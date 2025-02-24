@@ -763,6 +763,7 @@ bool UI_SKINCANVAS::CalculePosition(UI_ELEMENT* element, double fatherwidth, dou
       element->GetBoundaryLine()->height -= (element->GetMargin(UI_ELEMENT_TYPE_ALIGN_UP)   + element->GetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN));
     }
 
+  /*
   switch((int)element->GetBoundaryLine()->x)
     {
       case UI_ELEMENT_TYPE_ALIGN_LEFT     : x_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT);                                                                  
@@ -772,6 +773,8 @@ bool UI_SKINCANVAS::CalculePosition(UI_ELEMENT* element, double fatherwidth, dou
                                             break;
 
       case UI_ELEMENT_TYPE_ALIGN_CENTER   : x_position += (int)round((fatherwidth - element->GetBoundaryLine()->width)/2);    
+                                            x_position -=
+
                                             break;
 
                                 default   : x_position += GetPositionWithoutDefine(element->GetBoundaryLine()->x);            
@@ -811,6 +814,70 @@ bool UI_SKINCANVAS::CalculePosition(UI_ELEMENT* element, double fatherwidth, dou
 
                                     default   : y_position += GetPositionWithoutDefine(element->GetBoundaryLine()->y);            break;
         }
+    } 
+  */
+
+  switch((int)element->GetBoundaryLine()->x)
+    {
+      case UI_ELEMENT_TYPE_ALIGN_LEFT     : break;
+
+      case UI_ELEMENT_TYPE_ALIGN_RIGHT		: x_position += (fatherwidth - element->GetBoundaryLine()->width);                  
+                                            break;
+
+      case UI_ELEMENT_TYPE_ALIGN_CENTER   : x_position += (int)round((fatherwidth - element->GetBoundaryLine()->width)/2);                                               
+                                            break;
+
+                                default   : x_position += GetPositionWithoutDefine(element->GetBoundaryLine()->x);            
+                                            break;
+    }
+
+  if(element->GetFather())
+    {
+      switch((int)element->GetBoundaryLine()->y)
+        {
+          case UI_ELEMENT_TYPE_ALIGN_UP       : y_position -= fatherheight - element->GetBoundaryLine()->height;                 
+                                                break;
+
+          case UI_ELEMENT_TYPE_ALIGN_DOWN   	: break;
+
+          case UI_ELEMENT_TYPE_ALIGN_CENTER		: y_position -= (int)round((fatherheight - element->GetBoundaryLine()->height)/2);  
+                                                break;
+
+                                    default   : y_position -= GetPositionWithoutDefine(element->GetBoundaryLine()->y);            
+                                                break;
+        }
+     
+    }
+   else 
+    {
+      switch((int)element->GetBoundaryLine()->y)
+        {
+          case UI_ELEMENT_TYPE_ALIGN_UP       : y_position += element->GetBoundaryLine()->height;                                     
+                                                break;
+
+          case UI_ELEMENT_TYPE_ALIGN_DOWN   	: y_position += fatherheight;                                                        
+                                                break;
+
+          case UI_ELEMENT_TYPE_ALIGN_CENTER		: y_position += (int)round((fatherheight + element->GetBoundaryLine()->height)/2);  
+                                                break;
+
+                                    default   : y_position += GetPositionWithoutDefine(element->GetBoundaryLine()->y);            
+                                                break;
+        }
+    } 
+
+  x_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT);  
+  x_position -= element->GetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT);
+
+  if(element->GetFather())
+    {
+      y_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_UP);          
+      y_position -= element->GetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN);      
+    }
+   else
+    {
+      y_position -= element->GetMargin(UI_ELEMENT_TYPE_ALIGN_UP);          
+      y_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN);      
     }
 
   element->SetXPosition(x_position);
