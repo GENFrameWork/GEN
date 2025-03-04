@@ -750,36 +750,6 @@ BITMAPINFO* GRPWINDOWSSCREEN::GetHInfo()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPWINDOWSSCREEN::IsBlockClose()
-* @brief      Is block close
-* @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-bool GRPWINDOWSSCREEN::IsBlockClose()
-{
-  return isblockclose;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void GRPWINDOWSSCREEN::SetIsBlockClose(bool activated)
-* @brief      Set is block close
-* @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  activated : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-void GRPWINDOWSSCREEN::SetIsBlockClose(bool activated)
-{
-  isblockclose = activated;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
 * @fn         int GRPWINDOWSSCREEN::GetTaskbarHeight()
 * @brief      Get taskbar height
 * @ingroup    PLATFORM_WINDOWS
@@ -1104,77 +1074,94 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
 {
   switch(msg)
     {
-      case WM_SYSCOMMAND      :  switch(wparam)
-                                  {
-                                    case SC_CLOSE         : break;
-                                    case SC_SCREENSAVE    :
-                                    case SC_MONITORPOWER  : return 0;
-                                  }
-                                break;
-
-      case WM_ENDSESSION      : break;
-
-      case WM_MOVE            : { GRPWINDOWSSCREEN* screen =  (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
-                                  if(screen)
-                                    {
-                                      screen->SetPosition((int)(short) LOWORD(lparam),(int)(short) HIWORD(lparam));
-
-                                      //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Windows] move: x=%04d, y=%04d (%04d,%04d)"), screen->GetPositionX(), screen->GetPositionY(), screen->GetWidth(), screen->GetHeight());
-                                    }
-                                }
-                                break;
-
-      case WM_CLOSE           : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
-                                  if(screen)
-                                    {
-                                      if(screen->IsBlockClose())
+      case WM_SYSCOMMAND            :  switch(wparam)
                                         {
-                                          return 0;
+                                          case SC_CLOSE         : break;
+                                          case SC_SCREENSAVE    :
+                                          case SC_MONITORPOWER  : return 0;
                                         }
-                                    }              
-                                }  
-                                break;
+                                      break;
 
-      case WM_PAINT           : break;
+      case WM_ENDSESSION            : break;
 
-      case WM_DESTROY         : break;
+      case WM_MOVE                  : { GRPWINDOWSSCREEN* screen =  (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
+                                        if(screen)
+                                          {
+                                            screen->SetPosition((int)(short) LOWORD(lparam),(int)(short) HIWORD(lparam));
 
-      case WM_POWERBROADCAST  : //Computer is suspending
-                                if(wparam == PBT_APMSUSPEND)
-                                  {
-                                    #ifdef GRP_MAINPROCCTRL_ACTIVE
-                                    if(mainprocwindows.GetAppMain())
-                                      {
-                                        if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_SUSPEND);
+                                            //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Windows] move: x=%04d, y=%04d (%04d,%04d)"), screen->GetPositionX(), screen->GetPositionY(), screen->GetWidth(), screen->GetHeight());
+                                          }
                                       }
-                                    #endif
-                                  }
+                                      break;
 
-                                break;
+      case WM_CLOSE                 : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
+                                        if(screen)
+                                          {
+                                            if(!screen->CanClose())
+                                              {
+                                                return 0;
+                                              }
+                                          }              
+                                      }  
+                                      break;
 
-      case WM_QUERYENDSESSION : //Computer is shutting down
-                                if(lparam == 0)
-                                  {
-                                    #ifdef GRP_MAINPROCCTRL_ACTIVE
-                                    if(mainprocwindows.GetAppMain())
-                                      {
-                                        if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_REBOOT);
+      case WM_WINDOWPOSCHANGING     : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);                                       
+                                        if(screen)
+                                          {   
+                                            WINDOWPOS* pwp= (WINDOWPOS*)lparam;
+                                            if(!pwp) 
+                                              {
+                                                break;
+                                              }
+  
+                                            if(screen->Style_Is(GRPSCREENSTYLE_ZORDER))
+                                              {
+                                                pwp->flags |= SWP_NOZORDER;                                        
+                                              }
+                                          }
                                       }
-                                    #endif
-                                  }
+                                      break;  
 
-                                //User is logging off
-                                if((lparam & ENDSESSION_LOGOFF) == ENDSESSION_LOGOFF)
-                                  {
-                                    #ifdef GRP_MAINPROCCTRL_ACTIVE
-                                    if(mainprocwindows.GetAppMain())
-                                      {
-                                        if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_SESSION_LOGOFF);
-                                      }
-                                    #endif
-                                  }
+      case WM_PAINT                 : break;
 
-                                break;
+      case WM_DESTROY               : break;
+
+      case WM_POWERBROADCAST        : //Computer is suspending
+                                      if(wparam == PBT_APMSUSPEND)
+                                        {
+                                          #ifdef GRP_MAINPROCCTRL_ACTIVE
+                                          if(mainprocwindows.GetAppMain())
+                                            {
+                                              if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_SUSPEND);
+                                            }
+                                          #endif
+                                        }
+
+                                      break;
+
+      case WM_QUERYENDSESSION       : //Computer is shutting down
+                                      if(lparam == 0)
+                                        {
+                                          #ifdef GRP_MAINPROCCTRL_ACTIVE
+                                          if(mainprocwindows.GetAppMain())
+                                            {
+                                              if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_REBOOT);
+                                            }
+                                          #endif
+                                        }
+
+                                      //User is logging off
+                                      if((lparam & ENDSESSION_LOGOFF) == ENDSESSION_LOGOFF)
+                                        {
+                                          #ifdef GRP_MAINPROCCTRL_ACTIVE
+                                          if(mainprocwindows.GetAppMain())
+                                            {
+                                              if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_SESSION_LOGOFF);
+                                            }
+                                          #endif
+                                        }
+
+                                      break;
     }
 
   return DefWindowProc(hwnd, msg, wparam, lparam);

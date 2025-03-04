@@ -652,6 +652,21 @@ bool XSYSTEM::GetBatteryLevel (bool& isincharge, XBYTE& levelpercent)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int XSYSTEM::GetWifiRSSILevel()
+* @brief      get wifi RSSIlevel
+* @ingroup    XUTILS
+* 
+* @return     int : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+int XSYSTEM::GetWifiRSSILevel()
+{
+  return -1;
+}
+
+
 #ifndef MICROCONTROLLER
 
 /**-------------------------------------------------------------------------------------------------------------------

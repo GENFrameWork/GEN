@@ -48,6 +48,7 @@
 #include <Commctrl.h>
 #include <Security.h>
 #include <powrprof.h>
+#include <wlanapi.h>
 
 #ifndef BUILDER
 #include <mmdeviceapi.h>
@@ -74,6 +75,9 @@
 #include "XFileTXT.h"
 #include "XTrace.h"
 #include "XLanguage_ISO_639_3.h"
+
+
+#pragma comment(lib, "wlanapi.lib")
 
 #pragma endregion
 
@@ -1241,6 +1245,79 @@ bool XWINDOWSSYSTEM::GetBatteryLevel(bool& isincharge, XBYTE& levelpercent)
     }
 
   return false;      
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int XWINDOWSSYSTEM::GetWifiRSSILevel()
+* @brief      get wifi RSSIlevel
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     int : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+int XWINDOWSSYSTEM::GetWifiRSSILevel()
+{
+  HANDLE                      handleclient        = NULL;
+  DWORD                       max_client          = 2;
+  DWORD                       current_version     = 0;
+  DWORD                       result              = 0;  
+  PWLAN_INTERFACE_INFO_LIST   interfacelist       = NULL;
+  PWLAN_INTERFACE_INFO        interfacelinfo      = NULL;  
+  PWLAN_INTERFACE_CAPABILITY  interfacecapability = NULL;
+  int                         index_status        = 0;    
+  
+  result = WlanOpenHandle(max_client, NULL, &current_version, &handleclient);
+  if(result != ERROR_SUCCESS) return false;
+
+  result = WlanEnumInterfaces(handleclient, NULL, &interfacelist);
+  if(result != ERROR_SUCCESS) return false;
+
+
+  for(DWORD c=0; c<interfacelist->dwNumberOfItems; c++)
+    {
+      bool needactivated = false;
+
+      interfacelinfo = (WLAN_INTERFACE_INFO*)&interfacelist->InterfaceInfo[c];            
+      if(interfacelinfo->isState == wlan_interface_state_connected)
+        {
+          index_status = 4;
+
+          PVOID*                  ptr_rssi = 0;
+          DWORD                   sizerssi = sizeof(ptr_rssi);
+          WLAN_OPCODE_VALUE_TYPE  wlanopcodevaluetype = wlan_opcode_value_type_invalid;
+
+          result = WlanQueryInterface(handleclient, &interfacelinfo->InterfaceGuid
+                                                  , wlan_intf_opcode_rssi
+                                                  , NULL
+                                                  , &sizerssi
+                                                  , ptr_rssi
+                                                  , &wlanopcodevaluetype);
+
+          if(result == ERROR_SUCCESS)
+            {
+              if(ptr_rssi)
+                {               
+                  int rssi = (int)(*(int*)(ptr_rssi));
+                         
+                  if(rssi < -67) index_status = 3; 
+                  if(rssi < -70) index_status = 2; 
+                  if(rssi < -80) index_status = 1;                     
+                }
+            }
+        }
+    }
+  
+  if(interfacelist != NULL)
+    {
+      WlanFreeMemory(interfacelist);
+      interfacelist = NULL;
+    }
+
+  WlanCloseHandle(handleclient, NULL);
+
+  return index_status;
 }
 
 

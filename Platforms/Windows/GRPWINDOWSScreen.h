@@ -95,9 +95,6 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
     void                                  SetHDC                              (HDC hdc);
 
     BITMAPINFO*                           GetHInfo                            ();
-  
-    bool                                  IsBlockClose                        ();
-    void                                  SetIsBlockClose                     (bool activated);
     
   private:
 

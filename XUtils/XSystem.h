@@ -177,7 +177,8 @@ class XSYSTEM
     virtual bool                    Sound_SetLevel                  (int level); 
     virtual bool                    Sound_SetMutex                  (bool on); 
 
-    virtual bool                    GetBatteryLevel                 (bool& isincharge, XBYTE& levelpercent);  
+    virtual bool                    GetBatteryLevel                 (bool& isincharge, XBYTE& levelpercent); 
+    virtual int                     GetWifiRSSILevel                ();
 		
 		#ifndef MICROCONTROLLER
 

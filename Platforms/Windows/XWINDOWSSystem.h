@@ -462,6 +462,8 @@ class XWINDOWSSYSTEM : public XSYSTEM
     bool																				Sound_SetMutex																		(bool on);   
 
 		bool																				GetBatteryLevel																		(bool& isincharge, XBYTE& levelpercent);  
+		int																					GetWifiRSSILevel																	();
+		
 
   private:
 		

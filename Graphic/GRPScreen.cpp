@@ -663,6 +663,36 @@ void* GRPSCREEN::GetShellHandle()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool GRPSCREEN::CanClose()
+* @brief      can close
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::CanClose()
+{
+  return canclose;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPSCREEN::SetCanClose(bool canclose)
+* @brief      set can close
+* @ingroup    GRAPHIC
+* 
+* @param[in]  canclose : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPSCREEN::SetCanClose(bool canclose)
+{
+  this->canclose = canclose;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSTRING* GRPSCREEN::GetTitle()
 * @brief      Get title
 * @ingroup    GRAPHIC
@@ -1069,9 +1099,7 @@ void GRPSCREEN::Clean()
   styles                  = GRPSCREENSTYLE_DEFAULT;
 
   rotation                = GRPSCREENROTATION_NONE;
-   
-  isblockclose            = false;
-  
+     
   framerate               = NULL; 
 
   screencanvas            = NULL;
@@ -1080,6 +1108,8 @@ void GRPSCREEN::Clean()
   desktopscreenselected   = GRPSCREENTYPE_DESKTOP_ALL;
 
   isshow                  = false;
+
+  canclose                = false;
 }
 
 

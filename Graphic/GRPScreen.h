@@ -99,6 +99,7 @@ enum GRPSCREENROTATION
 #define GRPSCREENSTYLE_NOWINDOWICONS                  0x00000020
 #define GRPSCREENSTYLE_HEIGHTWITHOUTTASKBAR           0x00000040
 #define GRPSCREENSTYLE_NOICONTASKBAR                  0x00000080
+#define GRPSCREENSTYLE_ZORDER                         0x00000100
 
 #define GRPSCREENSTYLE_DEFAULT                        GRPSCREENSTYLE_TITLE
 
@@ -171,6 +172,9 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     virtual void*                         GetDesktopHandle              ();
     virtual void*                         GetShellHandle                ();
 
+    bool                                  CanClose                      ();    
+    void                                  SetCanClose                   (bool canclose);    
+
     XSTRING*                              GetTitle                      ();
     
     bool                                  UpdateSize                    (int width, int height);
@@ -202,14 +206,14 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     XDWORD                                styles;
     GRPSCREENROTATION                     rotation;
        
-    bool                                  isblockclose; 
-
     GRPCANVAS*                            screencanvas;  
     XVECTOR<GRPVIEWPORT*>                 viewports;  
     
     GRPFRAMERATE*                         framerate;
 
     bool                                  isshow;
+
+    bool                                  canclose;  
 
     XSTRING                               title; 
 
