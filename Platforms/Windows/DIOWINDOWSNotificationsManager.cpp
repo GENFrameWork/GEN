@@ -61,6 +61,106 @@
 #pragma region CLASS_MEMBERS
 
 
+#pragma region CLASS_DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated() const
+* @brief      toast activated
+* @ingroup    PLATFORM_WINDOWS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated() const 
+{
+  // std::wcout << L"The user clicked in this toast" << std::endl;
+  // exit(0);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(int actionIndex) const
+* @brief      toast activated
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  actionIndex : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(int actionindex) const 
+{
+  // std::wcout << L"The user clicked on action #" << actionIndex << std::endl;
+  // exit(16 + actionIndex);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(const char* response) const
+* @brief      toast activated
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  char* response : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(const char* response) const 
+{
+  // std::wcout << L"The user clicked on action #" << response << std::endl;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastDismissed(WinToastDismissalReason state) const
+* @brief      toast dismissed
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  state : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastDismissed(WinToastDismissalReason state) const 
+{
+  switch (state) 
+    {
+      case UserCanceled       : // std::wcout << L"The user dismissed this toast" << std::endl;
+                                // exit(1);
+                                break;
+
+      case TimedOut           : // std::wcout << L"The toast has timed out" << std::endl;
+                                // exit(2);
+                                break;
+
+      case ApplicationHidden  : // std::wcout << L"The application hid the toast using ToastNotifier.hide()" << std::endl;
+                                // exit(3);
+                                break;
+
+                    default   : // std::wcout << L"Toast not activated" << std::endl;
+                                // exit(4);
+                                break;
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastFailed() const
+* @brief      toast failed
+* @ingroup    PLATFORM_WINDOWS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastFailed() const 
+{
+  // std::wcout << L"Error showing current toast" << std::endl;
+  // exit(5);
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOWINDOWSNOTIFICATIONSMANAGER
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         DIOWINDOWSNOTIFICATIONSMANAGER::DIOWINDOWSNOTIFICATIONSMANAGER()
@@ -102,31 +202,18 @@ DIOWINDOWSNOTIFICATIONSMANAGER::~DIOWINDOWSNOTIFICATIONSMANAGER()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* titleowner, XCHAR* genericapp)
 {
+  if(!WinToast::isCompatible()) 
+    {
+        return false;
+    }
 
-  #if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
+  WinToast::instance()->setAppName(genericapp);
+  WinToast::instance()->setAppUserModelId(titleowner);
 
-  #else
-
-  Microsoft::WRL::Wrappers::RoInitializeWrapper winRTInitializer(RO_INIT_MULTITHREADED);
-
-  HRESULT hr = winRTInitializer;
-  if(FAILED(hr)) return false;
-
-  std::wstring sModuleName;
-  hr = ToastPP::CManager::GetExecutablePath(sModuleName);
-  if(FAILED(hr))  return false;
-
-  RegisterCOMServer(sModuleName.c_str());
-
-  hr = ToastPP::CManager::RegisterForNotificationSupport(titleowner, sModuleName.c_str(), genericapp, __uuidof(TOASTNOTIFICATIONACTIVATIONCALLBACK));
-  if(FAILED(hr)) return false;
-
-  hr = manager.Create(genericapp);
-  if(FAILED(hr)) return false;
-
-  RegisterActivator();
-
-  #endif
+  if(!WinToast::instance()->initialize()) 
+    {
+      return false;
+    }
 
   return true;
 }
@@ -145,36 +232,29 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* titleowner, XCHAR* genericapp)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
 {
-  #if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
-
-  ShowBaloon(notification->Get_Title()->Get(), notification->Get_Message()->Get(), (HWND)notification->GetWindowHandle(), (HICON)notification->GetApplicationIcon());
-
-  #else
-
-  XSTRING payload;
-
-  payload += __L("<toast> <visual> <binding template=\"ToastGeneric\">");
-
-  if(!notification->Get_Title()->IsEmpty())    payload.AddFormat(__L("<text>%s</text>"), notification->Get_Title()->Get());
-  if(!notification->Get_Message()->IsEmpty())  payload.AddFormat(__L("<text>%s</text>"), notification->Get_Message()->Get());
-
-  payload += __L("</binding></visual></toast>");
-
-  HRESULT hr = toast.Create(payload.Get());
-  if(FAILED(hr))
+  if(!notification)
     {
       return false;
     }
 
-  //Show the toast
-  hr = manager.Show(toast, this);
-  if(FAILED(hr))
+  WinToastTemplate::AudioOption audiooption = WinToastTemplate::AudioOption::Default;
+  WinToastTemplate              toast_template(WinToastTemplate::Text01);
+  std::wstring                  text        = notification->Get_Message()->Get();
+  std::wstring                  imagepath   = L"";
+  std::wstring                  attribute   = L"default";
+
+  toast_template.setTextField(text, WinToastTemplate::FirstLine);
+  toast_template.setAudioOption(audiooption);
+  //toast_template.setAttributionText(attribute);
+  //toast_template.setImagePath(imagepath);
+    
+  if(WinToast::instance()->showToast(toast_template, new DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER()) < 0) 
     {
       return false;
     }
 
-  #endif
 
+  
   return true;
 }
 
@@ -190,209 +270,9 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSNOTIFICATIONSMANAGER::End()
 {
-  #if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
-
-  #else
-
-  UnregisterActivator();
-  UnRegisterCOMServer();
-
-  manager.Detach();
-
-  #endif
-
+  
   return true;
 }
-
-
-
-#if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         BOOL DIOWINDOWSNOTIFICATIONSMANAGER::ShowBaloon(LPCTSTR title, LPCTSTR text, HWND hwnd, HICON hicon)
-* @brief      Show baloon
-* @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  title : 
-* @param[in]  text : 
-* @param[in]  hwnd : 
-* @param[in]  hicon : 
-* 
-* @return     BOOL : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-BOOL DIOWINDOWSNOTIFICATIONSMANAGER::ShowBaloon(LPCTSTR title, LPCTSTR text, HWND hwnd, HICON hicon)
-{
-  NOTIFYICONDATA    nid     = {};
-  static const GUID myguid  = { 0x23977b55, 0x10e0, 0x4041, { 0xb8, 0x62, 0xb1, 0x95, 0x41, 0x96, 0x36, 0x68 } };
-  BOOL              result  = FALSE;
-
-  ZeroMemory(&nid, sizeof(NOTIFYICONDATA));
-
-  nid.cbSize            = sizeof(nid);
-  nid.hWnd              = hwnd;
-  nid.uVersion          = 4;
-  nid.uID               = 1;
-  nid.guidItem          = myguid;
-  nid.hIcon             = hicon;
-  nid.uFlags            = NIF_TIP | NIF_ICON | NIF_MESSAGE | NIF_INFO | 0x00000080;
-  nid.uCallbackMessage  = WM_LBUTTONDOWN;
-
-  wcscpy_s(nid.szInfo     , ARRAYSIZE(nid.szInfo)     , text);
-  wcscpy_s(nid.szInfoTitle, ARRAYSIZE(nid.szInfoTitle), title);
-
-  result = Shell_NotifyIcon(NIM_DELETE, &nid);
-
-  result = Shell_NotifyIcon(NIM_ADD, &nid);
-
-  return result;
-}
-
-
-#else
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         HRESULT DIOWINDOWSNOTIFICATIONSMANAGER::RegisterCOMServer(_In_z_ PCWSTR pszExePath)
-* @brief      Register COM server
-* @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  pszExePath :
-*
-* @return     HRESULT :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-HRESULT  DIOWINDOWSNOTIFICATIONSMANAGER::RegisterCOMServer(_In_z_ PCWSTR pszExePath)
-{
-  //In this case, just register this application to start
-  return HRESULT_FROM_WIN32(::RegSetKeyValueW(HKEY_CURRENT_USER, L"SOFTWARE\\Classes\\CLSID\\{383803B6-AFDA-4220-BFC3-0DBF810106BF}\\LocalServer32", nullptr, REG_SZ, pszExePath, static_cast<DWORD>(wcslen(pszExePath)*sizeof(wchar_t))));
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         HRESULT DIOWINDOWSNOTIFICATIONSMANAGER::UnRegisterCOMServer()
-* @brief      Un register COM server
-* @ingroup    PLATFORM_WINDOWS
-*
-* @return     HRESULT :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-HRESULT  DIOWINDOWSNOTIFICATIONSMANAGER::UnRegisterCOMServer()
-{
-  HRESULT hr = HRESULT_FROM_WIN32(::RegDeleteKey(HKEY_CURRENT_USER, _T("SOFTWARE\\Classes\\CLSID\\{383803B6-AFDA-4220-BFC3-0DBF810106BF}\\LocalServer32")));
-  if(FAILED(hr)) return hr;
-
-  return HRESULT_FROM_WIN32(::RegDeleteKey(HKEY_CURRENT_USER, _T("SOFTWARE\\Classes\\CLSID\\{383803B6-AFDA-4220-BFC3-0DBF810106BF}")));
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         HRESULT DIOWINDOWSNOTIFICATIONSMANAGER::RegisterActivator()
-* @brief      Register activator
-* @ingroup    PLATFORM_WINDOWS
-*
-* @return     HRESULT :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-HRESULT  DIOWINDOWSNOTIFICATIONSMANAGER::RegisterActivator()
-{
-  static bool iscreate = false;
-
-  if(iscreate) 
-    { 
-      Microsoft::WRL::Module<Microsoft::WRL::OutOfProc>::Create([] {});
-      iscreate = true;
-    }
-
-  Microsoft::WRL::Module<Microsoft::WRL::OutOfProc>::GetModule().IncrementObjectCount();
-
-  return Microsoft::WRL::Module<Microsoft::WRL::OutOfProc>::GetModule().RegisterObjects();
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER::UnregisterActivator()
-* @brief      Unregister activator
-* @ingroup    PLATFORM_WINDOWS
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void  DIOWINDOWSNOTIFICATIONSMANAGER::UnregisterActivator()
-{
-  //Microsoft::WRL::Module<Microsoft::WRL::OutOfProc>::GetModule().DecrementObjectCount();  
-  //Microsoft::WRL::Module<Microsoft::WRL::OutOfProc>::GetModule().UnregisterObjects();  
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER::ReportToastNotification(_In_z_ LPCTSTR pszDetails, _In_ BOOL bAppend)
-* @brief      Report toast notification
-* @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  LPCTSTR pszDetails :
-* @param[in]  BOOL bAppend :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void DIOWINDOWSNOTIFICATIONSMANAGER::ReportToastNotification(_In_z_ LPCTSTR pszDetails, _In_ BOOL bAppend)
-{
-
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER::OnToastActivated(_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_opt_ IInspectable* pArgs)
-* @brief      On toast activated
-* @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  pSender :
-* @param[in]  pArgs :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void DIOWINDOWSNOTIFICATIONSMANAGER::OnToastActivated(_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_opt_ IInspectable* pArgs)
-{
-
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER::OnToastDismissed(_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_ ABI::Windows::UI::Notifications::ToastDismissalReason reason)
-* @brief      On toast dismissed
-* @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  pSender :
-* @param[in]  reason :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void DIOWINDOWSNOTIFICATIONSMANAGER::OnToastDismissed(_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_ ABI::Windows::UI::Notifications::ToastDismissalReason reason)
-{
-
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER::OnToastFailed(_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_ HRESULT errorCode)
-* @brief      On toast failed
-* @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  pSender :
-* @param[in]  errorCode :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void DIOWINDOWSNOTIFICATIONSMANAGER::OnToastFailed(_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_ HRESULT errorCode)
-{
-
-}
-
-
-#endif
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -405,13 +285,11 @@ void DIOWINDOWSNOTIFICATIONSMANAGER::OnToastFailed(_In_opt_ ABI::Windows::UI::No
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSNOTIFICATIONSMANAGER::Clean()
 {
-  #if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
-
-  #else
-
-
-  #endif
+ 
 }
+
+
+#pragma endregion
 
 
 #pragma endregion

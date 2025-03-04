@@ -32,36 +32,17 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#ifndef BUILDER
-#if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
+#include <windows.h>
+#include <string>
 
-  #include <Windows.h>
-
-#else
-
-  #include <cstdio>
-  #include <string>
-  #include <vector>
-  #include <new>
-
-  #include <atlbase.h>
-  #include <atlpath.h>
-  #include <Shlobj.h>
-  #include <propkey.h>
-  #include <propvarutil.h>
-  #include <wrl\event.h>
-  #include <wrl.h>
-
-  #include <wxdebug.h>
-
-  #include <Toast++.h>
-
-#endif
-#endif
+#include <wintoastlib.h>
 
 #include "XString.h"
 
 #include "DIONotificationsManager.h"
+
+
+using namespace WinToastLib;
 
 #pragma endregion
 
@@ -69,18 +50,6 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
-
-#else
-
-typedef struct NOTIFICATION_USER_INPUT_TICKET
-{
-  LPCWSTR     Key;
-  LPCWSTR     Value;
-
-}  NOTIFICATION_USER_INPUT_TICKET;
-
-#endif
 
 #pragma endregion
 
@@ -88,92 +57,32 @@ typedef struct NOTIFICATION_USER_INPUT_TICKET
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
-#if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
+class DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER : public IWinToastHandler 
+{
+  public:
+            
+    void               toastActivated                          () const;     
+    void               toastActivated                          (int actionindex) const;    
+    void               toastActivated                          (const char* response) const;
+    void               toastDismissed                          (WinToastDismissalReason state) const;
+    void               toastFailed                             () const;
+};
+
 
 class DIOWINDOWSNOTIFICATIONSMANAGER : public DIONOTIFICATIONSMANAGER
 {
   public:
-                                              DIOWINDOWSNOTIFICATIONSMANAGER          ();
-    virtual                                  ~DIOWINDOWSNOTIFICATIONSMANAGER          ();
+                       DIOWINDOWSNOTIFICATIONSMANAGER          ();
+    virtual           ~DIOWINDOWSNOTIFICATIONSMANAGER          ();
 
-    bool                                      Ini                                     (XCHAR* titleowner, XCHAR* genericapp);
-    bool                                      Do                                      (DIONOTIFICATION* notification);
-    bool                                      End                                     ();
-
-  private:
-
-    BOOL                                      ShowBaloon                              (LPCTSTR title, LPCTSTR text, HWND hwnd, HICON hicon);
-
-    void                                      Clean                                   ();
-
-};
-
-#else
-
-MIDL_INTERFACE("53E31837-6600-4A81-9395-75CFFE746F94")
-NOTIFICATIONACTIVATIONCALLBACK : public IUnknown
-{
-
-};
-
-
-
-//The COM server which implements the callback notifcation from Action Center
-class DECLSPEC_UUID("383803B6-AFDA-4220-BFC3-0DBF810106BF")
-TOASTNOTIFICATIONACTIVATIONCALLBACK : public Microsoft::WRL::RuntimeClass<Microsoft::WRL::RuntimeClassFlags<Microsoft::WRL::ClassicCom>, NOTIFICATIONACTIVATIONCALLBACK>
-{
-  public:
-                                              //Constructors / Destructors
-                                              TOASTNOTIFICATIONACTIVATIONCALLBACK     ()
-                                              {
-
-                                              }  
-};
-
-
-class DIOWINDOWSNOTIFICATIONSMANAGER : public DIONOTIFICATIONSMANAGER, public ToastPP::INotifier
-{
-  public:
-                                              DIOWINDOWSNOTIFICATIONSMANAGER          ();
-    virtual                                  ~DIOWINDOWSNOTIFICATIONSMANAGER          ();
-
-    bool                                      Ini                                     (XCHAR* titleowner, XCHAR* genericapp) override;
-    bool                                      Do                                      (DIONOTIFICATION* notification) override;
-    bool                                      End                                     () override;
+    bool               Ini                                     (XCHAR* titleowner, XCHAR* genericapp) override;
+    bool               Do                                      (DIONOTIFICATION* notification) override;
+    bool               End                                     () override;
 
   private:
-
-
-    HRESULT                                   RegisterCOMServer                       (_In_z_ PCWSTR pszExePath);
-    HRESULT                                   UnRegisterCOMServer                     ();
-
-    HRESULT                                   RegisterActivator                       ();
-    void                                      UnregisterActivator                     ();
- 
-    void                                      ReportToastNotification                 (_In_z_ LPCTSTR pszDetails, _In_ BOOL bAppend);
-
-    void                                      OnToastActivated                        (_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_opt_ IInspectable* pArgs) override;
-    void                                      OnToastDismissed                        (_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_ ABI::Windows::UI::Notifications::ToastDismissalReason reason) override;
-    void                                      OnToastFailed                           (_In_opt_ ABI::Windows::UI::Notifications::IToastNotification* pSender, _In_ HRESULT errorCode) override;
-
-    void                                      Clean                                   ();
-
-    ToastPP::CManager                         manager;
-    ToastPP::CToast                           toast;
+    
+    void               Clean                                   ();    
 };
-
-#endif
-
-/*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-#if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
-
-
-#else
-
-CoCreatableClass(TOASTNOTIFICATIONACTIVATIONCALLBACK);
-
-#endif
 
 
 #pragma endregion
