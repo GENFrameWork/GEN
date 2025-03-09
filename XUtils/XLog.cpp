@@ -644,7 +644,10 @@ bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XCHAR*
 
       filelog->AddLineAlready(outstring.Get(), &resultsizeline, &resultsizeLF);
 
-      if(lastentry) lastentry->size += (resultsizeline + resultsizeLF);
+      if(lastentry) 
+        {
+          lastentry->size += (resultsizeline + resultsizeLF);
+        }
 
       size += (resultsizeline + resultsizeLF);
 
@@ -927,7 +930,11 @@ bool XLOGBASE::CalculateInitialStatus()
                         }
                     }
 
-                  if(lastentry) lastentry->size += lack;
+                  if(lastentry) 
+                    {
+                      lastentry->size += lack;
+                    }
+
                   nlines++;
                 }
             }
@@ -980,7 +987,10 @@ bool XLOGBASE::FlushMemoryEntrys()
 
           filelog->AddLineAlready(line->Get(), &resultsizeline, &resultsizeLF);
 
-          if(lastentry) lastentry->size += (resultsizeline + resultsizeLF);
+          if(lastentry) 
+            {
+              lastentry->size += (resultsizeline + resultsizeLF);
+            }
 
           size += (resultsizeline + resultsizeLF);
 

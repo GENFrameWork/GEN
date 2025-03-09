@@ -319,8 +319,7 @@ XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetOperatingTime()
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_APPLICATIONSTATUS::Update()
-{  
-  
+{    
   if(checkresourceshardware && cfg)
     { 
       static bool iniappcheck = false;           

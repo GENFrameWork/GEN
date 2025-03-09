@@ -120,19 +120,19 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
 {
   XBUFFER charnamescript;
   XBUFFER charscript;
+  XSTRING currenttoken;
   
   namescript.ConvertToASCII(charnamescript);
   script.ConvertToASCII(charscript);
 
-  int status = luaL_loadbuffer(state, charscript.GetPtrChar(), strlen(charscript.GetPtrChar()), charnamescript.GetPtrChar());
+  int status = LUA_OK;
 
+  status  = luaL_loadbuffer(state, charscript.GetPtrChar(), strlen(charscript.GetPtrChar()), charnamescript.GetPtrChar());
   if(status == LUA_OK )  
     {
       errorcode  = SCRIPT_ERRORCODE_NONE;
       iscancelexec = false;
-
-      int     status = 0;
-
+      
       if(!HaveMainFunction())
         {
           // Exec to ajust the Stack in Lua with Main Function. lua_getglobal dont work well without this.
@@ -151,6 +151,7 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
             {
               lua_setglobal(state, SCRIPT_LNG_LUA_MAINFUNCTIONNAME);
               status = lua_pcall(state, 0, 1, 0);
+              currenttoken = lua_tostring(state, -1);
             }
         }
       
@@ -176,7 +177,7 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
           case LUA_ERRERR     : errorcode = SCRIPT_LNG_LUA_ERRORCODE_ERRERR;         break;
         }
 
-      HaveError(errorcode);
+      HaveError(currenttoken, errorcode);
 
       return errorcode;
     }
@@ -214,17 +215,18 @@ bool SCRIPT_LNG_LUA::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUN
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool SCRIPT_LNG_LUA::HaveError(SCRIPT_G_ERRORCODE errorcode)
-* @brief      Have error
+* 
+* @fn         bool SCRIPT_LNG_LUA::HaveError(XSTRING& currenttoken, int errorcode)
+* @brief      have error
 * @ingroup    SCRIPT
-*
-* @param[in]  errorcode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  currenttoken : 
+* @param[in]  errorcode : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool SCRIPT_LNG_LUA::HaveError(int errorcode)
+bool SCRIPT_LNG_LUA::HaveError(XSTRING& currenttoken, int errorcode)
 {
   if(errorcode != SCRIPT_ERRORCODE_NONE)
     {
@@ -238,21 +240,18 @@ bool SCRIPT_LNG_LUA::HaveError(int errorcode)
                                   __L("error while running a __gc metamethod")            ,
                                   __L("error while running the error handler function")   ,
                                 };
-      XSTRING   currenttoken;
       XPATH     namefile;
       XSTRING   errorstring;
       int       nline        = 0;
-
-      currenttoken = lua_tostring(state, -1);
-
+      
       namefile.AdjustSize(_MAXSTR);
       errorstring.AdjustSize(_MAXSTR);
       currenttoken.UnFormat(__L("[string \"%s\"]:%d:%s"), namefile.Get(), &nline, errorstring.Get());
       namefile.AdjustSize();
       errorstring.AdjustSize();
 
-      namescript.Set(namefile);
-      namefile.SetOnlyNamefileExt();
+      //namescript.Set(namefile);
+      //namefile.SetOnlyNamefileExt();
 
       SCRIPT_XEVENT xevent(this, SCRIPT_XEVENT_TYPE_ERROR);
 
@@ -261,7 +260,7 @@ bool SCRIPT_LNG_LUA::HaveError(int errorcode)
       xevent.GetCurrentToken()->Set(currenttoken);
       xevent.SetNLine(nline);
 
-      XTRACE_PRINTCOLOR(4, __L("Script [%s] ERROR %d: %s, line %d \"%s\"") , namefile.Get(), errorcode, errorstr[errorcode], nline, errorstring.Get());
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("Script [%s] ERROR %d: %s, line %d \"%s\""), namescript.Get(), errorcode, errorstr[errorcode], nline, errorstring.Get());
 
       PostEvent(&xevent);
 

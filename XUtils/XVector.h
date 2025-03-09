@@ -305,7 +305,10 @@ class XVECTOR
                                             {
                                               for(XDWORD c=s+1; c<nelements; c++)
                                                 {
-                                                  if(array[c] == element) array[c] = NULL;
+                                                  if(array[c] == element) 
+                                                    {
+                                                      array[c] = NULL;
+                                                    }
                                                 }
 
                                               delete(element);
@@ -326,9 +329,9 @@ class XVECTOR
                                         {
                                           T element = array[c];
                                           if(element)
-                                            {
-                                              array[c]=NULL;
-                                              delete element;
+                                            {                                              
+                                              delete(element);
+                                              array[c] = NULL;
                                             }
                                         }
 

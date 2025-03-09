@@ -222,7 +222,7 @@ bool SCRIPT_LNG_JAVASCRIPT::HaveError(int _errorcode)
   xevent.GetCurrentToken()->Set(currenttoken);
   xevent.SetNLine(nline);
 
-  XTRACE_PRINTCOLOR(4, __L("Script [%s] ERROR %d:\"%s\"") , namefile.Get(), errorcode, currenttoken.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("Script [%s] ERROR %d:\"%s\"") , namefile.Get(), errorcode, currenttoken.Get());
 
   PostEvent(&xevent);
 

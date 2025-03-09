@@ -1246,7 +1246,7 @@ bool SCRIPT_LNG_G::HaveError(int errorcode)
       xevent.GetCurrentToken()->Set(currenttoken);
       xevent.SetNLine(nline);
 
-      XTRACE_PRINTCOLOR(4, __L("Script [%s] ERROR %d: %s, line %d \"%s\"") , namescript.Get(), errorcode, errorstr[errorcode], nline, currenttoken);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("Script [%s] ERROR %d: %s, line %d \"%s\"") , namescript.Get(), errorcode, errorstr[errorcode], nline, currenttoken);
 
       PostEvent(&xevent);      
       iscancelexec = true;

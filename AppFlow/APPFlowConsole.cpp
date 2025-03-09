@@ -234,6 +234,7 @@ bool APPFLOWCONSOLE::Show_Header(bool separator)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::End()
 {
+  #ifndef APPFLOW_GRAPHICS_ACTIVE
   XSTRING exittypestring;
 
   GetExitTypeString(exittypestring);
@@ -241,15 +242,18 @@ bool APPFLOWCONSOLE::End()
     {
       GEN_XLOG.AddEntry(XLOGLEVEL_INFO, APPFLOW_CFG_LOG_SECTIONID_GENERIC, false, exittypestring.Get());
     }
+  #endif
 
   bool status = APPFLOWBASE::End();
 
   if(console)
     {
+      #ifndef APPFLOW_GRAPHICS_ACTIVE
       if(isprintexitmessageactive)
         {
           PrintExitMessage(exittypestring);
         }
+      #endif
 
       GEN_XFACTORY.DeleteConsole(console);
       console = NULL;
