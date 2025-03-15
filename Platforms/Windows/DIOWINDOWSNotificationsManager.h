@@ -30,6 +30,9 @@
 #define _DIOWINDOWSNOTIFICATIONSMANAGER_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
+
+#undef XMEMORY_CONTROL_ACTIVE
+
 #pragma region INCLUDES
 
 #include <windows.h>
@@ -61,27 +64,29 @@ class DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER : public IWinToastHandler
 {
   public:
             
-    void               toastActivated                          () const;     
-    void               toastActivated                          (int actionindex) const;    
-    void               toastActivated                          (const char* response) const;
-    void               toastDismissed                          (WinToastDismissalReason state) const;
-    void               toastFailed                             () const;
+    void                                      toastActivated                          () const;     
+    void                                      toastActivated                          (int actionindex) const;    
+    void                                      toastActivated                          (const char* response) const;
+    void                                      toastDismissed                          (WinToastDismissalReason state) const;
+    void                                      toastFailed                             () const;
 };
 
 
 class DIOWINDOWSNOTIFICATIONSMANAGER : public DIONOTIFICATIONSMANAGER
 {
   public:
-                       DIOWINDOWSNOTIFICATIONSMANAGER          ();
-    virtual           ~DIOWINDOWSNOTIFICATIONSMANAGER          ();
+                                              DIOWINDOWSNOTIFICATIONSMANAGER          ();
+    virtual                                  ~DIOWINDOWSNOTIFICATIONSMANAGER          ();
 
-    bool               Ini                                     (XCHAR* titleowner, XCHAR* genericapp) override;
-    bool               Do                                      (DIONOTIFICATION* notification) override;
-    bool               End                                     () override;
+    bool                                      Ini                                     (XCHAR* titleowner, XCHAR* genericapp) override;
+    bool                                      Do                                      (DIONOTIFICATION* notification) override;
+    bool                                      End                                     () override;
 
   private:
     
-    void               Clean                                   ();    
+    void                                      Clean                                   ();  
+
+    DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER*   handler; 
 };
 
 

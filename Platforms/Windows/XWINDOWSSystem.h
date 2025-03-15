@@ -463,6 +463,8 @@ class XWINDOWSSYSTEM : public XSYSTEM
 
 		bool																				GetBatteryLevel																		(bool& isincharge, XBYTE& levelpercent);  
 		int																					GetWifiRSSILevel																	();
+
+		bool																				GetPathExecApplication														(XCHAR* appname, XPATH& apppath);
 		
 
   private:

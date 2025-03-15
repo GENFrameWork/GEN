@@ -1322,6 +1322,54 @@ int XWINDOWSSYSTEM::GetWifiRSSILevel()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
+* @brief      get path exec application
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  appname : 
+* @param[in]  apppath : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
+{
+  apppath.Empty();
+
+  XWINDOWSREGISTRYMANAGER registrymanager;
+  XWINDOWSREGISTRYKEY     registrykey;
+  XSTRING                 keyname;
+  HKEY                    handlekey[2] = { HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE };
+  XVARIANT                pathvalue;
+  bool                    status    = false;
+  
+  for(XDWORD c=0; c<2; c++)
+    {
+      keyname.Format(__L("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\%s.exe"), appname);
+
+      if(registrymanager.OpenKey(handlekey[c], keyname, registrykey))
+        {
+          if(registrykey.ReadValue(__L("Path"), pathvalue))
+            {          
+              apppath = (XSTRING)pathvalue;
+              apppath.Slash_Add();
+              apppath.AddFormat(__L("%s.exe"), appname);  
+
+              status = true; 
+
+              break;                                  
+            }
+
+          registrymanager.CloseKey(registrykey);    
+        }
+    }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::AddCPUUsageStatus(XCHAR* processname)
 * @brief      Add CPU usage status

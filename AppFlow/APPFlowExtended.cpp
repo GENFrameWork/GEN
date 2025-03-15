@@ -601,7 +601,7 @@ void APPFLOWEXTENDED::ThreadFunction_Update(void* param)
     {
       if(appextended->exitincurse)
         {
-          return;
+          break;
         }
 
       GEN_XSLEEP.MilliSeconds(10);

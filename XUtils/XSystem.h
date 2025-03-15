@@ -34,6 +34,7 @@
 #pragma region INCLUDES
 
 #include "XString.h"
+#include "XPath.h"
 #include "XFileTXT.h"
 
 #pragma endregion
@@ -179,6 +180,9 @@ class XSYSTEM
 
     virtual bool                    GetBatteryLevel                 (bool& isincharge, XBYTE& levelpercent); 
     virtual int                     GetWifiRSSILevel                ();
+    
+    virtual bool                    GetPathExecApplication          (XCHAR* appname, XPATH& apppath);      
+    bool                            GetPathExecApplication          (XSTRING* appname, XPATH& apppath);      
 		
 		#ifndef MICROCONTROLLER
 

@@ -120,7 +120,7 @@ void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(const char* response
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastDismissed(WinToastDismissalReason state) const 
 {
-  switch (state) 
+  switch(state) 
     {
       case UserCanceled       : // std::wcout << L"The user dismissed this toast" << std::endl;
                                 // exit(1);
@@ -184,6 +184,8 @@ DIOWINDOWSNOTIFICATIONSMANAGER::DIOWINDOWSNOTIFICATIONSMANAGER()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSNOTIFICATIONSMANAGER::~DIOWINDOWSNOTIFICATIONSMANAGER()
 {
+  //End();
+
   Clean();
 }
 
@@ -214,6 +216,14 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* titleowner, XCHAR* genericapp)
     {
       return false;
     }
+
+  /*
+  handler = new DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER();
+  if(!handler)
+    {
+      return false;
+    }
+  */
 
   return true;
 }
@@ -247,15 +257,18 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
   toast_template.setAudioOption(audiooption);
   //toast_template.setAttributionText(attribute);
   //toast_template.setImagePath(imagepath);
-    
-  if(WinToast::instance()->showToast(toast_template, new DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER()) < 0) 
+
+  //if(handler)
     {
-      return false;
+      if(WinToast::instance()->showToast(toast_template, new DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER() /*handler*/) < 0) 
+        {
+          return false;
+        }
+       
+      return true; 
     }
-
-
   
-  return true;
+  //return false;
 }
 
 
@@ -270,6 +283,13 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSNOTIFICATIONSMANAGER::End()
 {
+  /*
+  if(handler)
+    {
+      delete handler;  
+      handler = NULL;
+    }
+  */
   
   return true;
 }
@@ -285,7 +305,7 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::End()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSNOTIFICATIONSMANAGER::Clean()
 {
- 
+  handler  = NULL;
 }
 
 

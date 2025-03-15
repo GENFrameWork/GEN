@@ -667,6 +667,49 @@ int XSYSTEM::GetWifiRSSILevel()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
+* @brief      get path exec application
+* @ingroup    XUTILS
+* 
+* @param[in]  appname : 
+* @param[in]  apppath : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
+{
+  apppath.Empty();
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XSYSTEM::GetPathExecApplication(XSTRING* appname, XPATH& apppath)
+* @brief      get path exec application
+* @ingroup    XUTILS
+* 
+* @param[in]  appname : 
+* @param[in]  apppath : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XSYSTEM::GetPathExecApplication(XSTRING* appname, XPATH& apppath)
+{
+  if(!appname)
+    {
+      return false;
+    }
+
+  return GetPathExecApplication(appname->Get(), apppath);
+}
+
+
 #ifndef MICROCONTROLLER
 
 /**-------------------------------------------------------------------------------------------------------------------
