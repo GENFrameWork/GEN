@@ -122,20 +122,16 @@ void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastDismissed(WinToastDismissalRea
 {
   switch(state) 
     {
-      case UserCanceled       : // std::wcout << L"The user dismissed this toast" << std::endl;
-                                // exit(1);
+      case UserCanceled       : // "The user dismissed this toast"       
                                 break;
 
-      case TimedOut           : // std::wcout << L"The toast has timed out" << std::endl;
-                                // exit(2);
+      case TimedOut           : // "The toast has timed out"                                
                                 break;
 
-      case ApplicationHidden  : // std::wcout << L"The application hid the toast using ToastNotifier.hide()" << std::endl;
-                                // exit(3);
+      case ApplicationHidden  : // "The application hid the toast using ToastNotifier.hide()" 
                                 break;
 
-                    default   : // std::wcout << L"Toast not activated" << std::endl;
-                                // exit(4);
+                    default   : // "Toast not activated"                                 
                                 break;
     }
 }
@@ -150,8 +146,7 @@ void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastDismissed(WinToastDismissalRea
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastFailed() const 
 {
-  // std::wcout << L"Error showing current toast" << std::endl;
-  // exit(5);
+  // "Error showing current toast"   
 }
 
 
@@ -184,47 +179,40 @@ DIOWINDOWSNOTIFICATIONSMANAGER::DIOWINDOWSNOTIFICATIONSMANAGER()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSNOTIFICATIONSMANAGER::~DIOWINDOWSNOTIFICATIONSMANAGER()
 {
-  //End();
-
   Clean();
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* titleowner, XCHAR* genericapp)
-* @brief      Ini
+* @fn         bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
+* @brief      ini
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  titleowner : 
-* @param[in]  genericapp : 
+* @param[in]  ownertitle : 
+* @param[in]  appname : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* titleowner, XCHAR* genericapp)
+bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
 {
   if(!WinToast::isCompatible()) 
     {
         return false;
     }
 
-  WinToast::instance()->setAppName(genericapp);
-  WinToast::instance()->setAppUserModelId(titleowner);
+  this->ownertitle = ownertitle;
+  this->appname    = appname;
+
+  WinToast::instance()->setAppUserModelId(ownertitle);
+  WinToast::instance()->setAppName(appname);
 
   if(!WinToast::instance()->initialize()) 
     {
       return false;
     }
-
-  /*
-  handler = new DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER();
-  if(!handler)
-    {
-      return false;
-    }
-  */
-
+  
   return true;
 }
 
@@ -258,17 +246,12 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
   //toast_template.setAttributionText(attribute);
   //toast_template.setImagePath(imagepath);
 
-  //if(handler)
+  if(WinToast::instance()->showToast(toast_template, new DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER() /*handler*/) < 0) 
     {
-      if(WinToast::instance()->showToast(toast_template, new DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER() /*handler*/) < 0) 
-        {
-          return false;
-        }
-       
-      return true; 
+      return false;
     }
-  
-  //return false;
+       
+  return true;   
 }
 
 
@@ -283,14 +266,7 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSNOTIFICATIONSMANAGER::End()
 {
-  /*
-  if(handler)
-    {
-      delete handler;  
-      handler = NULL;
-    }
-  */
-  
+   
   return true;
 }
 

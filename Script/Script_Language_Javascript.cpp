@@ -139,9 +139,15 @@ int SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
   _script.ConvertToASCII(charstr);
    
   duk_int_t error =  duk_peval_string(context, charstr.GetPtrChar());
-  if(error) HaveError(DUK_ERR_ERROR);  
+  if(error) 
+    {
+      HaveError(DUK_ERR_ERROR);  
+    }
   
-  if(returnval) (*returnval) =  duk_require_int(context, 0);
+  if(returnval) 
+    {
+      (*returnval) =  duk_require_int(context, 0);
+    }
 
   duk_pop(context);
 

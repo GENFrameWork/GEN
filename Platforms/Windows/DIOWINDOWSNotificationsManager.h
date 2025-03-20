@@ -78,7 +78,7 @@ class DIOWINDOWSNOTIFICATIONSMANAGER : public DIONOTIFICATIONSMANAGER
                                               DIOWINDOWSNOTIFICATIONSMANAGER          ();
     virtual                                  ~DIOWINDOWSNOTIFICATIONSMANAGER          ();
 
-    bool                                      Ini                                     (XCHAR* titleowner, XCHAR* genericapp) override;
+    bool                                      Ini                                     (XCHAR* ownertitle, XCHAR* appname) override;
     bool                                      Do                                      (DIONOTIFICATION* notification) override;
     bool                                      End                                     () override;
 

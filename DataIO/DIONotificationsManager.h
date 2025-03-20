@@ -82,16 +82,24 @@ class DIONOTIFICATIONSMANAGER
     virtual                        ~DIONOTIFICATIONSMANAGER   ();
 
 
-    virtual bool                    Ini                       (XCHAR* titleowner, XCHAR* genericapp);
+    virtual bool                    Ini                       (XCHAR* ownertitle, XCHAR* appname);
+
+    XSTRING*                        GetOwnerTitle             ();   
+    XSTRING*                        GetAppName                ();  
 
     virtual bool                    Do                        (DIONOTIFICATION* notification);
     bool                            Do                        (DIONOTIFICATION& notification);
 
     virtual bool                    End                       ();
 
+  protected:
+
+    XSTRING                         ownertitle;   
+    XSTRING                         appname;   
+
   private:
 
-    void                            Clean                     ();    
+    void                            Clean                     (); 
 };
 
 

@@ -231,19 +231,49 @@ DIONOTIFICATIONSMANAGER::~DIONOTIFICATIONSMANAGER()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIONOTIFICATIONSMANAGER::Ini(XCHAR* titleowner, XCHAR* genericapp)
-* @brief      Ini
+* @fn         bool DIONOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
+* @brief      ini
 * @ingroup    DATAIO
 * 
-* @param[in]  titleowner : 
-* @param[in]  genericapp : 
+* @param[in]  ownertitle : 
+* @param[in]  appname : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIONOTIFICATIONSMANAGER::Ini(XCHAR* titleowner, XCHAR* genericapp)
+bool DIONOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
 {
   return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* DIONOTIFICATIONSMANAGER::GetOwnerTitle()
+* @brief      get owner title
+* @ingroup    DATAIO
+* 
+* @return     XSTRING* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DIONOTIFICATIONSMANAGER::GetOwnerTitle()
+{
+  return &ownertitle;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* DIONOTIFICATIONSMANAGER::GetAppName()
+* @brief      get app name
+* @ingroup    DATAIO
+* 
+* @return     XSTRING* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DIONOTIFICATIONSMANAGER::GetAppName()
+{
+  return &appname;
 }
 
 
