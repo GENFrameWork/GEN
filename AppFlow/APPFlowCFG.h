@@ -58,7 +58,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#define APPFLOW_CFG_DEFAULT_REMARK_COLUMN                                             64
+#define APPFLOW_CFG_DEFAULT_REMARK_COLUMN                                             98
 
 
 #ifdef APPFLOW_CFG_GENERAL_ACTIVE

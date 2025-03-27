@@ -309,6 +309,8 @@ bool APPFLOWEXTENDED::APPEnd()
   XSTRING   string;
   XSTRING   stringresult;
   
+  exitincurse = true;
+  
   if(!appcfg)
     { 
       return false;
@@ -597,6 +599,7 @@ void APPFLOWEXTENDED::ThreadFunction_Update(void* param)
     }  
   #endif  
 
+  /*
   for(int c=0; c<100; c++) 
     {
       if(appextended->exitincurse)
@@ -606,6 +609,7 @@ void APPFLOWEXTENDED::ThreadFunction_Update(void* param)
 
       GEN_XSLEEP.MilliSeconds(10);
     }
+  */
 
   if(appextended->updatemutex) 
     {

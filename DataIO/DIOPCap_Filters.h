@@ -29,6 +29,8 @@
 #ifndef _DIOPCAP_FILTERS_H_
 #define _DIOPCAP_FILTERS_H_
 
+#ifdef DIO_PCAP_ACTIVE
+
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
@@ -115,6 +117,7 @@ class DIOPCAP_FILTERS
 
 #pragma endregion
 
+#endif
 
 #endif
 

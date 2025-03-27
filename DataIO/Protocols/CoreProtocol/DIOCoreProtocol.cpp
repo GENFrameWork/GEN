@@ -1709,11 +1709,11 @@ bool DIOCOREPROTOCOL::ShowDebug(bool send, DIOCOREPROTOCOL_HEADER* header, XBUFF
     {
       colormsg = XTRACE_COLOR_GREEN;
   
-      title.Format(__L("[Net Conn] Read  message [%5d bytes] : "), sizeallmessage); 
+      title.Format(__L("[CoreProtocol] Read  message [%5d bytes] : "), sizeallmessage); 
     }  
    else 
     {
-      title.Format(__L("[Net Conn] Write message [%5d bytes] : "), sizeallmessage);  
+      title.Format(__L("[CoreProtocol] Write message [%5d bytes] : "), sizeallmessage);  
     }
 
   if(!showlongformat)

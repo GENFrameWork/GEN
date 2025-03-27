@@ -34,6 +34,8 @@
 #pragma endregion
 
 
+#ifdef DIO_PCAP_ACTIVE
+
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
@@ -642,3 +644,4 @@ void DIOPCAP_FILTERS::Clean()
 #pragma endregion
 
 
+#endif

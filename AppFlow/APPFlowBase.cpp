@@ -132,7 +132,15 @@ bool APPFLOWBASE::Ini(XVECTOR<XSTRING*>* execparams)
 
   XDWORD code = GEN_XSYSTEM.GetLanguageSO();
 
-  if(code != XLANGUAGE_ISO_639_3_CODE_INVALID) XTRANSLATION_GEN::GetInstance().Sentences_AddToTranslation(code);
+  if(code == XLANGUAGE_ISO_639_3_CODE_INVALID) 
+    {
+      code = XLANGUAGE_ISO_639_3_CODE_ENG;
+    }
+
+  if(code != XLANGUAGE_ISO_639_3_CODE_INVALID) 
+    {
+      XTRANSLATION_GEN::GetInstance().Sentences_AddToTranslation(code);
+    }
 
   if(!AppProc_Ini()) return false;
 
