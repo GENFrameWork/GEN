@@ -394,7 +394,10 @@ APPFLOWBASE_EXITTYPE APPFLOWBASE::GetExitType()
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWBASE::SetExitType(APPFLOWBASE_EXITTYPE exittype)
 {
-  if(this->exittype != APPFLOWBASE_EXITTYPE_UNKNOWN) return;
+  if(this->exittype != APPFLOWBASE_EXITTYPE_UNKNOWN) 
+    {
+      return;
+    }
 
   this->exittype = exittype;
 }

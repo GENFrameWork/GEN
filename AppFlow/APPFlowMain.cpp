@@ -221,14 +221,20 @@ bool APPFLOWMAIN::Ini(MAINPROC* mainproc, APPFLOWBASE_MODE_TYPE applicationmode)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWMAIN::Update()
 {
-  if(!application) return false;
+  if(!application) 
+    {
+      return false;
+    }
 
   if(!application->UpdateStep())
     {
       application->SetExitType(APPFLOWBASE_EXITTYPE_BY_SERIOUSERROR);
     }
 
-  if(application->GetExitType() != APPFLOWBASE_EXITTYPE_UNKNOWN) return false;
+  if(application->GetExitType() != APPFLOWBASE_EXITTYPE_UNKNOWN) 
+    {
+      return false;
+    }
 
   return true;
 }
