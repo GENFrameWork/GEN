@@ -129,11 +129,11 @@ class DIOCOREPROTOCOL_CONNECTIONSMANAGER : public XOBSERVER, public XSUBJECT
     void                                      HandleEvent_DIOStream                          (DIOSTREAM_XEVENT* event);
     void                                      HandleEvent                                    (XEVENT* xevent);
 
-    static void                               ThreadConnections                               (void* param);
-    static void                               ThreadUpdateConnection                          (void* param);
-    static void                               ThreadAutomaticOperations                       (void* param);
+    static void                               ThreadConnections                              (void* param);
+    static void                               ThreadUpdateConnection                         (void* param);
+    static void                               ThreadAutomaticOperations                      (void* param);
 
-    void                                      Clean                                           ();
+    void                                      Clean                                          ();
     
     
     XMUTEX*                                   connections_xmutex;

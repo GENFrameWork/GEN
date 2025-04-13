@@ -1074,6 +1074,14 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XUUID* ID_message, XCHAR* classn
     {
       return false;
     }
+
+  if(protocol->GetProtocolCFG())
+    {
+      if(protocol->GetProtocolCFG()->GetIsServer())
+        {
+          return false;
+        }
+    }
   
   status = SendMsg(ID_message, DIOCOREPROTOCOL_HEADER_OPERATION_UPDATECLASS, classname, classcontent);
 
@@ -1101,6 +1109,14 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XUUID* ID_message, XCHAR* cla
   if(!protocol)
     {
       return false;
+    }
+
+  if(protocol->GetProtocolCFG())
+    {
+      if(!protocol->GetProtocolCFG()->GetIsServer())
+        {
+          return false;
+        }
     }
   
   status = SendMsg(ID_message, DIOCOREPROTOCOL_HEADER_OPERATION_ASKUPDATECLASS, classname, classcontent);
