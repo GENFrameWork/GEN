@@ -206,6 +206,16 @@ bool XWINDOWSPROCESSMANAGER::OpenURL(XCHAR* url)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
 {
+  if(!applicationpath)
+    {
+      return false;
+    }
+
+  if(!applicationpath[0])
+    {
+      return false;
+    }
+
   #define CMDLINE_SIZE  (10*1024)
   #define OUTBUF_SIZE   (10*1024*1024)
   
@@ -346,6 +356,16 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
 {
+  if(!applicationpath)
+    {
+      return false;
+    }
+
+  if(!applicationpath->GetSize())
+    {
+      return false;
+    }
+
   #define OUTBUF_SIZE   (10*1024*1024)
 
   PROCESS_INFORMATION processinfo;
@@ -474,6 +494,16 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFF
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD* ID)
 {
+   if(!applicationname)
+    {
+      return false;
+    }
+
+  if(!applicationname[0])
+    {
+      return false;
+    }
+
   XVECTOR<XPROCESS*>  applist;
   bool                status = GEN_XPROCESSMANAGER.Application_GetRunningList(applist);
   bool                exists = false;
