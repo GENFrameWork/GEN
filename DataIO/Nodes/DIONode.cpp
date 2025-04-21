@@ -378,9 +378,10 @@ bool DIONODE::Deserialize()
 {
   XSTRING ID;
 
-  Primitive_Extract<XSTRING&>(ID, __L("ID"));
-  Primitive_Extract<XSTRING&>(group, __L("group"));
-  XVectorClass_Extract<DIONODEITEM>(&items, __L("items"), __L("item"));
+  Primitive_Extract<XSTRING>(ID            , __L("ID"));
+  Primitive_Extract<XSTRING>(group         , __L("group"));
+  
+  XVectorClass_Extract<DIONODEITEM>(&items , __L("items"), __L("item"));
 
   UUID.SetFromString(ID);
 

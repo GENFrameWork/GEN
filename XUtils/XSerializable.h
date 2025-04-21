@@ -80,7 +80,7 @@ class XSERIALIZABLE
                                    }
 
     template<class T>
-    bool                           Primitive_Extract    (T var, XCHAR* name)
+    bool                           Primitive_Extract    (T& var, XCHAR* name)
                                    {
                                      return serializationmethod->Extract(var, name);                               
                                    }

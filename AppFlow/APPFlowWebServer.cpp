@@ -375,7 +375,10 @@ bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHE
 
   GEN_XFACTORY.Delete_File(xfile);
 
-  if(status) status = SendRequest(connection, headerresult, &xbuffer, timeout, addhead);
+  if(status) 
+    {
+      status = SendRequest(connection, headerresult, &xbuffer, timeout, addhead);
+    }
 
   return status;
 }

@@ -160,8 +160,8 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Ini()
         }
     }
   
-  GEN_XFACTORY_CREATE(connections_xmutex, Create_Mutex())
-  if(connections_xmutex) 
+  GEN_XFACTORY_CREATE(connections_delete_xmutex, Create_Mutex())
+  if(connections_delete_xmutex) 
     {
       connections_xthread = CREATEXTHREAD(XTHREADGROUPID_DIOPROTOCOL_CONNECTIONMANAGER, __L("DIOPROTOCOL_CONNECTIONSMANAGER::Ini"), ThreadConnections, (void*)this);
       if(connections_xthread)
@@ -228,10 +228,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::End()
   
   Connections_DeleteAll();
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      GEN_XFACTORY.Delete_Mutex(connections_xmutex);
-      connections_xmutex = NULL;
+      GEN_XFACTORY.Delete_Mutex(connections_delete_xmutex);
+      connections_delete_xmutex = NULL;
     }
 
   for(XDWORD c=0; c<diostreams.GetSize(); c++)
@@ -515,7 +515,7 @@ XVECTOR<DIOCOREPROTOCOL_CONNECTION*>* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connec
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_GetXMutex()
 {
-  return connections_xmutex;
+  return connections_delete_xmutex;
 }
 
 
@@ -547,16 +547,16 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Add(
         }      
     }
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->Lock();
+      connections_delete_xmutex->Lock();
     }
 
   bool status = connections.Add(connection);
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->UnLock();
+      connections_delete_xmutex->UnLock();
     }
 
   return connection;
@@ -581,9 +581,9 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Get(
       return NULL;
     }
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->Lock();
+      connections_delete_xmutex->Lock();
     }
 
   for(XDWORD c=0; c<connections.GetSize(); c++)
@@ -593,9 +593,9 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Get(
         {
           if(connection->GetCoreProtocol()->GetDIOStream() == diostream)
             {
-              if(connections_xmutex)
+              if(connections_delete_xmutex)
                   {
-                    connections_xmutex->UnLock();
+                    connections_delete_xmutex->UnLock();
                   }
 
               return connection;
@@ -603,9 +603,9 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Get(
         }
     }
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->UnLock();
+      connections_delete_xmutex->UnLock();
     }
 
   return NULL;
@@ -632,16 +632,16 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Get(
       return NULL;
     }
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->Lock();
+      connections_delete_xmutex->Lock();
     }
 
   connection = connections.Get(index);
   
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->UnLock();
+      connections_delete_xmutex->UnLock();
     }
 
   return connection;
@@ -666,17 +666,17 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Delete(DIOCOREPROTOCOL_CONN
       return false;
     }
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->Lock();
+      connections_delete_xmutex->Lock();
     }
 
   connections.Delete(connection);
   delete connection;
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->UnLock();
+      connections_delete_xmutex->UnLock();
     }
   
   return true;
@@ -701,9 +701,9 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAllDisconnected()
 
   int index = 0;
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->Lock();
+      connections_delete_xmutex->Lock();
     }
 
   do{ DIOCOREPROTOCOL_CONNECTION* connection = connections.Get(index);
@@ -726,9 +726,9 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAllDisconnected()
     } while(index < connections.GetSize());
 
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->UnLock();
+      connections_delete_xmutex->UnLock();
     }
 
   return true;
@@ -751,9 +751,9 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAll()
       return false;
     }
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->Lock();
+      connections_delete_xmutex->Lock();
     }
   
  
@@ -772,9 +772,9 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAll()
   connections.DeleteContents();
   connections.DeleteAll();
 
-  if(connections_xmutex)
+  if(connections_delete_xmutex)
     {
-      connections_xmutex->UnLock();
+      connections_delete_xmutex->UnLock();
     }
 
   return true;
@@ -1045,6 +1045,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllCommandMessages(DIOCOREPROT
       return false;
     }
 
+  connection->Mutex_Activate(connection->GetInsideCommandMutex(), true);
   
   bool managermessage = false;
   bool status         = false;
@@ -1087,6 +1088,8 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllCommandMessages(DIOCOREPROT
     {
       status = true;
     }
+
+  connection->Mutex_Activate(connection->GetInsideCommandMutex(), false);
 
   return status;
 }
@@ -1482,7 +1485,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerUpdateClasses()
       return false;
     }  
 
-  bool isserver = GetProtocolCFG()->GetIsServer();
+  if(GetProtocolCFG()->GetIsServer())
+    {
+      return false;
+    }
  
   for(int c=0; c<connections.GetSize(); c++)
     {  
@@ -1494,59 +1500,63 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerUpdateClasses()
             {       
               continue;
             }
-          
+            
           DIOCOREPROTOCOL* protocol = connection->GetCoreProtocol();
           if(!protocol)
             {    
               continue;
             }
-        
-          bool initialupdateclasses = connection->CompletedInitialUpdateClasses();
-        
-          if(isserver)
+
+          if(connection->Mutex_IsActive(connection->GetInsideCommandMutex()))
             {
-              connection->SetCompletedInitialUpdateClasses(true);                                      
-              continue;  
+              continue;
             }
-                    
+                                    
           for(XDWORD d=0; d<protocol->UpdateClass_GetAll()->GetSize(); d++)
             {
-              bool needtoupdate = true;
+              bool needtoupdate = false;
 
               DIOCOREPROTOCOL_UPDATECLASS* updateclass = protocol->UpdateClass_GetAll()->Get(d);
               if(!updateclass)     
-                {
+                {                  
                   continue;        
                 }
-           
-              if(updateclass->GetTimeToUpdate())
+          
+              if(!connection->CompletedInitialUpdateClasses() && updateclass->RequieredInitialUpdate())
                 {
-                  if(updateclass->GetTimerLastUpdate()->GetMeasureSeconds() < updateclass->GetTimeToUpdate())
-                    {
-                      needtoupdate = false;                                     
-                    }   
-                }
-                             
-              if(updateclass->IsFlag(DIOCOREPROTOCOL_UPDATECLASS_FLAG_FORCHANGE))
-                {  
-                  if(updateclass->GetClassPtr())
-                    {
-                      if(!updateclass->GetClassPtr()->HasBeenChanged())
-                        {
-                          needtoupdate = false;    
-                        }
-                        else
-                        {
-                          updateclass->GetClassPtr()->SetHasBeenChanged(false);
-                        }           
-                    }
-                } 
+                  updateclass->GetClassPtr()->HasBeenChanged();
+                  needtoupdate = true;               
+                }              
 
-              if(!initialupdateclasses && updateclass->RequieredInitialUpdate())
+              if(!needtoupdate)
                 {
-                  needtoupdate = true;                                             
-                }                               
-              
+                  if(updateclass->GetTimeToUpdate())
+                    {
+                      if(updateclass->GetTimerLastUpdate()->GetMeasureSeconds() >= updateclass->GetTimeToUpdate())
+                        {
+                          needtoupdate = true;                                     
+                        }   
+                    }
+                }
+
+              if(!needtoupdate)
+                {                                                                          
+                  if(updateclass->IsFlag(DIOCOREPROTOCOL_UPDATECLASS_FLAG_FORCHANGE))
+                    {  
+                      if(updateclass->GetClassPtr())
+                        {
+                          if(!updateclass->GetClassPtr()->HasBeenChanged())
+                            {
+                              needtoupdate = false;    
+                            }
+                           else
+                            {                      
+                              needtoupdate = true;  
+                            }           
+                        }
+                    } 
+                }
+                                         
               if(needtoupdate)
                 {                                                             
                   bool status;
@@ -1556,12 +1566,13 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerUpdateClasses()
                   if(status)
                     {                      
                       updateclass->GetTimerLastUpdate()->Reset();
-                      updateclass->AddOneToNUpdates(); 
+                      updateclass->GetClassPtr()->SetHasBeenChanged(false);
+                      updateclass->AddOneToNUpdates();                        
                     }                                                                                          
                 }                                                                        
             }
 
-          connection->SetCompletedInitialUpdateClasses(true);      
+          connection->SetCompletedInitialUpdateClasses(true);     
         }
     }
   
@@ -1595,6 +1606,12 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerHeartBet()
           if((connection->Status_Get() == DIOCOREPROTOCOL_CONNECTION_STATUS_READY) || 
              (connection->Status_Get() == DIOCOREPROTOCOL_CONNECTION_STATUS_INSTABILITY))
             {       
+
+             if(connection->Mutex_IsActive(connection->GetInsideCommandMutex()))
+               {
+                 continue;
+               }
+
               DIOCOREPROTOCOL* protocol = connection->GetCoreProtocol();
               if(protocol)
                 {                          
@@ -1628,7 +1645,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerHeartBet()
                           connection->GetXTimerWithoutConnexion()->Reset();                                
                         }                                     
                     }
-                }
+                }              
             }
                       
           index++;
@@ -1801,11 +1818,6 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
       return;
     }
 
-  if(connectionsmanager->connections_xmutex)
-    {
-      connectionsmanager->connections_xmutex->Lock();
-    }
-
   if(connectionsmanager->Connections_GetAll()->IsEmpty())
     {
       for(XDWORD c=0; c<connectionsmanager->DIOStream_GetAll()->GetSize(); c++)
@@ -1823,8 +1835,8 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
                 }                            
             }  
         }
-    }
-     
+    } 
+   
   for(XDWORD c=0; c<connectionsmanager->Connections_GetAll()->GetSize(); c++)
     {
       DIOCOREPROTOCOL_CONNECTION* connection = connectionsmanager->Connections_GetAll()->Get(c);
@@ -1896,14 +1908,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
         }      
     }
  
-  connectionsmanager->Connections_ReadMessages();
-
-  if(connectionsmanager->connections_xmutex)
-    {
-      connectionsmanager->connections_xmutex->UnLock();
-    }  
-
-  connectionsmanager->Connections_DeleteAllDisconnected();    
+  connectionsmanager->Connections_ReadMessages();  
 }
 
 
@@ -1928,11 +1933,6 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadUpdateConnection(void* param)
     {
       return;
     }
-
-  if(connectionsmanager->connections_xmutex)
-    {
-      connectionsmanager->connections_xmutex->Lock();
-    }
    
   for(XDWORD c=0; c<connectionsmanager->Connections_GetAll()->GetSize(); c++)
     {
@@ -1944,12 +1944,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadUpdateConnection(void* param)
               connection->Update();   
             }
         }
-    }
-
-  if(connectionsmanager->connections_xmutex)
-    {
-      connectionsmanager->connections_xmutex->UnLock();
-    }   
+    } 
 }
 
 
@@ -1978,6 +1973,8 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadAutomaticOperations(void* param)
   connectionsmanager->ManagerUpdateClasses();
    
   connectionsmanager->ManagerHeartBet();  
+
+  connectionsmanager->Connections_DeleteAllDisconnected();  
 }
 
 
@@ -1993,7 +1990,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::Clean()
 {  
   leavingactive               = false;  
 
-  connections_xmutex          = NULL;
+  connections_delete_xmutex   = NULL;
 
   connections_xthread         = NULL;
   connection_update_xthread   = NULL;

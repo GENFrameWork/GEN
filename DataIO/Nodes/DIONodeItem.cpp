@@ -493,17 +493,22 @@ bool DIONODEITEM::Deserialize()
 {   
   XSTRING ID;
 
-  Primitive_Extract<XSTRING&>(ID, __L("ID"));
-  Primitive_Extract<int>(category, __L("category"));
-  Primitive_Extract<XSTRING&>(description, __L("description"));
-  Primitive_Extract<bool>(issimulated, __L("simulated"));
-  Primitive_Extract<XQWORD>(timetoupdate, __L("timetoupdate"));
+  Primitive_Extract<XSTRING>(ID            , __L("ID"));
+  Primitive_Extract<XDWORD>(category       , __L("category"));
+  Primitive_Extract<XSTRING>(description   , __L("description"));
+  Primitive_Extract<bool>(issimulated      , __L("simulated"));
+  Primitive_Extract<XQWORD>(timetoupdate   , __L("timetoupdate"));
 
   DIONODEITEMHANDLER* itemhandler =  ItemHandler_Get();
   if(itemhandler)
     {
-      Primitive_Extract<int>(itemhandler->GetType(), __L("handler_type"));
-      Primitive_Extract<XSTRING&>((*itemhandler->GetName()), __L("handler_name"));
+      XDWORD type;
+
+      Primitive_Extract<XDWORD>(type, __L("handler_type"));
+      itemhandler->SetType(type);
+
+
+      Primitive_Extract<XSTRING>((*itemhandler->GetName()), __L("handler_name"));
     }
 
   XVectorClass_Extract<DIONODEITEMVALUE>(&values, __L("values"), __L("value"));  

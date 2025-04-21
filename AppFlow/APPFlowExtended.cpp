@@ -45,7 +45,6 @@
 #include "XConsole.h"
 #include "XSleep.h"
 #include "XThread.h"
-#include "XTranslation.h"
 #include "XTranslation_GEN.h"
 #include "XTranslation.h"
 #include "XLanguage_ISO_639_3.h"

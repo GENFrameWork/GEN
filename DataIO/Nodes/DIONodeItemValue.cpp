@@ -428,15 +428,16 @@ bool DIONODEITEMVALUE::Serialize()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUE::Deserialize()
 {   
-  Primitive_Extract<XDWORD>(type, __L("type"));  
-  Primitive_Extract<XDWORD>((XDWORD)mode, __L("mode"));
+  Primitive_Extract<XDWORD>(type                  , __L("type"));  
+  Primitive_Extract<XDWORD>((XDWORD&)mode         , __L("mode"));
   
-  //Primitive_Extract<XVARIANT*>(&datetimelastupdate, __L("lastupdate"));
+//Primitive_Extract<XVARIANT>(datetimelastupdate, __L("lastupdate"));
 
-  Primitive_Extract<XVARIANT&>(value, __L("value")); 
-  Primitive_Extract<XVARIANT&>(minvalue, __L("minvalue"));
-  Primitive_Extract<XVARIANT&>(maxvalue, __L("maxvalue"));  
-  Primitive_Extract<XVARIANT&>(differenceforchange, __L("differenceforchange"));
+  Primitive_Extract<XVARIANT>(value               , __L("value")); 
+  Primitive_Extract<XVARIANT>(minvalue            , __L("minvalue"));
+  Primitive_Extract<XVARIANT>(maxvalue            , __L("maxvalue"));  
+  Primitive_Extract<XVARIANT>(differenceforchange , __L("differenceforchange"));
+  
   Class_Extract<DIONODEITEMVALUEUNITFORMAT>(&unitformat, __L("unitformat"));
   
   return true;

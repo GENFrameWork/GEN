@@ -162,9 +162,9 @@ XVARIANT* DIONODEITEMVALUEUNITFORMAT::GetSymbol()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUEUNITFORMAT::Serialize()
 {  
-  Primitive_Add<int>(type, __L("type"));
-  Primitive_Add<XVARIANT*>(&name, __L("name"));
-  Primitive_Add<XVARIANT*>(&symbol, __L("symbol"));
+  Primitive_Add<int>(type           , __L("type"));
+  Primitive_Add<XVARIANT*>(&name    , __L("name"));
+  Primitive_Add<XVARIANT*>(&symbol  , __L("symbol"));
     
   return true;
 }
@@ -181,9 +181,9 @@ bool DIONODEITEMVALUEUNITFORMAT::Serialize()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUEUNITFORMAT::Deserialize()
 {
-  Primitive_Extract<int>(type, __L("type"));
-  Primitive_Extract<XVARIANT&>(name, __L("name"));
-  Primitive_Extract<XVARIANT&>(symbol, __L("symbol"));
+  Primitive_Extract<XDWORD>(type       , __L("type"));
+  Primitive_Extract<XVARIANT>(name     , __L("name"));
+  Primitive_Extract<XVARIANT>(symbol   , __L("symbol"));
 
   return true;
 }

@@ -88,7 +88,8 @@ DIOCOREPROTOCOL_CONNECTION::DIOCOREPROTOCOL_CONNECTION() : XFSMACHINE(0)
 {
   Clean(); 
 
-  operation_mutex = GEN_XFACTORY.Create_Mutex();
+  operation_mutex         = GEN_XFACTORY.Create_Mutex();
+  insidecommand_mutex     = GEN_XFACTORY.Create_Mutex();
 
   xtimerstatus            = GEN_XFACTORY.CreateTimer();
   xtimerwithoutconnexion  = GEN_XFACTORY.CreateTimer();
@@ -149,6 +150,11 @@ DIOCOREPROTOCOL_CONNECTION::~DIOCOREPROTOCOL_CONNECTION()
   if(operation_mutex)
     {
       GEN_XFACTORY.Delete_Mutex(operation_mutex);
+    }
+
+  if(insidecommand_mutex)
+    {
+      GEN_XFACTORY.Delete_Mutex(insidecommand_mutex);
     }
 
   Clean();
@@ -954,11 +960,6 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XCHAR* classname, XSERIALIZABLE*
     {
       return false;
     } 
-
-  if(!OperationMutex(true))
-    {
-      return false;
-    }
   
   classserializable->SetSerializationMethod(serializationmethod);
   classserializable->Serialize(); 
@@ -981,11 +982,6 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XCHAR* classname, XSERIALIZABLE*
               status = value->GetValueBoolean();
             }  
         }
-    }
-
-  if(!OperationMutex(false))
-    {
-      return false;
     }
                                                                     
   return status;       
@@ -1014,11 +1010,6 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XCHAR* classname, XSERIALIZAB
     {
       return false;
     } 
-
-  if(!OperationMutex(true))
-    {
-      return false;
-    }
                 
   if(UpdateClass_DoAsk(&ID_message, classname))
     {     
@@ -1029,8 +1020,7 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XCHAR* classname, XSERIALIZAB
         {  
           XSERIALIZATIONMETHOD* serializationmethod = XSERIALIZABLE::CreateInstance(resultcontent);
           if(!serializationmethod)
-            {
-              OperationMutex(false);
+            {  
               return false;
             }
                  
@@ -1043,12 +1033,7 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XCHAR* classname, XSERIALIZAB
             }
         }
     }
-
-  if(!OperationMutex(false))
-    {
-      return false;
-    }
-                                                                    
+                                             
   return status;       
 }
 
@@ -1079,7 +1064,7 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XUUID* ID_message, XCHAR* classn
     {
       if(protocol->GetProtocolCFG()->GetIsServer())
         {
-          return false;
+          //return false;
         }
     }
   
@@ -1115,7 +1100,7 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XUUID* ID_message, XCHAR* cla
     {
       if(!protocol->GetProtocolCFG()->GetIsServer())
         {
-          return false;
+          //return false;
         }
     }
   
@@ -1797,17 +1782,53 @@ bool DIOCOREPROTOCOL_CONNECTION::RemoteDisconnect()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOCOREPROTOCOL_CONNECTION::OperationMutex(bool activated)
-* @brief      operation mutex
+* @fn         XMUTEX* DIOCOREPROTOCOL_CONNECTION::GetOperationMutex()
+* @brief      get operation mutex
 * @ingroup    DATAIO
 * 
-* @param[in]  activated : 
+* @return     XMUTEX* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XMUTEX* DIOCOREPROTOCOL_CONNECTION::GetOperationMutex()
+{
+  return operation_mutex;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XMUTEX* DIOCOREPROTOCOL_CONNECTION::GetInsideCommandMutex()
+* @brief      get inside command mutex
+* @ingroup    DATAIO
+* 
+* @return     XMUTEX* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XMUTEX* DIOCOREPROTOCOL_CONNECTION::GetInsideCommandMutex()
+{
+  return insidecommand_mutex;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOCOREPROTOCOL_CONNECTION::Mutex_Activate(XMUTEX* mutex, bool activate)
+* @brief      mutex  activate
+* @ingroup    DATAIO
+* 
+* @param[in]  mutex : 
+* @param[in]  activate : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOCOREPROTOCOL_CONNECTION::OperationMutex(bool activated)
+bool DIOCOREPROTOCOL_CONNECTION::Mutex_Activate(XMUTEX* mutex, bool activate)
 {
+  if(!mutex)
+    {
+      return false;
+    }
+
   if(!protocol)
     {
       return false;
@@ -1818,24 +1839,64 @@ bool DIOCOREPROTOCOL_CONNECTION::OperationMutex(bool activated)
       return false;
     }
 
+  /*
   if(!protocol->GetProtocolCFG()->BusMode_IsActive())
     {
       return true;
     }
+  */
 
-  if(!operation_mutex)
+  bool status = false;
+
+  if(activate)
+    {
+      status = mutex->Lock();
+    }
+   else
+    {
+      status = mutex->UnLock();
+    }
+    
+  return true;  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOCOREPROTOCOL_CONNECTION::Mutex_IsActive(XMUTEX* mutex)
+* @brief      mutex  is active
+* @ingroup    DATAIO
+* 
+* @param[in]  mutex : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOCOREPROTOCOL_CONNECTION::Mutex_IsActive(XMUTEX* mutex)
+{
+   if(!mutex)
     {
       return false;
     }
 
-  if(activated)
+  if(!protocol)
     {
-      return operation_mutex->Lock();
+      return false;
     }
-   else
+
+  if(!protocol->GetProtocolCFG())
     {
-      return operation_mutex->UnLock();
+      return false;
     }
+
+  /*
+  if(!protocol->GetProtocolCFG()->BusMode_IsActive())
+    {
+      return true;
+    }
+  */
+
+  return mutex->IsLock();  
 }
 
 
@@ -2469,8 +2530,9 @@ void DIOCOREPROTOCOL_CONNECTION::Clean()
   protocol                        = NULL;
 
   status                          = DIOCOREPROTOCOL_CONNECTION_STATUS_NONE; 
-
+  
   operation_mutex                 = NULL;
+  insidecommand_mutex             = NULL;  
 
   xtimerstatus                    = NULL;
   xtimerwithoutconnexion          = NULL;
@@ -2481,6 +2543,8 @@ void DIOCOREPROTOCOL_CONNECTION::Clean()
   registerdata                    = NULL;
 
   completedinitialupdateclasses   = false;
+
+  isreceivedcommand               = false;
 }
 
 

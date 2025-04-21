@@ -906,46 +906,46 @@ bool DIOCOREPROTOCOL_HEADER::Deserialize()
   XSTRING string;
   
   string.Empty();
-  Primitive_Extract<XSTRING&>(string, DIOCOREPROTOCOL_HEADER_VAR_ID_MESSAGE);
+  Primitive_Extract<XSTRING>(string, DIOCOREPROTOCOL_HEADER_VAR_ID_MESSAGE);
   ID_message.SetFromString(string);
 
   #ifdef DIOCOREPROTOCOL_HUMANFORMAT_ACTIVE
-    Primitive_Extract<XSTRING&>(string, DIOCOREPROTOCOL_HEADER_VAR_MESSAGE_TYPE);
+    Primitive_Extract<XSTRING>(string, DIOCOREPROTOCOL_HEADER_VAR_MESSAGE_TYPE);
     GetMessageTypeFromString(&string, message_type);       
   #else
-    Primitive_Extract<int&>((int&)message_type, DIOCOREPROTOCOL_HEADER_VAR_MESSAGE_TYPE);
+    Primitive_Extract<int>((int&)message_type, DIOCOREPROTOCOL_HEADER_VAR_MESSAGE_TYPE);
   #endif
   
   #ifdef DIOCOREPROTOCOL_HUMANFORMAT_ACTIVE
-    Primitive_Extract<XSTRING&>(string, DIOCOREPROTOCOL_HEADER_VAR_OPERATION);
+    Primitive_Extract<XSTRING>(string, DIOCOREPROTOCOL_HEADER_VAR_OPERATION);
     GetOperationFromString(&string, operation);    
   #else
-    Primitive_Extract<int&>((int&)operation, DIOCOREPROTOCOL_HEADER_VAR_OPERATION);
+    Primitive_Extract<int>((int&)operation, DIOCOREPROTOCOL_HEADER_VAR_OPERATION);
   #endif
 
-  Primitive_Extract<XSTRING&>(operation_param, DIOCOREPROTOCOL_HEADER_VAR_OPERATION_PARAM);
+  Primitive_Extract<XSTRING>(operation_param, DIOCOREPROTOCOL_HEADER_VAR_OPERATION_PARAM);
 
   string.Empty();
-  Primitive_Extract<XSTRING&>(string, DIOCOREPROTOCOL_HEADER_VAR_DATETIME_SEND);
+  Primitive_Extract<XSTRING>(string, DIOCOREPROTOCOL_HEADER_VAR_DATETIME_SEND);
   datetime_send->GetDateTimeFromStringISO8601(string, XDATETIME_FORMAT_ISO8601_STANDARD | XDATETIME_FORMAT_TIMEWITHMILLISECONDS);
   
   #ifdef DIOCOREPROTOCOL_HUMANFORMAT_ACTIVE
-    Primitive_Extract<XSTRING&>(string, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_TYPE);
+    Primitive_Extract<XSTRING>(string, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_TYPE);
     GetContentTypeFromString(&string, content_type); 
   #else
-    Primitive_Extract<int&>((int&)content_type, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_TYPE);
+    Primitive_Extract<int>((int&)content_type, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_TYPE);
   #endif
 
-  Primitive_Extract<XDWORD&>(block_index, DIOCOREPROTOCOL_HEADER_VAR_BLOCK_INDEX);
+  Primitive_Extract<XDWORD>(block_index, DIOCOREPROTOCOL_HEADER_VAR_BLOCK_INDEX);
 
-  Primitive_Extract<XDWORD&>(block_amount, DIOCOREPROTOCOL_HEADER_VAR_BLOCK_AMOUNT);
+  Primitive_Extract<XDWORD>(block_amount, DIOCOREPROTOCOL_HEADER_VAR_BLOCK_AMOUNT);
 
-  Primitive_Extract<XDWORD&>(content_size, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_SIZE);
+  Primitive_Extract<XDWORD>(content_size, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_SIZE);
          
-  Primitive_Extract<XDWORD&>(content_compresssize, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_COMPRESSSIZE);
+  Primitive_Extract<XDWORD>(content_compresssize, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_COMPRESSSIZE);
   
   string.Empty();
-  Primitive_Extract<XSTRING&>(string, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_CRC32);
+  Primitive_Extract<XSTRING>(string, DIOCOREPROTOCOL_HEADER_VAR_CONTENT_CRC32);
   string.UnFormat(__L("%08X"), &content_CRC32);
    
   return true;

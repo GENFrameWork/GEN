@@ -69,7 +69,8 @@ class DIONODEITEMHANDLER : public XSUBJECT
                                   DIONODEITEMHANDLER     ();
     virtual                      ~DIONODEITEMHANDLER     ();
 
-    XDWORD                        GetType                 ();      
+    XDWORD                        GetType                 (); 
+    void                          SetType                 (XDWORD type);      
     XSTRING*                      GetName                 ();      
 
     virtual bool                  Open                    ();

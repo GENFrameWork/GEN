@@ -113,6 +113,21 @@ XDWORD DIONODEITEMHANDLER::GetType()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         void DIONODEITEMHANDLER::SetType(XDWORD type)
+* @brief      set type
+* @ingroup    DATAIO
+* 
+* @param[in]  type : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIONODEITEMHANDLER::SetType(XDWORD type)
+{
+  this->type = type;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSTRING* DIONODEITEMHANDLER::GetName()
 * @brief      Get name
 * @ingroup    DATAIO

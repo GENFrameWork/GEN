@@ -267,10 +267,10 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Serialize()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_INTERNETSTATUS::Deserialize()
 { 
-  Primitive_Extract<XSTRING&>(localIP            , __L("localIP"));
+  Primitive_Extract<XSTRING>(localIP             , __L("localIP"));
   
   Primitive_Extract<bool>(haveinternetconnection , __L("internetconnection"));
-  Primitive_Extract<XSTRING&>(publicIP           , __L("publicIP"));
+  Primitive_Extract<XSTRING>(publicIP            , __L("publicIP"));
  
   return true;
 }

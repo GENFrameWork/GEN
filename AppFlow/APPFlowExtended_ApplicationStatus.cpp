@@ -468,17 +468,17 @@ bool APPFLOWEXTENDED_APPLICATIONSTATUS::Serialize()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_APPLICATIONSTATUS::Deserialize()
 { 
-  Primitive_Extract<XSTRING&>(osversion       , __L("osversion"));  
-  Primitive_Extract<XSTRING&>(appversion      , __L("appversion"));
+  Primitive_Extract<XSTRING>(osversion           , __L("osversion"));  
+  Primitive_Extract<XSTRING>(appversion          , __L("appversion"));
 
-  Primitive_Extract<int>(memory_total         , __L("memorytotal"));
-  Primitive_Extract<int>(memory_free          , __L("memoryfree"));
-  Primitive_Extract<int>(memory_freepercent   , __L("memoryfreepercent"));  
+  Primitive_Extract<XDWORD>(memory_total         , __L("memorytotal"));
+  Primitive_Extract<XDWORD>(memory_free          , __L("memoryfree"));
+  Primitive_Extract<XDWORD>(memory_freepercent   , __L("memoryfreepercent"));  
 
-  Primitive_Extract<XSTRING&>(averange        , __L("averange"));
+  Primitive_Extract<XSTRING>(averange            , __L("averange"));
 
-  Primitive_Extract<XSTRING&>(currentdate     , __L("currentdate"));
-  Primitive_Extract<XSTRING&>(operatingtime   , __L("operatingtime"));
+  Primitive_Extract<XSTRING>(currentdate         , __L("currentdate"));
+  Primitive_Extract<XSTRING>(operatingtime       , __L("operatingtime"));
 
   return true;
 }

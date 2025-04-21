@@ -136,7 +136,7 @@ class DIOCOREPROTOCOL_CONNECTIONSMANAGER : public XOBSERVER, public XSUBJECT
     void                                      Clean                                          ();
     
     
-    XMUTEX*                                   connections_xmutex;
+    XMUTEX*                                   connections_delete_xmutex;
     XTHREADCOLLECTED*                         connections_xthread;
     XTHREADCOLLECTED*                         connection_update_xthread;
     XTHREADCOLLECTED*                         automaticoperations_xthread;
