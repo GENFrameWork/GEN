@@ -43,7 +43,7 @@
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 #pragma region PRECOMPILATION_CONTROL_INCLUDE
 
-#include "GEN_Control.h"
+#include "XMemory_Control.h"
 
 #pragma endregion
 

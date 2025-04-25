@@ -76,6 +76,7 @@
 
 #include "VersionFrameWork.h"
 
+#include "XFeedback_Control.h"
 #include "XPathsManager.h"
 #include "XThreadCollected.h"
 #include "XRand.h"
@@ -263,6 +264,10 @@ bool MAINPROCANDROID::End()
   GetXPathExec()->Empty();
 
   DeleteAllExecParams();
+
+  XFEEDBACK_CONTROL_DISPLAYFEEDBACK  
+  XFEEDBACK_CONTROL_DELETE 
+
   Factorys_End();
 
   #ifdef APPFLOW_ACTIVE
@@ -1079,6 +1084,8 @@ bool MAINPROCANDROID::Factorys_Ini()
   XFACTORY::SetInstance(new XANDROIDFACTORY());
   if(!XFACTORY::GetIsInstanced()) return false;
 
+  XFEEDBACK_CONTROL_CREATE
+
   #ifdef XSYSTEM_ACTIVE  
   if(!XSYSTEM::SetInstance(new XANDROIDSYSTEM())) return false;
   XBUFFER::SetHardwareUseLittleEndian(GEN_XSYSTEM.HardwareUseLittleEndian());
@@ -1574,6 +1581,8 @@ void android_main(android_app* application)
   VERSION::DelInstance();
 
   XFILE_DISPLAYNOTCLOSEFILES
+  XFEEDBACK_CONTROL_DISPLAYFEEDBACK
+  XFEEDBACK_CONTROL_DELETERESOURCES
   XMEMORY_CONTROL_DISPLAYMEMORYLEAKS
 }
 

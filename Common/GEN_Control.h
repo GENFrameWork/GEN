@@ -32,6 +32,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
+#include "XFeedback_Control.h"
 #include "XMemory_Control.h"
 
 #pragma endregion

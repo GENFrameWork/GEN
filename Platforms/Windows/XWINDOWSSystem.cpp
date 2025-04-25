@@ -48,9 +48,10 @@
 #include <Commctrl.h>
 #include <Security.h>
 #include <powrprof.h>
-#include <wlanapi.h>
+
 
 #ifndef BUILDER
+#include <wlanapi.h>
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
 #endif
@@ -76,8 +77,9 @@
 #include "XTrace.h"
 #include "XLanguage_ISO_639_3.h"
 
-
+#ifndef BUILDER
 #pragma comment(lib, "wlanapi.lib")
+#endif
 
 #pragma endregion
 
@@ -1259,15 +1261,17 @@ bool XWINDOWSSYSTEM::GetBatteryLevel(bool& isincharge, XBYTE& levelpercent)
 * --------------------------------------------------------------------------------------------------------------------*/
 int XWINDOWSSYSTEM::GetWifiRSSILevel()
 {
+  int                         index_status        = 0;
+
+  #ifndef BUILDER
   HANDLE                      handleclient        = NULL;
   DWORD                       max_client          = 2;
   DWORD                       current_version     = 0;
-  DWORD                       result              = 0;  
+  DWORD                       result              = 0;
   PWLAN_INTERFACE_INFO_LIST   interfacelist       = NULL;
-  PWLAN_INTERFACE_INFO        interfacelinfo      = NULL;  
+  PWLAN_INTERFACE_INFO        interfacelinfo      = NULL;
   PWLAN_INTERFACE_CAPABILITY  interfacecapability = NULL;
-  int                         index_status        = 0;    
-  
+
   result = WlanOpenHandle(max_client, NULL, &current_version, &handleclient);
   if(result != ERROR_SUCCESS) return false;
 
@@ -1316,6 +1320,7 @@ int XWINDOWSSYSTEM::GetWifiRSSILevel()
     }
 
   WlanCloseHandle(handleclient, NULL);
+  #endif
 
   return index_status;
 }
@@ -1351,7 +1356,7 @@ bool XWINDOWSSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
       if(registrymanager.OpenKey(handlekey[c], keyname, registrykey))
         {
           if(registrykey.ReadValue(__L("Path"), pathvalue))
-            {          
+            {
               apppath = (XSTRING)pathvalue;
               apppath.Slash_Add();
               apppath.AddFormat(__L("%s.exe"), appname);  

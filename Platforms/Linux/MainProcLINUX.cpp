@@ -147,6 +147,7 @@
 #include "Script_Cache.h"
 #endif
 
+#include "XFeedback_Control.h"
 #include "XRand.h"
 #include "XSleep.h"
 #include "XPath.h"
@@ -363,10 +364,12 @@ bool MAINPROCLINUX::End()
   #endif
 
   GEN_VERSION.DelInstance();
+  
+  XFILE_DISPLAYNOTCLOSEFILES
+  XFEEDBACK_CONTROL_DISPLAYFEEDBACK  
+  XFEEDBACK_CONTROL_DELETE 
 
   Factorys_End();
-
-  XFILE_DISPLAYNOTCLOSEFILES
 
   XMEMORY_CONTROL_DEACTIVATED
   XMEMORY_CONTROL_DISPLAYMEMORYLEAKS
@@ -390,6 +393,8 @@ bool MAINPROCLINUX::Factorys_Ini()
     {
       return false;
     }
+
+  XFEEDBACK_CONTROL_CREATE
   
   #ifdef XSYSTEM_ACTIVE  
   if(!XSYSTEM::SetInstance(new XLINUXSYSTEM())) 

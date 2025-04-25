@@ -364,7 +364,7 @@ bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
 
               if(displaydata)
                 {
-                  XTRACE_PRINTDATABLOCK(XDEBUGLEVELCOLOR(XTRACE_COLOR_RED), (XBYTE*)assignlist[c].ptr, datablocksize, 1);
+                  XTRACE_PRINTDATABLOCK(0, (XBYTE*)assignlist[c].ptr, datablocksize, 1);
                 }
 
               //-----------------------------------------------------------------
@@ -378,7 +378,7 @@ bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
             }
         }
 
-      XTRACE_PRINTHEADER(0, NULL);
+      XTRACE_PRINTHEADER((level | XTRACE_LEVEL_WITHCOLOR), NULL);
     }
 
   #endif

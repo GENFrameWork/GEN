@@ -336,7 +336,7 @@ bool XPATHSMANAGER::AddPathSection(XPATHSMANAGERSECTIONTYPE sectiontype, XSTRING
     }
    else
     {
-      xpathsection->xpath->Set(xpath.Get());
+      (*xpathsection->xpath) = xpath;
       xpathsection->xpath->Slash_Add();
       xpathsection->xpath->Slash_Normalize();
     }

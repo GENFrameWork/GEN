@@ -49,7 +49,9 @@
 #include <Security.h>
 #include <powrprof.h>
 
+
 #ifndef BUILDER
+#include <wlanapi.h>
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
 #endif
@@ -74,6 +76,9 @@
 #include "XFileTXT.h"
 #include "XTrace.h"
 #include "XLanguage_ISO_639_3.h"
+
+
+#pragma comment(lib, "wlanapi.lib")
 
 #pragma endregion
 
@@ -103,7 +108,7 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XWINDOWSSYSTEM_CPUUSAGE::XWINDOWSSYSTEM_CPUUSAGE()
-* @brief      Constructor
+* @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -116,7 +121,7 @@ XWINDOWSSYSTEM_CPUUSAGE::XWINDOWSSYSTEM_CPUUSAGE()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XWINDOWSSYSTEM_CPUUSAGE::~XWINDOWSSYSTEM_CPUUSAGE()
-* @brief      Destructor
+* @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -130,7 +135,7 @@ XWINDOWSSYSTEM_CPUUSAGE::~XWINDOWSSYSTEM_CPUUSAGE()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         double XWINDOWSSYSTEM_CPUUSAGE::GetTotalCpuUsage()
-* @brief      GetTotalCpuUsage
+* @brief      Get total cpu usage
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @return     double : 
@@ -175,7 +180,7 @@ double XWINDOWSSYSTEM_CPUUSAGE::GetTotalCpuUsage()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         double XWINDOWSSYSTEM_CPUUSAGE::GetProcessCpuUsage(DWORD processID)
-* @brief      GetProcessCpuUsage
+* @brief      Get process cpu usage
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  processID : 
@@ -185,6 +190,7 @@ double XWINDOWSSYSTEM_CPUUSAGE::GetTotalCpuUsage()
 * --------------------------------------------------------------------------------------------------------------------*/
 double XWINDOWSSYSTEM_CPUUSAGE::GetProcessCpuUsage(DWORD processID) 
 {
+  #ifndef BUILDER
   HANDLE hprocess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);
   if(hprocess == NULL) 
     {
@@ -227,13 +233,16 @@ double XWINDOWSSYSTEM_CPUUSAGE::GetProcessCpuUsage(DWORD processID)
   lastprocesstime = processtime;
 
   return (processtimediff * 100.0) / (timediff * GetNumberOfProcessors());
+  #else
+  return 0.0f;
+  #endif
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         ULONGLONG XWINDOWSSYSTEM_CPUUSAGE::SubtractTimes(const FILETIME& fta, const FILETIME& ftb)
-* @brief      SubtractTimes
+* @brief      Subtract times
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  FILETIME& fta : 
@@ -259,7 +268,7 @@ ULONGLONG XWINDOWSSYSTEM_CPUUSAGE::SubtractTimes(const FILETIME& fta, const FILE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         int XWINDOWSSYSTEM_CPUUSAGE::GetNumberOfProcessors()
-* @brief      GetNumberOfProcessors
+* @brief      Get number of processors
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @return     int : 
@@ -278,7 +287,7 @@ int XWINDOWSSYSTEM_CPUUSAGE::GetNumberOfProcessors()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void XWINDOWSSYSTEM_CPUUSAGE::Clean()
-* @brief      Clean the attributes of the class: Default initialice
+* @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -305,7 +314,7 @@ void XWINDOWSSYSTEM_CPUUSAGE::Clean()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWINDOWSSYSTEM_CPUUSAGESTATUS::XWINDOWSSYSTEM_CPUUSAGESTATUS()
-* @brief      Constructor
+* @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 *
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -318,7 +327,7 @@ XWINDOWSSYSTEM_CPUUSAGESTATUS::XWINDOWSSYSTEM_CPUUSAGESTATUS()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWINDOWSSYSTEM_CPUUSAGESTATUS::~XWINDOWSSYSTEM_CPUUSAGESTATUS()
-* @brief      Destructor
+* @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
 *
@@ -332,7 +341,7 @@ XWINDOWSSYSTEM_CPUUSAGESTATUS::~XWINDOWSSYSTEM_CPUUSAGESTATUS()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void XWINDOWSSYSTEM_CPUUSAGESTATUS::Clean()
-* @brief      Clean the attributes of the class: Default initialice
+* @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
 *
@@ -356,7 +365,7 @@ void XWINDOWSSYSTEM_CPUUSAGESTATUS::Clean()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XWINDOWSSYSTEM::XWINDOWSSYSTEM()
-* @brief      Constructor
+* @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -369,7 +378,7 @@ XWINDOWSSYSTEM::XWINDOWSSYSTEM() : XSYSTEM()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWINDOWSSYSTEM::~XWINDOWSSYSTEM()
-* @brief      Destructor
+* @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
 *
@@ -385,7 +394,7 @@ XWINDOWSSYSTEM::~XWINDOWSSYSTEM()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XSYSTEM_HARDWARETYPE XWINDOWSSYSTEM::GetTypeHardware(int* revision)
-* @brief      GetTypeHardware
+* @brief      Get type hardware
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  revision : 
@@ -404,7 +413,7 @@ XSYSTEM_HARDWARETYPE XWINDOWSSYSTEM::GetTypeHardware(int* revision)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XSYSTEM_PLATFORM XWINDOWSSYSTEM::GetPlatform(XSTRING* namestring)
-* @brief      GetPlatform
+* @brief      Get platform
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  namestring : 
@@ -423,7 +432,7 @@ XSYSTEM_PLATFORM XWINDOWSSYSTEM::GetPlatform(XSTRING* namestring)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSSYSTEM::GetOperativeSystemID(XSTRING& ID)
-* @brief      GetOperativeSystemID
+* @brief      Get operative system ID
 * @ingroup    PLATFORM_WINDOWS
 *
 * @param[in]  ID : 
@@ -466,7 +475,7 @@ bool XWINDOWSSYSTEM::GetOperativeSystemID(XSTRING& ID)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XLANGUAGE_CODE XWINDOWSSYSTEM::GetLanguageSO()
-* @brief      GetLanguageSO
+* @brief      Get language SO
 * @ingroup    PLATFORM_WINDOWS
 *
 * @return     XLANGUAGE_CODE :
@@ -491,7 +500,7 @@ XDWORD XWINDOWSSYSTEM::GetLanguageSO()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XSTRING* XWINDOWSSYSTEM::GetBIOSSerialNumber()
-* @brief      GetBIOSSerialNumber
+* @brief      Get BIOS serial number
 * @ingroup    PLATFORM_WINDOWS
 *
 * @return     XSTRING* :
@@ -517,7 +526,7 @@ XSTRING* XWINDOWSSYSTEM::GetBIOSSerialNumber()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XSTRING* XWINDOWSSYSTEM::GetCPUSerialNumber()
-* @brief      GetCPUSerialNumber
+* @brief      Get CPU serial number
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @return     XSTRING* : 
@@ -542,7 +551,7 @@ XSTRING* XWINDOWSSYSTEM::GetCPUSerialNumber()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         float XWINDOWSSYSTEM::GetCPUTemperature()
-* @brief      GetCPUTemperature
+* @brief      Get CPU temperature
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @return     float : 
@@ -574,7 +583,7 @@ float XWINDOWSSYSTEM::GetCPUTemperature()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XWINDOWSSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
-* @brief      Get Memory Info
+* @brief      Get memory info
 * @ingroup    PLATFORM_WINDOWS
 *
 * @param[out] total : total memory in bytes.
@@ -599,7 +608,7 @@ bool XWINDOWSSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         int XWINDOWSSYSTEM::GetCPUUsageTotal()
-* @brief      GetCPUUsageTotal
+* @brief      Get CPU usage total
 * @ingroup    PLATFORM_WINDOWS
 *
 * @return     int : 
@@ -664,7 +673,7 @@ int XWINDOWSSYSTEM::GetCPUUsageTotal()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         int XWINDOWSSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
-* @brief      GetCPUUsageForProcessName
+* @brief      Get CPU usage for process name
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  processname : 
@@ -718,7 +727,7 @@ int XWINDOWSSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         int XWINDOWSSYSTEM::GetCPUUsageForProcessID(XDWORD processID)
-* @brief      GetCPUUsageForProcessID
+* @brief      Get CPU usage for process ID
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  processID : 
@@ -781,7 +790,7 @@ int XWINDOWSSYSTEM::GetCPUUsageForProcessID(XDWORD processID)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XCHAR* XWINDOWSSYSTEM::GetEnviromentVariable(XCHAR* name)
-* @brief      GetEnviromentVariable
+* @brief      Get enviroment variable
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  name : 
@@ -798,7 +807,7 @@ XCHAR* XWINDOWSSYSTEM::GetEnviromentVariable(XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSSYSTEM::SetEnviromentVariable(XCHAR* name, XCHAR* value)
-* @brief      SetEnviromentVariable
+* @brief      Set enviroment variable
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  name : 
@@ -847,7 +856,7 @@ bool XWINDOWSSYSTEM::SetEnviromentVariable(XCHAR* name, XCHAR* value)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSSYSTEM::DelEnviromentVariable(XCHAR* name)
-* @brief      DelEnviromentVariable
+* @brief      Del enviroment variable
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  name : 
@@ -890,7 +899,7 @@ bool XWINDOWSSYSTEM::DelEnviromentVariable(XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSSYSTEM::GetUserAndDomain(XSTRING& user, XSTRING& domain)
-* @brief      GetUserAndDomain
+* @brief      Get user and domain
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  user : 
@@ -965,7 +974,7 @@ bool XWINDOWSSYSTEM::GetUserAndDomain(XSTRING& user, XSTRING& domain)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSSYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
-* @brief      ShutDown
+* @brief      Shut down
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  type : 
@@ -1022,7 +1031,7 @@ bool XWINDOWSSYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         int XWINDOWSSYSTEM::Sound_GetLevel()
-* @brief      Sound_GetLevel
+* @brief      Sound get level
 * @ingroup    PLATFORM_WINDOWS
 *
 * @return     int : 
@@ -1082,7 +1091,7 @@ int XWINDOWSSYSTEM::Sound_GetLevel()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSSYSTEM::Sound_SetLevel(int level)
-* @brief      Sound_SetLevel
+* @brief      Sound set level
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  level : 
@@ -1152,7 +1161,7 @@ bool XWINDOWSSYSTEM::Sound_SetLevel(int level)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSSYSTEM::Sound_SetMutex(bool on)
-* @brief      Sound_SetMutex
+* @brief      Sound set mutex
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  on : 
@@ -1210,7 +1219,7 @@ bool XWINDOWSSYSTEM::Sound_SetMutex(bool on)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSSYSTEM::GetBatteryLevel(bool& isincharge, XBYTE& levelpercent)
-* @brief      GetBatteryLevel
+* @brief      Get battery level
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  isincharge : 
@@ -1241,9 +1250,133 @@ bool XWINDOWSSYSTEM::GetBatteryLevel(bool& isincharge, XBYTE& levelpercent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int XWINDOWSSYSTEM::GetWifiRSSILevel()
+* @brief      get wifi RSSIlevel
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     int : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+int XWINDOWSSYSTEM::GetWifiRSSILevel()
+{
+  int                         index_status        = 0;
+
+  #ifndef BUILDER
+  HANDLE                      handleclient        = NULL;
+  DWORD                       max_client          = 2;
+  DWORD                       current_version     = 0;
+  DWORD                       result              = 0;
+  PWLAN_INTERFACE_INFO_LIST   interfacelist       = NULL;
+  PWLAN_INTERFACE_INFO        interfacelinfo      = NULL;
+  PWLAN_INTERFACE_CAPABILITY  interfacecapability = NULL;
+
+  result = WlanOpenHandle(max_client, NULL, &current_version, &handleclient);
+  if(result != ERROR_SUCCESS) return false;
+
+  result = WlanEnumInterfaces(handleclient, NULL, &interfacelist);
+  if(result != ERROR_SUCCESS) return false;
+
+
+  for(DWORD c=0; c<interfacelist->dwNumberOfItems; c++)
+    {
+      bool needactivated = false;
+
+      interfacelinfo = (WLAN_INTERFACE_INFO*)&interfacelist->InterfaceInfo[c];            
+      if(interfacelinfo->isState == wlan_interface_state_connected)
+        {
+          index_status = 4;
+
+          PVOID*                  ptr_rssi = 0;
+          DWORD                   sizerssi = sizeof(ptr_rssi);
+          WLAN_OPCODE_VALUE_TYPE  wlanopcodevaluetype = wlan_opcode_value_type_invalid;
+
+          result = WlanQueryInterface(handleclient, &interfacelinfo->InterfaceGuid
+                                                  , wlan_intf_opcode_rssi
+                                                  , NULL
+                                                  , &sizerssi
+                                                  , ptr_rssi
+                                                  , &wlanopcodevaluetype);
+
+          if(result == ERROR_SUCCESS)
+            {
+              if(ptr_rssi)
+                {               
+                  int rssi = (int)(*(int*)(ptr_rssi));
+                         
+                  if(rssi < -67) index_status = 3; 
+                  if(rssi < -70) index_status = 2; 
+                  if(rssi < -80) index_status = 1;                     
+                }
+            }
+        }
+    }
+  
+  if(interfacelist != NULL)
+    {
+      WlanFreeMemory(interfacelist);
+      interfacelist = NULL;
+    }
+
+  WlanCloseHandle(handleclient, NULL);
+  #endif
+
+  return index_status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
+* @brief      get path exec application
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  appname : 
+* @param[in]  apppath : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
+{
+  apppath.Empty();
+
+  XWINDOWSREGISTRYMANAGER registrymanager;
+  XWINDOWSREGISTRYKEY     registrykey;
+  XSTRING                 keyname;
+  HKEY                    handlekey[2] = { HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE };
+  XVARIANT                pathvalue;
+  bool                    status    = false;
+  
+  for(XDWORD c=0; c<2; c++)
+    {
+      keyname.Format(__L("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\%s.exe"), appname);
+
+      if(registrymanager.OpenKey(handlekey[c], keyname, registrykey))
+        {
+          if(registrykey.ReadValue(__L("Path"), pathvalue))
+            {
+              apppath = (XSTRING&)pathvalue;
+              apppath.Slash_Add();
+              apppath.AddFormat(__L("%s.exe"), appname);  
+
+              status = true; 
+
+              break;                                  
+            }
+
+          registrymanager.CloseKey(registrykey);    
+        }
+    }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::AddCPUUsageStatus(XCHAR* processname)
-* @brief      AddCPUUsageStatus
+* @brief      Add CPU usage status
 * @ingroup    PLATFORM_WINDOWS
 *
 * @param[in]  processname : 
@@ -1270,7 +1403,7 @@ XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::AddCPUUsageStatus(XCHAR* processn
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::GetCPUUsageStatus(XCHAR* processname)
-* @brief      GetCPUUsageStatus
+* @brief      Get CPU usage status
 * @ingroup    PLATFORM_WINDOWS
 *
 * @param[in]  processname :
@@ -1319,7 +1452,7 @@ XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::GetCPUUsageStatus(XCHAR* processn
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::AddCPUUsageStatus(XDWORD processID)
-* @brief      AddCPUUsageStatus
+* @brief      Add CPU usage status
 * @ingroup    PLATFORM_WINDOWS
 *
 * @param[in]  processID : 
@@ -1346,7 +1479,7 @@ XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::AddCPUUsageStatus(XDWORD processI
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::GetCPUUsageStatus(XDWORD processID)
-* @brief      GetCPUUsageStatus
+* @brief      Get CPU usage status
 * @ingroup    PLATFORM_WINDOWS
 *
 * @param[in]  processID : 
@@ -1395,7 +1528,7 @@ XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::GetCPUUsageStatus(XDWORD processI
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XWINDOWSSYSTEM::DeleteAllCPUUsageStatus()
-* @brief      DeleteAllCPUUsageStatus
+* @brief      Delete all CPU usage status
 * @ingroup    PLATFORM_WINDOWS
 *
 * @return     bool : true if is succesful. 
@@ -1415,7 +1548,7 @@ bool XWINDOWSSYSTEM::DeleteAllCPUUsageStatus()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void XWINDOWSSYSTEM::Clean()
-* @brief      Clean the attributes of the class: Default initialice
+* @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
 *
