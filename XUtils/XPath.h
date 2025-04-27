@@ -67,8 +67,7 @@ class XPATH : public XSTRING
     void                      operator =                    (const char* path);
     void                      operator =                    (const XCHAR* path);
     void                      operator =                    (XPATH& path);
-    void                      operator =                    (XSTRING& string);
-    void                      operator =                    (XSTRING string);
+    void                      operator =                    (XSTRING& string);    
     void                      operator =                    (XWORD* path);
 
     void                      operator +=                   (const char* path);

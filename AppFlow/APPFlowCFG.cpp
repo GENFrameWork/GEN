@@ -41,10 +41,19 @@
 
 #include "Common_DefaultXTraceCFG.h"
 
+#ifdef XFEEDBACK_CONTROL_ACTIVE
+#include "XFeedback_Control.h"
+#endif
 #include "XTrace.h"
 #include "XLog.h"
-#include "DIODNSResolver.h"
 
+#ifdef DIO_WEBSERVER_ACTIVE
+#include "DIOWebServer.h"
+#endif
+#ifdef DIO_SSHREVERSE_ACTIVE
+#include "DIOSSHReverse.h"
+#endif
+#include "DIODNSResolver.h"
 #pragma endregion
 
 
@@ -379,11 +388,27 @@ bool APPFLOWCFG::DoDefault()
   log_activesectionsID                             += __L(",");
   log_activesectionsID                             += APPFLOW_CFG_LOG_SECTIONID_STATUSAPP;
   log_activesectionsID                             += __L(",");
+
+  #ifdef XFEEDBACK_CONTROL_ACTIVE  
+  log_activesectionsID                             += XFEEDBACK_CONTROL_LOG_SECTIONID; 
+  log_activesectionsID                             += __L(","); 
+  #endif
+
+  #ifdef DIO_WEBSERVER_ACTIVE
+  log_activesectionsID                             += DIOWEBSERVER_LOGSECTIONID;
+  log_activesectionsID                             += __L(",");
+  #endif
+  
+  #ifdef DIO_SSHREVERSE_ACTIVE
+  log_activesectionsID                             += DIOSSHREVERSE_LOGSECTIONID;
+  log_activesectionsID                             += __L(",");
+  #endif
+
   log_activesectionsID                             += APPFLOW_CFG_LOG_SECTIONID_ENDING;
   log_levelmask                                     = XLOGLEVEL_ALL;
   log_maxsize                                       = 3000;
   log_reductionpercent                              = 10;
-  #endif
+  #endif 
 
   return true;
 }

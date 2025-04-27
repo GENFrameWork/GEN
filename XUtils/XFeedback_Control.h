@@ -55,7 +55,11 @@
 enum XFEEDBACK_CODE
 {
   XFEEDBACK_CODE_UNKNOWN                     = 0 ,  
-  XFEEDBACK_CODE_INVALIDPARAMFUNCTION            ,  
+  XFEEDBACK_CODE_INVALIDPARAMFUNCTION            , 
+  XFEEDBACK_CODE_INVALIDMEMORYALLOCATION         ,
+  XFEEDBACK_CODE_ERRORINFUNCTION                 ,
+
+  XFEEDBACK_CODE_MAXNCODES
 };
 
 
@@ -77,6 +81,13 @@ enum XFEEDBACK_CODE
                                                       delete XFeedback_Control;                         \
                                                       XFeedback_Control = NULL;                         \
                                                     }
+  
+#define XFEEDBACK_CODE_REFTEXT                    feedback_code_text_temporal                                 
+#define XFEEDBACK_CODE_TEXT                       feedback_code_text_temporal.Get()                                 
+#define XFEEDBACK_CODE_CREATETEXT(text, ...)      XSTRING XFEEDBACK_CODE_REFTEXT;                          \
+                                                  XFEEDBACK_CODE_REFTEXT.Format(text,  ## __VA_ARGS__);   
+
+#define XFEEDBACK_CONTROL_LOG_SECTIONID           __L("Feedback")
 
 #pragma endregion
 
@@ -160,7 +171,12 @@ extern XFEEDBACK_CONTROL* XFeedback_Control;
   #define XFEEDBACK_ADD  
   #define XFEEDBACK_CONTROL_DISPLAYFEEDBACK
   #define XFEEDBACK_CONTROL_DELETERESOURCES
-
+  #define XFEEDBACK_CONTROL_CREATE
+  #define XFEEDBACK_CONTROL_DELETE
+  #define XFEEDBACK_CODE_REFTEXT  
+  #define XFEEDBACK_CODE_TEXT                
+  #define XFEEDBACK_CODE_CREATETEXT
+                                                    
 #else
 
   #define XFEEDBACK_CONTROL_ACTIVATED               
@@ -168,6 +184,11 @@ extern XFEEDBACK_CONTROL* XFeedback_Control;
   #define XFEEDBACK_ADD(code, ...)                  
   #define XFEEDBACK_CONTROL_DISPLAYFEEDBACK    
   #define XFEEDBACK_CONTROL_DELETERESOURCES
+  #define XFEEDBACK_CONTROL_CREATE
+  #define XFEEDBACK_CONTROL_DELETE
+  #define XFEEDBACK_CODE_REFTEXT                
+  #define XFEEDBACK_CODE_TEXT                
+  #define XFEEDBACK_CODE_CREATETEXT(text, ...)
 
 #endif
 

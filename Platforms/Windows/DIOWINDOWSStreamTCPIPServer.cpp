@@ -397,7 +397,7 @@ DIOSTREAM* DIOWINDOWSSTREAMTCPIPSERVER::CreateStream()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStreamDisconnected()
 {
-  int index = 0;
+  XDWORD index = 0;
 
   while(index < GetMultiSocketStreams()->GetSize())
     {
@@ -437,7 +437,7 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStreamDisconnected()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStream()
 {
-  int index = 0;
+  XDWORD index = 0;
 
   while(index < GetMultiSocketStreams()->GetSize())
     {

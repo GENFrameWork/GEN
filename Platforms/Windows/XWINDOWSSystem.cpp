@@ -1357,7 +1357,11 @@ bool XWINDOWSSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
         {
           if(registrykey.ReadValue(__L("Path"), pathvalue))
             {
-              apppath = (XSTRING)pathvalue;
+              XSTRING apppath_tempo;
+
+              apppath_tempo = (XSTRING&)pathvalue;
+
+              apppath = apppath_tempo;
               apppath.Slash_Add();
               apppath.AddFormat(__L("%s.exe"), appname);  
 

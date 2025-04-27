@@ -321,21 +321,20 @@ bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
 
   #ifdef XTRACE_ACTIVE
 
-  XTRACE_PRINT(__L(" "));
-
   XBYTE level = ((!nassigned)?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED);
 
+  XTRACE_PRINTCOLOR(level, __L(" "));
   XTRACE_PRINTHEADER((level | XTRACE_LEVEL_WITHCOLOR), (!nassigned)?__L("ALL FREE MEMORY RESOURCES"):__L("NOT FREE MEMORY RESOURCES"));
-  XTRACE_PRINT(__L(" "));
+  XTRACE_PRINTCOLOR(level, __L(" "));
   XTRACE_PRINTCOLOR(level, __L("Maximum allocated blocks at a time : %d") , maxnassigns);
   XTRACE_PRINTCOLOR(level, __L("Maximum memory used at a time      : %dk"), maxused/1024); 
-  XTRACE_PRINT(__L(" "));
+  XTRACE_PRINTCOLOR(level, __L(" "));
 
   if(nassigned)
     {
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("Number memory blocks not free      : %d"), nassigned);
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L(" "));
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("         Address  Size    Line  Module"));
+      XTRACE_PRINTCOLOR(level, __L("Number memory blocks not free      : %d"), nassigned);
+      XTRACE_PRINTCOLOR(level, __L(" "));
+      XTRACE_PRINTCOLOR(level, __L("         Address  Size    Line  Module"));
 
       XDWORD count = 0;
 
@@ -350,11 +349,11 @@ bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
               size_t ptr = (size_t)assignlist[c].ptr;
               XDWORD address = (XDWORD)ptr;
 
-              XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("%08d %08X %07d %05d %s")   , c
-                                                                                  , address
-                                                                                  , assignlist[c].size
-                                                                                  , assignlist[c].linemodule
-                                                                                  , namemodule.Get());
+              XTRACE_PRINTCOLOR(level, __L("%08d %08X %07d %05d %s")   , c
+                                                                       , address
+                                                                       , assignlist[c].size
+                                                                       , assignlist[c].linemodule
+                                                                       , namemodule.Get());
 
               //-----------------------------------------------------------------
 
@@ -372,14 +371,14 @@ bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
               count++;              
               if(count > XMEMORY_CONTROL_MAXIMUNLEAKSTODISPLAY)
                 {
-                  XTRACE_PRINTCOLOR(XTRACE_LEVEL_COLOR(XTRACE_COLOR_RED), __L("Too many leaks: > %d and have %d. "), XMEMORY_CONTROL_MAXIMUNLEAKSTODISPLAY, nassigned);
+                  XTRACE_PRINTCOLOR(level, __L("Too many leaks: > %d and have %d. "), XMEMORY_CONTROL_MAXIMUNLEAKSTODISPLAY, nassigned);
                   break;
                 }              
             }
-        }
-
-      XTRACE_PRINTHEADER((level | XTRACE_LEVEL_WITHCOLOR), NULL);
+        }  
     }
+
+  XTRACE_PRINTHEADER((level | XTRACE_LEVEL_WITHCOLOR), NULL);
 
   #endif
 

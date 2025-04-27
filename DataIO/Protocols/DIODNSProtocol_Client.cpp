@@ -400,9 +400,9 @@ bool DIODNSPROTOCOLCLIENT::EncodeDNSFormat(XSTRING& URL, XBUFFER& EncodedURL)
       return false;
     }
   
-  for(int c=0; c<URL.GetSize(); c++)
+  for(XDWORD c=0; c<URL.GetSize(); c++)
     {
-      for(int d=c; d<URL.GetSize(); d++)
+      for(XDWORD d=c; d<URL.GetSize(); d++)
         {
           if(URL.Get()[d] != __C('.'))
             {

@@ -182,7 +182,6 @@ bool XRAND::DelInstance()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XRAND::Ini()
 {
-  static int counter  = 0;
   const int* prime1    = new int();
   const int* prime2    = new int();
 
