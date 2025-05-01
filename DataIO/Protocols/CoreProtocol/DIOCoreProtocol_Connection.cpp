@@ -2031,10 +2031,18 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
           message->GetHeader()->CopyFrom(header);
           message->GetContent()->CopyFrom(contentresult);  
           message->SetSizeAllMessage(sendsize);
- 
+
+          DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT xevent(this, DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE_WRITEMSG);
+          xevent.SetConnection(this);
+          xevent.SetActualStatus(Status_Get());                      
+          xevent.SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS_NONE);
+          xevent.SetMsg(message);
+
+          PostEvent(&xevent);
+
           if(IDmsgempty)
-            {
-              message->SetIsConsumed(true);
+            {  
+              message->SetIsConsumed(true);             
               status = Messages_GetAll()->AddRequest(message);
             }
            else
@@ -2042,17 +2050,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
               status = Messages_GetAll()->AddResponse(message);
             }       
 
-          if(status)
-            {
-              DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT xevent(this, DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE_WRITEMSG);
-              xevent.SetConnection(this);
-              xevent.SetActualStatus(Status_Get());                      
-              xevent.SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS_NONE);
-              xevent.SetMsg(message);
-
-              PostEvent(&xevent);
-            } 
-           else  
+          if(!status)
             {
               delete message;
             }  
@@ -2119,7 +2117,15 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
           message->GetHeader()->CopyFrom(header);
           message->GetContent()->CopyFrom(contentresult);  
           message->SetSizeAllMessage(sendsize);
- 
+
+          DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT xevent(this, DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE_WRITEMSG);
+          xevent.SetConnection(this);
+          xevent.SetActualStatus(Status_Get());                      
+          xevent.SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS_NONE);
+          xevent.SetMsg(message);
+
+          PostEvent(&xevent);
+
           if(IDmsgempty)
             {
               message->SetIsConsumed(true);
@@ -2130,17 +2136,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
               status = Messages_GetAll()->AddResponse(message);
             }       
 
-          if(status)
-            {
-              DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT xevent(this, DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE_WRITEMSG);
-              xevent.SetConnection(this);
-              xevent.SetActualStatus(Status_Get());                      
-              xevent.SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS_NONE);
-              xevent.SetMsg(message);
-
-              PostEvent(&xevent);
-            } 
-           else  
+          if(!status)           
             {
               delete message;
             }  
@@ -2206,11 +2202,19 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
           message->SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION_WRITE);
           message->GetHeader()->CopyFrom(header);
           message->GetContent()->CopyFrom(contentresult);  
-          message->SetSizeAllMessage(sendsize);
+          message->SetSizeAllMessage(sendsize); 
+
+          DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT xevent(this, DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE_WRITEMSG);
+          xevent.SetConnection(this);
+          xevent.SetActualStatus(Status_Get());                      
+          xevent.SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS_NONE);
+          xevent.SetMsg(message);
+
+          PostEvent(&xevent);
 
           if(IDmsgempty)
-            {
-              message->SetIsConsumed(true);
+            { 
+              message->SetIsConsumed(true);             
               status = Messages_GetAll()->AddRequest(message);
             }
            else
@@ -2218,17 +2222,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
               status = Messages_GetAll()->AddResponse(message);
             }       
 
-          if(status)
-            {
-              DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT xevent(this, DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE_WRITEMSG);
-              xevent.SetConnection(this);
-              xevent.SetActualStatus(Status_Get());                      
-              xevent.SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS_NONE);
-              xevent.SetMsg(message);
-
-              PostEvent(&xevent);
-            } 
-           else  
+          if(!status)                       
             {
               delete message;
             }  
@@ -2295,7 +2289,15 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
           message->GetHeader()->CopyFrom(header);
           message->GetContent()->CopyFrom(contentresult);  
           message->SetSizeAllMessage(sendsize);
-          
+           
+          DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT xevent(this, DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE_WRITEMSG);
+          xevent.SetConnection(this);
+          xevent.SetActualStatus(Status_Get());                      
+          xevent.SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS_NONE);
+          xevent.SetMsg(message);
+
+          PostEvent(&xevent);
+
           if(ID_message)
             {    
               if(ID_message->IsEmpty())
@@ -2314,17 +2316,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
               status = Messages_GetAll()->AddResponse(message);
             }       
 
-          if(status)
-            {
-              DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT xevent(this, DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE_WRITEMSG);
-              xevent.SetConnection(this);
-              xevent.SetActualStatus(Status_Get());                      
-              xevent.SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS_NONE);
-              xevent.SetMsg(message);
-
-              PostEvent(&xevent);
-            } 
-           else  
+          if(!status)          
             {
               delete message;
             }  
