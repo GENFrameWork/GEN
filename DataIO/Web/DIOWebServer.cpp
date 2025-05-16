@@ -2080,7 +2080,7 @@ bool DIOWEBSERVER_CONNECTION::ReadRequest()
 
           if(size)
             {
-              Receiver((XBYTE*)buffer,size, DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT);
+              Receiver((XBYTE*)buffer, size, DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT);
               if(size) data->Add((XBYTE*)buffer,size);
             }
 

@@ -34,6 +34,7 @@
 
 #include "XBase.h"
 #include "XMap.h"
+#include "XThread.h"
 
 #include "INPDevice.h"
 
@@ -79,9 +80,9 @@ class INPMANAGER
     void                                operator =                (INPMANAGER const&);        // Don't implement    
     
     void                                Clean                     ();
-
+    
     static INPMANAGER*                  instance;
-
+    XMUTEX*                             devicemap_xmutex;
     XMAP<int, INPDEVICE*>               devicemap;
 };
 

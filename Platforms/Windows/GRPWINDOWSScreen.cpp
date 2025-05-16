@@ -310,7 +310,7 @@ bool GRPWINDOWSSCREEN::Delete()
   if(Style_Is(GRPSCREENSTYLE_FULLSCREEN)) 
     {
       ChangeDisplaySettings(NULL,0);
-    }
+    }  
 
   if(hdc)
     {
@@ -319,14 +319,16 @@ bool GRPWINDOWSSCREEN::Delete()
     }
 
   if(hwnd) 
-    { 
-      CloseWindow(hwnd);
+    {       
+      SendMessage(hwnd, WM_CLOSE, 0, 0);
+      //CloseWindow(hwnd);
+
       DestroyWindow(hwnd);
 
       hwnd = NULL;
-
-      UnregisterClassA((LPCSTR)GRPWINDOWSSCREEN_NAMECLASS, hinstance);
     }
+
+  UnregisterClassA((LPCSTR)GRPWINDOWSSCREEN_NAMECLASS, hinstance);
 
   return GRPSCREEN::Delete();
 }
@@ -765,7 +767,6 @@ int GRPWINDOWSSCREEN::GetTaskbarHeight()
   RECT workArea;
   SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
 
-  
   int taskbarHeight = screenHeight - (workArea.bottom - workArea.top);
 
   return taskbarHeight;
@@ -1094,16 +1095,18 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
                                       }
                                       break;
 
-      case WM_CLOSE                 : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
-                                        if(screen)
-                                          {
+      case WM_CLOSE                 : {  GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
+                                         if(screen)
+                                           {
                                             if(!screen->CanClose())
                                               {
                                                 return 0;
                                               }
-                                          }              
+                                           }                                                                                                                             
                                       }  
-                                      break;
+                                      break;    
+
+      case WM_DESTROY               : break;
 
       case WM_WINDOWPOSCHANGING     : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);                                       
                                         if(screen)
@@ -1123,8 +1126,6 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
                                       break;  
 
       case WM_PAINT                 : break;
-
-      case WM_DESTROY               : break;
 
       case WM_POWERBROADCAST        : //Computer is suspending
                                       if(wparam == PBT_APMSUSPEND)
@@ -1163,7 +1164,7 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
 
                                       break;
     }
-
+ 
   return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 

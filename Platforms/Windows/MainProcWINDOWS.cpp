@@ -308,7 +308,7 @@ bool MAINPROCWINDOWS::Update()
                                       }
                                     break;
 
-              case WM_CLOSE       : PostQuitMessage(APPFLOWBASE_EXITTYPE_BY_USER);
+              case WM_CLOSE       : //PostQuitMessage(APPFLOWBASE_EXITTYPE_BY_USER);
                                     break;
             }
           

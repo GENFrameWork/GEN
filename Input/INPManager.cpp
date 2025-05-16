@@ -111,7 +111,10 @@ INPMANAGER& INPMANAGER::GetInstance()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::DelInstance()
 {
-  if(!instance) return false;
+  if(!instance) 
+    {
+      return false;
+    }
 
   delete instance;
   instance = NULL;
@@ -133,10 +136,27 @@ bool INPMANAGER::DelInstance()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::AddDevice(INPDEVICE* device)
 {
-  if(!device)             return false;
-  if(!device->IsCreated()) return false;
+  if(!device)             
+    {
+      return false;
+    }
 
+  if(!device->IsCreated()) 
+    {
+      return false;
+    }
+
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->Lock();
+    }
+  
   devicemap.Add(device->GetType(), device);
+  
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->UnLock();
+    }
 
   return true;
 }
@@ -155,12 +175,28 @@ bool INPMANAGER::AddDevice(INPDEVICE* device)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::DelDevice(INPDEVICE* device)
 {
-  if(!device)               return false;
-  if(!device->IsCreated())  return false;
+  if(!device)               
+    {
+      return false;
+    }
 
+  if(!device->IsCreated())  
+    {
+      return false;
+    }
+
+ if(devicemap_xmutex)
+    {
+      devicemap_xmutex->Lock();
+    }
+  
   devicemap.Delete(device->GetType(), device);
-
   delete device;
+
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->UnLock();
+    }
 
   return true;
 }
@@ -177,10 +213,23 @@ bool INPMANAGER::DelDevice(INPDEVICE* device)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::DeleteAllDevices()
 {
-  if(devicemap.IsEmpty()) return false;
+  if(devicemap.IsEmpty()) 
+    {
+      return false;
+    }
+
+ if(devicemap_xmutex)
+    {
+      devicemap_xmutex->Lock();
+    }
 
   devicemap.DeleteElementContents();
   devicemap.DeleteAll();
+
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->UnLock();
+    }
 
   return true;
 }
@@ -214,12 +263,24 @@ int INPMANAGER::GetNDevices()
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* INPMANAGER::GetDevice(int index)
 {
-  if(devicemap.IsEmpty()) return NULL;
+  if(devicemap.IsEmpty()) 
+    {
+      return NULL;
+    }
+
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->Lock();
+    }
 
   INPDEVICE* device = devicemap.GetElement(index);
-  if(device) return device;
+  
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->UnLock();
+    }
 
-  return NULL;
+  return device;
 }
 
 
@@ -236,15 +297,30 @@ INPDEVICE* INPMANAGER::GetDevice(int index)
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* INPMANAGER::GetDevice(INPDEVICE_TYPE type)
 {
-  if(devicemap.IsEmpty()) return NULL;
+  if(devicemap.IsEmpty()) 
+    {
+      return NULL;
+    }
 
   int index =  devicemap.Find(type);
-  if(index == -1) return NULL;
+  if(index == -1) 
+    {
+      return NULL;
+    }
+
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->Lock();
+    }
 
   INPDEVICE* device = devicemap.GetElement(index);
-  if(device) return device;
+  
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->UnLock();
+    }
 
-  return NULL;
+  return device;
 }
 
 
@@ -259,12 +335,28 @@ INPDEVICE* INPMANAGER::GetDevice(INPDEVICE_TYPE type)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::Update()
 {
-  if(devicemap.IsEmpty())  return false;
+  if(devicemap.IsEmpty())  
+    {
+      return false;
+    }
+
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->Lock();
+    }
 
   for(XDWORD c=0;c<devicemap.GetSize();c++)
     {
       INPDEVICE* device = devicemap.GetElement(c);
-      if(device) device->Update();
+      if(device) 
+        {
+          device->Update();
+        }
+    }
+
+  if(devicemap_xmutex)
+    {
+      devicemap_xmutex->UnLock();
     }
 
   return true;
@@ -281,6 +373,8 @@ bool INPMANAGER::Update()
 INPMANAGER::INPMANAGER()
 {
   Clean();
+
+  devicemap_xmutex = GEN_XFACTORY.Create_Mutex();
 }
 
 
@@ -296,6 +390,11 @@ INPMANAGER::~INPMANAGER()
 {
   DeleteAllDevices();
 
+  if(devicemap_xmutex)
+    {
+      GEN_XFACTORY.Delete_Mutex(devicemap_xmutex);
+    }
+
   Clean();
 }
 
@@ -310,6 +409,7 @@ INPMANAGER::~INPMANAGER()
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPMANAGER::Clean()
 {
+  devicemap_xmutex = NULL;
   devicemap.DeleteAll();
 }
 

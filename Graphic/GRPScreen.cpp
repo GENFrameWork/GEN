@@ -853,8 +853,13 @@ bool GRPSCREEN::UpdateViewports()
 
   #else
    
+  if(!screencanvas)
+    {   
+      return false;
+    }
+
   for(XDWORD c=0; c<viewports.GetSize(); c++)
-    {
+    {      
       screencanvas->CopyBufferRenderFromViewport(viewports.Get(c));                               
     } 
        
@@ -888,7 +893,10 @@ bool GRPSCREEN::UpdateViewports()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::DeleteViewport(GRPVIEWPORT* viewport)
 {
-  if(!viewport) return false;
+  if(!viewport) 
+    {
+      return false;
+    }
 
   viewports.Delete(viewport);
 
@@ -907,7 +915,10 @@ bool GRPSCREEN::DeleteViewport(GRPVIEWPORT* viewport)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::DeleteAllViewports()
 {
-  if(viewports.IsEmpty()) return false;
+  if(viewports.IsEmpty()) 
+    {
+      return false;
+    }
 
   viewports.DeleteContents();
   viewports.DeleteAll();

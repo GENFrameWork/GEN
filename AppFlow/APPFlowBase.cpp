@@ -185,7 +185,10 @@ bool APPFLOWBASE::End()
   bool status;
 
   status = AppProc_LastUpdate();
-  if(status) status = AppProc_End();
+  if(status) 
+    {
+      status = AppProc_End();
+    }
 
   GEN_XPUBLISHER.DeRegisterAllEvents();
 

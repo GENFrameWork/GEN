@@ -308,8 +308,8 @@ bool APPFLOWEXTENDED::APPEnd()
   XSTRING   string;
   XSTRING   stringresult;
   
-  exitincurse = true;
-  
+  exitincurse = true;   
+   
   if(!appcfg)
     { 
       return false;
@@ -319,7 +319,11 @@ bool APPFLOWEXTENDED::APPEnd()
     {
       return false;
     } 
- 
+
+  if(updatemutex) 
+    {
+      updatemutex->Lock();
+    }
 
   #ifdef APPFLOW_EXTENDED_INTERNETSTATUS_ACTIVE
   if(internetstatus)
@@ -381,10 +385,14 @@ bool APPFLOWEXTENDED::APPEnd()
     }
   #endif
 
-  if(updatethread)
+  if(updatemutex) 
     {
-      updatethread->End();
+      updatemutex->UnLock();
+    }
 
+  if(updatethread)
+    {         
+      updatethread->End();
       GEN_XFACTORY.DeleteThread(XTHREADGROUPID_APPFLOWEXTENDED, updatethread);
 
       updatethread = NULL;
@@ -597,18 +605,6 @@ void APPFLOWEXTENDED::ThreadFunction_Update(void* param)
       appextended->GetInternetStatus()->Update();
     }  
   #endif  
-
-  /*
-  for(int c=0; c<100; c++) 
-    {
-      if(appextended->exitincurse)
-        {
-          break;
-        }
-
-      GEN_XSLEEP.MilliSeconds(10);
-    }
-  */
 
   if(appextended->updatemutex) 
     {

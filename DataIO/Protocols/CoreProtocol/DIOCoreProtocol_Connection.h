@@ -228,9 +228,6 @@ class DIOCOREPROTOCOL_CONNECTION : public XFSMACHINE, public XSUBJECT
 
     bool                                  RemoteDisconnect                      ();
 
-    bool                                  IsReceivedCommand                     ();
-    void                                  SetIsReceivedCommand                  (bool isreceivedcommand); 
-
     XMUTEX*                               GetOperationMutex                     ();  
     XMUTEX*                               GetInsideCommandMutex                 ();  
 
