@@ -40,12 +40,14 @@
 #include "XLicense.h"
 
 #include "XFactory.h"
+#include "XSystem.h"
 #include "XPublisher.h"
 #include "XFileHash.h"
 #include "XFile.h"
 #include "XFileINI.h"
 
 #include "HashSHA1.h"
+#include "HashSHA2.h"
 #include "CipherAES.h"
 
 #include "DIOFactory.h"
@@ -107,105 +109,17 @@ XLICENSEID::~XLICENSEID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XLICENSEID::GetPart(int npart, XDWORD part)
-* @brief      Get part
+* 
+* @fn         XUUID* XLICENSEID::GetID()
+* @brief      get Id
 * @ingroup    XUTILS
-*
-* @param[in]  npart :
-* @param[in]  part :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     XUUID* : 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XLICENSEID::GetPart(int npart, XDWORD part)
+XUUID* XLICENSEID::GetID()
 {
-  if(npart<0)                      return false;
-  if(npart>=XLICENSE_MAXIDPARTS)   return false;
-
-  part = this->part[npart];
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XLICENSEID::SetPart(int npart, XDWORD part)
-* @brief      Set part
-* @ingroup    XUTILS
-*
-* @param[in]  npart :
-* @param[in]  part :
-*
-* @return     bool : true if is succesful.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-bool XLICENSEID::SetPart(int npart, XDWORD part)
-{
-  if(npart<0)                      return false;
-  if(npart>=XLICENSE_MAXIDPARTS)   return false;
-
-  this->part[npart] = part;
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD* XLICENSEID::GetParts()
-* @brief      Get parts
-* @ingroup    XUTILS
-*
-* @return     XDWORD* :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-XDWORD* XLICENSEID::GetParts()
-{
-  return part;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XLICENSEID::GetXBuffer(XBUFFER& xbuffer)
-* @brief      Get X buffer
-* @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void XLICENSEID::GetXBuffer(XBUFFER& xbuffer)
-{
-  for(int c=0; c<XLICENSE_MAXIDPARTS; c++)
-    {
-      xbuffer.Add((XDWORD)part[c]);
-    }
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XLICENSEID::GetXString(XSTRING& IDstring)
-* @brief      Get X string
-* @ingroup    XUTILS
-*
-* @param[in]  IDstring :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void XLICENSEID::GetXString(XSTRING& IDstring)
-{
-  XSTRING partstring;
-
-  IDstring.Empty();
-
-  for(int c=0; c<XLICENSE_MAXIDPARTS; c++)
-    {
-      partstring.Format(__L("%08X"), part[c]);
-      IDstring += partstring;
-      if(c != (XLICENSE_MAXIDPARTS-1))  IDstring +=__C('-');
-    }
+  return &ID;
 }
 
 
@@ -219,10 +133,7 @@ void XLICENSEID::GetXString(XSTRING& IDstring)
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLICENSEID::Clean()
 {
-  for(int c=0; c<XLICENSE_MAXIDPARTS; c++)
-    {
-      part[c] = 0;
-    }
+
 }
 
 
@@ -282,70 +193,62 @@ XLICENSE::~XLICENSE()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::GenerateMachineID(XLICENSEID& licenseID)
 {
-  DIOSTREAMIPLOCALENUMDEVICES* enumdevices = (DIOSTREAMIPLOCALENUMDEVICES*)GEN_DIOFACTORY.CreateStreamEnumDevices(DIOSTREAMENUMTYPE_IP_LOCAL);
-  if(enumdevices)
+  XSTRING   origin; 
+  XBUFFER   originbuffer; 
+  HASHSHA2* sha2        = NULL;
+  XUUID     ID;
+  XBUFFER*  result      = NULL;
+
+  ID.Empty();
+
+  //GEN_XSYSTEM.GetOperativeSystemID(origin);
+  
+  origin.AddFormat(__L(" %s"), GEN_XSYSTEM.GetBIOSSerialNumber()->Get());
+  origin.AddFormat(__L(" %s"), GEN_XSYSTEM.GetCPUSerialNumber()->Get());
+
+  origin.ConvertToUTF8(originbuffer);
+    
+  sha2 = new HASHSHA2(HASHSHA2TYPE_256);
+  if(!sha2)
     {
-      enumdevices->Search();
-
-      XQWORD  basicID     = 0;
-      XSTRING basicstring;
-      XBUFFER basicxbuffer;
-
-      for(int c=0;c<(int)enumdevices->GetDevices()->GetSize();c++)
-        {
-          DIOSTREAMDEVICEIP* device = (DIOSTREAMDEVICEIP*)enumdevices->GetDevices()->Get(c);
-          if(device)
-            {
-              DIOMAC* mac = device->GetMAC();
-              if(mac)
-                {
-                  XQWORD macID = 0;
-
-                  for(int d=0; d<DIOMAC_MAXSIZE; d++)
-                    {
-                      macID |= mac->Get()[d];
-                      macID<<=8;
-                    }
-
-                  basicID ^= macID;
-                }
-            }
-        }
-
-      GEN_DIOFACTORY.DeleteStreamEnumDevices(enumdevices);
-
-      basicstring.Format(__L("%02X%02X%llX%llX%02X%02X"), XLICENSE_VERSION, XLICENSE_SUBVERSION, basicID, ~basicID, XLICENSE_VERSION, XLICENSE_SUBVERSION);
-
-      HASHSHA1* sha1 = new HASHSHA1();
-      if(sha1)
-        {
-          basicstring.ConvertHexStringToBuffer(basicxbuffer);
-          sha1->Do(basicxbuffer);
-
-          XDWORD index      = 0;
-          XDWORD partID     = 0;
-          int    sizeofpart = sizeof(XDWORD)/sizeof(XBYTE);
-
-          for(int c=0; c<XLICENSE_MAXIDPARTS; c++)
-            {
-              partID = 0;
-              for(int d=0; d<sizeofpart; d++)
-                {
-                  partID |= (XBYTE)sha1->GetResult()->GetByte(index++);
-                  if(d!=(sizeofpart-1)) partID<<=8;
-                  if(index>=sha1->GetResult()->GetSize()) index = 0;
-                }
-
-              licenseID.SetPart(c, partID);
-            }
-
-          delete sha1;
-
-          return true;
-        }
+      return false;
     }
 
-  return false;
+  sha2->Do(originbuffer);
+  result = sha2->GetResult();
+
+  if(!result)
+    {
+      return false;
+    }
+
+  if(!result->GetSize())
+    {
+      return false;
+    }
+
+  XDWORD data1 = 0; 
+  XWORD  data2 = 0;
+  XWORD  data3 = 0;
+  XBYTE  data4 = 0;
+  XBYTE  data5 = 0; 
+  XBYTE* data6 = &result->Get()[12];
+
+  result->Get((XDWORD&)data1);  
+  result->Get((XWORD&)data2);  
+  result->Get((XWORD&)data3);  
+  result->Get((XBYTE&)data4);  
+  result->Get((XBYTE&)data5);  
+
+  ID.Set(data1, data2, data3, data4, data5, data6);
+
+  ID.GetToString(origin);
+
+  delete sha2;
+
+  licenseID.GetID()->Set(ID);
+
+  return true;
 }
 
 
@@ -372,13 +275,19 @@ bool XLICENSE::Generate(XLICENSEID& licenseID, XSTRING* applicationID, XBUFFER* 
   XSTRING*              _applicationID = applicationID;
 
   if(!_license) _license = this->license;
-  if(!_license) return false;
+  if(!_license) 
+    {
+      return false;
+    }
 
   if(!_applicationID) _applicationID = &this->applicationID;
-  if(!_applicationID) return false;
+  if(!_applicationID) 
+    {
+      return false;
+    }
 
   _license->Delete();
-  licenseID.GetXBuffer(xbuffercipher);
+  licenseID.GetID()->GetToBuffer(xbuffercipher);
 
   GetBufferKeyFromMachineID((*_applicationID), xbufferkey);
 
@@ -417,7 +326,6 @@ bool XLICENSE::GetBufferKeyFromMachineID(XSTRING& applicationID, XBUFFER& xbuffe
   HASHSHA1 sha1;
 
   xbufferkey.Delete();
-
   
   XBUFFER charstr;
     
@@ -455,7 +363,10 @@ bool XLICENSE::CipherExpirationDate(bool cipher, XSTRING& applicationID, XSTRING
   CIPHERKEYSYMMETRICAL  key;
   bool                  status = false;
 
-  if(!GetBufferKeyFromMachineID(applicationID, xbufferkey)) return false;
+  if(!GetBufferKeyFromMachineID(applicationID, xbufferkey)) 
+    {
+      return false;
+    }
 
   key.Set(xbufferkey);
 
@@ -472,6 +383,7 @@ bool XLICENSE::CipherExpirationDate(bool cipher, XSTRING& applicationID, XSTRING
       status = cipherAES.Cipher((XBYTE*)charstr.Get(), expirationdate.GetSize());
       if(status)
         {
+          expirationdate.Empty();
           cipherAES.GetResult()->ConvertToBase64(expirationdate);
           return true;
         }
@@ -479,7 +391,7 @@ bool XLICENSE::CipherExpirationDate(bool cipher, XSTRING& applicationID, XSTRING
    else
     {
       XBUFFER xbuffer;
-
+      
       xbuffer.ConvertFromBase64(expirationdate);
 
       status = cipherAES.Uncipher(xbuffer);
@@ -562,8 +474,15 @@ bool XLICENSE::Get(XSTRING& licensestring)
 {
   licensestring.Empty();
 
-  if(!license)            return false;
-  if(!license->GetSize()) return false;
+  if(!license)            
+    {
+      return false;
+    }
+
+  if(!license->GetSize()) 
+    {
+      return false;
+    }
 
   for(XDWORD c=0; c<license->GetSize(); c++)
     {
@@ -600,7 +519,10 @@ bool XLICENSE::LoadFromFile(XPATH& xpath, XSTRING& applicationID, XBUFFER* licen
   bool      status  = false;
 
   GEN_XFACTORY_CREATE(xfile, Create_File())
-  if(!xfile) return false;
+  if(!xfile) 
+    {
+      return false;
+    }
 
   if(xfile->Open(xpath))
     {
@@ -611,7 +533,10 @@ bool XLICENSE::LoadFromFile(XPATH& xpath, XSTRING& applicationID, XBUFFER* licen
       xfile->Close();
       GEN_XFACTORY.Delete_File(xfile);
 
-      if(status) status = LoadFromBuffer(xbuffer, applicationID, license, expirationdate);
+      if(status) 
+        {
+          status = LoadFromBuffer(xbuffer, applicationID, license, expirationdate);
+        }
     }
 
   return status;
@@ -637,13 +562,19 @@ bool XLICENSE::LoadFromFile(XPATH& xpath, XSTRING& applicationID, XBUFFER* licen
 bool XLICENSE::LoadFromURL(DIOURL& url, int timeout, XSTRING* IPlocal, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 {
   DIOWEBCLIENT* webclient = new DIOWEBCLIENT;
-  if(!webclient) return false;
+  if(!webclient) 
+    {
+      return false;
+    }
 
   XBUFFER xbuffer;
   bool    status;
 
   status = webclient->Get(url.Get(), xbuffer, NULL, timeout, IPlocal);
-  if(status) status = LoadFromBuffer(xbuffer, applicationID, license, expirationdate);
+  if(status) 
+    {
+      status = LoadFromBuffer(xbuffer, applicationID, license, expirationdate);
+    }
 
   delete webclient;
 
@@ -667,7 +598,10 @@ bool XLICENSE::LoadFromURL(DIOURL& url, int timeout, XSTRING* IPlocal, XSTRING& 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 {
-  if(!license) return false;
+  if(!license) 
+    {
+      return false;
+    }
 
   XFILEINI    fileini;
   XLICENSEID  licenseID;
@@ -678,7 +612,10 @@ bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER*
   XBUFFER*    _license = license;
 
   if(!_license) _license = this->license;
-  if(!_license) return false;
+  if(!_license) 
+    {
+      return false;
+    }
 
   fileini.AddBufferLines(XFILETXTFORMATCHAR_ASCII, xbuffer);
 
@@ -689,9 +626,12 @@ bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER*
   fileini.ReadValue(XLICENSE_FILESECTION, XLICENSE_FILEVALUE_EXPIRATION , licenseexprirationstring);
 
   GenerateMachineID(licenseID);
-  licenseID.GetXString(licenseIDstring2);
+  licenseID.GetID()->GetToString(licenseIDstring2);
 
-  if(licenseIDstring.Compare(licenseIDstring2)) return false;
+  if(licenseIDstring.Compare(licenseIDstring2)) 
+    {
+      return false;
+    }
 
   CipherExpirationDate(false, applicationID, licenseexprirationstring);
 
@@ -705,7 +645,7 @@ bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER*
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING& applicationID, int expirationseconds)
+* @fn         bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING& applicationID, int expirationdays)
 * @brief      Check master creation
 * @ingroup    XUTILS
 *
@@ -717,12 +657,16 @@ bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER*
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING& applicationID, int expirationseconds)
+bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING& applicationID, int expirationdays)
 {
   XFILEINI    fileini;
   XSTRING     licensestring;
 
-  if(!fileini.Open(xpath)) return false;
+  if(!fileini.Open(xpath)) 
+    {
+      return false;
+    }
+
   fileini.ReadValue(XLICENSE_FILESECTION, XLICENSE_FILEVALUE_LICENSE, licensestring);
   fileini.Close();
 
@@ -735,27 +679,39 @@ bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING&
       XBUFFER     licencia;
       XDATETIME*  expirationdatetime;
 
-      licenseID.GetXString(licenseIDstring);
-      if(!Generate(licenseID, &applicationID, &licencia)) return false;
+      licenseID.GetID()->GetToString(licenseIDstring);
+      if(!Generate(licenseID, &applicationID, &licencia)) 
+        {
+          return false;
+        }
 
       licensestring.ConvertHexStringFromBuffer(licencia);
 
       GEN_XFACTORY_CREATE(expirationdatetime, CreateDateTime())
-      if(!expirationdatetime) return false;
+      if(!expirationdatetime) 
+        {
+          return false;
+        }
 
       expirationdatetime->SetToZero();
-      if(expirationseconds)
+      if(expirationdays)
         {
           expirationdatetime->Read();
-          expirationdatetime->AddSeconds((int)expirationseconds);
+          expirationdatetime->AddDays((int)expirationdays);
         }
 
       expirationdatetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD,  licenseexpiration);
       GEN_XFACTORY.DeleteDateTime(expirationdatetime);
 
-      if(!CipherExpirationDate(true, applicationID, licenseexpiration)) return false;
+      if(!CipherExpirationDate(true, applicationID, licenseexpiration)) 
+        {
+          return false;
+        }
 
-      if(!fileini.Create(xpath)) return false;
+      if(!fileini.Create(xpath)) 
+        {
+          return false;
+        }
 
       fileini.CreateSection(XLICENSE_FILESECTION);
       fileini.WriteValue(XLICENSE_FILESECTION, XLICENSE_FILEVALUE_ID        , licenseIDstring);

@@ -38,7 +38,9 @@
 #include "XFactory.h"
 #include "XString.h"
 #include "XDateTime.h"
+#include "XTimer.h"
 #include "XSubject.h"
+#include "XUUID.h"
 
 #include "DIOURL.h"
 
@@ -66,35 +68,34 @@
                                                                                                 xlicense->CheckMasterCreation(xpath, xlicenseID, appID, expirationseconds);         \
                                                                                               }
 
-
 #ifdef XLICENSE_ACTIVE
 
-  #define CHECKLICENSEFULLLOCAL(xlicense, xpath, applicationID)                               {                                                                                     \
+  #define CHECKLICENSEFULLLOCAL(xlicense, xpath, applicationID, status)                       {                                                                                     \
                                                                                                 XLICENSEID  xlicenseID;                                                             \
                                                                                                 XSTRING     appID;                                                                  \
-                                                                                                XBUFFER     license();                                                              \
-                                                                                                appID = applicationID;                                                              \
-                                                                                                bool        status = xlicense->GenerateMachineID(xlicenseID);                       \
+                                                                                                XBUFFER     license;                                                                \
+                                                                                                appID  = applicationID;                                                             \
+                                                                                                status = xlicense->GenerateMachineID(xlicenseID);                                   \
                                                                                                 if(status)  status = xlicense->Generate(xlicenseID, &appID);                        \
                                                                                                 if(status)  status = xlicense->LoadFromFile(xpath, appID, &license);                \
                                                                                                 if(status)  status = license.Compare(xlicense->Get());                              \
                                                                                                 if(!status) xlicense->SetEvent(XLICENSEXEVENT_TYPE_INVALID);                        \
                                                                                               }
 
-  #define CHECKLICENSEFULLLOCALEXPIRE(xlicense, xpath, applicationID)                         {                                                                                     \
+  #define CHECKLICENSEFULLLOCALEXPIRE(xlicense, xpath, applicationID, status)                 {                                                                                     \
                                                                                                 XLICENSEID  xlicenseID;                                                             \
                                                                                                 XSTRING     appID;                                                                  \
                                                                                                 XSTRING     expireddate;                                                            \
-                                                                                                XBUFFER     license();                                                              \
-                                                                                                XTIME       xtimeexpired;                                                           \
+                                                                                                XBUFFER     license;                                                                \
+                                                                                                XDATETIME   xtimeexpired;                                                           \
                                                                                                 XDATETIME*  xtimeactual;                                                            \
                                                                                                 appID = applicationID;                                                              \
-                                                                                                bool        status = xlicense->GenerateMachineID(xlicenseID);                       \
+                                                                                                status = xlicense->GenerateMachineID(xlicenseID);                                   \
                                                                                                 if(status)  status = xlicense->Generate(xlicenseID, &appID);                        \
                                                                                                 if(status)  status = xlicense->LoadFromFile(xpath, appID, &license, &expireddate);  \
                                                                                                 if(status)  status = license.Compare(xlicense->Get());                              \
                                                                                                 if(!status) xlicense->SetEvent(XLICENSEXEVENT_TYPE_INVALID);                        \
-                                                                                                GEN_XFACTORY_CREATE(xtimeactual, CreateTime())                                      \
+                                                                                                GEN_XFACTORY_CREATE(xtimeactual, CreateDateTime())                                  \
                                                                                                 if(xtimeactual)                                                                     \
                                                                                                   {                                                                                 \
                                                                                                     xtimeexpired.GetDateTimeFromString(expireddate, XDATETIME_FORMAT_STANDARD);     \
@@ -104,9 +105,10 @@
                                                                                                         if(xtimeactual->GetSeconsFromDate() >= xtimeexpired.GetSeconsFromDate())    \
                                                                                                           {                                                                         \
                                                                                                             xlicense->SetEvent(XLICENSEXEVENT_TYPE_EXPIRED);                        \
+                                                                                                            status = false;                                                         \
                                                                                                           }                                                                         \
                                                                                                       }                                                                             \
-                                                                                                    GEN_XFACTORY.DeleteTime(xtimeactual);                                           \
+                                                                                                    GEN_XFACTORY.DeleteDateTime(xtimeactual);                                       \
                                                                                                   }                                                                                 \
                                                                                               }
 #else
@@ -135,19 +137,13 @@ class XLICENSEID
                           XLICENSEID                    ();
     virtual              ~XLICENSEID                    ();
 
-    bool                  GetPart                       (int npart, XDWORD part);
-    bool                  SetPart                       (int npart, XDWORD part);
-
-    XDWORD*               GetParts                      ();
-
-    void                  GetXBuffer                    (XBUFFER& xbuffer);
-    void                  GetXString                    (XSTRING& IDstring);
+    XUUID*                GetID                         ();
 
   private:
 
     void                  Clean                         ();
 
-    XDWORD                part[XLICENSE_MAXIDPARTS];
+    XUUID                 ID;
 };
 
 

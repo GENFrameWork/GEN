@@ -512,12 +512,7 @@ XSTRING* XWINDOWSSYSTEM::GetBIOSSerialNumber()
   #ifndef BUILDER
   XWINDOWSWMIINTERFACE wmiinterface;
 
-  if(wmiinterface.Ini())
-    { 
-      wmiinterface.DoQuery(__L("Win32_BIOS"), __L("SerialNumber"), BIOSserialnumber);
-
-      wmiinterface.End();
-    }
+  wmiinterface.DoQuery(__L("Win32_BIOS"), __L("SerialNumber"), BIOSserialnumber);
   #endif
 
   return &BIOSserialnumber;
@@ -537,12 +532,8 @@ XSTRING* XWINDOWSSYSTEM::GetCPUSerialNumber()
 {
   #ifndef BUILDER
   XWINDOWSWMIINTERFACE wmiinterface;
-  if(wmiinterface.Ini())
-    { 
-      wmiinterface.DoQuery(__L("Win32_Processor"), __L("ProcessorId"), CPUserialnumber);
 
-      wmiinterface.End();
-    }
+  wmiinterface.DoQuery(__L("Win32_Processor"), __L("ProcessorId"), CPUserialnumber);
   #endif
 
   return &CPUserialnumber;
@@ -563,7 +554,6 @@ float XWINDOWSSYSTEM::GetCPUTemperature()
   XSTRING CPUtemperaturestr;
 
   #ifndef BUILDER
-
   XWINDOWSWMIINTERFACE wmiinterface;
   
   wmiinterface.DoQuery(__L("Win32_PerfFormattedData_Counters_ThermalZoneInformation"), __L("Temperature"), CPUtemperaturestr);

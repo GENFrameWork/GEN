@@ -33,6 +33,7 @@
 #pragma region INCLUDES
 
 #include "XString.h"
+#include "XBuffer.h"
 
 #pragma endregion
 
@@ -63,6 +64,9 @@ class XUUID
     XBYTE               GetData5          ();
     XBYTE*              GetData6          ();
 
+    bool                GetToBuffer       (XBUFFER& data);  
+    bool                GetToString       (XSTRING& string);
+
     bool                SetData1          (XDWORD data);
     bool                SetData2          (XWORD data);
     bool                SetData3          (XWORD data);
@@ -70,9 +74,13 @@ class XUUID
     bool                SetData5          (XBYTE data);
     bool                SetData6          (XBYTE* data);
 
+    bool                SetFromBuffer     (XBUFFER& data);
+    bool                SetFromString     (XSTRING& string);
+
     bool                IsEmpty           ();
     bool                Empty             ();
     
+    bool                Set               (XUUID& ID);
     bool                Set               (XDWORD data1, XWORD data2, XWORD data3, XBYTE data4, XBYTE data5, XBYTE* data6);
 
     bool                CopyFrom          (XUUID& uuid);
@@ -81,10 +89,7 @@ class XUUID
     bool                GenerateRandom    ();
 
     bool                Compare           (XUUID& uuid);  
-
-    bool                GetToString       (XSTRING& string);
-    bool                SetFromString     (XSTRING& string);
-
+    
   protected:
 
     XDWORD              data1;

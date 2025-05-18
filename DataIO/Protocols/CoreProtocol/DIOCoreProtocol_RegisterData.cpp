@@ -111,9 +111,6 @@ bool DIOCOREPROTOCOL_REGISTERDATA::InitializeData(bool isserver)
 
   CreateIDMachine(ID_machine);
 
-  biosserialnumber  = GEN_XSYSTEM.GetBIOSSerialNumber()->Get();
-  CPUserialnumber   = GEN_XSYSTEM.GetCPUSerialNumber()->Get();
-
   GEN_XSYSTEM.GetPlatform(&plataformname);
   GEN_XSYSTEM.GetOperativeSystemID(SOidentifier);
 
@@ -150,36 +147,6 @@ XUUID* DIOCOREPROTOCOL_REGISTERDATA::GetIDMmachine()
 XUUID* DIOCOREPROTOCOL_REGISTERDATA::GetIDConnection()
 {
   return &ID_connection;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetBiosSerialNumber()
-* @brief      Get bios serial number
-* @ingroup    DATAIO
-* 
-* @return     XSTRING* : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetBiosSerialNumber()
-{
-  return &biosserialnumber;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetCPUSerialNumber()
-* @brief      Get CPU serial number
-* @ingroup    DATAIO
-* 
-* @return     XSTRING* : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetCPUSerialNumber()
-{
-  return &CPUserialnumber;
 }
 
 
@@ -265,10 +232,6 @@ bool DIOCOREPROTOCOL_REGISTERDATA::Serialize()
   ID_connection.GetToString(string);
   Primitive_Add<XSTRING*>(&string, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_ID_CONNECTION);
   
-  Primitive_Add<XSTRING*>(&biosserialnumber, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_BIOSSERIAL);  
-
-  Primitive_Add<XSTRING*>(&CPUserialnumber, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_CPUSERIAL);
-
   Primitive_Add<XSTRING*>(&plataformname, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_PLATAFORM);
 
   Primitive_Add<XSTRING*>(&SOidentifier, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_SOIDENTIFIER);
@@ -302,10 +265,6 @@ bool DIOCOREPROTOCOL_REGISTERDATA::Deserialize()
   Primitive_Extract<XSTRING>(string, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_ID_CONNECTION);
   ID_connection.SetFromString(string);
   
-  Primitive_Extract<XSTRING>(biosserialnumber, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_BIOSSERIAL);
-    
-  Primitive_Extract<XSTRING>(CPUserialnumber, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_CPUSERIAL);
-
   Primitive_Extract<XSTRING>(plataformname, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_PLATAFORM); 
 
   Primitive_Extract<XSTRING>(SOidentifier, DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_SOIDENTIFIER);
@@ -337,8 +296,6 @@ bool DIOCOREPROTOCOL_REGISTERDATA::CreateIDMachine(XUUID& ID)
   XBUFFER*  result      = NULL;
 
   ID.Empty();
-
-  GEN_XSYSTEM.GetOperativeSystemID(origin);
   
   origin.AddFormat(__L(" %s"), GEN_XSYSTEM.GetBIOSSerialNumber()->Get());
   origin.AddFormat(__L(" %s"), GEN_XSYSTEM.GetCPUSerialNumber()->Get());

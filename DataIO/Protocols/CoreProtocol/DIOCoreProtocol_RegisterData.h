@@ -44,8 +44,6 @@
 
 #define DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_ID_MACHINE          __L("ID_machine")    
 #define DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_ID_CONNECTION       __L("ID_connection")    
-#define DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_BIOSSERIAL          __L("biosserial")    
-#define DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_CPUSERIAL           __L("cpuserial") 
 #define DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_PLATAFORM           __L("plataform")
 #define DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_SOIDENTIFIER        __L("soidentifier")
 #define DIOCOREPROTOCOL_REGISTERDATA_HEADER_VAR_USER                __L("user")    
@@ -69,8 +67,6 @@ class DIOCOREPROTOCOL_REGISTERDATA : public XSERIALIZABLE
 
     XUUID*                  GetIDMmachine                   ();
     XUUID*                  GetIDConnection                 ();
-    XSTRING*                GetBiosSerialNumber             ();
-    XSTRING*                GetCPUSerialNumber              (); 
     XSTRING*                GetPlataformName                ();
     XSTRING*                GetSOIdentifier                 ();                     
     XSTRING*                GetUser                         ();                      
@@ -89,8 +85,6 @@ class DIOCOREPROTOCOL_REGISTERDATA : public XSERIALIZABLE
 
     XUUID                   ID_machine;
     XUUID                   ID_connection;
-    XSTRING                 biosserialnumber;
-    XSTRING                 CPUserialnumber; 
     XSTRING                 plataformname;
     XSTRING                 SOidentifier;
     XSTRING                 user;

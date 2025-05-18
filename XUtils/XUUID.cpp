@@ -195,6 +195,54 @@ XBYTE* XUUID::GetData6()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XUUID::GetToBuffer(XBUFFER& data)
+* @brief      get to buffer
+* @ingroup    XUTILS
+* 
+* @param[in]  data : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XUUID::GetToBuffer(XBUFFER& data)
+{
+  data.Empty();
+
+  data.Add((XDWORD)GetData1());
+  data.Add((XWORD)GetData2());
+  data.Add((XWORD)GetData3());
+  data.Add((XBYTE)GetData4());
+  data.Add((XBYTE)GetData5());
+  data.Add((XBYTE*)GetData6(), XUUIDMAXDATA4);
+
+  return data.IsEmpty()?false:true;    
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XUUID::GetToString(XSTRING& string)
+* @brief      Get to string
+* @ingroup    XUTILS
+*
+* @param[in]  string : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool XUUID::GetToString(XSTRING& string)
+{
+  string.Format(__L("%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X"), data1
+                                                                       , data2
+                                                                       , data3
+                                                                       , data4, data5
+                                                                       , data6[0], data6[1], data6[2], data6[3], data6[4], data6[5]);
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XUUID::SetData1(XDWORD data)
 * @brief      Set data1
@@ -313,6 +361,89 @@ bool XUUID::SetData6(XBYTE* data)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XUUID::SetFromBuffer(XBUFFER& data)
+* @brief      set from buffer
+* @ingroup    XUTILS
+* 
+* @param[in]  data : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XUUID::SetFromBuffer(XBUFFER& data)
+{ 
+  XDWORD data1  = 0;
+  XWORD  data2  = 0;
+  XWORD  data3  = 0;
+  XBYTE  data4  = 0;
+  XBYTE  data5  = 0;
+  XBYTE  data6[XUUIDMAXDATA4];
+
+  memset(data6, 0, XUUIDMAXDATA4);
+
+  data.Get((XDWORD&)data1);
+  data.Get((XWORD&)data2);
+  data.Get((XWORD&)data3);
+  data.Get((XBYTE&)data4);
+  data.Get((XBYTE&)data5);
+  data.Get(data6, XUUIDMAXDATA4);
+
+  return Set(data1, data2, data3, data4, data5, data6);  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XUUID::SetFromString(XSTRING& string)
+* @brief      Set from string
+* @ingroup    XUTILS
+*
+* @param[in]  string : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool XUUID::SetFromString(XSTRING& string)
+{
+  XSTRING string2;  
+  XDWORD  _data[6] = { 0, 0, 0, 0, 0, 0 };
+
+  string2 = string;
+
+  if(string2.IsEmpty())
+    {
+      return false;
+    }
+
+  string2.Insert(__L("-"), 28);
+
+  string2.UnFormat(__L("%08X-%04X-%04X-%04X-%04X-%08X")  , &_data[0]
+                                                         , &_data[1]
+                                                         , &_data[2] 
+                                                         , &_data[3]
+                                                         , &_data[4]
+                                                         , &_data[5]);
+  data1     = (XDWORD)_data[0];
+  data2     = (XWORD)_data[1];
+  data3     = (XWORD)_data[2];  
+
+  data4     = (XBYTE)(_data[3] >> 8);
+  data5     = (XBYTE)(_data[3] & 0x00FF);
+
+  data6[0]  = (XBYTE)(_data[4] >> 8);
+  data6[1]  = (XBYTE)(_data[4] & 0x00FF);
+  
+  data6[2]  = (XBYTE)((_data[5] >> 24) & 0x000000FF);
+  data6[3]  = (XBYTE)((_data[5] >> 16) & 0x000000FF);
+  data6[4]  = (XBYTE)((_data[5] >>  8) & 0x000000FF);
+  data6[5]  = (XBYTE)(_data[5] & 0x000000FF);
+  
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool XUUID::IsEmpty()
 * @brief      Is empty
 * @ingroup    XUTILS
@@ -380,6 +511,30 @@ bool XUUID::Empty()
     {
       this->data6[c] = 0;
     }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XUUID::Set(XUUID& ID)
+* @brief      set
+* @ingroup    XUTILS
+* 
+* @param[in]  ID : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XUUID::Set(XUUID& ID)
+{
+  SetData1(ID.GetData1());
+  SetData2(ID.GetData2());
+  SetData3(ID.GetData3());
+  SetData4(ID.GetData4());
+  SetData5(ID.GetData5());
+  SetData6(ID.GetData6());
 
   return true;
 }
@@ -553,78 +708,6 @@ bool XUUID::Compare(XUUID& uuid)
         }      
     }
 
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool XUUID::GetToString(XSTRING& string)
-* @brief      Get to string
-* @ingroup    XUTILS
-*
-* @param[in]  string : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-bool XUUID::GetToString(XSTRING& string)
-{
-  string.Format(__L("%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X"), data1
-                                                                       , data2
-                                                                       , data3
-                                                                       , data4, data5
-                                                                       , data6[0], data6[1], data6[2], data6[3], data6[4], data6[5]);
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool XUUID::SetFromString(XSTRING& string)
-* @brief      Set from string
-* @ingroup    XUTILS
-*
-* @param[in]  string : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-bool XUUID::SetFromString(XSTRING& string)
-{
-  XSTRING string2;  
-  XDWORD  _data[6] = { 0, 0, 0, 0, 0, 0 };
-
-  string2 = string;
-
-  if(string2.IsEmpty())
-    {
-      return false;
-    }
-
-  string2.Insert(__L("-"), 28);
-
-  string2.UnFormat(__L("%08X-%04X-%04X-%04X-%04X-%08X")  , &_data[0]
-                                                         , &_data[1]
-                                                         , &_data[2] 
-                                                         , &_data[3]
-                                                         , &_data[4]
-                                                         , &_data[5]);
-  data1     = (XDWORD)_data[0];
-  data2     = (XWORD)_data[1];
-  data3     = (XWORD)_data[2];  
-
-  data4     = (XBYTE)(_data[3] >> 8);
-  data5     = (XBYTE)(_data[3] & 0x00FF);
-
-  data6[0]  = (XBYTE)(_data[4] >> 8);
-  data6[1]  = (XBYTE)(_data[4] & 0x00FF);
-  
-  data6[2]  = (XBYTE)((_data[5] >> 24) & 0x000000FF);
-  data6[3]  = (XBYTE)((_data[5] >> 16) & 0x000000FF);
-  data6[4]  = (XBYTE)((_data[5] >>  8) & 0x000000FF);
-  data6[5]  = (XBYTE)(_data[5] & 0x000000FF);
-  
   return true;
 }
 
