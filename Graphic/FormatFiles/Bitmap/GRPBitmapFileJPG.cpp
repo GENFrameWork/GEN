@@ -134,7 +134,10 @@ GRPBITMAPFILEJPG::~GRPBITMAPFILEJPG()
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAPFILEJPG::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE forcemode)
 {
-  if(!Open(xpath))  return NULL;
+  if(!Open(xpath))  
+    {
+      return NULL;
+    }
 
   GRPBITMAPFILEJPGHEADER  header;
   GRPBITMAP*              bitmap = NULL;
@@ -341,11 +344,18 @@ bool GRPBITMAPFILEJPG::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEJPG::ReadHeaderFile(GRPBITMAPFILEJPGHEADER* header)
 {
-  if(!header) return false;
+  if(!header) 
+    {
+      return false;
+    }
 
   struct GRPBITMAPFILEJPG_ERROR jerr;
 
-  if(!GetPrimaryFile()) return false;
+  if(!GetPrimaryFile())
+    {
+      return false;
+    }
+
   GetPrimaryFile()->SetPosition(0);
 
   dinfo.err = jpeg_std_error(&jerr.pub);
@@ -400,7 +410,10 @@ bool GRPBITMAPFILEJPG::ReadHeaderFile(GRPBITMAPFILEJPGHEADER* header)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEJPG::ReadHeaderBuffer(XBYTE* buffer, XDWORD size, GRPBITMAPFILEJPGHEADER* header)
 {
-  if(!header) return false;
+  if(!header) 
+    {
+      return false;
+    }
 
   struct GRPBITMAPFILEJPG_ERROR jerr;
 
@@ -442,8 +455,15 @@ bool GRPBITMAPFILEJPG::ReadHeaderBuffer(XBYTE* buffer, XDWORD size, GRPBITMAPFIL
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEJPG::DecodeToBufferFromFile(XBYTE* buffer)
 {
-  if(!buffer)           return false;
-  if(!GetPrimaryFile()) return false;
+  if(!buffer)           
+    {
+      return false;
+    }
+
+  if(!GetPrimaryFile()) 
+    {
+      return false;
+    }
 
   JSAMPARRAY  line;         /* Output row buffer */
   int         rowstride;    /* physical row width in output buffer */
@@ -521,8 +541,15 @@ bool GRPBITMAPFILEJPG::DecodeToBufferFromFile(XBYTE* buffer)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEJPG::DecodeToBufferFromRawBuffer(XBYTE* buffer, XDWORD size, XBYTE* tobuffer)
 {
-  if(!buffer)       return false;
-  if(!tobuffer)     return false;
+  if(!buffer)       
+    {
+      return false;
+    }
+
+  if(!tobuffer)     
+    {
+      return false;
+    }
 
   JSAMPARRAY  line;         // Output row buffer 
   int         rowstride;    // physical row width in output buffer 
@@ -589,8 +616,15 @@ bool GRPBITMAPFILEJPG::DecodeToBufferFromRawBuffer(XBYTE* buffer, XDWORD size, X
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEJPG::EncodeToFile(int width, int height,  XBYTE* buffer, int quality, bool baseline)
 {
-  if(!buffer)           return false;
-  if(!GetPrimaryFile()) return false;
+  if(!buffer)           
+    {
+      return false;
+    }
+
+  if(!GetPrimaryFile()) 
+    {
+      return false;
+    }
 
   struct jpeg_error_mgr jerr;
 
@@ -604,7 +638,10 @@ bool GRPBITMAPFILEJPG::EncodeToFile(int width, int height,  XBYTE* buffer, int q
   jpeg_create_compress(&cinfo);
 
   FILE* filehandle = GetPrimaryFile()->CreateStructHandle();
-  if(!filehandle) return false;
+  if(!filehandle) 
+    {
+      return false;
+    }
 
   jpeg_stdio_dest(&cinfo, filehandle);
 

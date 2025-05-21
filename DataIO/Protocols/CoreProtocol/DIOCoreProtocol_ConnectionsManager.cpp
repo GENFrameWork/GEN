@@ -159,7 +159,13 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Ini()
             }
         }
     }
-  
+
+  GEN_XFACTORY_CREATE(updateclass_xmutex, Create_Mutex())
+  if(!updateclass_xmutex) 
+    {
+      return false;
+    }
+
   GEN_XFACTORY_CREATE(connections_delete_xmutex, Create_Mutex())
   if(connections_delete_xmutex) 
     {
@@ -182,9 +188,9 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Ini()
                     }
                 }
             }
-        }  
-    
+        }      
     }
+    
 
   End();
 
@@ -232,6 +238,12 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::End()
     {
       GEN_XFACTORY.Delete_Mutex(connections_delete_xmutex);
       connections_delete_xmutex = NULL;
+    }
+
+  if(updateclass_xmutex)
+    {
+      GEN_XFACTORY.Delete_Mutex(updateclass_xmutex);
+      updateclass_xmutex = NULL;
     }
 
   for(XDWORD c=0; c<diostreams.GetSize(); c++)
@@ -400,7 +412,22 @@ DIOCOREPROTOCOL* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateProtocol(DIOCOREPROTO
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClassSerialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
+* @fn         XMUTEX* DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_GetXMutex()
+* @brief      update class  get Xmutex
+* @ingroup    DATAIO
+* 
+* @return     XMUTEX* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XMUTEX* DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_GetXMutex()
+{
+  return updateclass_xmutex;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Serialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
 * @brief      Update class serialize
 * @ingroup    DATAIO
 * 
@@ -410,7 +437,7 @@ DIOCOREPROTOCOL* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateProtocol(DIOCOREPROTO
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClassSerialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
+bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Serialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
 {
   XFILEJSON              content;          
   XSERIALIZATIONMETHOD*  serializationmethod = XSERIALIZABLE::CreateInstance(content);  
@@ -450,7 +477,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClassSerialize(DIOCOREPROTOCOL_ME
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClassDeserialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
+* @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Deserialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
 * @brief      Update class deserialize
 * @ingroup    DATAIO
 * 
@@ -460,7 +487,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClassSerialize(DIOCOREPROTOCOL_ME
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClassDeserialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
+bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Deserialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
 {
   XFILEJSON              content;          
   XSERIALIZATIONMETHOD*  serializationmethod = XSERIALIZABLE::CreateInstance(content);  
@@ -1489,6 +1516,11 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerUpdateClasses()
     {
       return false;
     }
+
+  if(updateclass_xmutex)
+    {
+      updateclass_xmutex->Lock();
+    }
  
   for(int c=0; c<connections.GetSize(); c++)
     {  
@@ -1574,6 +1606,11 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerUpdateClasses()
 
           connection->SetCompletedInitialUpdateClasses(true);     
         }
+    }
+
+  if(updateclass_xmutex)
+    {
+      updateclass_xmutex->UnLock();
     }
   
   return true;
@@ -1989,6 +2026,8 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadAutomaticOperations(void* param)
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER::Clean()
 {  
   leavingactive               = false;  
+
+  updateclass_xmutex          = NULL;
 
   connections_delete_xmutex   = NULL;
 

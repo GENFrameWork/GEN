@@ -87,8 +87,9 @@ class DIOCOREPROTOCOL_CONNECTIONSMANAGER : public XOBSERVER, public XSUBJECT
 
     virtual DIOCOREPROTOCOL*                  CreateProtocol                                 (DIOCOREPROTOCOL_CONNECTION* connection, DIOSTREAM* diostream);    
  
-    static bool                               UpdateClassSerialize                           (DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent);
-    static bool                               UpdateClassDeserialize                         (DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent);
+    XMUTEX*                                   UpdateClass_GetXMutex                          ();  
+    static bool                               UpdateClass_Serialize                          (DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent);
+    static bool                               UpdateClass_Deserialize                        (DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent);
                               
     XVECTOR<DIOCOREPROTOCOL_CONNECTION*>*     Connections_GetAll                             ();
     XMUTEX*                                   Connections_GetXMutex                          ();  
@@ -136,6 +137,7 @@ class DIOCOREPROTOCOL_CONNECTIONSMANAGER : public XOBSERVER, public XSUBJECT
     void                                      Clean                                          ();
     
     
+    XMUTEX*                                   updateclass_xmutex;
     XMUTEX*                                   connections_delete_xmutex;
     XTHREADCOLLECTED*                         connections_xthread;
     XTHREADCOLLECTED*                         connection_update_xthread;
