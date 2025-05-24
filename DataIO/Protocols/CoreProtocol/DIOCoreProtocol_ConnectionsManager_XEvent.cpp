@@ -244,7 +244,7 @@ XBUFFER* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseBuffer()
 * @return     XSTRING* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XSTRING* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContenteResponseString()
+XSTRING* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseString()
 {
   return &contentresponsestring;
 }
@@ -259,7 +259,7 @@ XSTRING* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContenteResponseString()
 * @return     XFILEJSON* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XFILEJSON* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContenteResponseXFileJSON()
+XFILEJSON* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseXFileJSON()
 {
   return &contentresponsexfileJSON;
 }

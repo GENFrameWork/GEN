@@ -87,8 +87,8 @@ class DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT : public XEVENT
     void                                      SetMsg                                          (DIOCOREPROTOCOL_MESSAGE* message);
 
     XBUFFER*                                  GetContentResponseBuffer                        ();
-    XSTRING*                                  GetContenteResponseString                       ();
-    XFILEJSON*                                GetContenteResponseXFileJSON                    ();
+    XSTRING*                                  GetContentResponseString                        ();
+    XFILEJSON*                                GetContentResponseXFileJSON                     ();
           
   private:
 

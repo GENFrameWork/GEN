@@ -1171,7 +1171,21 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AdditionalCommandMessages(DIOC
 
           if(status)
             {     
-              status = connection->Command_Do(message->GetHeader()->GetIDMessage(), c, xevent.GetContenteResponseString());       
+              if(!xevent.GetContentResponseBuffer()->IsEmpty())
+                {
+                  status = connection->Command_Do(message->GetHeader()->GetIDMessage(), c, xevent.GetContentResponseBuffer());       
+                }
+               else
+                {
+                  if(!xevent.GetContentResponseString()->IsEmpty())
+                    {
+                      status = connection->Command_Do(message->GetHeader()->GetIDMessage(), c, xevent.GetContentResponseString()); 
+                    }
+                   else
+                    {
+                      status = connection->Command_Do(message->GetHeader()->GetIDMessage(), c, xevent.GetContentResponseXFileJSON());                     
+                    } 
+                }   
             }
         }
     }
