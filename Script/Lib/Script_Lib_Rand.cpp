@@ -127,7 +127,10 @@ XRAND* SCRIPT_LIB_RAND::GetXRand()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_RAND::AddLibraryFunctions(SCRIPT* script)
 {
-  if(!script) return false;
+  if(!script) 
+    {
+      return false;
+    }
 
   this->script = script;
 
@@ -173,10 +176,10 @@ void SCRIPT_LIB_RAND::Clean()
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_RandMax(SCRIPT_LIB* library, SCRIPT* script , XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -216,10 +219,10 @@ void Call_RandMax(SCRIPT_LIB* library, SCRIPT* script , XVECTOR<XVARIANT*>* para
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_RandBetween(SCRIPT_LIB* library, SCRIPT* script , XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 

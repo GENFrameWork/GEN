@@ -149,7 +149,7 @@ void SCRIPT_LIB_PROCESS::Clean()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void Call_OpenURL(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
-* @brief      Call_OpenURL
+* @brief      call  open URl
 * @ingroup    SCRIPT
 * 
 * @param[in]  library : 
@@ -160,10 +160,10 @@ void SCRIPT_LIB_PROCESS::Clean()
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_OpenURL(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -199,10 +199,10 @@ void Call_OpenURL(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_MakeCommand(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+   if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -243,10 +243,10 @@ void Call_MakeCommand(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* p
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_ExecApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -307,10 +307,10 @@ void Call_ExecApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_TerminateApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {  
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -351,10 +351,10 @@ void Call_TerminateApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVAR
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_TerminateApplicationWithWindow(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {   
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 

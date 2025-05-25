@@ -149,7 +149,7 @@ void SCRIPT_LIB_INPUTSIMULATE::Clean()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void Call_Key_Press(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
-* @brief      Call_Key_Press
+* @brief      all  key  press
 * @ingroup    SCRIPT
 * 
 * @param[in]  library : 
@@ -160,10 +160,10 @@ void SCRIPT_LIB_INPUTSIMULATE::Clean()
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Key_Press(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -194,11 +194,10 @@ void Call_Key_Press(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void Call_Key_Press(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
-* @brief      Call_Key_Press
+* @fn         void Call_Key_UnPress(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
+* @brief      Call  key  un press
 * @ingroup    SCRIPT
 * 
 * @param[in]  library : 
@@ -209,10 +208,10 @@ void Call_Key_Press(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Key_UnPress(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -257,10 +256,10 @@ void Call_Key_UnPress(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* p
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Key_Click(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -307,10 +306,10 @@ void Call_Key_Click(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Key_ClickByLiteral(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -359,10 +358,10 @@ void Call_Key_ClickByLiteral(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIA
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Key_ClickByText(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -411,10 +410,10 @@ void Call_Key_ClickByText(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Mouse_SetPos(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -461,10 +460,10 @@ void Call_Mouse_SetPos(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Mouse_Click(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 

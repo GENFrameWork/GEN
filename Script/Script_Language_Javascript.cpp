@@ -496,12 +496,10 @@ void SCRIPT_LNG_JAVASCRIPT::Clean()
 * @brief      builtin inf
 * @ingroup    SCRIPT
 * 
-* @param[in]  void : 
-* 
 * @return     double : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-double __builtin_inf (void)
+double __builtin_inf(void)
 {
   return (double)0xFFFFFFFFFFFFFFFF;
 }

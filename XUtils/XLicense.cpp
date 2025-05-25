@@ -644,18 +644,18 @@ bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING& applicationID, int expirationdays)
-* @brief      Check master creation
+* @brief      check master creation
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  licenseID :
-* @param[in]  applicationID :
-* @param[in]  expirationseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : 
+* @param[in]  licenseID : 
+* @param[in]  applicationID : 
+* @param[in]  expirationdays : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING& applicationID, int expirationdays)
 {

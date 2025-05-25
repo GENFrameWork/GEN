@@ -94,13 +94,14 @@ void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(int actionindex) con
 }
 
 
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(const char* response) const
 * @brief      toast activated
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  char* response : 
+* @param[in]  response : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(const char* response) const 

@@ -104,7 +104,10 @@ SCRIPT_LIB_STRING::~SCRIPT_LIB_STRING()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_STRING::AddLibraryFunctions(SCRIPT* script)
 {
-  if(!script) return false;
+  if(!script) 
+    {
+      return false;
+    }
 
   this->script = script;
 
@@ -153,10 +156,10 @@ void SCRIPT_LIB_STRING::Clean()
 * ---------------------------------------------------------------------------------------------------------------------*/
 void Call_AddString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -189,10 +192,10 @@ void Call_AddString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 * ---------------------------------------------------------------------------------------------------------------------*/
 void Call_FindString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -231,10 +234,10 @@ void Call_FindString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* pa
 * ---------------------------------------------------------------------------------------------------------------------*/
 void Call_CompareString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -273,10 +276,10 @@ void Call_CompareString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>*
 * ---------------------------------------------------------------------------------------------------------------------*/
 void Call_ReplaceString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 
@@ -314,10 +317,10 @@ void Call_ReplaceString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>*
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_SPrintf(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
-  if(!library)      return;
-  if(!script)       return;
-  if(!params)       return;
-  if(!returnvalue)  return;
+  if((!library) || (!script) || (!params)  || (!returnvalue))
+    {
+      return;
+    }
 
   returnvalue->Set();
 

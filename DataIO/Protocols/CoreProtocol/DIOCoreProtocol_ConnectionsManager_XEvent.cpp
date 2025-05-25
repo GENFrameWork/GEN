@@ -237,8 +237,8 @@ XBUFFER* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseBuffer()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XSTRING* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContenteResponseString()
-* @brief      Get contente response string
+* @fn         XSTRING* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseString()
+* @brief      get content response string
 * @ingroup    DATAIO
 * 
 * @return     XSTRING* : 
@@ -252,8 +252,8 @@ XSTRING* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseString()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XFILEJSON* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContenteResponseXFileJSON()
-* @brief      Get contente response X file JSON
+* @fn         XFILEJSON* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseXFileJSON()
+* @brief      get content response Xfile JSOn
 * @ingroup    DATAIO
 * 
 * @return     XFILEJSON* : 

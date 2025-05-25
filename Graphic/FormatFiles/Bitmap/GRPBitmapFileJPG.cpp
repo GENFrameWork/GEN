@@ -64,18 +64,20 @@
 #pragma region CLASS_MEMBERS
 
 
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         METHODDEF(void) GRPBITMAPFILEJPG_ErrorExit(j_common_ptr info)
-* @brief      Callback error Exist
+* @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
-* @param[in]  j_common_ptr: ptr struct common 
 * 
-* @param[in]  METHODDEF(void) 
+* @param[in]  info :
+*
+* @return     METHODDEF(void) :
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 METHODDEF(void) GRPBITMAPFILEJPG_ErrorExit(j_common_ptr info)
+
 {
   GRPBITMAPFILEJPG_ERROR_PTR myerr = (GRPBITMAPFILEJPG_ERROR_PTR) info->err;
 
