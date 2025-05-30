@@ -638,8 +638,8 @@ bool XFILETXT::IsBinaryFile()
   if(!file)     return false;
 
   bool istextfile = false;
-
-  #define MAX_BUFFER_TEST 1024*5
+  
+  #define MAX_BUFFER_TEST 1024*5 
 
   XBUFFER buffer;
   XDWORD  size          = MAX_BUFFER_TEST;
@@ -652,8 +652,8 @@ bool XFILETXT::IsBinaryFile()
     {
       for(XDWORD c=0; c<size; c++)
         {
-          if((((int)buffer.Get()[c] >= 0x00) && ((int)buffer.Get()[c] < 0x09)) ||
-             (((int)buffer.Get()[c] >  0x0D) && ((int)buffer.Get()[c] < 0x20)))
+          if(((buffer.Get()[c] >= 0x00) && (buffer.Get()[c] < 0x09)) ||         
+             ((buffer.Get()[c] >  0x0D) && (buffer.Get()[c] < 0x20)))
             {
               controlchars++;
             }

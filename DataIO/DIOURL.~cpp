@@ -301,7 +301,7 @@ bool DIOURL::GetHTTPResource(XSTRING& resource)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOURL::IsAURL()
 {
-  //int count = 0;
+  int count = 0; 
 
   for(XDWORD c=0; c<size; c++)
     {

@@ -57,10 +57,10 @@ class INPLINUXDEVICEMOUSEDIRECT : public INPDEVICE
   public:
 
                                   INPLINUXDEVICEMOUSEDIRECT   ();
-  virtual                        ~INPLINUXDEVICEMOUSEDIRECT   ();
+    virtual                      ~INPLINUXDEVICEMOUSEDIRECT   ();
 
 
-   bool                           Update                      ();
+    bool                          Update                      ();
 
   private:
 

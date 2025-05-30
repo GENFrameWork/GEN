@@ -167,7 +167,6 @@ bool APPFLOWCFG::DoVariableMapping()
   //---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   #ifdef APPFLOW_CFG_INTERNETSERVICES_ACTIVE
-
   AddRemark(APPFLOW_CFG_SECTION_INTERNETSERVICES, __L("--------------------------------------------------------------------------------------------------------------------------------------------"), 0, 1);
   AddRemark(APPFLOW_CFG_SECTION_INTERNETSERVICES, __L(" Internet services section of configuration"), 0, 2);
 

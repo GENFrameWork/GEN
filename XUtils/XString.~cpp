@@ -3771,8 +3771,8 @@ bool XSTRING::ConvertFromXBuffer(XBUFFER& xbuffer, XSTRINGCODING buffercoding)
                                                                             {
                                                                               value -= 0x10000;
 
-                                                                              //XDWORD lo = ((XWORD)(0xD800 | (value >> 10)));
-                                                                              //XDWORD hi = ((XWORD)(0xDC00 | (value & 0x3FF)));
+                                                                              XDWORD lo = ((XWORD)(0xD800 | (value >> 10)));   
+                                                                              XDWORD hi = ((XWORD)(0xDC00 | (value & 0x3FF)));
 
                                                                               //XCHAR character = ((hi<<16) | lo);  
                                                                               //Add((XCHAR)character);

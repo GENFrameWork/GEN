@@ -642,12 +642,12 @@ void DIOWINDOWSSTREAMUDP::ThreadConnection(void* data)
                                                                     const int enable = 1;
                                                                     if(setsockopt(diostream->handle, SOL_SOCKET, SO_REUSEADDR, (const char*)&enable, sizeof(int)) < 0)
                                                                       {
-                                                                        //int error = WSAGetLastError();
+                                                                        int error = WSAGetLastError();
                                                                       }
 
                                                                     if(bind(diostream->handle, (LPSOCKADDR)&loc_addr, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
                                                                       {
-                                                                        //int error = WSAGetLastError();
+                                                                        int error = WSAGetLastError();
 
                                                                         diostream->SetEvent(DIOWINDOWSUDPFSMEVENT_DISCONNECTING);
                                                                         break;
