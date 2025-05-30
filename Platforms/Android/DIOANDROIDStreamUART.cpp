@@ -661,7 +661,7 @@ void DIOANDROIDSTREAMUART::ThreadConnection(void* param)
                                                                       XDWORD br = diostream->ReadDirect(buffer, DIOSTREAM_MAXBUFFER);
                                                                       if(br)
                                                                         {
-                                                                          //XTRACE_PRINTDATABLOCK(XDEBUGLEVELCOLOR(2), (XBYTE*)diostream->buffer, (int)br);
+                                                                          //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, (XBYTE*)diostream->buffer, (int)br);
                                                                           diostream->inbuffer->Add(buffer, br);
                                                                         }
                                                                     }
@@ -679,7 +679,7 @@ void DIOANDROIDSTREAMUART::ThreadConnection(void* param)
 
                                                                           if(bw)
                                                                             {
-                                                                              //XTRACE_PRINTDATABLOCK(XDEBUGLEVELCOLOR(4), (XBYTE*)diostream->buffer, (int)bw);
+                                                                              //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_RED, (XBYTE*)diostream->buffer, (int)bw);
                                                                               diostream->outbuffer->Extract(NULL, 0, bw);
                                                                             }
                                                                         }

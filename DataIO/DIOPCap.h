@@ -203,6 +203,8 @@ class DIOPCAPFRAME
     bool                              Set                           (DIOPCAPUDPHEADER* UDP_header);
     bool                              Set                           (DIOPCAPTCPHEADER* TCP_header);    
     bool                              Set                           (XBYTE* data_payload, XDWORD size);
+
+    bool                              IsValid                       (XDWORD protocoltype, XWORD sourceport = 0, XWORD targetport = 0, XDWORD minimumplayloadsize = 0);
     
   protected:
 

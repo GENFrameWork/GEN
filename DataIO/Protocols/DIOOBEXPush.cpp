@@ -895,7 +895,7 @@ bool DIOOBEXPUSH::CheckSending()
 
                                                             if(!ReadAnswer(answer)) break;
 
-                                                            //XTRACE_PRINTDATABLOCK(4|XDEBUGTRACELEVEL_WITHCOLOR, answer);
+                                                            //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_RED, answer);
 
                                                             if(answer.Get()[0]==0xA0)
                                                               {
@@ -957,7 +957,7 @@ bool DIOOBEXPUSH::CheckSending()
                                                             else  wsize = (XWORD)sendbuffer->GetSize();
                                                           sendbuffer->Set((XBYTE*)&wsize,2,1);
 
-                                                          //XTRACE_PRINTDATABLOCK(2|XDEBUGTRACELEVEL_WITHCOLOR, (*sendbuffer));
+                                                          //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_GREEN, (*sendbuffer));
 
                                                           sio->Write(sendbuffer->Get(),sendbuffer->GetSize());
                                                           sio->WaitToFlushOutXBuffer(5);
@@ -972,7 +972,7 @@ bool DIOOBEXPUSH::CheckSending()
 
                                                             if(!ReadAnswer(answer)) break;
 
-                                                            //XTRACE_PRINTDATABLOCK(4|XDEBUGTRACELEVEL_WITHCOLOR, answer);
+                                                            //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_RED, answer);
 
                                                             switch(answer.Get()[0])
                                                               {
@@ -1025,7 +1025,7 @@ bool DIOOBEXPUSH::CheckSending()
                                                           wsize = DIOOBEXPUSH_MAXBUFFER;
                                                           sendbuffer->Add((XWORD)wsize);
 
-                                                          //XTRACE_PRINTDATABLOCK(2|XDEBUGTRACELEVEL_WITHCOLOR, (*sendbuffer));
+                                                          //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_GREEN, (*sendbuffer));
 
                                                           sio->Write(sendbuffer->Get(),sendbuffer->GetSize());
                                                           sio->WaitToFlushOutXBuffer(5);
@@ -1079,7 +1079,7 @@ bool DIOOBEXPUSH::CheckSending()
                                                             else  wsize = (XWORD)sendbuffer->GetSize();
                                                           sendbuffer->Set((XBYTE*)&wsize,2,1);
 
-                                                          //XTRACE_PRINTDATABLOCK(2|XDEBUGTRACELEVEL_WITHCOLOR, (*sendbuffer));
+                                                          //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_GREEN, (*sendbuffer));
 
                                                           sio->Write(sendbuffer->Get(),sendbuffer->GetSize());
                                                           sio->WaitToFlushOutXBuffer(5);

@@ -282,7 +282,7 @@ void DIOLINUXSTREAMUSB::ThreadConnection(void* data)
                                                                     XDWORD br = diostream->ReadBuffer(buffer, DIOSTREAM_MAXBUFFER);
                                                                     if(br)
                                                                       {
-                                                                        //XTRACE_PRINTDATABLOCK(XDEBUGLEVELCOLOR(2), (XBYTE*)diostream->buffer, (int)br);
+                                                                        //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_GREEN, (XBYTE*)diostream->buffer, (int)br);
                                                                         diostream->inbuffer->Add(buffer, br);
                                                                       }
                                                                   }
@@ -300,12 +300,12 @@ void DIOLINUXSTREAMUSB::ThreadConnection(void* data)
 
                                                                         if(bw)
                                                                           {
-                                                                            //XTRACE_PRINTDATABLOCK(XDEBUGLEVELCOLOR(4), (XBYTE*)diostream->buffer, (int)bw);
+                                                                            //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_RED, (XBYTE*)diostream->buffer, (int)bw);
                                                                             diostream->outbuffer->Extract(NULL , 0, bw);
                                                                           }
                                                                          else
                                                                           {
-                                                                            //XTRACE_PRINTDATABLOCK(XDEBUGLEVELCOLOR(3), (XBYTE*)diostream->buffer, (int)bw);
+                                                                            //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_PURPLE, (XBYTE*)diostream->buffer, (int)bw);
                                                                           }
                                                                       }
                                                                   }

@@ -753,7 +753,7 @@ void DIOWINDOWSSTREAMUART::ThreadConnection(void* data)
                                                                     XDWORD br = diostream->ReadDirect(buffer, DIOSTREAM_MAXBUFFER);
                                                                     if(br)
                                                                       {
-                                                                        //XTRACE_PRINTDATABLOCK(XDEBUGLEVELCOLOR(2), (XBYTE*)diostream->buffer, (int)br);
+                                                                        //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_GREEN, (XBYTE*)diostream->buffer, (int)br);
                                                                         diostream->inbuffer->Add(buffer, br);
                                                                       }
                                                                   }

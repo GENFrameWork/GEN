@@ -530,7 +530,7 @@ BOOL __stdcall SDP_ServiceCallback(ULONG attribID, LPBYTE valuestream, ULONG cbs
                                                                                               xbuffer.Add((XBYTE)data.data.sequence.value[c]);
 
                                                                                              XTRACE_PRINTCOLOR(1, __L("Sequence: "));
-                                                                                             XTRACE_PRINTDATABLOCK(1, xbuffer);
+                                                                                             XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, xbuffer);
                                                                                             */
                                                                                             //---------------------------------------------------
 

@@ -183,7 +183,7 @@ enum XTRACE_TYPE_STATUS_MSG
     #define XTRACE_PRINTTAB(level, mask, params)                                                          XTRACE::instance->Print((level|XTRACE_LEVEL_WITHTAB)             , mask ,params)
     #define XTRACE_PRINTCODE(level, mask, params)                                                         XTRACE::instance->Print((level|XTRACE_LEVEL_WITHCODE)            , mask ,params)
 
-    #define XTRACE_PRINTDATABLOCK(level, data, params)                                                    XTRACE::instance->PrintDataBlock(0                               , data ,params)
+    #define XTRACE_PRINTDATABLOCK(data, params)                                                           XTRACE::instance->PrintDataBlock(0                               , data ,params)
     #define XTRACE_PRINTDATABLOCKLEVEL(level, data, params)                                               XTRACE::instance->PrintDataBlock(level                           , data ,params)
     #define XTRACE_PRINTDATABLOCKCOLOR(level, data, params)                                               XTRACE::instance->PrintDataBlock((level|XTRACE_LEVEL_WITHCOLOR)  , data ,params)
     #define XTRACE_PRINTDATABLOCKTAB(level, data, params)                                                 XTRACE::instance->PrintDataBlock((level|XTRACE_LEVEL_WITHTAB)    , data ,params)
@@ -197,7 +197,7 @@ enum XTRACE_TYPE_STATUS_MSG
     #define XTRACE_PRINTTAB(level, mask, ...)                                                             XTRACE::instance->Print((level|XTRACE_LEVEL_WITHTAB)             , mask , ## __VA_ARGS__)
     #define XTRACE_PRINTCODE(level, mask, ...)                                                            XTRACE::instance->Print((level|XTRACE_LEVEL_WITHCODE)            , mask , ## __VA_ARGS__)
 
-    #define XTRACE_PRINTDATABLOCK(level, data, ...)                                                       XTRACE::instance->PrintDataBlock(0                               , data , ## __VA_ARGS__)
+    #define XTRACE_PRINTDATABLOCK(data, ...)                                                              XTRACE::instance->PrintDataBlock(0                               , data , ## __VA_ARGS__)
     #define XTRACE_PRINTDATABLOCKLEVEL(level, data, ...)                                                  XTRACE::instance->PrintDataBlock(level                           , data , ## __VA_ARGS__)
     #define XTRACE_PRINTDATABLOCKCOLOR(level, data, ...)                                                  XTRACE::instance->PrintDataBlock((level|XTRACE_LEVEL_WITHCOLOR)  , data , ## __VA_ARGS__)
     #define XTRACE_PRINTDATABLOCKTAB(level, data, ...)                                                    XTRACE::instance->PrintDataBlock((level|XTRACE_LEVEL_WITHTAB)    , data , ## __VA_ARGS__)
@@ -250,7 +250,7 @@ enum XTRACE_TYPE_STATUS_MSG
     #define XTRACE_PRINTTAB(level, mask, ...)
     #define XTRACE_PRINTCODE(level, mask, ...)
 
-    #define XTRACE_PRINTDATABLOCK(level, data, ...)
+    #define XTRACE_PRINTDATABLOCK(data, ...)
     #define XTRACE_PRINTDATABLOCKLEVEL(level, data, ...)
     #define XTRACE_PRINTDATABLOCKCOLOR(level, data, ...)
     #define XTRACE_PRINTDATABLOCKTAB(level, data, ...)

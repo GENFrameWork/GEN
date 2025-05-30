@@ -256,7 +256,7 @@ void DIOANDROIDSTREAMI2C::ThreadConnection(void* data)
                                                                                 {
                                                                                   diostream->inbuffer->Add(_data, diostream->sizeread);
                                                                                   //XTRACE_PRINTCOLOR(3, __L("(Addr %04X, size:%d)"), diostream->config->GetRemoteAddress(), diostream->inbuffer->GetSize());
-                                                                                  //XTRACE_PRINTDATABLOCK(1, (*diostream->inbuffer));
+                                                                                  //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, (*diostream->inbuffer));
 
                                                                                   diostream->sizeread = 0;
                                                                                 }

@@ -853,6 +853,82 @@ bool DIOPCAPFRAME::Set(XBYTE* data_payload, XDWORD data_payloadsize)
   return true;
 }
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOPCAPFRAME::IsValid(XDWORD protocoltype, XWORD sourceport, XWORD targetport, XDWORD minimumdatasize)
+* @brief      IsValid
+* @ingroup    DATAIO
+* 
+* @param[in]  protocoltype : 
+* @param[in]  sourceport : 
+* @param[in]  targetport : 
+* @param[in]  minimumdatasize : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOPCAPFRAME::IsValid(XDWORD protocoltype, XWORD sourceport, XWORD targetport, XDWORD minimumdatasize)
+{
+
+  /*
+  if(this->sourceMAC.IsZero())
+    {
+      return false;
+    }
+
+  if(this->targetMAC.IsZero())
+    {
+      return false;
+    }
+  */
+
+  if(this->protocoltype != protocoltype)
+    {
+      return false;
+    }
+
+  if((this->protocoltype & DIOPCAPIPPROTOCOLTYPE_ICMP)  ||
+     (this->protocoltype & DIOPCAPIPPROTOCOLTYPE_UDP)   ||
+     (this->protocoltype & DIOPCAPIPPROTOCOLTYPE_TCP))
+    {
+      if(this->sourceIP.IsEmpty())
+        {
+          return false;
+        }   
+
+      if(this->targetIP.IsEmpty())
+        {
+          return false;
+        }   
+    }
+
+  if(sourceport)
+    {
+      if(this->sourceport == sourceport)
+        {
+          return false;
+        }
+    }
+
+  if(targetport)
+    {
+      if(this->targetport == targetport)
+        {
+          return false;
+        }
+    }
+
+  if(GetDataPayLoadSize() < minimumdatasize) 
+    {
+      return false;
+    }
+
+    
+  return true;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOPCAPFRAME::Clean()

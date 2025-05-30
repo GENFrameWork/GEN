@@ -363,7 +363,7 @@ bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
 
               if(displaydata)
                 {
-                  XTRACE_PRINTDATABLOCK(0, (XBYTE*)assignlist[c].ptr, datablocksize, 1);
+                  XTRACE_PRINTDATABLOCK((XBYTE*)assignlist[c].ptr, datablocksize, 1);
                 }
 
               //-----------------------------------------------------------------
