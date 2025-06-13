@@ -220,9 +220,9 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
       xtask = new XSCHEDULERTASK(xscheduler);
       if(!xtask) return false;
 
-      xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, 5);  // Get IP first time
+      xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, 30);  // Get IP first time
       xtask->SetID(APPFLOWINTERNETSERVICES_TASKID_GETIPS);
-      xtask->SetIsStartImmediatelyCycles(false);
+      xtask->SetIsStartImmediatelyCycles(true);
       xtask->SetIsActive(true);
 
       xscheduler->Task_Add(xtask);      
