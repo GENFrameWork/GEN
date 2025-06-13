@@ -225,7 +225,7 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Show(XCONSOLE* console)
   string2.ConvertFromBoolean(haveinternetconnection, XSTRINGBOOLEANMODE_HUMAN);   
   APPFLOW_EXTENDED.GetConsole()->Show_Line(string, string2);
 
-  if(haveinternetconnection)
+  if(haveinternetconnection && !publicIP.IsEmpty())
     {
       string  = __L("Public IP");
       string2.Format(__L("[%s]"), publicIP.Get());

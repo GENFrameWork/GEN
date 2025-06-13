@@ -125,9 +125,12 @@ class XPATH : public XSTRING
     bool                      Create                        (int nelements, ...);
     bool                      Create                        (XPATHSMANAGERSECTIONTYPE sectiontype, int nelements, ...);
 
+    bool                      Split                         (XSTRING* drive, XPATH* xpath, XSTRING* name, XSTRING* ext);
+    bool                      Split                         (XSTRING* drive, XVECTOR<XSTRING*>& subpaths, XSTRING* name, XSTRING* ext);
+
   private:
 
-    bool                      Split                         (XSTRING* drive, XPATH* xpath, XSTRING* name, XSTRING* ext);
+    void                      Clean                         ();
 };
 
 

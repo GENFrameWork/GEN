@@ -1399,5 +1399,88 @@ bool XPATH::Split(XSTRING* drive, XPATH* xpath, XSTRING* name, XSTRING* ext)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XPATH::Split(XSTRING* drive, XVECTOR<XPATH*>* subpaths, XSTRING* name, XSTRING* ext)
+* @brief      split
+* @ingroup    XUTILS
+* 
+* @param[in]  drive : 
+* @param[in]  subpaths : 
+* @param[in]  name : 
+* @param[in]  ext : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPATH::Split(XSTRING* drive, XVECTOR<XSTRING*>& subpaths, XSTRING* name, XSTRING* ext)
+{
+  XSTRING  _drive;
+  XPATH    _xpath; 
+  XSTRING  _name;
+  XSTRING  _ext;
+
+  if(!Split(&_drive, &_xpath, &_name, &_ext))
+    {
+      return false;
+    }
+
+  if(!name)
+    {
+      if(!_name.IsEmpty() && _ext.IsEmpty())    
+        {
+          _xpath.Slash_Add();
+          _xpath.Add(_name);
+        }
+    }
+
+  XSTRING* newpart = NULL;  
+
+  for(XDWORD c=0; c<_xpath.GetSize()+1; c++)
+    {
+      if(!newpart)
+        {
+          newpart = new XSTRING();
+          if(!newpart) 
+            {
+              return false;
+            }
+        }
+      
+      if((_xpath[c]==__C('\\')) || (_xpath[c]==__C('/')) || (c == _xpath.GetSize()))
+        {
+          if(!c)
+            {
+              continue;
+            }        
+           else
+            {
+              subpaths.Add(newpart);  
+              newpart = NULL;
+            }
+        }
+       else 
+        {
+          newpart->Add(_xpath[c]);
+        }
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void XPATH::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    XUTILS
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void XPATH::Clean()
+{
+
+}
+
 #pragma endregion
 

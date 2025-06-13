@@ -905,7 +905,7 @@ bool DIOPCAPFRAME::IsValid(XDWORD protocoltype, XWORD sourceport, XWORD targetpo
 
   if(sourceport)
     {
-      if(this->sourceport == sourceport)
+      if(this->sourceport != sourceport)
         {
           return false;
         }
@@ -913,7 +913,7 @@ bool DIOPCAPFRAME::IsValid(XDWORD protocoltype, XWORD sourceport, XWORD targetpo
 
   if(targetport)
     {
-      if(this->targetport == targetport)
+      if(this->targetport != targetport)
         {
           return false;
         }

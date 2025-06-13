@@ -998,42 +998,42 @@ void APPFLOWINTERNETSERVICES::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
   switch(event->GetTask()->GetID())
     {
       case APPFLOWINTERNETSERVICES_TASKID_CHECKCONNECTIONINTERNET : CheckInternetStatus();                                                                  
-                                                                break;
+                                                                    break;
 
       case APPFLOWINTERNETSERVICES_TASKID_GETIPS                  : // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Check Get IPs..."));    
 
-                                                                if(CheckInternetConnection()) 
-                                                                  { 
-                                                                    XSTRING actualpublicIP;                                                                                                                             
+                                                                    if(CheckInternetConnection()) 
+                                                                      { 
+                                                                        XSTRING actualpublicIP;                                                                                                                             
 
-                                                                    if(UpdateIPs(actualpublicIP))
-                                                                      {  
-                                                                        // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Update public IP"));    
-  
-                                                                        #ifdef XTRACE_ACTIVE                                                                   
-                                                                        XTRACE_RESOLVEALLRESOURCES; 
-                                                                        #endif  
+                                                                        if(UpdateIPs(actualpublicIP))
+                                                                          {  
+                                                                            // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Update public IP"));    
+      
+                                                                            #ifdef XTRACE_ACTIVE                                                                   
+                                                                            XTRACE_RESOLVEALLRESOURCES; 
+                                                                            #endif  
 
-                                                                        #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE
-                                                                        UpdateDynDNSURLs(actualpublicIP);                                                                        
-                                                                        #endif
-                                                                      }   
+                                                                            #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE
+                                                                            UpdateDynDNSURLs(actualpublicIP);                                                                        
+                                                                            #endif
+                                                                          }   
 
-                                                                    if(!actualpublicIP.IsEmpty())
-                                                                      {
-                                                                        #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE                                                                  
-                                                                        // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Get IPs ajust to %d seconds]"), cfg->InternetServices_GetCheckIPsChangeCadence());
-                                                                        ChangeCadenceCheck(APPFLOWINTERNETSERVICES_TASKID_GETIPS, cfg->InternetServices_GetCheckIPsChangeCadence());   
-                                                                        #endif                                                                                                                                           
+                                                                        if(!actualpublicIP.IsEmpty())
+                                                                          {
+                                                                            #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE                                                                  
+                                                                            // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Get IPs ajust to %d seconds]"), cfg->InternetServices_GetCheckIPsChangeCadence());
+                                                                            ChangeCadenceCheck(APPFLOWINTERNETSERVICES_TASKID_GETIPS, cfg->InternetServices_GetCheckIPsChangeCadence());   
+                                                                            #endif                                                                                                                                           
+                                                                          }
                                                                       }
-                                                                  }
-                                                                break;
+                                                                    break;
 
       case APPFLOWINTERNETSERVICES_TASKID_CHECKNTPDATETIME        : if(CheckInternetConnection()) 
-                                                                 {
-                                                                   AdjustTimerByNTP(&NTPservers);                                                                  
-                                                                 }
-                                                                break;
+                                                                      {
+                                                                        AdjustTimerByNTP(&NTPservers);                                                                  
+                                                                      }
+                                                                    break;
     }
 
   

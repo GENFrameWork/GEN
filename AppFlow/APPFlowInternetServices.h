@@ -115,7 +115,7 @@ class APPFLOWINTERNETSERVICES : public XOBSERVER, public XSUBJECT
 
     void                            Clean                           ();
 
-    APPFLOWCFG*                         cfg;
+    APPFLOWCFG*                     cfg;
 
     XSCHEDULER*                     xscheduler;
 
