@@ -1972,9 +1972,9 @@ bool XSTRING::ToLowerCase()
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSTRING::Compare(const XCHAR* string, int csize, bool ignorecase)
 {
-  XDWORD stringsize=csize;
+  XDWORD stringsize = csize;
 
-  if(size!=stringsize)
+  if(size != stringsize)
     {
       if(size>stringsize) return  1;
       if(size<stringsize) return -1;
@@ -1983,40 +1983,47 @@ int XSTRING::Compare(const XCHAR* string, int csize, bool ignorecase)
   if(!size && !stringsize) return 0;
 
   XCHAR* _text = (XCHAR*)string;
-
-  if(ignorecase)
+  if(!_text)
     {
-      for(int c=size-1;c>=0;c--)
+      return -1;
+    }
+
+  if(!_text[0])
+    {
+      return -1;
+    }
+
+  int index = size-1;
+
+  while(index >= 0)
+    {
+      if(ignorecase)
         {
-          XCHAR a=_text[c];
-          XCHAR b=text[c];
+          XCHAR a = _text[index];
+          XCHAR b = text[index];
 
           if(Character_IsAlpha(a))
             {
               XCHAR c1 = Character_ToUpper(a);
               XCHAR c2 = Character_ToUpper(b);
 
-              if(c1 == c2) continue;
               if(c1 < c2) return  1;
               if(c1 > c2) return -1;
             }
            else
             {
-              if(a == b)  continue;
               if(a < b)   return  1;
               if(a > b)   return -1;
             }
         }
-    }
-   else
-    {
-      for(int c=size-1;c>=0;c--)
-        {
-          if(_text[c] == text[c]) continue;
-          if(_text[c] < text[c])  return  1;
-          if(_text[c] > text[c])  return -1;
-        }
-    }
+       else
+        {          
+          if(_text[index] < text[index])  return  1;
+          if(_text[index] > text[index])  return -1;
+        }  
+
+      index--;       
+    } 
 
   return 0;
 }
@@ -2036,59 +2043,13 @@ int XSTRING::Compare(const XCHAR* string, int csize, bool ignorecase)
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSTRING::Compare(const XCHAR* string, bool ignorecase)
 {
-  XDWORD stringsize = XSTRING::GetSize(string);
-
-  if(size != stringsize)
-    {
-      if(size>stringsize) return  1;
-      if(size<stringsize) return -1;
-    }
-
-  if(!size && !stringsize) return 0;
-
-  XCHAR* _text = (XCHAR*)string;
-
-  if(ignorecase)
-    {
-      for(int c=size-1;c>=0;c--)
-        {
-          XCHAR a=_text[c];
-          XCHAR b=text[c];
-
-          if(Character_IsAlpha(a))
-            {
-              XCHAR c1 = Character_ToUpper(a);
-              XCHAR c2 = Character_ToUpper(b);
-
-              if(c1 == c2) continue;
-              if(c1 < c2) return  1;
-              if(c1 > c2) return -1;
-            }
-           else
-            {
-              if(a == b)  continue;
-              if(a < b)   return  1;
-              if(a > b)   return -1;
-            }
-        }
-    }
-   else
-    {
-      for(int c=size-1;c>=0;c--)
-        {
-          if(_text[c] == text[c]) continue;
-          if(_text[c] < text[c])  return  1;
-          if(_text[c] > text[c])  return -1;
-        }
-    }
-
-  return 0;
+  return Compare(string, (int)XSTRING::GetSize(string), ignorecase);
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         int XSTRING::Compare(const char* string, bool ignorecase)
+* @fn         int XSTRING::Compare(const XSTRING& string, bool ignorecase) const
 * @brief      Compare
 * @ingroup    XUTILS
 *
@@ -2098,11 +2059,62 @@ int XSTRING::Compare(const XCHAR* string, bool ignorecase)
 * @return     int :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-int XSTRING::Compare(const char* string, bool ignorecase)
+int XSTRING::Compare(const XSTRING& string, bool ignorecase) const
 {
-  XSTRING stringtemp(string);
+  XDWORD stringsize = XSTRING::GetSize(string.Get());
 
-  return Compare(stringtemp, ignorecase);
+  if(size != stringsize)
+    {
+      if(size>stringsize) return  1;
+      if(size<stringsize) return -1;
+    }
+
+  if(!size && !stringsize) return 0;
+
+  XCHAR* _text = (XCHAR*)string.Get();
+  if(!_text)
+    {
+      return -1;
+    }
+
+  if(!_text[0])
+    {
+      return -1;
+    }
+
+  int index = size-1;
+
+  while(index >= 0)
+    {
+      if(ignorecase)
+        {
+          XCHAR a = _text[index];
+          XCHAR b = text[index];
+
+          if(Character_IsAlpha(a))
+            {
+              XCHAR c1 = Character_ToUpper(a);
+              XCHAR c2 = Character_ToUpper(b);
+
+              if(c1 < c2) return  1;
+              if(c1 > c2) return -1;
+            }
+           else
+            {
+              if(a < b)   return  1;
+              if(a > b)   return -1;
+            }
+        }
+       else
+        {          
+          if(_text[index] < text[index])  return  1;
+          if(_text[index] > text[index])  return -1;
+        }  
+
+      index--;       
+    } 
+
+  return 0;
 }
 
 
@@ -2121,17 +2133,17 @@ int XSTRING::Compare(const char* string, bool ignorecase)
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSTRING::Compare(const XCHAR* string, const XCHAR* string2, bool ignorecase)
 {
-  XSTRING a;
+  XSTRING _string;
 
-  a.Set(string);
+  _string.Set(string);
 
-  return a.Compare(string2,ignorecase);
+  return _string.Compare(string2, ignorecase);
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         int XSTRING::Compare(const XSTRING& string, bool ignorecase) const
+* @fn         int XSTRING::Compare(const char* string, bool ignorecase)
 * @brief      Compare
 * @ingroup    XUTILS
 *
@@ -2141,53 +2153,15 @@ int XSTRING::Compare(const XCHAR* string, const XCHAR* string2, bool ignorecase)
 * @return     int :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-int XSTRING::Compare(const XSTRING& string, bool ignorecase) const
+int XSTRING::Compare(const char* string, bool ignorecase)
 {
-  XDWORD stringsize = string.GetSize();
+  XSTRING stringtemp;
 
-  if(size != stringsize)
-    {
-      if(size > stringsize) return  1;
-      if(size < stringsize) return -1;
-    }
+  stringtemp = string;
 
-  if(!size && !stringsize) return 0;
-
-  XCHAR* _text = string.Get();
-
-  if(ignorecase)
-    {
-      for(int c=size-1;c>=0;c--)
-        {
-          if(Character_IsAlpha(_text[c]))
-            {
-              XCHAR c1 = Character_ToUpper(_text[c]);
-              XCHAR c2 = Character_ToUpper(text[c]);
-
-              if(c1 == c2) continue;
-              if(c1 < c2) return  1;
-              if(c1 > c2) return -1;
-            }
-           else
-            {
-              if(_text[c] == text[c]) continue;
-              if(_text[c] < text[c]) return  1;
-              if(_text[c] > text[c]) return -1;
-            }
-        }
-    }
-   else
-    {
-      for(int c=size-1;c>=0;c--)
-        {
-          if(_text[c] == text[c]) continue;
-          if(_text[c] < text[c])  return  1;
-          if(_text[c] > text[c])  return -1;
-        }
-    }
-
-  return 0;
+  return Compare(stringtemp, ignorecase);
 }
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -5093,6 +5067,8 @@ bool XSTRING::UnFormat(const XCHAR* mask,...)
   if(!text[0]) return false;
 
   va_list arg;
+  bool    status = true;
+
   va_start(arg, mask);
 
   XCHAR* param = new XCHAR[16];
@@ -5106,6 +5082,12 @@ bool XSTRING::UnFormat(const XCHAR* mask,...)
 
       while(mask[c])
         {
+          if(indextext >= GetSize())
+            {
+              status = false;
+              break;
+            }
+
           switch(mask[c])
             {
               case __C('%')   : memset(param,0,16*sizeof(XCHAR));
@@ -5255,7 +5237,10 @@ bool XSTRING::UnFormat(const XCHAR* mask,...)
 
                                         case __C('s')   :
                                         case __C('S')   : { value_xchar = (XCHAR*)va_arg(arg,XCHAR*);
-                                                            if(!value_xchar) break;
+                                                            if(!value_xchar) 
+                                                              {
+                                                                break;
+                                                              }
 
                                                             XSTRING string;
 
@@ -5268,7 +5253,7 @@ bool XSTRING::UnFormat(const XCHAR* mask,...)
 
                                                             Copy(indextext, indextext+d, string);
 
-                                                            if(nparam>2)
+                                                            if(nparam > 2)
                                                               {
                                                                 XSTRING strsizeparam = param;
                                                                 int     sizeparam;
@@ -5349,7 +5334,7 @@ bool XSTRING::UnFormat(const XCHAR* mask,...)
 
   va_end(arg);
 
-  return true;
+  return status;
 }
 
 

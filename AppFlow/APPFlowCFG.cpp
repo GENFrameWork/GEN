@@ -139,9 +139,9 @@ bool APPFLOWCFG::DoVariableMapping()
 
   #ifdef XTRACE_ACTIVE
   XFILECFGVALUE* CFGvalue = AddValueSecuence<XSTRING>(XFILECFG_VALUETYPE_STRING, APPFLOW_CFG_SECTION_GENERAL, APPFLOW_CFG_TRACETARGET, __L("%02d"), XTRACE_MINNTARGETS
-                                                                                                                , XTRACE_MAXNTARGETS
-                                                                                                                , tracetargets
-                                                                                                                , ntracetargets                                                                                               , __L("eXtended Trace Aim ")                                                , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+                                                                                                            , XTRACE_MAXNTARGETS
+                                                                                                            , tracetargets
+                                                                                                            , ntracetargets                                                                                               , __L("eXtended Trace Aim ")                                                , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   if(CFGvalue) 
     { 
       CFGvalue->SetModeRemoteMix((XFILECFG_MODEREMOTEMIX)(CFGvalue->GetModeRemoteMix() | XFILECFG_MODEREMOTEMIX_NOTDELADDKEYS));

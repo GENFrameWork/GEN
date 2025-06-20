@@ -239,11 +239,11 @@ class GEN_API_LIB XSTRING
     bool                  ToUpperCase                     ();
     bool                  ToLowerCase                     ();
 
-    int                   Compare                         (const XCHAR* string, bool ignorecase = false);
-    int                   Compare                         (const XCHAR* string, int csize, bool ignorecase= false);
-    int                   Compare                         (const XSTRING& string, bool ignorecase = false) const;
-    int                   Compare                         (const char* string, bool ignorecase = false);
+    int                   Compare                         (const XCHAR* string, int csize, bool ignorecase = false);
+    int                   Compare                         (const XCHAR* string, bool ignorecase = false);   
+    int                   Compare                         (const XSTRING& string, bool ignorecase = false) const;  
     static int            Compare                         (const XCHAR* string, const XCHAR* string2, bool ignorecase = false);
+    int                   Compare                         (const char* string, bool ignorecase = false);
 
     int                   Find                            (const XCHAR* string, bool ignorecase, int startindex = 0);
     int                   Find                            (XSTRING& string, bool ignorecase, int startindex = 0);
