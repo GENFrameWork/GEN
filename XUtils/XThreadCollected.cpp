@@ -140,11 +140,17 @@ XTHREADCOLLECTED::~XTHREADCOLLECTED()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADCOLLECTED::Ini(bool run)
 {
-  if(directxthread) return directxthread->Ini(run);
+  if(directxthread) 
+    {
+      return directxthread->Ini(run);
+    }
 
   if(run)
     {
-      if(!Run(true)) return false;
+      if(!Run(true)) 
+        {
+          return false;
+        }
     }
    else
     {
@@ -192,7 +198,12 @@ bool XTHREADCOLLECTED::End()
       return directxthread->End();
     }
 
-  if(status == XTHREADSTATUS_END) return false;
+  if(status == XTHREADSTATUS_END) 
+    {
+      return false;
+    }
+  
+ 
   status = XTHREADSTATUS_EXIT;
 
   WaitToEnd();
@@ -902,6 +913,8 @@ void XTHREADSCOLLECTED::ThreadRunFunction(void* param)
 
               case XTHREADSTATUS_EXIT   : xthreadcollected->SetStatus(XTHREADSTATUS_END);
                                           break;
+
+                           default      : break; 
             }
         }
     }

@@ -689,6 +689,11 @@ bool APPFLOWINTERNETSERVICES::CheckInternetConnection()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::CheckInternetStatus()
 {
+  if(endservices)
+    {
+      return false;
+    }    
+
   APPFLOWINTERNETSERVICES_XEVENT xevent(this, APPFLOWINTERNETSERVICES_XEVENT_TYPE_CHECKINTERNETCONNEXION);      
 
   xevent.SetInternetConnexionState(APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE_CHECKING);  
@@ -768,6 +773,11 @@ bool APPFLOWINTERNETSERVICES::UpdateIPs(XSTRING& actualpublicIP)
   bool                          sendchangeevent = false;
   bool                          status          = false;
       
+  if(endservices)
+    {
+      return false;
+    }
+
   APPFLOWINTERNETSERVICES_XEVENT    xevent(this, APPFLOWINTERNETSERVICES_XEVENT_TYPE_CHANGEIP);  
 
   // APPFLOW_LOG_ENTRY(XLOGLEVEL_INFO, APPFLOW_CFG_LOG_SECTIONID_CONNEXIONS, false, __L("[Update IPs] Ini Get Local IP... "));       
@@ -826,9 +836,14 @@ bool APPFLOWINTERNETSERVICES::UpdateIPs(XSTRING& actualpublicIP)
         }                                                                         
       
       // APPFLOW_LOG_ENTRY(XLOGLEVEL_INFO, APPFLOW_CFG_LOG_SECTIONID_CONNEXIONS, false, __L("[Update IPs] Ini Get Public IP... "));                                                                    
-      
-      GEN_DIOPUBLICINTERNETIP.Get(actualpublicIP);
 
+
+      if(endservices)
+        {
+          return false;
+        }      
+
+      GEN_DIOPUBLICINTERNETIP.Get(actualpublicIP);
       if(!actualpublicIP.IsEmpty())
         {
           // Check Public IP changed
@@ -892,7 +907,7 @@ bool APPFLOWINTERNETSERVICES::UpdateDynDNSURLs(XSTRING& actualpublicIP)
                 
   // APPFLOW_LOG_ENTRY(XLOGLEVEL_INFO, APPFLOW_CFG_LOG_SECTIONID_CONNEXIONS, false, __L("[Update IPs] Ini Update Dyndns URLs: [%s] "), actualpublicIP.Get());  
 
-  bool status = dyndnsmanager->AssingAll();
+  bool status = dyndnsmanager->AssingAll(&endservices);
 
   // APPFLOW_LOG_ENTRY((status?XLOGLEVEL_INFO:XLOGLEVEL_ERROR), APPFLOW_CFG_LOG_SECTIONID_CONNEXIONS, false, __L("[Update IPs] End Update Dyndns URLs: [%s]"), actualpublicIP.Get());    
 
@@ -990,16 +1005,23 @@ bool APPFLOWINTERNETSERVICES::AdjustTimerByNTP(XVECTOR<XSTRING*>* servers)
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 {
+  if(endservices)
+    {
+      return;
+    }   
+
   if(checkinternetconnection)
     {
       checkinternetconnection->GetCheckConnections()->Connections_GetMutex()->Lock();
     }
 
+  
   switch(event->GetTask()->GetID())
     {
       case APPFLOWINTERNETSERVICES_TASKID_CHECKCONNECTIONINTERNET : CheckInternetStatus();                                                                  
                                                                     break;
 
+      
       case APPFLOWINTERNETSERVICES_TASKID_GETIPS                  : // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Check Get IPs..."));    
 
                                                                     if(CheckInternetConnection()) 
@@ -1028,14 +1050,15 @@ void APPFLOWINTERNETSERVICES::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
                                                                           }
                                                                       }
                                                                     break;
-
+        
       case APPFLOWINTERNETSERVICES_TASKID_CHECKNTPDATETIME        : if(CheckInternetConnection()) 
                                                                       {
                                                                         AdjustTimerByNTP(&NTPservers);                                                                  
                                                                       }
                                                                     break;
+      
     }
-
+  
   
   if(checkinternetconnection)
     {

@@ -307,7 +307,7 @@ bool SNDFACTORY::Sound_Play(SNDITEM* item, SNDPLAYCFG* playCFG, int ntimestoplay
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_Pause(SNDITEM* item)                                   
 { 
-  return NULL;                      
+  return false;                      
 }
 
 

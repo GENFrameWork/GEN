@@ -64,7 +64,7 @@ class DIODYNDNS_MANAGER
     bool                        DeleteAllDNS          ();
     XDWORD                      GetNDNS               ();
 
-    bool                        AssingAll             ();
+    bool                        AssingAll             (bool* endproccess = NULL);
 
   private:
 

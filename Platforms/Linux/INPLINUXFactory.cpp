@@ -123,6 +123,8 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                                 }
                                             }
                                             break;
+
+                             default      : break; 
         }
     }
 
@@ -158,6 +160,8 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                                 }
                                             }
                                             break;
+
+                             default      : break; 
         }
     }
 
@@ -306,7 +310,9 @@ bool INPLINUXFACTORY::GetDeviceHandlers(INPDEVICE_TYPE devicetype, XVECTOR<INPLI
                                                       }
                                                   }  
                                               }
-                                              break;                                                                      
+                                              break;  
+
+                                  default   : break;                                                                     
                                 }
 
                               c++;

@@ -216,7 +216,7 @@ bool XLINUXCONSOLE::Print(XCHAR* string)
   XBUFFER charstr;
   
   _string.ConvertToASCII(charstr);  
-  printf(charstr.GetPtrChar());
+  printf("%s", charstr.GetPtrChar());
   
   fflush(stdout);
 

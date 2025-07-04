@@ -370,15 +370,24 @@ bool XBER::GetDump(XBUFFER& xbuffer, bool notheader)
       xbuffer.Add((XBYTE)tagtype);
 
       XBUFFER sizedata;
-      if(CodeSize(size, sizedata) && tagtype != XBER_TAGTYPE_NULL) xbuffer.Add(&sizedata);
+      if(CodeSize(size, sizedata) && tagtype != XBER_TAGTYPE_NULL) 
+        {
+          xbuffer.Add(&sizedata);
+        }
     }
 
-  if(data.GetSize()) xbuffer.Add(data.Get(), data.GetSize());
+  if(data.GetSize()) 
+    {
+      xbuffer.Add(data.Get(), data.GetSize());
+    }
 
   for(XDWORD c=0;c<sequences.GetSize();c++)
     {
       XBER* xber = (XBER*)sequences.Get(c);
-      if(xber) xber->GetDump(xbuffer);
+      if(xber) 
+        {
+          xber->GetDump(xbuffer);
+        }
     }
 
   return true;
@@ -420,7 +429,6 @@ bool XBER::SetFromDump(XBUFFER& buffer, XOBSERVER* observer)
 
 
   bool status = SetFromDumpInternal(buffer, observer);
-
 
   if(observer)
     {
@@ -490,7 +498,6 @@ bool XBER::SetSize(XDWORD size)
 bool XBER::SetNULL()
 {
   data.Delete();
-
   data.Add((XBYTE)0);
 
   tagtype = XBER_TAGTYPE_NULL;
@@ -966,7 +973,10 @@ XDWORD XBER::Sequence_GetSize()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::Sequence_DeleteAll()
 {
-  if(sequences.IsEmpty()) return false;
+  if(sequences.IsEmpty()) 
+    {
+      return false;
+    }
 
   sequences.DeleteContents();
 
@@ -1007,7 +1017,10 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
 
   tagtype = (XBYTE)(buffer.Get()[0] & XBER_TAG_MASKTYPE); 
 
-  if(!CalculeSize(buffer, size, sizehead)) return false;  
+  if(!CalculeSize(buffer, size, sizehead)) 
+    {
+      return false;  
+    }
   
   tagclass = XBER_TAG_CLASS(buffer.Get()[0]);
 
@@ -1022,6 +1035,8 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
                                             break;
 
       case XBER_TAGCLASS_PRIVATE          :	break;
+
+                                  default : break;
     } 
 
   GetTagTypeName(nametagtype);
@@ -1095,7 +1110,7 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
       subdata.Delete();
       subdata.Add(data.Get(), data.GetSize());     
 
-
+      
       XBER_XEVENT event(this, XBERXEVENT_TYPE_DECODE_DATA); 
 
       event.SetLevel(GetLevel());    
@@ -1111,9 +1126,7 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
       event.SetStatus(true);
 
       PostEvent(&event);  
-
-      event.SetBeforeEvent(event);
-                    
+                         
       while(subdata.GetSize())
         {                  
           sub_ber = new XBER();
@@ -1137,7 +1150,11 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
                   subdata.Extract(NULL, 0, addsize);
                 }            
                 
-            } else return false;
+            } 
+           else 
+            {
+              return false;
+            }
         }
             
       levels[level] = 0; 
@@ -1235,9 +1252,7 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
       (*event.GetValue()) = value;
       event.SetStatus(true);
 
-      PostEvent(&event);   
-
-      event.SetBeforeEvent(event);  
+      PostEvent(&event);         
     }
 
   if(observer)
@@ -1719,7 +1734,7 @@ void XBER::Clean()
   contextspecificvalue  = 0;
   unusedbits            = 0;
 
-  value.Set();
+  value.Destroy();
 
   sequences.DeleteContents();
   sequences.DeleteAll();

@@ -95,9 +95,7 @@ class XBER_XEVENT : public XEVENT
     bool                  GetStatus                     ();   
     void                  SetStatus                     (bool status);  
 
-    XBER_XEVENT*          GetBeforeEvent                (); 
-    bool                  SetBeforeEvent                (XBER_XEVENT& beforeevent); 
-    
+  
   private:
 
     void                  Clean                         ();
@@ -118,8 +116,6 @@ class XBER_XEVENT : public XEVENT
     XVARIANT              value;  
 
     bool                  status;
-
-    static XBER_XEVENT    beforeevent;
 };
 
 #pragma endregion

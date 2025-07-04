@@ -964,6 +964,8 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_ReadMessages()
                                                                                                   // Test show message status
                                                                                                   // messages->ShowDebug(connection->IsServer());                                                                                              
                                                                                                   break;
+
+                                                                                   default      : break; 
                                         }                                       
                                     }
                                 }
@@ -1801,6 +1803,8 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent_DIOStream(DIOSTREAM_XEVENT*
                                                       }                                                 
                                                   }
                                                   break;
+
+                                   default      : break; 
     }
 
 }
@@ -1838,6 +1842,8 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent(XEVENT* xevent)
                                                           HandleEvent_CoreProtocolConnectionsManager(event);
                                                         }
                                                         break; 
+
+                                         default      : break; 
     }
 }
 
@@ -1933,7 +1939,9 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
                                                                                     status = connection->Messages_GetAll()->AddResponse(message);                                                                                
                                                                                   }                                                                            
                                                                               } 
-                                                                              break;                                            
+                                                                              break;  
+
+                                                               default      : break;                                           
                         }
                                     
                       if(status)

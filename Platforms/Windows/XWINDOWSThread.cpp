@@ -291,7 +291,10 @@ bool XWINDOWSTHREAD::Wait(int miliseconds)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSTHREAD::End()
 {
-  if(statusfunc == XTHREADSTATUS_END) return false;
+  if(statusfunc == XTHREADSTATUS_END) 
+    {
+      return false;
+    }
 
   statusfunc = XTHREADSTATUS_EXIT;
 

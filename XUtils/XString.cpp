@@ -3671,7 +3671,9 @@ bool XSTRING::ConvertToXBuffer(XBUFFER& xbuffer)
                                   
                                     status = true;  
                                   }
-                                  break;  
+                                  break;
+  
+                   default      : break; 
     }
 
   return status;
@@ -3833,6 +3835,8 @@ bool XSTRING::ConvertFromXBuffer(XBUFFER& xbuffer, XSTRINGCODING buffercoding)
 
                                     }
                                   break;
+
+                   default      : break; 
     }
 
   return status;
@@ -4236,6 +4240,8 @@ bool XSTRING::ConvertToUTF16(XBUFFER& xbuffer)
                                     status = true;  
                                   }                               
                                   break;
+
+                   default      : break; 
     }
  
   return status;
@@ -4311,6 +4317,8 @@ bool XSTRING::ConvertToUTF32(XBUFFER& xbuffer)
                                   }
                                   status = true;  
                                   break;
+
+                   default      : break; 
     }
    
   return status;

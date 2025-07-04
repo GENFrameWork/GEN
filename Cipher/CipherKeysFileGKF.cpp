@@ -248,6 +248,8 @@ bool CIPHERKEYSFILEGKF::AddKey(CIPHERKEY& key)
                                           keys.Add(keyprivate);
                                         }
                                         break;
+
+                         default      : break; 
     }
 
   return true;
@@ -407,6 +409,8 @@ bool CIPHERKEYSFILEGKF::UpdateFile()
                                                               node->AddAtribute(CIPHERKEYSFILEGKF_ATTRNAME_CIPHERKEY_EXPONENT , string.Get());
                                                             }
                                                             break;
+
+                                             default      : break; 
                         }
                     }
                 }
@@ -750,6 +754,8 @@ bool CIPHERKEYSFILEGKF::ReadAllFile()
                                                                         }
                                                                       }
                                                                       break;
+
+                                                       default      : break; 
 
                                 }
                             }

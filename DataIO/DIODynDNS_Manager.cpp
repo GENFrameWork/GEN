@@ -184,15 +184,17 @@ XDWORD DIODYNDNS_MANAGER::GetNDNS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIODYNDNS_MANAGER::AssingAll()
-* @brief      Assing all
+* 
+* @fn         bool DIODYNDNS_MANAGER::AssingAll(bool endproccess)
+* @brief      assing all
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  endproccess : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIODYNDNS_MANAGER::AssingAll()
+bool DIODYNDNS_MANAGER::AssingAll(bool* endproccess)
 {
   DIODYNDNS_STATUSCODE  statusupdate;
   DIOURL                url;
@@ -217,6 +219,15 @@ bool DIODYNDNS_MANAGER::AssingAll()
 
       for(XDWORD c=0; c<DNSlist.GetSize(); c++)
         {
+          if(endproccess)
+            {
+              if((*endproccess) == true)
+                {
+                  delete dyndns;
+                  return false;  
+                }
+            }
+
           XSTRING* DNS = DNSlist.Get(c);
           if(DNS)
             {

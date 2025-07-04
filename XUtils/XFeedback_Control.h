@@ -69,7 +69,7 @@ enum XFEEDBACK_CODE
 #define XFEEDBACK_CONTROL_ACTIVATED               if(XFeedback_Control) XFeedback_Control->Activate(true);
 #define XFEEDBACK_CONTROL_DEACTIVATED             if(XFeedback_Control) XFeedback_Control->Activate(false);
 
-#define XFEEDBACK_ADD(code, ...)                  if(XFeedback_Control) XFeedback_Control->AddFeedbak(GEN_MODULE_EXEC, GEN_LINE_EXEC, code,  ## __VA_ARGS__);
+#define XFEEDBACK_ADD(code, ...)                  if(XFeedback_Control) XFeedback_Control->AddFeedbak(GEN_MODULE_EXEC, code, GEN_LINE_EXEC, ## __VA_ARGS__);
 
 #define XFEEDBACK_CONTROL_DISPLAYFEEDBACK         if(XFeedback_Control) XFeedback_Control->DisplayAll();
 
@@ -133,7 +133,7 @@ class XFEEDBACK_CONTROL
     bool                              IsActive                    ();
     bool                              Activate                    (bool isactive);
 
-    bool                              AddFeedbak                  (char const* namefile, int line, XFEEDBACK_CODE code, ...); 
+    bool                              AddFeedbak                  (char const* namefile, XFEEDBACK_CODE code, int line,  ...); 
   
     bool                              DisplayAll                  ();
 

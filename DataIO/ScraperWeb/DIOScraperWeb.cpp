@@ -393,7 +393,8 @@ bool DIOSCRAPERWEB::Do(XCHAR* namewebservice, int timeoutforurl, XSTRING* localI
                                               case XFILEJSONVALUETYPE_OBJECT            : break;
                                               case XFILEJSONVALUETYPE_ARRAY             : break;
                                               case XFILEJSONVALUETYPE_BOOLEAN           : break;
-                                              case XFILEJSONVALUETYPE_NULL              : break;
+                                              case XFILEJSONVALUETYPE_NULL              : 
+                                                                      default           : break;
 
                                             }
                                         }

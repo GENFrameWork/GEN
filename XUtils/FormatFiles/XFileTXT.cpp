@@ -363,6 +363,8 @@ bool XFILETXT::CreateBOMFormatChar(XFILETXTFORMATCHAR formatchar, XBYTE* BOM, XD
                                           BOM[1]  = 0xFE;
                                           sizeBOM = 2;
                                           break;
+
+                           default      : break; 
     }
 
   return sizeBOM?true:false;
@@ -390,6 +392,8 @@ int XFILETXT::SizeOfCharacter(XFILETXTFORMATCHAR formatchar)
 
       case XFILETXTFORMATCHAR_UTF16_BE  :
       case XFILETXTFORMATCHAR_UTF16_LE  : return 2;
+
+                           default      : break; 
 
     }
 
@@ -538,6 +542,8 @@ bool XFILETXT::CreateTypeLF(XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF
                                                                             break;
                                             }
                                           break;
+
+                           default      : break; 
     }
 
   return true;
@@ -574,6 +580,8 @@ bool XFILETXT::GetLF(XBUFFER& lfdata)
       case XFILETXTTYPELF_0D0A    : lfdata.Add((XBYTE)0x0D);
                                     lfdata.Add((XBYTE)0x0A);
                                     break;
+
+                     default      : break; 
     }
 
   return true;
@@ -613,10 +621,13 @@ XSTRING* XFILETXT::GetLF(XFILETXTTYPELF typeLF)
   switch(typeLF)
     {
       case XFILETXTTYPELF_UNKNOWN : break;
+
       case XFILETXTTYPELF_0A      : LF = __L("\n");    break;
       case XFILETXTTYPELF_0D      : LF = __L("\r");    break;
       case XFILETXTTYPELF_0A0D    : LF = __L("\n\r");  break;
       case XFILETXTTYPELF_0D0A    : LF = __L("\r\n");  break;
+
+                     default      : break; 
     }
 
   return &LF;
@@ -914,6 +925,8 @@ bool XFILETXT::WriteAllFile()
                                                           }
                                                       }
                                                       break;
+
+                                       default      : break; 
                 }
 
               if(bw) xbuffer.Add(buffer, bw);
@@ -1116,7 +1129,9 @@ bool XFILETXT::AddLine(XBUFFER& data, XFILETXTFORMATCHAR formatchar)
                                         break;
 
       case XFILETXTFORMATCHAR_UTF8    : format = XSTRINGCODING_UTF8;
-                                        break;  
+                                        break; 
+
+                         default      : break;  
     }
 
   string->ConvertFromXBuffer(data, format);
@@ -1188,6 +1203,8 @@ bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line
                                                  }
                                             }
                                             break;
+
+                             default      : break; 
     }
 
   return true;
@@ -1317,6 +1334,8 @@ bool XFILETXT::AddLineAlready(XSTRING& line, XDWORD* resultsizeline, XDWORD* res
                                                   }
                                               }
                                               break;
+
+                               default      : break; 
         }
 
       if(bw)
@@ -1476,6 +1495,8 @@ bool XFILETXT::AddBufferLines(XFILETXTFORMATCHAR formatchar, XBUFFER& xbuffer)
           case XFILETXTFORMATCHAR_UTF16_BE  :
           case XFILETXTFORMATCHAR_UTF16_LE  : nchar+=((sizeline*2)+(endline?(sizeLF*2):0));
                                               break;
+
+                               default      : break; 
         }
 
       } while(nchar<br);
@@ -1608,6 +1629,8 @@ bool XFILETXT::GetSizeOfLine(XFILETXTFORMATCHAR formatchar, XBYTE* buffer, XFILE
                                                 }
                                             }
                                           break;
+
+                           default      : break; 
     }
 
   if(status) size = c;

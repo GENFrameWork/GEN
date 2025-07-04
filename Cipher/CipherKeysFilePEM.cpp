@@ -46,7 +46,8 @@
 #include "XTrace.h"
 
 #include "CipherKey.h"
-#include "CipherKeyCertificate.h"
+#include "CipherKeyPublicRSA.h"
+#include "CipherCertificateX509.h"
 
 #pragma endregion
 
@@ -70,17 +71,17 @@
 #pragma region CLASS_MEMBERS
 
 
-#pragma region CIPHERKEYSFILEPEM_TYPECERTIFICATE
+#pragma region CLASS_CIPHERKEYSFILEPEM_ENTRYBUFFER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERKEYSFILEPEM_TYPECERTIFICATE::CIPHERKEYSFILEPEM_TYPECERTIFICATE()
+* @fn         CIPHERKEYSFILEPEM_ENTRYBUFFER::CIPHERKEYSFILEPEM_ENTRYBUFFER()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-CIPHERKEYSFILEPEM_TYPECERTIFICATE::CIPHERKEYSFILEPEM_TYPECERTIFICATE()
+CIPHERKEYSFILEPEM_ENTRYBUFFER::CIPHERKEYSFILEPEM_ENTRYBUFFER()
 {
   Clean();
 }
@@ -88,33 +89,35 @@ CIPHERKEYSFILEPEM_TYPECERTIFICATE::CIPHERKEYSFILEPEM_TYPECERTIFICATE()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERKEYSFILEPEM_TYPECERTIFICATE::~CIPHERKEYSFILEPEM_TYPECERTIFICATE()
+* @fn         CIPHERKEYSFILEPEM_ENTRYBUFFER::~CIPHERKEYSFILEPEM_ENTRYBUFFER()
 * @brief      Destructor of class
-* @note       VIRTUAL
 * @ingroup    CIPHER
+* @note       VIRTUAL
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-CIPHERKEYSFILEPEM_TYPECERTIFICATE::~CIPHERKEYSFILEPEM_TYPECERTIFICATE()
+CIPHERKEYSFILEPEM_ENTRYBUFFER::~CIPHERKEYSFILEPEM_ENTRYBUFFER()
 {
   Clean();
 }
 
-    
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void CIPHERKEYSFILEPEM_TYPECERTIFICATE::Clean()
+* @fn         void CIPHERKEYSFILEPEM_ENTRYBUFFER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @note       INTERNAL
 * @ingroup    CIPHER
+* @note       INTERNAL
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void CIPHERKEYSFILEPEM_TYPECERTIFICATE::Clean()
+void CIPHERKEYSFILEPEM_ENTRYBUFFER::Clean()
 {
+  type.Empty();
 
+  ini_line = 0;
+  end_line = 0;
+
+  data.Empty();  
 }
-
-
-#pragma endregion
 
 
 #pragma region CIPHERKEYSFILEPEM
@@ -147,7 +150,6 @@ CIPHERKEYSFILEPEM::~CIPHERKEYSFILEPEM()
 
   Clean();
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -222,178 +224,35 @@ bool CIPHERKEYSFILEPEM::Key_DelAll()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool CIPHERKEYSFILEPEM::ReadDecodeAllFile(XPATH& xpath)
-* @brief      Read decode all file
+* @fn         bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
+* @brief      decode certificates
 * @ingroup    CIPHER
 * 
-* @param[in]  xpath : 
+* @param[in]  lines : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYSFILEPEM::ReadDecodeAllFile(XPATH& xpath)
+bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
 {
-  XFILETXT*                               xfiletxt;
   XVECTOR<CIPHERKEYSFILEPEM_ENTRYBUFFER*> entrysbuffer;
   CIPHERKEYSFILEPEM_ENTRYBUFFER*          entrybuffer = NULL;
     
-  xfiletxt = new XFILETXT();
-  if(!xfiletxt) 
+  for(XDWORD c=0; c<lines->GetSize(); c++)
     {
-      return false;
-    }
+      XSTRING line;      
+      int     ini = XSTRING_NOTFOUND;
+      int     end = XSTRING_NOTFOUND;    
 
-  if(!xfiletxt->Open(xpath))  
-    {
-      return false;
-    }
-
-  xfiletxt->ReadAllFile();
-
-  for(XDWORD c=0; c<xfiletxt->GetNLines(); c++)
-    {
-      XSTRING* line = xfiletxt->GetLine(c); 
-      if(line)
-        {          
-          int ini;
-          int end;
-
-          ini = line->Find(CIPHERKEYSFILEPEM_BEGINKEY, true);
-          if(ini != XSTRING_NOTFOUND)
-            {
-              ini += XSTRING::GetSize(CIPHERKEYSFILEPEM_BEGINKEY);
-
-              if(!entrybuffer)
-                {
-                  entrybuffer = new CIPHERKEYSFILEPEM_ENTRYBUFFER(); 
-                  if(entrybuffer)
-                    {
-                      entrybuffer->ini_line = c+1;  
-                      end = line->Find(CIPHERKEYSFILEPEM_FINISH, true, ini);
-                      if(end != XSTRING_NOTFOUND)
-                        {
-                          entrybuffer->type.AdjustSize(_MAXSTR);                                                                  
-                          line->Copy(ini, end, entrybuffer->type);
-                          entrybuffer->type.AdjustSize();                
-                        }
-                    }
-                }
-            }
-
-          ini = line->Find(CIPHERKEYSFILEPEM_ENDKEY, true);
-          if(ini != XSTRING_NOTFOUND)
-            {
-              ini += XSTRING::GetSize(CIPHERKEYSFILEPEM_ENDKEY);
-
-              if(entrybuffer)
-                {
-                  entrybuffer->end_line = c;                          
-                  end = line->Find(CIPHERKEYSFILEPEM_FINISH, true, ini);
-                  if(end != XSTRING_NOTFOUND)
-                    {
-                      XSTRING type;  
-
-                      type.AdjustSize(_MAXSTR);                                                                  
-                      line->Copy(ini, end, type);
-                      type.AdjustSize();  
-
-                      if(!type.Compare(entrybuffer->type))
-                        {
-                          entrysbuffer.Add(entrybuffer);  
-                          entrybuffer = NULL;
-                        }                                   
-                    }      
-                }  
-            }
-        }   
-   }
-
-  for(XDWORD c=0; c<entrysbuffer.GetSize(); c++)
-    {
-      CIPHERKEYSFILEPEM_ENTRYBUFFER* entrybuffer = entrysbuffer.Get(c);
-      if(entrybuffer)
+      if(lines->Get(c))
         {
-          XSTRING datastr;
-
-          XSTRING datastr1;
-
-          for(int d=entrybuffer->ini_line; d<entrybuffer->end_line; d++)
-            {
-              datastr += xfiletxt->GetLine(d)->Get();                                 
-            }
-
-          entrybuffer->data.ConvertFromBase64(datastr); 
+          line = lines->Get(c)->Get();
         }
-    }
 
-
-  XASN1 asn1;
-    
-  for(XDWORD c=0; c<entrysbuffer.GetSize(); c++)
-    {
-      CIPHERKEYSFILEPEM_ENTRYBUFFER* entrybuffer = entrysbuffer.Get(c);
-
-      if(entrybuffer)
+      if(line.IsEmpty())
         {
-          decodekey = NULL;
-         
-          if(!entrybuffer->type.Compare(__L("CERTIFICATE")))
-            {
-              decodekey = (CIPHERKEY*) new CIPHERKEYCERTIFICATE();  
-            }
-
-          if(decodekey)
-            {
-              if(asn1.Decode(entrybuffer->data, this))
-                {
-                  Key_Add(decodekey);
-                } 
-               else
-                {
-                  delete decodekey;
-                }   
-            }
-        }  
-    }
-
-
-  entrysbuffer.DeleteContents();
-  entrysbuffer.DeleteAll();
-
-  xfiletxt->Close();
-
-  delete xfiletxt;
-
-  xfiletxt = NULL;
-
-  return true;
-}
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool CIPHERKEYSFILEPEM::DecodeCertificates(CIPHERROOTCERTIFICATES certificates, int nlinescertificates)
-* @brief      Decode certificates
-* @ingroup    CIPHER
-* 
-* @param[in]  certificates : 
-* @param[in]  nlinescertificates : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYSFILEPEM::DecodeCertificates(CIPHERROOTCERTIFICATES certificates, int nlinescertificates)
-{
-  XVECTOR<CIPHERKEYSFILEPEM_ENTRYBUFFER*> entrysbuffer;
-  CIPHERKEYSFILEPEM_ENTRYBUFFER*          entrybuffer = NULL;
-  XSTRING                                 line;
-  
-  for(XDWORD c=0; c<nlinescertificates; c++)
-    {
-      XCHAR*  _line = certificates[c];     
-      int     ini;
-      int     end;    
-
-      line = _line;
+          continue;
+        }
 
       ini = line.Find(CIPHERKEYSFILEPEM_BEGINKEY, true);
       if(ini != XSTRING_NOTFOUND)
@@ -405,6 +264,7 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(CIPHERROOTCERTIFICATES certificates, 
               entrybuffer = new CIPHERKEYSFILEPEM_ENTRYBUFFER(); 
               if(entrybuffer)
                 {
+                  entrybuffer->end_line = XSTRING_NOTFOUND;
                   entrybuffer->ini_line = c+1;  
                   end = line.Find(CIPHERKEYSFILEPEM_FINISH, true, ini);
                   if(end != XSTRING_NOTFOUND)
@@ -412,6 +272,11 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(CIPHERROOTCERTIFICATES certificates, 
                       entrybuffer->type.AdjustSize(_MAXSTR);                                                                  
                       line.Copy(ini, end, entrybuffer->type);
                       entrybuffer->type.AdjustSize();                
+                    }
+                   else
+                    {
+                      delete entrybuffer;
+                      entrybuffer = NULL;
                     }
                 }
             }
@@ -438,11 +303,22 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(CIPHERROOTCERTIFICATES certificates, 
                     {
                       entrysbuffer.Add(entrybuffer);  
                       entrybuffer = NULL;
-                    }                                   
-                }      
+                    }
+                   else
+                    {
+                      delete entrybuffer;
+                      entrybuffer = NULL;
+                    }                                          
+                }
+               else
+                {
+                  delete entrybuffer;
+                  entrybuffer = NULL;
+                }         
             }  
-        }          
-   }
+        }                
+    }
+
 
   for(XDWORD c=0; c<entrysbuffer.GetSize(); c++)
     {
@@ -450,51 +326,275 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(CIPHERROOTCERTIFICATES certificates, 
       if(entrybuffer)
         {
           XSTRING datastr;
-
           XSTRING datastr1;
-
+        
           for(int d=entrybuffer->ini_line; d<entrybuffer->end_line; d++)
             {
-              datastr += certificates[d];                                 
+              datastr += lines->Get(d)->Get();                                 
             }
 
-          entrybuffer->data.ConvertFromBase64(datastr); 
+          if(!entrybuffer->data.ConvertFromBase64(datastr))
+            {
+              XFEEDBACK_ADD(XFEEDBACK_CODE_ERRORINFUNCTION , 1, __L("CIPHERKEYSFILEPEM::DecodeCertificates invalid Convert From Base64"));
+              return false;
+            }      
         }
     }
 
+  
   XASN1 asn1;
     
-  for(XDWORD c=0; c< 1 /*entrysbuffer.GetSize()*/; c++)
+  for(XDWORD c=0; c<entrysbuffer.GetSize(); c++)
     {
       CIPHERKEYSFILEPEM_ENTRYBUFFER* entrybuffer = entrysbuffer.Get(c);
-
       if(entrybuffer)
         {
-          decodekey = NULL;
+          decodeobj = NULL;
          
           if(!entrybuffer->type.Compare(__L("CERTIFICATE")))
-            {
-              decodekey = (CIPHERKEY*) new CIPHERKEYCERTIFICATE();  
-            }
+            {      
+              decodeobjtype = CIPHERKEYTYPE_CERTIFICATE;     
 
-          if(decodekey)
-            {
-              if(asn1.Decode(entrybuffer->data, this))
-                {
-                  Key_Add(decodekey);
+              decodeobj = (CIPHERKEY*)new CIPHERCERTIFICATEX509();  
+              if(decodeobj)
+                {                  
+                  if(asn1.Decode(entrybuffer->data, this))
+                    {
+                      Key_Add((CIPHERKEY*)decodeobj);  
+
+                      CIPHERCERTIFICATEX509* certificate = (CIPHERCERTIFICATEX509*)decodeobj;                      
+                      if(certificate)
+                        {
+                          certificate->XTraceCertificatedPropertys();
+                        }
+                    }                 
+                   else                
+                    {
+                      delete (CIPHERCERTIFICATEX509*)decodeobj;
+                    }                   
                 } 
-               else
-                {
-                  delete decodekey;
-                }   
-            }
+            }         
         }  
     }
+  
 
   entrysbuffer.DeleteContents();
   entrysbuffer.DeleteAll();
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERKEYCERTIFICATE* certificate, XBER_XEVENT* event)
+* @brief      get certificated propertys
+* @ingroup    CIPHER
+* 
+* @param[in]  certificate : 
+* @param[in]  event : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certificate, XBER_XEVENT* event)
+{
+  if(!certificate)
+    {
+      return false;
+    }
+
+  if(!event)
+    {
+      return false;
+    }
+
+  XSTRING   levelsstr;
+  bool      ismanaged =  false;     
+  XVARIANT* value     = (XVARIANT*)event->GetValue();
+
+  levelsstr = event->GetLevelsString()->Get();           
+
+  if(event->GetTagType() == XBER_TAGTYPE_OBJECT_IDENTIFIER)
+    {
+      if(event->GetProperty())
+        {
+          lastOID = event->GetProperty()->OID; 
+
+          if(!levelsstr.Compare(__L("1.1.3.1")))
+            {
+              if(event->GetProperty())  
+                {
+                  certificate->SetAlgorithmType(event->GetProperty()->OID);
+                  ismanaged = true;  
+                }
+            }
+        }
+    }
+   else
+    {       
+      if(value)
+        {
+
+          // ---------------------------------------------------------------------------------
+
+          if(!levelsstr.Compare(__L("1.1.1.1")))
+            {
+              certificate->SetVersion((XWORD)event->GetData()->Get()[0] + 1);                  
+              ismanaged = true;
+            }
+
+          if(!levelsstr.Compare(__L("1.1.2")))
+            {
+              certificate->GetSerial()->CopyFrom((*event->GetData()));
+              ismanaged = true;  
+            }
+ 
+          // ---------------------------------------------------------------------------------
+
+          if(!lastOID.Compare(__L("2.5.4.6"), false))
+            {
+              if(certificate->GetIssuerID()->GetCountryName()->IsEmpty())  
+                {
+                  certificate->GetIssuerID()->GetCountryName()->Set((XSTRING)(*value));  
+                }
+               else 
+                {
+                  certificate->GetSubjectID()->GetCountryName()->Set((XSTRING)(*value));  
+                }
+
+              ismanaged = true;
+            }
+
+          if(!lastOID.Compare(__L("2.5.4.10"), false))
+            {              
+              if(certificate->GetIssuerID()->GetOrganizationName()->IsEmpty())  
+                {
+                  certificate->GetIssuerID()->GetOrganizationName()->Set((XSTRING)(*value));  
+                }
+               else 
+                {
+                  certificate->GetSubjectID()->GetOrganizationName()->Set((XSTRING)(*value));  
+                }
+
+              ismanaged = true; 
+            }
+
+          if(!lastOID.Compare(__L("2.5.4.11"), false))
+            {              
+              if(certificate->GetIssuerID()->GetOrganizationalUnitName()->IsEmpty())  
+                {
+                  certificate->GetIssuerID()->GetOrganizationalUnitName()->Set((XSTRING)(*value));  
+                }
+               else 
+                {
+                  certificate->GetSubjectID()->GetOrganizationalUnitName()->Set((XSTRING)(*value));  
+                }
+
+              ismanaged = true; 
+            }
+
+          if(!lastOID.Compare(__L("2.5.4.11"), false))
+            {             
+              if(certificate->GetIssuerID()->GetOrganizationalUnitNamePlus()->IsEmpty())  
+                {
+                  certificate->GetIssuerID()->GetOrganizationalUnitNamePlus()->Set((XSTRING)(*value));  
+                }
+               else 
+                {
+                  certificate->GetSubjectID()->GetOrganizationalUnitNamePlus()->Set((XSTRING)(*value));  
+                }
+
+              ismanaged = true; 
+            }
+
+          if(!lastOID.Compare(__L("2.5.4.3"), false))
+            {              
+              if(certificate->GetIssuerID()->GetCommonName()->IsEmpty())  
+                {
+                  certificate->GetIssuerID()->GetCommonName()->Set((XSTRING)(*value));  
+                }
+               else 
+                {
+                  certificate->GetSubjectID()->GetCommonName()->Set((XSTRING)(*value));  
+                }
+
+              ismanaged = true; 
+            }   
+
+          if(!lastOID.Compare(__L("1.2.840.113549.1.1.1"), false))
+            {
+              static XMPINTEGER modulus; 
+              static XMPINTEGER exponent;
+
+              // RSA key 
+              if(event->GetTagType() == XBER_TAGTYPE_INTEGER)
+                {                 
+                  if(!certificate->GetPublicCipherKey())
+                    {
+                      CIPHERKEYPUBLICRSA* cipherkey =  new CIPHERKEYPUBLICRSA();
+                      if(cipherkey)
+                        {
+                          modulus.ImportFromBinary(event->GetData()->Get(), event->GetData()->GetSize());
+                          
+                          certificate->SetPublicCipherKey((CIPHERKEY*)cipherkey);
+                        } 
+                    }         
+                   else
+                    {
+                      CIPHERKEYPUBLICRSA* cipherkey = (CIPHERKEYPUBLICRSA*)certificate->GetPublicCipherKey();
+                      if(cipherkey)
+                        {       
+                          exponent.ImportFromBinary(event->GetData()->Get(), event->GetData()->GetSize());                    
+                          cipherkey->Set(modulus, exponent);
+
+                          modulus.End();
+                          exponent.End();
+
+                          ismanaged = true; 
+                        }
+                    } 
+                }
+            }
+
+          // ---------------------------------------------------------------------------------  
+
+          if(!levelsstr.Compare(__L("1.1.5.1")))
+            {
+              XVARIANT* value;
+              XSTRING   valuestr;  
+
+              value     = (XVARIANT*)event->GetValue();
+              valuestr  = (XSTRING)(*value);
+
+              certificate->ConvertDateTime(valuestr.Get(), certificate->GetDateNotBefore());   
+              ismanaged = true;
+            }
+
+          if(!levelsstr.Compare(__L("1.1.5.2")))
+            {
+              XVARIANT* value;
+              XSTRING   valuestr;  
+
+              value     = (XVARIANT*)event->GetValue();
+              valuestr  = (XSTRING)(*value);
+
+              certificate->ConvertDateTime(valuestr.Get(), certificate->GetDateNotAfter());       
+              ismanaged = true;
+            }
+        
+          // ---------------------------------------------------------------------------------
+
+        }
+    }
+
+  if(ismanaged)
+    {
+      lastOID.Empty();
+    }
+
+
+  return ismanaged;
 }
 
 
@@ -510,101 +610,36 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(CIPHERROOTCERTIFICATES certificates, 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERKEYSFILEPEM::HandleEvent_XBER(XBER_XEVENT* event)
 {  
-  if(!decodekey)
+  if(!decodeobj)
     {
       return;
     }
     
   switch(event->GetEventType())
     {
-      case XBERXEVENT_TYPE_DECODE_START   : XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Cipher Keys File PEM] Start [%d]"), decodekey->GetType());
+      case XBERXEVENT_TYPE_DECODE_START   : XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Cipher Keys File PEM] Start"));
                                             break;
 
-      case XBERXEVENT_TYPE_DECODE_DATA    : { XSTRING levelsstr;
-
-                                              levelsstr = event->GetLevelsString()->Get();
-
-                                              if(decodekey->GetType() == CIPHERKEYTYPE_CERTIFICATE)
+      case XBERXEVENT_TYPE_DECODE_DATA    : { bool  ismanaged = false;
+                                                                                                                                            
+                                              if(decodeobjtype == CIPHERKEYTYPE_CERTIFICATE)
                                                 {
-                                                  CIPHERKEYCERTIFICATE* certificate = (CIPHERKEYCERTIFICATE*)decodekey;
-
-                                                  // Version 
-                                                  if(!levelsstr.Compare(__L("1.1.1.1")))
-                                                    {
-                                                      certificate->SetVersion((XWORD)event->GetData()->Get()[0]);
+                                                  CIPHERCERTIFICATEX509* certificate = (CIPHERCERTIFICATEX509*)decodeobj;
+                                                  if(certificate)
+                                                    {    
+                                                      ismanaged = GetCertificatedPropertys(certificate, event);
                                                     }
+                                                } 
 
-                                                  // Serial
-                                                  if(!levelsstr.Compare(__L("1.1.2")))
-                                                    {
-                                                      certificate->GetSerial()->CopyFrom((*event->GetData()));
-                                                    }
+                                              
+                                              XSTRING levelsstr;
 
-                                                  // Algorithm type
-                                                  if(!levelsstr.Compare(__L("1.1.3.1")))
-                                                    {
-                                                      certificate->SetAlgorithmType(event->GetProperty()->OID);
-                                                    }
+                                              levelsstr = event->GetLevelsString()->Get();                                              
+                                              levelsstr.AddFormat(__L(" %s"), event->GetLine()->Get());  
 
-                                                  // Date Not Before
-                                                  if(!levelsstr.Compare(__L("1.1.5.1")))
-                                                    {
-                                                      XVARIANT* value;
-                                                      XSTRING   valuestr;  
-
-                                                      value     = (XVARIANT*)event->GetValue();
-                                                      valuestr  = (XSTRING)(*value);
-
-                                                      certificate->ConvertDateTime(valuestr.Get(), certificate->GetDateNotBefore());   
-                                                    }
-
-                                                  // Date Not After
-                                                  if(!levelsstr.Compare(__L("1.1.5.2")))
-                                                    {
-                                                      XVARIANT* value;
-                                                      XSTRING   valuestr;  
-
-                                                      value     = (XVARIANT*)event->GetValue();
-                                                      valuestr  = (XSTRING)(*value);
-
-                                                      certificate->ConvertDateTime(valuestr.Get(), certificate->GetDateNotAfter());       
-                                                    }
-
-                                                  if(event->GetBeforeEvent()->GetTagType() == XBER_TAGTYPE_OBJECT_IDENTIFIER)
-                                                    {
-                                                      XSTRING   _OID;
-                                                      XVARIANT* value;
-
-                                                      _OID = event->GetBeforeEvent()->GetProperty()->OID;
-                                                      
-                                                      value = (XVARIANT*)event->GetValue();
-  
-                                                      if(!_OID.Compare(__L("2.5.4.6"), false))
-                                                        {
-                                                          certificate->GetCountryName()->Set((XSTRING)(*value));  
-                                                        }
-
-                                                      if(!_OID.Compare(__L("2.5.4.10"), false))
-                                                        {
-                                                          certificate->GetOrganizationName()->Set((XSTRING)(*value));  
-                                                        }
-
-                                                      if(!_OID.Compare(__L("2.5.4.11"), false))
-                                                        {
-                                                          certificate->GetOrganizationalUnitName()->Set((XSTRING)(*value));  
-                                                        }
-
-                                                      if(!_OID.Compare(__L("2.5.4.3"), false))
-                                                        {
-                                                          certificate->GetCommonName()->Set((XSTRING)(*value));  
-                                                        }
-                                                    }
-                                                }
-
-                                              levelsstr.AddFormat(__L(" %s"), event->GetLine()->Get());                                          
-
-                                              XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, levelsstr.Get(), NULL);                                                         
-                                            }
+                                              XTRACE_PRINTCOLOR((ismanaged?XTRACE_COLOR_BLUE:XTRACE_COLOR_BLACK), levelsstr.Get(), NULL);           
+                                              
+                                            }                                                                                       
                                             break;
 
       case XBERXEVENT_TYPE_DECODE_END     : XTRACE_PRINTCOLOR((event->GetStatus()?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("[Cipher Keys File PEM] End"));                                              
@@ -649,8 +684,9 @@ void CIPHERKEYSFILEPEM::HandleEvent(XEVENT* xevent)
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERKEYSFILEPEM::Clean()
-{
-  decodekey = NULL;
+{  
+  decodeobj     = NULL;
+  decodeobjtype = CIPHERKEYTYPE_UNKNOWN;
 }
 
 

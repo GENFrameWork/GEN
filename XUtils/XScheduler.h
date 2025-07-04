@@ -171,7 +171,7 @@ class XSCHEDULER  : public XSUBJECT
 
     XMUTEX*                     xmutexscheduler;
     XTHREADCOLLECTED*           xthreadscheduler;
-    XTIMER*                     xtimerwait;
+    XTIMER*                     xtimerwait;  
 
     bool                        isactive;
 

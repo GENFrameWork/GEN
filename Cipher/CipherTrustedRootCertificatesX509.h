@@ -1,10 +1,10 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       XASN1.h
+* @file       CipherTrustedRootCertificatesX509.h
 * 
-* @class      XASN1
-* @brief      eXtended Utils ANS.1 format buffer  (Abstract Syntax Notation One, defined in X.208)
-* @ingroup    XUTILS
+* @class      CIPHERTRUSTEDROOTCERTIFICATES
+* @brief      Cipher Trusted Root Certificates X.509 class
+* @ingroup    CIPHER
 * 
 * @copyright  GEN Group. All rights reserved.
 * 
@@ -26,15 +26,14 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XASN1_H_
-#define _XASN1_H_
+#ifndef _CIPHERTRUSTEDROOTCERTIFICATESX509_H_
+#define _CIPHERTRUSTEDROOTCERTIFICATESX509_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "XBER.h"
-#include "XBuffer.h"
-#include "XSubject.h"
+#include "XVector.h"
+#include "XPath.h"
 
 #pragma endregion
 
@@ -42,13 +41,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-typedef struct
-{
-  XCHAR*    OID;
-  XCHAR*    description; 
-  bool      isconstructed;
-   
-} XASN1_OID_PROPERTY;
+typedef XCHAR* _CIPHERTRUSTEDROOTCERTIFICATESX509[];
 
 #pragma endregion
 
@@ -56,22 +49,22 @@ typedef struct
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
-class XASN1 : public XSUBJECT
+class CIPHERTRUSTEDROOTCERTIFICATESX509
 {
   public:
-                                      XASN1										        ();
-    virtual                          ~XASN1										        ();
+                          CIPHERTRUSTEDROOTCERTIFICATESX509 ();
+    virtual              ~CIPHERTRUSTEDROOTCERTIFICATESX509 ();
 
-    static XASN1_OID_PROPERTY*        GetOIDProperty                  (XCHAR* OID); 
-    static XCHAR*                     GetOIDPropertyDescription       (XCHAR* OID);
+    bool                  ReadFromFile                      (XPATH* namefile);
+    bool                  GenerateEmbeddedHeadere           (XPATH* originpathnamefile, XPATH* targetpathnamefile);
 
-		bool    				                  Decode								          (XBUFFER& databin, XOBSERVER* observer = NULL);
+    XVECTOR<XSTRING*>*    GetLines                          ();
+    bool                  DeleteAllLines                    ();
 
   private:
-	
-    void                              Clean										        ();
-    
-    static XASN1_OID_PROPERTY         OID_properties[];
+  
+    void                  Clean                             ();
+    XVECTOR<XSTRING*>     lines;
 };
 
 #pragma endregion

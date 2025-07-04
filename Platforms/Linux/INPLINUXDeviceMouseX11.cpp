@@ -223,10 +223,11 @@ bool INPLINUXDEVICEMOUSEX11::Update()
                                     {
                                       switch (button->GetState())
                                         {
-                                          case INPBUTTON_STATE_UP:       button->SetState(INPBUTTON_STATE_PRESSED);  break;
-                                          case INPBUTTON_STATE_HOLD:     button->SetState(INPBUTTON_STATE_HOLD);     break;
-                                          case INPBUTTON_STATE_PRESSED:  button->SetState(INPBUTTON_STATE_HOLD);     break;
-                                          case INPBUTTON_STATE_RELEASED: button->SetState(INPBUTTON_STATE_PRESSED);  break;
+                                          case INPBUTTON_STATE_UP       : button->SetState(INPBUTTON_STATE_PRESSED);  break;
+                                          case INPBUTTON_STATE_HOLD     : button->SetState(INPBUTTON_STATE_HOLD);     break;
+                                          case INPBUTTON_STATE_PRESSED  : button->SetState(INPBUTTON_STATE_HOLD);     break;
+                                          case INPBUTTON_STATE_RELEASED : button->SetState(INPBUTTON_STATE_PRESSED);  break;
+                                                              default   : break; 
                                         }
 
                                       button->SetPressed(true);
@@ -239,16 +240,19 @@ bool INPLINUXDEVICEMOUSEX11::Update()
                                     {
                                       switch (button->GetState())
                                         {
-                                          case INPBUTTON_STATE_UP:       button->SetState(INPBUTTON_STATE_UP);       break;
-                                          case INPBUTTON_STATE_HOLD:     button->SetState(INPBUTTON_STATE_RELEASED); break;
-                                          case INPBUTTON_STATE_PRESSED:  button->SetState(INPBUTTON_STATE_RELEASED); break;
-                                          case INPBUTTON_STATE_RELEASED: button->SetState(INPBUTTON_STATE_RELEASED); break;
+                                          case INPBUTTON_STATE_UP       : button->SetState(INPBUTTON_STATE_UP);       break;
+                                          case INPBUTTON_STATE_HOLD     : button->SetState(INPBUTTON_STATE_RELEASED); break;
+                                          case INPBUTTON_STATE_PRESSED  : button->SetState(INPBUTTON_STATE_RELEASED); break;
+                                          case INPBUTTON_STATE_RELEASED : button->SetState(INPBUTTON_STATE_RELEASED); break;
+                                                           default      : break; 
                                         }
 
                                       button->SetPressed(false);
                                     }
                                 }
                                 break;
+
+               default      : break; 
         }
     }
 

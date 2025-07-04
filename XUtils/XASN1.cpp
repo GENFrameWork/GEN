@@ -108,6 +108,21 @@ XASN1_OID_PROPERTY XASN1::OID_properties[] = {  { __L("0.4.0.1862.1.1"),        
                                                 { __L("1.2.840.10045.2"),                   __L("publicKeyType")                                  , false },
                                                 { __L("1.2.840.10045.2.1"),                 __L("ecPublicKey")                                    , false },
                                                 { __L("1.2.840.10046.2.1"),                 __L("dhPublicNumber")                                 , false },
+                                                { __L("1.2.840.113549.1.1.11"),             __L("sha256WithRSAEncryption")                        , false },
+                                                { __L("1.2.840.113549.1.1.12"),             __L("sha384WithRSAEncryption")                        , false }, 
+                                                { __L("1.2.840.113549.1.1.13"),             __L("sha512WithRSAEncryption")                        , false },
+                                                { __L("1.2.840.113549.1.1.10"),             __L("rsassaPss")                                      , false },        
+                                                { __L("1.2.840.10045.4.3.2"),               __L("ecdsa-with-SHA256")                              , false },        
+                                                { __L("1.2.840.10045.4.3.3"),               __L("ecdsa-with-SHA384")                              , false },        
+                                                { __L("1.2.840.10045.4.3.4"),               __L("ecdsa-with-SHA512")                              , false },        
+                                                { __L("1.3.14.3.2.26"),                     __L("sha1")                                           , false },        
+                                                { __L("2.16.840.1.101.3.4.2.1"),            __L("sha256")                                         , false },        
+                                                { __L("2.16.840.1.101.3.4.2.2"),            __L("sha384")                                         , false },        
+                                                { __L("2.16.840.1.101.3.4.2.3"),            __L("sha512")                                         , false },        
+                                                { __L("1.2.840.113549.1.3.7"),              __L("des?cbc")                                        , false },        
+                                                { __L("1.2.840.113549.3.7"),                __L("des?ede3?cbc")                                   , false },        
+                                                { __L("2.16.840.1.101.3.4.1.2"),            __L("aes128?CBC")                                     , false },        
+                                                { __L("2.16.840.1.101.3.4.1.42"),           __L("aes256?CBC")                                     , false },        
                                                 { __L("1.2.840.113533.7"),                  __L("nsn")                                            , false },
                                                 { __L("1.2.840.113533.7.65"),               __L("nsn-ce")                                         , false },
                                                 { __L("1.2.840.113533.7.65.0"),             __L("entrustVersInfo")                                , false },
@@ -838,11 +853,6 @@ XASN1::XASN1()
 * --------------------------------------------------------------------------------------------------------------------*/
 XASN1::~XASN1()
 {
-  if(ber)
-    {
-      delete ber;
-    }
-
   Clean();
 }
 
@@ -915,25 +925,21 @@ XCHAR* XASN1::GetOIDPropertyDescription(XCHAR* OID)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XASN1::Decode(XBUFFER& databin, XOBSERVER* observer)
 {
-  if(!databin.GetSize()) return false;
+  bool status = true;
 
-  if(ber)
+  if(!databin.GetSize()) 
     {
-      delete ber;
-      ber = NULL;
-    }
- 
- 
-  ber = new XBER();
-  if(!ber) return NULL;
-
-  if(!ber->SetFromDump(databin, observer))
-    {
-      delete ber;
-      ber = NULL;      
+      return false;
     }
 
-  return (ber?true:false);
+   XBER ber; 
+
+   if(!ber.SetFromDump(databin, observer))
+    {      
+      status = false;
+    }
+
+  return status;
 }
 
 
@@ -947,7 +953,7 @@ bool XASN1::Decode(XBUFFER& databin, XOBSERVER* observer)
 * --------------------------------------------------------------------------------------------------------------------*/
 void XASN1::Clean()
 {
-  ber = NULL;
+ 
 }
 
 

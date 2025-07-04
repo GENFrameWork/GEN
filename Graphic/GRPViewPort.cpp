@@ -37,7 +37,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "GRPViewport.h"
+#include "GRPViewPort.h"
 
 #include "GRPXEvent.h"
 #include "GRPFactory.h"

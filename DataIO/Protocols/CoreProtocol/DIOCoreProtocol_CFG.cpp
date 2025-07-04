@@ -174,7 +174,7 @@ bool DIOCOREPROTOCOL_CFG::GetIsCompressContent()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetIsCompressContent(bool iscompresscontent)
 {
-  this->iscompresscontent;
+  this->iscompresscontent = iscompresscontent;
 }
 
 

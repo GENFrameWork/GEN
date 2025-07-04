@@ -249,6 +249,7 @@ bool DIOLINUXSTREAMUART::Config(XWORD mask)
           case 38400  : speed = B38400;     break;
           case 57600  : speed = B57600;     break;
           case 115200 : speed = B115200;    break;
+              default : break; 
         }
 
       cfsetispeed(&cfg, speed);
@@ -261,10 +262,11 @@ bool DIOLINUXSTREAMUART::Config(XWORD mask)
 
       switch(this->config->GetDataBits())
         {
-          case DIOSTREAMUARTDATABIT_5           : cfg.c_cflag|= CS5; break;
-          case DIOSTREAMUARTDATABIT_6           : cfg.c_cflag|= CS6; break;
-          case DIOSTREAMUARTDATABIT_7           : cfg.c_cflag|= CS7; break;
-          case DIOSTREAMUARTDATABIT_8           : cfg.c_cflag|= CS8; break;
+          case DIOSTREAMUARTDATABIT_5  : cfg.c_cflag|= CS5; break;
+          case DIOSTREAMUARTDATABIT_6  : cfg.c_cflag|= CS6; break;
+          case DIOSTREAMUARTDATABIT_7  : cfg.c_cflag|= CS7; break;
+          case DIOSTREAMUARTDATABIT_8  : cfg.c_cflag|= CS8; break;
+                            default    : break; 
         }
     }
 
@@ -301,6 +303,8 @@ bool DIOLINUXSTREAMUART::Config(XWORD mask)
           case DIOSTREAMUARTPARITY_EVEN         : cfg.c_cflag |= PARENB;
                                                   cfg.c_cflag &= ~PARODD;
                                                   break;
+
+                                   default      : break; 
         }
     }
 
@@ -313,6 +317,7 @@ bool DIOLINUXSTREAMUART::Config(XWORD mask)
           case DIOSTREAMUARTSTOPBITS_ONE          : cfg.c_cflag &= ~CSTOPB;   break;
           case DIOSTREAMUARTSTOPBITS_ONEANDAHALF  :
           case DIOSTREAMUARTSTOPBITS_TWO          : cfg.c_cflag |=  CSTOPB;   break;
+                                     default      : break; 
         }
     }
 
@@ -331,6 +336,8 @@ bool DIOLINUXSTREAMUART::Config(XWORD mask)
           case DIOSTREAMUARTFLOWCONTROL_SOFT    : cfg.c_cflag &= ~CRTSCTS;
                                                   cfg.c_iflag |= (IXON | IXOFF | IXANY);
                                                   break;
+
+                                   default      : break; 
         }
     }
 
@@ -681,6 +688,8 @@ void DIOLINUXSTREAMUART::ThreadConnection(void* param)
 
           case DIOLINUXUARTFSMSTATE_DISCONNECTING           : break;
 
+                                               default      : break; 
+
         }
     }
    else
@@ -711,6 +720,8 @@ void DIOLINUXSTREAMUART::ThreadConnection(void* param)
                                                                 diostream->status = DIOSTREAMSTATUS_DISCONNECTED;
                                                               }
                                                               break;
+
+                                               default      : break; 
             }
         }
     }

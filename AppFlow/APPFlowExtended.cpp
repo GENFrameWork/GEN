@@ -53,7 +53,7 @@
 
 #include "APPFlowBase.h"
 #include "APPFlowCFG.h"
-#include "APPFlowLOG.h"
+#include "APPFlowLog.h"
 #include "APPFlowConsole.h"
 #ifdef APPFLOW_EXTENDED_APPLICATIONSTATUS_ACTIVE
 #include "APPFlowExtended_ApplicationStatus.h"

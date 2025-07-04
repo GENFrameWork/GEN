@@ -40,7 +40,7 @@
 #include "GRPCanvas.h"
 
 #include "GRP2DRebuildAreas.h"
-#include "GRPViewport.h"
+#include "GRPViewPort.h"
 
 #pragma endregion
 

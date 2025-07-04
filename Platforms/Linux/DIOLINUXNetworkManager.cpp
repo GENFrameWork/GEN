@@ -221,6 +221,7 @@ DIOLINUXNETWORKMANAGER_STATE DIOLINUXNETWORKMANAGER::GetConnectionState()
               case NM_STATE_CONNECTED_LOCAL   : state = DIOLINUXNETWORKMANAGER_STATE_CONNECTED_LOCAL;   break;
               case NM_STATE_CONNECTED_SITE    : state = DIOLINUXNETWORKMANAGER_STATE_CONNECTED_SITE;    break;
               case NM_STATE_CONNECTED_GLOBAL  : state = DIOLINUXNETWORKMANAGER_STATE_CONNECTED_GLOBAL;  break;
+                                 default      : break; 
             }
         }   
 
@@ -323,6 +324,7 @@ bool DIOLINUXNETWORKMANAGER::GetDevices(XVECTOR<DIOSTREAMDEVICEIP*>& devices)
               case NM_DEVICE_TYPE_VRF           : // A VRF (Virtual Routing and Forwarding) interface. Since: 1.24.
                                                   break;
               */
+                                   default      : break; 
             }
 
           GetProperty(DIOLINUXNETWORKMANAGER_DEFAULT_DBUS_IFACE_DEVICE, pathdevices.Get(c)->Get(), __L("Interface")  , value); 
@@ -540,6 +542,8 @@ bool DIOLINUXNETWORKMANAGER::GetProperty(XCHAR* iface, XCHAR* pathdevice, XCHAR*
               case XVARIANT_TYPE_DATE           :
               case XVARIANT_TYPE_TIME           :
               case XVARIANT_TYPE_DATETIME       : break;
+
+                                   default      : break; 
             }           
 
           //--------------------------------------------------------------------
@@ -572,6 +576,8 @@ void DIOLINUXNETWORKMANAGER::HandleEvent_Signal(DIOLINUXDBUS_XEVENT* event)
                                                       }
                                                   }
                                                   break;
+
+                                   default      : break; 
     }
 }
 
@@ -593,12 +599,14 @@ void DIOLINUXNETWORKMANAGER::HandleEvent(XEVENT* xevent)
   
   switch(xevent->GetEventFamily())
     {
-      case XEVENT_TYPE_LINUX_DBUS      :  { DIOLINUXDBUS_XEVENT* event = (DIOLINUXDBUS_XEVENT*)xevent;
-                                            if(!event) return;
+      case XEVENT_TYPE_LINUX_DBUS      : { DIOLINUXDBUS_XEVENT* event = (DIOLINUXDBUS_XEVENT*)xevent;
+                                           if(!event) return;
 
-                                            HandleEvent_Signal(event);                                            
-                                          }
-                                          break;
+                                           HandleEvent_Signal(event);                                            
+                                         }
+                                         break;
+
+                          default      : break; 
       
     }
 }

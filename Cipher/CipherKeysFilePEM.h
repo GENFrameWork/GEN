@@ -38,23 +38,13 @@
 #include "XObserver.h"
 
 #include "CipherKey.h"
-#include "CipherRootCertificates.h"
+#include "CipherTrustedRootCertificatesX509.h"
 
 #pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
-
-
-typedef struct
-{
-  XSTRING   type;
-  XDWORD    ini_line;
-  XDWORD    end_line;
-  XBUFFER   data;  
-
-} CIPHERKEYSFILEPEM_ENTRYBUFFER;
 
 #define CIPHERKEYSFILEPEM_EXT           __L(".PEM")
 #define CIPHERKEYSFILEKEY_EXT           __L(".KEY")
@@ -75,54 +65,27 @@ typedef struct
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
+
 class XFACTORY;
-class CIPHERKEY;
 class XFILETXT;
 class XBER_XEVENT;
+class CIPHERKEY;
+class CIPHERCERTIFICATEX509;
 
-   
-class CIPHERKEYSFILEPEM_TYPECERTIFICATE 
+
+class CIPHERKEYSFILEPEM_ENTRYBUFFER
 {
   public:
-                            CIPHERKEYSFILEPEM_TYPECERTIFICATE   ();
-    virtual                ~CIPHERKEYSFILEPEM_TYPECERTIFICATE   ();
+                            CIPHERKEYSFILEPEM_ENTRYBUFFER       ();
+                           ~CIPHERKEYSFILEPEM_ENTRYBUFFER       ();
 
-    void                    Clean                               ();
+   void                     Clean                               ();
 
-    XWORD                   version;
-    XDWORD                  algorithm;
-    XDWORD                  key_algorithm;
-    XDWORD                  ec_algorithm;
-    XBYTE*                  exponent;
-    XDWORD                  exponent_len;
-    XBYTE*                  pk;
-    XDWORD                  pk_len;
-    XBYTE*                  priv;
-    XDWORD                  priv_len;
-    XBYTE*                  issuer_country;
-    XBYTE*                  issuer_state;
-    XBYTE*                  issuer_location;
-    XBYTE*                  issuer_entity;
-    XBYTE*                  issuer_subject;
-    XBYTE*                  not_before;
-    XBYTE*                  not_after;
-    XBYTE*                  country;
-    XBYTE*                  state;
-    XBYTE*                  location;
-    XBYTE*                  entity;
-    XBYTE*                  subject;
-    XBYTE**                 san;
-    XWORD                   san_length;
-    XBYTE*                  ocsp;
-    XBYTE*                  serial_number;
-    XDWORD                  serial_len;
-    XBYTE*                  sign_key;
-    XDWORD                  sign_len;
-    XBYTE*                  fingerprint;
-    XBYTE*                  der_bytes;
-    XDWORD                  der_len;
-    XBYTE*                  bytes;
-    XDWORD                  len;    
+   XSTRING                  type;
+   XDWORD                   ini_line;
+   XDWORD                   end_line;
+   XBUFFER                  data;  
+
 };
 
 
@@ -137,10 +100,11 @@ class CIPHERKEYSFILEPEM : public XOBSERVER
     bool                    Key_Del                             (CIPHERKEY* key);
     bool                    Key_DelAll                          ();
 
-    bool                    ReadDecodeAllFile                   (XPATH& xpath);
-    bool                    DecodeCertificates                  (CIPHERROOTCERTIFICATES certificates, int nlinescertificates);
-   
+    bool                    DecodeCertificates                  (XVECTOR<XSTRING*>* lines);
+  
   private:
+
+    bool                    GetCertificatedPropertys            (CIPHERCERTIFICATEX509* certificate, XBER_XEVENT* event);
 
     void                    HandleEvent_XBER                    (XBER_XEVENT* event);
     void                    HandleEvent                         (XEVENT* xevent);
@@ -149,7 +113,9 @@ class CIPHERKEYSFILEPEM : public XOBSERVER
                               
     XVECTOR<CIPHERKEY*>     keys;
 
-    CIPHERKEY*              decodekey;
+    void*                   decodeobj;
+    CIPHERKEYTYPE           decodeobjtype;
+    XSTRING                 lastOID;
 };
 
 

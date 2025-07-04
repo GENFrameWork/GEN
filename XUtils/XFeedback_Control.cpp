@@ -308,7 +308,7 @@ bool XFEEDBACK_CONTROL::Activate(bool isactive)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, int line, XFEEDBACK_CODE code, ...)
+bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, XFEEDBACK_CODE code,int line,  ...)
 {
   if(!isactive)
     {
@@ -330,7 +330,7 @@ bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, int line, XFEEDBACK_COD
             {              
               va_list arg;
 
-              va_start(arg, code);
+              va_start(arg, line);
            
               switch(code)
                 {

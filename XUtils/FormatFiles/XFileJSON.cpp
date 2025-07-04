@@ -778,7 +778,9 @@ bool XFILEJSONVALUE::Set(XVARIANT* variant)
       case XVARIANT_TYPE_POINTER        : type = XFILEJSONVALUETYPE_STRING;         
                                           variant->ToString(tempostr);
                                           value = tempostr;
-                                          break;                     
+                                          break; 
+
+                           default      : break;                     
     }
   
   return true;
@@ -836,6 +838,8 @@ bool XFILEJSONVALUE::Delete()
                                                   value.Destroy();
                                                 }
                                                 break;
+
+                                 default      : break; 
 
     }  
 
@@ -2352,6 +2356,8 @@ bool XFILEJSON::GetString(int& position, XSTRING& string)
           case XFILEJSONCONTROLCHAR_BLACKSLASH    : slashcontrol = true;
                                                     string += all.Get()[c];
                                                     break;
+
+                                     default      : break; 
         }
 
       if(exit)
