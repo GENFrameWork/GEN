@@ -72,7 +72,7 @@ CIPHERKEYPUBLICRSA::CIPHERKEYPUBLICRSA() : CIPHERKEY()
 {
   Clean();
 
-  type = CIPHERKEYTYPE_PUBLIC;
+  type = CIPHERKEYTYPE_RSA_PUBLIC;
 
   modulus.Ini();
   exponent.Ini();

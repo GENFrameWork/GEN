@@ -44,14 +44,24 @@
 
 enum CIPHERTYPE
 {
-  CIPHERTYPE_XOR                = 0 ,
-  CIPHERTYPE_DES                    ,
-  CIPHERTYPE_3DES                   ,
-  CIPHERTYPE_BLOWFISH               ,
-  CIPHERTYPE_AES                    ,
-  CIPHERTYPE_RSA                    ,
-  CIPHERTYPE_CURVE25519             ,
-};
+  CIPHERTYPE_XOR                      = 0 ,
+  CIPHERTYPE_DES                          ,
+  CIPHERTYPE_3DES                         ,
+  CIPHERTYPE_BLOWFISH                     ,
+  CIPHERTYPE_AES                          ,
+  CIPHERTYPE_RSA                          ,
+  CIPHERTYPE_ECDSA_SECP224R1	            ,
+  CIPHERTYPE_ECDSA_SECP192R1	            ,
+  CIPHERTYPE_ECDSA_SECP256R1	            ,
+  CIPHERTYPE_ECDSA_SECP384R1	            ,
+  CIPHERTYPE_ECDSA_SECP521R1	            ,
+  CIPHERTYPE_ECDSA_SECP256K1	            ,
+  CIPHERTYPE_ECDSA_SECT163K1	            ,
+  CIPHERTYPE_ECDSA_BRAINPOOLP256R1	      ,
+  CIPHERTYPE_ECDSA_BRAINPOOLP384R1	      ,
+  CIPHERTYPE_ECDSA_BRAINPOOLP512R1	      ,
+  CIPHERTYPE_ECDSA_X25519                 , // Not neccesary (Interchange Keys Only)
+};                                        
 
 enum CIPHERCHAININGMODE
 {

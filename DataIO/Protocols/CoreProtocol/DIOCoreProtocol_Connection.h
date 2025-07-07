@@ -34,9 +34,9 @@
 
 #include "XFSMachine.h"
 
-#include "CipherKey.h"
+#include "CipherKeySymmetrical.h"
 #include "CipherAES.h"
-#include "CipherCurve25519.h"
+#include "CipherECDSAX25519.h"
 
 #include "DIOCoreProtocol_Messages.h"
 #include "DIOCoreProtocol_RegisterData.h"
@@ -255,7 +255,7 @@ class DIOCOREPROTOCOL_CONNECTION : public XFSMACHINE, public XSUBJECT
 
     XBUFFER                               authentication_challenge;  
     XBUFFER                               authentication_response;
-    CIPHERCURVE25519                      ciphercurve;
+    CIPHERECDSAX25519                      ciphercurve;
     CIPHERKEYSYMMETRICAL                  cipherkey;     
 
     DIOCOREPROTOCOL_CONNECTION_STATUS     status;

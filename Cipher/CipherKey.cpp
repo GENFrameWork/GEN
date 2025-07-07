@@ -127,6 +127,54 @@ void CIPHERKEY::SetType(CIPHERKEYTYPE type)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XCHAR* CIPHERKEY::GetTypeStr()
+* @brief      get type str
+* @ingroup    CIPHER
+* 
+* @return     XCHAR* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XCHAR* CIPHERKEY::GetTypeStr()
+{ 
+  XCHAR* nametype = NULL;
+
+  switch(type)
+    {
+      case CIPHERKEYTYPE_UNKNOWN                        : 
+                                  default               : nametype = __L("Unknown");                         break;                                                        
+      case CIPHERKEYTYPE_SYMMETRICAL                    : nametype = __L("Symmetrical");                     break;                                                                                                                
+      case CIPHERKEYTYPE_RSA_PUBLIC                     : nametype = __L("RSA public");                      break;                                                         
+      case CIPHERKEYTYPE_RSA_PRIVATE                    : nametype = __L("RSA private");                     break;                                                                                                                
+      case CIPHERKEYTYPE_ECDSA_SECP192R1_PUBLIC	        : nametype = __L("ECDSA secp192r1 public");          break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP192R1_PRIVATE	      : nametype = __L("ECDSA secp192r1 private");         break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP224R1_PUBLIC	        : nametype = __L("ECDSA secp224r1 public");          break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP224R1_PRIVATE	      : nametype = __L("ECDSA secp224r1 private");         break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC	        : nametype = __L("ECDSA secp256r1 public");          break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE	      : nametype = __L("ECDSA secp256r1 private");         break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC	        : nametype = __L("ECDSA secp384r1 public");          break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE	      : nametype = __L("ECDSA secp384r1 private");         break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC	        : nametype = __L("ECDSA secp521r1 public");          break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE	      : nametype = __L("ECDSA secp521r1 private");         break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP256K1_PUBLIC	        : nametype = __L("ECDSA secp256k1 public");          break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECP256K1_PRIVATE	      : nametype = __L("ECDSA secp256k1 private");         break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECT163K1_PUBLIC	        : nametype = __L("ECDSA sect163k1 public");          break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECT163K1_PRIVATE	      : nametype = __L("ECDSA sect163k1 private");         break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECT233K1_PUBLIC	        : nametype = __L("ECDSA sect233k1 public");          break;                                                        
+      case CIPHERKEYTYPE_ECDSA_SECT233K1_PRIVATE	      : nametype = __L("ECDSA sect233k1 private");         break;                                                        
+      case CIPHERKEYTYPE_ECDSA_BRAINPOOLP256R1_PUBLIC	  : nametype = __L("ECDSA brainpoolp256r1 public");    break;                                                        
+      case CIPHERKEYTYPE_ECDSA_BRAINPOOLP256R1_PRIVATE  : nametype = __L("ECDSA brainpoolp256r1 private");   break;                                                        
+      case CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PUBLIC	  : nametype = __L("ECDSA brainpoolp384r1 public");    break;                                                        
+      case CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PRIVATE  : nametype = __L("ECDSA brainpoolp384r1 private");   break;                                                        
+      case CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PUBLIC	  : nametype = __L("ECDSA brainpoolp512r1 public");    break;                                                                                                          
+      case CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PRIVATE  : nametype = __L("ECDSA brainpoolp512r1 private");   break;                                                        
+    }
+
+  return nametype;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int CIPHERKEY::GetSizeInBytes()
 * @brief      Get size in bytes
 * @ingroup    CIPHER
@@ -192,178 +240,5 @@ void CIPHERKEY::Clean()
 #pragma endregion
 
 
-#pragma region CIPHERKEYSYMMETRICAL
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         CIPHERKEYSYMMETRICAL::CIPHERKEYSYMMETRICAL() : CIPHERKEY()
-* @brief      Constructor of class
-* @ingroup    CIPHER
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-CIPHERKEYSYMMETRICAL::CIPHERKEYSYMMETRICAL() : CIPHERKEY()
-{
-  Clean();
-
-  type = CIPHERKEYTYPE_SYMMETRICAL;
-
-  xbufferkey = new XBUFFER();
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         CIPHERKEYSYMMETRICAL::~CIPHERKEYSYMMETRICAL()
-* @brief      Destructor of class
-* @note       VIRTUAL
-* @ingroup    CIPHER
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-CIPHERKEYSYMMETRICAL::~CIPHERKEYSYMMETRICAL()
-{
-  if(xbufferkey)  delete xbufferkey;
-
-  Clean();
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         XBYTE* CIPHERKEYSYMMETRICAL::Get(int& size)
-* @brief      Get
-* @ingroup    CIPHER
-* 
-* @param[in]  size : 
-* 
-* @return     XBYTE* : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-XBYTE* CIPHERKEYSYMMETRICAL::Get(int& size)
-{
-  if(!xbufferkey) return NULL;
-
-  size = xbufferkey->GetSize();
-
-  return xbufferkey->Get();
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         XBUFFER* CIPHERKEYSYMMETRICAL::Get()
-* @brief      Get
-* @ingroup    CIPHER
-* 
-* @return     XBUFFER* : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-XBUFFER* CIPHERKEYSYMMETRICAL::Get()
-{
-  return xbufferkey;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
-* @brief      Set
-* @ingroup    CIPHER
-* 
-* @param[in]  key : 
-* @param[in]  size : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
-{
-  if(!key) return false;
-
-  this->xbufferkey->Delete();
-
-  this->xbufferkey->Add(key, (XDWORD)size);
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool CIPHERKEYSYMMETRICAL::Set(XBUFFER& key)
-* @brief      Set
-* @ingroup    CIPHER
-* 
-* @param[in]  key : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYSYMMETRICAL::Set(XBUFFER& key)
-{
-  return Set(key.Get(), key.GetSize());
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         int CIPHERKEYSYMMETRICAL::GetSizeInBytes()
-* @brief      Get size in bytes
-* @ingroup    CIPHER
-* 
-* @return     int : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-int CIPHERKEYSYMMETRICAL::GetSizeInBytes()
-{ 
-  return xbufferkey->GetSize();                     
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool CIPHERKEYSYMMETRICAL::CopyFrom(CIPHERKEYSYMMETRICAL* key)
-* @brief      Copy from
-* @ingroup    CIPHER
-* 
-* @param[in]  key : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYSYMMETRICAL::CopyFrom(CIPHERKEYSYMMETRICAL* key)
-{
-  if(!key) return false;
-
-  if(!CIPHERKEY::CopyFrom((CIPHERKEY*)key)) return false;
-
-  xbufferkey->Delete();
-  xbufferkey->Add(key->Get()->Get(), key->Get()->GetSize());
-
-  return true;
-}
-
-  
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void CIPHERKEYSYMMETRICAL::Clean()
-* @brief      Clean the attributes of the class: Default initialize
-* @note       INTERNAL
-* @ingroup    CIPHER
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-void CIPHERKEYSYMMETRICAL::Clean()
-{
-  xbufferkey = NULL;
-}
-
-
 #pragma endregion
-
-
-#pragma endregion
-
-
-
-
 

@@ -43,6 +43,8 @@
 
 #include "XFactory.h"
 
+#include "CipherKeySymmetrical.h"
+
 #pragma endregion
 
 

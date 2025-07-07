@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       CipherKeyPrivateRSA.cpp
+* @file       CipherKeySymmetrical.cpp
 * 
-* @class      CIPHERKEYPRIVATERSA
-* @brief      Cipher Key Private RSA class
+* @class      CIPHERKEYSYMMETRICAL
+* @brief      Cipher Key Symmetrical interface class
 * @ingroup    CIPHER
 * 
 * @copyright  GEN Group. All rights reserved.
@@ -37,7 +37,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "CipherKeyPrivateRSA.h"
+#include "CipherKeySymmetrical.h"
 
 #pragma endregion
 
@@ -61,38 +61,37 @@
 #pragma region CLASS_MEMBERS
 
 
+#pragma region CIPHERKEYSYMMETRICAL
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERKEYPRIVATERSA::CIPHERKEYPRIVATERSA()
+* @fn         CIPHERKEYSYMMETRICAL::CIPHERKEYSYMMETRICAL() : CIPHERKEY()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-CIPHERKEYPRIVATERSA::CIPHERKEYPRIVATERSA() : CIPHERKEY()
+CIPHERKEYSYMMETRICAL::CIPHERKEYSYMMETRICAL() : CIPHERKEY()
 {
   Clean();
 
-  type = CIPHERKEYTYPE_RSA_PRIVATE;
+  type = CIPHERKEYTYPE_SYMMETRICAL;
 
-  prime1factor.Ini();
-  prime2factor.Ini();
-  exponent.Ini();
+  xbufferkey = new XBUFFER();
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERKEYPRIVATERSA::~CIPHERKEYPRIVATERSA()
+* @fn         CIPHERKEYSYMMETRICAL::~CIPHERKEYSYMMETRICAL()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-CIPHERKEYPRIVATERSA::~CIPHERKEYPRIVATERSA()
+CIPHERKEYSYMMETRICAL::~CIPHERKEYSYMMETRICAL()
 {
-  prime1factor.End();
-  prime2factor.End();
-  exponent.End();
+  if(xbufferkey)  delete xbufferkey;
 
   Clean();
 }
@@ -100,45 +99,59 @@ CIPHERKEYPRIVATERSA::~CIPHERKEYPRIVATERSA()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool CIPHERKEYPRIVATERSA::Get(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor, XMPINTEGER& exponent)
+* @fn         XBYTE* CIPHERKEYSYMMETRICAL::Get(int& size)
 * @brief      Get
 * @ingroup    CIPHER
 * 
-* @param[in]  prime1factor : 
-* @param[in]  prime2factor : 
-* @param[in]  exponent : 
+* @param[in]  size : 
 * 
-* @return     bool : true if is succesful. 
+* @return     XBYTE* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYPRIVATERSA::Get(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor, XMPINTEGER& exponent)
+XBYTE* CIPHERKEYSYMMETRICAL::Get(int& size)
 {
-  prime1factor.CopyFrom(&this->prime1factor);
-  prime2factor.CopyFrom(&this->prime2factor);
-  exponent.CopyFrom(&this->exponent);
+  if(!xbufferkey) return NULL;
 
-  return true;
+  size = xbufferkey->GetSize();
+
+  return xbufferkey->Get();
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool CIPHERKEYPRIVATERSA::Set(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor, XMPINTEGER& exponent)
+* @fn         XBUFFER* CIPHERKEYSYMMETRICAL::Get()
+* @brief      Get
+* @ingroup    CIPHER
+* 
+* @return     XBUFFER* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* CIPHERKEYSYMMETRICAL::Get()
+{
+  return xbufferkey;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
 * @brief      Set
 * @ingroup    CIPHER
 * 
-* @param[in]  prime1factor : 
-* @param[in]  prime2factor : 
-* @param[in]  exponent : 
+* @param[in]  key : 
+* @param[in]  size : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYPRIVATERSA::Set(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor, XMPINTEGER& exponent)
+bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
 {
-  this->prime1factor.CopyFrom(&prime1factor);
-  this->prime2factor.CopyFrom(&prime2factor);
-  this->exponent.CopyFrom(&exponent);
+  if(!key) return false;
+
+  this->xbufferkey->Delete();
+
+  this->xbufferkey->Add(key, (XDWORD)size);
 
   return true;
 }
@@ -146,22 +159,39 @@ bool CIPHERKEYPRIVATERSA::Set(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         int CIPHERKEYPRIVATERSA::GetSizeInBytes()
+* @fn         bool CIPHERKEYSYMMETRICAL::Set(XBUFFER& key)
+* @brief      Set
+* @ingroup    CIPHER
+* 
+* @param[in]  key : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERKEYSYMMETRICAL::Set(XBUFFER& key)
+{
+  return Set(key.Get(), key.GetSize());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int CIPHERKEYSYMMETRICAL::GetSizeInBytes()
 * @brief      Get size in bytes
 * @ingroup    CIPHER
 * 
 * @return     int : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-int CIPHERKEYPRIVATERSA::GetSizeInBytes()
+int CIPHERKEYSYMMETRICAL::GetSizeInBytes()
 { 
-  return this->exponent.GetSize();      
+  return xbufferkey->GetSize();                     
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool CIPHERKEYPRIVATERSA::CopyFrom(CIPHERKEYPRIVATERSA* key)
+* @fn         bool CIPHERKEYSYMMETRICAL::CopyFrom(CIPHERKEYSYMMETRICAL* key)
 * @brief      Copy from
 * @ingroup    CIPHER
 * 
@@ -170,105 +200,39 @@ int CIPHERKEYPRIVATERSA::GetSizeInBytes()
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYPRIVATERSA::CopyFrom(CIPHERKEYPRIVATERSA* key)
+bool CIPHERKEYSYMMETRICAL::CopyFrom(CIPHERKEYSYMMETRICAL* key)
 {
   if(!key) return false;
 
   if(!CIPHERKEY::CopyFrom((CIPHERKEY*)key)) return false;
 
-  return key->Get(prime1factor, prime2factor, exponent);
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool CIPHERKEYPRIVATERSA::Check(CIPHERKEYPUBLICRSA& publickey)
-* @brief      Check
-* @ingroup    CIPHER
-* 
-* @param[in]  publickey : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERKEYPRIVATERSA::Check(CIPHERKEYPUBLICRSA& publickey)
-{
-  XMPINTEGER PQ;
-  XMPINTEGER DE;
-  XMPINTEGER P1;
-  XMPINTEGER Q1;
-  XMPINTEGER H;
-  XMPINTEGER I;
-  XMPINTEGER G;
-  XMPINTEGER G2;
-  XMPINTEGER L1;
-  XMPINTEGER L2;
-  XMPINTEGER publicmodulus;
-  XMPINTEGER publicexponent;
-
-  if(!publickey.Check())  return false;
-
-  if((!prime1factor.GetLimbs()) || (!prime2factor.GetLimbs()) || (!exponent.GetLimbs()))  return false;
-
-  publickey.Get(publicmodulus, publicexponent);
-
-  PQ.Ini();
-  DE.Ini();
-  P1.Ini();
-  Q1.Ini();
-  H.Ini();
-  I.Ini();
-  G.Ini();
-  G2.Ini();
-  L1.Ini();
-  L2.Ini();
-
-  if(!PQ.Multiplication(&prime1factor, &prime2factor))  return false;
-  if(!DE.Multiplication(&exponent, &publicexponent))    return false;
-  if(!P1.SubtractionSigned(&prime1factor, 1))           return false;
-  if(!Q1.SubtractionSigned(&prime2factor, 1))           return false;
-  if(!H.Multiplication(&P1, &Q1))                       return false;
-  if(!G.GreatestCommonDivisor(&G, &publicexponent, &H)) return false;
-  if(!G2.GreatestCommonDivisor(&G2, &P1, &Q1))          return false;
-  if(!L1.Division(&L1, &L2, &H, &G2 ))                  return false;
-  if(!I.Module(&I, &DE, &L1))                           return false;
-
-  // Check for a valid PKCS1v2 private key
-  if((PQ.CompareSignedValues(publicmodulus) != 0) ||
-     (L2.CompareSignedValues(0)             != 0) ||
-     (I.CompareSignedValues(1)              != 0) ||
-     (G.CompareSignedValues(1)              != 0)) return false;
-
-  PQ.End();
-  DE.End();
-  P1.End();
-  Q1.End();
-  H.End();
-  I.End();
-  G.End();
-  G2.End();
-  L1.End();
-  L2.End();
+  xbufferkey->Delete();
+  xbufferkey->Add(key->Get()->Get(), key->Get()->GetSize());
 
   return true;
 }
 
-
+  
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void CIPHERKEYPRIVATERSA::Clean()
+* @fn         void CIPHERKEYSYMMETRICAL::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void CIPHERKEYPRIVATERSA::Clean()
-{            
-
+void CIPHERKEYSYMMETRICAL::Clean()
+{
+  xbufferkey = NULL;
 }
 
 
 #pragma endregion
+
+
+#pragma endregion
+
+
 
 
 

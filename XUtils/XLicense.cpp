@@ -48,6 +48,7 @@
 
 #include "HashSHA1.h"
 #include "HashSHA2.h"
+#include "CipherKeySymmetrical.h"
 #include "CipherAES.h"
 
 #include "DIOFactory.h"

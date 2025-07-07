@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       CipherCurve25519.h
+* @file       CipherECDSAX25519.h
 * 
-* @class      CIPHERCURVE25519
-* @brief      Cipher Curve25519 class
+* @class      CIPHERECDSAX25519
+* @brief      Cipher ECDSA (Elliptic Curve Digital Signature Algorithm) 25519 class
 * @ingroup    CIPHER
 * 
 * @copyright  GEN Group. All rights reserved.
@@ -26,8 +26,8 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERCURVE25519_H_
-#define _CIPHERCURVE25519_H_
+#ifndef _CIPHERECDSAX25519_H_
+#define _CIPHERECDSAX25519_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -39,16 +39,16 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-enum CIPHERCURVE25519_TYPEKEY  
+enum CIPHERECDSAX25519_TYPEKEY  
 {
-  CIPHERCURVE25519_TYPEKEY_PRIVATE    = 0 ,
-  CIPHERCURVE25519_TYPEKEY_PUBLIC         ,
-  CIPHERCURVE25519_TYPEKEY_SHARED         ,
+  CIPHERECDSAX25519_TYPEKEY_PRIVATE    = 0 ,
+  CIPHERECDSAX25519_TYPEKEY_PUBLIC         ,
+  CIPHERECDSAX25519_TYPEKEY_SHARED         ,
 
-  CIPHERCURVE25519_MAXKEYS
+  CIPHERECDSAX25519_MAXKEYS
 };  
 
-#define CIPHERCURVE25519_MAXKEY  32
+#define CIPHERECDSAX25519_MAXKEY  32
 
 #pragma endregion
 
@@ -56,18 +56,18 @@ enum CIPHERCURVE25519_TYPEKEY
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
-class CIPHERCURVE25519
+class CIPHERECDSAX25519
 {
   public:
-                            CIPHERCURVE25519          ();
-    virtual                ~CIPHERCURVE25519          ();
+                            CIPHERECDSAX25519         ();
+    virtual                ~CIPHERECDSAX25519         ();
 
     bool                    GenerateRandomPrivateKey  ();
     bool                    CreatePublicKey           ();
-    bool                    CreateSharedKey           (XBYTE publickey[CIPHERCURVE25519_MAXKEY]);
+    bool                    CreateSharedKey           (XBYTE publickey[CIPHERECDSAX25519_MAXKEY]);
 
-    XBYTE*                  GetKey                    (CIPHERCURVE25519_TYPEKEY typekey);
-    bool                    IsKeyCreated              (CIPHERCURVE25519_TYPEKEY typekey);
+    XBYTE*                  GetKey                    (CIPHERECDSAX25519_TYPEKEY typekey);
+    bool                    IsKeyCreated              (CIPHERECDSAX25519_TYPEKEY typekey);
     void                    CleanAllKeys              ();
     
   private:
@@ -105,9 +105,9 @@ class CIPHERCURVE25519
 
     void                    Clean                     ();  
 
-    static const XBYTE      basepoint[CIPHERCURVE25519_MAXKEY]; 
+    static const XBYTE      basepoint[CIPHERECDSAX25519_MAXKEY]; 
 
-    XBYTE                   keys[CIPHERCURVE25519_MAXKEYS][CIPHERCURVE25519_MAXKEY];    
+    XBYTE                   keys[CIPHERECDSAX25519_MAXKEYS][CIPHERECDSAX25519_MAXKEY];    
 };
 
 #pragma endregion

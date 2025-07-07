@@ -46,6 +46,7 @@
 #include "XFileXML.h"
 
 #include "Cipher.h"
+#include "CipherKeySymmetrical.h"
 #include "CipherKeyPrivateRSA.h"
 #include "CipherKeyPublicRSA.h"
 
@@ -227,29 +228,29 @@ bool CIPHERKEYSFILEGKF::AddKey(CIPHERKEY& key)
     {
       case CIPHERKEYTYPE_UNKNOWN        : break;
 
-      case CIPHERKEYTYPE_SYMMETRICAL  : { CIPHERKEYSYMMETRICAL* keysimetrical = new CIPHERKEYSYMMETRICAL();
+      case CIPHERKEYTYPE_SYMMETRICAL    : { CIPHERKEYSYMMETRICAL* keysimetrical = new CIPHERKEYSYMMETRICAL();
 
-                                          keysimetrical->CopyFrom((CIPHERKEYSYMMETRICAL*)&key);
+                                            keysimetrical->CopyFrom((CIPHERKEYSYMMETRICAL*)&key);
 
-                                          keys.Add(keysimetrical);
-                                        }
-                                        break;
+                                            keys.Add(keysimetrical);
+                                          }
+                                          break;
 
-      case CIPHERKEYTYPE_PUBLIC       : { CIPHERKEYPUBLICRSA* keypublic = new CIPHERKEYPUBLICRSA();
+      case CIPHERKEYTYPE_RSA_PUBLIC     : { CIPHERKEYPUBLICRSA* keypublic = new CIPHERKEYPUBLICRSA();
 
-                                          keypublic->CopyFrom((CIPHERKEYPUBLICRSA*)&key);
-                                          keys.Add(keypublic);
-                                        }
-                                        break;
+                                            keypublic->CopyFrom((CIPHERKEYPUBLICRSA*)&key);
+                                            keys.Add(keypublic);
+                                          }
+                                          break;
 
-      case CIPHERKEYTYPE_PRIVATE      : { CIPHERKEYPRIVATERSA* keyprivate = new CIPHERKEYPRIVATERSA();
+      case CIPHERKEYTYPE_RSA_PRIVATE    : { CIPHERKEYPRIVATERSA* keyprivate = new CIPHERKEYPRIVATERSA();
 
-                                          keyprivate->CopyFrom((CIPHERKEYPRIVATERSA*)&key);
-                                          keys.Add(keyprivate);
-                                        }
-                                        break;
+                                            keyprivate->CopyFrom((CIPHERKEYPRIVATERSA*)&key);
+                                            keys.Add(keyprivate);
+                                          }
+                                          break;
 
-                         default      : break; 
+                         default        : break; 
     }
 
   return true;
@@ -368,7 +369,7 @@ bool CIPHERKEYSFILEGKF::UpdateFile()
 
                       switch(key->GetType())
                         {
-                          case CIPHERKEYTYPE_UNKNOWN        : break;
+                          case CIPHERKEYTYPE_UNKNOWN      : break;
 
                           case CIPHERKEYTYPE_SYMMETRICAL  : { CIPHERKEYSYMMETRICAL* keysimetrical = (CIPHERKEYSYMMETRICAL*)key;
                                                               XBUFFER* xbuffer = keysimetrical->Get();
@@ -378,7 +379,7 @@ bool CIPHERKEYSFILEGKF::UpdateFile()
                                                             }
                                                             break;
 
-                          case CIPHERKEYTYPE_PUBLIC       : { CIPHERKEYPUBLICRSA* keypublic = (CIPHERKEYPUBLICRSA*)key;
+                          case CIPHERKEYTYPE_RSA_PUBLIC   : { CIPHERKEYPUBLICRSA* keypublic = (CIPHERKEYPUBLICRSA*)key;
                                                               XMPINTEGER          modulus;
                                                               XMPINTEGER          exponent;
 
@@ -392,7 +393,7 @@ bool CIPHERKEYSFILEGKF::UpdateFile()
                                                             }
                                                             break;
 
-                          case CIPHERKEYTYPE_PRIVATE      : { CIPHERKEYPRIVATERSA*  keyprivate = (CIPHERKEYPRIVATERSA*)key;
+                          case CIPHERKEYTYPE_RSA_PRIVATE  : { CIPHERKEYPRIVATERSA*  keyprivate = (CIPHERKEYPRIVATERSA*)key;
                                                               XMPINTEGER            prime1factor;
                                                               XMPINTEGER            prime2factor;
                                                               XMPINTEGER            exponent;
@@ -462,91 +463,91 @@ bool CIPHERKEYSFILEGKF::ExportToPEMFile(CIPHERKEY* key, XSTRING& publicPEM)
 
   switch(key->GetType())
     {
-      case CIPHERKEYTYPE_PUBLIC     : { XBER                  beroui;
-                                        XBER                  bernull;
-                                        XBER                  berbitstring;
-                                        XBER                  bermodule;
-                                        XBER                  berexponent;
-                                        XBER                  berseq1;
-                                        XBER                  berseq2;
-                                        XBER                  berseq3;
-                                        CIPHERKEYPUBLICRSA*   publickey = (CIPHERKEYPUBLICRSA*)key;
-                                        XMPINTEGER            module;
-                                        XMPINTEGER            exponent;
-                                        XBUFFER               xbuffermodule;
-                                        XBUFFER               xbuffermodule2;
-                                        XBUFFER               xbufferexponent;
-                                        XBUFFER               xbufferpem;
-                                        XSTRING               string;
-                                        XSTRING               stringbase64;
-                                        XSTRING               _publicPEM;
+      case CIPHERKEYTYPE_RSA_PUBLIC   : { XBER                  beroui;
+                                          XBER                  bernull;
+                                          XBER                  berbitstring;
+                                          XBER                  bermodule;
+                                          XBER                  berexponent;
+                                          XBER                  berseq1;
+                                          XBER                  berseq2;
+                                          XBER                  berseq3;
+                                          CIPHERKEYPUBLICRSA*   publickey = (CIPHERKEYPUBLICRSA*)key;
+                                          XMPINTEGER            module;
+                                          XMPINTEGER            exponent;
+                                          XBUFFER               xbuffermodule;
+                                          XBUFFER               xbuffermodule2;
+                                          XBUFFER               xbufferexponent;
+                                          XBUFFER               xbufferpem;
+                                          XSTRING               string;
+                                          XSTRING               stringbase64;
+                                          XSTRING               _publicPEM;
 
-                                        publickey->Get(module, exponent);
+                                          publickey->Get(module, exponent);
 
-                                        module.GetToXBuffer(xbuffermodule2    , module.GetSize());
-                                        exponent.GetToXBuffer(xbufferexponent , exponent.GetSize());
+                                          module.GetToXBuffer(xbuffermodule2    , module.GetSize());
+                                          exponent.GetToXBuffer(xbufferexponent , exponent.GetSize());
 
 
-                                        xbuffermodule.Add((XBYTE)0);
-                                        xbuffermodule.Add(xbuffermodule2);
-                                        bermodule.SetINTEGER(xbuffermodule);
-                                        berexponent.SetINTEGER(xbufferexponent);
+                                          xbuffermodule.Add((XBYTE)0);
+                                          xbuffermodule.Add(xbuffermodule2);
+                                          bermodule.SetINTEGER(xbuffermodule);
+                                          berexponent.SetINTEGER(xbufferexponent);
 
-                                        berseq2.Sequence_AddTo(bermodule);
-                                        berseq2.Sequence_AddTo(berexponent);
-                                        berseq2.SetTagType(berseq2.GetTagType()|(XBYTE)(XBERTYPE_ISCONSTRUCTED));
+                                          berseq2.Sequence_AddTo(bermodule);
+                                          berseq2.Sequence_AddTo(berexponent);
+                                          berseq2.SetTagType(berseq2.GetTagType()|(XBYTE)(XBERTYPE_ISCONSTRUCTED));
 
-                                        xbufferpem.Add((XBYTE)0);
-                                        berseq2.GetDump(xbufferpem);
-                                        berbitstring.SetBITSTRING(xbufferpem);
+                                          xbufferpem.Add((XBYTE)0);
+                                          berseq2.GetDump(xbufferpem);
+                                          berbitstring.SetBITSTRING(xbufferpem);
 
-                                        beroui.SetOID(__L("1.2.840.113549.1.1.1"));
-                                        bernull.SetNULL();
+                                          beroui.SetOID(__L("1.2.840.113549.1.1.1"));
+                                          bernull.SetNULL();
 
-                                        berseq1.Sequence_AddTo(beroui);
-                                        berseq1.Sequence_AddTo(bernull);
-                                        berseq1.SetTagType(berseq1.GetTagType()|(XBYTE)(XBERTYPE_ISCONSTRUCTED));
+                                          berseq1.Sequence_AddTo(beroui);
+                                          berseq1.Sequence_AddTo(bernull);
+                                          berseq1.SetTagType(berseq1.GetTagType()|(XBYTE)(XBERTYPE_ISCONSTRUCTED));
 
-                                        berseq3.Sequence_AddTo(berseq1);
-                                        berseq3.Sequence_AddTo(berbitstring);
-                                        berseq3.SetTagType(berseq3.GetTagType()|(XBYTE)(XBERTYPE_ISCONSTRUCTED));
+                                          berseq3.Sequence_AddTo(berseq1);
+                                          berseq3.Sequence_AddTo(berbitstring);
+                                          berseq3.SetTagType(berseq3.GetTagType()|(XBYTE)(XBERTYPE_ISCONSTRUCTED));
 
-                                        xbufferpem.Delete();
-                                        berseq3.GetDump(xbufferpem);
+                                          xbufferpem.Delete();
+                                          berseq3.GetDump(xbufferpem);
 
-                                        string.Set(xbufferpem.Get(), xbufferpem.GetSize());
-                                        string.ConvertToBase64(stringbase64);
+                                          string.Set(xbufferpem.Get(), xbufferpem.GetSize());
+                                          string.ConvertToBase64(stringbase64);
 
-                                        _publicPEM.Empty();
-                                        _publicPEM += __L("-----BEGIN PUBLIC KEY-----\n");
+                                          _publicPEM.Empty();
+                                          _publicPEM += __L("-----BEGIN PUBLIC KEY-----\n");
 
-                                        int index       = 0;
-                                        int lincounter  = 0;
+                                          int index       = 0;
+                                          int lincounter  = 0;
 
-                                        while(index<(int)stringbase64.GetSize())
-                                          {
-                                            _publicPEM.Add(stringbase64.Get()[index]);
-                                            index++;
-                                            lincounter++;
+                                          while(index<(int)stringbase64.GetSize())
+                                            {
+                                              _publicPEM.Add(stringbase64.Get()[index]);
+                                              index++;
+                                              lincounter++;
 
-                                            if(lincounter>=64)
-                                              {
-                                                _publicPEM.Add(__C('\n'));
-                                                lincounter = 0;
-                                              }
-                                          }
+                                              if(lincounter>=64)
+                                                {
+                                                  _publicPEM.Add(__C('\n'));
+                                                  lincounter = 0;
+                                                }
+                                            }
 
-                                        _publicPEM.Add(__C('\n'));
-                                        _publicPEM += __L("-----END PUBLIC KEY-----\n");
+                                          _publicPEM.Add(__C('\n'));
+                                          _publicPEM += __L("-----END PUBLIC KEY-----\n");
 
-                                        publicPEM = _publicPEM;
-                                      }
-                                      status = true;
-                                      break;
+                                          publicPEM = _publicPEM;
+                                        }
+                                        status = true;
+                                        break;
 
-      case CIPHERKEYTYPE_PRIVATE    : break;
+      case CIPHERKEYTYPE_RSA_PRIVATE  : break;
 
-                          default   : break;
+                          default     : break;
     }
 
   return status;
@@ -690,7 +691,7 @@ bool CIPHERKEYSFILEGKF::ReadAllFile()
                                                                     }
                                                                     break;
 
-                                  case CIPHERKEYTYPE_PUBLIC       : { CIPHERKEYPUBLICRSA* keypublic = new CIPHERKEYPUBLICRSA();
+                                  case CIPHERKEYTYPE_RSA_PUBLIC   : { CIPHERKEYPUBLICRSA* keypublic = new CIPHERKEYPUBLICRSA();
                                                                       if(keypublic)
                                                                         {
                                                                           XMPINTEGER modulus;
@@ -718,7 +719,7 @@ bool CIPHERKEYSFILEGKF::ReadAllFile()
                                                                     }
                                                                     break;
 
-                                  case CIPHERKEYTYPE_PRIVATE      : { CIPHERKEYPRIVATERSA* keyprivate = new CIPHERKEYPRIVATERSA();
+                                  case CIPHERKEYTYPE_RSA_PRIVATE  : { CIPHERKEYPRIVATERSA* keyprivate = new CIPHERKEYPRIVATERSA();
                                                                       if(keyprivate)
                                                                         {
                                                                           XMPINTEGER prime1factor;

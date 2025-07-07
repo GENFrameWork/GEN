@@ -123,8 +123,8 @@ class XMPINTEGER
 
     XDWORD                      GetSize                       ();
 
-    int                         ImportFromBinary              (XBYTE* buffer, XDWORD size);
-    int                         ExportToBinary                (XBYTE* buffer, XDWORD size);
+    bool                        ImportFromBinary              (XBYTE* buffer, XDWORD size);
+    bool                        ExportToBinary                (XBYTE* buffer, XDWORD size);
 
     bool                        LeftShift                     (XDWORD count);
     bool                        RightShift                    (XDWORD count);

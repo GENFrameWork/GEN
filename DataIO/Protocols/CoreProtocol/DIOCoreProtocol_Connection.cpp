@@ -1301,10 +1301,10 @@ bool DIOCOREPROTOCOL_CONNECTION::Update()
                                                                                     {                                                                                   
                                                                                       if(header.GetContentType() == DIOCOREPROTOCOL_HEADER_CONTENTTYPE_BINARY)
                                                                                         {
-                                                                                          if(content.GetSize() == CIPHERCURVE25519_MAXKEY) 
+                                                                                          if(content.GetSize() == CIPHERECDSAX25519_MAXKEY) 
                                                                                             {
                                                                                               ciphercurve.CreateSharedKey(content.Get());
-                                                                                              cipherkey.Set(ciphercurve.GetKey(CIPHERCURVE25519_TYPEKEY_SHARED), CIPHERCURVE25519_MAXKEY); 
+                                                                                              cipherkey.Set(ciphercurve.GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED), CIPHERECDSAX25519_MAXKEY); 
                                                                                               
                                                                                               Status_Set(DIOCOREPROTOCOL_CONNECTION_STATUS_KEYEXCHANGE); 
                                                                                               SetEvent(DIOCOREPROTOCOL_CONNECTION_XFSMEVENT_AUTHENTICATION);                                                                                                     
@@ -1318,17 +1318,17 @@ bool DIOCOREPROTOCOL_CONNECTION::Update()
                                                                                     {                                                                                      
                                                                                       if(header.GetContentType() == DIOCOREPROTOCOL_HEADER_CONTENTTYPE_BINARY)
                                                                                         {
-                                                                                          if(content.GetSize() == CIPHERCURVE25519_MAXKEY) 
+                                                                                          if(content.GetSize() == CIPHERECDSAX25519_MAXKEY) 
                                                                                             {  
                                                                                               ciphercurve.CreateSharedKey(content.Get());
-                                                                                              cipherkey.Set(ciphercurve.GetKey(CIPHERCURVE25519_TYPEKEY_SHARED), CIPHERCURVE25519_MAXKEY); 
+                                                                                              cipherkey.Set(ciphercurve.GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED), CIPHERECDSAX25519_MAXKEY); 
 
                                                                                               static bool sended =  false;
                                                                                               if(!sended)     
                                                                                                 {        
                                                                                                   XBUFFER publickey;
 
-                                                                                                  publickey.Add(ciphercurve.GetKey(CIPHERCURVE25519_TYPEKEY_PUBLIC), CIPHERCURVE25519_MAXKEY);
+                                                                                                  publickey.Add(ciphercurve.GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC), CIPHERECDSAX25519_MAXKEY);
 
                                                                                                   sended = SendMsg(header.GetIDMessage(), DIOCOREPROTOCOL_HEADER_OPERATION_KEYEXCHANGE, DIOCOREPROTOCOL_KEYEXCHANGE_CLIENT_OPERATION_PARAM, &publickey);                                                                                                            
                                                                                                   if(sended)
@@ -1557,7 +1557,7 @@ bool DIOCOREPROTOCOL_CONNECTION::Update()
                                                                                     XUUID   ID_message;                                                                          
                                                                                     XBUFFER publickey;
                                                                                     
-                                                                                    publickey.Add(ciphercurve.GetKey(CIPHERCURVE25519_TYPEKEY_PUBLIC), CIPHERCURVE25519_MAXKEY);
+                                                                                    publickey.Add(ciphercurve.GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC), CIPHERECDSAX25519_MAXKEY);
 
                                                                                     SendMsg(&ID_message, DIOCOREPROTOCOL_HEADER_OPERATION_KEYEXCHANGE, DIOCOREPROTOCOL_KEYEXCHANGE_SERVER_OPERATION_PARAM, &publickey);
                                                                                   }                                                                               

@@ -92,7 +92,7 @@
 #include "XTrace.h"
 
 #include "GRPXEvent.h"
-#include "GRPViewport.h"
+#include "GRPViewPort.h"
 #include "GRPCanvas.h"
 
 #include "ANDROIDJNI.h"

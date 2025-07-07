@@ -44,6 +44,8 @@
 #include "XFactory.h"
 #include "XBuffer.h"
 
+#include "CipherKeySymmetrical.h"
+
 #pragma endregion
 
 

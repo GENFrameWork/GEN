@@ -237,7 +237,7 @@ bool CIPHERRSA::SetKey(CIPHERKEY* key, bool integritycheck)
     {
       case CIPHERKEYTYPE_SYMMETRICAL  : return false;
 
-      case CIPHERKEYTYPE_PUBLIC       : { CIPHERKEYPUBLICRSA* publickey = (CIPHERKEYPUBLICRSA*)key;
+      case CIPHERKEYTYPE_RSA_PUBLIC   : { CIPHERKEYPUBLICRSA* publickey = (CIPHERKEYPUBLICRSA*)key;
 
                                           publickey->Get(context.N, context.E); // Assign key public to context
 
@@ -248,7 +248,7 @@ bool CIPHERRSA::SetKey(CIPHERKEY* key, bool integritycheck)
                                         }
                                         break;
 
-      case CIPHERKEYTYPE_PRIVATE      : { CIPHERKEYPRIVATERSA* privatekey = (CIPHERKEYPRIVATERSA*)key;
+      case CIPHERKEYTYPE_RSA_PRIVATE  : { CIPHERKEYPRIVATERSA* privatekey = (CIPHERKEYPRIVATERSA*)key;
                                           XMPINTEGER           P1;
                                           XMPINTEGER           Q1;
 
@@ -480,7 +480,7 @@ bool CIPHERRSA::Sign(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* ha
 
   berseq2.GetDump(sign);
 
-  return Cipher(sign, CIPHERKEYTYPE_PRIVATE, pkcs1version);
+  return Cipher(sign, CIPHERKEYTYPE_RSA_PRIVATE, pkcs1version);
 }
 
 
@@ -757,7 +757,7 @@ bool CIPHERRSA::Cipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, CI
 
   input.Add((XBYTE)0);
 
-  if(keytypetouse == CIPHERKEYTYPE_PUBLIC)
+  if(keytypetouse == CIPHERKEYTYPE_RSA_PUBLIC)
     {
       XBYTE data = 0;
 
@@ -790,9 +790,9 @@ bool CIPHERRSA::Cipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, CI
 
   switch(keytypetouse)
     {
-      case CIPHERKEYTYPE_PUBLIC   : status = DoRSAPublicOperation(input, output);                              break;
-      case CIPHERKEYTYPE_PRIVATE  : status = DoRSAPrivateOperation(input, output, funcrandom, paramrandom);    break;
-                        default   : break;
+      case CIPHERKEYTYPE_RSA_PUBLIC   : status = DoRSAPublicOperation(input, output);                              break;
+      case CIPHERKEYTYPE_RSA_PRIVATE  : status = DoRSAPrivateOperation(input, output, funcrandom, paramrandom);    break;
+                            default   : break;
     }
 
   return status;
@@ -838,9 +838,9 @@ bool CIPHERRSA::Uncipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, 
 
   switch(keytypetouse)
     {
-      case CIPHERKEYTYPE_PUBLIC   : status = DoRSAPublicOperation(input , _output);                            break;
-      case CIPHERKEYTYPE_PRIVATE  : status = DoRSAPrivateOperation(input, _output, funcrandom, paramrandom);   break;
-                        default   : break;
+      case CIPHERKEYTYPE_RSA_PUBLIC   : status = DoRSAPublicOperation(input , _output);                            break;
+      case CIPHERKEYTYPE_RSA_PRIVATE  : status = DoRSAPrivateOperation(input, _output, funcrandom, paramrandom);   break;
+                            default   : break;
     }
 
   if(!status) return false;
@@ -850,7 +850,7 @@ bool CIPHERRSA::Uncipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, 
   pad_chk  = 0;
   pad_chk |= _output.GetByte(index++);
 
-  pad_chk |= (_output.GetByte(index++)) ^  ((keytypetouse == CIPHERKEYTYPE_PRIVATE)? CIPHERRSA_CIPHERDATA : CIPHERRSA_SINGDATA);
+  pad_chk |= (_output.GetByte(index++)) ^  ((keytypetouse == CIPHERKEYTYPE_RSA_PRIVATE)? CIPHERRSA_CIPHERDATA : CIPHERRSA_SINGDATA);
 
   for(XDWORD i=0; i<size-3; i++)
     {
@@ -884,7 +884,7 @@ bool CIPHERRSA::Uncipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::DoRSAPublicOperation(XBUFFER& input, XBUFFER& output)
 {
-  int keysize = GetKeySizeInBytes(CIPHERKEYTYPE_PUBLIC);
+  int keysize = GetKeySizeInBytes(CIPHERKEYTYPE_RSA_PUBLIC);
   if(!keysize) return false;
 
   XMPINTEGER  T;
@@ -974,7 +974,7 @@ bool CIPHERRSA::DoRSAPrivateOperation(XBUFFER& input, XBUFFER& output, XMPINTEGE
       }
   #endif
 
-  int keysize = GetKeySizeInBytes(CIPHERKEYTYPE_PRIVATE);
+  int keysize = GetKeySizeInBytes(CIPHERKEYTYPE_RSA_PRIVATE);
   if(!keysize) return false;
 
   if(!T.GetToXBuffer(output, keysize)) return false;
@@ -1016,7 +1016,7 @@ bool CIPHERRSA::PrepareBlinding(XMPINTEGER* Vi, XMPINTEGER* Vf, XMPINTEGER_FUNCR
     }
    else
     {
-      int keysize = GetKeySizeInBytes(CIPHERKEYTYPE_PRIVATE);
+      int keysize = GetKeySizeInBytes(CIPHERKEYTYPE_RSA_PRIVATE);
       if(!keysize) return false;
 
       // Unblinding value: Vf = random number, invertible mod N
@@ -1058,7 +1058,7 @@ int CIPHERRSA::GetKeySizeInBytes(CIPHERKEYTYPE keytouse)
 {
   int keysize = 0;
 
-  CIPHERKEY* key =  GetKey(CIPHERKEYTYPE_PRIVATE);
+  CIPHERKEY* key =  GetKey(CIPHERKEYTYPE_RSA_PRIVATE);
   if(!key) return 0;
 
   keysize = key->GetSizeInBytes();

@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       CipherRootCertificates.h
+* @file       CipherKeySymmetrical.h
 * 
-* @class      CIPHERROOTCERTIFICATES
-* @brief      Cipher Root Certificates class
+* @class      CIPHERKEYSYMMETRICAL
+* @brief      Cipher Key Symmetrical interface class
 * @ingroup    CIPHER
 * 
 * @copyright  GEN Group. All rights reserved.
@@ -26,13 +26,13 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERROOTCERTIFICATES_H_
-#define _CIPHERROOTCERTIFICATES_H_
+#ifndef _CIPHERKEYSYMMETRICAL_H_
+#define _CIPHERKEYSYMMETRICAL_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "XString.h"
+#include "CipherKey.h"
 
 #pragma endregion
 
@@ -40,7 +40,6 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-typedef XCHAR* CIPHERROOTCERTIFICATES[];
 
 #pragma endregion
 
@@ -49,18 +48,38 @@ typedef XCHAR* CIPHERROOTCERTIFICATES[];
 #pragma region CLASS
 
 
+class CIPHERKEYSYMMETRICAL : public CIPHERKEY
+{
+  public:
+                          CIPHERKEYSYMMETRICAL      ();
+    virtual              ~CIPHERKEYSYMMETRICAL      ();
+
+    XBYTE*                Get                       (int& size);
+    XBUFFER*              Get                       ();
+
+    bool                  Set                       (XBYTE* key, XDWORD size);
+    bool                  Set                       (XBUFFER& key);
+
+    int                   GetSizeInBytes            ();
+
+    bool                  CopyFrom                  (CIPHERKEYSYMMETRICAL* key);                          
+
+  private:
+
+    void                  Clean                     ();
+    
+    XBUFFER*              xbufferkey;
+};
+
+
 #pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 #pragma region FUNCTIONS_PROTOTYPES
 
-extern CIPHERROOTCERTIFICATES cipherrootcertificates;
-extern int                    nlinescipherrootcertificates;
 
 #pragma endregion
 
 
 #endif
-
-

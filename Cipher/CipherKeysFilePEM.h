@@ -46,17 +46,20 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#define CIPHERKEYSFILEPEM_EXT           __L(".PEM")
-#define CIPHERKEYSFILEKEY_EXT           __L(".KEY")
-#define CIPHERKEYSFILECER_EXT           __L(".CER")
+#define CIPHERKEYSFILEPEM_EXT                 __L(".PEM")
+#define CIPHERKEYSFILEKEY_EXT                 __L(".KEY")
+#define CIPHERKEYSFILECER_EXT                 __L(".CER")
 
-#define CIPHERKEYSFILEPEM_BEGINKEY      __L("-----BEGIN ")
-#define CIPHERKEYSFILEPEM_ENDKEY        __L("-----END ")
-#define CIPHERKEYSFILEPEM_FINISH        __L("-----")
+#define CIPHERKEYSFILEPEM_BEGINKEY            __L("-----BEGIN ")
+#define CIPHERKEYSFILEPEM_ENDKEY              __L("-----END ")
+#define CIPHERKEYSFILEPEM_FINISH              __L("-----")
 
-#define CIPHERKEYSFILEPEM_PUBLIC        __L("PUBLIC")
-#define CIPHERKEYSFILEPEM_PRIVATE       __L("PRIVATE")
-#define CIPHERKEYSFILEPEM_CERTIFICATE   __L("CERTIFICATE")
+#define CIPHERKEYSFILEPEM_PUBLIC              __L("PUBLIC")
+#define CIPHERKEYSFILEPEM_PRIVATE             __L("PRIVATE")
+#define CIPHERKEYSFILEPEM_CERTIFICATE         __L("CERTIFICATE")
+
+
+#define  CIPHERKEYSFILETYPE_CERTIFICATEX509   CIPHERKEYTYPE_LASTTYPE + 1
 
 
 #pragma endregion
@@ -69,7 +72,6 @@
 class XFACTORY;
 class XFILETXT;
 class XBER_XEVENT;
-class CIPHERKEY;
 class CIPHERCERTIFICATEX509;
 
 
@@ -114,8 +116,9 @@ class CIPHERKEYSFILEPEM : public XOBSERVER
     XVECTOR<CIPHERKEY*>     keys;
 
     void*                   decodeobj;
-    CIPHERKEYTYPE           decodeobjtype;
-    XSTRING                 lastOID;
+    XDWORD                  decodeobjtype;
+    XDWORD                  ndecodeobj; 
+    XSTRING                 lastOID;    
 };
 
 

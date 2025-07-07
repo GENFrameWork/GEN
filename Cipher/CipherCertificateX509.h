@@ -38,6 +38,7 @@
 #include "XMPInteger.h"
 
 #include "CipherKey.h"
+#include "Hash.h"
 
 #pragma endregion
 
@@ -133,9 +134,15 @@ class CIPHERCERTIFICATEX509
   
     CIPHERCERTIFICATEX509_ID*               GetSubjectID                      ();
 
+    bool                                    IsPublicCipherKeyValid            ();
+    void                                    SetPublicCipherKeyValid           (bool isvalid);
+
     CIPHERKEY*                              GetPublicCipherKey                ();
     bool                                    SetPublicCipherKey                (CIPHERKEY* publiccipherkey);
 
+    HASH*                                   GetHash                           ();  
+    void                                    SetHash                           (HASH* hash);
+    XBUFFER*                                GetHashData                       ();
 
     bool                                    ConvertDateTime                   (XCHAR* datestr, XDATETIME* datetime);
 
@@ -157,8 +164,12 @@ class CIPHERCERTIFICATEX509
     XDATETIME                               datenotafter;
 
     CIPHERCERTIFICATEX509_ID                subjectID;
+ 
+    bool                                    publiccipherkeyvalid;
+    CIPHERKEY*                              publiccipherkey; 
 
-    CIPHERKEY*                              publiccipherkey;
+    HASH*                                   hash;
+    XBUFFER                                 hashdata;
 };
 
 

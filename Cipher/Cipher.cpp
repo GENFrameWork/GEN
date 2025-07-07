@@ -43,6 +43,8 @@
 
 #include "XFactory.h"
 
+#include "CipherKeySymmetrical.h"
+
 #pragma endregion
 
 
@@ -247,10 +249,10 @@ CIPHERKEY* CIPHER::GetKey(CIPHERKEYTYPE type)
 
   switch(type)
     {
-      case CIPHERKEYTYPE_SYMMETRICAL :
-      case CIPHERKEYTYPE_PUBLIC      : index = 0;   break;
-      case CIPHERKEYTYPE_PRIVATE     : index = 1;   break;
-                      default        : return NULL;
+      case CIPHERKEYTYPE_SYMMETRICAL  :
+      case CIPHERKEYTYPE_RSA_PUBLIC   : index = 0;   break;
+      case CIPHERKEYTYPE_RSA_PRIVATE  : index = 1;   break;
+                      default         : return NULL;
     }
 
   return keys[index];
@@ -277,10 +279,10 @@ bool CIPHER::SetKey(CIPHERKEY* key, bool integritycheck)
 
   switch(key->GetType())
     {
-      case CIPHERKEYTYPE_SYMMETRICAL :
-      case CIPHERKEYTYPE_PUBLIC      : index = 0;   break;
-      case CIPHERKEYTYPE_PRIVATE     : index = 1;   break;
-                default              : return false;
+      case CIPHERKEYTYPE_SYMMETRICAL  :
+      case CIPHERKEYTYPE_RSA_PUBLIC   : index = 0;   break;
+      case CIPHERKEYTYPE_RSA_PRIVATE  : index = 1;   break;
+                default               : return false;
     }
 
   return SetKey(index, key);

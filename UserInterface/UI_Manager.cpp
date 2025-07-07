@@ -59,7 +59,7 @@
 #include "GRPCanvas.h"
 #include "GRPBitmapFile.h"
 
-#include "AppFlowBase.h"
+#include "APPFlowBase.h"
 
 #include "UI_XEvent.h"
 #include "UI_Color.h"

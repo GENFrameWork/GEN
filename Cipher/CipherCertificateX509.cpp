@@ -417,6 +417,11 @@ CIPHERCERTIFICATEX509::~CIPHERCERTIFICATEX509()
       delete publiccipherkey;
     }
 
+  if(hash)
+    {
+      delete hash;
+    }
+
   Clean();
 }
 
@@ -720,6 +725,36 @@ CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetSubjectID()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool CIPHERCERTIFICATEX509::IsPublicCipherKeyValid()
+* @brief      is public cipher key valid
+* @ingroup    CIPHER
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsPublicCipherKeyValid()
+{
+  return publiccipherkeyvalid;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509::SetPublicCipherKeyValid(bool isvalid)
+* @brief      set public cipher key valid
+* @ingroup    CIPHER
+* 
+* @param[in]  isvalid : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void CIPHERCERTIFICATEX509::SetPublicCipherKeyValid(bool isvalid)
+{
+  publiccipherkeyvalid = isvalid;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         CIPHERKEY* CIPHERCERTIFICATEX509::GetPublicCipherKey()
 * @brief      get public cipher key
 * @ingroup    CIPHER
@@ -754,6 +789,51 @@ bool CIPHERCERTIFICATEX509::SetPublicCipherKey(CIPHERKEY* publiccipherkey)
   this->publiccipherkey = publiccipherkey;
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         HASH* CIPHERCERTIFICATEX509::GetHash()
+* @brief      get hash
+* @ingroup    CIPHER
+* 
+* @return     HASH* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+HASH* CIPHERCERTIFICATEX509::GetHash()
+{
+  return hash;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509::SetHash(HASH* hash)
+* @brief      set hash
+* @ingroup    CIPHER
+* 
+* @param[in]  hash : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void CIPHERCERTIFICATEX509::SetHash(HASH* hash)
+{
+  this->hash = hash;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetHashData()
+* @brief      get hash data
+* @ingroup    CIPHER
+* 
+* @return     XBUFFER* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* CIPHERCERTIFICATEX509::GetHashData()
+{
+  return &hashdata;
 }
 
 
@@ -842,8 +922,8 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
   XSTRING     selfsignedstr;  
   XDATETIME*  xdatetime = NULL;
 
-  //------------------------------------------------------------------
-//  
+  ////------------------------------------------------------------------
+
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L(""));   
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Cipher Key Certificate] Properties:")); 
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Version                     : %d "), GetVersion()); 
@@ -913,7 +993,34 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Common name                 : %s"), GetSubjectID()->GetCommonName()->Get()); 
 
   //------------------------------------------------------------------
+
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("")); 
+
+  bool havepubliccipherkey = false;
+  if(GetPublicCipherKey())
+    {
+      havepubliccipherkey = (GetPublicCipherKey()->GetType() != CIPHERKEYTYPE_UNKNOWN)?true:false;
+      if(havepubliccipherkey) 
+        {
+          havepubliccipherkey = IsPublicCipherKeyValid();
+        }
+    }  
+
+
+  XTRACE_PRINTCOLOR((havepubliccipherkey?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Cipher Key                  : %s [%s]"), (havepubliccipherkey?__L("Obtained and valid"):__L("Not valid")), (havepubliccipherkey?GetPublicCipherKey()->GetTypeStr():__L("")));   
+
+  bool havehash = false;
+  if(GetHash())
+    {
+      havehash = (GetHash()->GetType() != HASHTYPE_NONE)?true:false;
+    }
+ 
+  XTRACE_PRINTCOLOR((havehash?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Hash                        : %s [%s]"), (havehash?__L("Obtained and valid"):__L("Not valid")), havehash?GetHash()->GetTypeStr():__L(""));  
+
+  //------------------------------------------------------------------
   
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L(""));  
+
   return true;
 }
 
@@ -927,12 +1034,14 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509::Clean()
 {                                         
-  version           = 0;
-  algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN;
+  version               = 0;
+  algorithmtype         = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN;
   algorithmtypestr.Empty();
 
-  publiccipherkey   = NULL;
+  publiccipherkeyvalid  = false;
+  publiccipherkey       = NULL; 
 
+  hash                  = NULL;
 }
 
 

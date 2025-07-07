@@ -45,8 +45,12 @@
 #include "XFileTXT.h"
 #include "XTrace.h"
 
+#include "HashSHA1.h"
+#include "HashSHA2.h"
+
 #include "CipherKey.h"
 #include "CipherKeyPublicRSA.h"
+#include "CipherKeyECDSA.h"
 #include "CipherCertificateX509.h"
 
 #pragma endregion
@@ -237,6 +241,9 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
 {
   XVECTOR<CIPHERKEYSFILEPEM_ENTRYBUFFER*> entrysbuffer;
   CIPHERKEYSFILEPEM_ENTRYBUFFER*          entrybuffer = NULL;
+
+
+  ndecodeobj = 0;
     
   for(XDWORD c=0; c<lines->GetSize(); c++)
     {
@@ -353,7 +360,7 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
          
           if(!entrybuffer->type.Compare(__L("CERTIFICATE")))
             {      
-              decodeobjtype = CIPHERKEYTYPE_CERTIFICATE;     
+              decodeobjtype = CIPHERKEYSFILETYPE_CERTIFICATEX509;     
 
               decodeobj = (CIPHERKEY*)new CIPHERCERTIFICATEX509();  
               if(decodeobj)
@@ -522,41 +529,6 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
               ismanaged = true; 
             }   
 
-          if(!lastOID.Compare(__L("1.2.840.113549.1.1.1"), false))
-            {
-              static XMPINTEGER modulus; 
-              static XMPINTEGER exponent;
-
-              // RSA key 
-              if(event->GetTagType() == XBER_TAGTYPE_INTEGER)
-                {                 
-                  if(!certificate->GetPublicCipherKey())
-                    {
-                      CIPHERKEYPUBLICRSA* cipherkey =  new CIPHERKEYPUBLICRSA();
-                      if(cipherkey)
-                        {
-                          modulus.ImportFromBinary(event->GetData()->Get(), event->GetData()->GetSize());
-                          
-                          certificate->SetPublicCipherKey((CIPHERKEY*)cipherkey);
-                        } 
-                    }         
-                   else
-                    {
-                      CIPHERKEYPUBLICRSA* cipherkey = (CIPHERKEYPUBLICRSA*)certificate->GetPublicCipherKey();
-                      if(cipherkey)
-                        {       
-                          exponent.ImportFromBinary(event->GetData()->Get(), event->GetData()->GetSize());                    
-                          cipherkey->Set(modulus, exponent);
-
-                          modulus.End();
-                          exponent.End();
-
-                          ismanaged = true; 
-                        }
-                    } 
-                }
-            }
-
           // ---------------------------------------------------------------------------------  
 
           if(!levelsstr.Compare(__L("1.1.5.1")))
@@ -584,6 +556,230 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
             }
         
           // ---------------------------------------------------------------------------------
+          //  Cipher Key
+
+          static CIPHERKEYTYPE keytype = CIPHERKEYTYPE_UNKNOWN;
+
+          // RSA
+          if(!lastOID.Compare(__L("1.2.840.113549.1.1.1"), false))
+            {
+              keytype = CIPHERKEYTYPE_RSA_PUBLIC;
+            }
+
+          // NIST / SECG   
+
+          // ECDSA secp192r1	        
+          if(!lastOID.Compare(__L("1.2.840.10045.3.1.1"), false))
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_SECP192R1_PUBLIC;
+            }
+          
+          // ECDSA secp224r1	        
+          if(!lastOID.Compare(__L("1.3.132.0.33"), false))	
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_SECP224R1_PUBLIC;
+            }
+
+          // ECDSA secp256r1	        
+          if(!lastOID.Compare(__L("1.2.840.10045.3.1.7"), false))
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC;
+            }
+          
+          // ECDSA secp384r1	        
+          if(!lastOID.Compare(__L("1.3.132.0.34"), false))
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC;
+            }
+
+          // ECDSA secp521r1	        
+          if(!lastOID.Compare(__L("1.3.132.0.35"), false))	   
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC;
+            }
+
+          // SECG (special)
+
+          // ECDSA secp256k1	        
+          if(!lastOID.Compare(__L("1.3.132.0.10"), false))
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_SECP256K1_PUBLIC;
+            }
+
+          // ECDSA sect163k1	        
+          if(!lastOID.Compare(__L("1.3.132.0.1"), false))
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_SECT163K1_PUBLIC;
+            }  
+
+          // ECDSA sect233k1	        
+          if(!lastOID.Compare(__L("1.3.132.0.26"), false))
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_SECT233K1_PUBLIC;
+            }
+
+          // Brainpool 
+
+          // ECDSA brainpoolP256r1	  
+          if(!lastOID.Compare(__L("1.3.36.3.3.2.8.1.1.7"), false))
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_BRAINPOOLP256R1_PUBLIC;
+            }
+
+          // ECDSA brainpoolP384r1	  
+          if(!lastOID.Compare(__L("1.3.36.3.3.2.8.1.1.11"), false))
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PUBLIC;
+            }
+
+          // ECDSA brainpoolP512r1	  
+          if(!lastOID.Compare(__L("1.3.36.3.3.2.8.1.1.13"), false))	
+            {
+              keytype = CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PUBLIC;
+            }
+
+          switch(keytype)
+            {   
+              case CIPHERKEYTYPE_RSA_PUBLIC                   : { static XMPINTEGER modulus; 
+                                                                  static XMPINTEGER exponent;
+
+                                                                  // RSA key 
+                                                                  if(event->GetTagType() == XBER_TAGTYPE_INTEGER)
+                                                                    {                 
+                                                                      if(!certificate->GetPublicCipherKey())
+                                                                        {
+                                                                          CIPHERKEYPUBLICRSA* cipherkey =  new CIPHERKEYPUBLICRSA();
+                                                                          if(cipherkey)
+                                                                            {
+                                                                              modulus.ImportFromBinary(event->GetData()->Get(), event->GetData()->GetSize());
+                          
+                                                                              certificate->SetPublicCipherKey((CIPHERKEY*)cipherkey);
+                                                                            } 
+                                                                        }         
+                                                                       else
+                                                                        {
+                                                                          CIPHERKEYPUBLICRSA* cipherkey = (CIPHERKEYPUBLICRSA*)certificate->GetPublicCipherKey();
+                                                                          if(cipherkey)
+                                                                            {       
+                                                                              exponent.ImportFromBinary(event->GetData()->Get(), event->GetData()->GetSize());                    
+                                                                              cipherkey->Set(modulus, exponent);
+
+                                                                              modulus.End();
+                                                                              exponent.End();
+
+                                                                              certificate->SetPublicCipherKeyValid(cipherkey->Check());
+
+                                                                              keytype = CIPHERKEYTYPE_UNKNOWN;
+
+                                                                              ismanaged = true; 
+                                                                            }
+                                                                        } 
+                                                                    }
+                                                                }
+                                                                break; 
+
+              case CIPHERKEYTYPE_ECDSA_SECP192R1_PUBLIC	      :
+              case CIPHERKEYTYPE_ECDSA_SECP224R1_PUBLIC	      :
+              case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC	      :
+              case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC	      :
+              case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC	      :
+              case CIPHERKEYTYPE_ECDSA_SECP256K1_PUBLIC	      :
+              case CIPHERKEYTYPE_ECDSA_SECT163K1_PUBLIC	      :
+              case CIPHERKEYTYPE_ECDSA_SECT233K1_PUBLIC	      :
+              case CIPHERKEYTYPE_ECDSA_BRAINPOOLP256R1_PUBLIC	:
+              case CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PUBLIC	:
+              case CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PUBLIC	: if((event->GetTagType() == XBER_TAGTYPE_BIT_STRING) && (keytype != CIPHERKEYTYPE_UNKNOWN))
+                                                                  {
+                                                                    CIPHERKEYECDSA* cipherkey = new CIPHERKEYECDSA();
+                                                                    if(cipherkey)
+                                                                      {
+                                                                        cipherkey->SetType(keytype);
+                                                                        cipherkey->Set((*event->GetData()));
+                                                                        
+                                                                        certificate->SetPublicCipherKey((CIPHERKEY*)cipherkey);
+                                                                        certificate->SetPublicCipherKeyValid(true);
+
+                                                                        keytype = CIPHERKEYTYPE_UNKNOWN;
+
+                                                                        ismanaged = true; 
+                                                                      }
+                                                                  }
+                                                                break; 
+            }                                                
+                      
+          // ---------------------------------------------------------------------------------  
+          // Hash 
+  
+          HASH*           hash     = NULL;
+          static HASHTYPE hashtype = HASHTYPE_NONE;
+      
+          // RSA SHA1
+          if(!lastOID.Compare(__L("1.2.840.113549.1.1.5"), false))
+            {
+              hashtype = HASHTYPE_SHA1; 
+            }
+
+          // RSA SHA256
+          if(!lastOID.Compare(__L("1.2.840.113549.1.1.11"), false))
+            {
+              hashtype = HASHTYPE_SHA256; 
+            }
+
+          // RSA SHA384
+          if(!lastOID.Compare(__L("1.2.840.113549.1.1.12"), false))
+            {
+              hashtype = HASHTYPE_SHA384; 
+            }
+
+          // RSA SHA512
+          if(!lastOID.Compare(__L("1.2.840.113549.1.1.13"), false))
+            {
+              hashtype = HASHTYPE_SHA512; 
+            }
+
+          // ECDSA SHA256
+          if(!lastOID.Compare(__L("1.2.840.10045.4.3.2"), false))
+            {
+              hashtype = HASHTYPE_SHA256;                       
+            }
+
+          // ECDSA SHA384
+          if(!lastOID.Compare(__L("1.2.840.10045.4.3.3"), false))
+            {
+              hashtype = HASHTYPE_SHA384;              
+            }
+
+          // ECDSA SHA512
+          if(!lastOID.Compare(__L("1.2.840.10045.4.3.4"), false))
+            {
+              hashtype = HASHTYPE_SHA512;              
+            }
+
+          if((event->GetTagType() == XBER_TAGTYPE_BIT_STRING) && (hashtype != HASHTYPE_NONE))
+            { 
+              switch(hashtype)
+                { 
+                  case HASHTYPE_SHA1   : hash  = new HASHSHA1();                  break;
+                  case HASHTYPE_SHA224 : hash  = new HASHSHA2(HASHSHA2TYPE_224);  break;      
+                  case HASHTYPE_SHA256 : hash  = new HASHSHA2(HASHSHA2TYPE_256);  break;
+                  case HASHTYPE_SHA384 : hash  = new HASHSHA2(HASHSHA2TYPE_384);  break;
+                  case HASHTYPE_SHA512 : hash  = new HASHSHA2(HASHSHA2TYPE_512);  break;                   
+                              default  : break;
+                }            
+
+              hashtype = HASHTYPE_NONE;
+
+              if(hash)
+                {
+                  certificate->GetHashData()->Set(event->GetData()->Get(), event->GetData()->GetSize());
+                  certificate->SetHash(hash);
+                  
+
+                  ismanaged = true; 
+                }
+            }
+
+          // ---------------------------------------------------------------------------------  
 
         }
     }
@@ -617,12 +813,12 @@ void CIPHERKEYSFILEPEM::HandleEvent_XBER(XBER_XEVENT* event)
     
   switch(event->GetEventType())
     {
-      case XBERXEVENT_TYPE_DECODE_START   : XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Cipher Keys File PEM] Start"));
+      case XBERXEVENT_TYPE_DECODE_START   : //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Cipher Keys File PEM] Start"));                                            
                                             break;
 
       case XBERXEVENT_TYPE_DECODE_DATA    : { bool  ismanaged = false;
                                                                                                                                             
-                                              if(decodeobjtype == CIPHERKEYTYPE_CERTIFICATE)
+                                              if(decodeobjtype == CIPHERKEYSFILETYPE_CERTIFICATEX509)
                                                 {
                                                   CIPHERCERTIFICATEX509* certificate = (CIPHERCERTIFICATEX509*)decodeobj;
                                                   if(certificate)
@@ -637,12 +833,12 @@ void CIPHERKEYSFILEPEM::HandleEvent_XBER(XBER_XEVENT* event)
                                               levelsstr = event->GetLevelsString()->Get();                                              
                                               levelsstr.AddFormat(__L(" %s"), event->GetLine()->Get());  
 
-                                              XTRACE_PRINTCOLOR((ismanaged?XTRACE_COLOR_BLUE:XTRACE_COLOR_BLACK), levelsstr.Get(), NULL);           
-                                              
+                                              //XTRACE_PRINTCOLOR((ismanaged?XTRACE_COLOR_BLUE:XTRACE_COLOR_BLACK), levelsstr.Get(), NULL);                                                                                                      
                                             }                                                                                       
                                             break;
 
-      case XBERXEVENT_TYPE_DECODE_END     : XTRACE_PRINTCOLOR((event->GetStatus()?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("[Cipher Keys File PEM] End"));                                              
+      case XBERXEVENT_TYPE_DECODE_END     : //XTRACE_PRINTCOLOR((event->GetStatus()?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("[Cipher Keys File PEM] End"));   
+                                            ndecodeobj++;
                                             break;
 
     } 
@@ -687,6 +883,7 @@ void CIPHERKEYSFILEPEM::Clean()
 {  
   decodeobj     = NULL;
   decodeobjtype = CIPHERKEYTYPE_UNKNOWN;
+  ndecodeobj    = 0;
 }
 
 

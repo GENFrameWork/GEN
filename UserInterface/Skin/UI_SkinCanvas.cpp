@@ -44,7 +44,7 @@
 #include "XSleep.h"
 
 #include "GRPCanvas.h"
-#include "GRPViewport.h"
+#include "GRPViewPort.h"
 #include "GRPScreen.h"
 #include "GRPBitmap.h"
 #include "GRPBitmapFile.h"

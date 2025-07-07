@@ -42,11 +42,37 @@
 
 enum CIPHERKEYTYPE
 {
-  CIPHERKEYTYPE_UNKNOWN         = 0 ,
-  CIPHERKEYTYPE_SYMMETRICAL         ,
-  CIPHERKEYTYPE_PUBLIC              ,
-  CIPHERKEYTYPE_PRIVATE             ,
-  CIPHERKEYTYPE_CERTIFICATE   
+  CIPHERKEYTYPE_UNKNOWN                          = 0 ,
+
+  CIPHERKEYTYPE_SYMMETRICAL                          ,
+  
+  CIPHERKEYTYPE_RSA_PUBLIC                           ,
+  CIPHERKEYTYPE_RSA_PRIVATE                          ,  
+
+  CIPHERKEYTYPE_ECDSA_SECP192R1_PUBLIC	             ,
+  CIPHERKEYTYPE_ECDSA_SECP192R1_PRIVATE	             ,
+  CIPHERKEYTYPE_ECDSA_SECP224R1_PUBLIC	             ,
+  CIPHERKEYTYPE_ECDSA_SECP224R1_PRIVATE	             ,
+  CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC	             ,
+  CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE	             ,
+  CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC	             , 
+  CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE	             ,
+  CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC	             ,
+  CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE	             ,
+  CIPHERKEYTYPE_ECDSA_SECP256K1_PUBLIC	             ,
+  CIPHERKEYTYPE_ECDSA_SECP256K1_PRIVATE	             ,
+  CIPHERKEYTYPE_ECDSA_SECT163K1_PUBLIC	             , 
+  CIPHERKEYTYPE_ECDSA_SECT163K1_PRIVATE	             ,
+  CIPHERKEYTYPE_ECDSA_SECT233K1_PUBLIC	             , 
+  CIPHERKEYTYPE_ECDSA_SECT233K1_PRIVATE	             , 
+  CIPHERKEYTYPE_ECDSA_BRAINPOOLP256R1_PUBLIC	       , 
+  CIPHERKEYTYPE_ECDSA_BRAINPOOLP256R1_PRIVATE	       , 
+  CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PUBLIC	       , 
+  CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PRIVATE	       ,
+  CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PUBLIC	       ,                                                     
+  CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PRIVATE	       ,
+  
+  CIPHERKEYTYPE_LASTTYPE                           
 };
 
 #pragma endregion
@@ -65,6 +91,8 @@ class CIPHERKEY
     CIPHERKEYTYPE         GetType                   ();
     void                  SetType                   (CIPHERKEYTYPE type);
 
+    XCHAR*                GetTypeStr                ();
+
     virtual int           GetSizeInBytes            ();
     int                   GetSizeInBits             ();
 
@@ -77,30 +105,6 @@ class CIPHERKEY
   private:
 
     void                  Clean                     ();
-};
-
-
-class CIPHERKEYSYMMETRICAL : public CIPHERKEY
-{
-  public:
-                          CIPHERKEYSYMMETRICAL      ();
-    virtual              ~CIPHERKEYSYMMETRICAL      ();
-
-    XBYTE*                Get                       (int& size);
-    XBUFFER*              Get                       ();
-
-    bool                  Set                       (XBYTE* key, XDWORD size);
-    bool                  Set                       (XBUFFER& key);
-
-    int                   GetSizeInBytes            ();
-
-    bool                  CopyFrom                  (CIPHERKEYSYMMETRICAL* key);                          
-
-  private:
-
-    void                  Clean                     ();
-    
-    XBUFFER*              xbufferkey;
 };
 
 

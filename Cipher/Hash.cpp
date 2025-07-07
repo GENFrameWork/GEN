@@ -112,6 +112,41 @@ HASHTYPE HASH::GetType()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XCHAR* HASH::GetTypeStr()
+* @brief      get type str
+* @ingroup    CIPHER
+* 
+* @return     XCHAR* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XCHAR* HASH::GetTypeStr()
+{ 
+  XCHAR* name = NULL;
+
+  switch(type)
+    {
+      case HASHTYPE_NONE      : 
+                    default   : name = __L("None");      break;
+      case HASHTYPE_CKS16     : name = __L("CKS16");     break;
+      case HASHTYPE_CRC16     : name = __L("CRC16");     break;
+      case HASHTYPE_CRC32     : name = __L("CRC32");     break;
+      case HASHTYPE_MD2       : name = __L("MD2");       break;
+      case HASHTYPE_MD4       : name = __L("MD4");       break;
+      case HASHTYPE_MD5       : name = __L("MD5");       break;
+      case HASHTYPE_SHA1      : name = __L("SHA1");      break;
+      case HASHTYPE_SHA224    : name = __L("SHA224");    break;
+      case HASHTYPE_SHA256    : name = __L("SHA256");    break;
+      case HASHTYPE_SHA384    : name = __L("SHA384");    break;
+      case HASHTYPE_SHA512    : name = __L("SHA512");    break;
+      case HASHTYPE_RIPEMD160 : name = __L("RIPEMD160"); break;
+    }                  
+
+  return name;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSTRING* HASH::GetOUINoSign()
 * @brief      Get OUI no sign
 * @ingroup    CIPHER

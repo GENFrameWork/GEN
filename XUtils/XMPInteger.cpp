@@ -476,6 +476,7 @@ int XMPINTEGER::GetLSB()
 * @return     int :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
+/*
 int XMPINTEGER::GetMSB()
 {
   XDWORD i;
@@ -493,6 +494,36 @@ int XMPINTEGER::GetMSB()
 
    return ((i * XMPINTEGER_BITSINLIMB) + j);
 }
+*/
+
+int XMPINTEGER::GetMSB()
+{
+  int i;
+  XDWORD j;
+
+  for(i = nlimbs - 1; i >= 0; i--)
+  {
+    if(limbs[i] != 0)
+      break;
+  }
+
+  if(i < 0)
+    {
+      return 0; // El número es 0, no tiene bits significativos
+    }
+
+  for(j = XMPINTEGER_BITSINLIMB; j > 0; j--)
+  {
+    if(((limbs[i] >> (j - 1)) & 1) != 0)
+      {
+        break;
+      }
+  }
+
+  return (i * XMPINTEGER_BITSINLIMB + j);
+}
+
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -511,37 +542,63 @@ XDWORD XMPINTEGER::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int XMPINTEGER::ImportFromBinary(XBYTE* buffer, XDWORD size)
-* @brief      Import from binary
+* 
+* @fn         bool XMPINTEGER::ImportFromBinary(XBYTE* buffer, XDWORD size)
+* @brief      import from binary
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     int :
-*
+* 
+* @param[in]  buffer : 
+* @param[in]  size : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-int XMPINTEGER::ImportFromBinary(XBYTE* buffer, XDWORD size)
+bool XMPINTEGER::ImportFromBinary(XBYTE* buffer, XDWORD size)
 {
-  XDWORD i;
-  XDWORD j;
-  XDWORD n;
-
-  for(n=0; n<size; n++)
+  if(!buffer || size == 0)
     {
-      if(buffer[n] != 0) break;
+      return false; 
     }
 
-  if(Grow(XMPINTEGER_CHARSTOLIMBS(size- n)))
-    {
-      if(!LeftSet(0)) return false;
+  XDWORD n=0;
 
-    } else return false;
-
-  for(i=size, j=0; i>nlimbs; i--, j++ )
+  for(; n < size; n++)
     {
-      limbs[j / XMPINTEGER_CHARSINLIMB] |= ((XLIMB) buffer[i-1]) << ((j % XMPINTEGER_CHARSINLIMB) << 3);
+      if(buffer[n] != 0)
+        {
+          break;
+        }
+    }
+
+  if(n == size)
+    {
+      if(!Grow(1)) 
+        {
+          return false;
+        }
+
+      if(!LeftSet(0)) 
+        {
+          return false;
+        }
+
+      return true;
+    }
+
+  if(!Grow(XMPINTEGER_CHARSTOLIMBS(size - n)))
+    {
+      return false;
+    }
+
+  if(!LeftSet(0))
+    {
+      return false;
+    }
+
+  
+  for(int i = (int)size - 1, j = 0; i >= (int)n; i--, j++)
+    {
+      limbs[j / XMPINTEGER_CHARSINLIMB] |= ((XLIMB)buffer[i]) << ((j % XMPINTEGER_CHARSINLIMB) << 3);
     }
 
   return true;
@@ -549,18 +606,18 @@ int XMPINTEGER::ImportFromBinary(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int XMPINTEGER::ExportToBinary(XBYTE* buffer, XDWORD size)
-* @brief      Export to binary
+* 
+* @fn         bool XMPINTEGER::ExportToBinary(XBYTE* buffer, XDWORD size)
+* @brief      export to binary
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     int :
-*
+* 
+* @param[in]  buffer : 
+* @param[in]  size : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-int XMPINTEGER::ExportToBinary(XBYTE* buffer, XDWORD size)
+bool XMPINTEGER::ExportToBinary(XBYTE* buffer, XDWORD size)
 {
   XDWORD i;
   XDWORD j;

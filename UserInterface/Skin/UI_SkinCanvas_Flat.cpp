@@ -42,7 +42,7 @@
 #include "XRect.h"
 
 #include "GRPCanvas.h"
-#include "GRPViewport.h"
+#include "GRPViewPort.h"
 #include "GRPScreen.h"
 
 #include "UI_Element.h"

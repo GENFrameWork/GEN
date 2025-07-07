@@ -41,7 +41,7 @@
 
 #include "GRPXEvent.h"
 #include "GRPCanvas.h"
-#include "GRPViewport.h"
+#include "GRPViewPort.h"
 
 #pragma endregion
 
