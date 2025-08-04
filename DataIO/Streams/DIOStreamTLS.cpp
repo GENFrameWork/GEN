@@ -40,9 +40,13 @@
 #include "DIOStreamTLS.h"
 
 #include "XBase.h"
+#include "XFactory.h"
+#include "XRand.h"
 
 #include "DIOFactory.h"
 #include "DIOStreamTCPIP.h"
+
+#include "DIOStreamTLSMessages.h"
 
 #pragma endregion
 
@@ -147,12 +151,22 @@ bool DIOSTREAMTLS::SetConfig(DIOSTREAMCONFIG* config)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS::Open()
 {
-  if(!diostream) return false;
+  if(!diostream) 
+    {
+      return false;
+    }
 
   bool status = diostream->Open();
-  if(!status) return false;
+  if(!status) 
+    {
+      return false;
+    }
 
-  status = HandShake_Client_Hello();
+  status = diostream->WaitToConnected(5);
+  if(status)
+    {
+      status = HandShake_Client_Hello();
+    }
 
   return status;
 }
@@ -256,29 +270,176 @@ DIOSTREAMSTATUS DIOSTREAMTLS::GetStatus()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS::HandShake_Client_Hello()
 {
-  XBUFFER   xbuffer;
-  XWORD     size16                            = 0;
-  XBYTE     size24[3]                         = { 0, 0, 0 };  
-  bool      status                            = false;
+ 
+  DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO>>  message;
+  XBUFFER                                                                                         xbuffer;
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO>*                          fragment  = NULL;
+  DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO*                                                     body      = NULL;
+  bool                                                                                            status    = false;
 
-  //-------------------------------------------------------------------
-  // TLS Plaintext
+  fragment  = message.GetFragment();
+  body      = message.GetFragment()->GetBody();
 
-  xbuffer.Add((XBYTE)DIOSTREAMTLS_CONTENTTYPE_HANDSHAKE);             // Content Type     
-  xbuffer.Add((XWORD)SwapWORD(DIOSTREAMTLS_VERSION_TLS_1_0));         // legacy record version
-  xbuffer.Add((XWORD)SwapWORD(size16));                               // Length 
+  if(!fragment || !body)
+    {
+      return status;
+    }
 
-  //-------------------------------------------------------------------
-  // HandSake protot
-  xbuffer.Add((XBYTE)DIOSTREAMTLS_HANDSHAKETYPE_CLIENT_HELLO);        // Handshake type: Client Hello (1)
-  xbuffer.Add(size24, 3);
-  xbuffer.Add((XWORD)SwapWORD(DIOSTREAMTLS_VERSION_TLS_1_2));         // Version TLS 1.2
-  xbuffer.Add(random, DIOSTREAMTLS_RANDOM_SIZE);                      // Random
-  xbuffer.Add((XBYTE)DIOSTREAMTLS_SESSION_ID_SIZE);                   // Session ID length
-  xbuffer.Add(sessionID, DIOSTREAMTLS_SESSION_ID_SIZE);               // Session ID
+  message.SetContenType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE);
+  message.SetProtocolVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+
+  fragment->SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_CLIENT_HELLO);
+
+  fragment->GetBody()->SetClientVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+
+  if(!GenerateRandom(random))
+    {
+      return false;
+    }
+
+  memcpy(body->GetRandom(), random, DIOSTREAMTLS_MSG_RANDOM_SIZE);
+  
+  body->SetSessionIDLength(DIOSTREAMTLS_MSG_SESSIONID_SIZE);
+
+  GenerateSessionID(sessionID, body->GetSessionIDLength());
+  memcpy(body->GetSessionID(), sessionID, DIOSTREAMTLS_MSG_SESSIONID_SIZE);
+
+  body->GetCipherSuites()->Add((XWORD)DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_GCM_SHA256);
+  body->GetCipherSuites()->Add((XWORD)DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_256_CBC_SHA256);
+  body->GetCipherSuites()->Add((XWORD)DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_CBC_SHA);
+  body->SetCiphersuitesLength((XWORD)body->GetCipherSuites()->GetSize());
+
+  body->SetCompressionLength(0x01);
+  body->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
+
+  body->SetExtensionLenght(0x0000);
+
+  message.CalculateLength();
+
+  message.SetToBuffer(xbuffer);
+
+ 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, xbuffer);
 
   XDWORD size = Write(xbuffer.Get(), xbuffer.GetSize());
-  if(size == xbuffer.GetSize()) status = true;
+  if(size == xbuffer.GetSize()) 
+    {
+      status = true;
+    }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS::GenerateRandom(XBYTE* random)
+* @brief      generate random
+* @ingroup    DATAIO
+* 
+* @param[in]  random : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS::GenerateRandom(XBYTE* random)
+{
+  if(!random)
+    {
+      return false;
+    }
+
+  memset(random, 0, DIOSTREAMTLS_MSG_RANDOM_SIZE);
+
+  XDATETIME*  timestamp = GEN_XFACTORY.CreateDateTime();  
+  bool        status    = false;
+
+  if(!timestamp)
+    {
+      return false;
+    }
+
+  if(timestamp->Read())
+    {
+      XDWORD timerstampdata = (XDWORD)timestamp->GetEPOCHFormat();
+
+      memcpy(random, &timerstampdata, sizeof(timerstampdata));
+
+      XRAND* xrand = GEN_XFACTORY.CreateRand();
+      if(xrand)
+        {
+          xrand->Ini();      
+
+          for(XDWORD c=sizeof(timerstampdata); c<DIOSTREAMTLS_MSG_RANDOM_SIZE; c++)
+            {
+              random[c] = xrand->Max(255);
+            }
+
+          status = true;  
+        }
+
+      GEN_XFACTORY.DeleteRand(xrand);
+   }
+
+  GEN_XFACTORY.DeleteDateTime(timestamp);
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS::GenerateSessionID(XBYTE* sessionID, XBYTE sessionIDlength)
+* @brief      generate session Id
+* @ingroup    DATAIO
+* 
+* @param[in]  sessionID : 
+* @param[in]  sessionIDlength : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS::GenerateSessionID(XBYTE* sessionID, XBYTE sessionIDlength)
+{
+  if(!sessionID)
+    {
+      return false;
+    }
+
+  memset(sessionID, 0, DIOSTREAMTLS_MSG_SESSIONID_SIZE);
+
+  XDATETIME*  timestamp = GEN_XFACTORY.CreateDateTime();  
+  bool        status    = false;
+
+  if(!timestamp)
+    {
+      return false;
+    }
+
+  if(timestamp->Read())
+    {
+      XDWORD timerstampdata = (XDWORD)timestamp->GetEPOCHFormat();
+
+      memcpy(sessionID, &timerstampdata, sizeof(timerstampdata));
+
+      XRAND* xrand = GEN_XFACTORY.CreateRand();
+      if(xrand)
+        {
+          xrand->Ini();      
+
+          for(XDWORD c=sizeof(timerstampdata); c<DIOSTREAMTLS_MSG_SESSIONID_SIZE; c++)
+            {
+              sessionID[c] = xrand->Max(255);
+            }
+
+          status = true;  
+        }
+
+      GEN_XFACTORY.DeleteRand(xrand);
+   }
+
+  GEN_XFACTORY.DeleteDateTime(timestamp);
 
   return status;
 }

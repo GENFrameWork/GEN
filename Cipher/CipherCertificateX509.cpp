@@ -725,6 +725,66 @@ CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetSubjectID()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool CIPHERCERTIFICATEX509::IsPublicCipherKeyUsage()
+* @brief      is public cipher key usage
+* @ingroup    CIPHER
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsPublicCipherKeyUsage()
+{
+  return publiccipherkeyusaged;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509::SetPublicCipherKeyUsage(bool isusage)
+* @brief      set public cipher key usage 
+* @ingroup    CIPHER
+* 
+* @param[in]  isusage : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void CIPHERCERTIFICATEX509::SetPublicCipherKeyUsage(bool isusage)
+{
+  publiccipherkeyusaged = isusage;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::IsPublicCipherKeyBasicConstraints()
+* @brief      is public cipher key basic constraints
+* @ingroup    CIPHER
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsPublicCipherKeyBasicConstraints()
+{
+  return publiccipherkeybasicconstraints;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509::SetPublicCipherKeyBasicConstraints(bool basicconstraints)
+* @brief      set public cipher key basic constraints
+* @ingroup    CIPHER
+* 
+* @param[in]  basicconstraints : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void CIPHERCERTIFICATEX509::SetPublicCipherKeyBasicConstraints(bool basicconstraints)
+{
+  publiccipherkeybasicconstraints = basicconstraints;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool CIPHERCERTIFICATEX509::IsPublicCipherKeyValid()
 * @brief      is public cipher key valid
 * @ingroup    CIPHER
@@ -750,6 +810,21 @@ bool CIPHERCERTIFICATEX509::IsPublicCipherKeyValid()
 void CIPHERCERTIFICATEX509::SetPublicCipherKeyValid(bool isvalid)
 {
   publiccipherkeyvalid = isvalid;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetPublicCipherKeyID()
+* @brief      get public cipher key Id
+* @ingroup    CIPHER
+* 
+* @return     XBUFFER* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* CIPHERCERTIFICATEX509::GetPublicCipherKeyID()
+{
+  return &publiccipherkeyID;
 }
 
 
@@ -924,28 +999,28 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
 
   ////------------------------------------------------------------------
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L(""));   
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Cipher Key Certificate] Properties:")); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Version                     : %d "), GetVersion()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Cipher Key Certificate] -----------------------------------------------------------------------"));  
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L(""));    
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Version                      : %d "), GetVersion()); 
 
   for(XDWORD c=0; c<GetSerial()->GetSize(); c++)
     {
       string.AddFormat(__L("%02X "), GetSerial()->Get()[c]); 
     }
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Serial                      : %s"), string.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Serial                       : %s"), string.Get());
   
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Algorithm Identifier        : %s"), GetAlgorithmTypeStr()->Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Algorithm Identifier         : %s"), GetAlgorithmTypeStr()->Get());
 
   //------------------------------------------------------------------
   
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L(""));   
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Issuer ID"));   
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Contry name                 : %s"), GetIssuerID()->GetCountryName()->Get()); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization name           : %s"), GetIssuerID()->GetOrganizationName()->Get()); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization unit name      : %s"), GetIssuerID()->GetOrganizationalUnitName()->Get()); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization unit name plus : %s"), GetIssuerID()->GetOrganizationalUnitNamePlus()->Get()); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Common name                 : %s"), GetIssuerID()->GetCommonName()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Contry name                  : %s"), GetIssuerID()->GetCountryName()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization name            : %s"), GetIssuerID()->GetOrganizationName()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization unit name       : %s"), GetIssuerID()->GetOrganizationalUnitName()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization unit name plus  : %s"), GetIssuerID()->GetOrganizationalUnitNamePlus()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Common name                  : %s"), GetIssuerID()->GetCommonName()->Get()); 
 
   //-----------------------------------------------------------------
 
@@ -960,21 +1035,21 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
       validdatestr = __L("Expired certificate");
     }  
  
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Validity dates                %s"), validdatestr.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Validity dates               : %s"), validdatestr.Get());
 
   xdatetime = GetDateNotBefore();
   if(xdatetime)
     {
       xdatetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, string);
     }    
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("UTC Time Not Before         : %s"), string.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("UTC Time Not Before          : %s"), string.Get());
   
   xdatetime = GetDateNotAfter();
   if(xdatetime)
     {
       xdatetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, string);
     }  
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("UTC Time Not After          : %s"), string.Get() );
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("UTC Time Not After           : %s"), string.Get() );
 
   //------------------------------------------------------------------
 
@@ -985,12 +1060,12 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
       selfsignedstr = __L("[This certificate is self-signed, Subject equal Issuer] ");
     }
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Subject ID                    %s"), selfsignedstr.Get());   
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Contry name                 : %s"), GetSubjectID()->GetCountryName()->Get()); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization name           : %s"), GetSubjectID()->GetOrganizationName()->Get()); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization unit name      : %s"), GetSubjectID()->GetOrganizationalUnitName()->Get()); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization unit name plus : %s"), GetSubjectID()->GetOrganizationalUnitNamePlus()->Get()); 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Common name                 : %s"), GetSubjectID()->GetCommonName()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Subject ID                     %s"), selfsignedstr.Get());   
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Contry name                  : %s"), GetSubjectID()->GetCountryName()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization name            : %s"), GetSubjectID()->GetOrganizationName()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization unit name       : %s"), GetSubjectID()->GetOrganizationalUnitName()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Organization unit name plus  : %s"), GetSubjectID()->GetOrganizationalUnitNamePlus()->Get()); 
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Common name                  : %s"), GetSubjectID()->GetCommonName()->Get()); 
 
   //------------------------------------------------------------------
 
@@ -1006,8 +1081,10 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
         }
     }  
 
-
-  XTRACE_PRINTCOLOR((havepubliccipherkey?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Cipher Key                  : %s [%s]"), (havepubliccipherkey?__L("Obtained and valid"):__L("Not valid")), (havepubliccipherkey?GetPublicCipherKey()->GetTypeStr():__L("")));   
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE                                       , __L("Cipher key usage             : %s"), IsPublicCipherKeyUsage()?__L("true"):__L("false"));   
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE                                       , __L("Cipher key basic constraints : %s"), IsPublicCipherKeyBasicConstraints()?__L("true"):__L("false"));   
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE                                       , __L("Cipher key ID                : %s"), GetPublicCipherKeyID()->Get());   
+  XTRACE_PRINTCOLOR((havepubliccipherkey?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Cipher key                   : %s [%s]"), (havepubliccipherkey?__L("Obtained and valid"):__L("Not valid")), (havepubliccipherkey?GetPublicCipherKey()->GetTypeStr():__L("")));   
 
   bool havehash = false;
   if(GetHash())
@@ -1015,7 +1092,7 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
       havehash = (GetHash()->GetType() != HASHTYPE_NONE)?true:false;
     }
  
-  XTRACE_PRINTCOLOR((havehash?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Hash                        : %s [%s]"), (havehash?__L("Obtained and valid"):__L("Not valid")), havehash?GetHash()->GetTypeStr():__L(""));  
+  XTRACE_PRINTCOLOR((havehash?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Hash                         : %s [%s]"), (havehash?__L("Obtained and valid"):__L("Not valid")), havehash?GetHash()->GetTypeStr():__L(""));  
 
   //------------------------------------------------------------------
   
@@ -1034,14 +1111,16 @@ bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509::Clean()
 {                                         
-  version               = 0;
-  algorithmtype         = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN;
+  version                         = 0;
+  algorithmtype                   = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN;
   algorithmtypestr.Empty();
 
-  publiccipherkeyvalid  = false;
-  publiccipherkey       = NULL; 
+  publiccipherkeyusaged           = false;
+  publiccipherkeybasicconstraints = false;
+  publiccipherkeyvalid            = false;
+  publiccipherkey                 = NULL; 
 
-  hash                  = NULL;
+  hash                            = NULL;
 }
 
 

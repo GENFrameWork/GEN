@@ -112,45 +112,54 @@ class CIPHERCERTIFICATEX509_ID
 class CIPHERCERTIFICATEX509 
 {
   public:
-                                            CIPHERCERTIFICATEX509             ();
-    virtual                                ~CIPHERCERTIFICATEX509             ();
+                                            CIPHERCERTIFICATEX509                   ();
+    virtual                                ~CIPHERCERTIFICATEX509                   ();
 
-    XWORD                                   GetVersion                        ();
-    void                                    SetVersion                        (XWORD version);
+    XWORD                                   GetVersion                              ();
+    void                                    SetVersion                              (XWORD version);
 
-    XBUFFER*                                GetSerial                         ();  
+    XBUFFER*                                GetSerial                               ();  
 
-    CIPHERCERTIFICATEX509_ALGORITHM_TYPE    GetAlgorithmType                  ();
-    bool                                    SetAlgorithmType                  (XCHAR* OID);
-    XSTRING*                                GetAlgorithmTypeStr               ();
+    CIPHERCERTIFICATEX509_ALGORITHM_TYPE    GetAlgorithmType                        ();
+    bool                                    SetAlgorithmType                        (XCHAR* OID);
+    XSTRING*                                GetAlgorithmTypeStr                     ();
 
-    CIPHERCERTIFICATEX509_ID*               GetIssuerID                       ();  
+    CIPHERCERTIFICATEX509_ID*               GetIssuerID                             ();  
 
-    bool                                    IsValidDates                      ();
-    XDATETIME*                              GetDateNotBefore                  ();
-    XDATETIME*                              GetDateNotAfter                   ();
+    bool                                    IsValidDates                            ();
+    XDATETIME*                              GetDateNotBefore                        ();
+    XDATETIME*                              GetDateNotAfter                         ();
 
-    bool                                    IsSelfSigned                      ();
+    bool                                    IsSelfSigned                            ();
   
-    CIPHERCERTIFICATEX509_ID*               GetSubjectID                      ();
+    CIPHERCERTIFICATEX509_ID*               GetSubjectID                            ();
 
-    bool                                    IsPublicCipherKeyValid            ();
-    void                                    SetPublicCipherKeyValid           (bool isvalid);
 
-    CIPHERKEY*                              GetPublicCipherKey                ();
-    bool                                    SetPublicCipherKey                (CIPHERKEY* publiccipherkey);
+    bool                                    IsPublicCipherKeyUsage                  ();
+    void                                    SetPublicCipherKeyUsage                 (bool isusage);
 
-    HASH*                                   GetHash                           ();  
-    void                                    SetHash                           (HASH* hash);
-    XBUFFER*                                GetHashData                       ();
+    bool                                    IsPublicCipherKeyBasicConstraints       ();
+    void                                    SetPublicCipherKeyBasicConstraints      (bool basicconstraints);
 
-    bool                                    ConvertDateTime                   (XCHAR* datestr, XDATETIME* datetime);
+    bool                                    IsPublicCipherKeyValid                  ();
+    void                                    SetPublicCipherKeyValid                 (bool isvalid);
 
-    bool                                    XTraceCertificatedPropertys       ();
+    XSTRING*                                GetPublicCipherKeyID                    ();
+
+    CIPHERKEY*                              GetPublicCipherKey                      ();
+    bool                                    SetPublicCipherKey                      (CIPHERKEY* publiccipherkey);
+
+    HASH*                                   GetHash                                 ();  
+    void                                    SetHash                                 (HASH* hash);
+    XBUFFER*                                GetHashData                             ();
+
+    bool                                    ConvertDateTime                         (XCHAR* datestr, XDATETIME* datetime);
+
+    bool                                    XTraceCertificatedPropertys             ();
     
   private:
   
-    void                                    Clean                             ();  
+    void                                    Clean                                   ();  
 
     XWORD                                   version;
     XBUFFER                                 serial;
@@ -165,7 +174,10 @@ class CIPHERCERTIFICATEX509
 
     CIPHERCERTIFICATEX509_ID                subjectID;
  
+    bool                                    publiccipherkeyusaged;
+    bool                                    publiccipherkeybasicconstraints;
     bool                                    publiccipherkeyvalid;
+    XSTRING                                 publiccipherkeyID;  
     CIPHERKEY*                              publiccipherkey; 
 
     HASH*                                   hash;

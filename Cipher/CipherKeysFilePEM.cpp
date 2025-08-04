@@ -242,7 +242,6 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
   XVECTOR<CIPHERKEYSFILEPEM_ENTRYBUFFER*> entrysbuffer;
   CIPHERKEYSFILEPEM_ENTRYBUFFER*          entrybuffer = NULL;
 
-
   ndecodeobj = 0;
     
   for(XDWORD c=0; c<lines->GetSize(); c++)
@@ -780,6 +779,63 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
             }
 
           // ---------------------------------------------------------------------------------  
+          
+          if(!lastOID.Compare(__L("2.5.29.19"), false))
+            {        
+              if(event->GetTagType() == XBER_TAGTYPE_BOOLEAN)
+                {                 
+                  certificate->SetPublicCipherKeyBasicConstraints((bool)event->GetValue());
+                }
+               
+              ismanaged = true; 
+            }  
+
+
+          // ---------------------------------------------------------------------------------  
+          
+          if(!lastOID.Compare(__L("2.5.29.14"), false))
+            {      
+              static bool secondround = false;  
+
+
+              if(event->GetTagType() == XBER_TAGTYPE_OCTET_STRING && !secondround)
+                {                 
+                  secondround = true;                  
+                }       
+               else
+                { 
+                  if(event->GetTagType() == XBER_TAGTYPE_OCTET_STRING && secondround)
+                    {                                                      
+                      XVARIANT* value;
+                      XSTRING   valuestr;  
+
+                      value     = (XVARIANT*)event->GetValue();
+                      valuestr  = (XSTRING)(*value);
+     
+                      certificate->GetPublicCipherKeyID()->Set(valuestr.Get());     
+                                  
+                      secondround = false;         
+        
+                      ismanaged = true; 
+                    }
+                }
+                                              
+            }   
+ 
+          // ---------------------------------------------------------------------------------  
+          
+          if(!lastOID.Compare(__L("2.5.29.15"), false))
+            {        
+              if(event->GetTagType() == XBER_TAGTYPE_BOOLEAN)
+                {                 
+                  certificate->SetPublicCipherKeyUsage((bool)event->GetValue());
+                }
+               
+              ismanaged = true; 
+            }   
+
+          // ---------------------------------------------------------------------------------  
+
 
         }
     }
