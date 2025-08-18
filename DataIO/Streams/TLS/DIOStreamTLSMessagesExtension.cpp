@@ -1,0 +1,715 @@
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @file       DIOStreamTLSMessages.cpp
+* 
+* @class      DIOSTREAMTLSMESSAGES
+* @brief      Data Input/Output Stream TLS (Transport Layer Security) Messages class
+* @ingroup    DATAIO
+* 
+* @copyright  GEN Group. All rights reserved.
+* 
+* @cond
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+* documentation files(the "Software"), to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
+* and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+* the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+* THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* @endcond
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+#pragma region PRECOMPILATION_DEFINE_INCLUDE
+
+#include "GEN_Defines.h"
+
+#pragma endregion
+
+
+/*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
+#pragma region INCLUDES
+
+#include "DIOStreamTLSMessagesExtension.h"
+
+#pragma endregion
+
+
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+#pragma region PRECOMPILATION_CONTROL_INCLUDE
+
+#include "GEN_Control.h"
+
+#pragma endregion
+
+
+/*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+#pragma region GENERAL_VARIABLE
+
+#pragma endregion
+
+
+/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+#pragma region CLASS_MEMBERS
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION::DIOSTREAMTLS_MSG_EXTENSION()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION::DIOSTREAMTLS_MSG_EXTENSION()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION::~DIOSTREAMTLS_MSG_EXTENSION()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION::~DIOSTREAMTLS_MSG_EXTENSION()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION::GetType()
+* @brief      get type
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION::GetType()
+{
+  return type;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION::SetType(XWORD type)
+* @brief      set type
+* @ingroup    DATAIO
+* 
+* @param[in]  type : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION::SetType(XWORD type)
+{
+  this->type = type;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION::GetLength()
+* @brief      get length
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION::GetLength()
+{
+  return length;    
+} 
+    
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION::SetLength(XWORD length)
+* @brief      set length
+* @ingroup    DATAIO
+* 
+* @param[in]  length : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION::SetLength(XWORD length)
+{
+  this->length = length; 
+} 
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBYTE* DIOSTREAMTLS_MSG_EXTENSION::GetExtensionData()
+* @brief      get extension data
+* @ingroup    DATAIO
+* 
+* @return     XBYTE* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XBYTE* DIOSTREAMTLS_MSG_EXTENSION::GetExtensionData()
+{
+  return extension_data;
+}
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION::SetExtensionData(XBYTE* extensiondata, XWORD length)
+* @brief      set extension data
+* @ingroup    DATAIO
+* 
+* @param[in]  extensiondata : 
+* @param[in]  length : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION::SetExtensionData(XBYTE* extensiondata, XWORD length)
+{
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    DATAIO
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION::Clean()
+{
+  type    = 0;
+  length  = 0;    
+  extension_data = NULL;
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SNI
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::~DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::~DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetType()
+* @brief      name  get type
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetType()
+{
+  return name_type;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_SetType(XWORD name_type)
+* @brief      name  set type
+* @ingroup    DATAIO
+* 
+* @param[in]  name_type : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_SetType(XWORD name_type)
+{
+  this->name_type = name_type;
+}
+
+            
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetLength()
+* @brief      name  get length
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetLength()
+{
+  return name_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_SetLength(XWORD name_length)
+* @brief      name  set length
+* @ingroup    DATAIO
+* 
+* @param[in]  name_length : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_SetLength(XWORD name_length)
+{
+  this->name_length = name_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetHost()
+* @brief      name  get host
+* @ingroup    DATAIO
+* 
+* @return     XSTRING* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetHost()
+{
+  return &hostname;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
+* @brief      copy to
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
+{
+  if(!servername)
+    {
+      return false;
+    }
+
+  servername->Name_SetType(Name_GetType());
+  servername->Name_SetLength(Name_GetLength());
+  servername->Name_GetHost()->Set(Name_GetHost()->Get());
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
+* @brief      copy from
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
+{
+  if(!servername)
+    {
+      return false;
+    }
+
+  Name_SetType(servername->Name_GetType());
+  Name_SetLength(servername->Name_GetLength());
+  Name_GetHost()->Set(servername->Name_GetHost()->Get());
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer)
+* @brief      set to buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer)
+{ 
+  XBUFFER bufferstring;
+  
+  hostname.ConvertToASCII(bufferstring);   
+  name_length = bufferstring.GetSize();
+
+  buffer.Add((XBYTE)name_type);
+  buffer.Add((XWORD)name_length);
+
+  return buffer.Add(bufferstring);
+}
+
+                                           
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer)
+* @brief      get from buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer)
+{
+  XBYTE _hostname[_MAXSTR];
+
+  memset((XBYTE*)_hostname, 0, _MAXSTR);
+
+  buffer.Extract((XBYTE)name_type);
+  buffer.Extract((XWORD)name_length);
+
+  buffer.Extract((XBYTE*)_hostname, 0, name_length);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    DATAIO
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Clean()
+{
+  name_type   = 0;
+  name_length = 0;
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SNI
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SNI::DIOSTREAMTLS_MSG_EXTENSION_SNI()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SNI::DIOSTREAMTLS_MSG_EXTENSION_SNI()
+{
+  Clean();
+}
+
+                        
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SNI::~DIOSTREAMTLS_MSG_EXTENSION_SNI()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SNI::~DIOSTREAMTLS_MSG_EXTENSION_SNI()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI::List_GetLength()
+* @brief      list  get length
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI::List_GetLength()
+{
+  return list_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_SNI::List_SetLength(XWORD list_length)
+* @brief      list  set length
+* @ingroup    DATAIO
+* 
+* @param[in]  list_length : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_SNI::List_SetLength(XWORD list_length)
+{
+  this->list_length = list_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>* DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Get()
+* @brief      list  get
+* @ingroup    DATAIO
+* 
+* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>* DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Get()
+{
+  return &list;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Add(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
+* @brief      list  add
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Add(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
+{
+  DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername =  new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
+  if(!_servername)
+    {
+      return false;
+    }
+        
+  _servername->CopyFrom(servername);
+
+  return list.Add(_servername);
+}
+
+    
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_DeleteAll()
+* @brief      list  delete all
+* @ingroup    DATAIO
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_DeleteAll()
+{
+  if(list.IsEmpty())
+    {
+      return false;
+    }
+
+  list.DeleteContents();
+  list.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* servername)
+* @brief      copy to
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* SNI)
+{
+  if(!SNI)
+    {
+      return false;
+    }
+
+  SNI->List_DeleteAll();
+
+  SNI->List_SetLength(List_GetLength());
+
+  for(XDWORD c=0; c<list.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = list.Get(c);
+      if(servername)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername = new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
+          if(_servername)
+            { 
+              servername->CopyTo(_servername);
+
+              SNI->List_Add(_servername);
+            }
+        }
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* servername)
+* @brief      copy from
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* SNI)
+{
+  if(!SNI)
+    {
+      return false;
+    }
+
+  List_DeleteAll();
+
+  List_SetLength(SNI->List_GetLength());
+
+  for(XDWORD c=0; c<SNI->List_Get()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = SNI->List_Get()->Get(c);
+      if(servername)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername = new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
+          if(_servername)
+            { 
+              _servername->CopyFrom(servername);
+
+              List_Add(_servername);
+            }
+        }
+    }
+
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer)
+* @brief      set to buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer)
+{
+  buffer.Add((XWORD)list_length);
+
+  for(XDWORD c=0; c<list.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = list.Get(c);
+      if(servername)
+        {
+          servername->SetToBuffer(buffer);
+        }
+    }
+
+  return true;
+}
+
+    
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer)
+* @brief      get from buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer)
+{
+  buffer.Extract((XWORD)list_length);
+
+  for(XDWORD c=0; c<list_length; c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
+      if(servername)
+        {
+          servername->GetFromBuffer(buffer);
+        }
+
+      if(!List_Add(servername))
+        {
+          return false;
+        }
+    }
+
+  return true;
+}
+
+                                               
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_SNI::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    DATAIO
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_SNI::Clean()
+{
+  list_length = 0;
+}
+
+
+#pragma endregion
+
+
+#pragma endregion
+

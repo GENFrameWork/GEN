@@ -37,7 +37,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "DIOStreamTLSMessages.h"
+#include "DIOStreamTLSMessagesHandShakeClientHello.h"
 
 #pragma endregion
 
@@ -60,17 +60,17 @@
 #pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_INTERFACE
+#pragma region CLASS_DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSTREAMTLS_MSG_INTERFACE::DIOSTREAMTLS_MSG_INTERFACE()
+* @fn         DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS_MSG_INTERFACE::DIOSTREAMTLS_MSG_INTERFACE()
+DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO()
 {
   Clean();
 }
@@ -78,79 +78,13 @@ DIOSTREAMTLS_MSG_INTERFACE::DIOSTREAMTLS_MSG_INTERFACE()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSTREAMTLS_MSG_INTERFACE::~DIOSTREAMTLS_MSG_INTERFACE()
+* @fn         DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::~DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO()
 * @brief      Destructor of class
 * @ingroup    DATAIO
 * @note       VIRTUAL
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS_MSG_INTERFACE::~DIOSTREAMTLS_MSG_INTERFACE()
-{ 
-  Clean();
-}
-       
-    
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         XDWORD DIOSTREAMTLS_MSG_INTERFACE::GetLengthBuffer()
-* @brief      get length buffer
-* @ingroup    DATAIO
-* 
-* @return     XDWORD : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-XDWORD DIOSTREAMTLS_MSG_INTERFACE::GetLengthBuffer()
-{ 
-  XBUFFER data;
-                                                 
-  SetToBuffer(data);
-
-  return data.GetSize();
-}
-
-  
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void DIOSTREAMTLS_MSG_INTERFACE::Clean()
-* @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
-* @note       INTERNAL
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLS_MSG_INTERFACE::Clean()
-{
-
-}
-
-
-#pragma endregion
-
-
-#pragma region CLASS_DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO()
-* @brief      Constructor of class
-* @ingroup    DATAIO
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO()
-{
-  Clean();
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::~DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO()
-* @brief      Destructor of class
-* @ingroup    DATAIO
-* @note       VIRTUAL
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::~DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO()
+DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::~DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO()
 { 
   Clean();
 }
@@ -158,14 +92,14 @@ DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::~DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIE
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetClientVersion()
+* @fn         XWORD DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetClientVersion()
 * @brief      get client version
 * @ingroup    DATAIO
 * 
 * @return     XWORD : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetClientVersion()
+XWORD DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetClientVersion()
 {
   return clientversion;    
 } 
@@ -173,14 +107,14 @@ XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetClientVersion()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetClientVersion(XWORD clientversion)
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetClientVersion(XWORD clientversion)
 * @brief      set client version
 * @ingroup    DATAIO
 * 
 * @param[in]  clientversion : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetClientVersion(XWORD clientversion)
+void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetClientVersion(XWORD clientversion)
 {
   this->clientversion = clientversion;            
 } 
@@ -188,14 +122,14 @@ void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetClientVersion(XWORD clientve
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTE* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetRandom()
+* @fn         XBYTE* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetRandom()
 * @brief      get random
 * @ingroup    DATAIO
 * 
 * @return     XBYTE* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XBYTE* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetRandom()
+XBYTE* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetRandom()
 {
   return random;
 }
@@ -203,14 +137,14 @@ XBYTE* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetRandom()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetSessionIDLength()
+* @fn         XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetSessionIDLength()
 * @brief      get session IDlength
 * @ingroup    DATAIO
 * 
 * @return     XBYTE : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetSessionIDLength()
+XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetSessionIDLength()
 {
   return sessionID_length;
 }
@@ -218,14 +152,14 @@ XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetSessionIDLength()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetSessionIDLength(XBYTE sessionID_length)
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetSessionIDLength(XBYTE sessionID_length)
 * @brief      set session IDlength
 * @ingroup    DATAIO
 * 
 * @param[in]  sessionID_length : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetSessionIDLength(XBYTE sessionID_length)
+void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetSessionIDLength(XBYTE sessionID_length)
 {
   this->sessionID_length = sessionID_length;
 }
@@ -233,14 +167,14 @@ void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetSessionIDLength(XBYTE sessio
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTE* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetSessionID()
+* @fn         XBYTE* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetSessionID()
 * @brief      get session Id
 * @ingroup    DATAIO
 * 
 * @return     XBYTE* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XBYTE* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetSessionID()
+XBYTE* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetSessionID()
 {
   return sessionID;
 }
@@ -248,14 +182,14 @@ XBYTE* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetSessionID()
                                           
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCiphersuitesLength()
+* @fn         XWORD DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetCiphersuitesLength()
 * @brief      get ciphersuites length
 * @ingroup    DATAIO
 * 
 * @return     XWORD : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCiphersuitesLength()
+XWORD DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetCiphersuitesLength()
 {
   return ciphersuites_length;
 }
@@ -263,14 +197,14 @@ XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCiphersuitesLength()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCiphersuitesLength(XWORD ciphersuites_length)
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetCiphersuitesLength(XWORD ciphersuites_length)
 * @brief      set ciphersuites length
 * @ingroup    DATAIO
 * 
 * @param[in]  ciphersuites_length : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCiphersuitesLength(XWORD ciphersuites_length)
+void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetCiphersuitesLength(XWORD ciphersuites_length)
 {
   this->ciphersuites_length = ciphersuites_length;
 }
@@ -278,14 +212,14 @@ void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCiphersuitesLength(XWORD cip
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XVECTOR<XWORD>* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCipherSuites()
+* @fn         XVECTOR<XWORD>* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetCipherSuites()
 * @brief      get cipher suites
 * @ingroup    DATAIO
 * 
 * @return     XVECTOR<XWORD>* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVECTOR<XWORD>* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCipherSuites()
+XVECTOR<XWORD>* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetCipherSuites()
 {
   return &ciphersuites;
 }
@@ -293,14 +227,14 @@ XVECTOR<XWORD>* DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCipherSuites()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCompressionLength()
+* @fn         XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetCompressionLength()
 * @brief      get compression length
 * @ingroup    DATAIO
 * 
 * @return     XBYTE : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCompressionLength()
+XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetCompressionLength()
 {
   return compress_length;
 }
@@ -308,14 +242,14 @@ XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCompressionLength()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCompressionLength(XBYTE compress_length)
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetCompressionLength(XBYTE compress_length)
 * @brief      set compression length
 * @ingroup    DATAIO
 * 
 * @param[in]  compress_length : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCompressionLength(XBYTE compress_length)
+void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetCompressionLength(XBYTE compress_length)
 {
   this->compress_length = compress_length;
 }
@@ -323,14 +257,14 @@ void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCompressionLength(XBYTE comp
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCompressionMethod()
+* @fn         XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetCompressionMethod()
 * @brief      get compression method
 * @ingroup    DATAIO
 * 
 * @return     XBYTE : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCompressionMethod()
+XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetCompressionMethod()
 {
   return compress_method;
 }
@@ -338,14 +272,14 @@ XBYTE DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetCompressionMethod()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCompressionMethod(XBYTE compress_method)
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetCompressionMethod(XBYTE compress_method)
 * @brief      set compression method
 * @ingroup    DATAIO
 * 
 * @param[in]  compress_method : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCompressionMethod(XBYTE compress_method)
+void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetCompressionMethod(XBYTE compress_method)
 {
   this->compress_method = compress_method;
 }
@@ -353,14 +287,14 @@ void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetCompressionMethod(XBYTE comp
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetExtensionLenght()
-* @brief      get extension lenght
+* @fn         XWORD DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_GetLenght()
+* @brief      extensions  get lenght
 * @ingroup    DATAIO
 * 
 * @return     XWORD : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetExtensionLenght()
+XWORD DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_GetLenght()
 {
   return extensions_lenght;
 }
@@ -368,14 +302,14 @@ XWORD DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetExtensionLenght()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetExtensionLenght(XWORD extension_lenght)
-* @brief      set extension lenght
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_SetLenght(XWORD extensions_lenght)
+* @brief      extensions  set lenght
 * @ingroup    DATAIO
 * 
-* @param[in]  extension_lenght : 
+* @param[in]  extensions_lenght : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetExtensionLenght(XWORD extensions_lenght)
+void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_SetLenght(XWORD extensions_lenght)
 {
   this->extensions_lenght = extensions_lenght; 
 }
@@ -383,7 +317,69 @@ void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetExtensionLenght(XWORD extens
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
+* @fn         XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_GetAll()
+* @brief      extensions  get all
+* @ingroup    DATAIO
+* 
+* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_GetAll()
+{
+  return &extensions;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_Add(DIOSTREAMTLS_MSG_EXTENSION* extension)
+* @brief      extensions  add
+* @ingroup    DATAIO
+* 
+* @param[in]  extension : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_Add(DIOSTREAMTLS_MSG_EXTENSION* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  extensions.Add(extension);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_DeleteAll()
+* @brief      extensions  delete all
+* @ingroup    DATAIO
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_DeleteAll()
+{ 
+  if(extensions.IsEmpty())
+    {
+      return true;
+    }
+
+  extensions.DeleteContents();
+  extensions.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
@@ -392,7 +388,7 @@ void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetExtensionLenght(XWORD extens
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
 {
   buffer.Add((XWORD)clientversion);  
 
@@ -415,13 +411,22 @@ bool DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
 
   buffer.Add((XWORD)extensions_lenght);
 
+  for(XDWORD c=0; c<extensions.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = extensions.Get(c);
+      if(extension)
+        {
+          extension->SetToBuffer(buffer);  
+        }
+    }
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetFromBuffer(XBUFFER& buffer)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
@@ -430,7 +435,7 @@ bool DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetFromBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetFromBuffer(XBUFFER& buffer)
 {
   return true;
 }
@@ -438,13 +443,13 @@ bool DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::GetFromBuffer(XBUFFER& buffer)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::Clean()
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @ingroup    DATAIO
 * @note       INTERNAL
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO::Clean()
+void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Clean()
 {
   clientversion         = 0;
 

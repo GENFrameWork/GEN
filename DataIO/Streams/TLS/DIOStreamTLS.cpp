@@ -47,6 +47,8 @@
 #include "DIOStreamTCPIP.h"
 
 #include "DIOStreamTLSMessages.h"
+#include "DIOStreamTLSMessagesExtension.h"
+#include "DIOStreamTLSMessagesHandShakeClientHello.h"
 
 #pragma endregion
 
@@ -271,11 +273,11 @@ DIOSTREAMSTATUS DIOSTREAMTLS::GetStatus()
 bool DIOSTREAMTLS::HandShake_Client_Hello()
 {
  
-  DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO>>  message;
-  XBUFFER                                                                                         xbuffer;
-  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO>*                          fragment  = NULL;
-  DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO*                                                     body      = NULL;
-  bool                                                                                            status    = false;
+  DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>  message;
+  XBUFFER                                                                                     xbuffer;
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>*                          fragment  = NULL;
+  DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO*                                                     body      = NULL;
+  bool                                                                                        status    = false;
 
   fragment  = message.GetFragment();
   body      = message.GetFragment()->GetBody();
@@ -288,7 +290,7 @@ bool DIOSTREAMTLS::HandShake_Client_Hello()
   message.SetContenType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE);
   message.SetProtocolVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
 
-  fragment->SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_CLIENT_HELLO);
+  fragment->SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO);
 
   fragment->GetBody()->SetClientVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
 
@@ -312,13 +314,29 @@ bool DIOSTREAMTLS::HandShake_Client_Hello()
   body->SetCompressionLength(0x01);
   body->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
 
-  body->SetExtensionLenght(0x0000);
+  body->Extensions_SetLenght(0x0000);
+
+  DIOSTREAMTLS_MSG_EXTENSION_SNI* extension_SNI = new DIOSTREAMTLS_MSG_EXTENSION_SNI();
+  if(extension_SNI)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME extension_SNI_servername;
+
+      extension_SNI->List_SetLength(1);
+
+      extension_SNI_servername.Name_SetType(0); 
+      extension_SNI_servername.Name_GetHost()->Set(__L("www.example.com")); 
+      extension_SNI_servername.Name_SetLength(extension_SNI_servername.Name_GetHost()->GetSize());
+
+      extension_SNI->List_Add(&extension_SNI_servername);
+
+      body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION*)extension_SNI);
+    }
+
 
   message.CalculateLength();
 
   message.SetToBuffer(xbuffer);
 
- 
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
   XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, xbuffer);
 

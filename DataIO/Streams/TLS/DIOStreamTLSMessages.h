@@ -60,20 +60,20 @@ enum DIOSTREAMTLS_CONTENTTYPE
 };
 
 
-enum DIOSTREAMTLS_CONTENTTYPE_HANDSHAKETYPE
+enum DIOSTREAMTLS_CONTENTTYPE_HANDSHAKE
 {
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_HELLO_REQUEST                    =    0  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_CLIENT_HELLO                     =    1  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_SERVER_HELLO                     =    2  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_CERTIFICATE                      =   11  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_SERVER_KEY_EXCHANGE              =   12  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_CERTIFICATE_REQUEST              =   13  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_SERVER_HELLO_DONE                =   14  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_CERTIFICATE_VERIFY               =   15  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_CLIENT_KEY_EXCHANGE              =   16  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_FINISHED                         =   20  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_KEY_UPDATE                       =   24  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKETYPE_MESSAGE_HASH                     =  254  ,      
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_HELLO_REQUEST                    =    0  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO                     =    1  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO                     =    2  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE                      =   11  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_KEY_EXCHANGE              =   12  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_REQUEST              =   13  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO_DONE                =   14  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_VERIFY               =   15  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_KEY_EXCHANGE              =   16  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED                         =   20  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE                       =   24  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH                     =  254  ,      
  };
 
 
@@ -322,99 +322,6 @@ class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
     XBYTE                                   msgtype;      
     XDWORD                                  length;      
     T                                       body;
-};
-
-
-template<typename T>
-class DIOSTREAMTLS_MSG_EXTENSION : public DIOSTREAMTLS_MSG_INTERFACE
-{
-  public:
-                                            DIOSTREAMTLS_MSG_EXTENSION                        ()
-                                            {
-                                              Clean();
-                                            }
-
-    virtual                                ~DIOSTREAMTLS_MSG_EXTENSION                        ()
-                                            {
-                                              Clean();
-                                            }
-
-
-    bool                                    SetToBuffer                                       (XBUFFER& buffer)
-                                            {
-                                              return true;
-                                            }
-
-
-    bool                                    GetFromBuffer                                     (XBUFFER& buffer)
-                                            {
-                                              return true;
-                                            }
-
- private:
-
-    void                                    Clean                                             ()
-                                            {
-
-                                            }
-
-    XWORD                                   type;
-    XWORD                                   length;    
-    T                                       extension;
-
-};
-
-
-class DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO : public DIOSTREAMTLS_MSG_INTERFACE
-{
-  public:
-                                            DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO        ();
-    virtual                                ~DIOSTREAMTLS_MSG_HANDSHAKETYPE_CLIENTHELLO        ();
-                                            
-
-    XWORD                                   GetClientVersion                                  ();    
-    void                                    SetClientVersion                                  (XWORD clientversion);
-                                            
-    XBYTE*                                  GetRandom                                         ();
-
-    XBYTE                                   GetSessionIDLength                                ();    
-    void                                    SetSessionIDLength                                (XBYTE sessionID_length);
-    XBYTE*                                  GetSessionID                                      ();
-
-    XWORD                                   GetCiphersuitesLength                             ();
-    void                                    SetCiphersuitesLength                             (XWORD ciphersuites_length);
-    XVECTOR<XWORD>*                         GetCipherSuites                                   ();
-
-    XBYTE                                   GetCompressionLength                              ();
-    void                                    SetCompressionLength                              (XBYTE compress_length);
-
-    XBYTE                                   GetCompressionMethod                              ();
-    void                                    SetCompressionMethod                              (XBYTE compress_method);
-
-    XWORD                                   GetExtensionLenght                                ();
-    void                                    SetExtensionLenght                                (XWORD extension_lenght);
-                                                
-    bool                                    SetToBuffer                                       (XBUFFER& buffer);    
-    bool                                    GetFromBuffer                                     (XBUFFER& buffer);
-                                            
-  private:
-
-    void                                    Clean                                             ();
-    
-    XWORD                                   clientversion;
-
-    XBYTE                                   random[DIOSTREAMTLS_MSG_RANDOM_SIZE];
-
-    XBYTE                                   sessionID_length;
-    XBYTE                                   sessionID[DIOSTREAMTLS_MSG_SESSIONID_SIZE];
-    
-    XWORD                                   ciphersuites_length;
-    XVECTOR<XWORD>                          ciphersuites;
-
-    XBYTE                                   compress_length;
-    XBYTE                                   compress_method;
-                                             
-    XWORD                                   extensions_lenght;
 };
 
 
