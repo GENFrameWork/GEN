@@ -288,7 +288,7 @@ bool DIOSTREAMTLS::HandShake_Client_Hello()
     }
 
   message.SetContenType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE);
-  message.SetProtocolVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+  message.SetProtocolVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_0);
 
   fragment->SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO);
 
@@ -299,40 +299,35 @@ bool DIOSTREAMTLS::HandShake_Client_Hello()
       return false;
     }
 
-  memcpy(body->GetRandom(), random, DIOSTREAMTLS_MSG_RANDOM_SIZE);
+  memcpy(body->GetRandom(), random, DIOSTREAMTLS_MSG_RANDOM_SIZE);  
   
-  body->SetSessionIDLength(DIOSTREAMTLS_MSG_SESSIONID_SIZE);
-
-  GenerateSessionID(sessionID, body->GetSessionIDLength());
-  memcpy(body->GetSessionID(), sessionID, DIOSTREAMTLS_MSG_SESSIONID_SIZE);
+  // GenerateSessionID(sessionID, body->GetSessionIDLength());
+  // memcpy(body->GetSessionID(), sessionID, DIOSTREAMTLS_MSG_SESSIONID_SIZE);
+  // body->SetSessionIDLength(DIOSTREAMTLS_MSG_SESSIONID_SIZE);
+  body->SetSessionIDLength(0);
 
   body->GetCipherSuites()->Add((XWORD)DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_GCM_SHA256);
   body->GetCipherSuites()->Add((XWORD)DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_256_CBC_SHA256);
   body->GetCipherSuites()->Add((XWORD)DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_CBC_SHA);
-  body->SetCiphersuitesLength((XWORD)body->GetCipherSuites()->GetSize());
+  body->SetCiphersuitesLength((XWORD)body->GetCipherSuites()->GetSize() * sizeof(XWORD));
 
   body->SetCompressionLength(0x01);
   body->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
-
-  body->Extensions_SetLenght(0x0000);
 
   DIOSTREAMTLS_MSG_EXTENSION_SNI* extension_SNI = new DIOSTREAMTLS_MSG_EXTENSION_SNI();
   if(extension_SNI)
     {
       DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME extension_SNI_servername;
-
-      extension_SNI->List_SetLength(1);
-
+      
       extension_SNI_servername.Name_SetType(0); 
       extension_SNI_servername.Name_GetHost()->Set(__L("www.example.com")); 
       extension_SNI_servername.Name_SetLength(extension_SNI_servername.Name_GetHost()->GetSize());
 
-      extension_SNI->List_Add(&extension_SNI_servername);
-
-      body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION*)extension_SNI);
+      extension_SNI->List_Add(&extension_SNI_servername);           
     }
 
-
+  body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION*)extension_SNI); 
+  
   message.CalculateLength();
 
   message.SetToBuffer(xbuffer);

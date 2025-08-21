@@ -152,32 +152,40 @@ void DIOSTREAMTLS_MSG_EXTENSION::SetLength(XWORD length)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTE* DIOSTREAMTLS_MSG_EXTENSION::GetExtensionData()
-* @brief      get extension data
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer)
+* @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @return     XBYTE* : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-XBYTE* DIOSTREAMTLS_MSG_EXTENSION::GetExtensionData()
-{
-  return extension_data;
-}
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION::SetExtensionData(XBYTE* extensiondata, XWORD length)
-* @brief      set extension data
-* @ingroup    DATAIO
-* 
-* @param[in]  extensiondata : 
-* @param[in]  length : 
+* @param[in]  buffer : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION::SetExtensionData(XBYTE* extensiondata, XWORD length)
+bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer)
 {
+  buffer.Add((XWORD)type);
+  buffer.Add((XWORD)length);
+
+  return true;
+}
+
+  
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer)
+* @brief      get from buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer)
+{
+  buffer.Extract((XWORD)type);
+  buffer.Extract((XWORD)length);
+  
   return true;
 }
 
@@ -193,8 +201,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION::SetExtensionData(XBYTE* extensiondata, XWORD le
 void DIOSTREAMTLS_MSG_EXTENSION::Clean()
 {
   type    = 0;
-  length  = 0;    
-  extension_data = NULL;
+  length  = 0;      
 }
 
 
@@ -373,7 +380,13 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer)
 { 
   XBUFFER bufferstring;
   
-  hostname.ConvertToASCII(bufferstring);   
+  hostname.ConvertToASCII(bufferstring);
+
+  if(bufferstring.GetSize() > 1)
+    {
+      bufferstring.Resize(bufferstring.GetSize()-1);
+    }
+   
   name_length = bufferstring.GetSize();
 
   buffer.Add((XBYTE)name_type);
@@ -440,6 +453,8 @@ void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Clean()
 DIOSTREAMTLS_MSG_EXTENSION_SNI::DIOSTREAMTLS_MSG_EXTENSION_SNI()
 {
   Clean();
+
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_SNI);
 }
 
                         
@@ -523,7 +538,28 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Add(DIOSTREAMTLS_MSG_EXTENSION_SNI_SER
         
   _servername->CopyFrom(servername);
 
-  return list.Add(_servername);
+  if(!list.Add(_servername))
+    {
+      return false;
+    }
+
+  SetLength(0);
+  List_SetLength(0);
+
+  for(XDWORD c=0; c<list.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = list.Get(c);
+      if(servername)
+        {
+          List_SetLength(List_GetLength() + servername->Name_GetHost()->GetSize());          
+        }
+    }
+
+  List_SetLength(List_GetLength() + sizeof(XBYTE) + sizeof(XWORD));
+
+  SetLength(List_GetLength() + + sizeof(XWORD));
+
+  return true;
 }
 
     
@@ -546,6 +582,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_DeleteAll()
   list.DeleteContents();
   list.DeleteAll();
 
+  List_SetLength(0);
+
   return true;
 }
 
@@ -567,6 +605,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* SNI)
     {
       return false;
     }
+
+  SNI->SetType(GetType());
+  
+  SNI->SetLength(GetLength());
 
   SNI->List_DeleteAll();
 
@@ -609,6 +651,11 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* SN
       return false;
     }
 
+  SetType(SNI->GetType());
+  
+  SetLength(SNI->GetLength());
+
+
   List_DeleteAll();
 
   List_SetLength(SNI->List_GetLength());
@@ -646,6 +693,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* SN
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer)
 {
+  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+
   buffer.Add((XWORD)list_length);
 
   for(XDWORD c=0; c<list.GetSize(); c++)
@@ -674,6 +723,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer)
 {
+  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+
   buffer.Extract((XWORD)list_length);
 
   for(XDWORD c=0; c<list_length; c++)

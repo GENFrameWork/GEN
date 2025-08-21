@@ -350,6 +350,17 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_Add(DIOSTREAMTLS_MSG_EXT
 
   extensions.Add(extension);
 
+  Extensions_SetLenght(0);
+
+  for(XDWORD c=0; c<extensions.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = extensions.Get(c);
+      if(extension)
+        {
+          Extensions_SetLenght(Extensions_GetLenght() + extension->GetLengthBuffer());          
+        }
+    }
+
   return true;
 }
 
@@ -373,6 +384,8 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_DeleteAll()
   extensions.DeleteContents();
   extensions.DeleteAll();
 
+  Extensions_SetLenght(0);
+
   return true;
 }
 
@@ -395,9 +408,12 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
   buffer.Add((XBYTE*)random, DIOSTREAMTLS_MSG_RANDOM_SIZE);  
 
   buffer.Add((XBYTE)sessionID_length);  
-  buffer.Add((XBYTE*)sessionID, sessionID_length);  
+  if(sessionID_length)
+    {
+      buffer.Add((XBYTE*)sessionID, sessionID_length);  
+    }
 
-  buffer.Add((XBYTE)ciphersuites_length);  
+  buffer.Add((XWORD)ciphersuites_length);  
 
   for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
     {

@@ -72,8 +72,8 @@ class DIOSTREAMTLS_MSG_EXTENSION : public DIOSTREAMTLS_MSG_INTERFACE
     XWORD                                                 GetLength                                         ();                                          
     void                                                  SetLength                                         (XWORD length);
     
-    XBYTE*                                                GetExtensionData                                  ();    
-    bool                                                  SetExtensionData                                  (XBYTE* extensiondata, XWORD length);  
+    virtual bool                                          SetToBuffer                                       (XBUFFER& buffer);                                           
+    virtual bool                                          GetFromBuffer                                     (XBUFFER& buffer);
      
   private:
 
@@ -81,8 +81,8 @@ class DIOSTREAMTLS_MSG_EXTENSION : public DIOSTREAMTLS_MSG_INTERFACE
     
     XWORD                                                 type;
     XWORD                                                 length;    
-    XBYTE*                                                extension_data;
-};
+};   
+
 
 class DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME : public DIOSTREAMTLS_MSG_INTERFACE
 {
@@ -114,7 +114,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME : public DIOSTREAMTLS_MSG_INTERF
 };
 
 
-class DIOSTREAMTLS_MSG_EXTENSION_SNI : public DIOSTREAMTLS_MSG_INTERFACE
+class DIOSTREAMTLS_MSG_EXTENSION_SNI : public DIOSTREAMTLS_MSG_EXTENSION
 {
   public:
                                                           DIOSTREAMTLS_MSG_EXTENSION_SNI                    ();
