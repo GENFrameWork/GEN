@@ -33,6 +33,7 @@
 #pragma region INCLUDES
 
 #include "XBuffer.h"
+#include "XFSMachine.h"
 
 #include "DIOStreamTLSMessages.h"
 
@@ -44,7 +45,31 @@
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
-     
+
+
+enum DIOSTREAMTLSXFSMEVENTS
+{
+  DIOSTREAMTLS_XFSMEVENT_NONE              = 0 ,
+  DIOSTREAMTLS_XFSMEVENT_INI                   ,
+  DIOSTREAMTLS_XFSMEVENT_UPDATE                ,
+  DIOSTREAMTLS_XFSMEVENT_END                   ,
+
+  DIOSTREAMTLS_LASTEVENT
+};
+
+
+enum DIOSTREAMTLSXFSMSTATES
+{
+  DIOSTREAMTLS_XFSMSTATE_NONE              = 0 ,
+  DIOSTREAMTLS_XFSMSTATE_INI                   ,
+  DIOSTREAMTLS_XFSMSTATE_UPDATE                ,
+  DIOSTREAMTLS_XFSMSTATE_END                   ,
+
+  DIOSTREAMTLS_LASTSTATE
+};
+
+
+#define DIOSTREAMTLS_TIMEOUT  3     
 
 #pragma endregion
 
@@ -62,39 +87,50 @@
 class DIOSTREAMTLSCONFIG;
 
 
-class DIOSTREAMTLS : public DIOSTREAM
+class DIOSTREAMTLS : public DIOSTREAM, public XFSMACHINE
 {
   public:
-                                            DIOSTREAMTLS                  (DIOSTREAMTLSCONFIG* config);
-    virtual                                ~DIOSTREAMTLS                  ();
+                                            DIOSTREAMTLS                      (DIOSTREAMTLSCONFIG* config);
+    virtual                                ~DIOSTREAMTLS                      ();
 
-    DIOSTREAMCONFIG*                        GetConfig                     ();
-    bool                                    SetConfig                     (DIOSTREAMCONFIG* config);  
+    DIOSTREAMCONFIG*                        GetConfig                         ();
+    bool                                    SetConfig                         (DIOSTREAMCONFIG* config);  
 
-    bool                                    Open                          ();    
+    bool                                    Open                              ();    
 
-    XDWORD                                  Read                          (XBYTE* buffer, XDWORD size);
-    XDWORD                                  Write                         (XBYTE* buffer, XDWORD size);
+    XDWORD                                  Read                              (XBYTE* buffer, XDWORD size);
+    XDWORD                                  Write                             (XBYTE* buffer, XDWORD size);
 
-    bool                                    Disconnect                    ();
+    bool                                    Disconnect                        ();
 
-    bool                                    Close                         (); 
+    bool                                    Close                             (); 
 
-    DIOSTREAMTCPIP*                         GetDIOStreamTCPIP             ();
+    bool                                    IniFSMachine                      ();
 
-    DIOSTREAMSTATUS                         GetStatus                     ();  
+    DIOSTREAMTCPIP*                         GetDIOStreamTCPIP                 ();
+    DIOSTREAMSTATUS                         GetStatus                         ();
 
-    bool                                    HandShake_Client_Hello        ();
+    int                                     GetTimeout                        ();
+    void                                    SetTimeout                        (int timeout = DIOSTREAMTLS_TIMEOUT);
 
-    bool                                    GenerateRandom                (XBYTE* random);
-    bool                                    GenerateSessionID             (XBYTE* sessionID, XBYTE sessionIDlength);
+    bool                                    HandShake_Send_Client_Hello       ();
+    bool                                    HandShake_Receive_Server_Hello    (int timeout = DIOSTREAMTLS_TIMEOUT);
+
+    bool                                    GenerateRandom                    (XBYTE* random);
+    bool                                    GenerateSessionID                 (XBYTE* sessionID, XBYTE sessionIDlength);
     
   private:
 
-    void                                    Clean                         ();
+    void                                    Clean                             ();
+
+    static void                             ThreadRunFunction                 (void* param);
 
     DIOSTREAMTLSCONFIG*                     config;
     DIOSTREAMTCPIP*                         diostream;
+
+    int                                     timeout;
+
+    XTHREADCOLLECTED*                       thread;
 
     XBYTE                                   random[DIOSTREAMTLS_MSG_RANDOM_SIZE];
     XBYTE                                   sessionID[DIOSTREAMTLS_MSG_SESSIONID_SIZE];

@@ -50,33 +50,6 @@
 #define DIOSTREAMTLS_MSG_RANDOM_SIZE                                          32
 #define DIOSTREAMTLS_MSG_SESSIONID_SIZE                                       32
 
-enum DIOSTREAMTLS_CONTENTTYPE
-{
-   DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC                            =  0x14   , 
-   DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT                                         =  0x15   , 
-   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE                                     =  0x16   ,
-   DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA                              =  0x17   , 
-   DIOSTREAMTLS_MSG_CONTENTTYPE_TLS_1_3_HEARTBEAT                             =  0x18   , 
-};
-
-
-enum DIOSTREAMTLS_CONTENTTYPE_HANDSHAKE
-{
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_HELLO_REQUEST                    =    0  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO                     =    1  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO                     =    2  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE                      =   11  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_KEY_EXCHANGE              =   12  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_REQUEST              =   13  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO_DONE                =   14  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_VERIFY               =   15  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_KEY_EXCHANGE              =   16  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED                         =   20  , 
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE                       =   24  ,
-  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH                     =  254  ,      
- };
-
-
 #define DIOSTREAMTLS_MSG_CIPHER_DES_CBC3_SHA                                  0x000A    // SSLv3   
 #define DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_CBC_SHA                      0x002F    // SSLv3   
 #define DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_256_CBC_SHA                      0x0035    // SSLv3  
@@ -110,15 +83,80 @@ enum DIOSTREAMTLS_CONTENTTYPE_HANDSHAKE
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256       0xCCA8    // TLSv1.2
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256     0xCCA9    // TLSv1.2
 #define DIOSTREAMTLS_MSG_CIPHER_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256         0xCCAA    // TLSv1.2 
-                    
-                    
+                                        
 #define DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL                                 0x00
 
-/*
-#define DIOSTREAMTLS_VERSION_DATAGRAMA_TLS_1_0                                0xFEFF    // Datagrama TLS v1.0
-#define DIOSTREAMTLS_VERSION_DATAGRAMA_TLS_1_2                                0xFEFD    // Datagrama TLS v1.2
-#define DIOSTREAMTLS_VERSION_DATAGRAMA_TLS_1_3                                0xFEFC    // Datagrama TLS v1.3
-*/
+#define DIOSTREAMTLS_MSG_CURVEID_X25519	                                      0x001D    // Optimizated              // Curvas modernas (TLS 1.3 recomendadas)
+#define DIOSTREAMTLS_MSG_CURVEID_X448	                                        0x001E	
+#define DIOSTREAMTLS_MSG_CURVEID_SECP256R1                                    0x0017	  // 256 bits
+#define DIOSTREAMTLS_MSG_CURVEID_SECP384R1	                                  0x0018    // 384 bits 	
+#define DIOSTREAMTLS_MSG_CURVEID_SECP521R1	                                  0x0019	  // 521 bits
+#define DIOSTREAMTLS_MSG_CURVEID_FFDHE2048	                                  0x0100		// 2048 bits                // Finite Field DH (FFDHE, TLS 1.3)
+#define DIOSTREAMTLS_MSG_CURVEID_FFDHE3072	                                  0x0101		// 3072 bits
+#define DIOSTREAMTLS_MSG_CURVEID_FFDHE4096	                                  0x0102		// 4096 bits
+#define DIOSTREAMTLS_MSG_CURVEID_FFDHE6144	                                  0x0103		// 6144 bits
+#define DIOSTREAMTLS_MSG_CURVEID_FFDHE8192	                                  0x0104		// 8192 bits
+#define DIOSTREAMTLS_MSG_CURVEID_SECP192R1   	                                0x0013	  // 192 bits (obsolete)      // Old Curves  (TLS 1.2)
+#define DIOSTREAMTLS_MSG_CURVEID_SECP224R1 	                                  0x0015	  // 254 bits (obsolete)
+#define DIOSTREAMTLS_MSG_CURVEID_SECP256K1	                                  0x0016	  // Bitcoin, not for TLS
+#define DIOSTREAMTLS_MSG_CURVEID_BRAINPOOLP256R1	                            0x001A	  // Alternativa europea
+#define DIOSTREAMTLS_MSG_CURVEID_BRAINPOOLP384R1	                            0x001B		
+#define DIOSTREAMTLS_MSG_CURVEID_BRAINPOOLP512R1	                            0x001C	
+
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256	                0x0804	  // RSA-PSS con SHA-256      // Algoritm RSA-PSS (TLS 1.3 Mandatory)
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384	                0x0805	  // RSA-PSS con SHA-384
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512	                0x0806	  // RSA-PSS con SHA-512
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256	                  0x0809	  // RSA-PSS puro, SHA-256
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384	                  0x080A	  // RSA-PSS puro, SHA-384
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512	                  0x080B	  // RSA-PSS puro, SHA-512
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256	              0x0403	  // ECDSA P-256 con SHA-256  // Algoritm ECDSA
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384	              0x0503	  // ECDSA P-384 con SHA-384
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512	              0x0603	  // ECDSA P-521 con SHA-512
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256	                    0x0401                                // Algoritm RSA PKCS#1 v1.5 (obsolete, only TLS 1.2)
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384	                    0x0501    
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512	                    0x0601    
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519	                            0x0807                                // Algoritm EdDSA (TLS 1.3 last)
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED448	                              0x0808     
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA1	                      0x0201                                // Other old (only TLS 1.2, rare)
+#define DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SHA1	                          0x0203       
+
+#define DIOSTREAMTLS_MSG_PSKKEYEXCHANGEMODE_PSK                             	0x00		  // PSK pure, without Diffie-Hellman 
+#define DIOSTREAMTLS_MSG_PSKKEYEXCHANGEMODE_PSK_DHE	                          0x01	    // PSK with Diffie-Hellman (DHE) 
+
+
+enum DIOSTREAMTLS_CONTENTTYPE
+{
+   DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC                            =    0x14  , 
+   DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT                                         =    0x15  , 
+   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE                                     =    0x16  ,
+   DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA                              =    0x17  , 
+   DIOSTREAMTLS_MSG_CONTENTTYPE_TLS_1_3_HEARTBEAT                             =    0x18  , 
+};
+
+
+enum DIOSTREAMTLS_CONTENTTYPE_HANDSHAKE
+{
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_HELLO_REQUEST                        =      0  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO                         =      1  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO                         =      2  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE                          =     11  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_KEY_EXCHANGE                  =     12  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_REQUEST                  =     13  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO_DONE                    =     14  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_VERIFY                   =     15  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_KEY_EXCHANGE                  =     16  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED                             =     20  , 
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE                           =     24  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH                         =    254  ,      
+ };
+
+
+enum DIOSTREAMTLS_ALPN_TYPE
+{
+  DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1       ,
+  DIOSTREAMTLS_ALPN_TYPE_HTTP_2         ,
+  DIOSTREAMTLS_ALPN_TYPE_HTTP_3         
+};
 
 
 
@@ -250,13 +288,13 @@ template<typename T>
 class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
 { 
   public:
-                                            DIOSTREAMTLS_MSG_FRAGMENT                     ()
+                                            DIOSTREAMTLS_MSG_FRAGMENT                         ()
                                             {
                                               Clean();
                                             }
 
 
-    virtual                                ~DIOSTREAMTLS_MSG_FRAGMENT                     ()
+    virtual                                ~DIOSTREAMTLS_MSG_FRAGMENT                         ()
                                             {
                                               Clean();
                                             }

@@ -86,6 +86,8 @@ DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::~DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO()
 { 
+  Extensions_DeleteAll();
+
   Clean();
 }
 
@@ -403,29 +405,29 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_DeleteAll()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
 {
-  buffer.Add((XWORD)clientversion);  
+  buffer.Add(clientversion);  
 
   buffer.Add((XBYTE*)random, DIOSTREAMTLS_MSG_RANDOM_SIZE);  
 
-  buffer.Add((XBYTE)sessionID_length);  
+  buffer.Add(sessionID_length);  
   if(sessionID_length)
     {
       buffer.Add((XBYTE*)sessionID, sessionID_length);  
     }
 
-  buffer.Add((XWORD)ciphersuites_length);  
+  buffer.Add(ciphersuites_length);  
 
   for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
     {
-      XDWORD ciphersuite = ciphersuites.Get(c);
+      XWORD ciphersuite = ciphersuites.Get(c);
 
-      buffer.Add((XWORD)ciphersuite);
+      buffer.Add(ciphersuite);
     }
 
-  buffer.Add((XBYTE)compress_length);  
-  buffer.Add((XBYTE)compress_method);  
+  buffer.Add(compress_length);  
+  buffer.Add(compress_method);  
 
-  buffer.Add((XWORD)extensions_lenght);
+  buffer.Add(extensions_lenght);
 
   for(XDWORD c=0; c<extensions.GetSize(); c++)
     {

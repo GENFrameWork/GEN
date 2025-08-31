@@ -183,8 +183,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer)
 {
-  buffer.Extract((XWORD)type);
-  buffer.Extract((XWORD)length);
+  buffer.Extract(type);
+  buffer.Extract(length);
   
   return true;
 }
@@ -413,8 +413,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer)
 
   memset((XBYTE*)_hostname, 0, _MAXSTR);
 
-  buffer.Extract((XBYTE)name_type);
-  buffer.Extract((XWORD)name_length);
+  buffer.Extract(name_type);
+  buffer.Extract(name_length);
 
   buffer.Extract((XBYTE*)_hostname, 0, name_length);
 
@@ -454,7 +454,7 @@ DIOSTREAMTLS_MSG_EXTENSION_SNI::DIOSTREAMTLS_MSG_EXTENSION_SNI()
 {
   Clean();
 
-  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_SNI);
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_SNI);   
 }
 
                         
@@ -468,6 +468,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SNI::DIOSTREAMTLS_MSG_EXTENSION_SNI()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_SNI::~DIOSTREAMTLS_MSG_EXTENSION_SNI()
 {
+  List_DeleteAll();
+
   Clean();
 }
 
@@ -590,29 +592,28 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_DeleteAll()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* servername)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* extension)
 * @brief      copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  servername : 
+* @param[in]  extension : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* SNI)
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* extension)
 {
-  if(!SNI)
+  if(!extension)
     {
       return false;
     }
 
-  SNI->SetType(GetType());
-  
-  SNI->SetLength(GetLength());
+  extension->SetType(GetType());  
+  extension->SetLength(GetLength());
 
-  SNI->List_DeleteAll();
+  extension->List_DeleteAll();
 
-  SNI->List_SetLength(List_GetLength());
+  extension->List_SetLength(List_GetLength());
 
   for(XDWORD c=0; c<list.GetSize(); c++)
     {
@@ -624,7 +625,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* SNI)
             { 
               servername->CopyTo(_servername);
 
-              SNI->List_Add(_servername);
+              extension->List_Add(_servername);
             }
         }
     }
@@ -635,34 +636,32 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* SNI)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* servername)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* extension)
 * @brief      copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  servername : 
+* @param[in]  extension : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* SNI)
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* extension)
 {
-  if(!SNI)
+  if(!extension)
     {
       return false;
     }
 
-  SetType(SNI->GetType());
-  
-  SetLength(SNI->GetLength());
-
+  SetType(extension->GetType());  
+  SetLength(extension->GetLength());
 
   List_DeleteAll();
 
-  List_SetLength(SNI->List_GetLength());
+  List_SetLength(extension->List_GetLength());
 
-  for(XDWORD c=0; c<SNI->List_Get()->GetSize(); c++)
+  for(XDWORD c=0; c<extension->List_Get()->GetSize(); c++)
     {
-      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = SNI->List_Get()->Get(c);
+      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = extension->List_Get()->Get(c);
       if(servername)
         {
           DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername = new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
@@ -674,7 +673,6 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* SN
             }
         }
     }
-
 
   return true;
 }
@@ -725,7 +723,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer)
 {
   DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
 
-  buffer.Extract((XWORD)list_length);
+  buffer.Extract(list_length);
 
   for(XDWORD c=0; c<list_length; c++)
     {
@@ -756,6 +754,572 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer)
 void DIOSTREAMTLS_MSG_EXTENSION_SNI::Clean()
 {
   list_length = 0;
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS::DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS::DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS()
+{
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDGROUPS); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS()
+{
+ 
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS::DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS::DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS()
+{
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_ECPOINTFORMATS); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS::~DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS::~DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS()
+{
+ 
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS()
+{
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMS); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::~DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::~DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS()
+{
+ 
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_ALPN
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_ALPN::DIOSTREAMTLS_MSG_EXTENSION_ALPN()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_ALPN::DIOSTREAMTLS_MSG_EXTENSION_ALPN()
+{
+  Clean();
+
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_ALPN);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_ALPN::~DIOSTREAMTLS_MSG_EXTENSION_ALPN()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_ALPN::~DIOSTREAMTLS_MSG_EXTENSION_ALPN()
+{
+  List_DeleteAll();
+
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetLength()
+* @brief      list  get length
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetLength()
+{
+  return list_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_SetLength(XWORD list_length)
+* @brief      list  set length
+* @ingroup    DATAIO
+* 
+* @param[in]  list_length : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_SetLength(XWORD list_length)
+{
+  this->list_length = list_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetBuffer()
+* @brief      list  get buffer
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetBuffer()
+{
+  return &list_buffer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
+* @brief      list  add
+* @ingroup    DATAIO
+* 
+* @param[in]  alpn_type : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
+{
+  switch(alpn_type)
+    {  
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1 : 
+                             default       :  { XBYTE value[] = { 0x08, 0x68, 0x74, 0x74, 0x70, 0x2F, 0x31, 0x2E, 0x31 };
+                                                list_buffer.Add(value, sizeof(value));  
+                                              } 
+                                              break;
+
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_2   :  { XBYTE value[] = { 0x02, 0x68, 0x32 };
+                                                list_buffer.Add(value, sizeof(value));  
+                                              } 
+                                              break;
+
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_3   :  { XBYTE value[] = { 0x02, 0x68, 0x33 };
+                                                list_buffer.Add(value, sizeof(value));  
+                                              } 
+                                              break;      
+    }
+
+  if(list_buffer.IsEmpty())
+    {
+      return false;
+    }
+
+  list_length = list_buffer.GetSize();
+
+  SetLength(list_length  + sizeof(XWORD));
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_DeleteAll()
+* @brief      list  delete all
+* @ingroup    DATAIO
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_DeleteAll()
+{
+  return list_buffer.Empty();  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension)
+* @brief      copy to
+* @ingroup    DATAIO
+* 
+* @param[in]  extension : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  extension->SetType(GetType());  
+  extension->SetLength(GetLength());
+
+  extension->List_SetLength(List_GetLength());
+
+  extension->List_GetBuffer()->CopyTo(list_buffer);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension)
+* @brief      copy from
+* @ingroup    DATAIO
+* 
+* @param[in]  extension : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  SetType(extension->GetType());  
+  SetLength(extension->GetLength());
+
+  List_SetLength(extension->List_GetLength());
+  
+  list_buffer.CopyFrom((*extension->List_GetBuffer()));
+
+  return true;
+}    
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer)
+* @brief      set to buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer)
+{
+  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+
+  buffer.Add((XWORD)list_length);
+
+  buffer.Add(list_buffer);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::GetFromBuffer(XBUFFER& buffer)
+* @brief      get from buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::GetFromBuffer(XBUFFER& buffer)
+{
+  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+
+  buffer.Extract(list_length);
+
+  list_buffer.Resize(buffer.GetSize());
+
+  buffer.Extract(list_buffer.Get(), 0, list_buffer.GetSize());
+
+  return true;
+}
+     
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_ALPN::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    DATAIO
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_ALPN::Clean()
+{
+  list_length = 0;
+
+  list_buffer.Empty();   
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_EMS
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_EMS::DIOSTREAMTLS_MSG_EXTENSION_EMS()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_EMS::DIOSTREAMTLS_MSG_EXTENSION_EMS()
+{
+  Clean();
+
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_EMS); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_EMS::~DIOSTREAMTLS_MSG_EXTENSION_EMS()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_EMS::~DIOSTREAMTLS_MSG_EXTENSION_EMS()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_EMS* extension)
+* @brief      copy to
+* @ingroup    DATAIO
+* 
+* @param[in]  extension : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_EMS* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  extension->SetType(GetType());  
+  extension->SetLength(GetLength());
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_EMS* extension)
+* @brief      copy from
+* @ingroup    DATAIO
+* 
+* @param[in]  extension : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_EMS* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  SetType(extension->GetType());  
+  SetLength(extension->GetLength());
+
+  return true;
+}
+
+     
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer)
+* @brief      set to buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer)
+{
+  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_EMS::GetFromBuffer(XBUFFER& buffer)
+* @brief      get from buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_EMS::GetFromBuffer(XBUFFER& buffer)
+{
+  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+
+  return true;
+}
+     
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_EMS::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    DATAIO
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_EMS::Clean()
+{
+  
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS::DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS::DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS()
+{
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDVERSIONS); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS()
+{
+ 
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES()
+{
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_PSKKEYEXCHANGEMODES); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::~DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::~DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES()
+{
+ 
 }
 
 

@@ -704,6 +704,8 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
                                                                       }
                                                                   }
                                                                 break; 
+
+                                                    default   : break;
             }                                                
                       
           // ---------------------------------------------------------------------------------  

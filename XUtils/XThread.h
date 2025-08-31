@@ -84,6 +84,7 @@ enum XTHREADGROUPID
   XTHREADGROUPID_DIOSTREAMI2C                         ,
   XTHREADGROUPID_DIOSTREAMSPI                         ,
   XTHREADGROUPID_DIOSTREAMCIPHER                      ,
+  XTHREADGROUPID_DIOSTREAMTLS                         ,
   XTHREADGROUPID_DIOSSHREVERSE                        ,
   XTHREADGROUPID_DIOCHECKTCPIPCONNECTIONS             ,
   XTHREADGROUPID_DIOPROTOCOL                          ,
