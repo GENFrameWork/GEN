@@ -377,11 +377,28 @@ class DIOSTREAMTLS_MSG_EXTENSION_KEY
                                                           DIOSTREAMTLS_MSG_EXTENSION_KEY                    ();
     virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_KEY                    ();
 
+    
+
+    XWORD                                                 GetKeyType                                        ();
+    void                                                  SetKeyType                                        (XWORD keytype);
+
+    XWORD                                                 GetLengthKeyData                                  ();                                          
+    void                                                  SetLengthKeyData                                  (XWORD lengthkeydata);
+
+    XBUFFER*                                              GetKeyData                                        ();
+
+    bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_KEY* key);  
+    bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_KEY* key);  
+
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer);                                           
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer);
+
   private:
 
     void                                                  Clean                                             ();   
 
-    XWORD                                                 length;
+    XWORD                                                 keytype;
+    XWORD                                                 lengthkeydata;    
     XBUFFER                                               keydata;
 };
 
@@ -395,7 +412,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE : public DIOSTREAMTLS_MSG_EXTENSION
     XWORD                                                 List_GetLength                                    ();                                          
     void                                                  List_SetLength                                    (XWORD list_length);
 
-    XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>*  List_Get                                          ();
+    XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>*             List_Get                                          ();
     bool                                                  List_Add                                          (DIOSTREAMTLS_MSG_EXTENSION_KEY* key);
     bool                                                  List_DeleteAll                                    ();
 

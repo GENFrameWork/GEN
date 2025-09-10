@@ -149,6 +149,36 @@ void DIOSTREAMCONFIG::SetMode(DIOSTREAMMODE mode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMCONFIG::IsTLS()
+* @brief      is TLs
+* @ingroup    DATAIO
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMCONFIG::IsTLS()
+{
+  return isTLS;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMCONFIG::SetIsTLS(bool isTLS)
+* @brief      set is TLs
+* @ingroup    DATAIO
+* 
+* @param[in]  isTLS : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMCONFIG::SetIsTLS(bool isTLS)
+{
+  this->isTLS = isTLS;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMCONFIG::IsServer()
 * @brief      Is server
@@ -267,6 +297,7 @@ void DIOSTREAMCONFIG::Clean()
 {
   type                    = DIOSTREAMTYPE_UNKNOWN;
   mode                    = DIOSTREAMMODE_NONE;
+  isTLS                   = false;
 
   sizebufferSO            = 0;
   threadpriority          = XTHREADPRIORITY_NORMAL;

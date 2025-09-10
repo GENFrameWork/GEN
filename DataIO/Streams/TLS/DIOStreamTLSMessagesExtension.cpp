@@ -208,7 +208,7 @@ void DIOSTREAMTLS_MSG_EXTENSION::Clean()
 #pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SNI
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -559,7 +559,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Add(DIOSTREAMTLS_MSG_EXTENSION_SNI_SER
 
   List_SetLength(List_GetLength() + sizeof(XBYTE) + sizeof(XWORD));
 
-  SetLength(List_GetLength() + + sizeof(XWORD));
+  SetLength(List_GetLength() + sizeof(XWORD));
 
   return true;
 }
@@ -1322,6 +1322,542 @@ DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::~DIOSTREAMTLS_MSG_EXTENSION_PSKK
  
 }
 
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_KEY
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_KEY::DIOSTREAMTLS_MSG_EXTENSION_KEY()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_KEY::DIOSTREAMTLS_MSG_EXTENSION_KEY()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_KEY::~DIOSTREAMTLS_MSG_EXTENSION_KEY()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_KEY::~DIOSTREAMTLS_MSG_EXTENSION_KEY()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetKeyType()
+* @brief      get key type
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetKeyType()
+{
+  return keytype;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetKeyType(XWORD keytype)
+* @brief      set key type
+* @ingroup    DATAIO
+* 
+* @param[in]  keytype : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetKeyType(XWORD keytype)
+{
+  this->keytype = keytype;
+}
+
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetLength()
+* @brief      get length
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetLengthKeyData()
+{
+  return lengthkeydata;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetLengthKeyData(XWORD lengthkeydata)
+* @brief      set length key data
+* @ingroup    DATAIO
+* 
+* @param[in]  lengthkeydata : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetLengthKeyData(XWORD lengthkeydata)
+{
+  this->lengthkeydata = lengthkeydata;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_KEY::GetKeyData()
+* @brief      get key data
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_KEY::GetKeyData()
+{
+  return &keydata;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
+* @brief      copy to
+* @ingroup    DATAIO
+* 
+* @param[in]  key : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
+{ 
+  key->SetKeyType(keytype);
+  
+  key->SetLengthKeyData(lengthkeydata);
+
+  key->GetKeyData()->Empty();
+  key->GetKeyData()->Add(keydata);
+
+  return true;
+}
+  
+  
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
+* @brief      copy from
+* @ingroup    DATAIO
+* 
+* @param[in]  key : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
+{ 
+  SetKeyType(key->GetKeyType());
+  
+  SetLengthKeyData(key->GetLengthKeyData());
+  
+  GetKeyData()->Empty();
+  GetKeyData()->Add(key->GetKeyData());
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer)
+* @brief      set to buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer)
+{ 
+  buffer.Add(keytype);
+  
+  buffer.Add(lengthkeydata); 
+  buffer.Add(keydata);
+
+  return true;
+}                                           
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer)
+* @brief      get from buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer)
+{  
+  buffer.Extract(keytype);
+  
+  buffer.Extract(lengthkeydata);
+
+  keydata.Resize(buffer.GetSize());
+  buffer.Extract(keydata.Get(), 0, keydata.GetSize());
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_KEY::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    DATAIO
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_KEY::Clean()
+{
+  keytype = 0;
+  lengthkeydata  = 0;
+  keydata.Empty();
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE()
+{
+  Clean();
+
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::~DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::~DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_GetLength()
+* @brief      list  get length
+* @ingroup    DATAIO
+* 
+* @return     XWORD : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_GetLength()
+{
+  return list_length;
+}                                          
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_SetLength(XWORD list_length)
+* @brief      list  set length
+* @ingroup    DATAIO
+* 
+* @param[in]  list_length : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_SetLength(XWORD list_length)
+{
+  this->list_length = list_length;
+}
+
+    
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>* DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Get()
+* @brief      list  get
+* @ingroup    DATAIO
+* 
+* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>* : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>* DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Get()
+{
+  return &list;
+}
+
+    
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Add(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
+* @brief      list  add
+* @ingroup    DATAIO
+* 
+* @param[in]  key : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Add(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
+{
+  DIOSTREAMTLS_MSG_EXTENSION_KEY* _key =  new DIOSTREAMTLS_MSG_EXTENSION_KEY();
+  if(!_key)
+    {
+      return false;
+    }
+        
+  _key->CopyFrom(key);
+
+  if(!list.Add(_key))
+    {
+      return false;
+    }
+
+  SetLength(0);
+  List_SetLength(0);
+
+  for(XDWORD c=0; c<list.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_KEY* key = list.Get(c);
+      if(key)
+        {
+          List_SetLength(List_GetLength() + key->GetKeyData()->GetSize());          
+        }
+    }
+
+  List_SetLength(List_GetLength() + sizeof(XWORD) + sizeof(XWORD));
+
+  SetLength(List_GetLength() + sizeof(XWORD));
+
+  return true;
+}
+
+    
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_DeleteAll()
+* @brief      list  delete all
+* @ingroup    DATAIO
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_DeleteAll()
+{
+  if(list.IsEmpty())
+    {
+      return false;
+    }
+
+  list.DeleteContents();
+  list.DeleteAll();
+
+  List_SetLength(0);
+
+  return true;
+}
+
+    
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension)
+* @brief      copy to
+* @ingroup    DATAIO
+* 
+* @param[in]  extension : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  extension->SetType(GetType());  
+  extension->SetLength(GetLength());
+
+  extension->List_DeleteAll();
+
+  extension->List_SetLength(List_GetLength());
+
+  for(XDWORD c=0; c<list.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_KEY* key = list.Get(c);
+      if(key)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_KEY* _key = new DIOSTREAMTLS_MSG_EXTENSION_KEY();
+          if(_key)
+            { 
+              key->CopyTo(_key);
+              extension->List_Add(_key);
+            }
+        }
+    }
+
+  return true;
+}
+    
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension)
+* @brief      copy from
+* @ingroup    DATAIO
+* 
+* @param[in]  extension : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  SetType(extension->GetType());  
+  SetLength(extension->GetLength());
+
+  List_DeleteAll();
+
+  List_SetLength(extension->List_GetLength());
+
+  for(XDWORD c=0; c<extension->List_Get()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_KEY* key = extension->List_Get()->Get(c);
+      if(key)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_KEY* _key = new DIOSTREAMTLS_MSG_EXTENSION_KEY();
+          if(_key)
+            { 
+              _key->CopyFrom(key);
+
+              List_Add(_key);
+            }
+        }
+    }
+  
+  return true;
+}
+                                                       
+    
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer)
+* @brief      set to buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer)
+{
+  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+
+  buffer.Add((XWORD)list_length);
+
+  for(XDWORD c=0; c<list.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_KEY* key = list.Get(c);
+      if(key)
+        {
+          key->SetToBuffer(buffer);
+        }
+    }
+
+  return true;
+}
+
+  
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer)
+* @brief      get from buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer)
+{
+  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+
+  buffer.Extract(list_length);
+
+  for(XDWORD c=0; c<list_length; c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_KEY* key = new DIOSTREAMTLS_MSG_EXTENSION_KEY();
+      if(key)
+        {
+          key->GetFromBuffer(buffer);
+        }
+
+      if(!List_Add(key))
+        {
+          return false;
+        }
+    }
+
+  return true;
+}
+                                             
+      
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    DATAIO
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::Clean()
+{
+  list_length = 0;
+}
+    
 
 #pragma endregion
 

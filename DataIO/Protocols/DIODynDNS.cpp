@@ -41,7 +41,9 @@
 
 #include "DIOFactory.h"
 #include "DIOWebClient.h"
+#ifdef DIO_PUBLICINTERNETIP_ACTIVE
 #include "DIOPublicInternetIP.h"
+#endif
 
 #pragma endregion
 
@@ -173,17 +175,10 @@ bool DIODYNDNS::GetPublicIP(DIOIP& publicIP, int timeout, XSTRING* IPlocal)
         }
     }
    else
-    {
+    {        
+      #ifdef DIO_PUBLICINTERNETIP_ACTIVE
       GEN_DIOPUBLICINTERNETIP.Get(publicIP);
-
-      /*        
-      DIOSCRAPERWEBPUBLICIP* scraperwebpublicip = new DIOSCRAPERWEBPUBLICIP();
-      if(scraperwebpublicip)
-        {
-          status = scraperwebpublicip->Get(publicIP, 5, NULL, false);
-          delete scraperwebpublicip;
-        }
-      */
+      #endif
     }
 
   return status;

@@ -99,6 +99,9 @@ class DIOSTREAMCONFIG : public XSUBJECT
     DIOSTREAMMODE             GetMode                         ();
     void                      SetMode                         (DIOSTREAMMODE mode);
 
+    bool                      IsTLS                           ();
+    void                      SetIsTLS                        (bool isTLS);
+
     bool                      IsServer                        ();
 
     XDWORD                    GetSizeBufferSO                 ();
@@ -115,6 +118,7 @@ class DIOSTREAMCONFIG : public XSUBJECT
 
     DIOSTREAMTYPE             type;
     DIOSTREAMMODE             mode;
+    bool                      isTLS;
 
     XDWORD                    sizebufferSO;
     XTHREADPRIORITY           threadpriority;
