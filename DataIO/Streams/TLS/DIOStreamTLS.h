@@ -35,17 +35,17 @@
 #include "XBase.h"
 #include "XFactory.h"
 #include "XRand.h"
-
-#include "XBuffer.h"
 #include "XFSMachine.h"
+#include "XBuffer.h"
 
 #include "DIOFactory.h"
 #include "DIOIP.h"
+#include "DIOStreamConfig.h"
 #include "DIOStream.h"
 #include "DIOStreamTLSMessages.h"
 #include "DIOStreamTLSMessagesExtension.h"
 #include "DIOStreamTLSMessagesHandShakeClientHello.h"
-
+#include "DIOStreamTLSMessagesHandShakeServerHello.h"
 
 
 #pragma endregion
@@ -95,73 +95,59 @@ enum DIOSTREAMTLSXFSMSTATES
 class DIOSTREAMTLSCONFIG;
 
 template<typename T>
-class DIOSTREAMTLS :  public XFSMACHINE, public DIOSTREAM
+class DIOSTREAMTLS :  public T
 {
   public:
-                                            DIOSTREAMTLS                      (DIOSTREAMTLSCONFIG* config)  : XFSMACHINE(0) 
+                                            DIOSTREAMTLS                            () 
                                             {
-                                              Clean();
-
-                                              SetConfig((DIOSTREAMCONFIG*)config);
-
-                                              config->SetIsTLS(false);
-
-                                              diostream = (T*)GEN_DIOFACTORY.CreateStreamIO((DIOSTREAMCONFIG*)config);
-
-                                              if(diostream)
-                                                {
-                                                  SetTimeout();
-                                                }
+                                              Clean();    
+                                              
+                                              timeout = DIOSTREAMTLS_TIMEOUT;  
                                             } 
                                        
 
-    virtual                                ~DIOSTREAMTLS                      ()
-                                            {
-                                              if(diostream) 
-                                                {
-                                                  GEN_DIOFACTORY.DeleteStreamIO(diostream);
-                                                }
-
+    virtual                                ~DIOSTREAMTLS                            ()
+                                            {                                             
                                               Clean();
                                             }
 
 
-    DIOSTREAMCONFIG*                        GetConfig                         ()
-                                            {
-                                              return (DIOSTREAMCONFIG*)config;
-                                            }
-
-
-    bool                                    SetConfig                         (DIOSTREAMCONFIG* config)
-                                            {
-                                              if(!config) 
-                                                {
-                                                  return false;
-                                                }
-
-                                              this->config = (DIOSTREAMTLSCONFIG *)config;
-
-                                              return true;
-                                            }
-
-
-    bool                                    Open                              ()
-                                            {
-                                              if(!diostream) 
-                                                {
-                                                  return false;
-                                                }
-
-                                              bool status = diostream->Open();
+    bool                                    Open                                    ()
+                                            {                                              
+                                              bool status = T::Open();
                                               if(!status) 
                                                 {
                                                   return false;
                                                 }
 
-                                              status = diostream->WaitToConnected(timeout);
-                                              if(status)
+                                              if(T::GetConfig()->IsServer())
                                                 {
 
+                                                }
+                                               else
+                                                {   
+                                                  status = T::WaitToConnected(timeout);
+                                                  if(status)
+                                                    {
+                                                      DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>> clienthello_msg;
+
+                                                      status = Send_HandShake_Client_ClientHello(clienthello_msg);
+                                                      if(status)
+                                                        {
+                                                          DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>> serverhello_msg;
+                                                          
+                                                          status = Received_HandShake_Client_ServerHello(serverhello_msg);      
+                                                          if(status)
+                                                            {
+
+
+                                                            }                                                        
+                                                        }                                                 
+                                                    } 
+                                                }
+
+                                              if(status) 
+                                                {
                                                   thread = CREATEXTHREAD(XTHREADGROUPID_DIOSTREAMTLS, __L("DIOSTREAMTLS::Open"), ThreadRunFunction, (void*)this);
                                                   if(!thread) 
                                                     {
@@ -169,129 +155,81 @@ class DIOSTREAMTLS :  public XFSMACHINE, public DIOSTREAM
                                                     }
 
                                                   thread->Ini();
-
-
-                                                  DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>> message;
-
-                                                  status = Create_HandShake_ClientHello(message);
-                                                  if(status)
-                                                    {
-                                                      XBUFFER writebuffer;
-                                                      bool    status;
-
-                                                      message.SetToBuffer(writebuffer);
-  
-                                                      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
-                                                      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, writebuffer);
-          
-                                                      status = Write(writebuffer.Get(), writebuffer.GetSize(), DIOSTREAMTLS_TIMEOUT);           
-                                                      if(status) 
-                                                        {
-                                                          XBUFFER readbuffer;
-
-                                                          readbuffer.Resize(32);    
-
-                                                          status = Read(readbuffer.Get(), readbuffer.GetSize(), DIOSTREAMTLS_TIMEOUT); 
-                                                          if(status)
-                                                            {
-
-                                                            }
-                                                        }
-                                                    }
                                                 }
 
                                               return status;
                                             }
     
 
-    XDWORD                                  Read                              (XBYTE* buffer, XDWORD size, int timeout)
+    XDWORD                                  Read                                    (XBYTE* buffer, XDWORD size)
                                             {
-                                              if(!diostream) 
+                                              bool status = T::WaitToFilledReadingBuffer(size, timeout);
+                                              if(!status)    
                                                 {
-                                                  return false;
+                                                  return 0;    
                                                 }
 
-                                              return diostream->Read(buffer, size);
+                                              return T::Read(buffer, size);
                                             }
 
 
-    XDWORD                                  Write                             (XBYTE* buffer, XDWORD size, int timeout)
+    XDWORD                                  Write                                   (XBYTE* buffer, XDWORD size)
                                             {
-                                              if(!diostream) 
+                                              if(!size)
                                                 {
-                                                  return false;
+                                                  return 0;    
                                                 }
 
-                                              bool status = diostream->Write(buffer, size);
-
-                                              if(status)
+                                              XDWORD _size = T::Write(buffer, size);
+                                              if(!_size)
                                                 {
-                                                  status = diostream->WaitToFlushOutXBuffer(timeout);  
+                                                  return 0;    
                                                 }
-
-                                              return status;
+                                              
+                                              bool status = T::WaitToFlushOutXBuffer(timeout);  
+                                              
+                                              return status?size:0;
                                             }
 
 
-    bool                                    Disconnect                        ()
-                                            {
-                                              if(!diostream) 
-                                                {
-                                                  return false;
-                                                }
-
-                                              return diostream->Disconnect();
+    bool                                    Disconnect                              ()
+                                            {                                              
+                                              return T::Disconnect();
                                             }
 
 
-    bool                                    Close                             ()
-                                            {
-                                              if(!diostream) 
-                                                {
-                                                  return false;
-                                                }
-
+    bool                                    Close                                   ()
+                                            {                                              
                                               DELETEXTHREAD(XTHREADGROUPID_DIOSTREAMTLS, thread); 
-
                                               thread = NULL;
 
-                                              return diostream->Close();
+                                              return T::Close();
                                             } 
 
-
-    DIOSTREAMTCPIP*                         GetDIOStreamTCPIP                 ()
-                                            {
-                                              return diostream;
+    DIOSTREAMSTATUS                         GetStatus                               ()
+                                            {                                              
+                                              return T::GetStatus();
                                             }
 
 
-    DIOSTREAMSTATUS                         GetStatus                         ()
-                                            {
-                                              if(!diostream) 
-                                                {
-                                                  return DIOSTREAMSTATUS_DISCONNECTED;
-                                                }
-
-                                              return diostream->GetStatus();
-                                            }
-
-
-    int                                     GetTimeout                        ()
+    int                                     GetTimeout                              ()
                                             {
                                               return timeout;
                                             }
 
 
-    void                                    SetTimeout                        (int timeout = DIOSTREAMTLS_TIMEOUT)
+    void                                    SetTimeout                              (int timeout = DIOSTREAMTLS_TIMEOUT)
                                             {
                                               this->timeout = timeout;
                                             }
 
+  private:
 
-    bool                                    Create_HandShake_ClientHello      (DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>& message)
+    bool                                    Send_HandShake_Client_ClientHello       (DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>& message)
                                             {
-                                              DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>*                          fragment  = NULL;
-                                              DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO*                                                     body      = NULL;
+                                              DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>*  fragment  = NULL;
+                                              DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO*                             body      = NULL;
+                                              XBUFFER                                                             writebuffer;
   
                                               fragment  = message.GetFragment();
                                               body      = message.GetFragment()->GetBody();
@@ -333,7 +271,7 @@ class DIOSTREAMTLS :  public XFSMACHINE, public DIOSTREAM
                                               body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 /*DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_CBC_SHA*/);
                                               body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
                                               body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
-
+                                            
                                               body->SetCiphersuitesLength((XWORD)body->GetCipherSuites()->GetSize() * sizeof(XWORD));
 
                                               body->SetCompressionLength(0x01);
@@ -437,9 +375,7 @@ class DIOSTREAMTLS :  public XFSMACHINE, public DIOSTREAM
                                               if(extension_keyshare)
                                                 { 
                                                   DIOSTREAMTLS_MSG_EXTENSION_KEY key;
-                                                  XBYTE                          datakey[32] = {  0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF, 
-                                                                                                  0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
-                                                                                               };
+                                                  XBYTE                          datakey[32];
 
                                                   GenerateRandom(datakey);
 
@@ -452,13 +388,55 @@ class DIOSTREAMTLS :  public XFSMACHINE, public DIOSTREAM
   
                                               body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)extension_keyshare); 
 
-                                              message.CalculateLength();
+                                              message.CalculateLength();                                        
+                                              
+                                              message.SetToBuffer(writebuffer, true);
+  
+                                              XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
+                                              XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, writebuffer);
+          
+                                              return Write(writebuffer.Get(), writebuffer.GetSize());                                                         
+                                            }
 
-                                              return true;
+    bool                                    Received_HandShake_Client_ServerHello   (DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>>& message)
+                                            {
+                                              XBUFFER readbuffer;
+                                              XDWORD  sizeread;
+                                              bool    status =  false;
+
+                                              readbuffer.Resize(5);    
+                                 
+                                              sizeread = Read(readbuffer.Get(), readbuffer.GetSize()); 
+                                              if(sizeread == readbuffer.GetSize())
+                                                { 
+                                                  XBYTE typemsg;
+                                                  XWORD legacyversion;
+                                                  XWORD sizemsg;  
+                                                      
+                                                  readbuffer.Get(typemsg);  
+                                                  readbuffer.Get(legacyversion);  
+                                                  readbuffer.Get(sizemsg);  
+
+                                                  //message.SetLegacyVersion(legacyversion);
+
+                                                  readbuffer.Resize(sizemsg);  
+
+                                                  sizeread = Read(readbuffer.Get(), readbuffer.GetSize()); 
+                                                  if(sizeread == readbuffer.GetSize())
+                                                    { 
+
+                                              
+                                                        
+
+                                                      status = true;   
+                                                    }                                                    
+                                                }                           
+
+                                              return status;
                                             }
 
     
-    bool                                    GenerateRandom                    (XBYTE* random)
+    bool                                    GenerateRandom                          (XBYTE* random)
                                             {
                                               if(!random)
                                                 {
@@ -503,7 +481,7 @@ class DIOSTREAMTLS :  public XFSMACHINE, public DIOSTREAM
                                             }
 
 
-    bool                                    GenerateSessionID                 (XBYTE* sessionID, XBYTE sessionIDlength)
+    bool                                    GenerateSessionID                       (XBYTE* sessionID, XBYTE sessionIDlength)
                                             {
                                               if(!sessionID)
                                                 {
@@ -547,38 +525,37 @@ class DIOSTREAMTLS :  public XFSMACHINE, public DIOSTREAM
                                               return status;
                                             }
     
-  private:
 
-    bool                                    IniFSMachine                      ()                                                                                         
+    bool                                    IniFSMachine                            ()                                                                                         
                                             {
-                                              if(!AddState( DIOSTREAMTLS_XFSMSTATE_NONE            ,
-                                                            DIOSTREAMTLS_XFSMEVENT_INI             , DIOSTREAMTLS_XFSMSTATE_INI           ,
-                                                            DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
-                                                            XFSMACHINESTATE_EVENTDEFEND)) return false;
+                                              if(!T::AddState(DIOSTREAMTLS_XFSMSTATE_NONE            ,
+                                                              DIOSTREAMTLS_XFSMEVENT_INI             , DIOSTREAMTLS_XFSMSTATE_INI           ,
+                                                              DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
+                                                              XFSMACHINESTATE_EVENTDEFEND)) return false;
 
 
-                                              if(!AddState( DIOSTREAMTLS_XFSMSTATE_INI             ,
-                                                            DIOSTREAMTLS_XFSMEVENT_UPDATE          , DIOSTREAMTLS_XFSMSTATE_UPDATE        ,
-                                                            DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
-                                                            XFSMACHINESTATE_EVENTDEFEND)) return false;
+                                              if(!T::AddState(DIOSTREAMTLS_XFSMSTATE_INI             ,
+                                                              DIOSTREAMTLS_XFSMEVENT_UPDATE          , DIOSTREAMTLS_XFSMSTATE_UPDATE        ,
+                                                              DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
+                                                              XFSMACHINESTATE_EVENTDEFEND)) return false;
 
 
-                                              if(!AddState( DIOSTREAMTLS_XFSMSTATE_UPDATE          ,
-                                                            DIOSTREAMTLS_XFSMEVENT_NONE            , DIOSTREAMTLS_XFSMSTATE_NONE          ,                
-                                                            DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
-                                                            XFSMACHINESTATE_EVENTDEFEND)) return false;
+                                              if(!T::AddState(DIOSTREAMTLS_XFSMSTATE_UPDATE          ,
+                                                              DIOSTREAMTLS_XFSMEVENT_NONE            , DIOSTREAMTLS_XFSMSTATE_NONE          ,                
+                                                              DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
+                                                              XFSMACHINESTATE_EVENTDEFEND)) return false;
 
 
-                                              if(!AddState( DIOSTREAMTLS_XFSMSTATE_END             ,
-                                                            DIOSTREAMTLS_XFSMEVENT_NONE            , DIOSTREAMTLS_XFSMSTATE_NONE          ,
-                                                            DIOSTREAMTLS_XFSMEVENT_INI             , DIOSTREAMTLS_XFSMSTATE_INI           ,
-                                                            XFSMACHINESTATE_EVENTDEFEND)) return false;
+                                              if(!T::AddState(DIOSTREAMTLS_XFSMSTATE_END             ,
+                                                              DIOSTREAMTLS_XFSMEVENT_NONE            , DIOSTREAMTLS_XFSMSTATE_NONE          ,
+                                                              DIOSTREAMTLS_XFSMEVENT_INI             , DIOSTREAMTLS_XFSMSTATE_INI           ,
+                                                              XFSMACHINESTATE_EVENTDEFEND)) return false;
 
                                               return true;  
                                             }
 
 
-    static void                             ThreadRunFunction                 (void* param)
+    static void                             ThreadRunFunction                       (void* param)
                                             {
                                               DIOSTREAMTLS* diostreamTLS = (DIOSTREAMTLS*)param;
                                               if(!diostreamTLS) 
@@ -588,22 +565,14 @@ class DIOSTREAMTLS :  public XFSMACHINE, public DIOSTREAM
                                             }
 
 
-    void                                    Clean                             ()
+    void                                    Clean                                   ()
                                             {
-                                              config      = NULL;  
-                                              diostream   = NULL;
-
                                               timeout     = 0;
-
                                               thread      = NULL;
                                             }
 
 
-    DIOSTREAMTLSCONFIG*                     config;
-    T*                                      diostream;
-
     int                                     timeout;
-
     XTHREADCOLLECTED*                       thread;
 
     XBYTE                                   random[DIOSTREAMTLS_MSG_RANDOM_SIZE];

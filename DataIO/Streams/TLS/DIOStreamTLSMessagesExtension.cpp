@@ -161,7 +161,7 @@ void DIOSTREAMTLS_MSG_EXTENSION::SetLength(XWORD length)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
   buffer.Add((XWORD)type);
   buffer.Add((XWORD)length);
@@ -181,7 +181,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
   buffer.Extract(type);
   buffer.Extract(length);
@@ -376,7 +376,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyFrom(DIOSTREAMTLS_MSG_EXTENS
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer, bool showdebug)
 { 
   XBUFFER bufferstring;
   
@@ -407,7 +407,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
   XBYTE _hostname[_MAXSTR];
 
@@ -689,9 +689,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* ex
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
-  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug);
 
   buffer.Add((XWORD)list_length);
 
@@ -700,7 +700,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer)
       DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = list.Get(c);
       if(servername)
         {
-          servername->SetToBuffer(buffer);
+          servername->SetToBuffer(buffer, showdebug);
         }
     }
 
@@ -719,9 +719,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
-  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug);
 
   buffer.Extract(list_length);
 
@@ -730,7 +730,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer)
       DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
       if(servername)
         {
-          servername->GetFromBuffer(buffer);
+          servername->GetFromBuffer(buffer, showdebug);
         }
 
       if(!List_Add(servername))
@@ -1067,9 +1067,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_ALPN* 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
-  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug);
 
   buffer.Add((XWORD)list_length);
 
@@ -1090,9 +1090,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::GetFromBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
-  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug);
 
   buffer.Extract(list_length);
 
@@ -1216,9 +1216,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_EMS* ex
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
-  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug);
 
   return true;
 }
@@ -1235,9 +1235,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_EMS::GetFromBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_EMS::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
-  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug);
 
   return true;
 }
@@ -1491,7 +1491,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEY* ke
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer, bool showdebug)
 { 
   buffer.Add(keytype);
   
@@ -1513,7 +1513,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {  
   buffer.Extract(keytype);
   
@@ -1791,9 +1791,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KE
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
-  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+  DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug);
 
   buffer.Add((XWORD)list_length);
 
@@ -1802,7 +1802,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer)
       DIOSTREAMTLS_MSG_EXTENSION_KEY* key = list.Get(c);
       if(key)
         {
-          key->SetToBuffer(buffer);
+          key->SetToBuffer(buffer, showdebug);
         }
     }
 
@@ -1821,9 +1821,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer)
+bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
-  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+  DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug);
 
   buffer.Extract(list_length);
 
@@ -1832,7 +1832,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer)
       DIOSTREAMTLS_MSG_EXTENSION_KEY* key = new DIOSTREAMTLS_MSG_EXTENSION_KEY();
       if(key)
         {
-          key->GetFromBuffer(buffer);
+          key->GetFromBuffer(buffer, showdebug);
         }
 
       if(!List_Add(key))

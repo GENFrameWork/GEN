@@ -93,6 +93,8 @@
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOWINDOWSStreamTCPIP.h"
 #include "DIOWINDOWSStreamTCPIPServer.h"
+#include "DIOStreamTLSConfig.h"
+#include "DIOStreamTLS.h"
 #endif
 
 #if (defined(DIO_STREAMBLUETOOTH_ACTIVE) || defined(DIO_STREAMBLUETOOTHLE_ACTIVE))
@@ -126,9 +128,6 @@
 #include "DIOStreamI2CConfig.h"
 #include "DIOWINDOWSStreamI2C.h"
 #endif
-
-#include "DIOStreamTLSConfig.h"
-#include "DIOStreamTLS.h"
 
 #ifdef DIO_PING_ACTIVE
 #include "DIOWINDOWSPing.h"
@@ -332,7 +331,7 @@ DIOSTREAM* DIOWINDOWSFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
                                             }                                      
                                            else
                                             {
-                                              _class = new DIOSTREAMTLS<DIOWINDOWSSTREAMTCPIP>((DIOSTREAMTLSCONFIG*)config);
+                                              _class = new DIOSTREAMTLS<DIOWINDOWSSTREAMTCPIP>();
                                             } 
                                           break;
           #endif

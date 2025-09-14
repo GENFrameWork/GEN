@@ -50,7 +50,7 @@
  #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SESSIONTICKET	        0x0023 // 1.2	  Ticket
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDVERSIONS	    0x002b // 1.3	  TLS Versions
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PSKKEYEXCHANGEMODES	  0x002d // 1.3	  Mode PSK
- #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE	            0x0033 // 1.3	  Public Key                                                                    
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE	            0x0033 // 1.3	  Public Key                                                                    
 
 
 #pragma endregion
@@ -72,8 +72,8 @@ class DIOSTREAMTLS_MSG_EXTENSION : public DIOSTREAMTLS_MSG_INTERFACE
     XWORD                                                 GetLength                                         ();                                          
     void                                                  SetLength                                         (XWORD length);
     
-    virtual bool                                          SetToBuffer                                       (XBUFFER& buffer);                                           
-    virtual bool                                          GetFromBuffer                                     (XBUFFER& buffer);
+    virtual bool                                          SetToBuffer                                       (XBUFFER& buffer, bool showdebug);                                           
+    virtual bool                                          GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
      
   private:
 
@@ -175,9 +175,9 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                             return true;
                                                           }
                                                                                                                 
-    bool                                                  SetToBuffer                                       (XBUFFER& buffer)
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug)
                                                           {
-                                                            DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer);
+                                                            DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug);
 
                                                             buffer.Add(list_length);
 
@@ -190,9 +190,9 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                             return true;
                                                           }                                                                                                     
 
-    bool                                                  GetFromBuffer                                     (XBUFFER& buffer)
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug)
                                                           {
-                                                            DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer);
+                                                            DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug);
 
                                                             buffer.Extract(list_length);
 
@@ -239,8 +239,8 @@ class DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME : public DIOSTREAMTLS_MSG_INTERF
     bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername);  
     bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername);  
 
-    bool                                                  SetToBuffer                                       (XBUFFER& buffer);                                           
-    bool                                                  GetFromBuffer                                     (XBUFFER& buffer);
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);                                           
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
 
   private:
 
@@ -268,8 +268,8 @@ class DIOSTREAMTLS_MSG_EXTENSION_SNI : public DIOSTREAMTLS_MSG_EXTENSION
     bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_SNI* extension);  
     bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_SNI* extension);  
                                                        
-    bool                                                  SetToBuffer                                       (XBUFFER& buffer);                                           
-    bool                                                  GetFromBuffer                                     (XBUFFER& buffer);
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);                                           
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
                                                
   private:
 
@@ -323,8 +323,8 @@ class DIOSTREAMTLS_MSG_EXTENSION_ALPN : public DIOSTREAMTLS_MSG_EXTENSION
     bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension);  
     bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension);  
                                                        
-    bool                                                  SetToBuffer                                       (XBUFFER& buffer);                                           
-    bool                                                  GetFromBuffer                                     (XBUFFER& buffer);
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);                                           
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
                                                
   private:
 
@@ -344,8 +344,8 @@ class DIOSTREAMTLS_MSG_EXTENSION_EMS : public DIOSTREAMTLS_MSG_EXTENSION
     bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_EMS* extension);  
     bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_EMS* extension);  
                                                        
-    bool                                                  SetToBuffer                                       (XBUFFER& buffer);                                           
-    bool                                                  GetFromBuffer                                     (XBUFFER& buffer);
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);                                           
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
                                                
   private:
 
@@ -390,8 +390,8 @@ class DIOSTREAMTLS_MSG_EXTENSION_KEY
     bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_KEY* key);  
     bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_KEY* key);  
 
-    bool                                                  SetToBuffer                                       (XBUFFER& buffer);                                           
-    bool                                                  GetFromBuffer                                     (XBUFFER& buffer);
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);                                           
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
 
   private:
 
@@ -419,8 +419,8 @@ class DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE : public DIOSTREAMTLS_MSG_EXTENSION
     bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension);  
     bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension);  
                                                        
-    bool                                                  SetToBuffer                                       (XBUFFER& buffer);                                           
-    bool                                                  GetFromBuffer                                     (XBUFFER& buffer);
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);                                           
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
                                                
   private:
 

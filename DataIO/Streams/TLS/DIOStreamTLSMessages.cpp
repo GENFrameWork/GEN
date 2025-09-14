@@ -103,7 +103,7 @@ XDWORD DIOSTREAMTLS_MSG_INTERFACE::GetLengthBuffer()
 { 
   XBUFFER data;
                                                  
-  SetToBuffer(data);
+  SetToBuffer(data, false);
 
   return data.GetSize();
 }

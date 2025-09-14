@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       DIOStreamTLSMessagesHandShakeClientHello.h
+* @file       DIOStreamTLSMessagesHandShakeServerHello.h
 * 
-* @class      DIOSTREAMTLSMESSAGESHANDSHAKECLIENTHELLO
-* @brief      Data Input/Output Stream TLS (Transport Layer Security) Handshake Client Hello Message class
+* @class      DIOSTREAMTLSMESSAGESHANDSHAKESERVERHELLO
+* @brief      Data Input/Output Stream TLS (Transport Layer Security) Handshake Server Hello Message class
 * @ingroup    DATAIO
 * 
 * @copyright  GEN Group. All rights reserved.
@@ -26,8 +26,8 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMTLSMESSAGEHANDSHAKECLIENTHELLO_H_
-#define _DIOSTREAMTLSMESSAGEHANDSHAKECLIENTHELLO_H_
+#ifndef _DIOSTREAMTLSMESSAGESHANDSHAKESERVERHELLO_H_
+#define _DIOSTREAMTLSMESSAGESHANDSHAKESERVERHELLO_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -49,16 +49,14 @@
 #pragma region CLASS
 
 
-
-class DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO : public DIOSTREAMTLS_MSG_INTERFACE
+class DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO : public DIOSTREAMTLS_MSG_INTERFACE
 {
   public:
-                                            DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO            ();
-    virtual                                ~DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO            ();
+                                            DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO            ();
+    virtual                                ~DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO            ();
                                             
-
-    XWORD                                   GetClientVersion                                  ();    
-    void                                    SetClientVersion                                  (XWORD clientversion);
+    XWORD                                   GetLegacyVersion                                  ();    
+    void                                    SetLegacyVersion                                  (XWORD legacy_version);
                                             
     XBYTE*                                  GetRandom                                         ();
 
@@ -89,7 +87,7 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO : public DIOSTREAMTLS_MSG_INTERFACE
 
     void                                    Clean                                             ();
     
-    XWORD                                   clientversion;
+    XWORD                                   legacy_version;
 
     XBYTE                                   random[DIOSTREAMTLS_MSG_RANDOM_SIZE];
 
@@ -118,4 +116,7 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO : public DIOSTREAMTLS_MSG_INTERFACE
 
 
 #endif
+
+
+
 

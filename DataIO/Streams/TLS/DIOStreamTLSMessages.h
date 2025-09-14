@@ -174,8 +174,8 @@ class DIOSTREAMTLS_MSG_INTERFACE
                                             DIOSTREAMTLS_MSG_INTERFACE                        ();                                            
     virtual                                ~DIOSTREAMTLS_MSG_INTERFACE                        ();
                                             
-    virtual bool                            SetToBuffer                                       (XBUFFER& buffer) = 0;
-    virtual bool                            GetFromBuffer                                     (XBUFFER& buffer) = 0;
+    virtual bool                            SetToBuffer                                       (XBUFFER& buffer, bool showdebug) = 0;
+    virtual bool                            GetFromBuffer                                     (XBUFFER& buffer, bool showdebug) = 0;
 
     XDWORD                                  GetLengthBuffer                                   ();
     
@@ -250,21 +250,21 @@ class DIOSTREAMTLS_MSG_RECORD : public DIOSTREAMTLS_MSG_INTERFACE
                                             } 
  
 
-    bool                                    SetToBuffer                                       (XBUFFER& buffer)
+    bool                                    SetToBuffer                                       (XBUFFER& buffer, bool showdebug)
                                             {  
                                               buffer.Delete();
 
                                               buffer.Add((XBYTE)contenttype);
-                                              buffer.Add((XWORD)protocolversion);
-                                              buffer.Add((XWORD)length);
+                                              buffer.Add(protocolversion);
+                                              buffer.Add(length);
 
-                                              fragment.SetToBuffer(buffer);
+                                              fragment.SetToBuffer(buffer, showdebug);
                                                 
                                               return true;
                                             }
 
 
-    bool                                    GetFromBuffer                                     (XBUFFER& buffer)
+    bool                                    GetFromBuffer                                     (XBUFFER& buffer, bool showdebug)
                                             {
                                               return true;
                                             }
@@ -283,6 +283,7 @@ class DIOSTREAMTLS_MSG_RECORD : public DIOSTREAMTLS_MSG_INTERFACE
     XWORD                                   length;  
     T                                       fragment;           
 };
+
 
 template<typename T>
 class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
@@ -329,7 +330,7 @@ class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
                                             }  
 
 
-    bool                                    SetToBuffer                                       (XBUFFER& buffer)
+    bool                                    SetToBuffer                                       (XBUFFER& buffer, bool showdebug)
                                             {
                                               buffer.Add((XBYTE)msgtype);  
 
@@ -337,13 +338,13 @@ class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
                                               SWAPDWORD(_length);  
                                               buffer.Add((XBYTE*)(&_length)+1, 3);  
 
-                                              body.SetToBuffer(buffer);
+                                              body.SetToBuffer(buffer,  showdebug);
 
                                               return true;
                                             }
 
 
-    bool                                    GetFromBuffer                                     (XBUFFER& buffer)
+    bool                                    GetFromBuffer                                     (XBUFFER& buffer, bool showdebug)
                                             {
                                               return true;
                                             }
