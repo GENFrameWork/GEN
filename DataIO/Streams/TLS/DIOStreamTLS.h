@@ -131,17 +131,37 @@ class DIOSTREAMTLS :  public T
                                                     {
                                                       DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>> clienthello_msg;
 
-                                                      status = Send_HandShake_Client_ClientHello(clienthello_msg);
+                                                      status = Encode_HandShake_Client_ClientHello(clienthello_msg);
                                                       if(status)
                                                         {
-                                                          DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>> serverhello_msg;
-                                                          
-                                                          status = Received_HandShake_Client_ServerHello(serverhello_msg);      
-                                                          if(status)
+                                                          XBUFFER writebuffer;    
+                                                          XDWORD  writesize;  
+
+                                                          clienthello_msg.SetToBuffer(writebuffer, true);
+  
+                                                          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
+                                                          XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, writebuffer);
+          
+                                                          writesize = Write(writebuffer.Get(), writebuffer.GetSize());      
+                                                          if(writesize == writebuffer.GetSize())     
                                                             {
+                                                              DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>>  serverhello_msg;
+                                                              XBUFFER                                                                                     readbuffer; 
+                                                              XBYTE                                                                                       typemsg       = 0;
+                                                              XWORD                                                                                       legacyversion = 0;
+                                                              XWORD                                                                                       sizemsg       = 0;
+
+                                                              status = Received_Message(readbuffer, typemsg, legacyversion, sizemsg);                                                              
+                                                              if(status)
+                                                                {    
+                                                                  status = Decode_HandShake_Client_ServerHello(readbuffer, serverhello_msg);      
+                                                                  if(status)
+                                                                    {
 
 
-                                                            }                                                        
+                                                                    }                                                         
+                                                                }
+                                                            }
                                                         }                                                 
                                                     } 
                                                 }
@@ -225,7 +245,7 @@ class DIOSTREAMTLS :  public T
 
   private:
 
-    bool                                    Send_HandShake_Client_ClientHello       (DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>& message)
+    bool                                    Encode_HandShake_Client_ClientHello     (DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>& message)
                                             {
                                               DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>*  fragment  = NULL;
                                               DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO*                             body      = NULL;
@@ -319,10 +339,13 @@ class DIOSTREAMTLS :  public T
 
                                               DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* extension_signaturealgorithms = new DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS();
                                               if(extension_signaturealgorithms)
-                                                { 
+                                                {  
+                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
+                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384);
+                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512);
                                                   extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
                                                   extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
-                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
+                                                
                                                 }
   
                                               body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS*)extension_signaturealgorithms); 
@@ -364,6 +387,7 @@ class DIOSTREAMTLS :  public T
                                               DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES* extension_PSKkeyexchangemodes = new DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES();
                                               if(extension_PSKkeyexchangemodes)
                                                 { 
+                                                  extension_PSKkeyexchangemodes->List_Add(DIOSTREAMTLS_MSG_PSKKEYEXCHANGEMODE_PSK);
                                                   extension_PSKkeyexchangemodes->List_Add(DIOSTREAMTLS_MSG_PSKKEYEXCHANGEMODE_PSK_DHE);
                                                 }
   
@@ -390,47 +414,51 @@ class DIOSTREAMTLS :  public T
 
                                               message.CalculateLength();                                        
                                               
-                                              message.SetToBuffer(writebuffer, true);
-  
-                                              XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
-                                              XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, writebuffer);
-          
-                                              return Write(writebuffer.Get(), writebuffer.GetSize());                                                         
+                                              return true;                                         
                                             }
 
-    bool                                    Received_HandShake_Client_ServerHello   (DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>>& message)
+    bool                                    Decode_HandShake_Client_ServerHello   (XBUFFER& readbuffer, DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>>& message)
+                                            {                                                                                           
+                                              XBYTE typemsg;
+                                              XWORD legacyversion;
+                                              XWORD sizemsg;  
+                                              bool  status =  false;
+                                                      
+                                              readbuffer.Get(typemsg);  
+                                              readbuffer.Get(legacyversion);  
+                                              readbuffer.Get(sizemsg);  
+                        
+                                              return status;
+                                            }
+
+    bool                                    Received_Message                        (XBUFFER& readbuffer, XBYTE& typemsg, XWORD& legacyversion, XWORD& sizemsg)
                                             {
-                                              XBUFFER readbuffer;
+                                              XBUFFER message;
                                               XDWORD  sizeread;
                                               bool    status =  false;
 
-                                              readbuffer.Resize(5);    
-                                 
+                                              readbuffer.Resize(5);                                     
                                               sizeread = Read(readbuffer.Get(), readbuffer.GetSize()); 
                                               if(sizeread == readbuffer.GetSize())
                                                 { 
-                                                  XBYTE typemsg;
-                                                  XWORD legacyversion;
-                                                  XWORD sizemsg;  
-                                                      
                                                   readbuffer.Get(typemsg);  
                                                   readbuffer.Get(legacyversion);  
-                                                  readbuffer.Get(sizemsg);  
+                                                  readbuffer.Get(sizemsg);                                                    
 
-                                                  //message.SetLegacyVersion(legacyversion);
+                                                  message.Resize(sizemsg);  
 
-                                                  readbuffer.Resize(sizemsg);  
-
-                                                  sizeread = Read(readbuffer.Get(), readbuffer.GetSize()); 
-                                                  if(sizeread == readbuffer.GetSize())
+                                                  sizeread = Read(message.Get(), message.GetSize()); 
+                                                  if(sizeread == message.GetSize())
                                                     { 
-
-                                              
-                                                        
-
+                                                      readbuffer.Add(message);                                                                                                  
                                                       status = true;   
                                                     }                                                    
-                                                }                           
+                                                } 
+
+                                              if(!status)                         
+                                                {
+                                                  readbuffer.Empty();
+                                                }
 
                                               return status;
                                             }

@@ -84,7 +84,7 @@ class DIOSTREAMTLS_MSG_EXTENSION : public DIOSTREAMTLS_MSG_INTERFACE
 };   
 
 
-template<typename T>
+template<typename T, typename S>
 class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
 {
   public:
@@ -119,7 +119,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
 
                                                             List_SetLength(list.GetSize() * sizeof(T));  
 
-                                                            SetLength(List_GetLength() + sizeof(XBYTE));  
+                                                            SetLength(List_GetLength() + sizeof(S));  
 
                                                             return true;
                                                           } 
@@ -179,7 +179,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                           {
                                                             DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug);
 
-                                                            buffer.Add(list_length);
+                                                            buffer.Add((S)list_length);
 
                                                             for(XDWORD c=0; c<list.GetSize(); c++)
                                                               {
@@ -194,7 +194,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                           {
                                                             DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug);
 
-                                                            buffer.Extract(list_length);
+                                                            buffer.Extract((S&)list_length);
 
                                                             XDWORD nsize = List_GetLength() / sizeof(T);
 
@@ -280,7 +280,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_SNI : public DIOSTREAMTLS_MSG_EXTENSION
 };
 
 
-class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD>
+class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD, XWORD>
 {
   public:
                                                           DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS        ();
@@ -289,7 +289,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS : public DIOSTREAMTLS_MSG_EXTEN
 };
 
 
-class DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XBYTE>
+class DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD, XWORD>
 {
   public:
                                                           DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS         ();
@@ -298,7 +298,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS : public DIOSTREAMTLS_MSG_EXTENS
 };
 
 
-class DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD>
+class DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD, XWORD>
 {
   public:
                                                           DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS    ();
@@ -346,14 +346,14 @@ class DIOSTREAMTLS_MSG_EXTENSION_EMS : public DIOSTREAMTLS_MSG_EXTENSION
                                                        
     bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);                                           
     bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
-                                               
+                                              
   private:
 
     void                                                  Clean                                             ();   
 };
 
 
-class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD>
+class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD, XBYTE>
 {
   public:
                                                           DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS      ();
@@ -362,7 +362,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS : public DIOSTREAMTLS_MSG_EXT
 };
 
 
-class DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XBYTE>
+class DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XBYTE, XBYTE>
 {
   public:
                                                           DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES    ();
