@@ -324,7 +324,7 @@ DIOSTREAM* DIOWINDOWSFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
         {
           case DIOSTREAMTYPE_UNKNOWN    : return NULL;
      
-          #ifdef DIO_STREAMTCPIP_ACTIVE
+          #if defined(DIO_STREAMTCPIP_ACTIVE) && defined(DIO_STREAMTLS_ACTIVE)
           case DIOSTREAMTYPE_TCPIP      : if(config->GetMode() == DIOSTREAMMODE_SERVERMULTISOCKET)
                                             {
                                               //_class = new DIOWINDOWSSTREAMTCPIPSERVER();
