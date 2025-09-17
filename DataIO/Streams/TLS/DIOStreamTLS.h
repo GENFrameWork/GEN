@@ -37,6 +37,7 @@
 #include "XRand.h"
 #include "XFSMachine.h"
 #include "XBuffer.h"
+#include "XTrace.h"
 
 #include "DIOFactory.h"
 #include "DIOIP.h"
@@ -77,7 +78,7 @@ enum DIOSTREAMTLSXFSMSTATES
 };
 
 
-#define DIOSTREAMTLS_TIMEOUT  3       // in seconds
+#define DIOSTREAMTLS_TIMEOUT  30       // in seconds
 
 #pragma endregion
 
@@ -103,11 +104,21 @@ class DIOSTREAMTLS :  public T
                                               Clean();    
                                               
                                               timeout = DIOSTREAMTLS_TIMEOUT;  
+
+                                              fsmachine = new XFSMACHINE(0);  
+
+                                              IniFSMachine();                                               
                                             } 
                                        
 
     virtual                                ~DIOSTREAMTLS                            ()
-                                            {                                             
+                                            {          
+                                              if(fsmachine)
+                                                {
+                                                  delete fsmachine;
+                                                  fsmachine = NULL;  
+                                                }
+                                   
                                               Clean();
                                             }
 
@@ -123,60 +134,26 @@ class DIOSTREAMTLS :  public T
                                               if(T::GetConfig()->IsServer())
                                                 {
 
+
+
                                                 }
                                                else
                                                 {   
                                                   status = T::WaitToConnected(timeout);
-                                                  if(status)
-                                                    {
-                                                      DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>> clienthello_msg;
-
-                                                      status = Encode_HandShake_Client_ClientHello(clienthello_msg);
-                                                      if(status)
+                                                  if(status) 
+                                                    {                                                     
+                                                      thread = CREATEXTHREAD(XTHREADGROUPID_DIOSTREAMTLS, __L("DIOSTREAMTLS::Open"), ThreadRunFunction, (void*)this);
+                                                      if(!thread) 
                                                         {
-                                                          XBUFFER writebuffer;    
-                                                          XDWORD  writesize;  
+                                                          return false;    
+                                                        }
 
-                                                          clienthello_msg.SetToBuffer(writebuffer, true);
-  
-                                                          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
-                                                          XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, writebuffer);
-          
-                                                          writesize = Write(writebuffer.Get(), writebuffer.GetSize());      
-                                                          if(writesize == writebuffer.GetSize())     
-                                                            {
-                                                              DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>>  serverhello_msg;
-                                                              XBUFFER                                                                                     readbuffer; 
-                                                              XBYTE                                                                                       typemsg       = 0;
-                                                              XWORD                                                                                       legacyversion = 0;
-                                                              XWORD                                                                                       sizemsg       = 0;
+                                                      thread->Ini();
 
-                                                              status = Received_Message(readbuffer, typemsg, legacyversion, sizemsg);                                                              
-                                                              if(status)
-                                                                {    
-                                                                  status = Decode_HandShake_Client_ServerHello(readbuffer, serverhello_msg);      
-                                                                  if(status)
-                                                                    {
-
-
-                                                                    }                                                         
-                                                                }
-                                                            }
-                                                        }                                                 
-                                                    } 
-                                                }
-
-                                              if(status) 
-                                                {
-                                                  thread = CREATEXTHREAD(XTHREADGROUPID_DIOSTREAMTLS, __L("DIOSTREAMTLS::Open"), ThreadRunFunction, (void*)this);
-                                                  if(!thread) 
-                                                    {
-                                                      return false;    
+                                                      fsmachine->SetEvent(DIOSTREAMTLS_XFSMEVENT_INI);
                                                     }
-
-                                                  thread->Ini();
                                                 }
-
+                                             
                                               return status;
                                             }
     
@@ -244,6 +221,48 @@ class DIOSTREAMTLS :  public T
                                             }
 
   private:
+
+     bool                                   Client_ClientHello                      ()
+                                            {
+                                              DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>  clienthello_msg;
+                                              bool                                                                                        status = false;
+
+                                              status = Encode_HandShake_Client_ClientHello(clienthello_msg);
+                                              if(status)
+                                                {
+                                                  XBUFFER writebuffer;    
+                                                  XDWORD  writesize;  
+
+                                                  clienthello_msg.SetToBuffer(writebuffer, true);
+  
+                                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
+                                                  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, writebuffer);
+          
+                                                  writesize = Write(writebuffer.Get(), writebuffer.GetSize());      
+                                                  if(writesize == writebuffer.GetSize())     
+                                                    {
+                                                      DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>>  serverhello_msg;
+                                                      XBUFFER                                                                                     readbuffer; 
+                                                      XBYTE                                                                                       typemsg       = 0;
+                                                      XWORD                                                                                       legacyversion = 0;
+                                                      XWORD                                                                                       sizemsg       = 0;
+
+                                                      status = Received_Message(readbuffer, typemsg, legacyversion, sizemsg);                                                              
+                                                      if(status)
+                                                        {    
+                                                          status = Decode_HandShake_Client_ServerHello(readbuffer, serverhello_msg);      
+                                                          if(status)
+                                                            {
+                                                              int a=0;
+                                                              a++;  
+
+                                                            }                                                         
+                                                        }
+                                                    }
+                                                }
+
+                                              return status;    
+                                            }
 
     bool                                    Encode_HandShake_Client_ClientHello     (DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>& message)
                                             {
@@ -556,31 +575,82 @@ class DIOSTREAMTLS :  public T
 
     bool                                    IniFSMachine                            ()                                                                                         
                                             {
-                                              if(!T::AddState(DIOSTREAMTLS_XFSMSTATE_NONE            ,
-                                                              DIOSTREAMTLS_XFSMEVENT_INI             , DIOSTREAMTLS_XFSMSTATE_INI           ,
-                                                              DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
-                                                              XFSMACHINESTATE_EVENTDEFEND)) return false;
+                                              if(!fsmachine)
+                                                {
+                                                  return false;              
+                                                }
+
+                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_NONE            ,
+                                                                      DIOSTREAMTLS_XFSMEVENT_INI             , DIOSTREAMTLS_XFSMSTATE_INI           ,
+                                                                      DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
+                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
 
 
-                                              if(!T::AddState(DIOSTREAMTLS_XFSMSTATE_INI             ,
-                                                              DIOSTREAMTLS_XFSMEVENT_UPDATE          , DIOSTREAMTLS_XFSMSTATE_UPDATE        ,
-                                                              DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
-                                                              XFSMACHINESTATE_EVENTDEFEND)) return false;
+                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_INI             ,
+                                                                      DIOSTREAMTLS_XFSMEVENT_UPDATE          , DIOSTREAMTLS_XFSMSTATE_UPDATE        ,
+                                                                      DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
+                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
 
 
-                                              if(!T::AddState(DIOSTREAMTLS_XFSMSTATE_UPDATE          ,
-                                                              DIOSTREAMTLS_XFSMEVENT_NONE            , DIOSTREAMTLS_XFSMSTATE_NONE          ,                
-                                                              DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
-                                                              XFSMACHINESTATE_EVENTDEFEND)) return false;
+                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_UPDATE          ,
+                                                                      DIOSTREAMTLS_XFSMEVENT_NONE            , DIOSTREAMTLS_XFSMSTATE_NONE          ,                
+                                                                      DIOSTREAMTLS_XFSMEVENT_END             , DIOSTREAMTLS_XFSMSTATE_END           ,
+                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
 
 
-                                              if(!T::AddState(DIOSTREAMTLS_XFSMSTATE_END             ,
-                                                              DIOSTREAMTLS_XFSMEVENT_NONE            , DIOSTREAMTLS_XFSMSTATE_NONE          ,
-                                                              DIOSTREAMTLS_XFSMEVENT_INI             , DIOSTREAMTLS_XFSMSTATE_INI           ,
-                                                              XFSMACHINESTATE_EVENTDEFEND)) return false;
+                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_END             ,
+                                                                      DIOSTREAMTLS_XFSMEVENT_NONE            , DIOSTREAMTLS_XFSMSTATE_NONE          ,
+                                                                      DIOSTREAMTLS_XFSMEVENT_INI             , DIOSTREAMTLS_XFSMSTATE_INI           ,
+                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
 
                                               return true;  
                                             }
+
+
+    bool                                    Update                                  ()
+                                            {
+                                              if(!fsmachine)
+                                                {
+                                                  return false;              
+                                                }
+
+                                              if(fsmachine->GetEvent() == DIOSTREAMTLS_XFSMEVENT_NONE) // Not new event
+                                                {
+                                                  switch(fsmachine->GetCurrentState())
+                                                    {
+                                                      case DIOSTREAMTLS_XFSMSTATE_NONE          : break;
+
+                                                      case DIOSTREAMTLS_XFSMSTATE_INI           : fsmachine->SetEvent(DIOSTREAMTLS_XFSMEVENT_UPDATE);
+                                                                                                  break;
+
+                                                      case DIOSTREAMTLS_XFSMSTATE_UPDATE        : break;
+
+                                                      case DIOSTREAMTLS_XFSMSTATE_END           : break;
+
+                                                    }
+                                                }
+                                               else //  New event
+                                                {
+                                                  if(fsmachine->GetEvent() < DIOSTREAMTLS_LASTEVENT)
+                                                    {
+                                                      fsmachine->CheckTransition();
+
+                                                      switch(fsmachine->GetCurrentState())
+                                                        {
+                                                          case DIOSTREAMTLS_XFSMSTATE_NONE      : break;
+
+                                                          case DIOSTREAMTLS_XFSMSTATE_INI       : Client_ClientHello();
+                                                                                                  break;
+
+                                                          case DIOSTREAMTLS_XFSMSTATE_UPDATE    : break;
+                                                          case DIOSTREAMTLS_XFSMSTATE_END       : break;
+                                                        }
+                                                    }
+                                                }
+
+                                              return true;
+                                            }
+
 
 
     static void                             ThreadRunFunction                       (void* param)
@@ -590,17 +660,23 @@ class DIOSTREAMTLS :  public T
                                                 {
                                                   return;
                                                 }
+
+                                              diostreamTLS->Update();
                                             }
 
 
     void                                    Clean                                   ()
                                             {
                                               timeout     = 0;
+
+                                              fsmachine   = NULL;
                                               thread      = NULL;
                                             }
 
 
     int                                     timeout;
+  
+    XFSMACHINE*                             fsmachine;        
     XTHREADCOLLECTED*                       thread;
 
     XBYTE                                   random[DIOSTREAMTLS_MSG_RANDOM_SIZE];
