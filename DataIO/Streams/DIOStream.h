@@ -146,8 +146,8 @@ class DIOSTREAM : public XSUBJECT
     bool                        IsFlushOutXBuffer               ();
     bool                        IsFlushXBuffers                 ();
 
-    bool                        WaitToFlushOutXBuffer           (int timeout = XTIMER_INFINITE);
-    bool                        WaitToFlushXBuffers             (int timeout = XTIMER_INFINITE);
+    bool                        WaitToFlushOutXBuffer           (int timeout = XTIMER_INFINITE, bool mutexactive = true);
+    bool                        WaitToFlushXBuffers             (int timeout = XTIMER_INFINITE, bool mutexactive = true);
 
     virtual XTIMER*             GetXTimerConnection             ();
     virtual XTIMER*             GetXTimerNotActivity            ();

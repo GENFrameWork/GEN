@@ -78,7 +78,7 @@ enum DIOSTREAMTLSXFSMSTATES
 };
 
 
-#define DIOSTREAMTLS_TIMEOUT  30       // in seconds
+#define DIOSTREAMTLS_TIMEOUT                3      // in seconds
 
 #pragma endregion
 
@@ -183,7 +183,7 @@ class DIOSTREAMTLS :  public T
                                                   return 0;    
                                                 }
                                               
-                                              bool status = T::WaitToFlushOutXBuffer(timeout);  
+                                              bool status = T::WaitToFlushOutXBuffer(timeout, false);  
                                               
                                               return status?size:0;
                                             }

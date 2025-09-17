@@ -876,17 +876,18 @@ bool DIOSTREAM::IsFlushXBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOSTREAM::WaitToFlushOutXBuffer(int timeout)
-* @brief      Wait to flush out X buffer
+* 
+* @fn         bool DIOSTREAM::WaitToFlushOutXBuffer(int timeout, bool mutexactive)
+* @brief      wait to flush out Xbuffer
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  timeout : 
+* @param[in]  mutexactive : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAM::WaitToFlushOutXBuffer(int timeout)
+bool DIOSTREAM::WaitToFlushOutXBuffer(int timeout, bool mutexactive)
 {
   if(!xtimerout) return false;
 
@@ -894,7 +895,10 @@ bool DIOSTREAM::WaitToFlushOutXBuffer(int timeout)
 
   xtimerout->Reset();
 
-  if(xmutextimerout) xmutextimerout->Lock();
+  if(xmutextimerout && mutexactive) 
+    {
+      xmutextimerout->Lock();
+    }
 
   while(!IsFlushOutXBuffer())
     {
@@ -912,24 +916,28 @@ bool DIOSTREAM::WaitToFlushOutXBuffer(int timeout)
       Wait(DIOSTREAM_TIMEINWAITFUNCTIONS);
     }
 
-  if(xmutextimerout) xmutextimerout->UnLock();
+  if(xmutextimerout && mutexactive) 
+    {
+      xmutextimerout->UnLock();
+    }
 
   return status;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOSTREAM::WaitToFlushXBuffers(int timeout)
-* @brief      Wait to flush X buffers
+* 
+* @fn         bool DIOSTREAM::WaitToFlushXBuffers(int timeout, bool mutexactive)
+* @brief      wait to flush Xbuffers
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  timeout : 
+* @param[in]  mutexactive : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAM::WaitToFlushXBuffers(int timeout)
+bool DIOSTREAM::WaitToFlushXBuffers(int timeout, bool mutexactive)
 {
   if(!xtimerout) return false;
 
@@ -937,7 +945,10 @@ bool DIOSTREAM::WaitToFlushXBuffers(int timeout)
 
   xtimerout->Reset();
 
-  if(xmutextimerout) xmutextimerout->Lock();
+  if(xmutextimerout && mutexactive) 
+    {
+      xmutextimerout->Lock();
+    }
 
   while(!IsFlushXBuffers())
     {
@@ -955,7 +966,10 @@ bool DIOSTREAM::WaitToFlushXBuffers(int timeout)
       Wait(DIOSTREAM_TIMEINWAITFUNCTIONS);
     }
 
-  if(xmutextimerout) xmutextimerout->UnLock();
+  if(xmutextimerout && mutexactive) 
+    {
+      xmutextimerout->UnLock();
+    }
 
   return status;
 }
