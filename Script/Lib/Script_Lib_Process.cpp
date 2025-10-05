@@ -149,7 +149,7 @@ void SCRIPT_LIB_PROCESS::Clean()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void Call_OpenURL(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
-* @brief      call  open URl
+* @brief      all  open URl
 * @ingroup    SCRIPT
 * 
 * @param[in]  library : 
