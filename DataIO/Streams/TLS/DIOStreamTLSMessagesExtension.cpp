@@ -152,11 +152,12 @@ void DIOSTREAMTLS_MSG_EXTENSION::SetLength(XWORD length)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -169,14 +170,15 @@ bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer, bool showdebug)
   return true;
 }
 
-  
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -367,11 +369,12 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyFrom(DIOSTREAMTLS_MSG_EXTENS
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -395,14 +398,15 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer, boo
   return buffer.Add(bufferstring);
 }
 
-                                           
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -680,11 +684,12 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* ex
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -706,15 +711,16 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer, bool showdebug
 
   return true;
 }
-
     
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -1058,11 +1064,12 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_ALPN* 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -1081,11 +1088,12 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer, bool showdebu
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -1204,14 +1212,15 @@ bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_EMS* ex
   return true;
 }
 
-     
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -1226,11 +1235,12 @@ bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer, bool showdebug
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_EMS::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_EMS::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -1482,11 +1492,12 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEY* ke
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -1504,11 +1515,12 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer, bool showdebug
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -1778,15 +1790,16 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KE
   
   return true;
 }
-                                                       
+
     
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -1812,11 +1825,12 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer, bool show
   
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 

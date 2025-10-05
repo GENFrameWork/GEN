@@ -395,11 +395,12 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_DeleteAll()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -445,11 +446,12 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetToBuffer(XBUFFER& buffer, bool s
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 

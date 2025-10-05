@@ -397,11 +397,12 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_DeleteAll()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -499,11 +500,12 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer, bool s
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetFromBuffer(XBUFFER& buffer)
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
 * @param[in]  buffer : 
+* @param[in]  showdebug : 
 * 
 * @return     bool : true if is succesful. 
 * 
