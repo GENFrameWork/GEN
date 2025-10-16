@@ -527,6 +527,12 @@ bool XCONSOLE::WaitKey(XCHAR* text, XDWORD margin, bool prelude, XDWORD timeout)
   XSTRING string2;
   bool    status = true;
 
+
+  while(KBHit())
+    {
+      GetChar();
+    }
+
   while(!KBHit())
     {
       string  = text;
