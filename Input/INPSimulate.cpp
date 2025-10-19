@@ -219,7 +219,7 @@ INPUTSIMULATE_KDB_PC  inputsimulare_KDB_PC[]						= { { 0x01	, __L("Left mouse")
                                                           };	
 
 
-INPUTSIMULATE_KDB_PC  inputsimulare_KDB_PC_Spanish[]		= { { 0xDC  , __L("\xBA")								  		 , ALTERNATIVE_KEY_NONE       },
+INPUTSIMULATE_KDB_PC  inputsimulare_KDB_INTEL_Spanish[]		= { { 0xDC  , __L("\xBA")								  		 , ALTERNATIVE_KEY_NONE       },
 																														{ 0xDC  , __L("\xAA")										   , ALTERNATIVE_KEY_SHIFT      },
 																														{ 0xDC  , __L("\\")											   , ALTERNATIVE_KEY_ALTGR      },
 																														{ 0x31  , __L("!")											   , ALTERNATIVE_KEY_SHIFT      },
@@ -495,12 +495,12 @@ XBYTE INPSIMULATE::GetKDBCodeByLiteral(XCHAR* literal, ALTERNATIVE_KEY& altkey)
 				}					
 		}
 
-	for(XDWORD c=0; c<(sizeof(inputsimulare_KDB_PC_Spanish)/sizeof(INPUTSIMULATE_KDB_PC)); c++)
+	for(XDWORD c=0; c<(sizeof(inputsimulare_KDB_INTEL_Spanish)/sizeof(INPUTSIMULATE_KDB_PC)); c++)
 		{
-			if(!_literal.Compare(inputsimulare_KDB_PC_Spanish[c].literal, true))
+			if(!_literal.Compare(inputsimulare_KDB_INTEL_Spanish[c].literal, true))
 				{
-					altkey = inputsimulare_KDB_PC_Spanish[c].altkey;
-					return inputsimulare_KDB_PC_Spanish[c].code;
+					altkey = inputsimulare_KDB_INTEL_Spanish[c].altkey;
+					return inputsimulare_KDB_INTEL_Spanish[c].code;
 				}					
 		}
 

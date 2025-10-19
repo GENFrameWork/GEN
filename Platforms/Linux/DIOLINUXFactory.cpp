@@ -121,7 +121,7 @@
 
 #include "DIOLedNeoPixelWS2812B.h"
 
-  #ifdef HW_PC    
+  #ifdef HW_INTEL    
   #endif  
   
   #ifdef HW_RASPBERRYPI

@@ -30,7 +30,7 @@
 #define _DIOLINUXGPIOPCPARALLEL_H_
 
 
-#ifdef HW_PC
+#ifdef HW_INTEL
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/

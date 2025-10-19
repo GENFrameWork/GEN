@@ -111,7 +111,7 @@
 
     #include "DIOLINUXGPIO.h"
 
-    #ifdef HW_PC
+    #ifdef HW_INTEL
       #ifdef DIO_GPIO_PCPARALLEL_ACTIVE
         #include "DIOLINUXGPIOPCParallel.h"
       #endif
@@ -467,7 +467,7 @@ bool MAINPROCLINUX::Factorys_Ini()
   
     #ifdef DIO_GPIO_ACTIVE
 
-      #ifdef HW_PC
+      #ifdef HW_INTEL
         #ifdef DIO_GPIO_PCPARALLEL_ACTIVE
         if(!DIOGPIO::SetInstance(new DIOLINUXGPIOPCPARALLEL())) 
           {
@@ -1217,7 +1217,7 @@ static inline void Signal_PrintfStackTrace(FILE *out, unsigned int max_frames)
           // offset in [begin_offset, end_offset). now apply
           // __cxa_demangle():
 
-          //#ifndef HW_PC_OLD
+          //#ifndef HW_INTEL_OLD
           abi::__cxa_demangle(begin_name, funcname, &funcnamesize, &status);
 
           char* fname = begin_name;

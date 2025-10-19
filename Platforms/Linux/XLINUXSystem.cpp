@@ -53,7 +53,7 @@
 #include <ctype.h>
 #include <signal.h>
 #include <termios.h>
-#ifdef HW_PC
+#ifdef HW_INTEL
 #include <cpuid.h>
 #endif
 #include <mntent.h>
@@ -200,7 +200,7 @@ XSYSTEM_HARDWARETYPE XLINUXSYSTEM::GetTypeHardware(int* revision)
     }
 
 
-  #ifdef HW_PC
+  #ifdef HW_INTEL
   return XSYSTEM_HARDWARETYPE_PC;
   #endif
 
@@ -254,7 +254,7 @@ XSYSTEM_HARDWARETYPE XLINUXSYSTEM::GetTypeHardware(int* revision)
 XSYSTEM_PLATFORM XLINUXSYSTEM::GetPlatform(XSTRING* namestring)
 {
  
-  #ifdef HW_PC
+  #ifdef HW_INTEL
   if(namestring)  namestring->Set(__L("Linux"));
   return XSYSTEM_PLATFORM_LINUX;
   #endif
@@ -381,7 +381,7 @@ XSTRING* XLINUXSYSTEM::GetBIOSSerialNumber()
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XLINUXSYSTEM::GetCPUSerialNumber()
 {
-  #ifdef HW_PC
+  #ifdef HW_INTEL
   unsigned int level = 1;
   unsigned eax = 3 /* processor serial number */, ebx = 0, ecx = 0, edx = 0;
 
