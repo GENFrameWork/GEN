@@ -1,10 +1,10 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRP2DColor.h
+* @file       XMemory_Control_Deactive.h
 * 
-* @class      GRP2DCOLOR
-* @brief      Graphics 2D color definitios (agg color definitions)
-* @ingroup    GRAPHIC
+* @class      XMEMORY_CONTROL
+* @brief      Deactive eXtended Utils Memory Control class
+* @ingroup    XUTILS
 * 
 * @copyright  GEN Group. All rights reserved.
 * 
@@ -26,57 +26,16 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRP2DCOLOR_H_
-#define _GRP2DCOLOR_H_
-
-/*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
-
-#include "agg_color_gray.h"
-#include "agg_color_rgba.h"
-
-#pragma endregion
+#ifndef _XMEMORY_CONTROL_DEACTIVE_H_
+#define _XMEMORY_CONTROL_DEACTIVE_H_
 
 
-/*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
+  #ifdef XMEMORY_CONTROL_ACTIVE
 
-#ifndef GRP2DCOLOR
-typedef void         GRP2DCOLOR;
-#endif
+    #undef new
 
-#ifndef GRP2DCOLOR_GRAY8
-typedef agg::gray8   GRP2DCOLOR_GRAY8;
-#endif
+  #endif
 
-#ifndef GRP2DCOLOR_GRAY16
-typedef agg::gray16  GRP2DCOLOR_GRAY16;
-#endif
-
-#ifndef GRP2DCOLOR_RGBA8
-typedef agg::rgba8   GRP2DCOLOR_RGBA8;
-#endif
-
-#ifndef GRP2DCOLOR_RGBA16
-typedef agg::rgba16  GRP2DCOLOR_RGBA16;
-#endif
-
-#pragma endregion
-
-
-/*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
-
-
-#pragma endregion
-
-
-/*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
-
-
-#pragma endregion
 
 
 #endif
-

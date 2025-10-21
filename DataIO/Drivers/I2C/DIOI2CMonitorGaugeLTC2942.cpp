@@ -40,7 +40,7 @@
 #include "DIOI2CMonitorGaugeLTC2942.h"
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 #include "XFactory.h"
 #include "XSleep.h"

@@ -39,7 +39,7 @@
 
 #include "XWINDOWSDateTime.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "XString.h"
 #include "XTrace.h"

@@ -39,7 +39,7 @@
 
 #include "DIOI2C6AxisTrackingLSM303DLHC.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "XFactory.h"
 #include "XBuffer.h"

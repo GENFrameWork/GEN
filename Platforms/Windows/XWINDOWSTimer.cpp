@@ -39,7 +39,7 @@
 
 #include "XWINDOWSTimer.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "XString.h"
 #include "XTrace.h"

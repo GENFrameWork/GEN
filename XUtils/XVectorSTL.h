@@ -230,6 +230,7 @@ class XVECTORSTL : public std::vector<T>
 
 #pragma endregion
 
+#include "XMemory_Control_Deactive.h"
 
 #endif
 

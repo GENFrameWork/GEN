@@ -33,7 +33,7 @@
 #pragma region INCLUDES
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 #include "agg_basics.h"
 #include "agg_pixfmt_gray.h"
@@ -1364,6 +1364,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
 #pragma endregion
 
+#include "XMemory_Control_Deactive.h"
 
 #endif
 

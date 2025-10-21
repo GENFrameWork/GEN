@@ -32,8 +32,6 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "XMemory_Control.h"
-
 #include "agg_basics.h"
 #include "agg_renderer_primitives.h"
 
@@ -41,6 +39,14 @@
 #include "GRP2DColor.h"
 #include "GRPRect.h"
 #include "GRPProperties.h"
+
+#pragma endregion
+
+
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+#pragma region PRECOMPILATION_CONTROL_INCLUDE
+
+#include "GEN_Control.h"
 
 #pragma endregion
 
@@ -447,5 +453,6 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
 #pragma endregion
 
+#include "XMemory_Control_Deactive.h"
 
 #endif

@@ -39,7 +39,7 @@
 
 #include "XBase.h"
 
-#include <math.h>
+#include <cmath>
 
 #pragma endregion
 

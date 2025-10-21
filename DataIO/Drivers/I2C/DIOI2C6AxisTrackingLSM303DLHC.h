@@ -33,7 +33,7 @@
 #pragma region INCLUDES
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 #include "XBase.h"
 

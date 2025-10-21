@@ -32,7 +32,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include <math.h>
+#include <cmath>
 
 #include "XBase.h"
 #pragma endregion
@@ -255,7 +255,7 @@ typedef GRPRECTBASE<double> GRPRECTDOUBLE;
 
 #pragma endregion
 
-
+#include "XMemory_Control_Deactive.h"
 
 #endif
 

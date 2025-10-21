@@ -28,7 +28,7 @@
 
 /*---- PRECOMPILATION CONTROL ----------------------------------------------------------------------------------------*/
 
-#include <math.h>
+#include <cmath>
 
 #include "GEN_Defines.h"
 

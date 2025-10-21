@@ -39,7 +39,7 @@
 
 #include "Script_Language_Lua.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "Script_XEvent.h"
 #include "Script_Lib.h"

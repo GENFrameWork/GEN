@@ -419,6 +419,7 @@ class XTREE
 
 #pragma endregion
 
+#include "XMemory_Control_Deactive.h"
 
 #endif
 

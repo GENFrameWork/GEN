@@ -736,6 +736,7 @@ class XITERATOR
 
 #pragma endregion
 
+#include "XMemory_Control_Deactive.h"
 
 #endif
 

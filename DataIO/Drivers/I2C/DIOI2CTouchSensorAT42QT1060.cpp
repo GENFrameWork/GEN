@@ -40,7 +40,7 @@
 #include "DIOI2CTouchSensorAT42QT1060.h"
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 #include "XFactory.h"
 #include "XSleep.h"

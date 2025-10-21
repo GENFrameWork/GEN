@@ -39,7 +39,7 @@
 
 #include "Script_Language_Javascript.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "XString.h"
 

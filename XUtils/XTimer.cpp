@@ -41,7 +41,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "XBase.h"
 #include "XFactory.h"

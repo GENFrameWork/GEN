@@ -37,12 +37,6 @@
 
 #include "XBase.h"
 
-#pragma endregion
-
-
-/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
-
 #include "XMemory_Control.h"
 
 #pragma endregion
@@ -456,6 +450,7 @@ class XVECTOR
 
 #pragma endregion
 
+#include "XMemory_Control_Deactive.h"
 
 #endif
 

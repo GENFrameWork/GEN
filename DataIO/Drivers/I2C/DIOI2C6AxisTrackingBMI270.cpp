@@ -40,7 +40,7 @@
 #include "DIOI2C6AxisTrackingBMI270.h"
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 #include "XFactory.h"
 #include "XSleep.h"

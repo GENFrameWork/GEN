@@ -39,7 +39,7 @@
 
 #include "DIORemoteFileCFG.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "DIOFactory.h"
 #include "DIOURL.h"

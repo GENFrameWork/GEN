@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "XFactory.h"
 #include "XBase.h"

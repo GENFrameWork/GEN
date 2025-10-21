@@ -39,7 +39,7 @@
 
 #include "DIOI2CPWMControlerPCA9685.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "XFactory.h"
 #include "XBuffer.h"
