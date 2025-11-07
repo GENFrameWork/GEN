@@ -35,6 +35,7 @@
 #include "XVector.h"
 #include "XString.h"
 #include "XVariant.h"
+#include "XDateTime.h"
 
 #pragma endregion
 
@@ -95,7 +96,9 @@ class XWINDOWSWMIINTERFACE
                                     XWINDOWSWMIINTERFACE              ();
     virtual                        ~XWINDOWSWMIINTERFACE              ();
 
-    bool                            Ini                               ();
+    XSTRING*                        GetRootDir                        ();
+
+    bool                            Ini                               ();    
 
     XWINDOWSWMIINTERFACE_RESULT*    DoQuery                           (XCHAR* query, XCHAR* propertynameofresultobject, bool allowemptyitems = false);
 
@@ -107,14 +110,17 @@ class XWINDOWSWMIINTERFACE
 
     bool                            NetWorkInterfaceEnable            (int ID, bool enabled);
     bool                            NetWorkInterfaceSetMetric         (int ID, int metric);
-
     bool                            NetWorkInterfaceSetMetric         (int metric);
+
+    bool                            ConvertDateTimeToXDateTime        (XSTRING& datetime, XDATETIME& xdatetime);
 
     bool                            End                               ();
 
   private:
 
     void                            Clean                             ();
+
+    XSTRING                         rootdir;
 };
 
 

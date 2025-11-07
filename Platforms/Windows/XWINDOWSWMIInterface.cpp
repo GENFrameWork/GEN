@@ -224,6 +224,8 @@ void XWINDOWSWMIINTERFACE_RESULT::Clean()
 XWINDOWSWMIINTERFACE::XWINDOWSWMIINTERFACE()
 {
   Clean();
+
+  rootdir = __L("ROOT\\CIMV2");
 }
 
 
@@ -240,6 +242,21 @@ XWINDOWSWMIINTERFACE::~XWINDOWSWMIINTERFACE()
   End();
 
   Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING XWINDOWSWMIINTERFACE::GetRootDir()
+* @brief      get root dir
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     XSTRING : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* XWINDOWSWMIINTERFACE::GetRootDir()
+{
+  return &rootdir;
 }
 
 
@@ -337,7 +354,7 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
 
       // Connect to the root\cimv2 namespace with the current user and obtain pointer pSvc
       // to make IWbemServices calls.
-      hres = ploc->ConnectServer( _bstr_t(L"ROOT\\CIMV2"), // Object path of WMI namespace
+      hres = ploc->ConnectServer( rootdir.Get(),           // Object path of WMI namespace             
                                   NULL,                    // User name. NULL = current user
                                   NULL,                    // User password. NULL = current
                                   NULL,                    // Locale. NULL indicates current
@@ -534,6 +551,78 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
                                                             }
                                                         }
                                                         break;
+
+                                        case VT_UI1   : { XBYTE data = vtprop.bVal;
+
+                                                          XSTRING* resultstr = new XSTRING();
+                                                          if(resultstr)
+                                                            {
+                                                              resultstr->ConvertFromDWord((XDWORD)data);
+                                                              result->GetResultsString()->Add(resultstr);
+                                                            }
+
+                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          if(resultvariant) 
+                                                            {
+                                                              (*resultvariant) = data;
+                                                              result->GetResultsVariant()->Add(resultvariant);
+                                                            }                                                        
+                                                        }  
+                                                        break;
+                                        
+                                        case VT_I1    : { char data = vtprop.cVal;
+
+                                                          XSTRING* resultstr = new XSTRING();
+                                                          if(resultstr)
+                                                            {
+                                                              resultstr->ConvertFromInt((int)data);
+                                                              result->GetResultsString()->Add(resultstr);
+                                                            }
+
+                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          if(resultvariant) 
+                                                            {
+                                                              (*resultvariant) = data;
+                                                              result->GetResultsVariant()->Add(resultvariant);
+                                                            }                                                        
+                                                        }  
+                                                        break;   
+
+                                        case VT_UI2   : { XWORD data = vtprop.uiVal;
+
+                                                          XSTRING* resultstr = new XSTRING();
+                                                          if(resultstr)
+                                                            {
+                                                              resultstr->ConvertFromDWord((XWORD)data);
+                                                              result->GetResultsString()->Add(resultstr);
+                                                            }
+
+                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          if(resultvariant) 
+                                                            {
+                                                              (*resultvariant) = data;
+                                                              result->GetResultsVariant()->Add(resultvariant);
+                                                            }                                                        
+                                                        }  
+                                                        break;    
+
+                                        case VT_UI4   : { XDWORD data = vtprop.ulVal;
+
+                                                          XSTRING* resultstr = new XSTRING();
+                                                          if(resultstr)
+                                                            {
+                                                              resultstr->ConvertFromDWord((XWORD)data);
+                                                              result->GetResultsString()->Add(resultstr);
+                                                            }
+
+                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          if(resultvariant) 
+                                                            {
+                                                              (*resultvariant) = data;
+                                                              result->GetResultsVariant()->Add(resultvariant);
+                                                            }                                                        
+                                                        }  
+                                                        break;    
                                       }
 
                                     VariantClear(&vtprop);
@@ -1236,6 +1325,52 @@ bool XWINDOWSWMIINTERFACE::NetWorkInterfaceSetMetric(int metric)
   pLoc->Release();     
      
 	return 0;   // Program successfully completed.
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWMIINTERFACE::ConvertDateTimeToXDateTime(XSTRING& datetime, XDATETIME& xdatetime)
+* @brief      convert date time to Xdate time
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  datetime : 
+* @param[in]  xdatetime : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWMIINTERFACE::ConvertDateTimeToXDateTime(XSTRING& datetime, XDATETIME& xdatetime)
+{
+  XSTRING year;
+  XSTRING month;
+  XSTRING day;
+  XSTRING hour;
+  XSTRING min;
+  XSTRING sec;
+
+  xdatetime.SetToZero();
+
+  if(datetime.GetSize() < 16)
+    {
+      return false;
+    }
+
+  datetime.Copy( 0,  4, year);
+  datetime.Copy( 4,  6, month);
+  datetime.Copy( 6,  8, day);  
+  datetime.Copy( 8, 10, hour);
+  datetime.Copy(10, 12, min);
+  datetime.Copy(12, 14, sec);
+
+  xdatetime.SetYear(year.ConvertToInt());
+  xdatetime.SetMonth(month.ConvertToInt());
+  xdatetime.SetDay(day.ConvertToInt());
+  xdatetime.SetHours(hour.ConvertToInt());
+  xdatetime.SetMinutes(min.ConvertToInt());
+  xdatetime.SetSeconds(sec.ConvertToInt());
+
+  return true;
 }
 
 

@@ -585,12 +585,35 @@ float XWINDOWSSYSTEM::GetCPUTemperature()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 {
+  /*
   MEMORYSTATUS mem;
 
   GlobalMemoryStatus(&mem);
 
   total = (XDWORD)(mem.dwTotalPhys/1024);
   free  = (XDWORD)(mem.dwAvailPhys/1024);
+  */
+
+  total = 0;
+  free  = 0;
+
+  #ifndef BUILDER
+  XWINDOWSWMIINTERFACE wmiinterface;
+  XSTRING              wmianswer;
+     
+  if(wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("TotalVisibleMemorySize"), wmianswer))
+    {
+      total = wmianswer.ConvertToInt();      
+    }
+
+  if(wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("FreePhysicalMemory"), wmianswer))
+    {
+      free = wmianswer.ConvertToInt();      
+    }
+  #endif
+
+  total /= 1024;
+  free  /= 1024;
 
   return true;
 }
@@ -674,7 +697,7 @@ int XWINDOWSSYSTEM::GetCPUUsageTotal()
 * --------------------------------------------------------------------------------------------------------------------*/
 int XWINDOWSSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
 {
-  int				       cpuusage = 0;
+  int	             cpuusage = 0;
 
   #ifndef BUILDER
   HANDLE           hprocesssnap;

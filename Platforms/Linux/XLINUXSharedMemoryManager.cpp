@@ -181,7 +181,6 @@ XBYTE* XLINUXSHAREDMEMORYMANAGER::Open(XCHAR* ID, XDWORD& size)
        base = (XBYTE*)mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, handlefile, 0);
        if(base)
          {
-
            this->size = size;
 
            size -= sizeof(XDWORD);
@@ -208,10 +207,21 @@ XBYTE* XLINUXSHAREDMEMORYMANAGER::Open(XCHAR* ID, XDWORD& size)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSHAREDMEMORYMANAGER::Close()
 {
-  if(!pointer)       return false;
-  if(handlefile < 0) return false;
+  if(!pointer)       
+    {
+      return false;
+    }
 
-  if(!isserver) munmap(base, size);
+  if(handlefile < 0) 
+    {
+      return false;
+    }
+
+  if(!isserver) 
+    {
+      munmap(base, size);
+    }
+
   close(handlefile);
 
   handlefile = -1;

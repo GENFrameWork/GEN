@@ -462,11 +462,13 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
             {
               if(certificate->GetIssuerID()->GetCountryName()->IsEmpty())  
                 {
-                  certificate->GetIssuerID()->GetCountryName()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetIssuerID()->GetCountryName()->Set(strvalue);  
                 }
                else 
                 {
-                  certificate->GetSubjectID()->GetCountryName()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetSubjectID()->GetCountryName()->Set(strvalue);  
                 }
 
               ismanaged = true;
@@ -476,11 +478,13 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
             {              
               if(certificate->GetIssuerID()->GetOrganizationName()->IsEmpty())  
                 {
-                  certificate->GetIssuerID()->GetOrganizationName()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetIssuerID()->GetOrganizationName()->Set(strvalue);  
                 }
                else 
                 {
-                  certificate->GetSubjectID()->GetOrganizationName()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetSubjectID()->GetOrganizationName()->Set(strvalue);  
                 }
 
               ismanaged = true; 
@@ -490,11 +494,13 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
             {              
               if(certificate->GetIssuerID()->GetOrganizationalUnitName()->IsEmpty())  
                 {
-                  certificate->GetIssuerID()->GetOrganizationalUnitName()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetIssuerID()->GetOrganizationalUnitName()->Set(strvalue);  
                 }
                else 
                 {
-                  certificate->GetSubjectID()->GetOrganizationalUnitName()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetSubjectID()->GetOrganizationalUnitName()->Set(strvalue);  
                 }
 
               ismanaged = true; 
@@ -504,11 +510,13 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
             {             
               if(certificate->GetIssuerID()->GetOrganizationalUnitNamePlus()->IsEmpty())  
                 {
-                  certificate->GetIssuerID()->GetOrganizationalUnitNamePlus()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetIssuerID()->GetOrganizationalUnitNamePlus()->Set(strvalue);  
                 }
                else 
                 {
-                  certificate->GetSubjectID()->GetOrganizationalUnitNamePlus()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetSubjectID()->GetOrganizationalUnitNamePlus()->Set(strvalue);  
                 }
 
               ismanaged = true; 
@@ -518,11 +526,13 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
             {              
               if(certificate->GetIssuerID()->GetCommonName()->IsEmpty())  
                 {
-                  certificate->GetIssuerID()->GetCommonName()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetIssuerID()->GetCommonName()->Set(strvalue);  
                 }
                else 
                 {
-                  certificate->GetSubjectID()->GetCommonName()->Set((XSTRING)(*value));  
+                  XSTRING strvalue = (*value);
+                  certificate->GetSubjectID()->GetCommonName()->Set(strvalue);  
                 }
 
               ismanaged = true; 
@@ -531,12 +541,8 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
           // ---------------------------------------------------------------------------------  
 
           if(!levelsstr.Compare(__L("1.1.5.1")))
-            {
-              XVARIANT* value;
-              XSTRING   valuestr;  
-
-              value     = (XVARIANT*)event->GetValue();
-              valuestr  = (XSTRING)(*value);
+            {           
+              XSTRING   valuestr = (*value);;  
 
               certificate->ConvertDateTime(valuestr.Get(), certificate->GetDateNotBefore());   
               ismanaged = true;
@@ -544,12 +550,8 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
 
           if(!levelsstr.Compare(__L("1.1.5.2")))
             {
-              XVARIANT* value;
-              XSTRING   valuestr;  
-
-              value     = (XVARIANT*)event->GetValue();
-              valuestr  = (XSTRING)(*value);
-
+              XSTRING   valuestr = (*value);  
+              
               certificate->ConvertDateTime(valuestr.Get(), certificate->GetDateNotAfter());       
               ismanaged = true;
             }
@@ -808,11 +810,7 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
                 { 
                   if(event->GetTagType() == XBER_TAGTYPE_OCTET_STRING && secondround)
                     {                                                      
-                      XVARIANT* value;
-                      XSTRING   valuestr;  
-
-                      value     = (XVARIANT*)event->GetValue();
-                      valuestr  = (XSTRING)(*value);
+                      XSTRING valuestr = (*value);
      
                       certificate->GetPublicCipherKeyID()->Set(valuestr.Get());     
                                   
