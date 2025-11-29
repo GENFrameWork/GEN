@@ -191,7 +191,10 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
   this->cfg = cfg;
 
   xscheduler = new XSCHEDULER();
-  if(!xscheduler) return false;
+  if(!xscheduler) 
+    {
+      return false;
+    }
 
   XSCHEDULERTASK* xtask;
   
@@ -200,7 +203,10 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
   if(cfg->InternetServices_GetCheckInternetStatusCadence())
     {
       xtask = new XSCHEDULERTASK( xscheduler);
-      if(!xtask) return false;
+      if(!xtask) 
+        {
+          return false;
+        }
       
       xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, cfg->InternetServices_GetCheckInternetStatusCadence());
       xtask->SetID(APPFLOWINTERNETSERVICES_TASKID_CHECKCONNECTIONINTERNET);
@@ -214,11 +220,14 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
     }
 
   //-------------------------------------------------------------------
-
+  
   if(cfg->InternetServices_GetCheckIPsChangeCadence())
     {
       xtask = new XSCHEDULERTASK(xscheduler);
-      if(!xtask) return false;
+      if(!xtask) 
+        {
+          return false;
+        }
 
       xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, 30);  // Get IP first time
       xtask->SetID(APPFLOWINTERNETSERVICES_TASKID_GETIPS);
@@ -226,7 +235,8 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
       xtask->SetIsActive(true);
 
       xscheduler->Task_Add(xtask);      
-           
+      
+                 
       #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE
       if(dyndnsmanager)
         {
@@ -235,8 +245,11 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
               dyndnsmanager->AddDNS((*cfg->DNSManager_GetURL(c)));
             }
         }
-        else return true;
-      #endif        
+       else 
+        {
+          return true;
+        }
+      #endif              
     }
 
   //-------------------------------------------------------------------
@@ -256,7 +269,10 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
         }
      
       xtask = new XSCHEDULERTASK( xscheduler);
-      if(!xtask) return false;
+      if(!xtask) 
+        {
+          return false;
+        }
 
       xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, cfg->InternetServices_GetUpdateTimeByNTPCadence());
       xtask->SetID(APPFLOWINTERNETSERVICES_TASKID_CHECKNTPDATETIME);
@@ -269,7 +285,10 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
   //-------------------------------------------------------------------
 
   SubscribeEvent(XEVENT_TYPE_SCHEDULER, xscheduler);
-  if(!xscheduler->Ini()) return false;
+  if(!xscheduler->Ini()) 
+    {
+      return false;
+    }
 
   //-------------------------------------------------------------------
 
@@ -289,7 +308,10 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
               XTIMER* GEN_XFACTORY_CREATE(timeout, CreateTimer())
               if(timeout)
                 {              
-                  do{ if(!publicIP.IsEmpty()) break;
+                  do{ if(!publicIP.IsEmpty()) 
+                        {
+                          break;
+                        }
 
                       GEN_XSLEEP.MilliSeconds(50);    
 
@@ -426,7 +448,10 @@ XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetLocal(bool active_daylightsave, 
 {
   if(!xdatetime_local) return NULL;
 
-  if(xmutex_datetime_local)  xmutex_datetime_local->Lock();
+  if(xmutex_datetime_local)  
+    {
+      xmutex_datetime_local->Lock();
+    }
 
   xdatetime_local->Read();
 
@@ -453,7 +478,10 @@ XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetLocal(bool active_daylightsave, 
        xdatetime_local->SetDateFromSeconds(seconds, false);                  
     }
 
-  if(xmutex_datetime_local)  xmutex_datetime_local->UnLock();
+  if(xmutex_datetime_local)  
+    {
+      xmutex_datetime_local->UnLock();
+    }
 
   return xdatetime_local;
 }
@@ -470,15 +498,24 @@ XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetLocal(bool active_daylightsave, 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetUTC()
 {
-  if(!xdatetime_UTC) return NULL;
+  if(!xdatetime_UTC) 
+    {
+      return NULL;
+    }
 
-  if(xmutex_datetime_UTC)  xmutex_datetime_UTC->Lock();
+  if(xmutex_datetime_UTC)  
+    {
+      xmutex_datetime_UTC->Lock();
+    }
 
   xdatetime_UTC->Read(false);
 
-  if(xmutex_datetime_UTC)  xmutex_datetime_UTC->UnLock();
+  if(xmutex_datetime_UTC)  
+    {
+      xmutex_datetime_UTC->UnLock();
+    }
 
- return xdatetime_UTC;
+  return xdatetime_UTC;
 }
 
 
@@ -1023,11 +1060,12 @@ void APPFLOWINTERNETSERVICES::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 
       
       case APPFLOWINTERNETSERVICES_TASKID_GETIPS                  : // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Check Get IPs..."));    
-
+                                                                      
                                                                     if(CheckInternetConnection()) 
                                                                       { 
                                                                         XSTRING actualpublicIP;                                                                                                                             
 
+                                                                            
                                                                         if(UpdateIPs(actualpublicIP))
                                                                           {  
                                                                             // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Update public IP"));    
@@ -1040,15 +1078,15 @@ void APPFLOWINTERNETSERVICES::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
                                                                             UpdateDynDNSURLs(actualpublicIP);                                                                        
                                                                             #endif
                                                                           }   
-
+                                                                          
                                                                         if(!actualpublicIP.IsEmpty())
                                                                           {
                                                                             #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE                                                                  
                                                                             // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[APP Internet Services] Get IPs ajust to %d seconds]"), cfg->InternetServices_GetCheckIPsChangeCadence());
                                                                             ChangeCadenceCheck(APPFLOWINTERNETSERVICES_TASKID_GETIPS, cfg->InternetServices_GetCheckIPsChangeCadence());   
                                                                             #endif                                                                                                                                           
-                                                                          }
-                                                                      }
+                                                                          }                                                                        
+                                                                      }                                                                    
                                                                     break;
         
       case APPFLOWINTERNETSERVICES_TASKID_CHECKNTPDATETIME        : if(CheckInternetConnection()) 
@@ -1118,8 +1156,6 @@ void APPFLOWINTERNETSERVICES::Clean()
   haveinternetconnection  = false;
 
   endservices             = false;
-
-//scraperwebpublicIP      = NULL;
 
   xdatetime_local         = NULL;
   xdatetime_UTC           = NULL;

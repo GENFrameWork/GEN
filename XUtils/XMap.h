@@ -60,8 +60,6 @@ class XMAP
   public:
                                     XMAP                                  ()
                                     {
-                                      // DIEGO: duplicate element bug fix
-                                      // SetIsMulti(true);
                                       keys.SetIsMulti(false);
                                       elements.SetIsMulti(true);
                                     }
@@ -94,7 +92,10 @@ class XMAP
 
                                       for(XDWORD c=0; c<keys.GetSize(); c++)
                                         {
-                                          if(key==keys.Get(c)) count++;
+                                          if(key==keys.Get(c))                                             
+                                            { 
+                                              count++;
+                                            }
                                         }
 
                                       return count;
@@ -103,10 +104,16 @@ class XMAP
 
     bool                            Add                                   (KEY key, ELEMENT element)
                                     {
-                                      if(!keys.Add(key)) return false;
+                                      if(!keys.Add(key)) 
+                                        {
+                                          return false;
+                                        }
 
                                       bool status = elements.Add(element);
-                                      if(!status) keys.Delete(key);
+                                      if(!status) 
+                                        {
+                                          keys.Delete(key);
+                                        }
 
                                       return status;
                                     }
@@ -122,8 +129,11 @@ class XMAP
     ELEMENT                         Get                                   (KEY key)
                                     {
                                       int position = NOTFOUND;
-                                      if (( position = keys.Find(key)) != NOTFOUND)
-                                      return elements.FastGet(position);
+
+                                      if((position = keys.Find(key)) != NOTFOUND)
+                                        {
+                                          return elements.FastGet(position);
+                                        }
 
                                       return (ELEMENT)0;
                                     }
@@ -132,7 +142,7 @@ class XMAP
                                     {
                                       int index=keys.Find(key);
 
-                                      if(index!=NOTFOUND)
+                                      if(index != NOTFOUND)
                                         {
                                           return elements.Set(index,element);
                                         }
@@ -144,7 +154,11 @@ class XMAP
 
     bool                            Insert                                (int index, KEY key, ELEMENT element)
                                     {
-                                      if(!keys.Insert(index, key)) return false;
+                                      if(!keys.Insert(index, key))
+                                        { 
+                                          return false;
+                                        }
+
                                       return elements.Insert(index, element);
                                     }
 
@@ -152,11 +166,17 @@ class XMAP
     bool                            Delete                                (KEY key)
                                     {
                                       int index = keys.Find(key);
-                                      if(index==NOTFOUND) return false;
+                                      if(index == NOTFOUND) 
+                                        {
+                                          return false;
+                                        }
 
                                       ELEMENT element = elements.Get(index);
 
-                                      if(!keys.Delete(key)) return false;
+                                      if(!keys.Delete(key)) 
+                                        {
+                                          return false;
+                                        }
 
                                       return elements.Delete(element);
                                     }
@@ -188,7 +208,11 @@ class XMAP
 
     bool                            DeleteAll                             ()
                                     {
-                                      if(!keys.DeleteAll()) return false;
+                                      if(!keys.DeleteAll()) 
+                                        {
+                                          return false;
+                                        }
+
                                       return elements.DeleteAll();
                                     }
 
@@ -202,14 +226,17 @@ class XMAP
 
     ELEMENT                         operator[](KEY k)
                                     {
-                                        return this->Get(k);
+                                      return this->Get(k);
                                     }
 
   private:
 
     bool                            CreateArraySize                       (int nelements)
                                     {
-                                      if(!keys.CreateArraySize(nelements)) return false;
+                                      if(!keys.CreateArraySize(nelements)) 
+                                        {
+                                          return false;
+                                        }
 
                                       return elements.CreateArraySize(nelements);
                                     }

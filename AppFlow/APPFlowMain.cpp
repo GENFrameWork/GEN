@@ -251,7 +251,10 @@ bool APPFLOWMAIN::Update()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWMAIN::End()
 {
-  if(!mainproc) return false;
+  if(!mainproc) 
+    {
+      return false;
+    }
 
   if(application)
     {

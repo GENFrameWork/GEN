@@ -181,7 +181,10 @@ bool XMEMORY_CONTROL::Activate(bool isactive)
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XMEMORY_CONTROL::Assign(XDWORD size, char* pathfile, int line)
 {
-  if(!size) return NULL;
+  if(!size) 
+    {
+      return NULL;
+    }
 
   Lock();
  

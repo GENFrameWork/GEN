@@ -282,8 +282,8 @@ DIOPING::DIOPING()
 
   RegisterEvent(DIOPING_XEVENT_TYPE_DOPING);
 
-  GEN_XFACTORY_CREATE(xtimer, CreateTimer())
-  GEN_XFACTORY_CREATE(xmutexreplys, Create_Mutex())
+  GEN_XFACTORY_CREATE(xtimer       , CreateTimer())
+  GEN_XFACTORY_CREATE(xmutexreplys , Create_Mutex())
 
   urltarget = new DIOURL();
 
@@ -323,14 +323,14 @@ DIOPING::~DIOPING()
 
   DeleteAllReplys();
 
-  if(xtimer) 
-    {
-      GEN_XFACTORY.DeleteTimer(xtimer);
-    }
-
   if(urltarget) 
     {
       delete urltarget;
+    }
+
+  if(xtimer) 
+    {
+      GEN_XFACTORY.DeleteTimer(xtimer);
     }
 
   if(xmutexreplys) 

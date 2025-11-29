@@ -180,6 +180,11 @@ XSTRING* APPFLOWEXTENDED_INTERNETSTATUS::GetPublicIP()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_INTERNETSTATUS::Update()
 {  
+  if(!internetservices)
+    {
+      return false;
+    }
+
   localIP = internetservices->GetAutomaticLocalIP()->Get();
 
   haveinternetconnection = internetservices->HaveInternetConnection();

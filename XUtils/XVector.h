@@ -93,8 +93,11 @@ class XVECTOR
                                     {
                                       XDWORD _nelements = nelements;
 
-                                      if(newsize == _nelements) return false;
-
+                                      if(newsize == _nelements) 
+                                        {
+                                          return false;
+                                        }
+                                            
                                       if(newsize > _nelements)
                                         {
                                           for(XDWORD c=0;c<(newsize - _nelements);c++)
@@ -108,8 +111,8 @@ class XVECTOR
                                             {
                                               DeleteLast();
                                             }
-                                        }
-
+                                        } 
+                                     
                                       return true;
                                     }
 
@@ -120,11 +123,17 @@ class XVECTOR
                                         {
                                           for(XDWORD c=0; c<nelements; c++)
                                             {
-                                              if(array[c] == element) return false;
+                                              if(array[c] == element) 
+                                                {
+                                                  return false;
+                                                }
                                             }
                                         }
 
-                                      if(!ResizeAdd()) return false;
+                                      if(!ResizeAdd()) 
+                                        {
+                                          return false;
+                                        }
 
                                       array[nelements] = element;
 
@@ -136,11 +145,17 @@ class XVECTOR
 
     int                             Find                                  (T element)
                                     {
-                                      if(!array) return NOTFOUND;
+                                      if(!array) 
+                                        {
+                                          return NOTFOUND;
+                                        }
 
                                       for(int c=nelements-1; c>=0; c--)
                                         {
-                                          if(array[c] == element) return c;
+                                          if(array[c] == element) 
+                                            {
+                                              return c;
+                                            }
                                         }
 
                                       return NOTFOUND;
@@ -149,19 +164,35 @@ class XVECTOR
 
     T                               Get                                   (XDWORD index)
                                     {
-                                      if(!array) return T();
-                                      if(index >= nelements)  return T();
+                                      if(!array) 
+                                        {
+                                          return T();
+                                        }
+
+                                      if(index >= nelements)  
+                                        {
+                                          return T();
+                                        }
 
                                       return array[index];
                                     }
 
+
     T*                              GetPointer                            (XDWORD index)
                                     {
-                                      if(!array) return 0;
-                                      if(index >= nelements)  return 0;
+                                      if(!array) 
+                                        {
+                                          return 0;
+                                        }
+
+                                      if(index >= nelements)  
+                                        {
+                                          return 0;
+                                        }
 
                                       return &array[index];
                                     }
+
 
     inline T                        FastGet                               (XDWORD index)
                                     {                                     
@@ -174,7 +205,11 @@ class XVECTOR
 
     bool                            Set                                   (XDWORD index, T element)
                                     {
-                                      if(index >= nelements)  return false;
+                                      if(index >= nelements)  
+                                        {
+                                          return false;
+                                        }
+
                                       array[index] = element;
 
                                       return true;
@@ -186,7 +221,10 @@ class XVECTOR
 
                                       if(index>nelements) index = nelements;
 
-                                      if(!Add(element)) return false;
+                                      if(!Add(element))
+                                        {
+                                          return false;
+                                        }
 
                                       for(XDWORD c=GetSize()-1; c>(XDWORD)index; c--)
                                         {
@@ -199,7 +237,10 @@ class XVECTOR
 
     virtual bool                    Delete                                (T element)
                                     {
-                                      if(!array) return false;
+                                      if(!array) 
+                                        {
+                                          return false;
+                                        }
 
                                       for(XDWORD c=0;c<nelements;c++)
                                         {
@@ -218,7 +259,10 @@ class XVECTOR
 
     bool                            DeleteLast                            ()
                                     {
-                                      if(!array) return false;
+                                      if(!array) 
+                                        {                                          
+                                          return false;
+                                        }
 
                                       DeleteIndex(nelements-1);
 
@@ -228,8 +272,15 @@ class XVECTOR
 
     virtual bool                    DeleteIndex                           (XDWORD index)
                                     {
-                                      if(!array) return false;
-                                      if(index >= nelements)  return false;
+                                      if(!array) 
+                                        {
+                                          return false;
+                                        }
+
+                                      if(index >= nelements)  
+                                        {
+                                          return false;
+                                        }
 
                                       ResizeRemove(index);
                                       nelements--;
@@ -247,7 +298,10 @@ class XVECTOR
 
     bool                            DeleteAll                             ()
                                     {
-                                      if(!array) return false;
+                                      if(!array) 
+                                        {
+                                          return false;
+                                        }
 
                                       delete [] array;
 
@@ -258,14 +312,14 @@ class XVECTOR
                                       return true;
                                     }
 
+
     bool                            ResizeContents                        (int newsize)
                                     {
+                                      int nsize = (int)GetSize();
 
-                                      int nSize=(int)GetSize();
-
-                                      if(newsize<nSize)
+                                      if(newsize < nsize)
                                         {
-                                          for(int counter=newsize; counter<nSize; counter++)
+                                          for(int counter=newsize; counter<nsize; counter++)
                                             {
                                               T element = GetLast();
                                               if(element)
@@ -282,8 +336,7 @@ class XVECTOR
                                               ResizeAdd();
                                             }
                                         }
-
-
+                                               
                                       return true;
                                     }
 
@@ -312,12 +365,17 @@ class XVECTOR
                                         }
 
                                       nelements = 0;
+
                                       return true;
                                     }
 
+
     bool                            DeleteContents                        ()
                                     {
-                                      if(!nelements) return false;
+                                      if(!nelements) 
+                                        {
+                                          return false;
+                                        }
 
                                       for(XDWORD c=0; c<nelements; c++)
                                         {
@@ -330,14 +388,22 @@ class XVECTOR
                                         }
 
                                       nelements=0;
+
                                       return true;
                                     }
 
 
     bool                            Swap                                  (XDWORD firstindex,XDWORD secondindex)
                                     {
-                                      if(firstindex   >=  nelements)  return false;
-                                      if(secondindex  >=  nelements)  return false;
+                                      if(firstindex   >=  nelements)  
+                                        {
+                                          return false;
+                                        }
+
+                                      if(secondindex  >=  nelements)  
+                                        {
+                                          return false;
+                                        }
 
                                       T element = array[secondindex];
 
@@ -357,13 +423,16 @@ class XVECTOR
 
                                       DeleteAll();
 
-                                      nelements   = origin->GetSize();
+                                      nelements         = origin->GetSize();
 
                                       XDWORD  _narray   = nelements;
                                       int     sizearray = (_narray*sizeof(T));
 
                                       array = new T[_narray];
-                                      if(!array) return false;
+                                      if(!array) 
+                                        {
+                                          return false;
+                                        }
 
                                       memcpy(array, origin->array, sizearray);
 
@@ -376,10 +445,13 @@ class XVECTOR
                                       // althougb if nelement gets bigger than narray we have a serious problem
                                       if((nelements >= narray) || (!narray))
                                         {
-                                          XDWORD newsize = nelements + addinlimit;
+                                          XDWORD newsize  = nelements + addinlimit;                                       
+                                          T*     newarray = new T[newsize];
 
-                                          T* newarray = new T[newsize];
-                                          if(!newarray) return false;
+                                          if(!newarray) 
+                                            {
+                                              return false;
+                                            }
 
                                           if(array)
                                             {
@@ -388,9 +460,17 @@ class XVECTOR
                                             }
 
                                           narray = newsize;
-                                          array = newarray;
+                                          array  = newarray;
 
-                                          return true;
+                                          // --------------------------------------------------
+
+                                          if((newsize * sizeof (T)) == 400)
+                                            {                                                                                                             
+                                              int a=0;
+                                              a++;                                                      
+                                            }
+
+                                          // --------------------------------------------------
                                         }
 
                                       return true;

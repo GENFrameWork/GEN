@@ -372,11 +372,18 @@ int XSYSTEM::GetFreeMemoryPercent()
 {
   XDWORD total;
   XDWORD free;
-  int    percent;
+  int    percent = 0;
 
-  if(!GetMemoryInfo(total,free)) return false;
+  if(!GetMemoryInfo(total,free)) 
+    {
+      return false;
+    }
 
-  percent = ((100*free)/total);
+  if(total)
+    {
+      percent = ((100*free)/total);
+      
+    }
 
   return percent;
 }

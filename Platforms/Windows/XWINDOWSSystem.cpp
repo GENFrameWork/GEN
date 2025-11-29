@@ -450,20 +450,22 @@ bool XWINDOWSSYSTEM::GetOperativeSystemID(XSTRING& ID)
   XSTRING                wmianswer[4];
 
   wmiinterface = new XWINDOWSWMIINTERFACE();
-  if(!wmiinterface)  return false;
-
-  wmiinterface->Ini();
-
-  wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("Caption")        , wmianswer[0]);
-  wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("BuildNumber")    , wmianswer[1]);
-  wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("CSDVersion")     , wmianswer[2]);
-  wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("OSArchitecture") , wmianswer[3]);
-
-  ID.Format(__L("%s Build(%s) %s %s"), wmianswer[0].Get(), wmianswer[1].Get(), wmianswer[2].Get(), wmianswer[3].Get());
-
-  if(wmiinterface)
+  if(!wmiinterface)  
     {
+      return false;
+    }
+
+  if(wmiinterface->Ini())
+    {
+      wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("Caption")        , wmianswer[0]);
+      wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("BuildNumber")    , wmianswer[1]);
+      wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("CSDVersion")     , wmianswer[2]);
+      wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("OSArchitecture") , wmianswer[3]);
+
+      ID.Format(__L("%s Build(%s) %s %s"), wmianswer[0].Get(), wmianswer[1].Get(), wmianswer[2].Get(), wmianswer[3].Get());
+
       wmiinterface->End();
+
       delete wmiinterface;
       wmiinterface = NULL;
     }
@@ -512,7 +514,12 @@ XSTRING* XWINDOWSSYSTEM::GetBIOSSerialNumber()
   #ifndef BUILDER
   XWINDOWSWMIINTERFACE wmiinterface;
 
-  wmiinterface.DoQuery(__L("Win32_BIOS"), __L("SerialNumber"), BIOSserialnumber);
+  if(wmiinterface.Ini())
+    {
+      wmiinterface.DoQuery(__L("Win32_BIOS"), __L("SerialNumber"), BIOSserialnumber);
+
+      wmiinterface.End();
+    }
   #endif
 
   return &BIOSserialnumber;
@@ -532,8 +539,11 @@ XSTRING* XWINDOWSSYSTEM::GetCPUSerialNumber()
 {
   #ifndef BUILDER
   XWINDOWSWMIINTERFACE wmiinterface;
-
-  wmiinterface.DoQuery(__L("Win32_Processor"), __L("ProcessorId"), CPUserialnumber);
+  if(wmiinterface.Ini())
+    { 
+      wmiinterface.DoQuery(__L("Win32_Processor"), __L("ProcessorId"), CPUserialnumber);
+      wmiinterface.End();     
+    }
   #endif
 
   return &CPUserialnumber;
@@ -555,8 +565,12 @@ float XWINDOWSSYSTEM::GetCPUTemperature()
 
   #ifndef BUILDER
   XWINDOWSWMIINTERFACE wmiinterface;
-  
-  wmiinterface.DoQuery(__L("Win32_PerfFormattedData_Counters_ThermalZoneInformation"), __L("Temperature"), CPUtemperaturestr);
+  if(wmiinterface.Ini())
+    { 
+      wmiinterface.DoQuery(__L("Win32_PerfFormattedData_Counters_ThermalZoneInformation"), __L("Temperature"), CPUtemperaturestr);
+
+      wmiinterface.End();       
+    }
   #endif
 
   int   CPUtemperature = 0;
@@ -600,16 +614,21 @@ bool XWINDOWSSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
   #ifndef BUILDER
   XWINDOWSWMIINTERFACE wmiinterface;
   XSTRING              wmianswer;
-     
-  if(wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("TotalVisibleMemorySize"), wmianswer))
-    {
-      total = wmianswer.ConvertToInt();      
-    }
 
-  if(wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("FreePhysicalMemory"), wmianswer))
-    {
-      free = wmianswer.ConvertToInt();      
-    }
+  if(wmiinterface.Ini())
+    { 
+      if(wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("TotalVisibleMemorySize"), wmianswer))
+        {
+          total = wmianswer.ConvertToInt();      
+        }
+
+      if(wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("FreePhysicalMemory"), wmianswer))
+        {
+          free = wmianswer.ConvertToInt();      
+        }
+     
+      wmiinterface.End();
+    } 
   #endif
 
   total /= 1024;

@@ -333,7 +333,10 @@ bool MAINPROCLINUX::End()
 {
   #ifdef APPFLOW_ACTIVE
 
-  if(appmain) appmain->End();
+  if(appmain) 
+    {
+      appmain->End();
+    }
 
   #else
 
@@ -346,7 +349,10 @@ bool MAINPROCLINUX::End()
 
   #ifdef APPFLOW_ACTIVE
 
-  if(appmain) appmain->Delete();
+  if(appmain) 
+    {
+      appmain->Delete();
+    }
 
   #else
 
@@ -835,32 +841,7 @@ static void LIBRARY_End(void)
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void Signal_Ini(void)
-{
-  /*
-  signalaction.sa_handler = Signal_Handler;
-  sigemptyset(&signalaction.sa_mask);
-  signalaction.sa_flags   = SA_SIGINFO | SA_UNSUPPORTED | SA_EXPOSE_TAGBITS;
-  signalaction.sa_mask    = signalaction.sa_mask;
-
-  sigaddset(&signalaction.sa_mask, SIGHUP);       sigaction(SIGHUP    , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGINT);       sigaction(SIGINT    , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGQUIT);      sigaction(SIGQUIT   , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGILL);       sigaction(SIGILL    , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGBUS);       sigaction(SIGBUS    , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGFPE);       sigaction(SIGFPE    , &signalaction , (struct sigaction*)NULL);
-//sigaddset(&signalaction.sa_mask, SIGKILL);      sigaction(SIGKILL   , &signalaction , (struct sigaction*)NULL);   // Not Available
-  sigaddset(&signalaction.sa_mask, SIGSEGV);      sigaction(SIGSEGV   , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGTERM);      sigaction(SIGTERM   , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGSTKFLT);    sigaction(SIGSTKFLT , &signalaction , (struct sigaction*)NULL);
-//sigaddset(&signalaction.sa_mask, SIGSTOP);      sigaction(SIGSTOP   , &signalaction , (struct sigaction*)NULL);   // Not Available
-  sigaddset(&signalaction.sa_mask, SIGTSTP);      sigaction(SIGTSTP   , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGABRT);      sigaction(SIGABRT   , &signalaction , (struct sigaction*)NULL);
-
-  sigaddset(&signalaction.sa_mask, SIGUSR1);      sigaction(SIGUSR1   , &signalaction , (struct sigaction*)NULL);
-  sigaddset(&signalaction.sa_mask, SIGUSR2);      sigaction(SIGUSR2   , &signalaction , (struct sigaction*)NULL);
-  */
-
-
+{  
   struct sigaction  act;
   int               i = 0;
 
@@ -870,113 +851,117 @@ void Signal_Ini(void)
   act.sa_handler = Signal_Handler;
   act.sa_flags = 0;
 
-  for(i = SIGRTMIN; i <= SIGRTMAX; i++)
+  for(i = 1; i < __SIGRTMIN; i++)
     {
-      if(sigaction(i, &act, NULL)) 
+      if(i == SIGKILL || i == SIGSTOP || i == SIGCHLD)
         {
+          continue;
+        }
+
+      if(sigaction(i, &act, NULL)) 
+        {          
           fprintf(stderr, "Cannot install realtime signal %d handler: %s.\n", i, strerror(errno));
           exit(EXIT_FAILURE);
         }
-    }
-  
+    }  
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         static void Signal_Handler(int sig)
-* @brief      oid Signal_Handler
+* 
+* @fn         static void Signal_Handler(int sign)
+* @brief      signal  handler
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  sig :
-*
-* @return     static :
-*
+* 
+* @param[in]  sign : 
+* 
+* @return     static : 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-static void Signal_Handler(int sig)
+static void Signal_Handler(int sign)
 {
-  XSTRING signalstr;
-  XSTRING description;
-  XSTRING string;
-  bool    iserror = false;
+  XSTRING   signalstr;
+  XSTRING   description;
+  XSTRING   string;
+  bool      iserror = false;
 
   allexceptiontext.Empty();
 
   #ifdef APPFLOW_ACTIVE
   APPFLOWBASE* app = NULL;
-  if(mainproclinux.GetAppMain()) app = mainproclinux.GetAppMain()->GetApplication();
+  if(mainproclinux.GetAppMain())     
+    {
+      app = mainproclinux.GetAppMain()->GetApplication();
+    }
 
   if(app)
     {
-      if(app->GetExitType()!=APPFLOWBASE_EXITTYPE_UNKNOWN) return;
+      if(app->GetExitType()!=APPFLOWBASE_EXITTYPE_UNKNOWN) 
+        {
+          return;
+        }
     }
   #endif
 
-  switch(sig)
+  switch(sign)
     {
       case SIGSEGV    : iserror     = true;
-                        signalstr   = __L("SEGV");
+                        signalstr   = __L("SIGSEGV");
                         description = __L("Segmentation fault.");
                         break;
 
       case SIGBUS     : iserror     = true;
-                        signalstr   = __L("BUS");
+                        signalstr   = __L("SIGBUS");
                         description = __L("Bus fault.");
                         break;
 
       case SIGFPE     : iserror     = true;
-                        signalstr   = __L("FPE");
+                        signalstr   = __L("SIGFPE");
                         description = __L("Erroneous arithmetic operation (such as divide by zero).");
                         break;
 
       case SIGABRT    : iserror     = true;
-                        signalstr   = __L("ABRT");
+                        signalstr   = __L("SIGABRT");
                         description = __L("Error: Abnormal termination condition.");
                         break;
 
       case SIGSTKFLT  : iserror     = true;
-                        signalstr   = __L("STKFLT");
+                        signalstr   = __L("SIGSTKFLT");
                         description = __L("Error: Stack fault.");
                         break;
 
       case SIGILL     : iserror     = true;
-                        signalstr   = __L("ILL");
+                        signalstr   = __L("SIGILL");
                         description = __L("Error: Illegal instruction.");
                         break;
 
-
-      case SIGHUP     : signalstr   = __L("HUP");
+      case SIGHUP     : signalstr   = __L("SIGHUP");
                         description = __L("Program hanged up.");
                         break;
 
-      case SIGTERM    : signalstr   = __L("TERM");
+      case SIGTERM    : signalstr   = __L("SIGTERM");
                         description = __L("Termination request, sent to the program.");
                         break;
 
-      case SIGINT     : signalstr   = __L("INT");
+      case SIGINT     : signalstr   = __L("SIGINT");
                         description = __L("External interrupt, usually initiated by the user.");
                         break;
 
-      case SIGQUIT    : signalstr   = __L("QUIT");
+      case SIGQUIT    : signalstr   = __L("SIGQUIT");
                         description = __L("Terminal quit.");
                         break;
 
-      case SIGTSTP    : signalstr   = __L("TSTP");
+      case SIGTSTP    : signalstr   = __L("SIGTSTP");
                         description = __L("Terminal stop signalstr.");
                         break;
 
-      case SIGKILL    : // Not Available -> Kill (can't be caught or ignored).
-                        break;
-
-      case SIGSTOP    : // Not Available -> Stop executing(can't be caught or ignored).
-                        break;
       case SIGUSR1    :
-      case SIGUSR2    :   signalstr = __L("USR");
-                          description = __L("User signal received.");
-                          break;
+      case SIGUSR2    : signalstr = __L("SIGUSR");
+                        description = __L("User signal received.");
+                        break;
     }
 
-  Signal_Printf(iserror, __L("SIGNAL"), __L("[SIG%s] Error: %s"), signalstr.Get(), description.Get());
+  Signal_Printf(iserror, __L("SIGNAL"), __L("[%s] Error: %s"), signalstr.Get(), description.Get());
 
   #ifdef APPFLOW_ACTIVE
   if(app)
@@ -984,14 +969,14 @@ static void Signal_Handler(int sig)
       if(app->GetTimerGlobal())
         {
           XSTRING string2;
-
+        
           app->GetTimerGlobal()->GetMeasureString(string2, true);
           Signal_Printf(false, NULL,__L("Time working: %s."), string2.Get());
         }
     }
   #endif
 
-  switch(sig)
+  switch(sign)
     {
       case SIGSEGV    :
       case SIGBUS     :
@@ -1023,25 +1008,30 @@ static void Signal_Handler(int sig)
                             }
                           #endif
 
-                          signal(sig, SIG_DFL);
-                          kill(getpid(), sig);
-
-                          //exit(sig);
+                          signal(sign, SIG_DFL);
+                          kill(getpid(), sign);
                         }
                         break;
 
-
       case SIGINT     :
                         #ifdef APPFLOW_ACTIVE
-                        if(app) app->SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
+                        if(app) 
+                          {
+                            app->SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);                                                  
+                          }
                         #endif
+
                         allexceptiontext.Empty();
                         break;
 
       case SIGQUIT    :
                         #ifdef APPFLOW_ACTIVE
-                        if(app) app->SetExitType(APPFLOWBASE_EXITTYPE_BY_SHUTDOWN);
+                        if(app) 
+                          {
+                            app->SetExitType(APPFLOWBASE_EXITTYPE_BY_SHUTDOWN);
+                          } 
                         #endif
+
                         allexceptiontext.Empty();
                         break;
 
@@ -1052,7 +1042,10 @@ static void Signal_Handler(int sig)
                           #ifdef APPFLOW_ACTIVE
                           if(app)
                             {
-                              if(app->GetExitType()!=APPFLOWBASE_EXITTYPE_UNKNOWN) return;
+                              if(app->GetExitType() != APPFLOWBASE_EXITTYPE_UNKNOWN) 
+                                {
+                                  return;
+                                }
                             }
                           #endif
 
@@ -1061,16 +1054,24 @@ static void Signal_Handler(int sig)
                               if(actual == __C('0'))
                                 {
                                   #ifdef APPFLOW_ACTIVE
-                                  if(app) app->SetExitType(APPFLOWBASE_EXITTYPE_BY_SHUTDOWN);
+                                  if(app) 
+                                    {
+                                      app->SetExitType(APPFLOWBASE_EXITTYPE_BY_SHUTDOWN);
+                                    }
                                   #endif
+
                                   allexceptiontext.Empty();
                                   break;
                                 }
                             }
 
                           #ifdef APPFLOW_ACTIVE
-                          if(app) app->SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
+                          if(app) 
+                            {
+                              app->SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
+                             }
                           #endif
+
                           allexceptiontext.Empty();
                         }
                         break;

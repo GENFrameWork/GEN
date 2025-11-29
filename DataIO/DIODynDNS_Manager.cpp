@@ -202,16 +202,19 @@ bool DIODYNDNS_MANAGER::AssingAll(bool* endproccess)
   bool                  error    = false;
   int                   nerrors  = 0;
   
-  DIODYNDNS* dyndns = new DIODYNDNS();
-  if(!dyndns) return false;
-
-  dyndns->GetLogin()->Set(login.Get());
-  dyndns->GetPassword()->Set(password.Get());
-
   if(!DNSlist.GetSize()) 
     {
       return true;
-   }
+    }
+
+  DIODYNDNS* dyndns = new DIODYNDNS();
+  if(!dyndns) 
+    {
+      return false;
+    }
+
+  dyndns->GetLogin()->Set(login.Get());
+  dyndns->GetPassword()->Set(password.Get());
 
   for(int d=0; d<3; d++)
     {

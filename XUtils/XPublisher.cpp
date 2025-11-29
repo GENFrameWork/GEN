@@ -192,7 +192,10 @@ bool XPUBLISHER::RegisterEvent(XDWORD type, XSUBJECT* subject)
 {
   bool status = false;
 
-  if(xmutexevents) xmutexevents->Lock();
+  if(xmutexevents) 
+    {
+      xmutexevents->Lock();
+    }
 
   bool found = false;
 
@@ -208,9 +211,15 @@ bool XPUBLISHER::RegisterEvent(XDWORD type, XSUBJECT* subject)
         }
     }
 
-  if(!found) status = subjectsmap.Add(type, subject);
+  if(!found) 
+    {
+      status = subjectsmap.Add(type, subject);
+    }
 
-  if(xmutexevents) xmutexevents->UnLock();
+  if(xmutexevents) 
+    {
+      xmutexevents->UnLock();
+    }
 
   return status;
 }
