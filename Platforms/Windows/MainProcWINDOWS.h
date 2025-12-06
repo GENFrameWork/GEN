@@ -6,7 +6,7 @@
 * @brief      WINDOWS Main procedure class
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -91,7 +91,7 @@ class MAINPROCWINDOWS : public MAINPROC
 };
 
 
-#if !defined(APPMODE_LIBRARY_DINAMIC) && !defined(APPMODE_LIBRARY_DINAMIC)
+#if !defined(APPMODE_LIBRARYDINAMIC_ACTIVE) && !defined(APPMODE_LIBRARYDINAMIC_ACTIVE)
 
 class WINDOWSSERVICE : public XWINDOWSSERVICEBASE
 {

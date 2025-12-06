@@ -6,7 +6,7 @@
 * @brief      eXtension Translation of GEN class (sencences within the framework)
 * @ingroup    XUTILS
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

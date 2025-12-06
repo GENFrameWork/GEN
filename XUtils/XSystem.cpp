@@ -7,7 +7,7 @@
 * @note       Cant be construct Factory + singelton without depends of system. ITS NOT A SINGLETON.
 * @ingroup    XUTILS
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

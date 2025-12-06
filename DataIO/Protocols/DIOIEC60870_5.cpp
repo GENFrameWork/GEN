@@ -6,7 +6,7 @@
 * @brief      Data Input/Output IEC 60870_5 (electric meters)
 * @ingroup    DATAIO
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

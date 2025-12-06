@@ -6,7 +6,7 @@
 * @brief      STM32 eXtended Not Unicode File class (Use FatFs - Generic FAT file system module)
 * @ingroup    PLATFORM_STM32
 *
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 *
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

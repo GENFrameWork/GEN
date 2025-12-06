@@ -19,7 +19,7 @@
 *             APPFLOW_CFG_ALERTS_ACTIVE            : Alerts
 *             APPFLOW_CFG_LOG_ACTIVE               : Log
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

@@ -6,7 +6,7 @@
 * @brief      Data Input/Output I2C Touch Sensor AT42QT1060 class
 * @ingroup    DATAIO
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

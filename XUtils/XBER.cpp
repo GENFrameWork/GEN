@@ -6,7 +6,7 @@
 * @brief      eXtended Utils Basic Encoding Rules (BER) encoding class (https://en.wikipedia.org/wiki/X.690)
 * @ingroup    XUTILS
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

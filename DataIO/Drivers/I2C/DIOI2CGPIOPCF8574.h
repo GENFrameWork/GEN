@@ -6,7 +6,7 @@
 * @brief      Data Input/Output I2C PCF8574 (GPIO 8 Pins) class
 * @ingroup    DATAIO
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

@@ -6,7 +6,7 @@
 @brief      WINDOWS eXtended Utils WinGet API class
 @ingroup    PLATFORM_WINDOWS
 
-@copyright  GEN Group. All rights reserved.
+@copyright  EndoraSoft. All rights reserved.
 
 @cond
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -41,16 +41,6 @@ SOFTWARE.
 #pragma region DEFINES_ENUMS
 
 
-#define XWINDOWSWINGET_MAX_LINES       512
-#define XWINDOWSWINGET_MAX_COLUMNS     16
-#define XWINDOWSWINGET_MAX_COL_NAME    64
-#define XWINDOWSWINGET_MAX_COL_VALUE   256
-
-#define XWINDOWSWINGET_MAX_KV_ITEMS    256
-#define XWINDOWSWINGET_MAX_KEY_LEN     64
-#define XWINDOWSWINGET_MAX_VAL_LEN     256
-
-
 #pragma endregion
 
 
@@ -58,76 +48,46 @@ SOFTWARE.
 #pragma region CLASS
 
 
-typedef struct 
+class XWINDOWSWINGET_RESULT
 {
-  char                    name[XWINDOWSWINGET_MAX_COL_NAME];
-  int                     start;
-  int                     end;
-
-} XWINDOWSWINGET_COLUMN;
+  public:
+                        XWINDOWSWINGET_RESULT     ();
+    virtual            ~XWINDOWSWINGET_RESULT     ();
 
 
-typedef struct 
-{
-  char                    values[XWINDOWSWINGET_MAX_COLUMNS][XWINDOWSWINGET_MAX_COL_VALUE];
+    XVECTOR<XSTRING*>   name;
+    XVECTOR<XSTRING*>   ID;
+    XVECTOR<XSTRING*>   actualversion;
+    XVECTOR<XSTRING*>   updateversion;
 
-} XWINDOWSWINGET_ROW;
+  private:
 
-
-typedef struct 
-{
-  XWINDOWSWINGET_COLUMN   columns[XWINDOWSWINGET_MAX_COLUMNS];
-  int                     columncount;
-
-  XWINDOWSWINGET_ROW      rows[XWINDOWSWINGET_MAX_LINES];
-  int                     rowcount;
-
-} XWINDOWSWINGET_TABLE;
-
-
-typedef struct 
-{
-  char                    key[XWINDOWSWINGET_MAX_KEY_LEN];
-  char                    value[XWINDOWSWINGET_MAX_VAL_LEN];
-
-} XWINDOWSWINGET_KVITEM;
-
-
-typedef struct 
-{
-  XWINDOWSWINGET_KVITEM   items[XWINDOWSWINGET_MAX_KV_ITEMS];
-  int                     count;
-
-} XWINDOWSWINGET_KVLIST;
+    void                Clean                     ();
+};
 
 
 class XWINDOWSWINGET
 {
   public:
-                    XWINDOWSWINGET        ();
-    virtual        ~XWINDOWSWINGET        ();
+                        XWINDOWSWINGET            ();
+    virtual            ~XWINDOWSWINGET            ();
 
-    bool            List                  (XCHAR* addparam, XWINDOWSWINGET_TABLE* output);
+    bool                List                      (XWINDOWSWINGET_RESULT& result);
    
         
   private:
     
-    bool            Exec                  (XCHAR* params, XBUFFER& output);
+    bool                Exec                      (XCHAR* params, XBUFFER& output);
 
-    int             LooksLikeUTF16        (XBYTE* buffer, int size);
-    bool            LooksLikeUTF8         (XBYTE* buffer, int size);
-
-    void            ConvertUTF16ToUTF8    (XBYTE* data);
-    void            CP437ToASCII          (XBYTE* dst, const XBYTE* src, int max);
-    void            NormalizeUnicode      (XBYTE* data);
-    void            RemoveANSICodes       (char* s);
-
-    char*           Trim                  (char* s);
-    int             IsSeparatorLine       (const char* line);
-    int             ParseWinget           (const char* text, XWINDOWSWINGET_TABLE* outtable);
-    int             ParseWinget           (const char* text, XWINDOWSWINGET_KVLIST* outlist);
-
-    void            Clean                 ();
+    int                 LooksLikeUTF16            (XBYTE* buffer, int size);
+    bool                LooksLikeUTF8             (XBYTE* buffer, int size);
+    void                ConvertUTF16ToUTF8        (XBYTE* data);
+    void                CP437ToASCII              (XBYTE* dst, const XBYTE* src, int max);
+    void                NormalizeUnicode          (XBYTE* data);
+    
+  //boor                ParseWinget               (const char* text, XWINDOWSWINGET_LIST* list);
+    
+    void                Clean                     ();
 };
 
 #pragma endregion

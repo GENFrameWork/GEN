@@ -6,7 +6,7 @@
 * @brief      WINDOWS eXtended Utils WinGet API class
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -62,6 +62,56 @@
 #pragma region CLASS_MEMBERS
 
 
+#pragma region CLASS_MEMBERS_XWINDOWSWINGET_RESULT
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWINDOWSWINGET_RESULT::XWINDOWSWINGET_RESULT()
+* @brief      Constructor of class
+* @ingroup    PLATFORM_WINDOWS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWINDOWSWINGET_RESULT::XWINDOWSWINGET_RESULT()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWINDOWSWINGET_RESULT::~XWINDOWSWINGET_RESULT()
+* @brief      Destructor of class
+* @ingroup    PLATFORM_WINDOWS
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWINDOWSWINGET_RESULT::~XWINDOWSWINGET_RESULT()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void XWINDOWSWINGET_RESULT::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    PLATFORM_WINDOWS
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void XWINDOWSWINGET_RESULT::Clean()
+{
+
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_MEMBERS_XWINDOWSWINGET
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XWINDOWSWINGET::XWINDOWSWINGET()
@@ -101,25 +151,12 @@ XWINDOWSWINGET::~XWINDOWSWINGET()
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XWINDOWSWINGET::List(XCHAR* addparam, XWINDOWSWINGET_TABLE* output)
+bool XWINDOWSWINGET::List(XWINDOWSWINGET_RESULT& result)
 {
-  XSTRING cmd; 
   XBUFFER buffer_output;
   bool    status;
 
-  if(!output)
-    {
-      return false;
-    }
-
-  cmd  = __L("list");
-  if(addparam)
-    {  
-      cmd += __L(" ");
-      cmd += addparam;
-    }
-
-  status = Exec(__L("list"), buffer_output);
+  status = Exec(__L("Get-WinGetPackage | Select-Object Name"), buffer_output);
   if(!status)
     {
       return false;
@@ -129,11 +166,13 @@ bool XWINDOWSWINGET::List(XCHAR* addparam, XWINDOWSWINGET_TABLE* output)
 
   string.ConvertFromUTF8(buffer_output);
 
+  /*
   if(!ParseWinget((char*)buffer_output.Get(),  output)) 
     {
       return false;
     }    
- 
+  */
+
   return true;
 }
 
@@ -156,10 +195,8 @@ bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
   XBUFFER cmd;
 
   output.Delete();
-  
-  //cmd_str.Format(__L("winget %s  2>&1"), params);
-
-  cmd_str.Format(__L("powershell -NonInteractive -command \"Get-WinGetPackage | Select-Object Name 2>&1\""), params);
+ 
+  cmd_str.Format(__L("powershell -NonInteractive -command \"%s\" 2>&1"), params);
   cmd_str.ConvertToASCII(cmd);
     
   FILE* pipe = _popen((char*)cmd.Get(), "rb");
@@ -354,461 +391,14 @@ void XWINDOWSWINGET::NormalizeUnicode(XBYTE* data)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void XWINDOWSWINGET::RemoveANSICodes(char* s)
-* @brief      delete ANSI escape sequences (color codes, etc.)
-* @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  s : null-terminated string
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-void XWINDOWSWINGET::RemoveANSICodes(char* s)
+
+/*
+bool XWINDOWSWINGET::ParseWinget(const char* text, XWINDOWSWINGET_LIST* list) 
 {
-  if(!s)
-    {
-      return;
-    }
-
-  char* src = s;
-  char* dst = s;
-
-  while(*src)
-    {
-      if(*src == 0x1B)            // ESC
-        {
-          src++;
-
-          if(*src == '[')         // CSI: ESC [ ... <final>
-            {
-              src++;
-
-              while(*src && !((*src >= '@') && (*src <= '~')))
-                {
-                  src++;
-                }
-
-              if(*src)
-                {
-                  src++;
-                }
-
-              continue;
-            }
-        }
-
-      *dst++ = *src++;
-    }
-
-  *dst = 0;
+  
+  return false;
 }
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         char* XWINDOWSWINGET::Trim(char* s)
-* @brief      trim
-* @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  s : 
-* 
-* @return     char* : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-char* XWINDOWSWINGET::Trim(char* s) 
-{
-  while(*s == ' ' || *s == '\t')
-    {
-      s++;
-    }
-  
-  char* end = s + strlen(s);
-  
-  while(end > s && (end[-1] == ' ' || end[-1] == '\t' || end[-1] == '\r' || end[-1] == '\n'))
-    {
-      end--;
-    }
-  
-  *end = 0;
-  
-  return s;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         int XWINDOWSWINGET::IsSeparatorLine(const char* line)
-* @brief      is separator line
-* @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  line : 
-* 
-* @return     int : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-int XWINDOWSWINGET::IsSeparatorLine(const char* line)
-{
-  int any = 0;
-
-  for(int i = 0; line[i]; i++) 
-    {
-      if(line[i] != '-' && line[i] != ' ' && line[i] != '\r' && line[i] != '\n')
-        {
-          return 0;
-        }
-
-      if(line[i] == '-')
-        {
-          any = 1;
-        }
-    }
-
-  return any;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         int XWINDOWSWINGET::ParseWinget(const char* text, XWINDOWSWINGET_TABLE* outtable) 
-* @brief      parse winget table output (multi-column)
-* @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  text : raw winget output (UTF-8, CR/LF)
-* @param[in]  outtable : parsed table
-* 
-* @return     int : 1 if successful, 0 otherwise
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-static int XWINDOWSWINGET_SplitByMultiSpace(const char* line, char tokens[][XWINDOWSWINGET_MAX_COL_VALUE], int maxtokens)
-{
-  int len   = 0;
-  int count = 0;
-
-  if(!line || !tokens || (maxtokens <= 0))
-    {
-      return 0;
-    }
-
-  len = (int)strlen(line);
-
-  int i = 0;
-  while((i < len) && (count < maxtokens))
-    {
-      /* skip leading spaces / tabs / CR */
-      while(i < len)
-        {
-          char ch = line[i];
-          if((ch == ' ') || (ch == '\t') || (ch == '\r'))
-            {
-              i++;
-              continue;
-            }
-          break;
-        }
-
-      if(i >= len)
-        {
-          break;
-        }
-
-      int start = i;
-
-      /* advance until we see a run of >= 2 spaces/tabs/CR (column separator) */
-      while(i < len)
-        {
-          char ch = line[i];
-
-          if((ch == ' ') || (ch == '\t') || (ch == '\r'))
-            {
-              if((i + 1 < len) && ((line[i+1] == ' ') || (line[i+1] == '\t') || (line[i+1] == '\r')))
-                {
-                  /* first char of a multi-space separator -> end of this field */
-                  break;
-                }
-            }
-
-          i++;
-        }
-
-      int end = i;
-
-      /* trim trailing spaces / tabs / CR from this field */
-      while((end > start) && ((line[end-1] == ' ') || (line[end-1] == '\t') || (line[end-1] == '\r')))
-        {
-          end--;
-        }
-
-      int flen = end - start;
-      if(flen < 0) flen = 0;
-      if(flen >= (XWINDOWSWINGET_MAX_COL_VALUE - 1))
-        {
-          flen = XWINDOWSWINGET_MAX_COL_VALUE - 1;
-        }
-
-      if(flen > 0)
-        {
-          memcpy(tokens[count], &line[start], flen);
-          tokens[count][flen] = 0;
-        }
-       else
-        {
-          tokens[count][0] = 0;
-        }
-
-      count++;
-
-      /* skip the separator run (2 or more spaces / tabs / CR) */
-      while(i < len)
-        {
-          char ch = line[i];
-          if((ch == ' ') || (ch == '\t') || (ch == '\r'))
-            {
-              i++;
-            }
-           else
-            {
-              break;
-            }
-        }
-    }
-
-  return count;
-}
-
-
-int XWINDOWSWINGET::ParseWinget(const char* text, XWINDOWSWINGET_TABLE* outtable) 
-{
-  outtable->columncount = 0;
-  outtable->rowcount    = 0;
-
-  if(!text || !outtable)
-    {
-      return 0;
-    }
-
-  char* buffer = (char*)malloc(strlen(text) + 1);
-  if(!buffer) 
-    {
-      return 0;
-    }
-
-  strcpy(buffer, text);
-
-  /* remove ANSI color / escape sequences */
-  RemoveANSICodes(buffer);
-
-  char* lines[XWINDOWSWINGET_MAX_LINES];
-  int   linecount = 0;
-
-  char* tok = strtok(buffer, "\n");
-  while(tok && (linecount < XWINDOWSWINGET_MAX_LINES))
-    {
-      /* skip leading control characters (keep spaces for column alignment) */
-      unsigned char* p = (unsigned char*)tok;
-
-      while(*p && (*p < 0x20) && (*p != ' ') && (*p != '\t'))
-        {
-          p++;
-        }
-
-      /* drop empty lines */
-      char* line = (char*)p;
-      while(*line == ' ' || *line == '\t' || *line == '\r')
-        {
-          line++;
-        }
-
-      if(*line)
-        {
-          lines[linecount++] = (char*)p;
-        }
-
-      tok = strtok(NULL, "\n");
-    }
-
-  if(linecount < 2) 
-    {
-      free(buffer);
-      return 0;
-    }
-
-  /* locate header and separator line:
-     header = line before the first line made of '-' and spaces only */
-  int headerindex = -1;
-  int sepindex    = -1;
-
-  for(int i = 1; i < linecount; i++)
-    {
-      if(IsSeparatorLine(lines[i]))
-        {
-          char* cand = lines[i-1];
-
-          if(IsSeparatorLine(cand))
-            {
-              continue;
-            }
-
-          /* count "words" in the candidate header line to ensure it is not junk */
-          int words = 0;
-          int inword = 0;
-
-          for(int j = 0; cand[j] != 0; j++)
-            {
-              char ch = cand[j];
-              bool isspacechar = (ch == ' ') || (ch == '\t') || (ch == '\r') || (ch == '\n');
-
-              if(!isspacechar)
-                {
-                  if(!inword)
-                    {
-                      inword = 1;
-                      words++;
-                    }
-                }
-               else
-                {
-                  inword = 0;
-                }
-            }
-
-          if(words >= 2)
-            {
-              headerindex = i - 1;
-              sepindex    = i;
-              break;
-            }
-        }
-    }
-
-  if(headerindex < 0)
-    {
-      /* can't find header */
-      free(buffer);
-      return 0;
-    }
-
-  /* parse header columns */
-  char* header = Trim(lines[headerindex]);
-
-  char headerfields[XWINDOWSWINGET_MAX_COLUMNS][XWINDOWSWINGET_MAX_COL_VALUE];
-  int  headercount = XWINDOWSWINGET_SplitByMultiSpace(header, headerfields, XWINDOWSWINGET_MAX_COLUMNS);
-
-  if(headercount <= 0)
-    {
-      free(buffer);
-      return 0;
-    }
-
-  outtable->columncount = headercount;
-
-  for(int c = 0; c < headercount; c++)
-    {
-      char* src = headerfields[c];
-      char* t   = Trim(src);
-
-      memset(outtable->columns[c].name, 0, sizeof(outtable->columns[c].name));
-
-      if(t)
-        {
-          strncpy(outtable->columns[c].name, t, XWINDOWSWINGET_MAX_COL_NAME - 1);
-        }
-
-      /* start/end are not reliable with proportional fonts; set to 0 */
-      outtable->columns[c].start = 0;
-      outtable->columns[c].end   = 0;
-    }
-
-  /* parse data rows */
-  for(int i = sepindex + 1; i < linecount; i++)
-    {
-      if(outtable->rowcount >= XWINDOWSWINGET_MAX_LINES)
-        {
-          break;
-        }
-
-      char* line = Trim(lines[i]);
-      if(!line || !(*line))
-        {
-          continue;
-        }
-
-      int r = outtable->rowcount;
-
-      int colparsed = XWINDOWSWINGET_SplitByMultiSpace(line, outtable->rows[r].values, outtable->columncount);
-      if(colparsed <= 0)
-        {
-          continue;
-        }
-
-      /* ensure unused columns are empty */
-      for(int c = colparsed; c < outtable->columncount; c++)
-        {
-          outtable->rows[r].values[c][0] = 0;
-        }
-
-      outtable->rowcount++;
-    }
-
-  free(buffer);
-
-  return (outtable->columncount > 0 && outtable->rowcount > 0) ? 1 : 0;
-}
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         int XWINDOWSWINGET::ParseWinget(const char* text, XWINDOWSWINGET_KVLIST* outList) 
-* @brief      parse winget 
-* @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  text : 
-* @param[in]  outList : 
-* 
-* @return     int : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-int XWINDOWSWINGET::ParseWinget(const char* text, XWINDOWSWINGET_KVLIST* outList) 
-{
-  outList->count = 0;
-  
-  char* buffer = (char*)malloc(strlen(text) + 1);
-  if(!buffer) 
-    {
-      return 0;
-    }
-  
-  strcpy(buffer, text);
-  
-  char* line = strtok(buffer, "\n");
-  
-  while(line && outList->count < XWINDOWSWINGET_MAX_KV_ITEMS) 
-    {        
-      char* colon = strchr(line, ':');
-      if(colon) 
-        {
-          *colon = 0;
-  
-          char* key   = Trim(line);
-          char* value = Trim(colon + 1);
-  
-          if(key[0] != 0 && value[0] != 0) 
-            {
-              int ki = outList->count;
-  
-              strncpy(outList->items[ki].key, key, XWINDOWSWINGET_MAX_KEY_LEN - 1);
-              outList->items[ki].key[XWINDOWSWINGET_MAX_KEY_LEN - 1] = 0;
-  
-              strncpy(outList->items[ki].value, value, XWINDOWSWINGET_MAX_VAL_LEN - 1);
-              outList->items[ki].value[XWINDOWSWINGET_MAX_VAL_LEN - 1] = 0;
-              outList->count++;
-            }
-        }
-  
-      line = strtok(NULL, "\n");
-    }
-  
-  free(buffer);
-  return (outList->count > 0) ? 1 : 0;
-}
-
+*/
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -822,6 +412,9 @@ void XWINDOWSWINGET::Clean()
 {
 
 }
+
+
+#pragma endregion
 
 
 #pragma endregion

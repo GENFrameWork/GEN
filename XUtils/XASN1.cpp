@@ -6,7 +6,7 @@
 * @brief      eXtended Utils ANS.1 format buffer  (Abstract Syntax Notation One, defined in X.208)
 * @ingroup    XUTILS
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

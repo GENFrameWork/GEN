@@ -6,7 +6,7 @@
 * @brief      LINUX Data Input/Output Wifi Manager Mode class
 * @ingroup    PLATFORM_LINUX
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

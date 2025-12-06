@@ -6,7 +6,7 @@
 * @brief      LINUX Main procedure class
 * @ingroup    PLATFORM_LINUX
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -676,7 +676,7 @@ void MAINPROCLINUX::Clean()
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 
-#if !defined(APPMODE_LIBRARY_STATIC) && !defined(APPMODE_LIBRARY_DINAMIC)
+#if !defined(APPMODE_LIBRARYSTATIC_ACTIVE) && !defined(APPMODE_LIBRARYDINAMIC_ACTIVE)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -763,7 +763,7 @@ int main(int argc, char* argv[])
 #endif
 
 
-#ifdef APPMODE_LIBRARY_DINAMIC
+#ifdef APPMODE_LIBRARYDINAMIC_ACTIVE
 
 
 extern "C"

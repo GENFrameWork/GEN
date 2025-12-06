@@ -6,7 +6,7 @@
 * @brief      Version of framework
 * @ingroup    COMMON
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
