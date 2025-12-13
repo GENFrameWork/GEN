@@ -245,7 +245,7 @@
 #endif
 
 #ifndef GEN_DIOOSPIPELINE
-#define GEN_DIOOSPIPELINE                   DIOOSPIPELINE::GetInstance()
+#define GEN_DIOOSPIPELINE                 DIOOSPIPELINE::GetInstance()
 #endif
 
 // --- Data Input/Output Manager ------------------------------------------------------------------

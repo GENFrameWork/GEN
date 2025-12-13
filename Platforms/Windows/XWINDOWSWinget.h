@@ -33,12 +33,22 @@ SOFTWARE.
 #pragma region INCLUDES
 
 #include "XString.h"
+#include "XSerializable.h"
 
 #pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
+
+enum XWINDOWSWINGET_APPLICATIONOPERATION
+{
+  XWINDOWSWINGET_APPLICATIONOPERATION_UNKNOWN         =   0 ,
+  XWINDOWSWINGET_APPLICATIONOPERATION_INSTALL               ,
+  XWINDOWSWINGET_APPLICATIONOPERATION_UPDATEVERSION         ,
+  XWINDOWSWINGET_APPLICATIONOPERATION_UNINSTALL             ,
+};
+
 
 
 #pragma endregion
@@ -48,46 +58,77 @@ SOFTWARE.
 #pragma region CLASS
 
 
-class XWINDOWSWINGET_RESULT
+class XWINDOWSWINGET_ELEMENTRESULT : public XSERIALIZABLE
 {
   public:
-                        XWINDOWSWINGET_RESULT     ();
-    virtual            ~XWINDOWSWINGET_RESULT     ();
+                                                XWINDOWSWINGET_ELEMENTRESULT  ();
+    virtual                                    ~XWINDOWSWINGET_ELEMENTRESULT  ();
 
+    bool                                        Serialize                     ();    
+    bool                                        Deserialize                   ();  
 
-    XVECTOR<XSTRING*>   name;
-    XVECTOR<XSTRING*>   ID;
-    XVECTOR<XSTRING*>   actualversion;
-    XVECTOR<XSTRING*>   updateversion;
+    XSTRING                                     name;
+    XSTRING                                     ID;
+    XSTRING                                     actualversion;
+    XSTRING                                     availableversion;
 
   private:
 
-    void                Clean                     ();
+    void                                        Clean                         ();
 };
+
+
+
+class XWINDOWSWINGET_LISTRESULT : public XSERIALIZABLE
+{
+  public:
+                                                XWINDOWSWINGET_LISTRESULT     ();
+    virtual                                    ~XWINDOWSWINGET_LISTRESULT     ();
+
+    bool                                        Serialize                     ();    
+    bool                                        Deserialize                   ();  
+
+    XVECTOR<XWINDOWSWINGET_ELEMENTRESULT*>      list;
+
+  private:
+
+    void                                        Clean                         ();
+};
+
+
 
 
 class XWINDOWSWINGET
 {
   public:
-                        XWINDOWSWINGET            ();
-    virtual            ~XWINDOWSWINGET            ();
+                                                XWINDOWSWINGET                ();
+    virtual                                    ~XWINDOWSWINGET                ();
 
-    bool                List                      (XWINDOWSWINGET_RESULT& result);
-   
-        
+    bool                                        InstallModule                 ();
+
+    bool                                        List                          (XWINDOWSWINGET_LISTRESULT* listresult);
+    bool                                        ListUpdateAvailable           (XWINDOWSWINGET_LISTRESULT* listresult);
+    bool                                        Find                          (XCHAR* search, XWINDOWSWINGET_LISTRESULT* listresult);  
+
+    bool                                        List                          (bool updateavaible, XSTRING& jsonresult);  
+    bool                                        Find                          (XCHAR* search, XSTRING& jsonresult);
+
+    bool                                        ApplicationOperation          (XWINDOWSWINGET_APPLICATIONOPERATION appoper, XCHAR* ID, bool force);
+           
   private:
     
-    bool                Exec                      (XCHAR* params, XBUFFER& output);
+    bool                                        Exec                          (XCHAR* params, XBUFFER& output);
 
-    int                 LooksLikeUTF16            (XBYTE* buffer, int size);
-    bool                LooksLikeUTF8             (XBYTE* buffer, int size);
-    void                ConvertUTF16ToUTF8        (XBYTE* data);
-    void                CP437ToASCII              (XBYTE* dst, const XBYTE* src, int max);
-    void                NormalizeUnicode          (XBYTE* data);
+    int                                         LooksLikeUTF16                (XBYTE* buffer, int size);
+    bool                                        LooksLikeUTF8                 (XBYTE* buffer, int size);
+    void                                        ConvertUTF16ToUTF8            (XBYTE* data);
+    void                                        CP437ToASCII                  (XBYTE* dst, const XBYTE* src, int max);
+    void                                        NormalizeUnicode              (XBYTE* data);
     
-  //boor                ParseWinget               (const char* text, XWINDOWSWINGET_LIST* list);
+    bool                                        GenerateColumnList            (XCHAR* ask, XVECTOR<XSTRING*>* list);
+    bool                                        GenerateList                  (XSTRING& string,  XVECTOR<XSTRING*>* list);
     
-    void                Clean                     ();
+    void                                        Clean                         ();
 };
 
 #pragma endregion

@@ -40,6 +40,8 @@
 #include "XWINDOWSWinget.h"
 
 #include "XBuffer.h"
+#include "XSerializable.h"
+#include "XFileJSON.h"
 
 #pragma endregion
 
@@ -62,17 +64,17 @@
 #pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_MEMBERS_XWINDOWSWINGET_RESULT
+#pragma region CLASS_MEMBERS_XWINDOWSWINGET_ELEMENTRESULT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWINDOWSWINGET_RESULT::XWINDOWSWINGET_RESULT()
+* @fn         XWINDOWSWINGET_ELEMENTRESULT::XWINDOWSWINGET_ELEMENTRESULT()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XWINDOWSWINGET_RESULT::XWINDOWSWINGET_RESULT()
+XWINDOWSWINGET_ELEMENTRESULT::XWINDOWSWINGET_ELEMENTRESULT()
 {
   Clean();
 }
@@ -80,13 +82,13 @@ XWINDOWSWINGET_RESULT::XWINDOWSWINGET_RESULT()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWINDOWSWINGET_RESULT::~XWINDOWSWINGET_RESULT()
+* @fn         XWINDOWSWINGET_ELEMENTRESULT::~XWINDOWSWINGET_ELEMENTRESULT()
 * @brief      Destructor of class
 * @ingroup    PLATFORM_WINDOWS
 * @note       VIRTUAL
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XWINDOWSWINGET_RESULT::~XWINDOWSWINGET_RESULT()
+XWINDOWSWINGET_ELEMENTRESULT::~XWINDOWSWINGET_ELEMENTRESULT()
 {
   Clean();
 }
@@ -94,13 +96,136 @@ XWINDOWSWINGET_RESULT::~XWINDOWSWINGET_RESULT()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void XWINDOWSWINGET_RESULT::Clean()
+* @fn         bool XWINDOWSWINGET_ELEMENTRESULT::Serialize()
+* @brief      serialize
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET_ELEMENTRESULT::Serialize()
+{
+  Primitive_Add<XSTRING*>(&name                 , __L("name"));
+  Primitive_Add<XSTRING*>(&ID                   , __L("ID"));
+  Primitive_Add<XSTRING*>(&actualversion        , __L("actualversion"));
+  Primitive_Add<XSTRING*>(&availableversion     , __L("availableversion"));
+
+  return true;
+}
+
+   
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET_ELEMENTRESULT::Deserialize()
+* @brief      deserialize
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET_ELEMENTRESULT::Deserialize()
+{
+  Primitive_Extract<XSTRING&>(name              , __L("name"));
+  Primitive_Extract<XSTRING&>(ID                , __L("ID"));
+  Primitive_Extract<XSTRING&>(actualversion     , __L("actualversion"));
+  Primitive_Extract<XSTRING&>(availableversion  , __L("availableversion"));
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void XWINDOWSWINGET_ELEMENTRESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @ingroup    PLATFORM_WINDOWS
 * @note       INTERNAL
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void XWINDOWSWINGET_RESULT::Clean()
+void XWINDOWSWINGET_ELEMENTRESULT::Clean()
+{
+
+}
+
+
+#pragma endregion
+
+
+#pragma region CLASS_MEMBERS_XWINDOWSWINGET_LISTRESULT
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWINDOWSWINGET_LISTRESULT::XWINDOWSWINGET_LISTRESULT()
+* @brief      Constructor of class
+* @ingroup    PLATFORM_WINDOWS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWINDOWSWINGET_LISTRESULT::XWINDOWSWINGET_LISTRESULT()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWINDOWSWINGET_LISTRESULT::~XWINDOWSWINGET_LISTRESULT()
+* @brief      Destructor of class
+* @ingroup    PLATFORM_WINDOWS
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWINDOWSWINGET_LISTRESULT::~XWINDOWSWINGET_LISTRESULT()
+{
+  list.DeleteContents();
+
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET_LISTRESULT::Serialize()
+* @brief      serialize
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET_LISTRESULT::Serialize()
+{
+  XVectorClass_Add<XWINDOWSWINGET_ELEMENTRESULT>(&list, __L("list"), __L(""));
+ 
+  return true;
+}
+
+   
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET_LISTRESULT::Deserialize()
+* @brief      deserialize
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET_LISTRESULT::Deserialize()
+{
+  XVectorClass_Extract<XWINDOWSWINGET_ELEMENTRESULT>(&list, __L("list"), __L(""));
+  
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void XWINDOWSWINGET_LISTRESULT::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @ingroup    PLATFORM_WINDOWS
+* @note       INTERNAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void XWINDOWSWINGET_LISTRESULT::Clean()
 {
 
 }
@@ -122,6 +247,8 @@ void XWINDOWSWINGET_RESULT::Clean()
 XWINDOWSWINGET::XWINDOWSWINGET()
 {
   Clean();
+
+  //InstallModule();
 }
 
 
@@ -141,39 +268,419 @@ XWINDOWSWINGET::~XWINDOWSWINGET()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XWINDOWSWINGET::List(XCHAR* addparam, XWINDOWSWINGET_TABLE* output)
-* @brief      list
+* @fn         bool XWINDOWSWINGET::InstallModule()
+* @brief      install module
 * @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  addparam : 
-* @param[in]  output : 
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XWINDOWSWINGET::List(XWINDOWSWINGET_RESULT& result)
+bool XWINDOWSWINGET::InstallModule()
 {
-  XBUFFER buffer_output;
-  bool    status;
+  XBUFFER    buffer_output;
+  bool       status = false;
+ 
+  status = Exec( __L("Import-Module PackageManagement -Force"), buffer_output);
+  status = Exec( __L("Import-Module PowerShellGet -Force"), buffer_output);
+  status = Exec( __L("Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false | Out-Null"), buffer_output);
+  status = Exec( __L("Install-Module Microsoft.WinGet.Client -Force -Confirm:$false -AllowClobber"), buffer_output);
 
-  status = Exec(__L("Get-WinGetPackage | Select-Object Name"), buffer_output);
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::List(XVECTOR<XWINDOWSWINGET_ELEMENTRESULT*>* listresult)
+* @brief      list
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  listresult : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::List(XWINDOWSWINGET_LISTRESULT* listresult)
+{ 
+  XSTRING             string;
+  XVECTOR<XSTRING*>   list_name;
+  XVECTOR<XSTRING*>   list_ID;
+  XBUFFER             buffer_output;
+  bool                status = false;
+
+  if(!listresult)
+    {
+      return false;    
+    }
+
+  status = GenerateColumnList(__L("Get-WinGetPackage | Select-Object Name"), &list_name);
+  if(status)
+    {
+      status = GenerateColumnList(__L("Get-WinGetPackage | Select-Object ID"), &list_ID);
+      if(status)
+        {             
+          if(list_name.GetSize() == list_ID.GetSize())
+            {    
+              for(int c=0; c<list_name.GetSize(); c++)
+                {
+                  if(!list_name.Get(c)->IsEmpty() || !list_ID.Get(c)->IsEmpty())
+                    {                        
+                      XWINDOWSWINGET_ELEMENTRESULT* elementresult = new XWINDOWSWINGET_ELEMENTRESULT();
+                      if(elementresult)  
+                        {
+                          elementresult->name = list_name.Get(c)->Get();
+                          elementresult->ID   = list_ID.Get(c)->Get();
+
+                          listresult->list.Add(elementresult); 
+
+                          status = true;
+                        }
+                       else
+                        {
+                          status = false;
+                          break;
+                        }         
+                    }
+                }                      
+            } 
+        }
+    }
+
+  list_name.DeleteContents();
+  list_ID.DeleteContents();
+    
+  return status;
+}              
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::ListUpdateAvailable(XWINDOWSWINGET_LISTRESULT* listresult)
+* @brief      list update available
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  listresult : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::ListUpdateAvailable(XWINDOWSWINGET_LISTRESULT* listresult)
+{ 
+  XVECTOR<XSTRING*>   list_name;
+  XVECTOR<XSTRING*>   list_ID;
+  XVECTOR<XSTRING*>   list_actualversion;
+  XVECTOR<XSTRING*>   list_availableversion;
+  XBUFFER             buffer_output;
+  bool                status = false;
+
+  if(!listresult)
+    {
+      return false;    
+    }
+
+  status = GenerateColumnList(__L("Get-WinGetPackage | Where-Object IsUpdateAvailable | Select-Object Name"), &list_name);
+  if(status)
+    {
+      status = GenerateColumnList(__L("Get-WinGetPackage | Where-Object IsUpdateAvailable | Select-Object ID"), &list_ID);
+      if(status)
+        {             
+          status = GenerateColumnList(__L("Get-WinGetPackage | Where-Object IsUpdateAvailable | Select-Object InstalledVersion"), &list_actualversion);
+          if(status)
+            {             
+              status = GenerateColumnList(__L("Get-WinGetPackage | Where-Object IsUpdateAvailable | Select-Object AvailableVersions"), &list_availableversion);
+              if(status)
+                {               
+
+                  if(list_name.GetSize() == list_ID.GetSize())
+                    {    
+                      for(int c=0; c<list_name.GetSize(); c++)
+                        {
+                          if(!list_name.Get(c)->IsEmpty() || !list_ID.Get(c)->IsEmpty())
+                            {                        
+                              XWINDOWSWINGET_ELEMENTRESULT* elementresult = new XWINDOWSWINGET_ELEMENTRESULT();
+                              if(elementresult)  
+                                {
+                                  elementresult->name             = list_name.Get(c)->Get();
+                                  elementresult->ID               = list_ID.Get(c)->Get();
+                                  elementresult->actualversion    = list_actualversion.Get(c)->Get();
+                                  elementresult->availableversion = list_availableversion.Get(c)->Get();
+
+                                  listresult->list.Add(elementresult); 
+
+                                  status = true;
+                                }
+                               else
+                                {
+                                  status = false;
+                                  break;
+                                }         
+                            }
+                        }                      
+                    } 
+                }
+            }
+        }
+    }
+
+  list_name.DeleteContents();
+  list_ID.DeleteContents();
+
+  list_actualversion.DeleteContents();
+  list_availableversion.DeleteContents();
+    
+  return status;
+}              
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::Find(XCHAR* search, XWINDOWSWINGET_LISTRESULT* listresult)
+* @brief      find
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  search : 
+* @param[in]  listresult : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::Find(XCHAR* search, XWINDOWSWINGET_LISTRESULT* listresult)
+{ 
+  XSTRING             cmdstr;
+  XSTRING             mask;
+  XVECTOR<XSTRING*>   list_name;
+  XVECTOR<XSTRING*>   list_ID;
+  XVECTOR<XSTRING*>   list_actualversion;
+  XBUFFER             buffer_output;
+  bool                status = false;
+
+  if(!search)
+    {
+      return false;    
+    }
+
+  if(!listresult)
+    {
+      return false;    
+    }
+
+  mask.Format(__L("Find-WinGetPackage -Name \"%s\" | Select-Object"), search);
+
+  cmdstr.Format(__L("%s %s"), mask.Get(), __L("Name"));
+  status = GenerateColumnList(cmdstr.Get(), &list_name);
+  if(status)
+    {
+      cmdstr.Format(__L("%s %s"), mask.Get(), __L("ID"));
+      status = GenerateColumnList(cmdstr.Get(), &list_ID);
+      if(status)
+        {             
+          cmdstr.Format(__L("%s %s"), mask.Get(), __L("Version"));
+          status = GenerateColumnList(cmdstr.Get(), &list_actualversion);
+          if(status)
+            {                           
+              if(list_name.GetSize() == list_ID.GetSize())
+                {    
+                  for(int c=0; c<list_name.GetSize(); c++)
+                    {
+                      if(!list_name.Get(c)->IsEmpty() || !list_ID.Get(c)->IsEmpty())
+                        {                        
+                          XWINDOWSWINGET_ELEMENTRESULT* elementresult = new XWINDOWSWINGET_ELEMENTRESULT();
+                          if(elementresult)  
+                            {
+                              elementresult->name             = list_name.Get(c)->Get();
+                              elementresult->ID               = list_ID.Get(c)->Get();
+                              elementresult->actualversion    = list_actualversion.Get(c)->Get();
+                                  
+                              listresult->list.Add(elementresult); 
+
+                              status = true;
+                            }
+                            else
+                            {
+                              status = false;
+                              break;
+                            }         
+                        }
+                    }                      
+                }                 
+            }
+        }
+    }
+
+  list_name.DeleteContents();
+  list_ID.DeleteContents();
+  list_actualversion.DeleteContents();
+    
+  return status;
+}              
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::List(bool updateavaible, XSTRING* jsonresult)
+* @brief      list
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  updateavaible : 
+* @param[in]  jsonresult : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::List(bool updateavaible, XSTRING& jsonresult)
+{ 
+  XSERIALIZATIONMETHOD*       serializationmethod;
+  XFILEJSON                   xfileJSON;      
+  XWINDOWSWINGET              winget;  
+  XWINDOWSWINGET_LISTRESULT   listresult;
+  bool                        status = false;
+ 
+  status = updateavaible?winget.ListUpdateAvailable(&listresult):winget.List(&listresult);
   if(!status)
     {
       return false;
-    }    
+    }
+     
+  serializationmethod = XSERIALIZABLE::CreateInstance(xfileJSON);
 
-  XSTRING string;
+  status = listresult.DoSerialize(serializationmethod);
+  xfileJSON.EncodeAllLines(false);  
 
-  string.ConvertFromUTF8(buffer_output);
+  xfileJSON.GetAllInOneLine(jsonresult);
 
-  /*
-  if(!ParseWinget((char*)buffer_output.Get(),  output)) 
+  xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
+ 
+  delete serializationmethod;
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::Find(XCHAR* search, XSTRING& jsonresult)
+* @brief      find
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  search : 
+* @param[in]  jsonresult : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::Find(XCHAR* search, XSTRING& jsonresult)
+{ 
+  if(!search)
     {
       return false;
-    }    
-  */
+    }
 
-  return true;
+  XSERIALIZATIONMETHOD*       serializationmethod;
+  XFILEJSON                   xfileJSON;      
+  XWINDOWSWINGET              winget;  
+  XWINDOWSWINGET_LISTRESULT   listresult;
+  bool                        status = false;
+ 
+  status = winget.Find(search, &listresult);
+  if(!status)
+    {
+      return false;
+    }
+     
+  serializationmethod = XSERIALIZABLE::CreateInstance(xfileJSON);
+
+  status = listresult.DoSerialize(serializationmethod);
+  xfileJSON.EncodeAllLines(false);  
+
+  xfileJSON.GetAllInOneLine(jsonresult);
+
+  xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
+ 
+  delete serializationmethod;
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::ApplicationOperation(XWINDOWSWINGET_APPLICATIONOPERATION appoper, XCHAR* ID, bool force)
+* @brief      application operation
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  appoper : 
+* @param[in]  ID : 
+* @param[in]  force : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::ApplicationOperation(XWINDOWSWINGET_APPLICATIONOPERATION appoper, XCHAR* ID, bool force)
+{
+  XSTRING  cmdstr;
+  XBUFFER  buffer_output;
+  bool     status = false;
+
+  if(!ID)
+    {
+      return false;  
+    }
+
+  switch(appoper)
+    {
+      case XWINDOWSWINGET_APPLICATIONOPERATION_UNKNOWN        : return status;
+      case XWINDOWSWINGET_APPLICATIONOPERATION_INSTALL        : cmdstr.Format(__L("Install-WinGetPackage"));    break;
+      case XWINDOWSWINGET_APPLICATIONOPERATION_UPDATEVERSION  : cmdstr.Format(__L("Update-WinGetPackage"));     break;
+      case XWINDOWSWINGET_APPLICATIONOPERATION_UNINSTALL      : cmdstr.Format(__L("Uninstall-WinGetPackage"));  break;
+    }
+
+  cmdstr.AddFormat(__L(" -Id \"%s\""), ID);
+
+  if(force)
+    {
+      cmdstr.AddFormat(__L(" -force"));
+    }
+
+
+  cmdstr.AddFormat(__L(" | Select-Object Status"));
+
+  status = Exec(cmdstr.Get(), buffer_output);
+  if(status)
+    {
+      if(!buffer_output.GetSize())
+        {
+          status = true;
+        }  
+    }
+
+  XVECTOR<XSTRING*> statuslist;
+  XSTRING           result;
+
+  result.ConvertFromUTF8(buffer_output);
+  GenerateList(result,  &statuslist);
+
+  status = statuslist.GetSize()?true:false;
+
+  if(status)
+    {  
+      XSTRING* statusstr = statuslist.Get(0);
+      if(statusstr)
+        {
+          status = false;
+
+          if(!statusstr->Compare(__L("NoApplicableUpgrade"), false))  
+            {
+              status = true;   
+            }
+
+          if(!statusstr->Compare(__L("Ok"), false))  
+            {
+              status = true;   
+            }
+        }
+    }
+
+  return status;
 }
 
 
@@ -365,6 +872,11 @@ void XWINDOWSWINGET::CP437ToASCII(XBYTE* dst, const XBYTE* src, int max)
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWINGET::NormalizeUnicode(XBYTE* data) 
 {
+  if(!data)
+    {
+      return;
+    }
+
   int     len    = (int)strlen((char*)data);
   XBYTE*  buffer = (XBYTE*)data;
   
@@ -391,14 +903,104 @@ void XWINDOWSWINGET::NormalizeUnicode(XBYTE* data)
 }
 
 
-
-/*
-bool XWINDOWSWINGET::ParseWinget(const char* text, XWINDOWSWINGET_LIST* list) 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::GenerateColumnList(XCHAR* ask, XVECTOR<XSTRING*>* list)
+* @brief      generate column list
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  ask : 
+* @param[in]  list : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::GenerateColumnList(XCHAR* ask, XVECTOR<XSTRING*>* list) 
 {
-  
-  return false;
+  XSTRING  result;
+  XBUFFER  buffer_output;
+  bool     status;
+
+  status = Exec(ask, buffer_output);
+  if(!status)
+    {
+      return false;
+    }    
+
+  result.ConvertFromUTF8(buffer_output);
+
+  return GenerateList(result, list);
 }
-*/
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::GenerateList(XSTRING& string, XVECTOR<XSTRING*>* list)
+* @brief      generate list
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  string : 
+* @param[in]  list : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::GenerateList(XSTRING& result,  XVECTOR<XSTRING*>* list) 
+{
+  int start =  XSTRING_NOTFOUND;
+  int end   =  XSTRING_NOTFOUND;
+  
+  start = result.Find(__L("\r\n--"), true);
+  if(start == XSTRING_NOTFOUND)
+    {
+      return false;
+    }
+
+  start +=4;
+
+  end = result.Find(__L("--\r\n"), true, start);
+  if(end == XSTRING_NOTFOUND)
+    {      
+      end = result.Find(__L("  \r\n"), true, start);
+      if(end == XSTRING_NOTFOUND)
+        {
+          return false;
+        }
+    }
+
+  start = end + 4;
+  
+  while(1)
+    {
+      end = result.Find(__L("\r\n"), true, start);
+      if(end == XSTRING_NOTFOUND)
+        {
+          break;
+        }
+  
+      XSTRING* element = new XSTRING();
+      if(!element)
+        {
+          break;
+        }
+
+      result.Copy(start, end, (*element));
+
+      element->DeleteCharacter(__C(' '), XSTRINGCONTEXT_TO_END);
+
+      list->Add(element);
+
+      start = end + 2;
+    }
+
+  if(!list->GetSize())
+    {
+      return false;
+    }
+
+  return true;
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
