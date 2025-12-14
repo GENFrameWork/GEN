@@ -57,6 +57,8 @@
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 #pragma region GENERAL_VARIABLE
 
+XWINDOWSWINGET* XWINDOWSWINGET::instance = NULL;
+
 #pragma endregion
 
 
@@ -239,30 +241,56 @@ void XWINDOWSWINGET_LISTRESULT::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWINDOWSWINGET::XWINDOWSWINGET()
-* @brief      Constructor of class
+* @fn         bool XWINDOWSWINGET::GetIsInstanced()
+* @brief      get is instanced
 * @ingroup    PLATFORM_WINDOWS
 * 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-XWINDOWSWINGET::XWINDOWSWINGET()
+bool XWINDOWSWINGET::GetIsInstanced()
 {
-  Clean();
-
-  //InstallModule();
+  return instance!=NULL;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWINDOWSWINGET::~XWINDOWSWINGET()
-* @brief      Destructor of class
+* @fn         XWINDOWSWINGET& XWINDOWSWINGET::GetInstance()
+* @brief      get instance
 * @ingroup    PLATFORM_WINDOWS
-* @note       VIRTUAL
+* 
+* @return     XWINDOWSWINGET& : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XWINDOWSWINGET::~XWINDOWSWINGET()
+XWINDOWSWINGET& XWINDOWSWINGET::GetInstance()
 {
-  Clean();
+  if(!instance) instance = new XWINDOWSWINGET();
+
+  return (*instance);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSWINGET::DelInstance()
+* @brief      del instance
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::DelInstance()
+{
+  if(instance)
+    {
+      delete instance;
+      instance = NULL;
+
+      return true;
+    }
+
+  return false;
 }
 
 
@@ -548,7 +576,7 @@ bool XWINDOWSWINGET::List(bool updateavaible, XSTRING& jsonresult)
 
   xfileJSON.GetAllInOneLine(jsonresult);
 
-  xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
+  // xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
  
   delete serializationmethod;
 
@@ -594,7 +622,7 @@ bool XWINDOWSWINGET::Find(XCHAR* search, XSTRING& jsonresult)
 
   xfileJSON.GetAllInOneLine(jsonresult);
 
-  xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
+  //xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
  
   delete serializationmethod;
 
@@ -686,6 +714,35 @@ bool XWINDOWSWINGET::ApplicationOperation(XWINDOWSWINGET_APPLICATIONOPERATION ap
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XWINDOWSWINGET::XWINDOWSWINGET()
+* @brief      Constructor of class
+* @ingroup    PLATFORM_WINDOWS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWINDOWSWINGET::XWINDOWSWINGET()
+{
+  Clean();
+
+  //InstallModule();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWINDOWSWINGET::~XWINDOWSWINGET()
+* @brief      Destructor of class
+* @ingroup    PLATFORM_WINDOWS
+* @note       VIRTUAL
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XWINDOWSWINGET::~XWINDOWSWINGET()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
 * @brief      exec
 * @ingroup    PLATFORM_WINDOWS
@@ -698,37 +755,83 @@ bool XWINDOWSWINGET::ApplicationOperation(XWINDOWSWINGET_APPLICATIONOPERATION ap
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
 {
-  XSTRING cmd_str;
-  XBUFFER cmd;
-
   output.Delete();
- 
-  cmd_str.Format(__L("powershell -NonInteractive -command \"%s\" 2>&1"), params);
-  cmd_str.ConvertToASCII(cmd);
-    
-  FILE* pipe = _popen((char*)cmd.Get(), "rb");
-  if(!pipe) 
+
+  // Construir comando PowerShell (igual que antes)
+  XSTRING cmd_str;
+  cmd_str.Format(__L("powershell.exe -NonInteractive -Command \"%s\" 2>&1"), params);
+  
+  // Crear pipe para capturar salida
+  SECURITY_ATTRIBUTES sa;  
+  STARTUPINFO         si;  
+  PROCESS_INFORMATION pi;    
+  HANDLE              hread = NULL;
+  HANDLE              hwrite = NULL;
+
+  ZeroMemory(&si, sizeof(si));  
+  ZeroMemory(&pi, sizeof(pi));
+
+  sa.nLength              = sizeof(sa);
+  sa.lpSecurityDescriptor = NULL;
+  sa.bInheritHandle       = TRUE;
+
+  if(!CreatePipe(&hread, &hwrite, &sa, 0))
     {
       return false;
     }
 
-  while(!feof(pipe)) 
-    {
-      int c = fgetc(pipe);
-      if(c == EOF) 
-        {
-          break;
-        }
+  // El extremo de lectura NO debe heredarse
+  SetHandleInformation(hread, HANDLE_FLAG_INHERIT, 0);
 
-      output.Add((XBYTE)c);
-    }    
-    
-  _pclose(pipe);
+  si.cb           = sizeof(si);
+  si.dwFlags      = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+  si.wShowWindow  = SW_HIDE;
+  si.hStdOutput   = hwrite;
+  si.hStdError    = hwrite;
+  si.hStdInput    = GetStdHandle(STD_INPUT_HANDLE);
+
+  BOOL ok = CreateProcess(  NULL,
+                            (XCHAR*)cmd_str.Get(),      // buffer modificable
+                            NULL,
+                            NULL,
+                            TRUE,                       // heredar handles
+                            CREATE_NO_WINDOW,           // CLAVE: evita CMD
+                            NULL,
+                            NULL,
+                            &si,
+                            &pi
+                         );
+
+  CloseHandle(hwrite);
+
+  if(!ok)
+  {
+    CloseHandle(hread);
+    return false;
+  }
+
+  BYTE    buffer[4096];
+  DWORD   bytes_read = 0;
+
+  while(ReadFile(hread, buffer, sizeof(buffer), &bytes_read, NULL) && bytes_read > 0)
+    {
+      output.Add(buffer, (XDWORD)bytes_read);
+    }
+
+  CloseHandle(hread);
+  
+  WaitForSingleObject(pi.hProcess, INFINITE);
+
+  CloseHandle(pi.hThread);
+  CloseHandle(pi.hProcess);
+
 
   NormalizeUnicode(output.Get());
 
   return true;
 }
+
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------

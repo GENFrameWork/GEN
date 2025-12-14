@@ -244,9 +244,10 @@
 #define GEN_XEEPROMMEMORYMANAGER          XEEPROMMEMORYMANAGER::GetInstance()
 #endif
 
-#ifndef GEN_DIOOSPIPELINE
-#define GEN_DIOOSPIPELINE                 DIOOSPIPELINE::GetInstance()
+#ifndef GEN_WINGET
+#define GEN_WINGET                        XWINDOWSWINGET::GetInstance()
 #endif
+
 
 // --- Data Input/Output Manager ------------------------------------------------------------------
 
@@ -275,6 +276,11 @@
 #ifndef GEN_DIOALERTS
 #define GEN_DIOALERTS                     DIOALERTS::GetInstance()
 #endif
+
+#ifndef GEN_DIOOSPIPELINE
+#define GEN_DIOOSPIPELINE                 DIOOSPIPELINE::GetInstance()
+#endif
+
 
 // --- AppFlow ------------------------------------------------------------------------------------
 

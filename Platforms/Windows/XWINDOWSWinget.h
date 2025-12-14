@@ -100,9 +100,11 @@ class XWINDOWSWINGET_LISTRESULT : public XSERIALIZABLE
 
 class XWINDOWSWINGET
 {
-  public:
-                                                XWINDOWSWINGET                ();
-    virtual                                    ~XWINDOWSWINGET                ();
+   public:
+
+    static bool                                 GetIsInstanced                ();
+    static XWINDOWSWINGET&                      GetInstance                   ();
+    static bool                                 DelInstance                   ();  
 
     bool                                        InstallModule                 ();
 
@@ -113,9 +115,14 @@ class XWINDOWSWINGET
     bool                                        List                          (bool updateavaible, XSTRING& jsonresult);  
     bool                                        Find                          (XCHAR* search, XSTRING& jsonresult);
 
-    bool                                        ApplicationOperation          (XWINDOWSWINGET_APPLICATIONOPERATION appoper, XCHAR* ID, bool force);
+    bool                                        ApplicationOperation          (XWINDOWSWINGET_APPLICATIONOPERATION appoper, XCHAR* ID, bool force = true);
            
-  private:
+  private:                                             
+                                                XWINDOWSWINGET                ();
+                                                XWINDOWSWINGET                (XWINDOWSWINGET const&);        // Don't implement
+    virtual                                    ~XWINDOWSWINGET                ();
+
+    void                                        operator =                    (XWINDOWSWINGET const&);        // Don't implement    
     
     bool                                        Exec                          (XCHAR* params, XBUFFER& output);
 
@@ -129,7 +136,10 @@ class XWINDOWSWINGET
     bool                                        GenerateList                  (XSTRING& string,  XVECTOR<XSTRING*>* list);
     
     void                                        Clean                         ();
+
+    static XWINDOWSWINGET*                      instance;
 };
+
 
 #pragma endregion
 
