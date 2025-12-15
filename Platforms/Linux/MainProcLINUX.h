@@ -45,6 +45,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
+#define LOG_SIGNAL              __L("SIGNAL")
 
 #pragma endregion
 

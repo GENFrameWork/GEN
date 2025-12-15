@@ -54,11 +54,12 @@
 #include <sys/stat.h>
 #include <sys/fcntl.h>
 #include <execinfo.h>
-#include <errno.h>
 #include <cxxabi.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <fenv.h>
+#include <dlfcn.h>
+#include <stdint.h>
 
 #ifdef GOOGLETEST_ACTIVE      
 #include "gtest/gtest.h"
@@ -961,7 +962,7 @@ static void Signal_Handler(int sign)
                         break;
     }
 
-  Signal_Printf(iserror, __L("SIGNAL"), __L("[%s] Error: %s"), signalstr.Get(), description.Get());
+  Signal_Printf(iserror, LOG_SIGNAL, __L("[%s] Error: %s"), signalstr.Get(), description.Get());
 
   #ifdef APPFLOW_ACTIVE
   if(app)
@@ -971,7 +972,7 @@ static void Signal_Handler(int sign)
           XSTRING string2;
         
           app->GetTimerGlobal()->GetMeasureString(string2, true);
-          Signal_Printf(false, NULL,__L("Time working: %s."), string2.Get());
+          Signal_Printf(iserror, LOG_SIGNAL, __L("Time working: %s."), string2.Get());
         }
     }
   #endif
@@ -984,7 +985,7 @@ static void Signal_Handler(int sign)
       case SIGABRT    :
       case SIGSTKFLT  :
       case SIGILL     : { Signal_PrintfStackTrace();
-
+  
                           string.Format(__L("SIGNAL %s: %s"), signalstr.Get(), description.Get());
 
                           #ifdef DIO_ALERTS_ACTIVE
@@ -1110,7 +1111,7 @@ bool Signal_Printf(bool iserror, XCHAR* title, XCHAR* mask, ...)
   #ifdef XLOG_ACTIVE
   if(GEN_XLOG.IsActive())
     {
-      GEN_XLOG.SetFilters(__L(""));
+      GEN_XLOG.SetFilters(LOG_SIGNAL);
 
       if(GEN_XLOG.AddEntry(iserror?XLOGLEVEL_ERROR:XLOGLEVEL_WARNING, title, false, outstring.Get()))
         {
@@ -1136,6 +1137,54 @@ bool Signal_Printf(bool iserror, XCHAR* title, XCHAR* mask, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static inline bool Signal_ResolveFunctionName(void* addr, XSTRING& namefunc)
+* @brief      nline bool  signal  resolve function name
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  addr : 
+* @param[in]  namefunc : 
+* 
+* @return     static : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+static inline bool Signal_ResolveFunctionName(void* addr, XSTRING& namefunc)
+{
+  Dl_info info;
+
+  namefunc.Empty();
+
+  namefunc = __L("?");
+
+  if(dladdr(addr, &info) == 0)
+    {    
+      return false;
+    }
+
+  if(!info.dli_sname)
+    {
+      return false;
+    }
+
+  int status = -1;
+  char* dem = abi::__cxa_demangle(info.dli_sname, nullptr, nullptr, &status);
+  
+  if(status == 0 && dem)
+    {
+      namefunc = dem;
+    }
+  else
+    {
+      namefunc = info.dli_sname;
+    }
+
+  free(dem);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         static inline void Signal_PrintfStackTrace(FILE*out, unsigned int max_frames)
 * @brief      nline void Signal_PrintfStackTrace
@@ -1154,100 +1203,26 @@ static inline void Signal_PrintfStackTrace(FILE *out, unsigned int max_frames)
 
   memset(addrlist,0, sizeof(addrlist));
 
-  addrlen = backtrace(addrlist, sizeof(addrlist) / sizeof(void*));  // retrieve current stack addresses
+  addrlen = backtrace(addrlist, sizeof(addrlist) / sizeof(void*)); 
 
   if(addrlen == 0)
     {
-      Signal_Printf(true, NULL, __L("Stack trace: Not available."));
+      Signal_Printf(true, LOG_SIGNAL, __L("Stack trace: Not available."));
       return;
 
-    } else Signal_Printf(true, NULL, __L("Stack trace: (%d) calls"),addrlen);
+    } else Signal_Printf(true, LOG_SIGNAL, __L("Stack trace: (%d) calls"), addrlen);
 
-  // resolve addresses into strings containing "filename(function+address)",
-  // Actually it will be ## program address function + offset
-  // this array must be free()-ed
-  char** symbollist = backtrace_symbols( addrlist, addrlen );
+  char** symbollist = backtrace_symbols(addrlist, addrlen);
 
-  size_t funcnamesize = 1204;
-  char   funcname[1024];
-
-  // iterate over the returned symbol lines. skip the first, it is the
-  // address of this function.
-  for(XDWORD i = 0; i < addrlen; i++)
+  for(int c=0; c<addrlen; c++)
     {
-      char* begin_name   = NULL;
-      char* begin_offset = NULL;
-      char* end_offset   = NULL;
+      XSTRING symbolstr = symbollist[c];
+      XSTRING namefunc;
 
-      XSTRING   beginname;
-      XSTRING   beginoffset;
-      XSTRING   endoffset;
-      XSTRING   symbol;
-
-      // find parentheses and +address offset surrounding the mangled name
-
-      for(char *p = symbollist[i]; *p; ++p)
-        {
-         if(*p == '(')
-           {
-             begin_name = p;
-           }
-          else
-           {
-             if(*p == '+')
-               {
-                 begin_offset = p;
-               }
-              else
-               {
-                 if ( *p == ')' && ( begin_offset || begin_name ))  end_offset = p;
-               }
-           }
-        }
-
-      if(begin_name && end_offset && (begin_name < end_offset))
-        {
-          *begin_name++   = '\0';
-          *end_offset++   = '\0';
-
-          if(begin_offset) *begin_offset++ = '\0';
-
-          int   status = -1;
-          char* ret    = NULL;
-          // mangled name is now in [begin_name, begin_offset) and caller
-          // offset in [begin_offset, end_offset). now apply
-          // __cxa_demangle():
-
-          //#ifndef HW_INTEL_OLD
-          abi::__cxa_demangle(begin_name, funcname, &funcnamesize, &status);
-
-          char* fname = begin_name;
-          if(status == 0)  fname = ret;
-          beginname   = fname;
-          //#endif
-
-          endoffset   = end_offset;
-          symbol      = symbollist[i];
-
-          if(begin_offset)
-            {
-              beginoffset = begin_offset;
-              Signal_Printf(true, NULL, __L("%-40s (%-40s  + %-6s) %s"), symbol.Get(), beginname.Get(), beginoffset.Get(), endoffset.Get());
-            }
-           else
-            {
-              Signal_Printf(true, NULL, __L("%-40s (%-40s    %-6s) %s"), symbol.Get(), beginname.Get(), __L(""), endoffset.Get());
-            }
-        }
-       else
-        {
-          symbol      = symbollist[i];
-          // couldn't parse the line? print the whole line.
-          Signal_Printf(true, NULL, __L("%-40s"), symbol.Get());
-        }
+      Signal_ResolveFunctionName(addrlist[c], namefunc);
+      
+      Signal_Printf(true, LOG_SIGNAL, __L("[%-64s] %s"), namefunc.Get(), symbolstr.Get());      
     }
-
-  free(symbollist);
 }
 
 
