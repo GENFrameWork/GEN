@@ -37,6 +37,8 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
+#include <Windows.h>
+
 #include "XWINDOWSWinget.h"
 
 #include "XBuffer.h"
