@@ -852,14 +852,31 @@ void Signal_Ini(void)
   act.sa_handler = Signal_Handler;
   act.sa_flags = 0;
 
-  for(i = 1; i < __SIGRTMIN; i++)
+  int signalcap[] = {  SIGSEGV    , 
+                       SIGBUS     ,
+                       SIGFPE     , 
+                       SIGABRT    , 
+                       SIGSTKFLT  , 
+                       SIGILL     , 
+                       SIGHUP     , 
+                       SIGTERM    , 
+                       SIGINT     , 
+                       SIGQUIT    , 
+                       SIGTSTP    , 
+                       SIGUSR1    ,
+                       SIGUSR2    
+                    }; 
+
+  for(int c=0; c<(sizeof(signalcap)/sizeof(int)); c++)
     {
+      /*
       if(i == SIGKILL || i == SIGSTOP || i == SIGCHLD)
         {
           continue;
         }
+      */
 
-      if(sigaction(i, &act, NULL)) 
+      if(sigaction(signalcap[c], &act, NULL)) 
         {          
           fprintf(stderr, "Cannot install realtime signal %d handler: %s.\n", i, strerror(errno));
           exit(EXIT_FAILURE);
@@ -962,7 +979,7 @@ static void Signal_Handler(int sign)
                         break;
     }
 
-  Signal_Printf(iserror, LOG_SIGNAL, __L("[%s] Error: %s"), signalstr.Get(), description.Get());
+  Signal_Printf(iserror, LOG_SIGNAL, __L("[%s %d] Error: %s"), signalstr.Get(), sign,  description.Get());
 
   #ifdef APPFLOW_ACTIVE
   if(app)

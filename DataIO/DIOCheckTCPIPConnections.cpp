@@ -747,7 +747,10 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(DIOURL& url, XDWORD& ID)
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION* DIOCHECKTCPIPCONNECTIONS::Connection_GetByID(XDWORD ID)
 {
-  if(xmutexconnections) xmutexconnections->Lock();
+  if(xmutexconnections) 
+    {
+      xmutexconnections->Lock();
+    }
 
   for(XDWORD c=0; c<connections.GetSize(); c++)
     {
@@ -762,7 +765,10 @@ DIOCHECKTCPIPCONNECTION* DIOCHECKTCPIPCONNECTIONS::Connection_GetByID(XDWORD ID)
         }
     }
 
-  if(xmutexconnections) xmutexconnections->UnLock();
+  if(xmutexconnections) 
+    {
+      xmutexconnections->UnLock();
+    }
 
   return NULL;
 }
