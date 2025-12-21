@@ -37,11 +37,14 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
+#include "Windows.h"
+
 #include "XWINDOWSWinget.h"
 
 #include "XBuffer.h"
 #include "XSerializable.h"
 #include "XFileJSON.h"
+#include "XTrace.h"
 
 #pragma endregion
 
@@ -308,9 +311,13 @@ bool XWINDOWSWINGET::InstallModule()
   XBUFFER    buffer_output;
   bool       status = false;
  
+  /*
   status = Exec( __L("Import-Module PackageManagement -Force"), buffer_output);
   status = Exec( __L("Import-Module PowerShellGet -Force"), buffer_output);
   status = Exec( __L("Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false | Out-Null"), buffer_output);
+  status = Exec( __L("Install-Module Microsoft.WinGet.Client -Force -Confirm:$false -AllowClobber"), buffer_output);
+  */
+
   status = Exec( __L("Install-Module Microsoft.WinGet.Client -Force -Confirm:$false -AllowClobber"), buffer_output);
 
   return status;
@@ -759,7 +766,13 @@ bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
 
   // Construir comando PowerShell (igual que antes)
   XSTRING cmd_str;
-  cmd_str.Format(__L("powershell.exe -NonInteractive -Command \"%s\" 2>&1"), params);
+  //cmd_str.Format(__L("powershell.exe -NonInteractive -Command \"%s\" 2>&1"), params);
+  cmd_str.Format(__L("pwsh.exe -NonInteractive -Command \"%s\" 2>&1"), params);
+
+
+  #ifdef SHOW_EXTRA_TRACE
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[WinGet] Command ejecuted: %s"), cmd_str.Get());
+  #endif      
   
   // Crear pipe para capturar salida
   SECURITY_ATTRIBUTES sa;  
@@ -825,8 +838,13 @@ bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
   CloseHandle(pi.hThread);
   CloseHandle(pi.hProcess);
 
-
   NormalizeUnicode(output.Get());
+
+  #ifdef SHOW_EXTRA_TRACE
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[WinGet] Result: %s"), cmd_str.Get());
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, output);
+  #endif
+
 
   return true;
 }
@@ -1049,29 +1067,27 @@ bool XWINDOWSWINGET::GenerateColumnList(XCHAR* ask, XVECTOR<XSTRING*>* list)
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::GenerateList(XSTRING& result,  XVECTOR<XSTRING*>* list) 
-{
-  int start =  XSTRING_NOTFOUND;
-  int end   =  XSTRING_NOTFOUND;
+{  
+  XSTRING literal1  = __L("\r\n\x1b[32;1m--");
+  XSTRING literal2  = __L("\x1B[0m\r\n");
+  int     start     =  XSTRING_NOTFOUND;
+  int     end       =  XSTRING_NOTFOUND;
   
-  start = result.Find(__L("\r\n--"), true);
+  start = result.Find(literal1.Get(), true);
   if(start == XSTRING_NOTFOUND)
     {
       return false;
     }
 
-  start +=4;
+  start += literal1.GetSize();
 
-  end = result.Find(__L("--\r\n"), true, start);
+  end = result.Find(literal2.Get(), true, start);
   if(end == XSTRING_NOTFOUND)
     {      
-      end = result.Find(__L("  \r\n"), true, start);
-      if(end == XSTRING_NOTFOUND)
-        {
-          return false;
-        }
+      return false;      
     }
 
-  start = end + 4;
+  start = end + literal2.GetSize();;
   
   while(1)
     {

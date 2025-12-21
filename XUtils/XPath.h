@@ -50,7 +50,7 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
-class XPATH : public XSTRING
+class GEN_API_LIB_EXP XPATH : public XSTRING
 {
   public:
                               XPATH                         ();

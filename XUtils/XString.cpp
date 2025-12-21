@@ -33,7 +33,6 @@
 
 #pragma endregion
 
-#if defined(APPMODE_API_LIB_EXPORT_ACTIVE) || !defined(APPMODE_API_LIB_ACTIVE)
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -5933,5 +5932,4 @@ void XSTRING::Clean()
 #pragma endregion
 
 
-#endif
 

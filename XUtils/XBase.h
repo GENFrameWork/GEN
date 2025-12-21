@@ -141,38 +141,32 @@ typedef void*                 POINTER;
                                b = a ^ b; \
                                a = a ^ b;  
 
-
-#ifdef APPMODE_API_LIB_ACTIVE
+            
+#if defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
 
   #if defined(WINDOWS)
-    //  Microsoft    
-    #ifdef APPMODE_API_LIB_EXPORT_ACTIVE
-      #define GEN_API_LIB __declspec(dllexport)  
-    #else  
-      #define GEN_API_LIB __declspec(dllimport)
-    #endif  
+    #define GEN_API_LIB_EXP   __declspec(dllexport)  
+    #define GEN_API_LIB_IMP   __declspec(dllimport)
+  #endif  
 
-  #elif defined(LINUX)
-    //  GCC
+  #if defined(LINUX)  
     #include <dlfcn.h> 
-    #ifdef APPMODE_API_LIB_EXPORT_ACTIVE
-      #define GEN_API_LIB __attribute__((visibility("default")))
-    #else
-      #define GEN_API_LIB
-    #endif  
- 
-  #else
-    //  do nothing and hope for the best?
-    #define GEN_API_LIB
-  
+    #define GEN_API_LIB_EXP   __attribute__((visibility("default")))
+    #define GEN_API_LIB_IMP
   #endif
+
+ #if !defined(WINDOWS) && !defined(LINUX)      
+    #define GEN_API_LIB_EXP
+    #define GEN_API_LIB_IMP  
+  #endif
+  
 #else
-  #define GEN_API_LIB
+  #define GEN_API_LIB_EXP
+  #define GEN_API_LIB_IMP  
 #endif
 
 
 typedef bool (*PROGRESS_FUNCTION)(void);
- 
 
 #ifdef _MSC_VER    
   #define  TYPEDEF_STRUCT_ALIGNMENT_BYTE_INI                                            \

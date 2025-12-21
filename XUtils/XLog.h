@@ -78,6 +78,10 @@ enum XLOGTYPELIMIT
 #define XLOG_MAXLEVELSIZE                8
 #define XLOG_MAXSECTIONIDSIZE           10
 
+#ifndef GEN_XLOG
+#define GEN_XLOG                        XLOG::GetInstance()
+#endif
+
 #pragma endregion
 
 
@@ -104,7 +108,7 @@ class XLOGENTRY
 };
 
 
-class XLOGBASE
+class GEN_API_LIB_EXP XLOGBASE
 {
   public:
                             XLOGBASE                          ();
@@ -188,7 +192,7 @@ class XLOGBASE
 };
 
 
-class XLOG : public XLOGBASE
+class GEN_API_LIB_EXP XLOG : public XLOGBASE
 {
   public:
 

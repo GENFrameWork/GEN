@@ -446,29 +446,22 @@ bool XWINDOWSSYSTEM::GetOperativeSystemID(XSTRING& ID)
   ID.Empty();
 
   #ifndef BUILDER
-  XWINDOWSWMIINTERFACE*  wmiinterface;
-  XSTRING                wmianswer[4];
-
-  wmiinterface = new XWINDOWSWMIINTERFACE();
-  if(!wmiinterface)  
+  XWINDOWSWMIINTERFACE wmiinterface;
+  XSTRING              wmianswer[4];
+  
+  if(!wmiinterface.Ini())
     {
       return false;
     }
 
-  if(wmiinterface->Ini())
-    {
-      wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("Caption")        , wmianswer[0]);
-      wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("BuildNumber")    , wmianswer[1]);
-      wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("CSDVersion")     , wmianswer[2]);
-      wmiinterface->DoQuery(__L("Win32_OperatingSystem"), __L("OSArchitecture") , wmianswer[3]);
+  wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("Caption")        , wmianswer[0]);
+  wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("BuildNumber")    , wmianswer[1]);
+  wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("CSDVersion")     , wmianswer[2]);
+  wmiinterface.DoQuery(__L("Win32_OperatingSystem"), __L("OSArchitecture") , wmianswer[3]);
 
-      ID.Format(__L("%s Build(%s) %s %s"), wmianswer[0].Get(), wmianswer[1].Get(), wmianswer[2].Get(), wmianswer[3].Get());
+  ID.Format(__L("%s Build(%s) %s %s"), wmianswer[0].Get(), wmianswer[1].Get(), wmianswer[2].Get(), wmianswer[3].Get());
 
-      wmiinterface->End();
-
-      delete wmiinterface;
-      wmiinterface = NULL;
-    }
+  wmiinterface.End();          
   #endif
 
   return true;

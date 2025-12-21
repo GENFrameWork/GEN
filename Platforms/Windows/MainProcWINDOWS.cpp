@@ -161,6 +161,7 @@
 #ifdef XTRACE_ACTIVE
 XWINDOWSTRACE           windowsdebugtrace;
 #endif
+
 MAINPROCWINDOWS         mainprocwindows;
 XSTRING*                allexceptiontext  = NULL;
 
@@ -816,7 +817,7 @@ void MAINPROCWINDOWS::Clean()
 #pragma endregion
 
 
-#if !defined(APPMODE_LIBRARYDINAMIC_ACTIVE) 
+#if !defined(APPMODE_LIBRARY_STATIC_ACTIVE) && !defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
 
 
 #pragma region CLASS_WINDOWSSERVICE

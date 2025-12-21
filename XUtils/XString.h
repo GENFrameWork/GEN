@@ -145,7 +145,7 @@ class XBUFFER;
 class XMUTEX;
 
 
-class GEN_API_LIB XSTRING
+class GEN_API_LIB_EXP XSTRING
 {
   public:
                           XSTRING                         ();

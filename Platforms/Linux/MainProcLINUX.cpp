@@ -184,8 +184,9 @@ XLINUXTRACE           linuxdebugtrace;
 #endif
 
 MAINPROCLINUX         mainproclinux;
-bool                  libmainproclinux      = false;
 XSTRING               allexceptiontext;
+
+bool                  libmainproclinux      = false;
 
 #pragma endregion
 
@@ -252,13 +253,27 @@ bool MAINPROCLINUX::Ini(APPFLOWMAIN* appmain, APPFLOWBASE_MODE_TYPE applicationm
   #endif
   //---------------------------------------------------------------------------
   
-  if(!Factorys_Ini()) return false;
+  if(!Factorys_Ini()) 
+    {
+      return false;
+    }
   
   #ifdef APPFLOW_ACTIVE
 
-  if(!appmain)                              return false;
-  if(!appmain->Create())                    return false;
-  if(!appmain->Ini(this, applicationmode))  return false;
+  if(!appmain)                              
+    {
+      return false;
+    }
+
+  if(!appmain->Create())                    
+    {
+      return false;
+    }
+
+  if(!appmain->Ini(this, applicationmode))  
+    {
+      return false;
+    }
 
   #else
 
@@ -677,7 +692,7 @@ void MAINPROCLINUX::Clean()
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 
-#if !defined(APPMODE_LIBRARYSTATIC_ACTIVE) && !defined(APPMODE_LIBRARYDINAMIC_ACTIVE)
+#if !defined(APPMODE_LIBRARY_STATIC_ACTIVE) && !defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -763,8 +778,8 @@ int main(int argc, char* argv[])
 
 #endif
 
-
-#ifdef APPMODE_LIBRARYDINAMIC_ACTIVE
+       
+#ifdef APPMODE_LIBRARY_DINAMIC_ACTIVE
 
 
 extern "C"

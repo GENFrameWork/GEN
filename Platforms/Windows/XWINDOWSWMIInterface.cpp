@@ -293,6 +293,11 @@ bool XWINDOWSWMIINTERFACE::Ini()
                                    EOAC_NONE,                   // Additional capabilities
                                    NULL                         // Reserved
                                  );
+      if(hres == RPC_E_TOO_LATE)
+        {
+          return true;
+        }
+
       if(FAILED(hres))
         {
           return false;

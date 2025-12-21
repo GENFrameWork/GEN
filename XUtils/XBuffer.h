@@ -76,7 +76,7 @@ enum XBUFFER_PADDINGTYPE
 class XFACTORY;
 class XMUTEX;
 
-class GEN_API_LIB XBUFFER
+class GEN_API_LIB_EXP XBUFFER
 {
   public:
                              XBUFFER                              (bool threadsafe = XBUFFER_ISTHREADSAFE);
