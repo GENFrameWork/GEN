@@ -75,7 +75,14 @@ class MAINPROCLINUX : public MAINPROC
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
+
 #pragma region FUNCTIONS_PROTOTYPES
+
+
+#if defined(APPMODE_LIBRARY_STATIC_ACTIVE)
+void LIBRARY_Ini(void);
+void LIBRARY_End(void);
+#endif
 
 
 #pragma endregion

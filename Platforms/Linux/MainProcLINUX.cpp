@@ -776,16 +776,11 @@ int main(int argc, char* argv[])
   return returncode;
 }
 
-#endif
 
-       
-#ifdef APPMODE_LIBRARY_DINAMIC_ACTIVE
+#else
 
+ 
 
-extern "C"
-{
-
-__attribute__((constructor))
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void LIBRARY_Ini(void)
@@ -795,7 +790,18 @@ __attribute__((constructor))
 * @param[in]  void :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
+#if defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)  
+
+extern "C"
+{
+__attribute__((constructor))
 static void LIBRARY_Ini(void)
+
+#else
+
+void LIBRARY_Ini(void)
+
+#endif
 {
   XMEMORY_CONTROL_ACTIVATED 
 
@@ -820,8 +826,6 @@ static void LIBRARY_Ini(void)
 }
 
 
-
-__attribute__((destructor))
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void LIBRARY_End(void)
@@ -831,14 +835,26 @@ __attribute__((destructor))
 * @param[in]  void :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
+#if defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
+
+__attribute__((destructor))
+
 static void LIBRARY_End(void)
+
+#else
+
+void LIBRARY_End(void)
+
+#endif
 {
   mainproclinux.GetXPathExec()->Empty();
   mainproclinux.End();
 }
 
 
+#if defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
 }
+#endif
 
 #endif
 
