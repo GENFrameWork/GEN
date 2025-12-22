@@ -133,6 +133,11 @@ class MAINPROC
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 #pragma region FUNCTIONS_PROTOTYPES
 
+
+void GEN_API_LIB_EXP LIBRARY_Ini(void);
+void GEN_API_LIB_EXP LIBRARY_End(void);
+
+
 extern    MAIN_FUNCTION_TYPE    Main_Proc_PlatformIni;
 extern    MAIN_FUNCTION_TYPE    Main_Proc_Ini;
 extern    MAIN_FUNCTION_TYPE    Main_Proc_Update;

@@ -779,7 +779,6 @@ int main(int argc, char* argv[])
 
 #else
 
- 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -790,18 +789,7 @@ int main(int argc, char* argv[])
 * @param[in]  void :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-#if defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)  
-
-extern "C"
-{
-__attribute__((constructor))
-static void LIBRARY_Ini(void)
-
-#else
-
 void LIBRARY_Ini(void)
-
-#endif
 {
   XMEMORY_CONTROL_ACTIVATED 
 
@@ -835,26 +823,12 @@ void LIBRARY_Ini(void)
 * @param[in]  void :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-#if defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
-
-__attribute__((destructor))
-
-static void LIBRARY_End(void)
-
-#else
-
 void LIBRARY_End(void)
-
-#endif
 {
   mainproclinux.GetXPathExec()->Empty();
   mainproclinux.End();
 }
 
-
-#if defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
-}
-#endif
 
 #endif
 
@@ -900,13 +874,6 @@ void Signal_Ini(void)
 
   for(int c=0; c<(sizeof(signalcap)/sizeof(int)); c++)
     {
-      /*
-      if(i == SIGKILL || i == SIGSTOP || i == SIGCHLD)
-        {
-          continue;
-        }
-      */
-
       if(sigaction(signalcap[c], &act, NULL)) 
         {          
           fprintf(stderr, "Cannot install realtime signal %d handler: %s.\n", i, strerror(errno));

@@ -1341,32 +1341,23 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, XDWORD fdwReason,LPVOID lpvReserved)
 {
   switch(fdwReason)
     {
-      case DLL_PROCESS_ATTACH : { XMEMORY_CONTROL_ACTIVATED                                  
-      
-                                  XPATH xpathexecutable;
+      case DLL_PROCESS_ATTACH : { XPATH xpathexecutable;
 
                                   xpathexecutable.AdjustSize(_MAXPATH);
                                   GetModuleFileName(hinstDLL, xpathexecutable.Get(), xpathexecutable.GetSize());
                                   xpathexecutable.AdjustSize();
 
                                   mainprocwindows.GetXPathExec()->Set(xpathexecutable);
-                                  xpathexecutable.Empty();
-                                  
-                                  #ifdef APPFLOW_ACTIVE
-                                  mainprocwindows.Ini(&GEN_appmain, APPFLOWBASE_MODE_TYPE_DINAMICLIBRARY);
-                                  #else
-                                  mainprocwindows.Ini();
-                                  #endif
+                                  xpathexecutable.Empty();                                 
                                 }
+                                
                                 break;
 
       case DLL_THREAD_ATTACH  : break;
 
       case DLL_THREAD_DETACH  : break;
 
-      case DLL_PROCESS_DETACH : mainprocwindows.GetXPathExec()->Empty();
-                                mainprocwindows.End();
-                                break;
+      case DLL_PROCESS_DETACH : break;
     }
 
   return true;
@@ -1374,6 +1365,43 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, XDWORD fdwReason,LPVOID lpvReserved)
 
 
 #endif
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void LIBRARY_Ini(void)
+* @brief      LIBRARY ini
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  void : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void LIBRARY_Ini(void)
+{ 
+  XMEMORY_CONTROL_ACTIVATED                                  
+                                      
+  #ifdef APPFLOW_ACTIVE
+  mainprocwindows.Ini(&GEN_appmain, APPFLOWBASE_MODE_TYPE_DINAMICLIBRARY);
+  #else
+  mainprocwindows.Ini();
+  #endif
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void LIBRARY_End(void)
+* @brief      IBRARY end
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  void : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void LIBRARY_End(void)
+{
+  mainprocwindows.GetXPathExec()->Empty();
+  mainprocwindows.End();
+}
 
 
 #pragma endregion
