@@ -46,7 +46,6 @@
 #include "XVariant.h"
 #include "XTranslation.h"
 #include "XTranslation_GEN.h"
-#include "XTranslation.h"
 #include "XLanguage_ISO_639_3.h"
 
 #pragma endregion
