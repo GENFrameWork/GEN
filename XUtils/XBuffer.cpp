@@ -2511,7 +2511,7 @@ void XBUFFER::operator = (const XBUFFER& xbuffer)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::operator == (XBUFFER buffer)
 { 
-  return false;
+  return Compare(buffer);
 }
 
 
@@ -2528,7 +2528,7 @@ bool XBUFFER::operator == (XBUFFER buffer)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::operator != (XBUFFER buffer)
 { 
-  return false;
+  return !Compare(buffer);
 }
 
 
