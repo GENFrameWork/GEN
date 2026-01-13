@@ -626,6 +626,90 @@ bool XPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFFER* par
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
+* @brief      application  execute elevated
+* @ingroup    XUTILS
+* 
+* @param[in]  applicationpath : 
+* @param[in]  params : 
+* @param[in]  in : 
+* @param[in]  out : 
+* @param[in]  returncode : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XPROCESSMANAGER::Application_ExecuteElevated(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
+* @brief      application  execute elevated
+* @ingroup    XUTILS
+* 
+* @param[in]  applicationpath : 
+* @param[in]  params : 
+* @param[in]  in : 
+* @param[in]  out : 
+* @param[in]  returncode : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPROCESSMANAGER::Application_ExecuteElevated(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, int* returncode)
+* @brief      application  execute
+* @ingroup    XUTILS
+* 
+* @param[in]  applicationpath : 
+* @param[in]  params : 
+* @param[in]  returncode : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, int* returncode)
+{  
+  XSTRING* in = NULL;
+
+  return Application_Execute(applicationpath, params, in, NULL, returncode); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, int* returncode)
+* @brief      application  execute elevated
+* @ingroup    XUTILS
+* 
+* @param[in]  applicationpath : 
+* @param[in]  params : 
+* @param[in]  returncode : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, int* returncode)
+{  
+  XSTRING* in = NULL;
+
+  return Application_ExecuteElevated(applicationpath, params, in, NULL, returncode); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
 * @brief      Application execute
 * @ingroup    XUTILS
@@ -649,7 +733,7 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
       in->ConvertToASCII(_in);
     }
 
-  bool status = Application_Execute(applicationpath, params, &_in, &_out, returncode);
+  bool status = Application_Execute(applicationpath, params, in?&_in:NULL, out?&_out:NULL, returncode);
 
   if(out)
     {
@@ -658,6 +742,43 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
 
   return status;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
+* @brief      application  execute elevated
+* @ingroup    XUTILS
+* 
+* @param[in]  applicationpath : 
+* @param[in]  params : 
+* @param[in]  in : 
+* @param[in]  out : 
+* @param[in]  returncode : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
+{
+  XBUFFER _in;
+  XBUFFER _out;
+
+  if(in)
+    {
+      in->ConvertToASCII(_in);
+    }
+
+  bool status = Application_ExecuteElevated(applicationpath, params, in?&_in:NULL, out?&_out:NULL, returncode);
+
+  if(out)
+    {
+      out->ConvertFromASCII(_out);
+    }
+
+  return status;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------

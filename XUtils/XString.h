@@ -52,18 +52,34 @@ typedef wchar_t XCHAR;
 
 enum XSTRINGCODING
 {
-  XSTRINGCODING_UNKWOWN         = 0 ,
-  XSTRINGCODING_ASCII               ,
-  XSTRINGCODING_UTF8                ,
-  XSTRINGCODING_UTF16               ,
-  XSTRINGCODING_UTF32               ,
-};
+  XSTRINGCODING_UNKWOWN              = 0 ,
+  XSTRINGCODING_ASCII                    ,
+  XSTRINGCODING_UTF8                     ,
+  XSTRINGCODING_UTF16                    ,
+  XSTRINGCODING_UTF32                    ,
+};                                   
+                                     
+enum XSTRINGCONTEXT                  
+{                                    
+  XSTRINGCONTEXT_FROM_FIRST          = 0 ,
+  XSTRINGCONTEXT_TO_END                  ,
+  XSTRINGCONTEXT_ALLSTRING               ,
+};                                   
 
-enum XSTRINGCONTEXT
+enum XSTRINGASCIICODE
 {
-  XSTRINGCONTEXT_FROM_FIRST     = 0 ,
-  XSTRINGCONTEXT_TO_END             ,
-  XSTRINGCONTEXT_ALLSTRING          ,
+  XSTRINGASCIICODE_7BIT              = 0 ,
+  XSTRINGASCIICODE_CODEPAGE_437          ,
+  XSTRINGASCIICODE_CODEPAGE_850          ,     
+  XSTRINGASCIICODE_ISO_8859_1            ,
+  XSTRINGASCIICODE_ISO_8859_2            ,
+  XSTRINGASCIICODE_ISO_8859_3            ,
+  XSTRINGASCIICODE_ISO_8859_4            ,
+  XSTRINGASCIICODE_WINDOWS_1250          ,
+  XSTRINGASCIICODE_WINDOWS_1251          ,
+  XSTRINGASCIICODE_WINDOWS_1252          ,  
+  XSTRINGASCIICODE_WINDOWS_1253          ,
+  XSTRINGASCIICODE_WINDOWS_1254          ,  
 };
 
 
@@ -73,7 +89,26 @@ enum XSTRINGCONTEXT
 #define XSTRINGBOOLEANMODE_LOWERCASE   0x40
 
 
-#pragma pack(push, r1, 1)
+typedef struct 
+{
+  XDWORD             character;
+  XBYTE              code7bit;  
+  XBYTE              codepage437;  
+  XBYTE              codepage850;  
+  XBYTE              iso88591;
+  XBYTE              iso88592;
+  XBYTE              iso88593;
+  XBYTE              iso88594;
+  XBYTE              windows1250;
+  XBYTE              windows1251;
+  XBYTE              windows1252;
+  XBYTE              windows1253;
+  XBYTE              windows1254;
+
+} ASCCICODEENTRY;
+           
+
+#pragma            pack(push, r1, 1)
 typedef struct
 {
   XBYTE size;
@@ -291,8 +326,10 @@ class GEN_API_LIB_EXP XSTRING
     double                ConvertToDouble                 (int index = 0, const XCHAR* mask = NULL, bool checkvalidchars = true);
         
     bool                  IsValidASCII                    ();
-    bool                  ConvertToASCII                  (XBUFFER& xbuffer);
-    bool                  ConvertFromASCII                (XBUFFER& xbuffer);
+    bool                  ConvertCharacterUnicodeToASCII  (XCHAR character, XBYTE& asciicharacter, XSTRINGASCIICODE asccicode = XSTRINGASCIICODE_7BIT);
+    bool                  ConvertASCIICharacterToUnicode  (XBYTE asciicharacter, XCHAR& character, XSTRINGASCIICODE asccicode = XSTRINGASCIICODE_7BIT);
+    bool                  ConvertToASCII                  (XBUFFER& xbuffer, XSTRINGASCIICODE asccicode = XSTRINGASCIICODE_7BIT);
+    bool                  ConvertFromASCII                (XBUFFER& xbuffer, XSTRINGASCIICODE asccicode = XSTRINGASCIICODE_7BIT);
     
     bool                  ConvertToXBuffer                (XBUFFER& xbuffer);
     bool                  ConvertFromXBuffer              (XBUFFER& xbuffer, XSTRINGCODING buffercoding);

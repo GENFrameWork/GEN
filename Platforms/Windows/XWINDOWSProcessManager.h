@@ -66,11 +66,22 @@ class XWINDOWSPROCESSMANAGER : public XPROCESSMANAGER
 
     bool                    Application_Execute                         (XCHAR* applicationpath, XCHAR* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
     bool                    Application_Execute                         (XBUFFER* applicationpath, XBUFFER* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
+
+    bool                    Application_ExecuteElevated                 (XCHAR* applicationpath, XCHAR* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
+    bool                    Application_ExecuteElevated                 (XBUFFER* applicationpath, XBUFFER* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
+
     bool                    Application_IsRunning                       (XCHAR* command, XDWORD* ID = NULL);
     bool                    Application_GetRunningList                  (XVECTOR<XPROCESS*>& applist, bool onlywithvalidwindow = false);
     bool                    Application_Terminate                       (XDWORD processID, XDWORD  exitcode = 0);
   
   private:
+
+    BOOL                    EnablePrivilege                             (LPCWSTR privname);
+    BOOL                    GetActiveSessionId                          (DWORD* ptrsessionID);
+    BOOL                    DuplicateToPrimaryToken                     (HANDLE handleIN, HANDLE* phandleprimaryout);
+    BOOL                    TryGetLinkedElevatedPrimary                 (HANDLE handleprimary, HANDLE* phelevprimaryout);
+    BOOL                    BuildMutableCommandLine                     (LPCWSTR exepath, LPCWSTR args, LPWSTR* ptrcmdline);
+    BOOL                    CreateInteractiveProcess_AttemptElevated    (LPCWSTR exepath, LPCWSTR args, LPCWSTR workingdir, BOOL waitforexit, DWORD* ptrexitcode);
 
     bool                    GetWindowPropertys                          (HWND hwnd, XSTRING& title, GRPRECTINT& rect);  
     int                     GetWindowTitleHeight                        (HWND hwnd);

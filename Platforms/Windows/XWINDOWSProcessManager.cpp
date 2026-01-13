@@ -39,10 +39,17 @@
 
 #include "XWINDOWSProcessManager.h"
 
+#include <windows.h>
+
 #include <tlhelp32.h>
 #include <psapi.h> 
 #include <tchar.h>
 #include <process.h>
+
+
+
+#include <wtsapi32.h>
+#include <userenv.h>
 
 #include "XFactory.h"
 #include "XFile.h"
@@ -63,6 +70,11 @@
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 #pragma region GENERAL_VARIABLE
+
+
+#pragma comment(lib, "wtsapi32.lib")
+#pragma comment(lib, "advapi32.lib")
+#pragma comment(lib, "userenv.lib")
 
 
 #pragma endregion
@@ -180,7 +192,7 @@ bool XWINDOWSPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* retu
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::OpenURL(XCHAR* url)
 {
-  //HINSTANCE handle = ShellExecute(NULL, L"open", url ,NULL, NULL, SW_SHOWNORMAL); 
+  //handleINSTANCE handle = ShellExecute(NULL, L"open", url ,NULL, NULL, SW_SHOWNORMAL); 
   //if((int)handle <= 32) return false;
 
   ShellExecute(NULL, L"open", url ,NULL, NULL, SW_SHOWNORMAL); 
@@ -214,6 +226,11 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
   if(!applicationpath[0])
     {
       return false;
+    }
+
+  if(returncode) 
+    {
+      (*returncode) = 0;
     }
 
   #define CMDLINE_SIZE  (10*1024)
@@ -321,7 +338,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
                 }
 
               status = true;
-            }
+            }            
         }
     }
 
@@ -337,6 +354,9 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
   
   return status;
 }
+
+
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -452,6 +472,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFF
                 }             
             }
 
+          
           if(WaitForSingleObject(processinfo.hProcess, (out?INFINITE:500)) == WAIT_OBJECT_0)
             {
               if(out)
@@ -466,7 +487,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFF
                 }
 
               status = true;
-            }
+            }          
         }
     }
 
@@ -478,6 +499,216 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFF
   return status;
 }
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
+* @brief      application  execute elevated
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  applicationpath : 
+* @param[in]  params : 
+* @param[in]  in : 
+* @param[in]  out : 
+* @param[in]  returncode : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
+{  
+  DWORD sessionID = 0;
+  if(!GetActiveSessionId(&sessionID))
+    {
+      return FALSE;
+    }
+    
+  EnablePrivilege(SE_ASSIGNPRIMARYTOKEN_NAME);
+  EnablePrivilege(SE_INCREASE_QUOTA_NAME);
+
+  HANDLE handleusertoken = NULL;
+  if(!WTSQueryUserToken(sessionID, &handleusertoken))
+    {
+      int error = GetLastError();
+      return FALSE;
+    }
+
+    
+  HANDLE handleprimary = NULL;
+  if(!DuplicateToPrimaryToken(handleusertoken, &handleprimary)) 
+    {
+      CloseHandle(handleusertoken);
+      return FALSE;
+    }
+
+  CloseHandle(handleusertoken);
+
+
+  HANDLE handleelevprimary = NULL;
+  HANDLE hTokenToUse = handleprimary;
+  if(TryGetLinkedElevatedPrimary(handleprimary, &handleelevprimary)) 
+    {
+      hTokenToUse = handleelevprimary;
+    }
+
+    
+  LPVOID ptrenv = NULL;
+  if(!CreateEnvironmentBlock(&ptrenv, hTokenToUse, FALSE)) 
+    {
+      ptrenv = NULL;
+    }
+
+  LPWSTR cmdLine = NULL;
+  if(!BuildMutableCommandLine(applicationpath, params, &cmdLine)) 
+    {
+      if(ptrenv) 
+        {
+          DestroyEnvironmentBlock(ptrenv);
+        }
+
+      if(handleelevprimary) 
+        {
+          CloseHandle(handleelevprimary);
+        }
+        
+      CloseHandle(handleprimary);
+
+      return FALSE;
+    }
+
+  bool status = Application_ExecuteElevated(applicationpath, params, in, out, returncode);
+
+  if(cmdLine) 
+    {
+      HeapFree(GetProcessHeap(), 0, cmdLine);
+    }
+
+  if(ptrenv) 
+    {
+      DestroyEnvironmentBlock(ptrenv);
+    }
+
+  if(handleelevprimary) 
+    {
+      CloseHandle(handleelevprimary);
+    }
+
+  CloseHandle(handleprimary);
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
+* @brief      application  execute elevated
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  applicationpath : 
+* @param[in]  params : 
+* @param[in]  in : 
+* @param[in]  out : 
+* @param[in]  returncode : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
+{
+    DWORD sessionId = 0;
+  if(!GetActiveSessionId(&sessionId))
+    {
+      return FALSE;
+    }
+
+    
+  EnablePrivilege(SE_ASSIGNPRIMARYTOKEN_NAME);
+  EnablePrivilege(SE_INCREASE_QUOTA_NAME);
+
+  HANDLE handleusertoken = NULL;
+  if(!WTSQueryUserToken(sessionId, &handleusertoken))
+    {
+      return FALSE;
+    }
+
+    
+  HANDLE handleprimary = NULL;
+  if(!DuplicateToPrimaryToken(handleusertoken, &handleprimary)) 
+    {
+      CloseHandle(handleusertoken);
+      return FALSE;
+    }
+
+  CloseHandle(handleusertoken);
+
+
+  HANDLE handleelevprimary = NULL;
+  HANDLE hTokenToUse = handleprimary;
+  if(TryGetLinkedElevatedPrimary(handleprimary, &handleelevprimary)) 
+    {
+      hTokenToUse = handleelevprimary;
+    }
+
+    
+  LPVOID ptrenv = NULL;
+  if(!CreateEnvironmentBlock(&ptrenv, hTokenToUse, FALSE)) 
+    {
+      ptrenv = NULL;
+    }
+
+  LPWSTR  cmdLine = NULL;
+  XSTRING _applicationpath;
+  XSTRING _params;
+
+  if(applicationpath)
+    {
+      _applicationpath.ConvertFromASCII((*applicationpath));
+    }
+
+  if(params)
+    {
+      _params.ConvertFromASCII((*params));
+    }
+
+  if(!BuildMutableCommandLine((WCHAR*)_applicationpath.Get(), (WCHAR*)_params.Get(), &cmdLine)) 
+    {
+      if(ptrenv) 
+        {
+          DestroyEnvironmentBlock(ptrenv);
+        }
+
+      if(handleelevprimary) 
+        {
+          CloseHandle(handleelevprimary);
+        }
+        
+      CloseHandle(handleprimary);
+
+      return FALSE;
+    }
+
+  bool status = Application_ExecuteElevated(applicationpath, params, in, out, returncode);
+
+  if(cmdLine) 
+    {
+      HeapFree(GetProcessHeap(), 0, cmdLine);
+    }
+
+  if(ptrenv) 
+    {
+      DestroyEnvironmentBlock(ptrenv);
+    }
+
+  if(handleelevprimary) 
+    {
+      CloseHandle(handleelevprimary);
+    }
+
+  CloseHandle(handleprimary);
+
+  return status;
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -752,6 +983,368 @@ bool XWINDOWSPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD  exi
 
   return (result?true:false);
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         BOOL XWINDOWSPROCESSMANAGER::EnablePrivilege(LPCWSTR privname)
+* @brief      enable privilege
+* @ingroup    
+* 
+* @param[in]  privname : 
+* 
+* @return     BOOL : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+BOOL XWINDOWSPROCESSMANAGER::EnablePrivilege(LPCWSTR privname)
+{
+  HANDLE hToken = NULL;
+  if(!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
+    {
+      return FALSE;
+    }
+
+  LUID luid;
+  if(!LookupPrivilegeValueW(NULL, privname, &luid)) 
+    {
+      CloseHandle(hToken);
+      return FALSE;
+    }
+
+  TOKEN_PRIVILEGES tp;
+  tp.PrivilegeCount = 1;
+  tp.Privileges[0].Luid = luid;
+  tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+  if(!AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(tp), NULL, NULL)) 
+    {
+      CloseHandle(hToken);
+      return FALSE;
+    }
+
+  DWORD err = GetLastError();
+  CloseHandle(hToken);
+
+  return (err == ERROR_SUCCESS);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         BOOL XWINDOWSPROCESSMANAGER::GetActiveSessionId(DWORD* ptrsessionID)
+* @brief      get active session id
+* @ingroup    
+* 
+* @param[in]  ptrsessionID : 
+* 
+* @return     BOOL : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+BOOL XWINDOWSPROCESSMANAGER::GetActiveSessionId(DWORD* ptrsessionID)
+{
+  if(!ptrsessionID) 
+    {
+      return FALSE;
+    }
+
+  DWORD sid = WTSGetActiveConsoleSessionId();
+
+  if(sid == 0xFFFFFFFF) 
+    {
+      return FALSE;
+    }
+
+  *ptrsessionID = sid;
+
+  return TRUE;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         BOOL XWINDOWSPROCESSMANAGER::DuplicateToPrimaryToken(HANDLE handleIN, HANDLE* phandleprimaryout)
+* @brief      duplicate to primary token
+* @ingroup    
+* 
+* @param[in]  handleIN : 
+* @param[in]  phandleprimaryout : 
+* 
+* @return     BOOL : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+BOOL XWINDOWSPROCESSMANAGER::DuplicateToPrimaryToken(HANDLE handleIN, HANDLE* phandleprimaryout)
+{
+  if(!phandleprimaryout) 
+    {
+      return FALSE;
+    }
+    
+  *phandleprimaryout = NULL;
+
+  SECURITY_ATTRIBUTES sa;
+  
+  ZeroMemory(&sa, sizeof(sa));
+  sa.nLength = sizeof(sa);
+
+  return DuplicateTokenEx(handleIN, TOKEN_ALL_ACCESS, &sa, SecurityImpersonation, TokenPrimary, phandleprimaryout);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         BOOL XWINDOWSPROCESSMANAGER::TryGetLinkedElevatedPrimary(HANDLE handleprimary, HANDLE* phandleelevprimaryout)
+* @brief      try get linked elevated primary
+* @ingroup    
+* 
+* @param[in]  handleprimary : 
+* @param[in]  phandleelevprimaryout : 
+* 
+* @return     BOOL : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+BOOL XWINDOWSPROCESSMANAGER::TryGetLinkedElevatedPrimary(HANDLE handleprimary, HANDLE* phandleelevprimaryout)
+{
+  if(!phandleelevprimaryout) 
+    {
+      return FALSE;
+    }
+  
+  *phandleelevprimaryout = NULL;
+
+  TOKEN_ELEVATION_TYPE  elevType = TokenElevationTypeDefault;
+  DWORD                 retLen   = 0;
+
+  if(!GetTokenInformation(handleprimary, TokenElevationType, &elevType, sizeof(elevType), &retLen))
+    {
+      return FALSE;
+    }
+
+  if(elevType != TokenElevationTypeLimited)
+    {
+      return FALSE;
+    }
+
+  TOKEN_LINKED_TOKEN linked;
+  
+  ZeroMemory(&linked, sizeof(linked));
+  retLen = 0;
+
+  if(!GetTokenInformation(handleprimary, TokenLinkedToken, &linked, sizeof(linked), &retLen))
+    {
+      return FALSE;
+    }
+
+  HANDLE  hLinkedPrimary = NULL;
+  BOOL    ok             = DuplicateToPrimaryToken(linked.LinkedToken, &hLinkedPrimary);
+
+  CloseHandle(linked.LinkedToken);
+
+  if(!ok) 
+    {
+      return FALSE;
+    }
+
+  *phandleelevprimaryout = hLinkedPrimary;
+
+  return TRUE;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         BOOL XWINDOWSPROCESSMANAGER::BuildMutableCommandLine(LPCWSTR exepath, LPCWSTR args, LPWSTR*cmdline)
+* @brief      build mutable command line
+* @ingroup    
+* 
+* @param[in]  exepath : 
+* @param[in]  args : 
+* @param[in] cmdline : 
+* 
+* @return     BOOL : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+BOOL XWINDOWSPROCESSMANAGER::BuildMutableCommandLine(LPCWSTR exepath, LPCWSTR args, LPWSTR* ptrcmdline)
+{
+  if(!exepath || !ptrcmdline) 
+    {
+      return FALSE;
+    }
+  
+  *ptrcmdline = NULL;
+
+  SIZE_T exeLen   = lstrlenW(exepath);
+  SIZE_T argsLen  = (args && args[0]) ? lstrlenW(args) : 0;    
+  SIZE_T total    = (SIZE_T)2 + exeLen + (argsLen ? (SIZE_T)2 + argsLen : (SIZE_T)0) + (SIZE_T)1;
+
+  LPWSTR buf      = (LPWSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, total * sizeof(WCHAR));
+  if(!buf) 
+    {
+      return FALSE;
+    }
+
+    
+  buf[0] = L'"';
+  CopyMemory(buf + 1, exepath, exeLen * sizeof(WCHAR));
+  buf[1 + exeLen] = L'"';
+
+  SIZE_T pos = 2 + exeLen; 
+  if(argsLen) 
+    {
+      buf[pos - 0] = L' ';
+      CopyMemory(buf + pos, args, argsLen * sizeof(WCHAR));
+      pos += argsLen + 1; // +1 por el espacio ya puesto
+    }
+    
+  *ptrcmdline = buf;
+
+  return TRUE;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         BOOL XWINDOWSPROCESSMANAGER::CreateInteractiveProcess_AttemptElevated(LPCWSTR exepath, LPCWSTR args, LPCWSTR workingdir, BOOL waitforexit, DWORD* ptrexitcode)
+* @brief      create interactive process  attempt elevated
+* @ingroup    
+* 
+* @param[in]  exepath : 
+* @param[in]  args : 
+* @param[in]  workingdir : 
+* @param[in]  waitforexit : 
+* @param[in]  ptrexitcode : 
+* 
+* @return     BOOL : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+BOOL XWINDOWSPROCESSMANAGER::CreateInteractiveProcess_AttemptElevated(LPCWSTR exepath, LPCWSTR args, LPCWSTR workingdir, BOOL waitforexit, DWORD* ptrexitcode)
+{
+  if(ptrexitcode) 
+    {
+      *ptrexitcode = 0;
+    }
+
+  if(!exepath || !exepath[0]) 
+    {
+      return FALSE;
+    }
+
+  DWORD sessionId = 0;
+  if(!GetActiveSessionId(&sessionId))
+    {
+      return FALSE;
+    }
+
+    
+  EnablePrivilege(SE_ASSIGNPRIMARYTOKEN_NAME);
+  EnablePrivilege(SE_INCREASE_QUOTA_NAME);
+
+  HANDLE handleusertoken = NULL;
+  if(!WTSQueryUserToken(sessionId, &handleusertoken))
+    {
+      return FALSE;
+    }
+
+    
+  HANDLE handleprimary = NULL;
+  if(!DuplicateToPrimaryToken(handleusertoken, &handleprimary)) 
+    {
+      CloseHandle(handleusertoken);
+      return FALSE;
+    }
+
+  CloseHandle(handleusertoken);
+
+
+  HANDLE handleelevprimary = NULL;
+  HANDLE hTokenToUse = handleprimary;
+  if(TryGetLinkedElevatedPrimary(handleprimary, &handleelevprimary)) 
+    {
+      hTokenToUse = handleelevprimary;
+    }
+
+    
+  LPVOID ptrenv = NULL;
+  if(!CreateEnvironmentBlock(&ptrenv, hTokenToUse, FALSE)) 
+    {
+      ptrenv = NULL;
+    }
+
+  LPWSTR cmdLine = NULL;
+  if(!BuildMutableCommandLine(exepath, args, &cmdLine)) 
+    {
+      if(ptrenv) 
+        {
+          DestroyEnvironmentBlock(ptrenv);
+        }
+
+      if(handleelevprimary) 
+        {
+          CloseHandle(handleelevprimary);
+        }
+        
+      CloseHandle(handleprimary);
+
+      return FALSE;
+    }
+
+  STARTUPINFOW si;
+  ZeroMemory(&si, sizeof(si));
+
+  si.cb           = sizeof(si);
+  si.lpDesktop    = (LPWSTR)L"winsta0\\default";
+  si.dwFlags      = STARTF_USESHOWWINDOW;
+  si.wShowWindow  = SW_SHOWNORMAL;
+
+  PROCESS_INFORMATION pi;
+  ZeroMemory(&pi, sizeof(pi));
+
+  DWORD flags = CREATE_UNICODE_ENVIRONMENT;
+
+  BOOL ok = CreateProcessAsUserW(hTokenToUse, NULL, cmdLine, NULL, NULL, FALSE, flags, ptrenv, workingdir, &si, &pi);
+    
+  if(cmdLine) 
+    {
+      HeapFree(GetProcessHeap(), 0, cmdLine);
+    }
+
+  if(ptrenv) 
+    {
+      DestroyEnvironmentBlock(ptrenv);
+    }
+
+  if(handleelevprimary) 
+    {
+      CloseHandle(handleelevprimary);
+    }
+
+  CloseHandle(handleprimary);
+
+  if(!ok) 
+    {
+      XDWORD error = GetLastError();
+      return FALSE;
+    }
+
+  if(waitforexit) 
+    {
+      WaitForSingleObject(pi.hProcess, INFINITE);
+      if(ptrexitcode) 
+        {
+          DWORD ec = 0;
+          if(GetExitCodeProcess(pi.hProcess, &ec)) 
+            {
+              *ptrexitcode = ec;
+            }
+        }
+    }
+
+  CloseHandle(pi.hThread);
+  CloseHandle(pi.hProcess);
+
+  return TRUE;
+}
+
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
