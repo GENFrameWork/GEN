@@ -71,6 +71,8 @@ enum XSTRINGASCIICODE
   XSTRINGASCIICODE_7BIT              = 0 ,
   XSTRINGASCIICODE_CODEPAGE_437          ,
   XSTRINGASCIICODE_CODEPAGE_850          ,     
+  XSTRINGASCIICODE_CODEPAGE_852          ,     
+  XSTRINGASCIICODE_CODEPAGE_866          ,     
   XSTRINGASCIICODE_ISO_8859_1            ,
   XSTRINGASCIICODE_ISO_8859_2            ,
   XSTRINGASCIICODE_ISO_8859_3            ,
@@ -95,6 +97,8 @@ typedef struct
   XBYTE              code7bit;  
   XBYTE              codepage437;  
   XBYTE              codepage850;  
+  XBYTE              codepage852;  
+  XBYTE              codepage866;  
   XBYTE              iso88591;
   XBYTE              iso88592;
   XBYTE              iso88593;
