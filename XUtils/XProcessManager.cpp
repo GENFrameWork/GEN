@@ -40,6 +40,8 @@
 
 #include "XProcessManager.h"
 
+#include "XConsole.h"
+
 #pragma endregion
 
 
@@ -605,8 +607,30 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
+* @fn         bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, int* returncode)
 * @brief      application  execute
+* @ingroup    XUTILS
+* 
+* @param[in]  applicationpath : 
+* @param[in]  params : 
+* @param[in]  returncode : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, int* returncode)
+{  
+  XSTRING* in  = NULL;
+  XSTRING* out = NULL;
+
+  return Application_Execute(applicationpath, params, in, out, returncode); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
+* @brief      Application execute
 * @ingroup    XUTILS
 * 
 * @param[in]  applicationpath : 
@@ -618,9 +642,30 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
+bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
 {
-  return false;
+  XBUFFER _in;
+  XBUFFER _out;
+
+  if(in)
+    {
+      if(!in->IsEmpty())
+        {
+          AdjustStringToConsolaSymbolsUsed((*in), _in);
+        }
+    }
+
+  bool status = Application_Execute(applicationpath, params, _in.GetSize()?&_in:NULL, out?&_out:NULL, returncode);
+
+  if(out)
+    {
+      if(!_out.IsEmpty())
+        {
+          AdjustConsolaSymbolsUsedToString(_out, (*out));
+        }
+    }
+
+  return status;
 }
 
 
@@ -647,48 +692,6 @@ bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR*
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XPROCESSMANAGER::Application_ExecuteElevated(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
-* @brief      application  execute elevated
-* @ingroup    XUTILS
-* 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool XPROCESSMANAGER::Application_ExecuteElevated(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
-{
-  return false;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, int* returncode)
-* @brief      application  execute
-* @ingroup    XUTILS
-* 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  returncode : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, int* returncode)
-{  
-  XSTRING* in = NULL;
-
-  return Application_Execute(applicationpath, params, in, NULL, returncode); 
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
 * @fn         bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, int* returncode)
 * @brief      application  execute elevated
 * @ingroup    XUTILS
@@ -705,42 +708,6 @@ bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR*
   XSTRING* in = NULL;
 
   return Application_ExecuteElevated(applicationpath, params, in, NULL, returncode); 
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
-* @brief      Application execute
-* @ingroup    XUTILS
-* 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
-{
-  XBUFFER _in;
-  XBUFFER _out;
-
-  if(in)
-    {
-      in->ConvertToASCII(_in);
-    }
-
-  bool status = Application_Execute(applicationpath, params, in?&_in:NULL, out?&_out:NULL, returncode);
-
-  if(out)
-    {
-      out->ConvertFromASCII(_out);
-    }
-
-  return status;
 }
 
 
@@ -766,19 +733,114 @@ bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR*
 
   if(in)
     {
-      in->ConvertToASCII(_in);
+      if(!in->IsEmpty())
+        {
+          AdjustStringToConsolaSymbolsUsed((*in), _in);
+        }
     }
 
-  bool status = Application_ExecuteElevated(applicationpath, params, in?&_in:NULL, out?&_out:NULL, returncode);
+  bool status = Application_ExecuteElevated(applicationpath, params, _in.GetSize()?&_in:NULL, out?&_out:NULL, returncode);
 
   if(out)
     {
-      out->ConvertFromASCII(_out);
+      if(!_out.IsEmpty())
+        {
+          AdjustConsolaSymbolsUsedToString(_out, (*out));
+        }
     }
 
   return status;
 }
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XPROCESSMANAGER::AdjustStringToConsolaSymbolsUsed(XSTRING& string, XBUFFER& target_buffer)
+* @brief      adjust string to consola symbols used
+* @ingroup    XUTILS
+* 
+* @param[in]  string : 
+* @param[in]  target_buffer : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPROCESSMANAGER::AdjustStringToConsolaSymbolsUsed(XSTRING& string, XBUFFER& target_buffer)
+{
+  XCONSOLE_SYMBOLSUSED symbolused       = Console_GetSymbolsUsed();
+  XSTRINGASCIICODE     stringasccicode  = string.ConsoleCodePageToConvertASCII(symbolused);
+
+  target_buffer.Empty();
+
+  if(string.IsEmpty())
+    {
+      return false;  
+    }
+
+  if(symbolused == XCONSOLE_SYMBOLSUSED_UNICODE_UTF8)
+    {
+      string.ConvertToUTF8(target_buffer);    
+    }
+   else
+    {
+      if(stringasccicode != XSTRINGASCIICODE_NONE)
+        {
+          string.ConvertToASCII(target_buffer, stringasccicode);            
+        }      
+    }
+
+  if(target_buffer.IsEmpty())
+    {
+      return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XPROCESSMANAGER::AdjustConsolaSymbolsUsedToString(XBUFFER& origin_buffer, XSTRING& string)
+* @brief      adjust consola symbols used to string
+* @ingroup    XUTILS
+* 
+* @param[in]  origin_buffer : 
+* @param[in]  string : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XPROCESSMANAGER::AdjustConsolaSymbolsUsedToString(XBUFFER& origin_buffer, XSTRING& string)
+{
+  XCONSOLE_SYMBOLSUSED symbolused       = Console_GetSymbolsUsed();
+  XSTRINGASCIICODE     stringasccicode  = string.ConsoleCodePageToConvertASCII(symbolused);
+
+  string.Empty();
+
+  if(origin_buffer.IsEmpty())
+    {
+      return false;  
+    }
+
+  if(symbolused == XCONSOLE_SYMBOLSUSED_UNICODE_UTF8)
+    {
+      string.ConvertFromUTF8(origin_buffer);    
+    }
+   else
+    {
+      if(stringasccicode != XSTRINGASCIICODE_NONE)
+        {
+          string.ConvertFromASCII(origin_buffer, stringasccicode);            
+        }      
+    }
+
+  if(string.IsEmpty())
+    {
+      return false;
+    }
+
+  return true;
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -951,9 +1013,8 @@ XPROCESS* XPROCESSMANAGER::Application_GetProcessByID(XDWORD processID, XVECTOR<
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPROCESSMANAGER::Clean()
 {
-
+  
 }
-
 
 #pragma endregion
 

@@ -237,9 +237,8 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
   #define OUTBUF_SIZE   (10*1024*1024)
   
   PROCESS_INFORMATION processinfo;
-  STARTUPINFOA        startupinfo;
-  SECURITY_ATTRIBUTES saattr;
-  XBYTE*              cmdline             = NULL;
+  STARTUPINFOW        startupinfo;
+  SECURITY_ATTRIBUTES saattr; 
   XBYTE*              outbuftmp           = NULL;
   DWORD               bytes_read;
   DWORD               exitcode;
@@ -247,23 +246,29 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
   HANDLE              stdhandle_out_write = NULL;
   HANDLE              stdhandle_in_read   = NULL;
   HANDLE              stdhandle_in_write  = NULL;
-  XSTRING             _command;
+  XSTRING             command;
   bool                status = false;
 
-  cmdline    = new XBYTE[CMDLINE_SIZE];
   outbuftmp  = new XBYTE[OUTBUF_SIZE];
   
-  if(cmdline && outbuftmp)
+  if(outbuftmp)
     {      
-      _command.Format(__L("\"%s\""), applicationpath);
+      command.Format(__L("\"%s\""), applicationpath);
       
-      if(params) _command.AddFormat(__L(" %s"), params);
+      if(params)
+        {
+          command.AddFormat(__L(" %s"), params);
+        }
       
-      XBUFFER charstr;
+      /*
+      XBUFFER buffersymbolused;
       
-      _command.ConvertToASCII(charstr);
-      memcpy(cmdline, charstr.GetPtrChar(), _command.GetSize()+1);
-      
+      if(!AdjustStringToConsolaSymbolsUsed(command, buffersymbolused))
+        {
+          return false;
+        }
+      */
+
       memset(&saattr, 0, sizeof(saattr));
       saattr.nLength              = sizeof(SECURITY_ATTRIBUTES);
       saattr.bInheritHandle       = TRUE;
@@ -288,7 +293,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
       startupinfo.hStdInput   = stdhandle_in_read;    // GetStdHandle(STD_INPUT_HANDLE);
       startupinfo.dwFlags    |= STARTF_USESTDHANDLES;
 
-      if(CreateProcessA(NULL, (char*)cmdline, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &startupinfo, &processinfo))
+      if(CreateProcessW(NULL, (LPWSTR)command.Get() /*buffersymbolused.GetPtrChar()*/, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &startupinfo, &processinfo))
         {
           CloseHandle(stdhandle_out_write);
           
@@ -339,155 +344,6 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
 
               status = true;
             }            
-        }
-    }
-
-  if(cmdline) 
-    {
-      delete [] cmdline;
-    }
-
-  if(outbuftmp)
-    {
-      delete [] outbuftmp;
-    }
-  
-  return status;
-}
-
-
-
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool XWINDOWSPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
-* @brief      application  execute
-* @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool XWINDOWSPROCESSMANAGER::Application_Execute(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
-{
-  if(!applicationpath)
-    {
-      return false;
-    }
-
-  if(!applicationpath->GetSize())
-    {
-      return false;
-    }
-
-  #define OUTBUF_SIZE   (10*1024*1024)
-
-  PROCESS_INFORMATION processinfo;
-  STARTUPINFOW        startupinfo;
-  SECURITY_ATTRIBUTES saattr;
-  XSTRING             cmdline;
-  XBYTE*              outbuftmp           = NULL;
-  DWORD               bytes_read;
-  DWORD               exitcode;
-  HANDLE              stdhandle_out_read  = NULL;
-  HANDLE              stdhandle_out_write = NULL;
-  HANDLE              stdhandle_in_read   = NULL;
-  HANDLE              stdhandle_in_write  = NULL;
-  bool                status = false;
-
-  outbuftmp  = new XBYTE[OUTBUF_SIZE];
-  
-  if(outbuftmp)
-    {      
-      XSTRING _params;
-
-      cmdline.ConvertFromUTF8((*applicationpath));
-      _params.ConvertFromUTF8((*params));
-
-      cmdline.AddFormat(__L(" %s"), _params.Get());
-      
-      memset(&saattr, 0, sizeof(saattr));
-      saattr.nLength              = sizeof(SECURITY_ATTRIBUTES);
-      saattr.bInheritHandle       = TRUE;
-      saattr.lpSecurityDescriptor = NULL;
-
-      // Create a pipe for the child process's STDOUT.
-      if(!CreatePipe(&stdhandle_out_read, &stdhandle_out_write, &saattr, 0))  return false;
-      // Ensure the read handle to the pipe for STDOUT is not inherited.
-      if(!SetHandleInformation(stdhandle_out_read, HANDLE_FLAG_INHERIT, 0))   return false;
-
-      // Create a pipe for the child process's STDIN.
-      if(!CreatePipe(&stdhandle_in_read, &stdhandle_in_write, &saattr, 0))    return false;
-      // Ensure the read handle to the pipe for STDIN is not inherited.
-      if(!SetHandleInformation(stdhandle_in_write, HANDLE_FLAG_INHERIT, 0))   return false;
-
-      ZeroMemory(&processinfo, sizeof(PROCESS_INFORMATION));
-
-      ZeroMemory(&startupinfo, sizeof(STARTUPINFO));
-      startupinfo.cb          = sizeof(startupinfo);
-      startupinfo.hStdError   = stdhandle_out_write;
-      startupinfo.hStdOutput  = stdhandle_out_write;
-      startupinfo.hStdInput   = stdhandle_in_read;    // GetStdHandle(STD_INPUT_HANDLE);
-      startupinfo.dwFlags    |= STARTF_USESTDHANDLES;
-
-      if(CreateProcessW(NULL, (LPWSTR)cmdline.Get(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &startupinfo, &processinfo))
-        {
-          CloseHandle(stdhandle_out_write);
-          
-          if(in)
-            {
-              if(in->GetSize())
-                {
-                  DWORD bytes_write;
-
-                  WriteFile(stdhandle_in_write, in->Get(), in->GetSize(), &bytes_write, NULL);
-                  
-                  FlushFileBuffers(stdhandle_in_write);
-                }
-            }
-
-          CloseHandle(stdhandle_in_write);
-
-          if(out)
-            {
-              memset(outbuftmp, 0, OUTBUF_SIZE);
-
-              for(;;)
-                {
-                  if(!ReadFile(stdhandle_out_read, outbuftmp, OUTBUF_SIZE, &bytes_read, NULL))
-                    {
-                      break;
-                    }
-
-                  if(bytes_read > 0)
-                    {                    
-                      out->Add(outbuftmp, bytes_read);
-                    }
-                }             
-            }
-
-          
-          if(WaitForSingleObject(processinfo.hProcess, (out?INFINITE:500)) == WAIT_OBJECT_0)
-            {
-              if(out)
-                {
-                  if(GetExitCodeProcess(processinfo.hProcess, &exitcode))
-                    {
-                      if(returncode) (*returncode) = exitcode;
-                    }
-
-                  CloseHandle(processinfo.hProcess);
-                  CloseHandle(processinfo.hThread);
-                }
-
-              status = true;
-            }          
         }
     }
 
@@ -576,119 +432,7 @@ bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath,
       return FALSE;
     }
 
-  bool status = Application_ExecuteElevated(applicationpath, params, in, out, returncode);
-
-  if(cmdLine) 
-    {
-      HeapFree(GetProcessHeap(), 0, cmdLine);
-    }
-
-  if(ptrenv) 
-    {
-      DestroyEnvironmentBlock(ptrenv);
-    }
-
-  if(handleelevprimary) 
-    {
-      CloseHandle(handleelevprimary);
-    }
-
-  CloseHandle(handleprimary);
-
-  return status;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
-* @brief      application  execute elevated
-* @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XBUFFER* applicationpath, XBUFFER* params, XBUFFER* in, XBUFFER* out, int* returncode)
-{
-    DWORD sessionId = 0;
-  if(!GetActiveSessionId(&sessionId))
-    {
-      return FALSE;
-    }
-
-    
-  EnablePrivilege(SE_ASSIGNPRIMARYTOKEN_NAME);
-  EnablePrivilege(SE_INCREASE_QUOTA_NAME);
-
-  HANDLE handleusertoken = NULL;
-  if(!WTSQueryUserToken(sessionId, &handleusertoken))
-    {
-      return FALSE;
-    }
-
-    
-  HANDLE handleprimary = NULL;
-  if(!DuplicateToPrimaryToken(handleusertoken, &handleprimary)) 
-    {
-      CloseHandle(handleusertoken);
-      return FALSE;
-    }
-
-  CloseHandle(handleusertoken);
-
-
-  HANDLE handleelevprimary = NULL;
-  HANDLE hTokenToUse = handleprimary;
-  if(TryGetLinkedElevatedPrimary(handleprimary, &handleelevprimary)) 
-    {
-      hTokenToUse = handleelevprimary;
-    }
-
-    
-  LPVOID ptrenv = NULL;
-  if(!CreateEnvironmentBlock(&ptrenv, hTokenToUse, FALSE)) 
-    {
-      ptrenv = NULL;
-    }
-
-  LPWSTR  cmdLine = NULL;
-  XSTRING _applicationpath;
-  XSTRING _params;
-
-  if(applicationpath)
-    {
-      _applicationpath.ConvertFromASCII((*applicationpath));
-    }
-
-  if(params)
-    {
-      _params.ConvertFromASCII((*params));
-    }
-
-  if(!BuildMutableCommandLine((WCHAR*)_applicationpath.Get(), (WCHAR*)_params.Get(), &cmdLine)) 
-    {
-      if(ptrenv) 
-        {
-          DestroyEnvironmentBlock(ptrenv);
-        }
-
-      if(handleelevprimary) 
-        {
-          CloseHandle(handleelevprimary);
-        }
-        
-      CloseHandle(handleprimary);
-
-      return FALSE;
-    }
-
-  bool status = Application_ExecuteElevated(applicationpath, params, in, out, returncode);
+  bool status = Application_Execute(applicationpath, params, in, out, returncode);
 
   if(cmdLine) 
     {

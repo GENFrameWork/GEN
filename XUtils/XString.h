@@ -67,8 +67,9 @@ enum XSTRINGCONTEXT
 };                                   
 
 enum XSTRINGASCIICODE
-{
-  XSTRINGASCIICODE_7BIT              = 0 ,
+{  
+  XSTRINGASCIICODE_NONE              = 0 ,
+  XSTRINGASCIICODE_7BIT                  ,
   XSTRINGASCIICODE_CODEPAGE_437          ,
   XSTRINGASCIICODE_CODEPAGE_850          ,     
   XSTRINGASCIICODE_CODEPAGE_852          ,     
@@ -182,6 +183,7 @@ typedef struct
 
 class XBUFFER;
 class XMUTEX;
+
 
 
 class GEN_API_LIB_EXP XSTRING
@@ -334,6 +336,7 @@ class GEN_API_LIB_EXP XSTRING
     bool                  ConvertASCIICharacterToUnicode  (XBYTE asciicharacter, XCHAR& character, XSTRINGASCIICODE asccicode = XSTRINGASCIICODE_7BIT);
     bool                  ConvertToASCII                  (XBUFFER& xbuffer, XSTRINGASCIICODE asccicode = XSTRINGASCIICODE_7BIT);
     bool                  ConvertFromASCII                (XBUFFER& xbuffer, XSTRINGASCIICODE asccicode = XSTRINGASCIICODE_7BIT);
+    XSTRINGASCIICODE      ConsoleCodePageToConvertASCII   (XDWORD symbolused);
     
     bool                  ConvertToXBuffer                (XBUFFER& xbuffer);
     bool                  ConvertFromXBuffer              (XBUFFER& xbuffer, XSTRINGCODING buffercoding);

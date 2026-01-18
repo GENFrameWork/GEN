@@ -37,6 +37,7 @@
 #include "XSubject.h"
 #include "XVector.h"
 #include "XVariant.h"
+#include "XFileTXT.h"
 
 #pragma endregion
 
@@ -175,8 +176,8 @@ class XFILECFG : public XSUBJECT
     bool                                Load                      ();
     virtual bool                        Load                      (XPATH& xpath);
     
-    bool                                Save                      ();
-    virtual bool                        Save                      (XPATH& xpath);
+    bool                                Save                      (XFILETXTFORMATCHAR formatchar =  XFILETXTFORMATCHAR_UNKNOWN);
+    virtual bool                        Save                      (XPATH& xpath, XFILETXTFORMATCHAR formatchar =  XFILETXTFORMATCHAR_UNKNOWN);
 
     virtual bool                        End                       ();    
 

@@ -66,6 +66,30 @@
 #pragma endregion
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed()
+* @brief      onsole  get symbols used
+* @ingroup    XUTILS
+* 
+* @return     XCONSOLE_SYMBOLSUSED : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed()
+{
+  XCONSOLE*            console            = GEN_XFACTORY.CreateConsole();
+  XCONSOLE_SYMBOLSUSED consolesymbolused  = XCONSOLE_SYMBOLSUSED_NOTCONSOLE; 
+  if(console)
+    {
+      consolesymbolused = console->GetSymbolsUsed();      
+
+      GEN_XFACTORY.DeleteConsole(console);
+    }
+
+  return consolesymbolused;
+}
+
+
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 #pragma region CLASS_MEMBERS
 
@@ -153,6 +177,21 @@ bool XCONSOLE::SetSize(int width, int height)
 bool XCONSOLE::GetSizeText(int& columns, int& rows)
 {
   return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XCONSOLE_SYMBOLUSE XCONSOLE::GetASCCICode()
+* @brief      get ASCCIcode
+* @ingroup    XUTILS
+* 
+* @return     XCONSOLE_SYMBOLUSE : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XCONSOLE_SYMBOLSUSED XCONSOLE::GetSymbolsUsed()
+{
+  return XCONSOLE_SYMBOLSUSED_UNKNWON;
 }
 
 

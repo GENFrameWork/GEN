@@ -36,6 +36,7 @@
 #include "XPath.h"
 #include "XString.h"
 #include "XBuffer.h"
+#include "XConsole.h"
 
 #include "GRPRect.h"
 
@@ -55,35 +56,35 @@
 class XPROCESS
 {
   public:
-                                    XPROCESS                        ();
-    virtual                        ~XPROCESS                        ();
+                                    XPROCESS                          ();
+    virtual                        ~XPROCESS                          ();
 
-    XDWORD                          GetID                           ();
-    void                            SetID                           (XDWORD handle);
+    XDWORD                          GetID                             ();
+    void                            SetID                             (XDWORD handle);
 
-    XVECTOR<XDWORD>*                GetProcessIDs                   ();
+    XVECTOR<XDWORD>*                GetProcessIDs                     ();
   
-    XPATH*                          GetPath                         ();
-    XSTRING*                        GetName                         ();
+    XPATH*                          GetPath                           ();
+    XSTRING*                        GetName                           ();
 
-    void*                           GetWindowHandle                 ();
-    void                            SetWindowHandle                 (void* windowhandle);
+    void*                           GetWindowHandle                   ();
+    void                            SetWindowHandle                   (void* windowhandle);
     
-    XSTRING*                        GetWindowTitle                  ();  
-    GRPRECTINT*                     GetWindowRect                   ();      
-    int                             GetWindowTitleHeight            ();    
-    void                            SetWindowTitleHeight            (int windowtitleheight);    
-    int                             GetWindowBorderWidth            (); 
-    void                            SetWindowBorderWidth            (int windowborderwidth);
+    XSTRING*                        GetWindowTitle                    ();  
+    GRPRECTINT*                     GetWindowRect                     ();      
+    int                             GetWindowTitleHeight              ();    
+    void                            SetWindowTitleHeight              (int windowtitleheight);    
+    int                             GetWindowBorderWidth              (); 
+    void                            SetWindowBorderWidth              (int windowborderwidth);
     
-    bool                            CopyTo                          (XPROCESS& xprocess);    
-    bool                            CopyFrom                        (XPROCESS& xprocess);    
+    bool                            CopyTo                            (XPROCESS& xprocess);    
+    bool                            CopyFrom                          (XPROCESS& xprocess);    
 
-    bool                            Compare                         (XPROCESS& xprocess, bool onlyfixed = true);    
+    bool                            Compare                           (XPROCESS& xprocess, bool onlyfixed = true);    
     
   private:
 
-    void                            Clean                           ();
+    void                            Clean                             ();
 
     XDWORD                          ID;
     XVECTOR<XDWORD>                 processIDs;    
@@ -100,47 +101,49 @@ class XPROCESS
 class XPROCESSMANAGER
 {
   public:
-                                    XPROCESSMANAGER                 ();
-    virtual                        ~XPROCESSMANAGER                 ();
+                                    XPROCESSMANAGER                   ();
+    virtual                        ~XPROCESSMANAGER                   ();
 
-    static bool                     GetIsInstanced                  ();
-    static XPROCESSMANAGER&         GetInstance                     ();
-    static bool                     SetInstance                     (XPROCESSMANAGER* instance);
-    static bool                     DelInstance                     ();
+    static bool                     GetIsInstanced                    ();
+    static XPROCESSMANAGER&         GetInstance                       ();
+    static bool                     SetInstance                       (XPROCESSMANAGER* instance);
+    static bool                     DelInstance                       ();
 
-    virtual bool                    MakeSystemCommand               (XCHAR* command);    
-    virtual bool                    MakeCommand                     (XCHAR* command, XBUFFER* out = NULL, int* returncode = NULL);
+    virtual bool                    MakeSystemCommand                 (XCHAR* command);    
+    virtual bool                    MakeCommand                       (XCHAR* command, XBUFFER* out = NULL, int* returncode = NULL);
 
-    virtual bool                    OpenURL                         (XCHAR* url);
+    virtual bool                    OpenURL                           (XCHAR* url);
 
-    virtual bool                    Application_Execute             (XCHAR* applicationpath, XCHAR* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
-    virtual bool                    Application_Execute             (XBUFFER* applicationpath, XBUFFER* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
+    virtual bool                    Application_Execute               (XCHAR* applicationpath, XCHAR* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);        
+    bool                            Application_Execute               (XCHAR* applicationpath, XCHAR* params, int* returncode);  
+    bool                            Application_Execute               (XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode = NULL);
 
-    virtual bool                    Application_ExecuteElevated     (XCHAR* applicationpath, XCHAR* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
-    virtual bool                    Application_ExecuteElevated     (XBUFFER* applicationpath, XBUFFER* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
+    bool                            AdjustStringToConsolaSymbolsUsed  (XSTRING& string, XBUFFER& target_buffer);
+    bool                            AdjustConsolaSymbolsUsedToString  (XBUFFER& origin_buffer, XSTRING& string);
 
-    bool                            Application_Execute             (XCHAR* applicationpath, XCHAR* params, int* returncode);
-    bool                            Application_ExecuteElevated     (XCHAR* applicationpath, XCHAR* params, int* returncode);
-    bool                            Application_Execute             (XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode = NULL);
-    bool                            Application_ExecuteElevated     (XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode = NULL);
 
-    virtual bool                    Application_IsRunning           (XCHAR* command, XDWORD* ID = NULL);
+    virtual bool                    Application_ExecuteElevated       (XCHAR* applicationpath, XCHAR* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
+    bool                            Application_ExecuteElevated       (XCHAR* applicationpath, XCHAR* params, int* returncode);  
+    bool                            Application_ExecuteElevated       (XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode = NULL);
 
-    virtual bool                    Application_GetRunningList      (XVECTOR<XPROCESS*>& applist, bool onlywithvalidwindow = false);
+    virtual bool                    Application_IsRunning             (XCHAR* command, XDWORD* ID = NULL);
 
-    virtual bool                    Application_Terminate           (XDWORD processID, XDWORD  exitcode = 0);
-    bool                            Application_Terminate           (XPROCESS& process, XDWORD exitcode = 0);
-    bool                            Application_Terminate           (XCHAR* processname, XDWORD exitcode = 0);
-    bool                            Application_Terminate           (XSTRING& processname, XDWORD exitcode = 0);
+    virtual bool                    Application_GetRunningList        (XVECTOR<XPROCESS*>& applist, bool onlywithvalidwindow = false);
 
-    static XPROCESS*                Application_GetProcessByID      (XDWORD processID, XVECTOR<XPROCESS*>& applist);
+    virtual bool                    Application_Terminate             (XDWORD processID, XDWORD  exitcode = 0);
+    bool                            Application_Terminate             (XPROCESS& process, XDWORD exitcode = 0);
+    bool                            Application_Terminate             (XCHAR* processname, XDWORD exitcode = 0);
+    bool                            Application_Terminate             (XSTRING& processname, XDWORD exitcode = 0);
 
+    static XPROCESS*                Application_GetProcessByID        (XDWORD processID, XVECTOR<XPROCESS*>& applist);
+  
   private:
 
-    void                            Clean                           ();
+    void                            Clean                             ();
 
-    static XPROCESSMANAGER*         instance;
+    static XPROCESSMANAGER*         instance;        
 };
+
 
 #pragma endregion
 

@@ -699,10 +699,14 @@ bool XFILECFG::Load(XPATH& xpath)
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XFILECFG::Save()
+bool XFILECFG::Save(XFILETXTFORMATCHAR formatchar)
 {
-  if(xpathfile.IsEmpty()) return false;
-  return Save(xpathfile);
+  if(xpathfile.IsEmpty()) 
+    {
+      return false;
+    }
+
+  return Save(xpathfile, formatchar);
 }
 
 
@@ -717,7 +721,7 @@ bool XFILECFG::Save()
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XFILECFG::Save(XPATH& xpath)
+bool XFILECFG::Save(XPATH& xpath, XFILETXTFORMATCHAR formatchar)
 {
   bool status = false;
 
@@ -730,6 +734,14 @@ bool XFILECFG::Save(XPATH& xpath)
 
   if(IniFile(xpath))
     {
+      if(formatchar != XFILETXTFORMATCHAR_UNKNOWN)
+        {
+          if(GetFileINI())
+            {
+              GetFileINI()->SetFormatChar(formatchar);
+            }
+        }
+
       AjustRemarks();    
 
       fileini->DeleteAllSections();

@@ -51,33 +51,35 @@
 class XWINDOWSCONSOLE : public XCONSOLE
 {
   public:
-                        XWINDOWSCONSOLE                 ();
-    virtual            ~XWINDOWSCONSOLE                 ();
+                            XWINDOWSCONSOLE                 ();
+    virtual                ~XWINDOWSCONSOLE                 ();
 
-    bool                GetSize                         (int& width, int& height);
-    bool                SetSize                         (int width, int height);
+    bool                    GetSize                         (int& width, int& height);
+    bool                    SetSize                         (int width, int height);
 
-    bool                GetSizeText                     (int& columms, int& rows);
+    bool                    GetSizeText                     (int& columms, int& rows);
 
-    bool                Maximize                        ();
-    bool                Minimize                        ();
+    XCONSOLE_SYMBOLSUSED    GetSymbolsUsed                  ();
 
-    bool                Hide                            ();
-    bool                IsHide                          ();
-    bool                UnHide                          ();
+    bool                    Maximize                        ();
+    bool                    Minimize                        ();
 
-    bool                Print                           (XCHAR* string);
-    bool                Clear                           (bool fill = true);
+    bool                    Hide                            ();
+    bool                    IsHide                          ();
+    bool                    UnHide                          ();
 
-    bool                KBHit                           ();
-    int                 GetChar                         ();
+    bool                    Print                           (XCHAR* string);
+    bool                    Clear                           (bool fill = true);
 
-    static bool         Generate                        ();
-    static bool         Close                           ();
+    bool                    KBHit                           ();
+    int                     GetChar                         ();
+
+    static bool             Generate                        ();
+    static bool             Close                           ();
 
   private:
 
-    static void         SendEnterKey                    ();
+    static void             SendEnterKey                    ();
    
 };
 

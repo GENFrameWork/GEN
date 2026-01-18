@@ -207,6 +207,72 @@ bool XWINDOWSCONSOLE::GetSizeText(int& columns, int& rows)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XCONSOLE_SYMBOLSUSED XWINDOWSCONSOLE::GetSymbolsUsed()
+* @brief      get symbols used
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     XCONSOLE_SYMBOLSUSED : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XCONSOLE_SYMBOLSUSED XWINDOWSCONSOLE::GetSymbolsUsed()
+{
+  UINT                    in_cp  = GetConsoleCP();        
+  UINT                    out_cp = GetConsoleOutputCP();  
+  XCONSOLE_SYMBOLSUSED    symbol_cp = XCONSOLE_SYMBOLSUSED_UNKNWON;
+  
+  if(in_cp != out_cp)
+    {
+      return symbol_cp;
+    }
+
+  switch(in_cp)
+    {
+      case      0 : symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTCONSOLE;         break;  
+      case    437 : symbol_cp =  XCONSOLE_SYMBOLSUSED_CODEPAGE_437;       break;  // OEM USA (original DOS)
+      case    850	: symbol_cp =  XCONSOLE_SYMBOLSUSED_CODEPAGE_850;       break;  // OEM Western Europe
+      case    852	: symbol_cp =  XCONSOLE_SYMBOLSUSED_CODEPAGE_852;       break;  // OEM Central Europe
+      case    855	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Cyrillic
+      case    857	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Turkish
+      case    858	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Multilingual Latin I
+      case    860	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Portuguese
+      case    861	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Icelandic
+      case    862	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Hebrew
+      case    863	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Canadian French
+      case    865	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Nordic
+      case    866	: symbol_cp =  XCONSOLE_SYMBOLSUSED_CODEPAGE_866;       break;  // OEM Russian
+      case    874	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Thai
+      case    932	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Japanese (Shift-JIS)
+      case    936	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Simplified Chinese (GBK)
+      case    949	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Korean
+      case    950	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // OEM Traditional Chinese
+
+      case   1250	: symbol_cp =  XCONSOLE_SYMBOLSUSED_WINDOWS_1250;       break;  // ANSI Central Europe
+      case   1251	: symbol_cp =  XCONSOLE_SYMBOLSUSED_WINDOWS_1251;       break;  // ANSI Cyrillic
+      case   1252	: symbol_cp =  XCONSOLE_SYMBOLSUSED_WINDOWS_1252;       break;  // ANSI Western Europe
+      case   1253	: symbol_cp =  XCONSOLE_SYMBOLSUSED_WINDOWS_1253;       break;  // ANSI Greek
+      case   1254	: symbol_cp =  XCONSOLE_SYMBOLSUSED_WINDOWS_1254;       break;  // ANSI Turkish
+      case   1255	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // ANSI Hebrew
+      case   1256	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // ANSI Arabic
+      case   1257	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // ANSI Baltic
+      case   1258	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // ANSI Vietnamese
+     
+      case   1200	: symbol_cp =  XCONSOLE_SYMBOLSUSED_UNICODE_UTF16;      break;  // UTF-16 LE
+      case   1201	: symbol_cp =  XCONSOLE_SYMBOLSUSED_UNICODE_UTF16;      break;  // UTF-16 BE 
+      case  65001 : symbol_cp =  XCONSOLE_SYMBOLSUSED_UNICODE_UTF8;       break;  // UTF-8
+
+      case  20932	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // EUC-JP
+      case  51932	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // EUC-JP (ext)
+      case  54936	: symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;  // GB18030
+
+          default : symbol_cp =  XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;       break;
+    }  
+
+  return symbol_cp;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XWINDOWSCONSOLE::Maximize()
 * @brief      Maximize

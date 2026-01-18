@@ -1,4 +1,4 @@
-﻿/**-------------------------------------------------------------------------------------------------------------------
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @file       XString.cpp
 * 
@@ -53,6 +53,7 @@
 #include "XTranslation.h"
 #include "XTranslation_GEN.h"
 #include "XLanguage_ISO_639_3.h"
+#include "XConsole.h"
 
 #pragma endregion
 
@@ -4354,6 +4355,51 @@ bool XSTRING::ConvertFromASCII(XBUFFER& xbuffer, XSTRINGASCIICODE asccicode)
     }  
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRINGASCIICODE XSTRING::ConsoleCodePageToConvertASCII(XDWORD symbolused)
+* @brief      console code page to convert ASCIi
+* @ingroup    XUTILS
+* 
+* @param[in]  symbolused : 
+* 
+* @return     XSTRINGASCIICODE : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRINGASCIICODE XSTRING::ConsoleCodePageToConvertASCII(XDWORD symbolused)
+{
+  XSTRINGASCIICODE ASCIIcode = XSTRINGASCIICODE_NONE;
+
+  switch(symbolused)
+    {
+      case XCONSOLE_SYMBOLSUSED_NOTCONSOLE     : ASCIIcode = XSTRINGASCIICODE_NONE;           break;
+      case XCONSOLE_SYMBOLSUSED_UNKNWON        : ASCIIcode = XSTRINGASCIICODE_7BIT;           break; ;
+      case XCONSOLE_SYMBOLSUSED_NOTSUPPORTED   : ASCIIcode = XSTRINGASCIICODE_7BIT;           break; 
+      
+      case XCONSOLE_SYMBOLSUSED_CODEPAGE_437   : ASCIIcode = XSTRINGASCIICODE_CODEPAGE_437;   break; 
+      case XCONSOLE_SYMBOLSUSED_CODEPAGE_850   : ASCIIcode = XSTRINGASCIICODE_CODEPAGE_850;   break; 
+      case XCONSOLE_SYMBOLSUSED_CODEPAGE_852   : ASCIIcode = XSTRINGASCIICODE_CODEPAGE_852;   break;  
+      case XCONSOLE_SYMBOLSUSED_CODEPAGE_866   : ASCIIcode = XSTRINGASCIICODE_CODEPAGE_866;   break;  
+
+      case XCONSOLE_SYMBOLSUSED_ISO_8859_1     : ASCIIcode = XSTRINGASCIICODE_ISO_8859_1;     break;  
+      case XCONSOLE_SYMBOLSUSED_ISO_8859_2     : ASCIIcode = XSTRINGASCIICODE_ISO_8859_2;     break;  
+      case XCONSOLE_SYMBOLSUSED_ISO_8859_3     : ASCIIcode = XSTRINGASCIICODE_ISO_8859_3;     break;   
+      case XCONSOLE_SYMBOLSUSED_ISO_8859_4     : ASCIIcode = XSTRINGASCIICODE_ISO_8859_4;     break;  
+
+      case XCONSOLE_SYMBOLSUSED_WINDOWS_1250   : ASCIIcode = XSTRINGASCIICODE_WINDOWS_1250;   break;  
+      case XCONSOLE_SYMBOLSUSED_WINDOWS_1251   : ASCIIcode = XSTRINGASCIICODE_WINDOWS_1251;   break;   
+      case XCONSOLE_SYMBOLSUSED_WINDOWS_1252   : ASCIIcode = XSTRINGASCIICODE_WINDOWS_1252;   break;  
+      case XCONSOLE_SYMBOLSUSED_WINDOWS_1253   : ASCIIcode = XSTRINGASCIICODE_WINDOWS_1253;   break;    
+      case XCONSOLE_SYMBOLSUSED_WINDOWS_1254   : ASCIIcode = XSTRINGASCIICODE_WINDOWS_1254;   break;  
+                                               
+      case XCONSOLE_SYMBOLSUSED_UNICODE_UTF8   : ASCIIcode = XSTRINGASCIICODE_NONE;           break;
+      case XCONSOLE_SYMBOLSUSED_UNICODE_UTF16  : ASCIIcode = XSTRINGASCIICODE_NONE;           break; 
+    }
+
+  return ASCIIcode;
 }
 
 
