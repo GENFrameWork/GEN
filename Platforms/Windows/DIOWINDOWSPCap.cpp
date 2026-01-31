@@ -36,7 +36,7 @@
 
 #ifdef DIO_PCAP_ACTIVE
                      
-#pragma comment(lib,"wpcap.lib")
+//#pragma comment(lib,"wpcap.lib")
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES

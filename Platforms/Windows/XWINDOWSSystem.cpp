@@ -78,7 +78,7 @@
 #include "XLanguage_ISO_639_3.h"
 
 #ifndef BUILDER
-#pragma comment(lib, "wlanapi.lib")
+//#pragma comment(lib, "wlanapi.lib")
 #endif
 
 #pragma endregion

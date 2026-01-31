@@ -54,7 +54,6 @@
 #include "XWINDOWSTrace.h"
 #include "XWINDOWSRand.h"
 #include "XWINDOWSSleep.h"
-#include "XWINDOWSTrace.h"
 
 #ifdef XSYSTEM_ACTIVE
   #include "XWINDOWSSystem.h"

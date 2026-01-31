@@ -41,9 +41,9 @@
 #pragma region INCLUDES
 
 
-#pragma comment(lib, "wlanapi.lib")
-#pragma comment(lib, "ole32.lib")
-#pragma comment(lib, "Rpcrt4.lib")
+//#pragma comment(lib, "wlanapi.lib")
+//#pragma comment(lib, "ole32.lib")
+//#pragma comment(lib, "Rpcrt4.lib")
 
 #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"
 
