@@ -130,7 +130,7 @@ typedef struct
   #define XSTRING_MAXTEMPOSTR           1024
 #endif
 
-#define XSTRING_SIZETABLE64BITS         64
+//#define XSTRING_TABLE64BITSSIZE         64
 #define XSTRING_TABLE64BITS             __L("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
 
 #define XSTRING_VALIDCHARSINT           __L("0123456789-+");

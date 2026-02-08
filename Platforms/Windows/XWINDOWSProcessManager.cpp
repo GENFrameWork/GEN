@@ -233,7 +233,6 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
       (*returncode) = 0;
     }
 
-  #define CMDLINE_SIZE  (10*1024)
   #define OUTBUF_SIZE   (10*1024*1024)
   
   PROCESS_INFORMATION processinfo;

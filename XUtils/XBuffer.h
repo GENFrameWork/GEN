@@ -43,28 +43,28 @@
 
 enum XBUFFER_PADDINGTYPE
 {
-  XBUFFER_PADDINGTYPE_NONE              = 0 ,
-  XBUFFER_PADDINGTYPE_ZEROS                 ,
-  XBUFFER_PADDINGTYPE_SPACES                ,
-  XBUFFER_PADDINGTYPE_ANSIX923              ,
-  XBUFFER_PADDINGTYPE_ISO10126              ,
-  XBUFFER_PADDINGTYPE_PKCS7                 ,
-  XBUFFER_PADDINGTYPE_PKCS5                 ,
-  XBUFFER_PADDINGTYPE_ISOIEC7816_4          ,
+  XBUFFER_PADDINGTYPE_NONE                 = 0 ,
+  XBUFFER_PADDINGTYPE_ZEROS                    ,
+  XBUFFER_PADDINGTYPE_SPACES                   ,
+  XBUFFER_PADDINGTYPE_ANSIX923                 ,
+  XBUFFER_PADDINGTYPE_ISO10126                 ,
+  XBUFFER_PADDINGTYPE_PKCS7                    ,
+  XBUFFER_PADDINGTYPE_PKCS5                    ,
+  XBUFFER_PADDINGTYPE_ISOIEC7816_4             ,
 };
 
 
-#define XBUFFER_INVALIDPOSITION         -1
-#define XBUFFER_ISTHREADSAFE            true
+#define XBUFFER_INVALIDPOSITION             -1
+#define XBUFFER_ISTHREADSAFE                true
 
-#define XBUFFER_MASTER_NBITS            -1
+#define XBUFFER_MASTER_NBITS                -1
 
 
 
 #ifdef MICROCONTROLLER
- #define XBUFFER_BLOCKMEM          8
+#define XBUFFER_ADDBLOCKMEMSIZE_DEFAULT      8
 #else
- #define XBUFFER_BLOCKMEM          128
+#define XBUFFER_ADDBLOCKMEMSIZE_DEFAULT    128
 #endif
 
 #pragma endregion
@@ -87,6 +87,8 @@ class GEN_API_LIB_EXP XBUFFER
 
     XDWORD                   GetSize                              ();
     bool                     SetSize                              (XDWORD size);
+
+    bool                     SetAddBlockMemSize                   (XDWORD addblockMemSize);
 
     bool                     IsEmpty                              ();
 
@@ -242,6 +244,8 @@ class GEN_API_LIB_EXP XBUFFER
     XDWORD                   size;
     XDWORD                   sizeassign;
     XDWORD                   position;
+
+    XDWORD                   addblockmemsize;
 
     XBYTE                    nbits;
     XBYTE                    nbitsfree;

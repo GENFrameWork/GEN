@@ -207,6 +207,32 @@ bool XBUFFER::SetSize(XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XBUFFER::SetAddBlockMemSize(XDWORD addblockmemsize)
+* @brief      set add block mem size
+* @ingroup    XUTILS
+* 
+* @param[in]  addblockmemsize : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XBUFFER::SetAddBlockMemSize(XDWORD addblockmemsize)
+{
+  if(!addblockmemsize)
+    {
+      addblockmemsize = XBUFFER_ADDBLOCKMEMSIZE_DEFAULT;
+
+      return false;
+    }
+
+  this->addblockmemsize = addblockmemsize;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XBUFFER::IsEmpty()
 * @brief      Is empty
@@ -2138,7 +2164,7 @@ bool XBUFFER::Resize(XDWORD newsize, bool setblocked)
         { 
           XBYTE* newbuffer = NULL;         
 
-          sizeassign = (newsize + XBUFFER_BLOCKMEM); 
+          sizeassign = (newsize + addblockmemsize); 
 
           newbuffer = new XBYTE[sizeassign];
           if(newbuffer)
@@ -3556,6 +3582,8 @@ void XBUFFER::Clean()
   size                = 0;
   sizeassign          = 0;
   position            = 0;
+
+  addblockmemsize     = XBUFFER_ADDBLOCKMEMSIZE_DEFAULT;
 
   nbits               = 0;
   nbitsfree           = 0;
