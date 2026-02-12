@@ -732,7 +732,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD  exi
 * 
 * @fn         BOOL XWINDOWSPROCESSMANAGER::EnablePrivilege(LPCWSTR privname)
 * @brief      enable privilege
-* @ingroup    
+* @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  privname : 
 * 
@@ -776,7 +776,7 @@ BOOL XWINDOWSPROCESSMANAGER::EnablePrivilege(LPCWSTR privname)
 * 
 * @fn         BOOL XWINDOWSPROCESSMANAGER::GetActiveSessionId(DWORD* ptrsessionID)
 * @brief      get active session id
-* @ingroup    
+* @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  ptrsessionID : 
 * 
@@ -807,7 +807,7 @@ BOOL XWINDOWSPROCESSMANAGER::GetActiveSessionId(DWORD* ptrsessionID)
 * 
 * @fn         BOOL XWINDOWSPROCESSMANAGER::DuplicateToPrimaryToken(HANDLE handleIN, HANDLE* phandleprimaryout)
 * @brief      duplicate to primary token
-* @ingroup    
+* @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  handleIN : 
 * @param[in]  phandleprimaryout : 
@@ -837,7 +837,7 @@ BOOL XWINDOWSPROCESSMANAGER::DuplicateToPrimaryToken(HANDLE handleIN, HANDLE* ph
 * 
 * @fn         BOOL XWINDOWSPROCESSMANAGER::TryGetLinkedElevatedPrimary(HANDLE handleprimary, HANDLE* phandleelevprimaryout)
 * @brief      try get linked elevated primary
-* @ingroup    
+* @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  handleprimary : 
 * @param[in]  phandleelevprimaryout : 
@@ -895,13 +895,13 @@ BOOL XWINDOWSPROCESSMANAGER::TryGetLinkedElevatedPrimary(HANDLE handleprimary, H
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         BOOL XWINDOWSPROCESSMANAGER::BuildMutableCommandLine(LPCWSTR exepath, LPCWSTR args, LPWSTR*cmdline)
+* @fn         BOOL XWINDOWSPROCESSMANAGER::BuildMutableCommandLine(LPCWSTR exepath, LPCWSTR args, LPWSTR* ptrcmdline)
 * @brief      build mutable command line
-* @ingroup    
+* @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  exepath : 
 * @param[in]  args : 
-* @param[in] cmdline : 
+* @param[in]  ptrcmdline : 
 * 
 * @return     BOOL : 
 * 
@@ -948,7 +948,7 @@ BOOL XWINDOWSPROCESSMANAGER::BuildMutableCommandLine(LPCWSTR exepath, LPCWSTR ar
 * 
 * @fn         BOOL XWINDOWSPROCESSMANAGER::CreateInteractiveProcess_AttemptElevated(LPCWSTR exepath, LPCWSTR args, LPCWSTR workingdir, BOOL waitforexit, DWORD* ptrexitcode)
 * @brief      create interactive process  attempt elevated
-* @ingroup    
+* @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  exepath : 
 * @param[in]  args : 
@@ -1088,12 +1088,10 @@ BOOL XWINDOWSPROCESSMANAGER::CreateInteractiveProcess_AttemptElevated(LPCWSTR ex
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSPROCESSMANAGER::GetWindowPropertys(HWND hwnd, XSTRING& title, GRPRECTINT& rect)
-* @brief      Get window propertys
+* @brief      get window propertys
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  hwnd : 

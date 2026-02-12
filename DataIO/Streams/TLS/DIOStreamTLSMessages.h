@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       DIOStreamTLSMessage.h
+* @file       DIOStreamTLSMessages.h
 * 
-* @class      DIOSTREAMTLSMESSAGE
+* @class      DIOSTREAMTLSMESSAGES
 * @brief      Data Input/Output Stream TLS (Transport Layer Security) Messages class
 * @ingroup    DATAIO
 * 

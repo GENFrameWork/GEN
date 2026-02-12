@@ -77,15 +77,19 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed()
 {
+  XCONSOLE_SYMBOLSUSED consolesymbolused  = XCONSOLE_SYMBOLSUSED_NOTCONSOLE;
+
+  #ifndef BUILDER
   XCONSOLE*            console            = GEN_XFACTORY.CreateConsole();
-  XCONSOLE_SYMBOLSUSED consolesymbolused  = XCONSOLE_SYMBOLSUSED_NOTCONSOLE; 
+
   if(console)
     {
-      consolesymbolused = console->GetSymbolsUsed();      
+      consolesymbolused = console->GetSymbolsUsed();
 
       GEN_XFACTORY.DeleteConsole(console);
     }
-
+  #endif
+  
   return consolesymbolused;
 }
 
@@ -182,11 +186,11 @@ bool XCONSOLE::GetSizeText(int& columns, int& rows)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XCONSOLE_SYMBOLUSE XCONSOLE::GetASCCICode()
-* @brief      get ASCCIcode
+* @fn         XCONSOLE_SYMBOLSUSED XCONSOLE::GetSymbolsUsed()
+* @brief      get symbols used
 * @ingroup    XUTILS
 * 
-* @return     XCONSOLE_SYMBOLUSE : 
+* @return     XCONSOLE_SYMBOLSUSED : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE_SYMBOLSUSED XCONSOLE::GetSymbolsUsed()

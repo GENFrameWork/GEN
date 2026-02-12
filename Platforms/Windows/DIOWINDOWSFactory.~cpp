@@ -93,10 +93,8 @@
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOWINDOWSStreamTCPIP.h"
 #include "DIOWINDOWSStreamTCPIPServer.h"
-#ifndef BUILDER
 #include "DIOStreamTLSConfig.h"
 #include "DIOStreamTLS.h"
-#endif
 #endif
 
 #if (defined(DIO_STREAMBLUETOOTH_ACTIVE) || defined(DIO_STREAMBLUETOOTHLE_ACTIVE))

@@ -120,7 +120,9 @@ double Truncate(double value)
 {
   double truncate = 0;
 
+  #ifndef BUILDER
   modf(value, &truncate);
+  #endif
 
   return truncate;
 }
@@ -140,8 +142,12 @@ double Truncate(double value)
 double Fraction(double value)
 {
   double truncate = 0;
-
+  #ifndef BUILDER
   return modf(value, &truncate);
+  #else
+  return truncate;
+  #endif
+  
 }
 
 
@@ -204,7 +210,11 @@ double RoundOff(double value, XBYTE prec)
 * --------------------------------------------------------------------------------------------------------------------*/
 float RoundFloat(float x)
 {
+  #ifndef BUILDER
   return float(x >= 0.0f ? floor(x + 0.5f) : ceil(x - 0.5f));
+  #else
+  return x;
+  #endif
 }
 
 
@@ -228,8 +238,12 @@ float AdjustFloat(float valor, int decimals)
     {
       factor *= 10.0f;
     }
-    
+
+  #ifndef BUILDER
   float valorAjustado = (float)floor(valor * factor + 0.5f) / factor;
+  #else
+  float valorAjustado = valor;
+  #endif
   
   return valorAjustado;
 }
@@ -256,7 +270,11 @@ double AdjustDouble(double valor, int decimals)
       factor *= 10.0;
     }
 
+  #ifndef BUILDER
   double valorAjustado = floor(valor * factor + 0.5) / factor;
+  #else
+  double valorAjustado = valor;
+  #endif
 
   return valorAjustado;
 }

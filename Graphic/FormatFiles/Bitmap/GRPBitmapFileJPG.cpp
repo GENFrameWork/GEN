@@ -68,7 +68,7 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         METHODDEF(void) GRPBITMAPFILEJPG_ErrorExit(j_common_ptr info)
-* @brief      Constructor of class
+* @brief      GRPBITMAPFILEJPG_ErrorExit
 * @ingroup    GRAPHIC
 * 
 * @param[in]  info :
@@ -77,7 +77,6 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 METHODDEF(void) GRPBITMAPFILEJPG_ErrorExit(j_common_ptr info)
-
 {
   GRPBITMAPFILEJPG_ERROR_PTR myerr = (GRPBITMAPFILEJPG_ERROR_PTR) info->err;
 

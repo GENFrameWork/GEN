@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       DIOStreamTLSMessage.h
+* @file       DIOStreamTLSMessagesExtension.h
 * 
 * @class      DIOSTREAMTLSMESSAGE
-* @brief      Data Input/Output Stream TLS (Transport Layer Security) Messages class
+* @brief      Data Input/Output Stream TLS (Transport Layer Security) Messages Extension class
 * @ingroup    DATAIO
 * 
 * @copyright  EndoraSoft. All rights reserved.

@@ -326,7 +326,7 @@ bool XWINDOWSWINGET::InstallModule()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XWINDOWSWINGET::List(XVECTOR<XWINDOWSWINGET_ELEMENTRESULT*>* listresult)
+* @fn         bool XWINDOWSWINGET::List(XWINDOWSWINGET_LISTRESULT* listresult)
 * @brief      list
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -552,7 +552,7 @@ bool XWINDOWSWINGET::Find(XCHAR* search, XWINDOWSWINGET_LISTRESULT* listresult)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XWINDOWSWINGET::List(bool updateavaible, XSTRING* jsonresult)
+* @fn         bool XWINDOWSWINGET::List(bool updateavaible, XSTRING& jsonresult)
 * @brief      list
 * @ingroup    PLATFORM_WINDOWS
 * 

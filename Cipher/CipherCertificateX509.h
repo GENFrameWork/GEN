@@ -1,6 +1,6 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       CipherKeyCertificate.h
+* @file       CipherCertificateX509.h
 * 
 * @class      CIPHERCERTIFICATEX509
 * @brief      Cipher Certificate X.509 class

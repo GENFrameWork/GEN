@@ -691,13 +691,15 @@ bool XFILECFG::Load(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILECFG::Save()
-* @brief      Save
+* 
+* @fn         bool XFILECFG::Save(XFILETXTFORMATCHAR formatchar)
+* @brief      save
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  formatchar : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::Save(XFILETXTFORMATCHAR formatchar)
 {
@@ -711,15 +713,16 @@ bool XFILECFG::Save(XFILETXTFORMATCHAR formatchar)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILECFG::Save(XPATH& xpath)
-* @brief      Save
+* 
+* @fn         bool XFILECFG::Save(XPATH& xpath, XFILETXTFORMATCHAR formatchar)
+* @brief      save
 * @ingroup    XUTILS
-*
-* @param[in]  xpath : path to file config
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : 
+* @param[in]  formatchar : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::Save(XPATH& xpath, XFILETXTFORMATCHAR formatchar)
 {

@@ -77,7 +77,6 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 ANDROIDJNIOBJECT::ANDROIDJNIOBJECT(XSTRING classname, XSTRING constructorsignature, ...)
-
 {
   JNIEnv*   JEnv = ANDROIDJNI::GetJNIEnv();
   char*     cstr = NULL;
@@ -302,18 +301,17 @@ jobject ANDROIDJNIOBJECT::CallMethod<jobject>(ANDROIDJNIMETHOD method, ...)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD method, ...)
-* @brief      Call method<long long>
+* @fn         template<> long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD method, ...)
+* @brief      call method<long long>
 * @ingroup    PLATFORM_ANDROID
 * 
 * @param[in]  method : 
 * @param[in]  ... : 
 * 
-* @return     long : 
+* @return     emplate<> long long: 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-template<>
-long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD method, ...)
+template<> long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD method, ...)
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();
 

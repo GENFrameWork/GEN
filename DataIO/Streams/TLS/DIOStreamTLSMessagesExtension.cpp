@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       DIOStreamTLSMessages.cpp
+* @file       DIOStreamTLSMessagesExtension.cpp
 * 
 * @class      DIOSTREAMTLSMESSAGES
-* @brief      Data Input/Output Stream TLS (Transport Layer Security) Messages class
+* @brief      Data Input/Output Stream TLS (Transport Layer Security) Messages Extension class
 * @ingroup    DATAIO
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -1396,11 +1396,10 @@ void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetKeyType(XWORD keytype)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetLength()
-* @brief      get length
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetLengthKeyData()
+* @brief      get length key data
 * @ingroup    DATAIO
 * 
 * @return     XWORD : 

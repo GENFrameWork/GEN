@@ -1401,7 +1401,7 @@ bool XPATH::Split(XSTRING* drive, XPATH* xpath, XSTRING* name, XSTRING* ext)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XPATH::Split(XSTRING* drive, XVECTOR<XPATH*>* subpaths, XSTRING* name, XSTRING* ext)
+* @fn         bool XPATH::Split(XSTRING* drive, XVECTOR<XSTRING*>& subpaths, XSTRING* name, XSTRING* ext)
 * @brief      split
 * @ingroup    XUTILS
 * 

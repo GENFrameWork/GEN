@@ -4251,12 +4251,12 @@ bool XSTRING::ConvertASCIICharacterToUnicode(XBYTE asciicharacter, XCHAR& charac
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XSTRING::ConvertToASCII(XBUFFER& xbuffer, XSTRINGASSCIICODE assicode)
+* @fn         bool XSTRING::ConvertToASCII(XBUFFER& xbuffer, XSTRINGASCIICODE asccicode)
 * @brief      convert to ASCIi
 * @ingroup    XUTILS
 * 
 * @param[in]  xbuffer : 
-* @param[in]  assicode : 
+* @param[in]  asccicode : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -4306,15 +4306,16 @@ bool XSTRING::ConvertToASCII(XBUFFER& xbuffer, XSTRINGASCIICODE asccicode)
 
   return true;    
 }
-    
+ 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XSTRING::ConvertFromASCII(XBUFFER& xbuffer)
-* @brief      Convert from ASCII
+* @fn         bool XSTRING::ConvertFromASCII(XBUFFER& xbuffer, XSTRINGASCIICODE asccicode)
+* @brief      convert from ASCIi
 * @ingroup    XUTILS
 * 
 * @param[in]  xbuffer : 
+* @param[in]  asccicode : 
 * 
 * @return     bool : true if is succesful. 
 * 
@@ -5230,6 +5231,7 @@ bool XSTRING::ConvertFromDoubleToSpanishText(double value, bool withintegerpart,
 {
   Empty();
 
+  #ifndef BUILDER
   integerpart = Truncate(value);
   decimalpart = Fraction(value);
 
@@ -5386,6 +5388,10 @@ bool XSTRING::ConvertFromDoubleToSpanishText(double value, bool withintegerpart,
     }
 
   return true;
+
+  #else
+  return false;
+  #endif
 }
 
 

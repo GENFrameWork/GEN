@@ -1372,8 +1372,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, XDWORD fdwReason,LPVOID lpvReserved)
 * @brief      LIBRARY ini
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  void : 
-* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void LIBRARY_Ini(void)
 { 
@@ -1390,10 +1388,8 @@ void LIBRARY_Ini(void)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void LIBRARY_End(void)
-* @brief      IBRARY end
+* @brief      LIBRARY end
 * @ingroup    PLATFORM_WINDOWS
-* 
-* @param[in]  void : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void LIBRARY_End(void)
