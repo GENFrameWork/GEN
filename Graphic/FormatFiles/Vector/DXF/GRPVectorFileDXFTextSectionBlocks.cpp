@@ -46,7 +46,7 @@
 #include "GRPVectorFileDXF.h"
 #include "GRPVectorFileDXFValue.h"
 #include "GRPVectorFileDXFXDataCtrl.h"
-#include "GRPVECTORFILEDXFTEXTBLOCK.h"
+#include "GRPVectorFileDXFTextBlock.h"
 #include "GRPVectorFileDXFTextSectionEntities.h"
 
 #pragma endregion

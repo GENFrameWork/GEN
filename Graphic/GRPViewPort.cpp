@@ -1,6 +1,6 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPViewport.cpp
+* @file       GRPViewPort.cpp
 * 
 * @class      GRPVIEWPORT
 * @brief      Graphics Viewport class

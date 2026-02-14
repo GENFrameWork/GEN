@@ -46,7 +46,7 @@
 #include "XVariant.h"
 
 #include "GRPVectorFile_XEvent.h"
-#include "GRPVECTORFILEDXFTEXTBLOCK.h"
+#include "GRPVectorFileDXFTextBlock.h"
 #include "GRPVectorFileDXFTextSectionBlocks.h"
 #include "GRPVectorFileDXFTextSectionEntities.h"
 #include "GRPVectorFileDXFTextSectionHeader.h"

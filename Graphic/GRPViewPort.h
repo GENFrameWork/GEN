@@ -1,6 +1,6 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPViewport.h
+* @file       GRPViewPort.h
 * 
 * @class      GRPVIEWPORT
 * @brief      Graphics Viewport class
