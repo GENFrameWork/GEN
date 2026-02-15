@@ -26,10 +26,9 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifdef LINUX_X11_ACTIVE
+#pragma once
 
-#ifndef _INPLINUXDEVICEKEYBOARDX11_H_
-#define _INPLINUXDEVICEKEYBOARDX11_H_
+#ifdef LINUX_X11_ACTIVE
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
@@ -68,9 +67,6 @@ class INPLINUXDEVICEKEYBOARDX11 : public INPDEVICE
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-#endif
 
 
 #endif
