@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -40,11 +39,9 @@
 #include "XSubject.h"
 #include "XVector.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum APPFLOWBASE_EXITTYPE
 {
@@ -87,11 +84,9 @@ enum APPFLOWBASE_MODE_TYPE
                                                             return VARIABLE;                              \
                                                           }
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTIMER;
 
@@ -164,13 +159,10 @@ class APPFLOWBASE :  public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

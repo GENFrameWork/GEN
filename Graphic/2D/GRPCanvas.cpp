@@ -27,44 +27,34 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "GRPCanvas.h"
 
 #include "GRP2DRebuildAreas.h"
 #include "GRPViewPort.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_MEMBERS_GRPCANVAS_VECTORFONT_CONFIG
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -324,10 +314,8 @@ void GRPCANVAS_VECTORFONT_CONFIG::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_GRPCANVAS   
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1298,7 +1286,6 @@ void GRPCANVAS::Clean()
 }
 
 
-#pragma endregion
 
 
 

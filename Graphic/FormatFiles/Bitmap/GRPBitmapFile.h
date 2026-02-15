@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XPath.h"
 #include "XFile.h"
 
 #include "GRPProperties.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum GRPBITMAPFILE_TYPE
 {
@@ -51,11 +48,9 @@ enum GRPBITMAPFILE_TYPE
   GRPBITMAPFILE_TYPE_TGA              
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPBITMAP;
@@ -122,14 +117,11 @@ class GRPBITMAPFILE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

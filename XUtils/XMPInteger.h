@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XString.h"
 #include "XBuffer.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 typedef XDWORD XLIMB;
 typedef XQWORD XUDBL;
@@ -85,11 +82,9 @@ typedef bool (*XMPINTEGER_FUNCRANDOM)   (XBYTE* buffer, XDWORD size, void* param
 #define XMPINTEGER_MULADDC_STOP       \
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XMPINTEGER
 {
@@ -191,14 +186,11 @@ class XMPINTEGER
     XLIMB*                      limbs;          // Pointer to limbs
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XPublisher.h"
 #include "XSubject.h"
@@ -37,11 +36,9 @@
 #include "UI_Color.h"
 #include "UI_BoundaryLine.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum UI_ELEMENT_TYPE
@@ -96,11 +93,9 @@ enum UI_ELEMENT_TRANSITION_STATE_SHOW
 #define UI_ELEMENT_MARGIN_MAX										  4	
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XTIMER;
@@ -242,14 +237,11 @@ class UI_ELEMENT : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

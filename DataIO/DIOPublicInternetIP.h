@@ -29,28 +29,23 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 
 #include "DIOIP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOPUBLICINTERNETIP_URL                                     __L("http://ipecho.net/plain");
 
 #define DIOPUBLICINTERNETIP_DEFAULTNCHECKSFOREVERYCONNECTION          5
 #define DIOPUBLICINTERNETIP_DEFAULTTIMERCONNECTIONCHECK             100   // milliseconds
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DIOPUBLICINTERNETIP
 {
@@ -77,14 +72,11 @@ class DIOPUBLICINTERNETIP
     static DIOPUBLICINTERNETIP*     instance;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

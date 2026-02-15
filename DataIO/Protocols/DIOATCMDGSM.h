@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "DIOATCMDS.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum
@@ -68,11 +65,9 @@ enum
 #define DIOATCMDGSM_SMSFORMAT_TXT                   0x02
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOATCMDGSM_ALPHABET
@@ -135,14 +130,11 @@ class DIOATCMDGSM  : public DIOATCMDS
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XDateTime.h"
@@ -39,11 +38,9 @@
 #include "CipherKey.h"
 #include "CipherTrustedRootCertificatesX509.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define CIPHERKEYSFILEPEM_EXT                 __L(".PEM")
 #define CIPHERKEYSFILEKEY_EXT                 __L(".KEY")
@@ -61,11 +58,9 @@
 #define  CIPHERKEYSFILETYPE_CERTIFICATEX509   CIPHERKEYTYPE_LASTTYPE + 1
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XFACTORY;
@@ -121,14 +116,11 @@ class CIPHERKEYSFILEPEM : public XOBSERVER
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

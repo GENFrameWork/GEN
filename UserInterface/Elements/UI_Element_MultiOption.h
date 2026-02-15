@@ -29,24 +29,19 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #include "UI_Property_Selectable.h"
 #include "UI_Property_Scrolleable.h"
 #include "UI_Element.h"
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class UI_ELEMENT_MULTIOPTION : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE, public UI_PROPERTY_SELECTABLE
@@ -61,14 +56,11 @@ class UI_ELEMENT_MULTIOPTION : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

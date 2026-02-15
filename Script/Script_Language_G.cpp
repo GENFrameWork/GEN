@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "Script_Language_G.h"
 
@@ -53,32 +50,25 @@
 #include "Script_XEvent.h"
 #include "Script_Lib.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 
 /*---- LIBRARY FUNCTIONS ---------------------------------------------------------------------------------------------*/
-#pragma region SCRIPT_LNG_G_COMMAND_CLASS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -195,11 +185,9 @@ void SCRIPT_LNG_G_COMMAND::Clean()
 }
 
 
-#pragma endregion
 
 
 /*---- LIBRARY FUNCTIONS ---------------------------------------------------------------------------------------------*/
-#pragma region SCRIPT_LNG_G_COMMAND_CLASS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -721,11 +709,9 @@ void SCRIPT_LNG_G_VAR::Clean()
 }
 
 
-#pragma endregion
 
 
 /*---- LIBRARY FUNCTIONS ---------------------------------------------------------------------------------------------*/
-#pragma region SCRIPT_LNG_G_FUNCTIONTYPE_CLASS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -891,11 +877,9 @@ void SCRIPT_LNG_G_FUNCTIONTYPE::Clean()
 }
 
 
-#pragma endregion
 
 
 /*---- LIBRARY FUNCTIONS ---------------------------------------------------------------------------------------------*/
-#pragma region SCRIPT_LNG_G_CLASS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3664,6 +3648,5 @@ void SCRIPT_LNG_G::Clean()
 }
 
 
-#pragma endregion
 
 

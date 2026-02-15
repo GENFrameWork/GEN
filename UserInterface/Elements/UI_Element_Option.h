@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "UI_Element.h"
 #include "UI_Property_Selectable.h"
@@ -37,11 +36,9 @@
 #include "UI_Element_Text.h"
 #include "UI_Element_Animation.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE
 {
@@ -61,11 +58,9 @@ enum UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE
 #define UI_ELEMENT_OPTION_VISIBLE_LIMIT_SELECT        0x0008
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class UI_ELEMENT_OPTION : public UI_ELEMENT, public UI_PROPERTY_SELECTABLE
@@ -99,13 +94,10 @@ class UI_ELEMENT_OPTION : public UI_ELEMENT, public UI_PROPERTY_SELECTABLE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

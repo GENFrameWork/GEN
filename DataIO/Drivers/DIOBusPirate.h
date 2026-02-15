@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOBUSPIRATETYPEPROCOTOL
@@ -89,11 +86,9 @@ enum DIOBUSPIRATESPEEDNOSNIFFER
 #define DIOBUSPIRATE_DEFAULTTIMEOUT  5
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XTIMER;
@@ -129,14 +124,11 @@ class DIOBUSPIRATE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

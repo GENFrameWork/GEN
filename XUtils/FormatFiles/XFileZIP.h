@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <zlib.h>
 #include <zip.h>
@@ -40,11 +39,9 @@
 #include "XPath.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XFILEZIP_ERROR
 {
@@ -64,11 +61,9 @@ enum XFILEZIP_ERROR
 
 #define XFILEZIP_DEFAULT_MAXBLOCKFILE  1024*100
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XDATETIME;
@@ -198,14 +193,11 @@ class XFILEUNZIP : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

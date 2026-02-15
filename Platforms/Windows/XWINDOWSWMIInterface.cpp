@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XWINDOWSWMIInterface.h"
 
@@ -55,20 +52,15 @@
 using namespace std;
 #pragma comment(lib, "wbemuuid.lib")
 
-#pragma endregion
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XWINDOWSWMIINTERFACE_RESULT
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -208,10 +200,8 @@ void XWINDOWSWMIINTERFACE_RESULT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XWINDOWSWMIINTERFACE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1410,5 +1400,4 @@ void XWINDOWSWMIINTERFACE::Clean()
 }
 
 
-#pragma endregion
 

@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XWINDOWSServiceBase.h"
 
@@ -44,20 +41,16 @@
 #include "XTrace.h"
 #include "XLog.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 XWINDOWSSERVICEBASE*        XWINDOWSSERVICEBASE::service                  = NULL;
 
@@ -66,11 +59,9 @@ LPSERVICE_DESCRIPTION       XWINDOWSSERVICEBASE::service_description      = NULL
 LPSERVICE_FAILURE_ACTIONS   XWINDOWSSERVICEBASE::service_failureactions   = NULL;
 
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1140,4 +1131,3 @@ void XWINDOWSSERVICEBASE::Clean()
 }
 
 
-#pragma endregion

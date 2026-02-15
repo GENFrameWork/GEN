@@ -38,7 +38,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <sqlite3.h>
 
@@ -46,18 +45,14 @@
 #include "DB_SQL_Database.h"
 #include "SQLite_Result.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class SQLITE_QUERY : public DB_SQL_QUERY
@@ -99,14 +94,11 @@ class SQLITE_QUERY : public DB_SQL_QUERY
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

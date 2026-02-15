@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <setjmp.h>
 
@@ -44,11 +43,9 @@ extern "C"
  #include "jpeglib.h"
 }
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 struct GRPBITMAPFILEJPG_ERROR
 {
@@ -58,11 +55,9 @@ struct GRPBITMAPFILEJPG_ERROR
 
 typedef struct GRPBITMAPFILEJPG_ERROR*  GRPBITMAPFILEJPG_ERROR_PTR;
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPBITMAP;
@@ -106,14 +101,11 @@ class GRPBITMAPFILEJPG : public GRPBITMAPFILEBASE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

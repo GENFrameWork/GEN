@@ -29,32 +29,25 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "CompressBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 #define COMPRESS_GZ_CHUNK          16384
 #define COMPRESS_GZ_WINDOWBITS     15
 #define COMPRESS_GZ_ENCODING       16
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 class XBUFFER;
 
@@ -76,7 +69,6 @@ class COMPRESS_GZ : public COMPRESSBASE
 
 };
 
-#pragma endregion
 
 
 

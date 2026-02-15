@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
@@ -49,11 +48,9 @@
 #include "DIOWebServer_Plugin.h"
 #include "DIOWebServer_PluginsManager.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOWEBSERVER_TYPE
@@ -134,11 +131,9 @@ typedef struct
 } WEBSOCKET_HEADERFRAME;
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XPATHS;
@@ -494,14 +489,11 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

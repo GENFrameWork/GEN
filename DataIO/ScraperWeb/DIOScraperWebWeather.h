@@ -29,25 +29,20 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOURL.h"
 #include "DIOScraperWeb.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSCRAPERWEBWEATHER_NAMEFILE       __L("ws_weather.xml")
 #define DIOSCRAPERWEBWEATHER_NAMESERVICE    __L("WEATHER")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSCRAPERWEBWEATHER : public DIOSCRAPERWEB
@@ -70,14 +65,11 @@ class DIOSCRAPERWEBWEATHER : public DIOSCRAPERWEB
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

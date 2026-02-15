@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XBuffer.h"
@@ -38,18 +37,14 @@
 #include "XFSMachine.h"
 #include "XThreadCollected.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 enum DIOOBEXPUSHERROR
@@ -96,11 +91,9 @@ enum DIOOBEXPUSHXFSMSTATES
 #define DIOOBEXPUSH_MAXANSWER       32
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class XTIMER;
@@ -211,7 +204,6 @@ class DIOOBEXPUSH : public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 

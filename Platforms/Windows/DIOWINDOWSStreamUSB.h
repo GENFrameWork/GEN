@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include <windows.h>
@@ -45,11 +44,9 @@
 #include "DIOStreamUSBConfig.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOWINDOWSUSBFSMEVENTS
@@ -76,11 +73,9 @@ enum DIOWINDOWSUSBFSMSTATES
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWINDOWSSTREAMUSB : public DIOSTREAMUSB , public XFSMACHINE
@@ -117,14 +112,11 @@ class DIOWINDOWSSTREAMUSB : public DIOSTREAMUSB , public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

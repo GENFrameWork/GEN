@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum UI_PROPERTY_SELECTABLE_STATE
 {
@@ -53,11 +50,9 @@ enum UI_PROPERTY_SELECTABLE_STATE
 
 #define UI_PROPERTY_SELECTABLE_DEFAULT_TIMESELECTED      100
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XTIMER;
@@ -91,13 +86,10 @@ class UI_PROPERTY_SELECTABLE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

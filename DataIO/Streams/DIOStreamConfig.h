@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSTREAMTYPE
@@ -71,18 +68,14 @@ enum DIOSTREAMMODE
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class DIOSTREAMCONFIG : public XSUBJECT
@@ -129,7 +122,6 @@ class DIOSTREAMCONFIG : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 

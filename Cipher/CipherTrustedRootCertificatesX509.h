@@ -29,24 +29,19 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XPath.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 typedef XCHAR* _CIPHERTRUSTEDROOTCERTIFICATESX509[];
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class CIPHERTRUSTEDROOTCERTIFICATESX509
 {
@@ -66,14 +61,11 @@ class CIPHERTRUSTEDROOTCERTIFICATESX509
     XVECTOR<XSTRING*>     lines;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

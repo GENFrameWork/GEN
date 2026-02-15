@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -38,11 +37,9 @@
 #include "DIOURL.h"
 #include "DIOIP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIODYNDNS_STATUSCODE
@@ -67,11 +64,9 @@ enum DIODYNDNS_STATUSCODE
 #define DIODYNDNS_DEFAULTTIMEOUT  10
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWEBCLIENT;
@@ -104,14 +99,11 @@ class DIODYNDNS
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

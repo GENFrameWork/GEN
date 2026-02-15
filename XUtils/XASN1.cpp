@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XASN1.h"
 
@@ -44,20 +41,16 @@
 #include "XTrace.h"
 #include "XObserver.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 
 XASN1_OID_PROPERTY XASN1::OID_properties[] = {  { __L("0.4.0.1862.1.1")                ,    __L("QcCompliance")                                   , false },
@@ -966,10 +959,8 @@ XASN1_OID_PROPERTY XASN1::OID_properties[] = {  { __L("0.4.0.1862.1.1")         
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XASN1_OID_PROPERTY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1099,5 +1090,4 @@ void XASN1::Clean()
 }
 
 
-#pragma endregion
 

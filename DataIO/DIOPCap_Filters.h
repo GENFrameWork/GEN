@@ -31,25 +31,20 @@
 #ifdef DIO_PCAP_ACTIVE
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 
 #include "DIOPCap.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOPCAP_FILTERS_PORT_TARGET      0x80000000
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DIOPCAP_FILTER_ENTRY
 {
@@ -107,14 +102,11 @@ class DIOPCAP_FILTERS
     XVECTOR<DIOPCAP_FILTER_ENTRY*>    entrys;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 #endif
 

@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 
 #include "GRPVectorFileDXFEntity.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum GRPVECTORFILEDXFENTITYOBJTYPE
@@ -60,11 +57,9 @@ enum GRPVECTORFILEDXFENTITYOBJTYPE
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPVECTORFILEDXFENTITYOBJ
@@ -116,14 +111,11 @@ class GRPVECTORFILEDXFENTITYOBJ
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

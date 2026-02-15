@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "UI_Element.h"
 #include "UI_Background.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum UI_SKIN_TYPE
 {
@@ -59,11 +56,9 @@ enum UI_SKIN_DRAWMODE
 #define UI_SKIN_NAME_DEFAULT      __L("default")
 #define UI_SKIN_NAME_FLAT         __L("flat")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPBITMAP;
@@ -185,14 +180,11 @@ class UI_SKIN
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

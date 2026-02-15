@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XSystem.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define   _PATH_UMOUNT		  "/bin/umount"
 #define   _PATH_PASSWD      "/etc/passwd"
@@ -48,11 +45,9 @@
 
 //#define   WR(s) write(fd, s, strlen(s))
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XLINUXSYSTEM : public XSYSTEM
@@ -99,14 +94,11 @@ class XLINUXSYSTEM : public XSYSTEM
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

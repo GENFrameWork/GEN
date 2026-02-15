@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XFile.h"
@@ -37,11 +36,9 @@
 
 #include "SNDFile.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 typedef struct 
 {
@@ -55,11 +52,9 @@ typedef struct
 } SNDFILEWAV_FORMAT;
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFILERIFF;
 class XFILERIFF_LIST;
@@ -96,14 +91,11 @@ class SNDFILEWAV : public SNDFILE
     XDWORD                  datasizeread; 
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

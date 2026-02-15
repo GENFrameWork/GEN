@@ -29,25 +29,20 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOIP.h"
 #include "DIOScraperWeb.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSCRAPERWEBPUBLICIP_NAMEFILE      __L("ws_publicip.xml")
 #define DIOSCRAPERWEBPUBLICIP_NAMESERVICE   __L("PUBLICIP")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOPUBLICIP_RESULT :  public DIOSCRAPERWEBCACHE_RESULT
@@ -82,14 +77,11 @@ class DIOSCRAPERWEBPUBLICIP : public DIOSCRAPERWEB
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

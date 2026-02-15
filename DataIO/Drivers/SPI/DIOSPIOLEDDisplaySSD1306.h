@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -37,11 +36,9 @@
 #include "DIODeviceSPI.h"
 #include "DIODisplayDevice.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSPIOLEDDISPLAYSSD1306_DISPLAYSIZE
@@ -115,11 +112,9 @@ enum DIOSPIOLEDDISPLAYSSD1306_DISPLAYSIZE
 
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSPIOLEDDISPLAYSSD1306 : public DIODISPLAYDEVICE, public DIODEVICESPI
@@ -165,14 +160,11 @@ class DIOSPIOLEDDISPLAYSSD1306 : public DIODISPLAYDEVICE, public DIODEVICESPI
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

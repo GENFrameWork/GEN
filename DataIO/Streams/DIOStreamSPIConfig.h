@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOStream.h"
 #include "DIOGPIO.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOSTREAMSPI_GPIO
 {
@@ -65,11 +62,9 @@ enum DIOSTREAMSPI_GPIO
 #define DIOSTREAMSPI_NO_CS          0x40
 #define DIOSTREAMSPI_READY          0x80
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMSPICONFIG : public DIOSTREAMCONFIG
@@ -125,14 +120,11 @@ class DIOSTREAMSPICONFIG : public DIOSTREAMCONFIG
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,28 +29,23 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XPath.h"
 #include "XString.h"
 #include "XLog.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define APPFLOW_LOG               APPFLOWLOG::GetInstance()
 #define APPFLOW_LOG_ENTRY         GEN_XLOG.AddEntry
 
 #define APPFLOW_LOG_SEPARATOR     __L("-----------------------------------------------------------------------------------------------")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class APPFLOWCFG;
 
@@ -80,14 +75,11 @@ class APPFLOWLOG
     APPFLOWCFG*                         cfg;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

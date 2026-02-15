@@ -27,34 +27,27 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFileDFU.h"
 
 #include "XFactory.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 XDWORD XFILEDFU::CRCtable[256] =   {  0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535,
 			                                0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91,
@@ -87,14 +80,11 @@ XDWORD XFILEDFU::CRCtable[256] =   {  0x00000000, 0x77073096, 0xee0e612c, 0x9909
 			                                0x5d681b02, 0x2a6f2b94, 0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d 
                                     };
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XFILEDFU_PREFIX
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -141,10 +131,8 @@ void XFILEDFU_PREFIX::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEDFU_IMAGE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -198,10 +186,8 @@ void XFILEDFU_IMAGE::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEDFU_ELEMENT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -246,10 +232,8 @@ void XFILEDFU_ELEMENT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEDFU_SUFFIX
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -301,10 +285,8 @@ void XFILEDFU_SUFFIX::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEDFU
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -606,8 +588,6 @@ void XFILEDFU::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 

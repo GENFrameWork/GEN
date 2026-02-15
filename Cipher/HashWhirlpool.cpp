@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "HashWhirlpool.h"
 
@@ -43,20 +40,16 @@
 
 #include "XBuffer.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 #define LL(v)                   (v##ULL)
 
@@ -620,11 +613,9 @@ XQWORD HASHWHIRLPOOL::rc[HASHWHIRLPOOL_ROUNDS+1]  = { LL(0x0000000000000000),
                                                       LL(0xca2dbf07ad5a8333),
                                                     };
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1173,5 +1164,4 @@ void HASHWHIRLPOOL::Clean()
 }
 
 
-#pragma endregion
 

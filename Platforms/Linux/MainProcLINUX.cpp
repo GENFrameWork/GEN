@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -164,20 +161,16 @@
 
 #include "APPFlowBase.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 #ifdef XTRACE_ACTIVE
 XLINUXTRACE           linuxdebugtrace;
@@ -188,11 +181,9 @@ XSTRING               allexceptiontext;
 
 bool                  libmainproclinux      = false;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 void                  Signal_Ini                (void);
 static void           Signal_Handler            (int sig);
@@ -201,7 +192,6 @@ static inline void    Signal_PrintfStackTrace   (FILE *out = stderr, unsigned in
 bool                  Signal_RunLevel           (XCHAR& previous, XCHAR& actual);
 
 
-#pragma region CLASS_MAINPROCLINUX
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -679,10 +669,8 @@ void MAINPROCLINUX::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region MAINENTRYS
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*  main        : Linux normal entry                                                                                  */
@@ -833,10 +821,8 @@ void LIBRARY_End(void)
 #endif
 
 
-#pragma endregion
 
 
-#pragma region SIGNAL_FUNCTIONS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1282,9 +1268,7 @@ bool Signal_RunLevel(XCHAR& previous, XCHAR& actual)
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 

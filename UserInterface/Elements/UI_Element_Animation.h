@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h" 
 
 #include "UI_Element.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum UI_ELEMENT_ANIMATION_STATE
 {
@@ -49,11 +46,9 @@ enum UI_ELEMENT_ANIMATION_STATE
   UI_ELEMENT_ANIMATION_STATE_PAUSE              ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XTIMER;
@@ -97,14 +92,11 @@ class UI_ELEMENT_ANIMATION : public UI_ELEMENT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

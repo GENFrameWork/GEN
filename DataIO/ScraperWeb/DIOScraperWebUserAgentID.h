@@ -29,25 +29,20 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOURL.h"
 #include "DIOScraperWeb.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSCRAPERWEBUSERAGENTID_NAMEFILE       __L("ws_useragentid.xml")
 #define DIOSCRAPERWEBUSERAGENTID_NAMESERVICE    __L("USERAGENTID")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOUSERAGENTID_RESULT :  public DIOSCRAPERWEBCACHE_RESULT
@@ -87,14 +82,11 @@ class DIOSCRAPERWEBUSERAGENTID : public DIOSCRAPERWEB
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

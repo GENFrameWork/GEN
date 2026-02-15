@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdlib.h> 
 
@@ -42,22 +41,18 @@
 #include "DIOWebClient.h"
 #include "DIOPublicInternetIP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOREMOTEFILECFG_PREFIXNAMEFILE    __L("remote_")
 
 #define DIOREMOTEFILECFG_SECTIONGENERAL    __L("general")
 #define DIOREMOTEFILECFG_URLREMOTECFG      __L("urlremotecfg")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOREMOTEFILECFG : public XFILECFG
@@ -359,14 +354,11 @@ class DIOREMOTEFILECFG : public XFILECFG
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

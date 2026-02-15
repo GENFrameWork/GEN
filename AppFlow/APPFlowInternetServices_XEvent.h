@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum APPFLOWINTERNETSERVICES_XEVENT_TYPE
 {
@@ -58,11 +55,9 @@ enum APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE
   APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE_RESTORE                                                    ,        
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTIMER;
 class XPUBLISHER;
@@ -117,13 +112,10 @@ class APPFLOWINTERNETSERVICES_XEVENT : public XEVENT
     XDWORD                                                  nchangespublicIP;   
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

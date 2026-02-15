@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XFactory.h"
@@ -48,11 +47,9 @@
 #include "DIOStreamTLSMessagesHandShakeServerHello.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSTREAMTLSXFSMEVENTS
@@ -83,17 +80,13 @@ enum DIOSTREAMTLSXFSMSTATES
 
 #define DIOSTREAMTLS_TIMEOUT                3      // in seconds
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class DIOSTREAMTLSCONFIG;
@@ -729,7 +722,6 @@ class DIOSTREAMTLS :  public T
 };
 
 
-#pragma endregion
 
 
 

@@ -30,16 +30,13 @@ SOFTWARE.
 #define _XWINDOWSWINGET_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XSerializable.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XWINDOWSWINGET_APPLICATIONOPERATION
 {
@@ -51,11 +48,9 @@ enum XWINDOWSWINGET_APPLICATIONOPERATION
 
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XWINDOWSWINGET_ELEMENTRESULT : public XSERIALIZABLE
@@ -141,14 +136,11 @@ class XWINDOWSWINGET
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

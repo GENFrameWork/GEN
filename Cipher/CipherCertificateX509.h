@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XBuffer.h"
@@ -39,11 +38,9 @@
 #include "CipherKey.h"
 #include "Hash.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum CIPHERCERTIFICATEX509_ALGORITHM_TYPE
@@ -68,11 +65,9 @@ enum CIPHERCERTIFICATEX509_ALGORITHM_TYPE
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class CIPHERCERTIFICATEX509_ID 
@@ -184,14 +179,11 @@ class CIPHERCERTIFICATEX509
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

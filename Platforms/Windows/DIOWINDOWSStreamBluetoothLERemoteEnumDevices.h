@@ -33,22 +33,17 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOStreamBluetoothLERemoteEnumDevices.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES : public DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES
@@ -68,14 +63,11 @@ class DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES : public DIOSTREAMBLUETOOTHLE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

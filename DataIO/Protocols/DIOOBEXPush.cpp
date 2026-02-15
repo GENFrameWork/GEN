@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOOBEXPush.h"
 
@@ -54,29 +51,22 @@
 
 #include "DIOStreamBluetooth.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOOBEXPUSHFILE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -324,10 +314,8 @@ void DIOOBEXPUSHFILE::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOOBEXPUSH
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1226,7 +1214,5 @@ void DIOOBEXPUSH::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion

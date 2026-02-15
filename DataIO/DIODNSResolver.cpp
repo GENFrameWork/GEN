@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIODNSResolver.h"
 
@@ -49,30 +46,23 @@
 #include "DIOStreamUDP.h"
 #include "DIODNSProtocol_Client.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 DIODNSRESOLVER* DIODNSRESOLVER::instance = NULL;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
-#pragma region CLASS_HOSTRESOLVED
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -146,10 +136,8 @@ void DIODNSRESOLVER_HOSTRESOLVED::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DNSSERVER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -238,10 +226,8 @@ void DIODNSRESOLVER_DNSSERVER::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIODNSRESOLVER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -805,8 +791,6 @@ void DIODNSRESOLVER::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 

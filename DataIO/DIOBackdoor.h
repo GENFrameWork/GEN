@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFactory.h"
 #include "XPathsManager.h"
@@ -47,20 +46,16 @@
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOWebClient.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOBACKDOOR_CFGREMOTENAMEFILE       __L("backdoor.ini")
 #define DIOBACKDOOR_DEFAULTPORT             3540
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DIOBACKDOOR
 {
@@ -405,14 +400,11 @@ class DIOBACKDOOR
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 DIOBACKDOOR*   DIOBACKDOOR::instance = NULL;
 
-#pragma endregion
 
 

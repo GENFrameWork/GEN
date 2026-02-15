@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "AL/al.h"
 #include "AL/alc.h"
@@ -38,11 +37,9 @@
 
 #include "SNDFactory.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum SNDOPENALPLAYITEM_XFSMEVENTS
 {
@@ -70,11 +67,9 @@ enum DEVTESTSCONSOLEXFSMSTATES
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class SNDITEM;
 class SNDNOTE;
@@ -154,14 +149,11 @@ class SNDOPENALFACTORY : public SNDFACTORY
     XVECTOR<SNDOPENALPLAYITEM*>               soundplayitems;                                                  
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOPING_XEVENT_TYPE
 {
@@ -46,11 +43,9 @@ enum DIOPING_XEVENT_TYPE
   DIOPING_XEVENT_TYPE_DOPING                                    ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DIOPINGREPLY;
 
@@ -70,14 +65,11 @@ class DIOPING_XEVENT : public XEVENT
     DIOPINGREPLY*                 pingreply;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

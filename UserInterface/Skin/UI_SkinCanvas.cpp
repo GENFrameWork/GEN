@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "UI_SkinCanvas.h"
 
@@ -70,29 +67,22 @@
 
 #include "APPFlowBase.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_UI_SKINCANVAS_REBUILDAREAS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -415,10 +405,8 @@ void UI_SKINCANVAS_REBUILDAREAS::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_UI_SKINCANVAS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3336,8 +3324,6 @@ void UI_SKINCANVAS::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 

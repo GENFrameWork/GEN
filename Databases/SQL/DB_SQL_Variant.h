@@ -33,18 +33,15 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XTrace.h"
 #include "XVariant.h"
 
 #include "DB_SQL_Base.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DB_SQL_VARIANT_TYPE
@@ -81,11 +78,9 @@ enum DB_SQL_VARIANT_FLAGS
 #define  DB_SQL_ROWHEADER       DB_SQL_VECTOR<DB_SQL_STRING*>
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 #ifdef _MSC_VER
@@ -138,14 +133,11 @@ class DB_SQL_ROW
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

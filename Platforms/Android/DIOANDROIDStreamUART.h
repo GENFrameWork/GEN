@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBuffer.h"
 #include "XFSMachine.h"
@@ -42,11 +41,9 @@
 
 #include "DIOStreamUART.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOANDROIDUARTFSMEVENTS
@@ -72,11 +69,9 @@ enum DIOANDROIDUARTFSMSTATES
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOANDROIDSTREAMUART : public DIOSTREAMUART , public XFSMACHINE
@@ -122,14 +117,11 @@ class DIOANDROIDSTREAMUART : public DIOSTREAMUART , public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

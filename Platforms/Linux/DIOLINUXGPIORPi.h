@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 /*
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,11 +53,9 @@
 #include "DIOLINUXGPIO.h"
 #include "DIOLINUXGPIORPi.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 /*
 
@@ -96,11 +93,9 @@ typedef struct
 #define RPI5_RIOCLR   ((RPI5_RIOREGS*)(RIObase + 0x3000 / 4))
 */
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 //class DIOLINUXGPIORPI : public DIOGPIO
 class DIOLINUXGPIORPI : public DIOLINUXGPIO
@@ -144,14 +139,11 @@ class DIOLINUXGPIORPI : public DIOLINUXGPIO
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

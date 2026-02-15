@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFactory.h"
 #include "XDateTime.h"
@@ -44,11 +43,9 @@
 #include "DIOFactory.h"
 #include "DIOURL.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOCHECKTCPIPCONNECTIONS_DEFAULTTIMECONNECTIONCHECKS              10   // seconds
 
@@ -59,11 +56,9 @@
 
 #define DIOCHECKTCPIPCONNECTIONS_INFINITECUT                             -1
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XFACTORY;
@@ -204,14 +199,11 @@ class DIOCHECKTCPIPCONNECTIONS
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

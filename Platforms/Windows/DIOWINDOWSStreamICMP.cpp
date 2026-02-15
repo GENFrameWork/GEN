@@ -27,16 +27,13 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMICMP_ACTIVE)
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOWINDOWSStreamICMP.h"
 
@@ -49,26 +46,20 @@
 #include "DIOStream_XEvent.h"
 #include "DIOStreamICMPConfig.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 
@@ -574,10 +565,8 @@ void DIOWINDOWSSTREAMICMP::ThreadConnection(void* data)
     }
 }
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 #endif

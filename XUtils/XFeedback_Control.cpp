@@ -27,17 +27,14 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 #ifdef XFEEDBACK_CONTROL_ACTIVE
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFeedback_Control.h"
 
@@ -49,22 +46,17 @@
 #include "XLog.h"
 #include "XTrace.h"
 
-#pragma endregion
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 XFEEDBACK_CONTROL* XFeedback_Control = NULL;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XFEEDBACK
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -214,11 +206,9 @@ void XFEEDBACK::Clean()
 }
 
 
-#pragma endregion
 
 
 
-#pragma region CLASS_XFEEDBACK_CONTROL
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -546,10 +536,8 @@ void XFEEDBACK_CONTROL::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 #endif

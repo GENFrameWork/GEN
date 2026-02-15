@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -38,11 +37,9 @@
 
 #include "DIODeviceI2C.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define DIOI2CPWMCONTROLERPCA9685_ADDR          0x40
@@ -61,11 +58,9 @@
 #define DIOI2CPWMCONTROLERPCA9685_ALLLED_OFF_H  0xFD
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOI2CPWMCONTROLERPCA9685 : public DIODEVICEI2C
@@ -93,14 +88,11 @@ class DIOI2CPWMCONTROLERPCA9685 : public DIODEVICEI2C
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

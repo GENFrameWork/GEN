@@ -27,35 +27,28 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XMPInteger.h"
 
 #include <stdio.h>
 #include <string.h>
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 static const int SmallPrime[] = {   3,    5,    7,   11,   13,   17,   19,   23,  29,   31,   37,   41,   43,   47,   53,   59,
                                    61,   67,   71,   73,   79,   83,   89,   97,  101,  103,  107,  109,  113,  127,  131,  137,
@@ -70,11 +63,9 @@ static const int SmallPrime[] = {   3,    5,    7,   11,   13,   17,   19,   23,
                                   953,  967,  971,  977,  983,  991,  997, -103
                                 };
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2692,5 +2683,4 @@ void XMPINTEGER::Clean()
 }
 
 
-#pragma endregion
 

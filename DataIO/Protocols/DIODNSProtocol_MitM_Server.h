@@ -30,25 +30,20 @@ SOFTWARE.
 #define _DIODNSPROTOCOL_MITM_SERVER_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XSubject.h"
 
 #include "DIOStreamUDPConfig.h"
 #include "DIODNSResolver.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTHREAD;
 class XMUTEX;  
@@ -91,14 +86,11 @@ class DIODNSPROTOCOL_MITM_SERVER : public XSUBJECT
     XVECTOR<DIODNSRESOLVER_DNSSERVER*>  dnsservers;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

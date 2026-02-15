@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #ifdef APPFLOW_ACTIVE
 #include "APPFlowBase.h"
@@ -38,19 +37,15 @@
 
 #include "MainProc.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define LOG_SIGNAL              __L("SIGNAL")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class MAINPROCLINUX : public MAINPROC
 {
@@ -70,15 +65,12 @@ class MAINPROCLINUX : public MAINPROC
     void                          Clean                 ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

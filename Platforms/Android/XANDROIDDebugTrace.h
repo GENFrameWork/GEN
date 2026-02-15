@@ -33,33 +33,26 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XLINUXDebugTrace.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define XANDROIDDEBUG_LOG_INFO(...)       __android_log_print(ANDROID_LOG_INFO, FRAMEWORKNAME, "%s", __VA_ARGS__)
 #define XANDROIDDEBUG_LOG_ERROR(...)      __android_log_print(ANDROID_LOG_INFO, FRAMEWORKNAME, "%s", __VA_ARGS__)
 #define XANDROIDDEBUG_LOG_WARNING(...)    __android_log_print(ANDROID_LOG_INFO, FRAMEWORKNAME, "%s", __VA_ARGS__)
 #define XANDROIDDEBUG_LOG_DEBUG(...)      __android_log_print(ANDROID_LOG_INFO, FRAMEWORKNAME, "%s", __VA_ARGS__)
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class XANDROIDDEBUGTRACE : public XLINUXDEBUGTRACE
@@ -72,7 +65,6 @@ class XANDROIDDEBUGTRACE : public XLINUXDEBUGTRACE
 };
 
 
-#pragma endregion
 
 
 #endif

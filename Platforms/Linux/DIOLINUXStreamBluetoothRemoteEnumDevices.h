@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/sdp.h>
@@ -44,14 +43,12 @@
 #include "DIOMAC.h"
 #include "DIOStreamBluetoothRemoteEnumDevices.h"
 
-#pragma endregion
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMBLUETOOTH_ACTIVE)
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOLINUXBTENUMFSMFSMEVENTS
@@ -78,11 +75,9 @@ enum DIOLINUXBTENUMFSMSTATES
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMDEVICEBLUETOOTH;
@@ -126,14 +121,11 @@ class DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES :  public DIOSTREAMBLUETOOTHREMOT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

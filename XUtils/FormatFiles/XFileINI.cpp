@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFileINI.h"
 
@@ -44,29 +41,22 @@
 
 #include "XPath.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XFILEINIKEY 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -178,10 +168,8 @@ void XFILEINIKEY::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEINISECTION
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -423,10 +411,8 @@ void XFILEINISECTION::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEINIREMARK
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -689,10 +675,8 @@ void XFILEINIREMARK::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEINI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2005,8 +1989,6 @@ void XFILEINI::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 

@@ -29,27 +29,22 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOStreamUSBConfig.h"
 #include "DIOStreamDeviceUSB.h"
 
 #include "DIOStreamEnumDevices.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSTREAMUSBLOCALENUMDEVICES_PORTKEY  __L("Port_")
 #define DIOSTREAMUSBLOCALENUMDEVICES_PORTHUB  __L("Hub_")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMUSBLOCALENUMDEVICES : public DIOSTREAMENUMDEVICES
@@ -82,14 +77,11 @@ class DIOSTREAMUSBLOCALENUMDEVICES : public DIOSTREAMENUMDEVICES
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

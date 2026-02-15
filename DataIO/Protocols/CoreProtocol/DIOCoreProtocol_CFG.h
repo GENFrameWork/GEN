@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include "XFileJSON.h"
@@ -38,11 +37,9 @@
 #include "DIOStream.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOCOREPROTOCOL_CFG_DEFAULT_MINSIZECOMPRESS                         150 
 
@@ -55,11 +52,9 @@
 #define DIOCOREPROTOCOL_CFG_DEFAULT_MODEBUS_TIMEOUTSENDDATA                 180 
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------c------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOCOREPROTOCOL_CFG
@@ -127,14 +122,11 @@ class DIOCOREPROTOCOL_CFG
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XPath.h"
@@ -43,11 +42,9 @@
 #include "GRPRect.h"
 #include "GRPBitmapSequence.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum GRPCANVASTYPE
 {
@@ -58,11 +55,9 @@ enum GRPCANVASTYPE
 
 #define GRPCANVASTYPE_DRAWFRAMERATE_ADJUSTSCREEN  -1.0f
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPSCREEN;
@@ -205,13 +200,10 @@ class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

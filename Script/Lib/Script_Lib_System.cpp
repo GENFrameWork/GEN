@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "Script_Lib_System.h"
 
@@ -48,27 +45,21 @@
 
 #include "Script.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -139,11 +130,9 @@ void SCRIPT_LIB_SYSTEM::Clean()
 }
 
 
-#pragma endregion
 
 
 /*---- LIBRARY FUNCTIONS ---------------------------------------------------------------------------------------------*/
-#pragma region LIBRARY_FUNCTIONS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -293,5 +282,4 @@ void Call_System_GetEnviromentVar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<X
 }
 
 
-#pragma endregion
 

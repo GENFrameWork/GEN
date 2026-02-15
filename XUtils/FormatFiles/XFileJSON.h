@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
@@ -37,11 +36,9 @@
 #include "XFileTXT.h"
 #include "XVariant.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum XFILEJSONVALUETYPE
@@ -99,11 +96,9 @@ enum XFILEJSONCONTROLCHAR
                                                             }                                                           \
                                                         }
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XVARIANT;
 class XFILEJSONOBJECT;
@@ -280,14 +275,11 @@ class XFILEJSON : public XFILETXT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

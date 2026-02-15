@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XLICENSEXEVENT_TYPE
 {
@@ -46,11 +43,9 @@ enum XLICENSEXEVENT_TYPE
   XLICENSEXEVENT_TYPE_EXPIRED                                       ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XLICENSE;
 
@@ -71,14 +66,11 @@ class XLICENSE_XEVENT : public XEVENT
     XLICENSE*             xlicense;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

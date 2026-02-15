@@ -29,34 +29,27 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XDateTime.h"
 
 #include "DIOURL.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIONTP_DEFAULTPORT        123
 #define DIONTP_JAN1ST1900         2415021
 #define DIONTP_DEFAULTTIMEOUT     10              
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class XTIMER;
@@ -169,7 +162,6 @@ class DIONTP
     DIOSTREAMUDP*                 diostreamudp;
 };
 
-#pragma endregion
 
 
 

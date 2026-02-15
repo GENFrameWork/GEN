@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "APPFlowUpdate.h"
 
@@ -50,32 +47,25 @@
 #include "APPFlowBase.h"
 #include "APPFlowCFG.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 APPFLOWUPDATE* APPFLOWUPDATE::instance = NULL;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /*---- CLASS APPFLOWUPDATE_CFG -------------------------------------------------------------------------------------------*/
-#pragma region APPFLOWUPDATE_CFG                                                                                                      
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -302,11 +292,9 @@ void APPFLOWUPDATE_CFG::Clean()
   dolog = false;
 }
 
-#pragma endregion
 
 
 /*---- CLASS APPFLOWUPDATE -----------------------------------------------------------------------------------------------*/
-#pragma region APPFLOWUPDATE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1064,8 +1052,6 @@ void APPFLOWUPDATE::Clean()
   cfg           = NULL;
 }
 
-#pragma endregion
 
 
-#pragma endregion
 

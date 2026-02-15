@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "UI_Element_Menu.h"
 
@@ -43,31 +40,24 @@
 #include "UI_Element_Text.h"
 #include "UI_Element_Option.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_UI_ELEMENT_MENU_OPTION_CFG
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -122,10 +112,8 @@ void UI_ELEMENT_MENU_OPTION_CFG::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_UI_ELEMENT_MENU
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -232,7 +220,5 @@ void UI_ELEMENT_MENU::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion

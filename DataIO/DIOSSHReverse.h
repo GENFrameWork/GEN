@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFactory.h"
 #include "XString.h"
@@ -42,11 +41,9 @@
 #include "XLog.h"
 #include "XTrace.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSSHREVERSE_DEFAULTAPPLICATION      __L("sshpass")
 #define DIOSSHREVERSE_DEFAULTAPPLICATION2     __L("autossh")
@@ -55,11 +52,9 @@
 
 #define DIOSSHREVERSE_LOGSECTIONID            __L("SSHreverse")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSSHREVERSE
@@ -112,14 +107,11 @@ class DIOSSHREVERSE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

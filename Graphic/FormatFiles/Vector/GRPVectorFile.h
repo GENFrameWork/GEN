@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XPath.h"
 #include "XSubject.h"
 
 #include "GRPVectorFileConfig.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum GRPVECTORFILERESULT
 {
@@ -61,11 +58,9 @@ enum GRPVECTORFILETYPE
   GRPVECTORFILETYPE_DXF                                ,   
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPVECTORFILE : public XSUBJECT
@@ -110,14 +105,11 @@ class GRPVECTORFILE : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

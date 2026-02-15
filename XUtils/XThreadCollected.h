@@ -32,7 +32,6 @@
 #ifdef XTHREADCOLLECTED_ACTIVE
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <string.h>
@@ -45,22 +44,18 @@
 #include "XThread.h"
 #include "XTrace.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define CREATEXTHREAD             XTHREADSCOLLECTEDMANAGER::GetInstance().CreateThread
 #define DELETEXTHREAD             XTHREADSCOLLECTEDMANAGER::GetInstance().DeleteThread
 #define ACTIVATEXTHREADGROUP      XTHREADSCOLLECTEDMANAGER::GetInstance().ActivateGroup
 #define DEACTIVATEXTHREADGROUP    XTHREADSCOLLECTEDMANAGER::GetInstance().DeactivateGroup
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XTHREADCOLLECTED
@@ -199,14 +194,11 @@ class XTHREADSCOLLECTEDMANAGER
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #else

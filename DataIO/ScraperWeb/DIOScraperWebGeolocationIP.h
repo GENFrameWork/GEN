@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XMap.h"
 
@@ -38,20 +37,16 @@
 
 #include "DIOScraperWeb.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSCRAPERWEBGEOLOCATIONIP_NAMEFILE       __L("ws_geolocationip.xml")
 #define DIOSCRAPERWEBGEOLOCATIONIP_NAMESERVICE    __L("GEOLOCATIONIP")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOGEOLOCATIONIP_RESULT : public DIOSCRAPERWEBCACHE_RESULT
@@ -113,14 +108,11 @@ class DIOSCRAPERWEBGEOLOCATIONIP : public DIOSCRAPERWEB
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

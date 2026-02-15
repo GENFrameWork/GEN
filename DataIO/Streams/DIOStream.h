@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XSleep.h"
 #include "XUUID.h"
@@ -39,11 +38,9 @@
 
 #include "DIOStreamConfig.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSTREAMSTATUS
@@ -74,11 +71,9 @@ enum DIOSTREAMERROR
 #define DIOSTREAM_TIMEINWAITFUNCTIONS   10       // milliseconds
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XBUFFER;
@@ -193,14 +188,11 @@ class DIOSTREAM : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

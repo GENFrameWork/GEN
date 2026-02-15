@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 
@@ -39,19 +38,15 @@
 
 #include "FactoryBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define XTIMER_INFINITE                   -1
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XDATETIME;
@@ -123,17 +118,14 @@ class XTIMER : public FACTORYBASE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 #ifdef XTRACE_ACTIVE_VIRTUALCLOCKTICK
   extern XTIMERCLOCK*  xtimerclock;
 #endif
 
-#pragma endregion
 
 
 

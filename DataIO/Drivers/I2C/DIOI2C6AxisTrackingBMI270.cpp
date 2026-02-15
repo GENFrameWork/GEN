@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOI2C6AxisTrackingBMI270.h"
 
@@ -52,20 +49,16 @@
 #include "DIOStreamI2C.h"
 #include "DIOGPIO.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 
 // Global array that stores the feature input configuration of BMI270 
@@ -554,11 +547,9 @@ const XBYTE bmi270_config_file[]                                                
                                                                                                 0x2e, 0x00, 0xc1
                                                                                             };
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -13685,4 +13676,3 @@ void DIOI2C6AXISTRACKINGBMI270::Clean()
 
 /// @endcond
 
-#pragma endregion

@@ -30,16 +30,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XPath.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define SNDFACTORY_UNDEFINED              -1
 #define SNDFACTORY_MAXTIMEOUT_INFINITE     0
@@ -48,11 +45,9 @@
 class SNDITEM;
 typedef bool (*SNDFACTORY_WAITFUNCTION)(SNDITEM* item);
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class SNDPLAYCFG;
 
@@ -114,14 +109,11 @@ class SNDFACTORY : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

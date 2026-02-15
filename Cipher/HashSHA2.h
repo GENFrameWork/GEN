@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "Hash.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum HASHSHA2TYPE
 {
@@ -84,11 +81,9 @@ typedef HASHSHA2_512_CTX HASHSHA2_384_CTX;
 typedef HASHSHA2_256_CTX HASHSHA2_224_CTX;
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class HASHSHA2 : public HASH
 {
@@ -137,13 +132,10 @@ class HASHSHA2 : public HASH
     void              Sha2_224_End          (HASHSHA2_224_CTX* ctx, XBYTE* digest);
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

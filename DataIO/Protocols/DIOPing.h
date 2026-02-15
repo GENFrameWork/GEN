@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
@@ -39,11 +38,9 @@
 #include "DIOURL.h"
 #include "DIOStreamICMPConfig.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOPING_DEFAULTNRETRYS              3
 #define DIOPING_DEFAULTTIMEBETWEENCHECKS    500       // Milliseconds
@@ -52,11 +49,9 @@
 #define DIOPING_ICMP_ECHOREQ                8
 #define DIOPING_REQ_TICKETSIZE              32        // Echo Request Data size
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 typedef struct
@@ -234,14 +229,11 @@ class DIOPING :  public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

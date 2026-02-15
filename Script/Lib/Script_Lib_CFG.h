@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "Script_Lib.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define SCRIPT_LIB_NAME_CFG   __L("CFG")
 
@@ -49,11 +46,9 @@
                                                       }                                                                             \
                                                   }
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XVARIANT;
 class XFILECFG;
@@ -77,14 +72,11 @@ class SCRIPT_LIB_CFG : public SCRIPT_LIB
     XFILECFG*             xfileCFG;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 void    Call_GetFileCFGValue          (SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue);
 
-#pragma endregion
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XMap.h"
 #include "XVariant.h"
@@ -37,22 +36,18 @@
 
 #include "GRPVectorFileDXFTextSection.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define GRPVECTORFILEDXFBLOCKS_MAXNDEFBLOCKS    2
 #define GRPVECTORFILEDXFBLOCKS_MAXNDEFTYPES     35
 
 #undef TEST_ONLY_DEFINE_IN_BLOCKS
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPVECTORFILEDXFTEXTBLOCK;
@@ -104,14 +99,11 @@ class GRPVECTORFILEDXFTEXTSECTIONBLOCKS : public GRPVECTORFILEDXFTEXTSECTION
     XVECTOR<GRPVECTORFILEDXFTEXTBLOCK*>           blocks;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

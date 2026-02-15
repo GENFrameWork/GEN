@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOIP.h"
 #include "DIOURL.h"
@@ -37,18 +36,14 @@
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOStreamConfigString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
@@ -65,14 +60,11 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

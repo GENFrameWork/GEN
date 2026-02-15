@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XTimer.h"
 
@@ -49,20 +46,16 @@
 #include "XTranslation.h"
 #include "XTranslation_GEN.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 #ifdef XTRACE_ACTIVE_VIRTUALCLOCKTICK
 
@@ -70,14 +63,11 @@
 
 #endif
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XTIMERCLOCK
 
 
 #ifdef XTRACE_ACTIVE_VIRTUALCLOCKTICK
@@ -193,10 +183,8 @@ void XTIMERCLOCK::ThreadClockFunction(void* data)
 #endif
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XTIMER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -563,9 +551,7 @@ void XTIMER::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 

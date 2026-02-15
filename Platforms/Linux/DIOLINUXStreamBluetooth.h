@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <sys/un.h>
@@ -64,11 +63,9 @@
 
 #include "DIOStreamBluetooth.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOLINUXBTFSMEVENTS
@@ -110,11 +107,9 @@ enum DIOLINUXBTFSMSTATES
 #define DIOLINUXSTREAMBLUETOOTH_DBUSAGENTPATH     "/org/bluez"
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOLINUXSTREAMBLUETOOTH : public DIOSTREAMBLUETOOTH , public XFSMACHINE
@@ -149,14 +144,11 @@ class DIOLINUXSTREAMBLUETOOTH : public DIOSTREAMBLUETOOTH , public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

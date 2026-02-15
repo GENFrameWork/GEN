@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XString.h"
@@ -37,11 +36,9 @@
 
 #include "XLanguage_ISO_639_3.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define XTRANSLATION_NAMEFILEEXT         __L(".lng")
@@ -56,11 +53,9 @@
 #define XT_L(ID)                         GEN_XTRANSLATION.Translate_GetSentence(ID)
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XPATH;
@@ -119,14 +114,11 @@ class XTRANSLATION
     XCHAR*                            sentences[XTRANSLATION_MAXSENTENCES];
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

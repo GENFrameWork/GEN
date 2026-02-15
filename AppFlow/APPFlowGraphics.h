@@ -31,18 +31,15 @@
 #ifdef GRP_ACTIVE
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 
 #include "APPFlowBase.h"
 #include "APPFlowConsole.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum APPFLOWGRAPHICS_INIOPTIONS
 {
@@ -52,11 +49,9 @@ enum APPFLOWGRAPHICS_INIOPTIONS
   APPFLOWGRAPHICS_INIOPTION_INPUT               = 1 << 3
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPSCREEN;
@@ -106,14 +101,11 @@ class APPFLOWGRAPHICS : public APPFLOWCONSOLE, public XOBSERVER
     #endif
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
@@ -38,11 +37,9 @@
 #include "XVariant.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define XBER_TAGTYPE_RESERVEDBER                   0
 #define XBER_TAGTYPE_BOOLEAN	                     1
@@ -105,11 +102,9 @@ enum XBER_TAGCLASS
 
 #define XBER_MAXLEVELS                          256
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XBER : public XSUBJECT
 {
@@ -205,14 +200,11 @@ class XBER : public XSUBJECT
 
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

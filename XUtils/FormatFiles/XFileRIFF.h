@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFile.h"
 #include "XTree.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 class XFILERIFF_LIST;
 
@@ -50,11 +47,9 @@ typedef XTREE<XFILERIFF_LIST*>                           XFILERIFF_XTREE;
 #define XFILERIFF_TYPE_LIST  0x5453494C
 #define XFILERIFF_TYPE_INFO  0x4F464E49
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFILERIFF_LIST
 {
@@ -156,14 +151,11 @@ class XFILERIFF
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

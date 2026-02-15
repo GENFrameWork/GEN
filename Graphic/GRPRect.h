@@ -29,31 +29,24 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <cmath>
 
 #include "XBase.h"
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 template<class T>
@@ -208,11 +201,9 @@ class GRPRECTBASE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 template<class R>
@@ -242,17 +233,14 @@ inline R UniteRectangles(const R& r1, const R& r2)
 }
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS2
 
 typedef GRPRECTBASE<int>    GRPRECTINT;
 typedef GRPRECTBASE<float>  GRPRECTFLOAT;
 typedef GRPRECTBASE<double> GRPRECTDOUBLE;
 
-#pragma endregion
 
 #include "XMemory_Control_Deactive.h"
 

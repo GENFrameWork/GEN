@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -37,11 +36,9 @@
 #include "DIODisplayDevice.h"
 #include "DIOGPIO.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define DIOSPIOLEDDISPLAYSSD1331_CMD_FILLRECTDISABLE               0x00
@@ -112,11 +109,9 @@
 #define DIOSPIOLEDDISPLAYSSD1331_DEFAULTTIMEOUT                    3
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSPIOLEDDISPLAYSSD1331 : public DIODISPLAYDEVICE, public DIODEVICESPI
@@ -158,14 +153,11 @@ class DIOSPIOLEDDISPLAYSSD1331 : public DIODISPLAYDEVICE, public DIODEVICESPI
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

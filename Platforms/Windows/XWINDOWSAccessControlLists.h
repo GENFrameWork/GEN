@@ -29,24 +29,19 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include "XString.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 #define XWINDOWSACL_DELETE                           (0x00010000L)
@@ -66,11 +61,9 @@
 #define XWINDOWSACL_SPECIFIC_RIGHTS_ALL              (0x0000FFFFL)
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class XWINDOWSACCESSCONTROLLISTS
@@ -88,7 +81,6 @@ class XWINDOWSACCESSCONTROLLISTS
     void                    Clean                                 ();
 };
 
-#pragma endregion
 
 
 

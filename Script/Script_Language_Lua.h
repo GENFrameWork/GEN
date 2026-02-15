@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <lua.hpp>
 
 #include "Script.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum SCRIPT_LNG_LUA_ERRORCODE
 {
@@ -53,11 +50,9 @@ enum SCRIPT_LNG_LUA_ERRORCODE
 
 #define SCRIPT_LNG_LUA_MAINFUNCTIONNAME   "main"
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class SCRIPT_LNG_LUA : public SCRIPT
 {
@@ -79,15 +74,12 @@ class SCRIPT_LNG_LUA : public SCRIPT
     lua_State*                          state;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
-#pragma region FUNCTIONS_PROTOTYPES
 
 int     LUA_LibraryCallBack       (lua_State* state);
 
-#pragma endregion
 
 

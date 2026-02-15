@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 
 #include "DIOURL.h"
 #include "DIOWebHeader.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOWEBCLIENT_XEVENT_TYPE
 {
@@ -54,11 +51,9 @@ enum DIOWEBCLIENT_XEVENT_TYPE
   DIOWEBCLIENT_XEVENT_TYPE_CLOSEWEB
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWEBCLIENT_XEVENT : public XEVENT
@@ -101,14 +96,11 @@ class DIOWEBCLIENT_XEVENT : public XEVENT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

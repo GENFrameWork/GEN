@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
@@ -37,11 +36,9 @@
 
 #include "DIONodeItem.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIONODEITEMHANDLER_TYPE
 {
@@ -55,11 +52,9 @@ enum DIONODEITEMHANDLER_TYPE
 
 #define DIONODEITEMHANDLER_INVALIDPARAM     -1 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIONODEITEMHANDLER : public XSUBJECT
@@ -98,14 +93,11 @@ class DIONODEITEMHANDLER : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

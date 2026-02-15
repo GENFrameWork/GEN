@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XThread.h"
@@ -40,11 +39,9 @@
 #include "DIOStreamConfig.h"
 #include "DIOStreamConfigString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 class DIOSTREAMUDPCONFIG : public DIOSTREAMCONFIG, public DIOSTREAMCONFIGSTRING
@@ -83,21 +80,16 @@ class DIOSTREAMUDPCONFIG : public DIOSTREAMCONFIG, public DIOSTREAMCONFIGSTRING
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

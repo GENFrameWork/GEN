@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XEvent.h"
@@ -42,21 +41,17 @@
 
 #include "DIOProtocol_ConnectionsManager_XEvent.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOPROTOCOL_CONNECTIONS_DEFAULTIMETRYCONNECTIONS         8    // Seconds
 #define DIOPROTOCOL_CONNECTIONS_DEFAULTIMECHECKCONNECTIONS      60    // Seconds
 #define DIOPROTOCOL_CONNECTIONS_UNLIMITEDNCONNECTIONS           -1
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XTIMER;
@@ -191,14 +186,11 @@ class DIOPROTOCOL_CONNECTIONSMANAGER : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

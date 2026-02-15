@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XString.h"
 #include "XVariant.h"
 #include "XDateTime.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XWINDOWSWMIINTERFACE_ERROR
 {
@@ -54,11 +51,9 @@ enum XWINDOWSWMIINTERFACE_ERROR
   XWINDOWSWMIINTERFACE_ERROR_BLANKETPROXYSETFAILURE             ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XWINDOWSWMIINTERFACE_RESULT
@@ -123,14 +118,11 @@ class XWINDOWSWMIINTERFACE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

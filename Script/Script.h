@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
@@ -46,11 +45,9 @@
 #include "Script_ErrorCode.h"
 #include "Script_Lib_Function.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum SCRIPT_TYPE
 {
@@ -66,11 +63,9 @@ class SCRIPT_LIB;
 
 typedef void (*SCRFUNCADJUSTLIBRARYS)             (SCRIPT* script);
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTIMER;
 class XPUBLISHER;
@@ -165,13 +160,10 @@ class SCRIPT : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

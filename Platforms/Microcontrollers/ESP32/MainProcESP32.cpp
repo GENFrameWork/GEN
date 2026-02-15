@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "MainProcESP32.h"
 
@@ -70,30 +67,24 @@
 #include "APPFlowBase.h"
 #include "APPFlowMain.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
-#pragma region GENERAL_VARIABLE
 #ifdef XTRACE_ACTIVE
 XESP32TRACE      ESP32trace;
 #endif
 MAINPROCESP32    mainprocesp32;
 
-#pragma endregion
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -368,11 +359,9 @@ void MAINPROCESP32::Clean()
 
 }
 
-#pragma endregion
 
 
 /*---- MAIN FUNCTIONS ------------------------------------------------------------------------------------------------*/
-#pragma region MAIN FUNCTIONS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -407,4 +396,3 @@ int main()
   return status;
 }
 
-#pragma endregion

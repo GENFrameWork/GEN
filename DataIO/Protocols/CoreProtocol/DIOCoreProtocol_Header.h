@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XUUID.h"
 #include "XFileJSON.h"
@@ -38,11 +37,9 @@
 
 #include "DIOStream.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOCOREPROTOCOL_HEADER_MESSAGETYPE
@@ -131,11 +128,9 @@ enum DIOCOREPROTOCOL_HEADER_CONTENTTYPE
 #endif
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------c------------------------------------------------*/
-#pragma region CLASS
 
 
 class COMPRESSMANAGER;
@@ -221,14 +216,11 @@ class DIOCOREPROTOCOL_HEADER : public XSERIALIZABLE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

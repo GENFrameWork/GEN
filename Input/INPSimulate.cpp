@@ -27,34 +27,27 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "INPSimulate.h"
 
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 INPUTSIMULATE_KDB_PC  inputsimulare_KDB_PC[]						= { { 0x01	, __L("Left mouse")						     , ALTERNATIVE_KEY_NONE			  },					
 																														{ 0x02	, __L("Right mouse")					     , ALTERNATIVE_KEY_NONE			  },					                                                           
@@ -274,11 +267,9 @@ INPUTSIMULATE_KDB_PC  inputsimulare_KDB_INTEL_Spanish[]		= { { 0xDC  , __L("\xBA
 																														{ 0xBD  , __L("_")											   , ALTERNATIVE_KEY_SHIFT      },																														
 																													};
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -522,6 +513,5 @@ void INPSIMULATE::Clean()
 }
 
 
-#pragma endregion
 
 

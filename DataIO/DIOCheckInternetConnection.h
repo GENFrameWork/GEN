@@ -29,27 +29,22 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 
 #include "DIOCheckTCPIPConnections.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOCHECKINTERNETCONNECTION_MAXCONNECTIONS        16
 
 #define DIOCHECKINTERNETCONNECTION_DEFAULTTIMECHECK      30
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XPUBLISHER;
@@ -89,13 +84,10 @@ class DIOCHECKINTERNETCONNECTION
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

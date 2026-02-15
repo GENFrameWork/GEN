@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -37,11 +36,9 @@
 
 #include "DIODeviceI2C.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOI2CTEMHUMSENSORSHT20_ADDRESS                               0x40
 
@@ -57,11 +54,9 @@
 
 #define DIOI2CTEMHUMSENSORSHT20_SHIFTED_DIVISOR                       0x988000
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOI2CTEMHUMSENSORSHT20: public DIODEVICEI2C
@@ -94,13 +89,10 @@ class DIOI2CTEMHUMSENSORSHT20: public DIODEVICEI2C
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

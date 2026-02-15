@@ -30,17 +30,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XPath.h"
 #include "XFileTXT.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XSYSTEM_HARDWARETYPE
 {
@@ -121,11 +118,9 @@ enum XSYSTEM_CHANGESTATUSTYPE
 
 #define XSYSTEM_CPUUSAGE_ERROR              -1
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XSYSTEM
 {
@@ -206,13 +201,10 @@ class XSYSTEM
    
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

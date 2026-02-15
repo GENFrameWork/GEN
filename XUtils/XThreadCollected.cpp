@@ -27,46 +27,36 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 #ifdef XTHREADCOLLECTED_ACTIVE
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XThreadCollected.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 XTHREADSCOLLECTEDMANAGER* XTHREADSCOLLECTEDMANAGER::instance = NULL;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XTHREADCOLLECTED
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -605,10 +595,8 @@ void XTHREADCOLLECTED::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_THREADSCOLLECTED
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -989,10 +977,8 @@ void XTHREADSCOLLECTED::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XTHREADSCOLLECTEDMANAGER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1297,7 +1283,6 @@ void XTHREADSCOLLECTEDMANAGER::Clean()
 }
 
 
-#pragma endregion
 
 
 #endif

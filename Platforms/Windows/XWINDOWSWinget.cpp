@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINE_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "Windows.h"
 
@@ -46,30 +43,23 @@
 #include "XFileJSON.h"
 #include "XTrace.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 XWINDOWSWINGET* XWINDOWSWINGET::instance = NULL;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_MEMBERS_XWINDOWSWINGET_ELEMENTRESULT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -153,10 +143,8 @@ void XWINDOWSWINGET_ELEMENTRESULT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_MEMBERS_XWINDOWSWINGET_LISTRESULT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -236,10 +224,8 @@ void XWINDOWSWINGET_LISTRESULT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_MEMBERS_XWINDOWSWINGET
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1135,7 +1121,5 @@ void XWINDOWSWINGET::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion

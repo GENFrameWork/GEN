@@ -29,26 +29,21 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFileCFG.h"
 
 #include "GRPVectorFileConfig.h"
 #include "GRPVectorFileDXFTextSectionHeader.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define VECTORFILEDXFCONFIG_SECTION_DFX_CFG    __L("DXF Config")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPVECTORFILEDXFCONFIG : public GRPVECTORFILECONFIG
@@ -73,14 +68,11 @@ class GRPVECTORFILEDXFCONFIG : public GRPVECTORFILECONFIG
    XFILECFG*                              fileCFG;  
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

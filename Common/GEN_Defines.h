@@ -30,7 +30,6 @@
 
 
 /*---- DEFINE GROUPS DOXYGEN -----------------------------------------------------------------------------------------*/
-#pragma region DEFINES_GROUPS_DOXYGEN
 /**
 * 
 * @defgroup APPFLOW AppFlow
@@ -168,16 +167,13 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "FactoryBase.h"
 #include "APP_GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #ifndef UNICODE
 #define UNICODE
@@ -335,21 +331,16 @@
 #endif
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

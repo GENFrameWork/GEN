@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <libpq-fe.h>
 
@@ -43,11 +42,9 @@
 
 #include "PostgreSQL_Result.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum POSTGRESQL_DATA_TYPE
@@ -145,11 +142,9 @@ enum POSTGRESQL_DATA_TYPE
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class POSTGRESQL_RESULT;
@@ -183,14 +178,11 @@ class POSTGRESQL_QUERY : public DB_SQL_QUERY
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

@@ -29,28 +29,23 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <Windows.h>
 
 #include "XVector.h"
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define GEN_XWINDOWSVIRTUALDESKTOPMANAGER    XWINDOWSVIRTUALDESKTOPMANAGER::GetInstance()
 
 typedef bool(*XWINDOWSVIRTUALDESKTOPMANAGER_HOOK_FUNC)(void);
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XWINDOWSVIRTUALDESKTOP
@@ -116,14 +111,11 @@ class XWINDOWSVIRTUALDESKTOPMANAGER
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

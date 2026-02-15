@@ -33,25 +33,20 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOGPIO.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define DIOLINUXGPIOPCPARALLEL_PORT1                0x378
 #define DIOLINUXGPIOPCPARALLEL_PORT2                0x278
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOLINUXGPIOPCPARALLEL : public DIOGPIO
@@ -84,14 +79,11 @@ class DIOLINUXGPIOPCPARALLEL : public DIOGPIO
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

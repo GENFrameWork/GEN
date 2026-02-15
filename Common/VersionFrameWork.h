@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define VERSIONFRAMEWORK_NAME         "GEN FrameWork"
 #define VERSIONFRAMEWORK_VERSION      0
@@ -45,11 +42,9 @@
 #define VERSIONFRAMEWORK_SUBERROR     0
 #define VERSIONFRAMEWORK_CODENAME     "Glossam X2"
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class VERSIONFRAMEWORK
@@ -106,14 +101,11 @@ class VERSIONFRAMEWORK
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

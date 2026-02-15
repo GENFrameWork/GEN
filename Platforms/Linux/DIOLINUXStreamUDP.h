@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -38,11 +37,9 @@
 
 #include "DIOStreamUDP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOLINUXUDPFSMEVENTS
 {
@@ -72,11 +69,9 @@ enum DIOLINUXUDPFSMSTATES
   DIOLINUXUDP_LASTSTATE
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DIOLINUXSTREAMUDP : public DIOSTREAMUDP , public XFSMACHINE
 {
@@ -101,14 +96,11 @@ class DIOLINUXSTREAMUDP : public DIOSTREAMUDP , public XFSMACHINE
     int                       handle;    
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

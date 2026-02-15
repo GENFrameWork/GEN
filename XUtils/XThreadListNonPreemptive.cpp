@@ -27,44 +27,34 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XThreadListNonPreemptive.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 XTHREADLISTNONPREEMPTIVE* XTHREADLISTNONPREEMPTIVE::instance = NULL;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /*---- XTHREADLISTNONPREEMPTIVE CLASS --------------------------------------------------------------------------------*/
-#pragma region XTHREADLISTNONPREEMPTIVE_CLASS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -195,11 +185,9 @@ bool XTHREADLISTNONPREEMPTIVE::ExecuteFunctions()
 }
 
 
-#pragma endregion
 
 
 /*---- XTHREADLISTNONPREEMPTIVE CLASS --------------------------------------------------------------------------------*/
-#pragma region XTHREADLISTNONPREEMPTIVE_CLASS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -245,8 +233,6 @@ void XTHREADLISTNONPREEMPTIVE::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 

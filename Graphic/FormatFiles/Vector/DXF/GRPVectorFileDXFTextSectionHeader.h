@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XMap.h"
 #include "XVariant.h"
@@ -39,20 +38,16 @@
 #include "GRPVectorFile.h"
 #include "GRPVectorFileDXFTextSection.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define GRPVECTORFILEDXFTEXTSECTIONHEADER_MAXNDEFVAR    283
 #define GRPVECTORFILEDXFTEXTSECTIONHEADER_MAXNVAR       3
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 typedef struct
@@ -104,14 +99,11 @@ class GRPVECTORFILEDXFTEXTSECTIONHEADER : public GRPVECTORFILEDXFTEXTSECTION
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

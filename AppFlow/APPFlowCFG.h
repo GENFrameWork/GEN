@@ -42,7 +42,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XTrace.h"
 #include "XFileCFG.h"
@@ -51,11 +50,9 @@
 #include "DIORemoteFileCFG.h"
 #endif
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define APPFLOW_CFG_DEFAULT_REMARK_COLUMN                                             98
 
@@ -223,11 +220,9 @@
   #define   APPFLOW_CFG_SETAUTOMATICTRACETARGETS             
 #endif
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFACTORY;
 class XPATHS;
@@ -492,14 +487,11 @@ class APPFLOWCFG
     void                 Clean                                                    ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

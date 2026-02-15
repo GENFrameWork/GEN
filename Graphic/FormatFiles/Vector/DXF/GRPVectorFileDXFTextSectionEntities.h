@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XMap.h"
 #include "XVariant.h"
@@ -40,11 +39,9 @@
 #include "GRPVectorFileDXFEntityObj.h"
 #include "GRPVectorFileDXFTextSection.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #undef  TEST_ONLY_DEFINE_IN_ENTITITES
 
@@ -83,11 +80,9 @@
 #define VFDXF_ANGLE_X                                 __L("ANGLE_X")
 #define VFDXF_THICKNESS                               __L("THICKNESS") 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class GRPVECTORFILEDXFXDATACTRL;
 
@@ -154,14 +149,11 @@ class GRPVECTORFILEDXFTEXTSECTIONENTITIES : public GRPVECTORFILEDXFTEXTSECTION
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

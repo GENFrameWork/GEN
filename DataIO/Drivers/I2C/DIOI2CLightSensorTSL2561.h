@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -38,11 +37,9 @@
 
 #include "DIODeviceI2C.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOI2CLIGHTSENSORTSL2561_ADDR1                0x29            // Address 1
 #define DIOI2CLIGHTSENSORTSL2561_ADDR2                0x39            // Address 2
@@ -166,11 +163,9 @@ enum DIOI2CLIGHTSENSORTSL2561GAIN
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOI2CLIGHTSENSORTSL2561 : public DIODEVICEI2C
@@ -211,14 +206,11 @@ class DIOI2CLIGHTSENSORTSL2561 : public DIODEVICEI2C
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

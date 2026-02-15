@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <Windows.h>
 
@@ -38,19 +37,15 @@
 
 #include "XProcessManager.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define MAPWINPROCESS XMAP<HWND, XDWORD>
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XWINDOWSPROCESSMANAGER : public XPROCESSMANAGER
 {
@@ -92,13 +87,10 @@ class XWINDOWSPROCESSMANAGER : public XPROCESSMANAGER
 
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

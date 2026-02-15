@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XString.h"
@@ -39,11 +38,9 @@
 
 #include "DIOStreamDevice.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOSTREAMIPDEVICE_TYPE
 {
@@ -55,11 +52,9 @@ enum DIOSTREAMIPDEVICE_TYPE
   DIOSTREAMIPDEVICE_TYPE_LOOPBACK               ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMDEVICEIP : public DIOSTREAMDEVICE
@@ -96,14 +91,11 @@ class DIOSTREAMDEVICEIP : public DIOSTREAMDEVICE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 
 #include "DIODeviceI2C.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum  DIOI2CAIRQUALITYCCS811_ERRORS
@@ -76,11 +73,9 @@ enum  DIOI2CAIRQUALITYCCS811_ERRORS
 #define DIOI2CAIRQUALITYCCS811_HW_ID                    0x81
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOI2CAIRQUALITYCCS811: public DIODEVICEI2C
@@ -139,14 +134,11 @@ class DIOI2CAIRQUALITYCCS811: public DIODEVICEI2C
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

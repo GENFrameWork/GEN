@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
@@ -38,11 +37,9 @@
 
 #include "INPCursorMotion.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum INPCURSOR_ID
 {
@@ -55,11 +52,9 @@ enum INPCURSOR_ID
   INPCURSOR_ID_TOUCHSCREEN4         ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFACTORY;
 class XTIMER;
@@ -108,14 +103,11 @@ class INPCURSOR : public INPCURSORMOTIONPOINT
     INPCURSORMOTION         motion;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

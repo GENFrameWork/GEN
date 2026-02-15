@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XVariant.h"
 #include "XSerializable.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIONODEITEMVALUE_UNITSFORMAT_TYPE
 {
@@ -58,11 +55,9 @@ enum DIONODEITEMVALUE_UNITSFORMAT_TYPE
 
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIONODEITEMVALUEUNITFORMAT : public XSERIALIZABLE
@@ -93,14 +88,11 @@ class DIONODEITEMVALUEUNITFORMAT : public XSERIALIZABLE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

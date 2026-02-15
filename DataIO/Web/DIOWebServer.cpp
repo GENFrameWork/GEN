@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOWebServer.h"
 
@@ -61,29 +58,22 @@
 #include "DIOWebServer_Plugin.h"
 #include "DIOWebServer_XEvent.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOWEBSERVER_HEADER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -533,10 +523,8 @@ void DIOWEBSERVER_HEADER::Clean()
 }
 
 
-#pragma endregion 
 
 
-#pragma region CLASS_DIOWEBSOCKET_HEADER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -580,10 +568,8 @@ void DIOWEBSOCKET_HEADER::Clean()
 }
 
 
-#pragma endregion 
 
 
-#pragma region CLASS_DIOWEBSERVER_AUTHENTICATION
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -716,10 +702,8 @@ void DIOWEBSERVER_AUTHENTICATION::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region class_DIOWEBSERVER_REQUEST
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1339,10 +1323,8 @@ void DIOWEBSERVER_REQUEST::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOWEBSERVER_CONNECTION
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2640,10 +2622,8 @@ void DIOWEBSERVER_CONNECTION::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOWEBSERVER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3953,7 +3933,5 @@ void DIOWEBSERVER::Clean()
 }
 
 
-#pragma endregion 
 
 
-#pragma endregion 

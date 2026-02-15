@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XSubject.h"
 
 #include "GRPVectorFile.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum GRPVECTORFILE_XEVENTTYPE : XDWORD
 {
@@ -48,11 +45,9 @@ enum GRPVECTORFILE_XEVENTTYPE : XDWORD
    GRPVECTORFILE_XEVENTTYPE_PARTUNKNOWN                             
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XPUBLISHER;
 
@@ -79,14 +74,11 @@ class GRPVECTORFILE_XEVENT : public XEVENT
     XSTRING                 message;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XInheritEnum.h"
 #include "XString.h"
@@ -40,11 +39,9 @@
 
 #include "GRPVectorFile.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum GRPVECTORFILEDXFRESULTADD
 {
@@ -58,22 +55,18 @@ typedef XINHERITENUM<GRPVECTORFILEDXFRESULTADD, GRPVECTORFILERESULT > GRPVECTORF
 
 #define TEST_NOT_CONCRETE_ENTITY
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFILETXT;
 class GRPVECTORFILEDXFTEXTSECTIONENTITIES;
 class GRPVECTORFILECONFIG;
 class GRPVECTORFILEDXFENTITYOBJ;
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class GRPVECTORFILEDXF : public GRPVECTORFILE
@@ -110,7 +103,6 @@ class GRPVECTORFILEDXF : public GRPVECTORFILE
 };
 
 
-#pragma endregion
 
 
 

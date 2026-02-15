@@ -29,26 +29,21 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XThreadCollected.h"
 
 #include "DIOStreamEnumServers.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSTREAMUDPLOCALENUMSERVERSDEFAULTSEARCHTIMEOUT      30                                        // seconds
 #define DIOSTREAMUDPLOCALENUMSERVERSID                        __L("GEN Broadcast message ID [%08X]")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMUDPCONFIG;
@@ -89,13 +84,10 @@ class DIOSTREAMUDPLOCALENUMSERVERS :  public DIOSTREAMENUMSERVERS
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

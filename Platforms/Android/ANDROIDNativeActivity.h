@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <jni.h>
 
@@ -42,11 +41,9 @@
 #include "XBase.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 typedef int32_t       STATUS;
 
@@ -54,11 +51,9 @@ const STATUS          STATUS_OK   = 0;
 const STATUS          STATUS_KO   = -1;
 const STATUS          STATUS_EXIT = -2;
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class ANDROIDNATIVEINPUT_HANDLER
@@ -135,14 +130,11 @@ class ANDROIDNATIVEACTIVITY_EVENTLOOP
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

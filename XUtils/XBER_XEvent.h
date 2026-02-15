@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XBuffer.h"
@@ -38,11 +37,9 @@
 #include "XBER.h"
 #include "XASN1.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XBERXEVENT_TYPE
 {
@@ -52,11 +49,9 @@ enum XBERXEVENT_TYPE
   XBERXEVENT_TYPE_DECODE_END                                                                          
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XBER;
 
@@ -117,14 +112,11 @@ class XBER_XEVENT : public XEVENT
     bool                  status;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

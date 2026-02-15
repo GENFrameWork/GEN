@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XBuffer.h"
@@ -40,11 +39,9 @@
 #include "DIOCoreProtocol_Connection.h"
 #include "DIOCoreProtocol_ConnectionsManager.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE
@@ -60,11 +57,9 @@ enum DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_TYPE
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT : public XEVENT
@@ -103,14 +98,11 @@ class DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT : public XEVENT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,24 +29,19 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "UI_Property_Scrolleable.h"
 #include "UI_Element.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define UI_ELEMENT_TEXTBOX_DEFAULTLINESPACING     4
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class UI_ELEMENT_TEXTBOX : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
@@ -83,14 +78,11 @@ class UI_ELEMENT_TEXTBOX : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

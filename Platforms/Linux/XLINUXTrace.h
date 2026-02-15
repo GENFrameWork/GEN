@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <pthread.h>
 
@@ -46,18 +45,14 @@
 
 #include "XTrace.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XLINUXTRACE : public XTRACE
@@ -94,7 +89,6 @@ class XLINUXTRACE : public XTRACE
 };
 
 
-#pragma endregion
 
 
 #endif

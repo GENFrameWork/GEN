@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include <Windows.h>
@@ -40,19 +39,15 @@
 #include "GRPScreen.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define GRPWINDOWSSCREEN_NAMECLASS  __L("GEN_Windows_Screen")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPWINDOWSSCREEN : public GRPSCREEN
@@ -118,13 +113,10 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
     BITMAPINFO                            hinfo;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

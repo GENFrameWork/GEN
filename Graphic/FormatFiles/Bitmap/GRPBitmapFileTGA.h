@@ -30,7 +30,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XFile.h"
@@ -41,11 +40,9 @@
 #include "GRP2DColor.h"
 #include "GRPBitmapFile.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum GRPBITMAPFILETGATYPE
@@ -104,11 +101,9 @@ typedef struct
 #pragma pack(pop, r1)
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPBITMAP;
@@ -167,14 +162,11 @@ class GRPBITMAPFILETGA : public GRPBITMAPFILEBASE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

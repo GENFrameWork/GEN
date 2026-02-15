@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XMap.h"
 #include "XFileXDB.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define XFILESENTENCES_TYPE           (XFILE_TYPE_GENERIC | XFILE_FEATURES_HASH)
 #define XFILESENTENCES_VERSION        0x0100
@@ -46,11 +43,9 @@
 
 #define XFILESENTENCES_EXTENSION      __L(".sen");
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFILESENTENCES : public XFILEXDB
 {
@@ -64,14 +59,11 @@ class XFILESENTENCES : public XFILEXDB
     bool                  GetSentence               (XDWORD index,XSTRING& sentence);
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

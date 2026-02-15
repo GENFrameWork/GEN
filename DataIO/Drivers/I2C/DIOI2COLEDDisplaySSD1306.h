@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -38,11 +37,9 @@
 #include "DIODeviceI2C.h"
 #include "DIODisplayDevice.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOI2COLEDDISPLAYSSD1306_DISPLAYSIZE
@@ -125,11 +122,9 @@ enum DIOI2COLEDDISPLAYSSD1306_DISPLAYSIZE
 #define DIOI2COLEDDISPLAYSSD1306_BITCHECK(x, y)                              (x & (1UL<<y) ? 1 : 0)
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOI2COLEDDISPLAYSSD1306 : public DIODISPLAYDEVICE, public DIODEVICEI2C
@@ -174,14 +169,11 @@ class DIOI2COLEDDISPLAYSSD1306 : public DIODISPLAYDEVICE, public DIODEVICEI2C
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

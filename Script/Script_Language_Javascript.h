@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "duk_config.h"
 #include "duktape.h"
 
 #include "Script.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum SCRIPT_LNG_JAVASCRIPT_ERRORCODE
 {
@@ -56,11 +53,9 @@ enum SCRIPT_LNG_JAVASCRIPT_ERRORCODE
 
 #define SCRIPT_LNG_JAVASCRIPT_MAINFUNCTIONNAME   "main"
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class SCRIPT_LNG_JAVASCRIPT : public SCRIPT
 {
@@ -86,14 +81,11 @@ class SCRIPT_LNG_JAVASCRIPT : public SCRIPT
     duk_context*                        context;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

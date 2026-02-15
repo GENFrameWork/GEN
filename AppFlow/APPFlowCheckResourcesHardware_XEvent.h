@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum APPFLOWCHECKRESOURCESHARDWARE_XEVENT_TYPE
 {
@@ -48,11 +45,9 @@ enum APPFLOWCHECKRESOURCESHARDWARE_XEVENT_TYPE
   APPFLOWCHECKRESOURCESHARDWARE_XEVENT_TYPE_APPCPUUSAGELIMIT                                       
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTIMER;
 class XPUBLISHER;
@@ -83,13 +78,10 @@ class APPFLOWCHECKRESOURCESHARDWARE_XEVENT : public XEVENT
     int                  appCPUusage;    
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

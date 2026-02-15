@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XPath.h"
 #include "XEvent.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOLINUXDBUS_XEVENT_TYPE
@@ -49,18 +46,14 @@ enum DIOLINUXDBUS_XEVENT_TYPE
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class DIOLINUXDBUS_MESSAGE;
@@ -90,7 +83,6 @@ class DIOLINUXDBUS_XEVENT : public XEVENT
 };
 
 
-#pragma endregion
 
 
 

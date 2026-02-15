@@ -29,26 +29,21 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOMAC.h"
 #include "DIOURL.h"
 #include "DIOScraperWeb.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSCRAPERWEBMACMANUFACTURER_NAMEFILE     __L("ws_publicip.xml")
 #define DIOSCRAPERWEBMACMANUFACTURER_NAMESERVICE  __L("MACMANUFACTURED")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOMACMANUFACTURED_RESULT :  public DIOSCRAPERWEBCACHE_RESULT
@@ -85,14 +80,11 @@ class DIOSCRAPERWEBMACMANUFACTURER : public DIOSCRAPERWEB
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

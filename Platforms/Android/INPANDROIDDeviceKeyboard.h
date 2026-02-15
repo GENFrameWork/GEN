@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 
 #include "INPButton.h"
 #include "INPDevice.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define KEYCODE_A                       0x001d  // Keyboard a and A
 #define KEYCODE_B                       0x001e  // Keyboard b and B
@@ -174,11 +171,9 @@
 #define KEYCODE_POWER                   0x001a  // KEY_COFFEE 4.0 0x001a
 #define KEYCODE_CALCULATOR              0x00d2  // KEY_CALC 4.0.3 0x00d2
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class INPANDROIDDEVICEKEYBOARD : public INPDEVICE
 {
@@ -197,14 +192,11 @@ class INPANDROIDDEVICEKEYBOARD : public INPDEVICE
     void                  Clean                         ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

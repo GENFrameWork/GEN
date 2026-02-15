@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <cmath>
@@ -78,20 +77,16 @@
 #include "GRPViewPort.h"
 #include "GRPFrameRate.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define AGG_OUTLINE_INI                                       agg::line_profile_aa                                                                             profile;                         \
@@ -120,11 +115,9 @@ typedef agg::font_engine_freetype_int32                       AGG_FONT_ENGINE;
 typedef agg::font_cache_manager<AGG_FONT_ENGINE>              AGG_FONT_MANAGER;
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPCANVASAGG_SIMPLE_VERTEX_SOURCE
@@ -1354,14 +1347,11 @@ class GRPCANVASAGG: public GRPCANVAS
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 #include "XMemory_Control_Deactive.h"
 

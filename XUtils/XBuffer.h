@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XBUFFER_PADDINGTYPE
 {
@@ -66,11 +63,9 @@ enum XBUFFER_PADDINGTYPE
 #define XBUFFER_ADDBLOCKMEMSIZE_DEFAULT    128
 #endif
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFACTORY;
 class XMUTEX;
@@ -260,14 +255,11 @@ class GEN_API_LIB_EXP XBUFFER
     bool                     localhardwareuselittleendian;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

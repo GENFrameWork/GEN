@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVariant.h"
 #include "XSerializable.h"
 
 #include "DIONodeItemValueUnitFormat.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIONODEITEMVALUE_MODE
 {
@@ -64,11 +61,9 @@ enum DIONODEITEMVALUE_TYPE
   DIONODEITEMVALUE_TYPE_OWNER                 ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XDATETIME;
 
@@ -122,14 +117,11 @@ class DIONODEITEMVALUE : public XSERIALIZABLE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

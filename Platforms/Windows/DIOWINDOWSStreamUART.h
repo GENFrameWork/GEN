@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <windows.h>
 
@@ -44,11 +43,9 @@
 #include "DIOStreamUARTConfig.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOWINDOWSUARTFSMEVENTS
@@ -73,11 +70,9 @@ enum DIOWINDOWSUARTFSMSTATES
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWINDOWSSTREAMUART : public DIOSTREAMUART , public XFSMACHINE
@@ -129,14 +124,11 @@ class DIOWINDOWSSTREAMUART : public DIOSTREAMUART , public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

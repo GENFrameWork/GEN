@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XPath.h"
 #include "XEvent.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOWEBPAGEHTMLCREATOR_XEVENT_TYPE
 {
@@ -47,11 +44,9 @@ enum DIOWEBPAGEHTMLCREATOR_XEVENT_TYPE
   DIOWEBPAGEHTMLCREATOR_XEVENT_TYPE_XTAGFOUND
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWEBPAGEHTMLCREATOR;
@@ -78,14 +73,11 @@ class DIOWEBPAGEHTMLCREATOR_XEVENT : public XEVENT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

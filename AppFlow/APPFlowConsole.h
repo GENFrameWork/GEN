@@ -29,26 +29,21 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XObserver.h"
 
 #include "APPFlowBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define APPFLOWCONSOLE_DEFAULT_MESSAGEMASK                   __L("%-36s ... ")
 #define APPFLOWCONSOLE_DEFAULT_MESSAGEMASKWITHOUTPOINTS      __L("%-36s ")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTIMER;
 class XCONSOLE;
@@ -86,13 +81,10 @@ class APPFLOWCONSOLE : public APPFLOWBASE
 
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

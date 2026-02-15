@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <errno.h>
 #include <signal.h>
@@ -52,19 +51,15 @@
 
 #include "DIOStreamBluetoothLERemoteEnumDevices.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES_MAXLIST  1024
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XMUTEX;
@@ -101,14 +96,11 @@ class DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES :  public DIOSTREAMBLUETOOTHLER
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

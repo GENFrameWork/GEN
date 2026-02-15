@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFactory.h"
 #include "XFile.h"
@@ -37,11 +36,9 @@
 #include "DIOURL.h"
 #include "DIOEmailAddress.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSSMPTCONTENTTYPE
@@ -76,11 +73,9 @@ enum DIOSMTPXPRIORITY
 #define DIOSMTP_BOUNDARYTEXT                __L("__MESSAGE__ID__54yg6f6h6y456345")
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XFILETXT;
@@ -230,14 +225,11 @@ class DIOSMTP
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

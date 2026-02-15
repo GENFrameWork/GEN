@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 
 #include "FactoryBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum XCONSOLE_SYMBOLSUSED
@@ -72,11 +69,9 @@ enum XCONSOLE_SYMBOLSUSED
 
 #define XCONSOLE_MAXSIZEDATABLOCK             10240
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFACTORY;
 
@@ -123,14 +118,11 @@ class XCONSOLE : public FACTORYBASE
     void                            Clean                         ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed();
 
-#pragma endregion
 
 

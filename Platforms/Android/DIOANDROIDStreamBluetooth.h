@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <sys/un.h>
@@ -61,11 +60,9 @@
 #include "XBuffer.h"
 #include "XFSMachine.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOANDROIDBTFSMEVENTS
@@ -106,11 +103,9 @@ enum DIOANDROIDBTFSMSTATES
 #define DIOANDROIDSTREAMBLUETOOTH_DBUSAGENTPATH     "/org/bluez"
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XTHREAD;
@@ -150,14 +145,11 @@ class DIOANDROIDSTREAMBLUETOOTH : public DIOSTREAMBLUETOOTH , public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

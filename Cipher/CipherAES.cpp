@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "CipherAES.h"
 
@@ -45,20 +42,16 @@
 
 #include "CipherKeySymmetrical.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 #define GET_UINT32_LE(n,b,i)                  {   (n) =   ( (XDWORD) (b)[(i)    ]       )     \
                                                         | ( (XDWORD) (b)[(i) + 1] <<  8 )     \
@@ -135,11 +128,9 @@ XDWORD  CIPHERAES::RT3[256];
 
 XDWORD  CIPHERAES::RCON[10];
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -883,5 +874,4 @@ void CIPHERAES::Clean()
 }
 
 
-#pragma endregion
 

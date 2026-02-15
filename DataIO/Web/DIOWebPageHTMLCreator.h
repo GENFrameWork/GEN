@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XPath.h"
 #include "XEvent.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOWEBPAGEHTMLCREATORALIGN
 {
@@ -60,11 +57,9 @@ enum DIOWEBPAGEHTMLCREATORTAGXENGINESTATUS
 
 #define DIOWEBPAGEHTMLCREATOR_TAGXENGINE   __L("GEN")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWEBPAGEHTMLCREATOR : public XSTRING, public XSUBJECT
@@ -128,14 +123,11 @@ class DIOWEBPAGEHTMLCREATOR : public XSTRING, public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

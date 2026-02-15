@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <Windows.h>
 
 #include "DIOGPIO.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOWINDOWSGPIOPCPARALLEL_PORT1                0x378
 #define DIOWINDOWSGPIOPCPARALLEL_PORT2                0x278
@@ -50,11 +47,9 @@ typedef short (__stdcall* DIOWGPIOINP)               (short);
 typedef BOOL  (__stdcall* DIOWGPIOISDRIVEROPEN)      (void);
 typedef BOOL  (__stdcall* DIOWGPIOISDRIVER64BITS)    (void);
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XPATH;
 
@@ -100,13 +95,10 @@ class DIOWINDOWSGPIOPCPARALLEL : public DIOGPIO
     XBYTE                       dataport;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XTranslation.h"
 
@@ -37,22 +36,18 @@
 #include "DIOURL.h"
 #include "DIOScraperWeb.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSCRAPERWEBTRANSLATION_NAMEFILE       __L("ws_translation.xml")
 #define DIOSCRAPERWEBTRANSLATION_NAMESERVICE    __L("TRANSLATION")
 
 #define XLANGUAGE_CODE                          XLANGUAGE_ISO_639_3_CODE
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOTRANSLATION_RESULT :  public DIOSCRAPERWEBCACHE_RESULT
@@ -102,14 +97,11 @@ class DIOSCRAPERWEBTRANSLATION : public DIOSCRAPERWEB
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

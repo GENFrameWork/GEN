@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XString.h"
@@ -38,11 +37,9 @@
 #include "DIOWebHeader.h"
 #include "DIOWebServer_Plugin.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOWEBSERVER_XEVENT_TYPE
 {
@@ -57,11 +54,9 @@ enum DIOWEBSERVER_XEVENT_TYPE
   DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_DISCONNECTED                         ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XSUBJECT;
@@ -125,14 +120,11 @@ class DIOWEBSERVER_XEVENT : public XEVENT
 
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

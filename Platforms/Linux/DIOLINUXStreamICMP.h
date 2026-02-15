@@ -31,7 +31,6 @@
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMICMP_ACTIVE)
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -40,11 +39,9 @@
 
 #include "DIOStreamICMP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOLINUXICMPFSMEVENTS
 {
@@ -74,11 +71,9 @@ enum DIOLINUXICMPFSMSTATES
   DIOLINUXICMP_LASTSTATE
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOLINUXSTREAMICMP : public DIOSTREAMICMP , public XFSMACHINE
@@ -107,14 +102,11 @@ class DIOLINUXSTREAMICMP : public DIOSTREAMICMP , public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

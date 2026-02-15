@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "Hash.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define HASHCOMP128V1_RAND_SIZE     16
 #define HASHCOMP128V1_KI_SIZE       16
@@ -46,11 +43,9 @@
 #define HASHCOMP128V1_KC_SIZE       8
 #define HASHCOMP128V1_RESULT_SIZE   (HASHCOMP128V1_SRES_SIZE + HASHCOMP128V1_KC_SIZE)
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class HASHCOMP128V1 : public HASH
 {
@@ -85,13 +80,10 @@ class HASHCOMP128V1 : public HASH
     XBYTE                 digest[HASHCOMP128V1_RESULT_SIZE];
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

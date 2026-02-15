@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XFile.h"
@@ -40,11 +39,9 @@
 #include "GRP2DColor.h"
 #include "GRPBitmapFile.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum GRPBITMAPFILEBMPCOMPRESSION
@@ -84,11 +81,9 @@ typedef struct
 #pragma pack(pop, r1)
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPBITMAPFILEBMPCOLORPALETE
@@ -163,14 +158,11 @@ class GRPBITMAPFILEBMP : public GRPBITMAPFILEBASE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

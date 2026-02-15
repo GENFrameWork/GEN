@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include <termios.h>
@@ -42,19 +41,15 @@
 #include "INPLINUXDeviceID.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define INPLINUXDEVICEKEYBOARDDIRECT_OLDMAXBUFFER   16
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class INPLINUXDEVICEKEYBOARDDIRECT : public INPDEVICE
@@ -87,14 +82,11 @@ class INPLINUXDEVICEKEYBOARDDIRECT : public INPDEVICE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "HashCOMP128v1.h"
 
@@ -43,20 +40,16 @@
 
 #include "XBuffer.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 const XBYTE HASHCOMP128V1::table0[512]    =   { 102,177,186,162,  2,156,112, 75, 55, 25,  8, 12,251,193,246,188,
                                                 109,213,151, 53, 42, 79,191,115,233,242,164,223,209,148,108,161,
@@ -137,11 +130,9 @@ const XBYTE* HASHCOMP128V1::table[5]      =   {  table0,
                                                  table4
                                               };
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -401,5 +392,4 @@ void HASHCOMP128V1::Clean()
 }
 
 
-#pragma endregion
 

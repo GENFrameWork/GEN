@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <Windows.h>
 
@@ -42,11 +41,9 @@
 
 #include "DIOStreamBluetooth.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOWINDOWSBTFSMEVENTS
@@ -80,11 +77,9 @@ enum DIOWINDOWSBTFSMSTATES
 #define BTHNS_RESULT_DEVICE_AUTHENTICATED  0x00040000
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWINDOWSSTREAMBLUETOOTH : public DIOSTREAMBLUETOOTH , public XFSMACHINE
@@ -117,14 +112,11 @@ class DIOWINDOWSSTREAMBLUETOOTH : public DIOSTREAMBLUETOOTH , public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

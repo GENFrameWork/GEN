@@ -29,24 +29,19 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XESP32Trace.h"
 
 #include "MainProc.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XSTRING;
 
@@ -68,17 +63,14 @@ class MAINPROCESP32 : public MAINPROC
     void                          Clean                 ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 #ifdef XTRACE_ACTIVE
 extern  XESP32TRACE     ESP32trace;
 #endif
 
-#pragma endregion
 
 
 

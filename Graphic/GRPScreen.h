@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -43,11 +42,9 @@
 #include "GRPProperties.h"
 #include "GRPRect.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum GRPSCREENTYPE
@@ -103,11 +100,9 @@ enum GRPSCREENROTATION
 #define GRPSCREENSTYLE_DEFAULT                        GRPSCREENSTYLE_TITLE
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPCANVAS;
@@ -229,13 +224,10 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

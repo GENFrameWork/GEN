@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "CipherBlowfish.h"
 
@@ -45,20 +42,16 @@
 
 #include "CipherKeySymmetrical.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 #define GET_UINT32_BE(n,b,i)  {  (n) =    ( (XDWORD) (b)[(i)    ] << 24 )              \
                                         | ( (XDWORD) (b)[(i) + 1] << 16 )              \
@@ -340,11 +333,9 @@ XDWORD CIPHERBLOWFISH::S[4][256]                     =  { { 0xD1310BA6L, 0x98DFB
                                                             0xB74E6132L, 0xCE77E25BL, 0x578FDFE3L, 0x3AC372E6L
                                                           }
                                                         };
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -913,5 +904,4 @@ void CIPHERBLOWFISH::Clean()
 }
 
 
-#pragma endregion
 

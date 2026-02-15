@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XDateTime.h"
 #include "XVector.h"
@@ -37,11 +36,9 @@
 #include "XSubject.h"
 #include "XThreadCollected.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define XSCHEDULER_CYCLEFOREVER    -1
@@ -58,11 +55,9 @@
 #define XSCHEDULER_DAYWEEK_ISWEEKEND      (XSCHEDULER_DAYWEEK_ISSATURDAY | XSCHEDULER_DAYWEEK_ISSUNDAY)
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XPUBLISHER;
@@ -180,17 +175,13 @@ class XSCHEDULER  : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

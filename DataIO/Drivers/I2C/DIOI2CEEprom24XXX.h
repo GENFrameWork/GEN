@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -37,11 +36,9 @@
 
 #include "DIODeviceI2C.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOI2CEEPROM24XXXTYPE
 {
@@ -58,18 +55,14 @@ enum DIOI2CEEPROM24XXXTYPE
 #define DIOI2CEEPROM2408_FIXEDADDRESSBASE       0x50
 #define DIOI2CEEPROM2416_FIXEDADDRESSBASE       0x50
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class DIOI2CEEPROM24XXX : public DIODEVICEI2C
@@ -113,7 +106,6 @@ class DIOI2CEEPROM24XXX : public DIODEVICEI2C
 };
 
 
-#pragma endregion
 
 
 

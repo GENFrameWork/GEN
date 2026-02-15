@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XSubject.h"
 #include "XBuffer.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum INPCAPTURE_XEVENT_TYPE
 {
@@ -48,11 +45,9 @@ enum INPCAPTURE_XEVENT_TYPE
   INPCAPTURE_XEVENT_TYPE_UNPRESSKEY
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTIMER;
 class XPUBLISHER;
@@ -99,14 +94,11 @@ class INPCAPTURE_XEVENT : public XEVENT
     XSTRING                     string; 
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

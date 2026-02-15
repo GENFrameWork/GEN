@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFSMachine.h"
 #include "XEvent.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOIEC60870_5_XEVENT_TYPE
@@ -102,11 +99,9 @@ enum DIOIEC60870_5_XEVENT_TYPE
 #define DIOIEC60870_5_ASDUCAUSETRANS_INTEGRPEROIDNOTAVAILABLE   18
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XDATETIME;
@@ -271,14 +266,11 @@ class DIOIEC60870_5  : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

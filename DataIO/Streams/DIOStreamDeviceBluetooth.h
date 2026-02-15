@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XTrace.h"
@@ -38,11 +37,9 @@
 
 #include "DIOStreamDevice.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define DIOSTREAMDEVICEBLUETOOTHPROTOCOLTYPE_SDP                                0x0001
@@ -178,11 +175,9 @@
 #define DIOSTREAMDEVICEBLUETOOTH_NOCHANNEL                                      -1
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL
@@ -290,14 +285,11 @@ class DIOSTREAMDEVICEBLUETOOTH : public DIOSTREAMDEVICE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

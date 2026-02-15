@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XString.h"
 
 #include "XSerializationMethod.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum XSERIALIZATIONMETHODBINARY_TYPEELEMENT
@@ -65,11 +62,9 @@ enum XSERIALIZATIONMETHODBINARY_TYPEELEMENT
 #define XSERIALIZATIONMETHOD_ARRAY_ID   0x82
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XVARIANT;
@@ -131,14 +126,11 @@ class XSERIALIZATIONMETHODBINARY : public XSERIALIZATIONMETHOD
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

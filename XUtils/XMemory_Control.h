@@ -38,7 +38,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <new>
@@ -55,11 +54,9 @@
 
 #include "XBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #ifdef MICROCONTROLLER
   #define XMEMORY_CONTROL_MAXBLOCKASSIGN        128
@@ -83,11 +80,9 @@
 
 #define XMEMORY_CONTROL_PRE_DEACTIVATED
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XMUTEX;
@@ -163,11 +158,9 @@ class XMEMORY_CONTROL
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
   extern XMEMORY_CONTROL XMemory_Control;
 
@@ -201,7 +194,6 @@ class XMEMORY_CONTROL
 #endif
 
 
-#pragma endregion
 
 
 

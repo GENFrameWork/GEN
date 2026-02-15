@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFSMachine.h"
 
 #include "DIOStreamI2C.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define DIOANDROIDSTREAMI2C_MSG_TEN                         0x10
@@ -143,19 +140,15 @@ typedef struct
 } DIOANDROIDSTREAMI2C_RDWR_IOCTL_TICKET;
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class DIOANDROIDSTREAMI2C : public DIOSTREAMI2C
@@ -183,7 +176,6 @@ class DIOANDROIDSTREAMI2C : public DIOSTREAMI2C
 };
 
 
-#pragma endregion
 
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XPath.h"
 #include "XObserver.h"
@@ -40,11 +39,9 @@
 #include "DIOApplicationUpdate_XEvent.h"
 #include "DIOApplicationUpdate.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum APPFLOWUPDATE_TASKID
 {
@@ -63,11 +60,9 @@ enum APPFLOWUPDATE_EVENTOPERATION
 
 #define APPFLOW_UPDATE   APPFLOWUPDATE::GetInstance()
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XEVENT;
 class XSCHEDULER;
@@ -158,14 +153,11 @@ class APPFLOWUPDATE : public XOBSERVER, public XSUBJECT
     
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

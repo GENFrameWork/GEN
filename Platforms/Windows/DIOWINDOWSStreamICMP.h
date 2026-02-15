@@ -32,7 +32,6 @@
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMICMP_ACTIVE)
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include <winsock2.h>
@@ -46,11 +45,9 @@
 #include "DIOStreamICMP.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOWINDOWSICMPFSMEVENTS
 {
@@ -79,11 +76,9 @@ enum DIOWINDOWSICMPFSMSTATES
   DIOWINDOWSICMP_LASTSTATE
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWINDOWSSTREAMICMP : public DIOSTREAMICMP , public XFSMACHINE
@@ -110,14 +105,11 @@ class DIOWINDOWSSTREAMICMP : public DIOSTREAMICMP , public XFSMACHINE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

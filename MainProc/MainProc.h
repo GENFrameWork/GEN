@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -40,11 +39,9 @@
 
 #include "APPFlowBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 class MAINPROC;
 typedef bool (*MAIN_FUNCTION_TYPE)(MAINPROC* main);
@@ -70,11 +67,9 @@ typedef bool (*MAIN_FUNCTION_TYPE)(MAINPROC* main);
 #define MAIN_FUNCTION_PLATFORMEND   NULL
 #endif
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XSTRING;
 class APPFLOWMAIN;
@@ -128,11 +123,9 @@ class MAINPROC
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 extern    MAIN_FUNCTION_TYPE    Main_Proc_PlatformIni;
 extern    MAIN_FUNCTION_TYPE    Main_Proc_Ini;
@@ -140,7 +133,6 @@ extern    MAIN_FUNCTION_TYPE    Main_Proc_Update;
 extern    MAIN_FUNCTION_TYPE    Main_Proc_End;
 extern    MAIN_FUNCTION_TYPE    Main_Proc_PlatformEnd;
 
-#pragma endregion
 
 
 

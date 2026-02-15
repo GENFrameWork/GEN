@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include <windows.h>
@@ -38,11 +37,9 @@
 #include "XDriveImageManager.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 typedef struct
@@ -54,11 +51,9 @@ typedef struct
 } XWINDOWSDRIVEIMAGE_DEVICE_NUMBER;
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XWINDOWSDRIVEIMAGEMANAGER : public XDRIVEIMAGEMANAGER
@@ -108,14 +103,11 @@ class XWINDOWSDRIVEIMAGEMANAGER : public XDRIVEIMAGEMANAGER
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

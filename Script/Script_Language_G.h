@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
@@ -43,11 +42,9 @@
 #include "Script.h"
 #include "Script_ErrorCode.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define SCRIPT_LNG_G_VERSION                    1
 #define SCRIPT_LNG_G_SUBVERSION                 0
@@ -135,11 +132,9 @@ union SCRIPT_LNG_G_VARVALUE
 
 #define SCRIPT_LNG_G_EXTENSION                  __L(".g")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTHREADCOLLECTED;
 class SCRIPT_LIB;
@@ -347,14 +342,11 @@ class SCRIPT_LNG_G : public SCRIPT
 
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

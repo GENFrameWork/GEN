@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "UI_BoundaryLine.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum UI_PROPERTY_SCROLLEABLE_TYPE
 {
@@ -49,11 +46,9 @@ enum UI_PROPERTY_SCROLLEABLE_TYPE
 
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class UI_PROPERTY_SCROLLEABLE_STATUS
@@ -105,13 +100,10 @@ class UI_PROPERTY_SCROLLEABLE
     UI_PROPERTY_SCROLLEABLE_STATUS            vertical;  
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

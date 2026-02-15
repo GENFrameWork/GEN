@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFileJSON.h"
 
@@ -48,29 +45,22 @@
 #include "XTranslation_GEN.h"
 #include "XLanguage_ISO_639_3.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XFILEJSONVALUE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -884,10 +874,8 @@ void XFILEJSONVALUE::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEJSONOBJECT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1170,10 +1158,8 @@ void XFILEJSONOBJECT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEJSONARRAY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1294,10 +1280,8 @@ void XFILEJSONARRAY::Clean()
 };
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEJSON
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2552,10 +2536,8 @@ void XFILEJSON::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 

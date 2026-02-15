@@ -31,18 +31,15 @@
 #ifdef DIO_ALERTS_ACTIVE
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XPath.h"
 #include "XString.h"
 
 #include "DIOAlerts.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum APPFLOW_ALERT_TYPE
 {
@@ -68,11 +65,9 @@ enum APPFLOW_ALERT_STATUS
 
 #define APPFLOW_ALERTS               APPFLOWALERTS ::GetInstance()
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DIOSTREAM;
 class APPFLOWCFG;
@@ -103,14 +98,11 @@ class APPFLOWALERTS
     APPFLOWCFG*                         cfg;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

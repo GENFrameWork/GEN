@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBuffer.h"
 #include "XMap.h"
@@ -39,11 +38,9 @@
 
 #include "DIOCoreProtocol_Header.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION
 {
@@ -52,11 +49,9 @@ enum DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION
   DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION_WRITE              ,  
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------c------------------------------------------------*/
-#pragma region CLASS
 
 class XMUTEX;
 
@@ -121,14 +116,11 @@ class DIOCOREPROTOCOL_MESSAGES
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

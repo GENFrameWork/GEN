@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "GRPWINDOWSFactory.h"
 
@@ -49,26 +46,20 @@
 #include "GRPWINDOWSDesktopManager.h"
 #endif
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 CREATEFUNC(GRPWINDOWSFACTORY, GRPSCREEN             , GRPWINDOWSSCREEN            , CreateScreen)
@@ -87,5 +78,4 @@ DELETEFUNC(GRPWINDOWSFACTORY, GRPDESKTOPMANAGER     , GRPWINDOWSDESKTOPMANAGER  
 #endif
 
 
-#pragma endregion
 

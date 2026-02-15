@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdint.h>
 #include <stddef.h>
@@ -37,11 +36,9 @@
 #include "XBase.h"
 #include "DIODeviceI2C.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOI2C6AXISTRACKINGBMI270_ADDR1                         0x68
 #define DIOI2C6AXISTRACKINGBMI270_ADDR2                         0x69
@@ -2005,11 +2002,9 @@ struct bmi2_accel_offset
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOI2C6AXISTRACKINGBMI270: public DIODEVICEI2C
@@ -2288,14 +2283,11 @@ class DIOI2C6AXISTRACKINGBMI270: public DIODEVICEI2C
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

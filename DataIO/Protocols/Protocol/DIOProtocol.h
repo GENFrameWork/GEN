@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XDir.h"
@@ -45,11 +44,9 @@
 #include "DIOAlerts.h"
 #endif
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOPROTOCOL_CMDTYPE
@@ -146,11 +143,9 @@ class DIOPROTOCOL;
 
 typedef int (*DIOPROTOCOL_RECEIVEDFUNC)   (DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& buffer, XDWORD rID, XDWORD& param);
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XRAND;
@@ -483,14 +478,11 @@ class DIOPROTOCOL : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -37,11 +36,9 @@
 
 #include "DIODevice.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define DIOSPITOUCHSCREENSTMPE610_REG_CHIP_ID1            0x00  //  0x0811 Device identification
@@ -159,11 +156,9 @@
 #define DIOSPITOUCHSCREENSTMPE610_GPIO_ALT_FUNCT          0x17
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XBUFFER;
@@ -214,14 +209,11 @@ class DIOSPITOUCHSCREENSTMPE610 : public DIODEVICE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

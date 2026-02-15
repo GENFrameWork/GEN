@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOGPIO.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIODISPLAYDEVICE_INDEX_GPIOENTRYID
@@ -49,11 +46,9 @@ enum DIODISPLAYDEVICE_INDEX_GPIOENTRYID
   DIODISPLAYDEVICE_INDEX_GPIOENTRYID_MAX  
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIODISPLAYDEVICE_CONFIG
@@ -103,14 +98,11 @@ class DIODISPLAYDEVICE : public DIODISPLAYDEVICE_CONFIG
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

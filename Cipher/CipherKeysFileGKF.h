@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XDateTime.h"
 
 #include "Cipher.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define CIPHERKEYSFILEGKF_EXT                            __L(".gkf")
 
@@ -60,11 +57,9 @@
 #define CIPHERKEYSFILEGKF_ATTRNAME_CIPHERKEY_FACTOR1     __L("1STPRIMEFACTOR")
 #define CIPHERKEYSFILEGKF_ATTRNAME_CIPHERKEY_FACTOR2     __L("2NDPRIMEFACTOR")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFACTORY;
 class CIPHERKEY;
@@ -111,14 +106,11 @@ class CIPHERKEYSFILEGKF
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

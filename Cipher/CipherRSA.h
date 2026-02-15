@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XMPInteger.h"
 
@@ -37,11 +36,9 @@
 #include "CipherKeyPrivateRSA.h"
 #include "Cipher.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum CIPHERRSAPKCS1VERSION
 {
@@ -54,11 +51,9 @@ enum CIPHERRSAPKCS1VERSION
 
 //#define CIPHERRSA_RSANOCRT
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XRAND;
 class HASH;
@@ -157,13 +152,10 @@ class CIPHERRSA : public CIPHER
     XRAND*                          xrand;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

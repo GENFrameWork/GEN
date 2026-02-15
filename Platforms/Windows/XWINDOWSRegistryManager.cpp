@@ -27,18 +27,15 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 #ifdef WINDOWS
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XWINDOWSRegistryManager.h"
 
@@ -46,29 +43,22 @@
 #include "XPath.h"
 #include "XBuffer.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XWINDOWSREGISTRYKEY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -508,10 +498,8 @@ void XWINDOWSREGISTRYKEY::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XWINDOWSREGISTRYMANAGER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -843,10 +831,8 @@ void XWINDOWSREGISTRYMANAGER::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 #endif

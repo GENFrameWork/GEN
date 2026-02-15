@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XSubject.h"
 #include "XDriveImageManager.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XDRIVEIMAGEMANAGER_XEVENT_TYPE
 {
@@ -51,11 +48,9 @@ enum XDRIVEIMAGEMANAGER_XEVENT_TYPE
   XDRIVEIMAGEMANAGER_XEVENT_TYPE_WRITEFROMIMGFILE
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTIMER;
 class XPUBLISHER;
@@ -93,14 +88,11 @@ class XDRIVEIMAGEMANAGER_XEVENT : public XEVENT
 
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

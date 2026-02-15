@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XPath.h"
 #include "XVector.h"
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XDRIVEIMAGEMANAGER_ERROR
 {
@@ -54,11 +51,9 @@ enum XDRIVEIMAGEMANAGER_ERROR
 
 #define XDRIVEIMAGEMANAGER_DEFAULT_NSECTORPERBLOCK     100000
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XDRIVEIMAGEMANAGER_DRIVE
@@ -157,14 +152,11 @@ class XDRIVEIMAGEMANAGER : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XLANGUAGE_ISO_639_3_CODE
 {
@@ -245,11 +242,9 @@ typedef struct
 #define XLANGUAGE_ISO_639_3_NENTRYS         sizeof(iso_639_3_entry)/sizeof(XLANGUAGE_ISO_639_3_ENTRY)
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XLANGUAGE_ISO_639_3
@@ -279,14 +274,11 @@ class XLANGUAGE_ISO_639_3
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

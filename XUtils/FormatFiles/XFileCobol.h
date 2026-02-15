@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XVector.h"
 #include "XMap.h"
 #include "XTree.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XFILECOBOL_LINE_TYPE
 {
@@ -98,11 +95,9 @@ typedef XTREE<XFILECOBOL_FIELD*>                 XFILECOBOL_FD_TREE;
 typedef XTREE_NODE<XFILECOBOL_FIELD*>            XFILECOBOL_FD_TREENODE;
 typedef XTREE_NODE_ITERATOR<XFILECOBOL_FIELD*>   XFILECOBOL_FD_TREENODEITERATOR;
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XPATH;
 class XFILETXT;
@@ -344,14 +339,11 @@ class XFILECOBOL
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

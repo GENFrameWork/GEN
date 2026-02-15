@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #ifdef WINDOWS_STACKWALKER_ACTIVE
 #include <StackWalker.h>
@@ -45,11 +44,9 @@
 
 #include "MainProc.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #ifndef APPMODE_SERVICE_NAME
   #define APPMODE_SERVICE_NAME              __L("GEN Service")
@@ -59,11 +56,9 @@
   #define APPMODE_SERVICE_DISPLAYNAME       __L("GEN Service")
 #endif
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class MAINPROCWINDOWS : public MAINPROC
 {
@@ -134,17 +129,14 @@ class MAINPROCWINDOWSSTACKWALKER : public StackWalker
 };
 #endif
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 extern MAINPROCWINDOWS              mainprocwindows;
 
 extern int                          Exception_Filter                  (XDWORD code, struct _EXCEPTION_POINTERS *ep);
 
-#pragma endregion
 
 
 

@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFSMachine.h"
 #include "DIOStreamEnumBluetoothDevices.h"
 #include "DIOStreamDeviceBluetoothLE.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES_SEARCHMODE
 {
@@ -48,11 +45,9 @@ enum DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES_SEARCHMODE
   DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES_SEARCHMODE_EVENT        = 0x02  ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES :  public DIOSTREAMENUMBLUETOOTHDEVICES
@@ -78,14 +73,11 @@ class DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES :  public DIOSTREAMENUMBLUETOOTHDEVI
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

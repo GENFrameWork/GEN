@@ -29,27 +29,22 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XMap.h"
 #include "XFileHash.h"
 #include "XFileID.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define XFILEXDB_TYPE         (XFILE_TYPE_GENERIC | XFILE_FEATURES_HASH)
 #define XFILEXDB_VERSION      0x0100
 #define XFILEXDB_IDSTRING     __L("[XDB File]")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFILEXDB : public XFILEHASH
 {
@@ -89,14 +84,11 @@ class XFILEXDB : public XFILEHASH
     void                      Clean                   ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

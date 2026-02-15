@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOURL.h"
 #include "XPath.h"
 
 #include "XSubject.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOAPPLICATIONUPDATEFUNC_STATUS
@@ -99,11 +96,9 @@ enum DIOAPPLICATIONUPDATE_ERROR
 
 #define DIOAPPLICATIONUPDATE_LOG_SECTIONID_APPFLOWUPDATE            __L("AppUpdate")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XFACTORY;
@@ -233,14 +228,11 @@ class DIOAPPLICATIONUPDATE : public XSUBJECT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

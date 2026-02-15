@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "INPCursorMotion.h"
 
@@ -46,29 +43,22 @@
 #include "XFactory.h"
 #include "XTimer.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_INPCURSORMOTIONPOINT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -223,10 +213,8 @@ void INPCURSORMOTIONPOINT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_INPCURSORMOTION
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1062,10 +1050,8 @@ void INPCURSORMOTION::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 

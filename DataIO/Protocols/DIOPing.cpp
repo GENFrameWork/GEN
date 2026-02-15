@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOPing.h"
 
@@ -54,31 +51,24 @@
 
 #include "DIOPing_XEvent.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 DIOPING* DIOPING::instance = NULL;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOPINGREPLY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -263,10 +253,8 @@ void DIOPINGREPLY::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOPING
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -960,7 +948,5 @@ void DIOPING::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion

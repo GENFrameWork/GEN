@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DB_SQL_Connection.h"
 #include "DB_SQL_Database.h"
@@ -41,18 +40,14 @@
 #include "PostgreSQL_Query.h"
 #include "PostgreSQL_Database.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class POSTGRESQL_CONNECTION : public DB_SQL_CONNECTION
@@ -78,14 +73,11 @@ class POSTGRESQL_CONNECTION : public DB_SQL_CONNECTION
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "Hash.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define HASHWHIRLPOOL_DIGESTBYTES             64
 #define HASHWHIRLPOOL_DIGESTBITS              (8*HASHWHIRLPOOL_DIGESTBYTES) /* 512 */
@@ -61,11 +58,9 @@ typedef struct
 } WHIRLPOOL;
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class HASHWHIRLPOOL : public HASH
 {
@@ -99,14 +94,11 @@ class HASHWHIRLPOOL : public HASH
     void                Clean                 ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

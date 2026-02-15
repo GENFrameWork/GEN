@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFSMachine.h"
 #include "XThreadCollected.h"
 
 #include "DIOStreamTCPIPServer.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOLINUXTCPIPSERVERFSMEVENTS
@@ -71,11 +68,9 @@ enum DIOLINUXTCPIPSERVERFSMSTATES
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOLINUXSTREAMTCPIPSERVER : public DIOSTREAMTCPIPSERVER , public XFSMACHINE
@@ -109,14 +104,11 @@ class DIOLINUXSTREAMTCPIPSERVER : public DIOSTREAMTCPIPSERVER , public XFSMACHIN
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

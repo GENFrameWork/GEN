@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 
 #include "DIOStreamConfig.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSTREAMUARTDATABITS
@@ -87,11 +84,9 @@ enum DIOSTREAMUARTFLOWCONTROL
 #define DIOSTREAMUART_FLOWCONTROL_STR_HARD    __L("RTS/CTS")
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMUARTCONFIG : public DIOSTREAMCONFIG
@@ -143,13 +138,10 @@ class DIOSTREAMUARTCONFIG : public DIOSTREAMCONFIG
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

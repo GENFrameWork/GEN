@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <windows.h>
 #include <stdio.h>
@@ -42,11 +41,9 @@
 
 #include "XSystem.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define XWINDOWSSYSTEM_MAXNETADDRIP															16
 
@@ -60,11 +57,9 @@
 #define XWINDOWSSYSTEM_BYTEINCREMENT														10*1024
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 #ifndef BUILDER
 
@@ -481,14 +476,11 @@ class XWINDOWSSYSTEM : public XSYSTEM
 		XVECTOR<XWINDOWSSYSTEM_CPUUSAGESTATUS*>			cpuusagestatus;		
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

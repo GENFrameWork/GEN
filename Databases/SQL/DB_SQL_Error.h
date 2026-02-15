@@ -33,15 +33,12 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DB_SQL_Base.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DB_SQL_ERROR_TYPE
 {
@@ -53,11 +50,9 @@ enum DB_SQL_ERROR_TYPE
   DB_SQL_ERROR_TYPE_TRANSACTION_ERROR
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DB_SQL_ERROR
@@ -76,14 +71,11 @@ class DB_SQL_ERROR
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

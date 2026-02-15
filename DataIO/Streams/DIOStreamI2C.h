@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFSMachine.h"
 #include "XThreadCollected.h"
 
 #include "DIOStream.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum  DIOSTREAMI2C_FSMEVENTS
 {
@@ -65,11 +62,9 @@ enum  DIOSTREAMI2C_FSMSTATES
   DIOSTREAMI2C_LASTSTATE
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XBUFFER;
@@ -103,13 +98,10 @@ class DIOSTREAMI2C : public DIOSTREAM , public XFSMACHINE
     void                          Clean                                     ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

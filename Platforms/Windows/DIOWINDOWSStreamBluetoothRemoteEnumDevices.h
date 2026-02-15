@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <Windows.h>
 
@@ -44,11 +43,9 @@
 
 #include "DIOStreamBluetoothRemoteEnumDevices.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOWINDOWSBTENUMFSMFSMEVENTS
 {
@@ -104,11 +101,9 @@ enum DIOWINDOWSBTENUMPROTOCOLUUID
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES :  public DIOSTREAMBLUETOOTHREMOTEENUMDEVICES, public XFSMACHINE
@@ -138,15 +133,12 @@ class DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES :  public DIOSTREAMBLUETOOTHREM
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 BOOL __stdcall    SDP_ServiceCallback     (ULONG attribID, LPBYTE valuestream, ULONG cbstreamsize, LPVOID vparam);
 
-#pragma endregion
 
 
 #endif

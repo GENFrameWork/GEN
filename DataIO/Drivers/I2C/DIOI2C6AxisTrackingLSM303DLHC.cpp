@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOI2C6AxisTrackingLSM303DLHC.h"
 
@@ -49,29 +46,22 @@
 #include "DIOStreamI2CConfig.h"
 #include "DIOStreamI2C.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOI2CLSM303DLHCVECTOR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -175,10 +165,8 @@ void DIOI2CLSM303DLHCVECTOR::Clean()
 
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOI2CLSM303DLHC
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -357,10 +345,8 @@ void DIOI2CLSM303DLHC::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOI2C3DCOMPASSLSM303DLHC
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -450,10 +436,8 @@ bool DIOI2C3DACCELEROMETERLSM303DLHC::Read(XWORD& a_x, XWORD& a_y, XWORD& a_z)
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOI2C3DACCELEROMETERLSM303DLHC
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -542,10 +526,8 @@ bool DIOI2C3DCOMPASSLSM303DLHC::Read(XWORD& c_x, XWORD& c_y, XWORD& c_z)
   return true;
 }
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOI2C3DACCELEROMETERLSM303DLHC
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -868,9 +850,7 @@ void DIOI2C6AXISTRACKINGLSM303DLHC::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 

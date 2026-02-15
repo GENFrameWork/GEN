@@ -29,25 +29,20 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 
 #include "GRPVectorFileDXFEntityDefPoint.h"
 #include "GRPVectorFileDXFEntityObj.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPVECTORFILEDXFENTITYOBJPOLYLINE : public GRPVECTORFILEDXFENTITYOBJ
@@ -73,14 +68,11 @@ class GRPVECTORFILEDXFENTITYOBJPOLYLINE : public GRPVECTORFILEDXFENTITYOBJ
     GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;                         // Extrusion direction.
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

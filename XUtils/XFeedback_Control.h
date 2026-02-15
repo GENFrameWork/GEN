@@ -31,7 +31,6 @@
 #ifdef XFEEDBACK_CONTROL_ACTIVE
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <string.h>
@@ -45,11 +44,9 @@
 #include "XMap.h"
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum XFEEDBACK_CODE
 {
@@ -88,13 +85,11 @@ enum XFEEDBACK_CODE
 
 #define XFEEDBACK_CONTROL_LOG_SECTIONID           __L("Feedback")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-#pragma region CLASS
 
 class XFEEDBACK
 {
@@ -151,15 +146,12 @@ class XFEEDBACK_CONTROL
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 extern XFEEDBACK_CONTROL* XFeedback_Control;
 
-#pragma endregion
 
 #else
 

@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOCheckTCPIPConnections.h"
 
@@ -51,29 +48,22 @@
 #include "DIOURL.h"
 #include "DIOPing.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOCHECKTCPIPCONNECTION_CUT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -233,10 +223,8 @@ void DIOCHECKTCPIPCONNECTION_CUT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOCHECKTCPIPCONNECTION 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -510,10 +498,8 @@ void DIOCHECKTCPIPCONNECTION::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOCHECKTCPIPCONNECTIONS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1303,10 +1289,8 @@ void DIOCHECKTCPIPCONNECTIONS::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 

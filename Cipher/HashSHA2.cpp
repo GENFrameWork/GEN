@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "HashSHA2.h"
 
@@ -43,20 +40,16 @@
 
 #include "XBuffer.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 #if 0
 #define UNROLL_LOOPS /* Enable loops unrolling */
@@ -222,11 +215,9 @@ XDWORD HASHSHA2::Sha256_k[64] =   { 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5db
                                     0x4cc5d4becb3e42b6ULL, 0x597f299cfc657e2aULL,
                                     0x5fcb6fab3ad6faecULL, 0x6c44198c4a475817ULL
                                   };
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -979,5 +970,4 @@ void HASHSHA2::Clean()
 }
 
 
-#pragma endregion
 

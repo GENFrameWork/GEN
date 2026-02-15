@@ -28,42 +28,32 @@
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINE_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XTrace.h"
 
 #include "DIOStreamTLSMessagesHandShakeClientHello.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -542,9 +532,7 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 

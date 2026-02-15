@@ -27,18 +27,15 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 #ifdef DIO_ACTIVE
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #ifndef BUILDER
 #if(_MSC_VER >= 1700) && defined(_USING_V110_SDK71_)
@@ -143,26 +140,20 @@
 #include "DIOWINDOWSNotificationsManager.h"
 #endif
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 #ifdef ANYTYPEOFDIOSTREAMIO
 
@@ -400,7 +391,6 @@ DELETEFUNC(DIOWINDOWSFACTORY, DIONOTIFICATIONSMANAGER   , DIOWINDOWSNOTIFICATION
 #endif
 
 
-#pragma endregion
 
 
 #endif

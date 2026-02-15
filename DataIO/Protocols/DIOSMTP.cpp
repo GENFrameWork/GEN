@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOSMTP.h"
 
@@ -48,29 +45,22 @@
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOStreamTCPIP.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOSMTPRECIPIENT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -174,10 +164,8 @@ void DIOSMTPRECIPIENT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSMTPATTACHMENT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -314,10 +302,8 @@ void DIOSMTPATTACHMENT::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSMTP
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1612,8 +1598,6 @@ void DIOSMTP::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 

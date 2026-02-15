@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "DIOStreamConfig.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSTREAMI2CCONFIG_ADDRESSSIZE
@@ -52,11 +49,9 @@ enum DIOSTREAMI2CCONFIG_ADDRESSSIZE
 #define DIOSTREAMI2CCONFIG_ADDRESSINVALID     -1
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMI2CCONFIG : public DIOSTREAMCONFIG
@@ -98,14 +93,11 @@ class DIOSTREAMI2CCONFIG : public DIOSTREAMCONFIG
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

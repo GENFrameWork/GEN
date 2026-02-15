@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XESP32Thread.h"
 
@@ -43,30 +40,23 @@
 #include "XTrace.h"
 #include "XThreadListNonPreemptive.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /*---- CLASS ESP32MUTEX ----------------------------------------------------------------------------------------------*/
-#pragma region CLASS_ESP32MUTEX
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -147,11 +137,9 @@ void XESP32MUTEX::Clean()
   counterlock  = 0;
 }
 
-#pragma endregion
 
 
 /*---- CLASS ESP32THREAD ---------------------------------------------------------------------------------------------*/
-#pragma region CLASS_ESP32THREAD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -263,10 +251,8 @@ void XESP32THREAD::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 

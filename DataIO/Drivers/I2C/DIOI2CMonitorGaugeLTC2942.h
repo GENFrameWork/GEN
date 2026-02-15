@@ -29,17 +29,14 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 
 #include "DIODeviceI2C.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 // LTC2942 ADC mode enumeration 
@@ -128,11 +125,9 @@ enum DIOI2CMONITORGAUGELTC2942_AN
 #define DIOI2CMONITORGAUGELTC2942_VOLTAGE_READ_ERROR      		0X8000
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOI2CMONITORGAUGELTC2942: public DIODEVICEI2C
@@ -170,14 +165,11 @@ class DIOI2CMONITORGAUGELTC2942: public DIODEVICEI2C
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

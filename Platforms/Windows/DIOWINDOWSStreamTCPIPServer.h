@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <windows.h>
 
@@ -38,11 +37,9 @@
 
 #include "DIOStreamTCPIPServer.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOWINDOWSTCPIPSERVERFSMEVENTS
@@ -73,11 +70,9 @@ enum DIOWINDOWSTCPIPSERVERFSMSTATES
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOWINDOWSSTREAMTCPIPSERVER: public DIOSTREAMTCPIPSERVER, public XFSMACHINE
@@ -111,14 +106,11 @@ class DIOWINDOWSSTREAMTCPIPSERVER: public DIOSTREAMTCPIPSERVER, public XFSMACHIN
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

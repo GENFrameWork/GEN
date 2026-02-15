@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFile.h"
 
@@ -46,33 +43,26 @@
 
 #include "Cipher.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 #ifdef XTRACE_ACTIVE
 XFILEOPENLIST XFileOpenList;
 #endif
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_XFILE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -533,10 +523,8 @@ void XFILE::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILECONTAINER
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -639,10 +627,8 @@ void XFILECONTAINER::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_XFILEOPENLIST
 
 
 #ifdef XTRACE_ACTIVE
@@ -768,10 +754,8 @@ bool XFILEOPENLIST::DisplayAll()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 
 
 #endif

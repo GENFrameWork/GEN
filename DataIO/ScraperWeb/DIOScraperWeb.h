@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XMap.h"
@@ -37,21 +36,17 @@
 #include "DIOWebClient.h"
 #include "DIOScraperWebCache.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSCRAPERWEB_MAXTIMEOUTFORURL         10
 #define DIOSCRAPERWEB_NAMEFILE                 __L("scraperweb.xml")
 #define DIOSCRAPERWEB_DEFAULTUSERAGENT         DIOWEBCLIENT_DEFAULTUSERAGENT
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XDATETIME;
@@ -114,14 +109,11 @@ class DIOSCRAPERWEB
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

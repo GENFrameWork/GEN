@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "CompressBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define   LZW_MAX_TABLE_SIZE    4096
 #define   LZW_MAX_HASHSIZE      0x1000FF // (4096 << 8) + 0xFF
@@ -51,11 +48,9 @@ typedef struct tagLZW_STRING
 
 } LZW_STRING, *PLZW_STRING;
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class COMPRESS_LZW : public COMPRESSBASE
 {
@@ -114,14 +109,11 @@ class COMPRESS_LZW : public COMPRESSBASE
     XDWORD                 pitch;
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

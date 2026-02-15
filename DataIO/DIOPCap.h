@@ -31,7 +31,6 @@
 #ifdef DIO_PCAP_ACTIVE
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XString.h"
@@ -40,11 +39,9 @@
 #include "DIOMAC.h"
 #include "DIOIP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOPCAPETHERNETMACSIZE        6
 
@@ -115,11 +112,9 @@ typedef struct
 } DIOPCAPTCPHEADER;
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTHREADCOLLECTED;
 class XMUTEX;
@@ -287,14 +282,11 @@ class DIOPCAP
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

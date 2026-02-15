@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XLog.h"
 #include "XTrace.h"
@@ -41,11 +40,9 @@
 #include "DIOI2CPWMControlerPCA9685.h"
 #include "DIOGPIO.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOAIOBIMAINBOARD_I2CDEVICENAME           __L("/dev/i2c-1")
 
@@ -99,11 +96,9 @@ enum DIOAIOBIMAINBOARD_I2CDIGIGPIO
 
 #define DIOAIOBIMAINBOARD_LOGSECTIONID            __L("AIOBI MainBoard")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOAIOBIMAINBOARD
@@ -166,14 +161,11 @@ class DIOAIOBIMAINBOARD
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

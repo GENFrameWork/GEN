@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XVector.h"
@@ -37,11 +36,9 @@
 
 #include "DIOCLIProtocol.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOCLIPROTOCOLBUS_ENUM_DEFAULTMAXTIME     30
 #define DIOCLIPROTOCOLBUS_SEND_DEFAULNRETRIES     3
@@ -51,11 +48,9 @@
 #define DIOCLIPROTOCOLBUS_COMMAND_ENUM  			    __L("enum")
 #define DIOCLIPROTOCOLBUS_COMMAND_ENUMREQUEST     __L("enumrequest")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOCLIPROTOCOLBUS : public DIOCLIPROTOCOL
@@ -109,13 +104,10 @@ class DIOCLIPROTOCOLBUS : public DIOCLIPROTOCOL
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

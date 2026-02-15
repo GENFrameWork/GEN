@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -38,11 +37,9 @@
 #include "DIODeviceSPI.h"
 #include "DIODisplayDevice.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSPITFTDISPLAYILI9341_DCHIGH                   GEN_DIOGPIO.SetValue(GetGPIOEntryID(DIODISPLAYDEVICE_INDEX_GPIOENTRYID_DC), true); 
 #define DIOSPITFTDISPLAYILI9341_DCLOW                    GEN_DIOGPIO.SetValue(GetGPIOEntryID(DIODISPLAYDEVICE_INDEX_GPIOENTRYID_DC), false);
@@ -57,11 +54,9 @@
 #define DIOSPITFTDISPLAYILI9341_COLOR_WHITE              0xFFFF
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSPITFTDISPLAYILI9341 : public DIODISPLAYDEVICE, public DIODEVICESPI
@@ -96,14 +91,11 @@ class DIOSPITFTDISPLAYILI9341 : public DIODISPLAYDEVICE, public DIODEVICESPI
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #if defined(STM32F072xB)
 #define HW_STM32F0XX
@@ -56,11 +55,9 @@
 #endif
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #ifndef TRUE
 #define TRUE                  1
@@ -70,18 +67,14 @@
 #define FALSE                 0
 #endif
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 #ifdef __cplusplus
@@ -117,7 +110,6 @@ void __iar_dlmalloc_stats(void);
 #endif
 
 
-#pragma endregion
 
 
 

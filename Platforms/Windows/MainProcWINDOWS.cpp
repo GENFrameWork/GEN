@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <winsock2.h>
 
@@ -143,19 +140,15 @@
 #include "XTranslation.h"
 #include "XPublisher.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 #ifdef XTRACE_ACTIVE
 XWINDOWSTRACE           windowsdebugtrace;
@@ -164,11 +157,9 @@ XWINDOWSTRACE           windowsdebugtrace;
 MAINPROCWINDOWS         mainprocwindows;
 XSTRING*                allexceptiontext  = NULL;
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 DWORD WINAPI            Service_WorkerThread          (LPVOID lpParam);
 
@@ -176,7 +167,6 @@ bool                    Exception_Printf              (bool iserror, XCHAR* titl
 BOOL                    Exception_ConsoleHandler      (DWORD fdwctrltype);
 
 
-#pragma region CLASS_MAINPROCWINDOWS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -813,13 +803,11 @@ void MAINPROCWINDOWS::Clean()
 }
 
 
-#pragma endregion
 
 
 #if !defined(APPMODE_LIBRARY_STATIC_ACTIVE) && !defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
 
 
-#pragma region CLASS_WINDOWSSERVICE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1133,10 +1121,8 @@ DWORD WINAPI Service_WorkerThread(LPVOID lpparam)
 }
 
 
-#pragma endregion
 
 
-#pragma region MAINENTRYS
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*  wmain    : Windows UNICODE entry  /CONSOLE mode                                                                   */
@@ -1399,10 +1385,8 @@ void LIBRARY_End(void)
 }
 
 
-#pragma endregion
 
 
-#pragma region WINDOWS_STACKWALKER
 
 
 #ifdef WINDOWS_STACKWALKER_ACTIVE
@@ -1466,10 +1450,8 @@ void MAINPROCWINDOWSSTACKWALKER::OnCallstackEntry(CallstackEntryType eType, Call
 #endif
 
 
-#pragma endregion
 
 
-#pragma region EXECPTION_FUNTIONS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1780,8 +1762,6 @@ bool Exception_Printf(bool iserror, XCHAR* title, XCHAR* mask, ...)
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 

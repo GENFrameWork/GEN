@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XSubject.h"
 #include "XVariant.h"
@@ -37,11 +36,9 @@
 #include "GRPVectorFile.h"
 #include "GRPVectorFileDXFTextPart.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum GRPVECTORFILEDXFTEXTSECTION_BASICTYPE
@@ -79,11 +76,9 @@ enum GRPVECTORFILEDXFTEXTSECTION_TYPESECTION
 #define GRPVECTORFILEDXFTEXTSECTION_MAXNGENERICDEFTYPES       93
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XFILETXT;
@@ -140,14 +135,11 @@ class GRPVECTORFILEDXFTEXTSECTION : public XSUBJECT, public GRPVECTORFILEDXFTEXT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOURL.h"
 #include "DIOScraperWeb.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSCRAPERWEBSEXNAMETYPE
@@ -53,11 +50,9 @@ enum DIOSCRAPERWEBSEXNAMETYPE
 #define DIOSCRAPERWEBSEXNAME_NAMESERVICE    __L("SEXNAME")
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSEXNAME_RESULT :  public DIOSCRAPERWEBCACHE_RESULT
@@ -99,14 +94,11 @@ class DIOSCRAPERWEBSEXNAME : public DIOSCRAPERWEB
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

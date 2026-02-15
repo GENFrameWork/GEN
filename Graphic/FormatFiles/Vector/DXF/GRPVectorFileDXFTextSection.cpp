@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "GRPVectorFileDXFTextSection.h"
 
@@ -44,20 +41,16 @@
 #include "GRPVectorFileDXFTextSectionBlocks.h"
 #include "GRPVectorFileDXFTextSectionEntities.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 
 GRPVECTORFILEDXFDEFTEXTSECTION GRPVECTORFILEDXFTEXTSECTION::defsection[GRPVECTORFILEDXFTEXTSECTION_MAXNDEFSECTIONS] = 
@@ -171,11 +164,9 @@ GRPVECTORFILEDXFTEXTSECTIONGENERICDEFTYPE GRPVECTORFILEDXFTEXTSECTION::genericde
 };
 
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -986,4 +977,3 @@ void GRPVECTORFILEDXFTEXTSECTION::Clean()
   vectorfile = NULL;
 }
 
-#pragma endregion

@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XThreadCollected.h"
 
@@ -37,20 +36,16 @@
 #include "DIOStream.h"
 #include "DIOStreamTCPIP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DIOSTREAMTCPIPSERVER_MAXLISTEN                        1024
 #define DIOSTREAMTCPIPSERVER_TIMEOUTENUMSERVERSIGNAL          3
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSTREAMTCPIPCONFIG;
@@ -97,14 +92,11 @@ class DIOSTREAMTCPIPSERVER : public DIOSTREAM
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

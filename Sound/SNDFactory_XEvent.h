@@ -29,16 +29,13 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum SNDFACTORY_XEVENT_TYPE
 {
@@ -50,11 +47,9 @@ enum SNDFACTORY_XEVENT_TYPE
   SNDFACTORY_XEVENT_TYPE_SOUND_END                                  ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class SNDITEM;
 
@@ -74,14 +69,11 @@ class SNDFACTORY_XEVENT : public XEVENT
     SNDITEM*                    item;                   
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

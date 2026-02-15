@@ -27,43 +27,33 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOScraperWebCache.h"
 
 #include "XFactory.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOSCRAPERWEBCACHE_RESULT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -127,10 +117,8 @@ bool DIOSCRAPERWEBCACHE_RESULT::CopyTo(DIOSCRAPERWEBCACHE_RESULT* result)
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSCRAPERWEBCACHE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -279,8 +267,6 @@ void DIOSCRAPERWEBCACHE::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma endregion
 

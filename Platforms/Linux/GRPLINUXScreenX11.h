@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include <X11/X.h>
@@ -46,11 +45,9 @@
 #include "GRPScreen.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define GRPLINUXSCREENX11_MWM_HINTS_DECORATIONS (1L << 1)
 
@@ -61,11 +58,9 @@
 #define GRPLINUXSCREENX11_MWM_FUNC_MAXIMIZE     (1L << 4)
 #define GRPLINUXSCREENX11_MWM_FUNC_CLOSE        (1L << 5)
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 typedef struct
@@ -139,14 +134,11 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

@@ -33,7 +33,6 @@
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
 #include "INPCursor.h"
@@ -42,11 +41,9 @@
 #include "GRPLINUXScreenX11.h"
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #define INPLINUXDEVICEMOUSE11_EVRELEASED    0
@@ -54,11 +51,9 @@
 #define INPLINUXDEVICEMOUSE11_EVREPEAT      2
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class INPLINUXDEVICEMOUSEX11 : public INPDEVICE
@@ -82,14 +77,11 @@ class INPLINUXDEVICEMOUSEX11 : public INPDEVICE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 #endif

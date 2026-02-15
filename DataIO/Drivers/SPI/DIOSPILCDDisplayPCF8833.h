@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 
@@ -38,11 +37,9 @@
 
 #include "DIODisplayDevice.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DIOSPILCDDISPLAYPCF8833_TYPE
@@ -175,11 +172,9 @@ enum DIOSPILCDDISPLAYPCF8833_TYPE
 */
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class DIOSPILCDDISPLAYPCF8833 : public DIODISPLAYDEVICE, public DIODEVICESPI
@@ -216,14 +211,11 @@ class DIOSPILCDDISPLAYPCF8833 : public DIODISPLAYDEVICE, public DIODEVICESPI
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

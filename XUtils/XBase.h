@@ -29,14 +29,11 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 #ifndef XBYTE
@@ -205,11 +202,9 @@ typedef bool (*PROGRESS_FUNCTION)(void);
 #endif 
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XBASE
@@ -226,11 +221,9 @@ class XBASE
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 double    Truncate            (double value);
@@ -268,6 +261,5 @@ XBYTE     RotateBitReverse    (XBYTE byte);
 int       SizeBufferASCII     (XBYTE* buffer, int sizemax = 65535);
 
 
-#pragma endregion
 
 

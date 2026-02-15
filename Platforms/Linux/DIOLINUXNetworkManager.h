@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XString.h"
 #include "XObserver.h"
@@ -37,11 +36,9 @@
 
 #include "DIOStreamDeviceIP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOLINUXNETWORKMANAGER_STATE
 {
@@ -63,18 +60,14 @@ enum DIOLINUXNETWORKMANAGER_STATE
 #define DIOLINUXNETWORKMANAGER_DEFAULT_DBUS_IFACE_IP4CONFIG    __L("org.freedesktop.NetworkManager.IP4Config")
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
 class DIOLINUXDBUS_XEVENT;
@@ -114,7 +107,6 @@ class DIOLINUXNETWORKMANAGER : public XOBSERVER
 };
 
 
-#pragma endregion
 
 
 

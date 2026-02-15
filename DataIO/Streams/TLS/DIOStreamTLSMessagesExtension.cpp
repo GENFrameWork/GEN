@@ -27,40 +27,30 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINE_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DIOStreamTLSMessagesExtension.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -207,10 +197,8 @@ void DIOSTREAMTLS_MSG_EXTENSION::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -441,10 +429,8 @@ void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SNI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -763,10 +749,8 @@ void DIOSTREAMTLS_MSG_EXTENSION_SNI::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -796,10 +780,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTE
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -829,10 +811,8 @@ DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS::~DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFO
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -862,10 +842,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::~DIOSTREAMTLS_MSG_EXTENSION_SIGN
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_ALPN
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1128,10 +1106,8 @@ void DIOSTREAMTLS_MSG_EXTENSION_ALPN::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_EMS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1267,10 +1243,8 @@ void DIOSTREAMTLS_MSG_EXTENSION_EMS::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1300,10 +1274,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPOR
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1333,10 +1305,8 @@ DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::~DIOSTREAMTLS_MSG_EXTENSION_PSKK
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_KEY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1553,10 +1523,8 @@ void DIOSTREAMTLS_MSG_EXTENSION_KEY::Clean()
 }
 
 
-#pragma endregion
 
 
-#pragma region CLASS_DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1872,8 +1840,6 @@ void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::Clean()
 }
     
 
-#pragma endregion
 
 
-#pragma endregion
 

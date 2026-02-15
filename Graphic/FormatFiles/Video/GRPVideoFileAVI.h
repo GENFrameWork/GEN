@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBase.h"
 #include "XPath.h"
@@ -39,11 +38,9 @@
 
 #include "GRPVideoFile.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 typedef struct
@@ -114,11 +111,9 @@ typedef struct
 #define GRPVIDEOFILEAVI_INDEXENTRY_MAXSIZE    16
 
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class GRPPROPERTY;
@@ -169,14 +164,11 @@ class GRPVIDEOFILEAVI : public GRPVIDEOFILE
     XDWORD                                        offsetforentrys;      
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

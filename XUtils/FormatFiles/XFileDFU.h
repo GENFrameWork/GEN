@@ -29,27 +29,22 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XFile.h"
 #include "XVector.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define XFILEDFU_PREFIX_SIGNATUREPREXIF_MAX   5
 #define XFILEDFU_PREFIX_SIGNATUREIMAGE_MAX    6
 #define XFILEDFU_IMAGEPREFIX_NAME_MAX         255
 #define XFILEDFU_PREFIX_SIGNATURESUFFIX_MAX   3
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XFILEDFU_ELEMENT;
 
@@ -171,13 +166,10 @@ class XFILEDFU
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

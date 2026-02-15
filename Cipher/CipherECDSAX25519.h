@@ -29,14 +29,11 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum CIPHERECDSAX25519_TYPEKEY  
 {
@@ -49,11 +46,9 @@ enum CIPHERECDSAX25519_TYPEKEY
 
 #define CIPHERECDSAX25519_MAXKEY  32
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class CIPHERECDSAX25519
 {
@@ -109,14 +104,11 @@ class CIPHERECDSAX25519
     XBYTE                   keys[CIPHERECDSAX25519_MAXKEYS][CIPHERECDSAX25519_MAXKEY];    
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

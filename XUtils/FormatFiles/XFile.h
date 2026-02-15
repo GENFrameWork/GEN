@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XVector.h"
 #include "XPath.h"
@@ -37,11 +36,9 @@
 
 #include "FactoryBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum
 {
@@ -72,11 +69,9 @@ enum
                                                   }                                               \
                                               }
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class CIPHER;
@@ -194,17 +189,14 @@ class XFILEOPENLIST
 #endif
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 #ifdef XTRACE_ACTIVE
 extern XFILEOPENLIST  XFileOpenList;
 #endif
 
-#pragma endregion
 
 
 

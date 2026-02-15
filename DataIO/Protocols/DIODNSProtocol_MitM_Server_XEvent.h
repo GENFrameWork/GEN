@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XSubject.h"
@@ -38,11 +37,9 @@
 #include "DIOURL.h"
 #include "DIOIP.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE
 {
@@ -51,18 +48,14 @@ enum DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE
   DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ANSWERDNS                                       
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 class DIODNSPROTOCOL_MITM_SERVER_XEVENT : public XEVENT
 {
@@ -90,7 +83,6 @@ class DIODNSPROTOCOL_MITM_SERVER_XEVENT : public XEVENT
 
 };
 
-#pragma endregion
 
 
 

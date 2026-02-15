@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include <stdio.h>
 #include <string.h>
@@ -38,12 +37,10 @@
 
 #include "XMemory_Control.h"
 
-#pragma endregion
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #ifdef MICROCONTROLLER
   #define XVECTOR_DEFAULTADDINLIMIT   2
@@ -51,11 +48,9 @@
   #define XVECTOR_DEFAULTADDINLIMIT   100
 #endif
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 template<class T>
@@ -520,14 +515,11 @@ class XVECTOR
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 #include "XMemory_Control_Deactive.h"
 

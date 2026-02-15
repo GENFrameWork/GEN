@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XEvent.h"
 #include "XString.h"
@@ -37,11 +36,9 @@
 
 #include "DIOApplicationUpdate.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 enum DIOAPPLICATIONUPDATE_XEVENT_TYPE
 {
@@ -62,11 +59,9 @@ enum DIOAPPLICATIONUPDATE_XEVENT_TYPE
   DIOAPPLICATIONUPDATE_XEVENT_TYPE_RESTOREUPDATEFILES                                     ,
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
 class XSUBJECT;
@@ -115,14 +110,11 @@ class DIOAPPLICATIONUPDATE_XEVENT : public XEVENT
 };
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 
