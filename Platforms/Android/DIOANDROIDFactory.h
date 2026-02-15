@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDFACTORY_H_
-#define _DIOANDROIDFACTORY_H_
+#pragma once
 
 
 #ifdef DIO_ACTIVE
@@ -93,5 +92,4 @@ class DIOANDROIDFACTORY : public DIOFACTORY
 #endif
 
 
-#endif
 

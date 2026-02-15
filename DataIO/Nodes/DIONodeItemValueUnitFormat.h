@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIONODEITEMVALUEUNITFORMAT_H_
-#define _DIONODEITEMVALUEUNITFORMAT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -104,5 +103,4 @@ class DIONODEITEMVALUEUNITFORMAT : public XSERIALIZABLE
 #pragma endregion
 
 
-#endif
 

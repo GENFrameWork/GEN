@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XBINARYMAP_H_
-#define _XBINARYMAP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -227,5 +226,4 @@ class XBINARYMAP
 
 #include "XMemory_Control_Deactive.h"
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _FACTORYBASE_H_
-#define _FACTORYBASE_H_
+#pragma once
 
 /*---- PRECOMPILATION INCLUDES ----------------------------------------------------------------------------------------*/
 #pragma region PRECOMPILATION_DEFINES_INCLUDE
@@ -118,6 +117,5 @@
 #pragma endregion
 
 
-#endif
 
 

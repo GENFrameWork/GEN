@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMSPI_H_
-#define _DIOLINUXSTREAMSPI_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -81,5 +80,4 @@ class DIOLINUXSTREAMSPI : public DIOSTREAMSPI
 #pragma endregion
 
 
-#endif
 

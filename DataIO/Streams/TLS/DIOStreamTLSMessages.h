@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMTLSMESSAGE_H_
-#define _DIOSTREAMTLSMESSAGE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -374,5 +373,4 @@ class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
 #pragma endregion
 
 
-#endif
 

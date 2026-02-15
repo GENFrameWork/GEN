@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MYSQL_DATABASE_H_
-#define _MYSQL_DATABASE_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_MYSQL_ACTIVE)
@@ -110,5 +109,4 @@ class MYSQL_DATABASE : public DB_SQL_DATABASE
 #endif
 
 
-#endif
 

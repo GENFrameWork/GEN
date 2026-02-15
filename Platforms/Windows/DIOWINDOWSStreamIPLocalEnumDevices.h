@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSSTREAMIPLOCALENUMDEVICES_H_
-#define _DIOWINDOWSSTREAMIPLOCALENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -74,5 +73,4 @@ class DIOWINDOWSSTREAMIPLOCALENUMDEVICES :  public DIOSTREAMIPLOCALENUMDEVICES
 #pragma endregion
 
 
-#endif
 

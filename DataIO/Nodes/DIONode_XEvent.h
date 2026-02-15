@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIONODE_XEVENT_H_
-#define _DIONODE_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -89,5 +88,4 @@ class DIONODE_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

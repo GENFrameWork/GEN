@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIONODEITEMHANDLER_GPIODIGITAL_H_
-#define _DIONODEITEMHANDLER_GPIODIGITAL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -131,7 +130,6 @@ class DIONODEITEMHANDLER_GPIODIGITAL : public DIONODEITEMHANDLER
 #pragma endregion
 
 
-#endif
 
 
 

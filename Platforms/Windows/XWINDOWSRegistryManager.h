@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSREGISTRYMANAGER_H_
-#define _XWINDOWSREGISTRYMANAGER_H_
+#pragma once
 
 #ifdef WINDOWS
 
@@ -131,5 +130,4 @@ class XWINDOWSREGISTRYMANAGER
 #endif
 
 
-#endif
 

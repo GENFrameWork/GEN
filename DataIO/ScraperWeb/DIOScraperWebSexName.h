@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSCRAPERWEBSEXNAME_H_
-#define _DIOSCRAPERWEBSEXNAME_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -110,5 +109,4 @@ class DIOSCRAPERWEBSEXNAME : public DIOSCRAPERWEB
 #pragma endregion
 
 
-#endif
 

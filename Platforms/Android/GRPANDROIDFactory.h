@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPANDROIDFACTORY_H_
-#define _GRPANDROIDFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,6 +77,5 @@ class GRPANDROIDFACTORY : public GRPFACTORY
 #pragma endregion
 
 
-#endif
 
 

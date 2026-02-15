@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOEMAILADDRESS_H_
-#define _DIOEMAILADDRESS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -95,5 +94,4 @@ class DIOEMAILADDRESS: public XSTRING
 #pragma endregion
 
 
-#endif
 

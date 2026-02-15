@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIONODEITEM_H_
-#define _DIONODEITEM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -124,5 +123,4 @@ class DIONODEITEM : public XSERIALIZABLE
 #pragma endregion
 
 
-#endif
 

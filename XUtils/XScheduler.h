@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XSCHEDULER_H_
-#define _XSCHEDULER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -194,5 +193,4 @@ class XSCHEDULER  : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

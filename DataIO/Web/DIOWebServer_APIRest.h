@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWEBSERVER_APIREST_H_
-#define _DIOWEBSERVER_APIREST_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -93,5 +92,4 @@ class DIOWEBSERVER_APIREST
 #pragma endregion
 
 
-#endif
 

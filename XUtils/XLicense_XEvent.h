@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLICENSE_XEVENT_H_
-#define _XLICENSE_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -82,5 +81,4 @@ class XLICENSE_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

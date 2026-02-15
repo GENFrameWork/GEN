@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFENTITY_H_
-#define _GRPVECTORFILEDXFENTITY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -89,5 +88,4 @@ class GRPVECTORFILEDXFENTITY
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOFACTORY_H_
-#define _DIOFACTORY_H_
+#pragma once
 
 
 #ifdef DIO_ACTIVE
@@ -124,5 +123,4 @@ class DIOFACTORY
 #endif
 
 
-#endif
 

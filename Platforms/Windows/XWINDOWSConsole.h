@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSCONSOLE_H_
-#define _XWINDOWSCONSOLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -94,5 +93,4 @@ class XWINDOWSCONSOLE : public XCONSOLE
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MAINPROCLINUX_H_
-#define _MAINPROCLINUX_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -82,5 +81,4 @@ class MAINPROCLINUX : public MAINPROC
 #pragma endregion
 
 
-#endif
 

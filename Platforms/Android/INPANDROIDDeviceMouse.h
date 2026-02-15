@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPANDROIDDEVICEMOUSE_H_
-#define _INPANDROIDDEVICEMOUSE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -85,6 +84,5 @@ class INPANDROIDDEVICEMOUSE : public INPDEVICE
 #pragma endregion
 
 
-#endif
 
 

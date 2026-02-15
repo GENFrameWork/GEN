@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSCRAPERWEBGEOLOCATIONIP_H_
-#define _DIOSCRAPERWEBGEOLOCATIONIP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -124,5 +123,4 @@ class DIOSCRAPERWEBGEOLOCATIONIP : public DIOSCRAPERWEB
 #pragma endregion
 
 
-#endif
 

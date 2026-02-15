@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOPROTOCOL_APPLICATIONDATA_H_
-#define _DIOPROTOCOL_APPLICATIONDATA_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -101,5 +100,4 @@ class DIOPROTOCOL_APPLICATIONDATA
 #pragma endregion
 
 
-#endif
 

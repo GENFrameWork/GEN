@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMENUMDEVICES_H_
-#define _DIOSTREAMENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -118,4 +117,3 @@ class DIOSTREAMENUMDEVICES : public XSUBJECT
 #pragma endregion
 
 
-#endif

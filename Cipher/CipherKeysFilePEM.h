@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERKEYSFILEPEM_H_
-#define _CIPHERKEYSFILEPEM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -132,5 +131,4 @@ class CIPHERKEYSFILEPEM : public XOBSERVER
 #pragma endregion
 
 
-#endif
 

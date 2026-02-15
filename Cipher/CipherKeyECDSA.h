@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERKEYECDSA_H_
-#define _CIPHERKEYECDSA_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -70,4 +69,3 @@ class CIPHERKEYECDSA : public CIPHERKEYSYMMETRICAL
 #pragma endregion
 
 
-#endif

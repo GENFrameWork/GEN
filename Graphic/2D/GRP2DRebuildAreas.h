@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRP2DREBUILDAREAS_H_
-#define _GRP2DREBUILDAREAS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -126,5 +125,4 @@ class GRP2DREBUILDAREAS
 #pragma endregion
 
 
-#endif
 

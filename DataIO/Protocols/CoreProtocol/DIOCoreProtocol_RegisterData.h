@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCOREPROTOCOL_REGISTERDATA_H_
-#define _DIOCOREPROTOCOL_REGISTERDATA_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -102,4 +101,3 @@ class DIOCOREPROTOCOL_REGISTERDATA : public XSERIALIZABLE
 #pragma endregion
 
 
-#endif

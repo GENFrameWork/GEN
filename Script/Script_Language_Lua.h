@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LANGUAGE_LUA_H_
-#define _SCRIPT_LANGUAGE_LUA_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -92,4 +91,3 @@ int     LUA_LibraryCallBack       (lua_State* state);
 #pragma endregion
 
 
-#endif

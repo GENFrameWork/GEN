@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMCONFIG_H_
-#define _DIOSTREAMCONFIG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -133,5 +132,4 @@ class DIOSTREAMCONFIG : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

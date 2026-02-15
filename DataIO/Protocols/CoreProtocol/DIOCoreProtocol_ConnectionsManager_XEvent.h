@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_H_
-#define _DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -114,5 +113,4 @@ class DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSNOTIFICATIONSMANAGER_H_
-#define _DIOWINDOWSNOTIFICATIONSMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
@@ -100,5 +99,4 @@ class DIOWINDOWSNOTIFICATIONSMANAGER : public DIONOTIFICATIONSMANAGER
 #pragma endregion
 
 
-#endif
 

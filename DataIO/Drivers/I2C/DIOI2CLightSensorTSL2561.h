@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CLIGHTSENSORTSL2561_H_
-#define _DIOI2CLIGHTSENSORTSL2561_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -222,7 +221,6 @@ class DIOI2CLIGHTSENSORTSL2561 : public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 
 
 

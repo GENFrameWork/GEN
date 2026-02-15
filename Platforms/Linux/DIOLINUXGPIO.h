@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXGPIO_H_
-#define _DIOLINUXGPIO_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -95,5 +94,4 @@ class DIOLINUXGPIO : public DIOGPIO
 #pragma endregion
 
 
-#endif
 

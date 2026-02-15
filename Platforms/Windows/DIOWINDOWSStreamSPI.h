@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSSTREAMSPI_H_
-#define _DIOWINDOWSSTREAMSPI_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -72,4 +71,3 @@ class DIOWINDOWSSTREAMSPI : public DIOSTREAMSPI
 #pragma endregion
 
 
-#endif

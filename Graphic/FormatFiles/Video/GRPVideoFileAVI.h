@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVIDEOFILEAVI_H_
-#define _GRPVIDEOFILEAVI_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -180,6 +179,5 @@ class GRPVIDEOFILEAVI : public GRPVIDEOFILE
 #pragma endregion
 
 
-#endif
 
 

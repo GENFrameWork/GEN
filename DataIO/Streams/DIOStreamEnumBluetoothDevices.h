@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMENUMBLUETOOTHDEVICES_H_
-#define _DIOSTREAMENUMBLUETOOTHDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -85,4 +84,3 @@ class DIOSTREAMENUMBLUETOOTHDEVICES : public DIOSTREAMENUMDEVICES
 #pragma endregion
 
 
-#endif

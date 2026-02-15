@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMIPLOCALENUMDEVICES_H_
-#define _DIOANDROIDSTREAMIPLOCALENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -69,4 +68,3 @@ class DIOANDROIDSTREAMIPLOCALENUMDEVICES :  public DIOSTREAMIPLOCALENUMDEVICES
 #pragma endregion
 
 
-#endif

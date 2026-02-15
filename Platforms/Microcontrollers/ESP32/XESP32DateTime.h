@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XESP32DATETIME_H_
-#define _XESP32DATETIME_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -71,4 +70,3 @@ class XESP32DATETIME : public XDATETIME
 #pragma endregion
 
 
-#endif

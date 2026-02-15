@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSSTREAMBLUETOOTH_H_
-#define _DIOWINDOWSSTREAMBLUETOOTH_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && (defined(DIO_STREAMBLUETOOTH_ACTIVE) || defined(DIO_STREAMBLUETOOTHLE_ACTIVE))
@@ -131,5 +130,4 @@ class DIOWINDOWSSTREAMBLUETOOTH : public DIOSTREAMBLUETOOTH , public XFSMACHINE
 #endif
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERBLOWFISH_H_
-#define _CIPHERBLOWFISH_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -104,5 +103,4 @@ class CIPHERBLOWFISH : public CIPHER
 #pragma endregion
 
 
-#endif
 

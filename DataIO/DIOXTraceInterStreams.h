@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOXTRACEINTERSTREAMS_H_
-#define _DIOXTRACEINTERSTREAMS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,5 +77,4 @@ class DIOXTRACEINTERSTREAMS
 #pragma endregion
 
 
-#endif
 

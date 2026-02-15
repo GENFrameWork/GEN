@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSEEPROMMEMORYMANAGER_H_
-#define _XWINDOWSEEPROMMEMORYMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -85,5 +84,4 @@ class XWINDOWSEEPROMMEMORYMANAGER : public XEEPROMMEMORYMANAGER
 #pragma endregion
 
 
-#endif
 

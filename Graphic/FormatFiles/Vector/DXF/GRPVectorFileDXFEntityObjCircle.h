@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFENTITYOBJCIRCLE_H_
-#define _GRPVECTORFILEDXFENTITYOBJCIRCLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -93,5 +92,4 @@ class GRPVECTORFILEDXFENTITYOBJCIRCLE : public GRPVECTORFILEDXFENTITYOBJ
 #pragma endregion
 
 
-#endif
 

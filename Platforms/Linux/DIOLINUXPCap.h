@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXPCAP_H_
-#define _DIOLINUXPCAP_H_
+#pragma once
 
 
 #ifdef DIO_PCAP_ACTIVE
@@ -93,5 +92,4 @@ class DIOLINUXPCAP : public DIOPCAP
 #endif
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XESP32EEPROMMEMORYMANAGER_H_
-#define _XESP32EEPROMMEMORYMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
@@ -63,7 +62,6 @@ class XESP32EEPROMMEMORYMANAGER : public XEEPROMMEMORYMANAGER
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
-#endif
 
 
 

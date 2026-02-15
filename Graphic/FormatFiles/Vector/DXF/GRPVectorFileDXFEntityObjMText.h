@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFENTITYOBJMTEXT_H_
-#define _GRPVECTORFILEDXFENTITYOBJMTEXT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -76,4 +75,3 @@ class GRPVECTORFILEDXFENTITYOBJMTEXT : public GRPVECTORFILEDXFENTITYOBJ
 #pragma endregion
 
 
-#endif

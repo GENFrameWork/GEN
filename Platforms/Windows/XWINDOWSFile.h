@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSFILE_H_
-#define _XWINDOWSFILE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -122,6 +121,5 @@ class XWINDOWSFILE : public XFILE
 #pragma endregion
 
 
-#endif
 
 

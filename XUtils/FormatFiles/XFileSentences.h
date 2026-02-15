@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XFILESENTENCES_H_
-#define _XFILESENTENCES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -75,5 +74,4 @@ class XFILESENTENCES : public XFILEXDB
 #pragma endregion
 
 
-#endif
 

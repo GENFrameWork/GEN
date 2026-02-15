@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOW_XEVENT_H_
-#define _APPFLOW_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -83,5 +82,4 @@ class APPFLOW_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

@@ -27,8 +27,7 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 
-#ifndef _SNDANDROIDFACTORY_H_
-#define _SNDANDROIDFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -75,6 +74,5 @@ class SNDANDROIDFACTORY : public SNDOPENALFACTORY
 #pragma endregion
 
 
-#endif
 
 

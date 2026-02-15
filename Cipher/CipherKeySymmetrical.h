@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERKEYSYMMETRICAL_H_
-#define _CIPHERKEYSYMMETRICAL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -82,4 +81,3 @@ class CIPHERKEYSYMMETRICAL : public CIPHERKEY
 #pragma endregion
 
 
-#endif

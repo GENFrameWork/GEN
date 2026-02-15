@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXWIFIMANAGERMODE_H_
-#define _DIOLINUXWIFIMANAGERMODE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -99,5 +98,4 @@ class DIOLINUXWIFIMANAGERMODE : public DIOWIFIMANAGERMODE
 #pragma endregion
 
 
-#endif
 

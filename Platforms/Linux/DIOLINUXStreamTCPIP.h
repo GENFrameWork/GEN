@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMTCPIP_H_
-#define _DIOLINUXSTREAMTCPIP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -122,5 +121,4 @@ class DIOLINUXSTREAMTCPIP : public DIOSTREAMTCPIP , public XFSMACHINE
 #pragma endregion
 
 
-#endif
 

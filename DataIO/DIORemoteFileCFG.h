@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOREMOTEFILECFG_H_
-#define _DIOREMOTEFILECFG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -370,5 +369,4 @@ class DIOREMOTEFILECFG : public XFILECFG
 #pragma endregion
 
 
-#endif
 

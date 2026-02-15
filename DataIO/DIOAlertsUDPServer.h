@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOALERTSUDPSERVER_H_
-#define _DIOALERTSUDPSERVER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -107,5 +106,4 @@ class DIOALERTSUDPSERVER
 #pragma endregion
 
 
-#endif
 

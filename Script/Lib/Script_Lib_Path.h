@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_PATH_H_
-#define _SCRIPT_LIB_PATH_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,4 +77,3 @@ void      Call_GetNameScript                        (SCRIPT_LIB* library, SCRIPT
 #pragma endregion
 
 
-#endif

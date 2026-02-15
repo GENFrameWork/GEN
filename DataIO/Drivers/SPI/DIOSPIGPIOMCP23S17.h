@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSPIGPIOMCP23S17_H_
-#define _DIOSPIGPIOMCP23S17_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -145,5 +144,4 @@ class DIOSPIGPIOMCP23S17 : public DIODEVICESPI
 #pragma endregion
 
 
-#endif
 

@@ -1,5 +1,4 @@
-#ifndef _MALLOCSTATS_H_
-#define _MALLOCSTATS_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C"
@@ -33,4 +32,3 @@ void __iar_dlmalloc_stats(void);
 }
 #endif
 
-#endif

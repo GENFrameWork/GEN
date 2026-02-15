@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPBITMAPFILEPNG_H_
-#define _GRPBITMAPFILEPNG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -101,5 +100,4 @@ class GRPBITMAPFILEPNG : public GRPBITMAPFILEBASE
 #pragma endregion
 
 
-#endif
 

@@ -27,8 +27,7 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 
-#ifndef _SNDFACTORY_H_
-#define _SNDFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -125,6 +124,5 @@ class SNDFACTORY : public XSUBJECT
 #pragma endregion
 
 
-#endif
 
 

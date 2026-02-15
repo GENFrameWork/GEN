@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXSYSTEM_H_
-#define _XLINUXSYSTEM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -110,5 +109,4 @@ class XLINUXSYSTEM : public XSYSTEM
 #pragma endregion
 
 
-#endif
 

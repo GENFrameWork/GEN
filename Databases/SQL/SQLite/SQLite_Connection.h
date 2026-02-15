@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SQLITE_CONNECTION_H_
-#define _SQLITE_CONNECTION_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_SQLITE_ACTIVE)
@@ -87,5 +86,4 @@ class SQLITE_CONNECTION : public DB_SQL_CONNECTION
 #endif
 
 
-#endif
 

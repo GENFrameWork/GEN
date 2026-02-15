@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XFILETXT_H_
-#define _XFILETXT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -172,4 +171,3 @@ class XFILETXT : public XFILECONTAINER
 #pragma endregion
 
 
-#endif

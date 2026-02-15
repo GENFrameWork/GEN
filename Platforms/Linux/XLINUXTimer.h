@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXTIMER_H_
-#define _XLINUXTIMER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -71,4 +70,3 @@ class XLINUXTIMER : public XTIMER
 #pragma endregion
 
 
-#endif

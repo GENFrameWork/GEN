@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES_H_
-#define _DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMBLUETOOTHLE_ACTIVE)
@@ -82,5 +81,4 @@ class DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES : public DIOSTREAMBLUETOOTHLE
 #endif
 
 
-#endif
 

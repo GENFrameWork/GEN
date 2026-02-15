@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXSHAREDMEMORYMANAGER_H_
-#define _XLINUXSHAREDMEMORYMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -77,5 +76,4 @@ class XLINUXSHAREDMEMORYMANAGER : public XSHAREDMEMORYMANAGER
 #pragma endregion
 
 
-#endif
 

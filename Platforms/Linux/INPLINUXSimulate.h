@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPLINUXSIMULATE_H_
-#define _INPLINUXSIMULATE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -69,7 +68,6 @@ class INPLINUXSIMULATE
 #pragma endregion
 
 
-#endif
 
 
 

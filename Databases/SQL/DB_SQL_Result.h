@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DB_SQL_RESULT_H_
-#define _DB_SQL_RESULT_H_
+#pragma once
 
 
 #ifdef DB_SQL_ACTIVE
@@ -100,5 +99,4 @@ class DB_SQL_RESULT
 #endif
 
 
-#endif
 

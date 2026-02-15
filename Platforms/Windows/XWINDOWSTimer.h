@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSTIMER_H_
-#define _XWINDOWSTIMER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -83,5 +82,4 @@ class XWINDOWSTIMER : public XTIMER
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CMONITORGAUGELTC2942_H_
-#define _DIOI2CMONITORGAUGELTC2942_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -181,5 +180,4 @@ class DIOI2CMONITORGAUGELTC2942: public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

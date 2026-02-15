@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPCAPTURE_H_
-#define _INPCAPTURE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -97,5 +96,4 @@ class INPCAPTURE : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOESP32STREAMI2C_H_
-#define _DIOESP32STREAMI2C_H_
+#pragma once
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMI2C_ACTIVE)
 
@@ -130,6 +129,5 @@ class DIOESP32STREAMI2C : public DIOSTREAMI2C
 
 #endif
 
-#endif
 
 

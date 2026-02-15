@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSPITFTDISPLAYST7789_H_
-#define _DIOSPITFTDISPLAYST7789_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -156,6 +155,5 @@ class DIOSPITFTDISPLAYST7789 : public DIODISPLAYDEVICE, public DIODEVICESPI
 #pragma endregion
 
 
-#endif
 
 

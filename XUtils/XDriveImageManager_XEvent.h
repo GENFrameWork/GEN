@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XDRIVEIMAGEMANAGER_XEVENT_H_
-#define _XDRIVEIMAGEMANAGER_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -104,5 +103,4 @@ class XDRIVEIMAGEMANAGER_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

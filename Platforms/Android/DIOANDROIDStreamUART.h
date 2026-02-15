@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMUART_H_
-#define _DIOANDROIDSTREAMUART_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMUART_ACTIVE)
@@ -136,7 +135,6 @@ class DIOANDROIDSTREAMUART : public DIOSTREAMUART , public XFSMACHINE
 #endif
 
 
-#endif
 
 
 

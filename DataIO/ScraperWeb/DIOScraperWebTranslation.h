@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSCRAPERWEBTRANSLATION_H_
-#define _DIOSCRAPERWEBTRANSLATION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -113,5 +112,4 @@ class DIOSCRAPERWEBTRANSLATION : public DIOSCRAPERWEB
 #pragma endregion
 
 
-#endif
 

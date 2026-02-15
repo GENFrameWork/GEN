@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSSERVICEBASE_H_
-#define _XWINDOWSSERVICEBASE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -134,5 +133,4 @@ class XWINDOWSSERVICEBASE
 #pragma endregion
 
 
-#endif
 

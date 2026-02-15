@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCOREPROTOCOL_H_
-#define _DIOCOREPROTOCOL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -244,6 +243,5 @@ class DIOCOREPROTOCOL
 #pragma endregion
 
 
-#endif
 
 

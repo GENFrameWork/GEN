@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDTIMER_H_
-#define _XANDROIDTIMER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -66,5 +65,4 @@ class XANDROIDTIMER : public XLINUXTIMER
 #pragma endregion
 
 
-#endif
 

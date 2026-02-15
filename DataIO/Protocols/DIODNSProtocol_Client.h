@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIODNSPROTOCOL_CLIENT_H_
-#define _DIODNSPROTOCOL_CLIENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -99,4 +98,3 @@ class DIODNSPROTOCOLCLIENT
 #pragma endregion
 
 
-#endif

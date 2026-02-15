@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LANGUAGE_JAVASCRIPT_H_
-#define _SCRIPT_LANGUAGE_JAVASCRIPT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -97,5 +96,4 @@ class SCRIPT_LNG_JAVASCRIPT : public SCRIPT
 #pragma endregion
 
 
-#endif
 

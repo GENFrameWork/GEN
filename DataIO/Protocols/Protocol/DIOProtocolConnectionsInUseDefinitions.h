@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOPROTOCOLCONNECTIONSINUSEDEFINITIONS_H_
-#define _DIOPROTOCOLCONNECTIONSINUSEDEFINITIONS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -65,5 +64,4 @@ enum DIOPROTOCOL_CONNECTIONSINUSEID
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWBASE_H_
-#define _APPFLOWBASE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -175,4 +174,3 @@ class APPFLOWBASE :  public XSUBJECT
 #pragma endregion
 
 
-#endif

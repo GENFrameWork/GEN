@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CAIRQUALITYCCS811_H_
-#define _DIOI2CAIRQUALITYCCS811_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -150,5 +149,4 @@ class DIOI2CAIRQUALITYCCS811: public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOMODBUSELECTRICMETER_H_
-#define _DIOMODBUSELECTRICMETER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -173,6 +172,5 @@ class DIOMODBUSELECTRICMETER  : public XSUBJECT
 #pragma endregion
 
 
-#endif
 
 

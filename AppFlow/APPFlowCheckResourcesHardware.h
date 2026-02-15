@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWCHECKRESOURCESHARDWARE_H_
-#define _APPFLOWCHECKRESOURCESHARDWARE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -121,4 +120,3 @@ class APPFLOWCHECKRESOURCESHARDWARE : public XOBSERVER, public XSUBJECT
 #pragma endregion
 
 
-#endif

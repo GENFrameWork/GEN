@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _COMPRESSZIP_H_
-#define _COMPRESSZIP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -76,5 +75,4 @@ class COMPRESS_ZIP : public COMPRESSBASE
 #pragma endregion
 
 
-#endif
 

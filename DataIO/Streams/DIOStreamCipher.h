@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMCIPHER_H_
-#define _DIOSTREAMCIPHER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -110,5 +109,4 @@ class DIOSTREAMCIPHER : public DIOSTREAM
 #pragma endregion
 
 
-#endif
 

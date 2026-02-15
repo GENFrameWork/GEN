@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMUDPACKNOWLEDGE_H_
-#define _DIOSTREAMUDPACKNOWLEDGE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -106,5 +105,4 @@ class DIOSTREAMUDPACKNOWLEDGE : public DIOSTREAMUDP
 #pragma endregion
 
 
-#endif
 

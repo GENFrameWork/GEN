@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPBITMAPSEQUENCE_H_
-#define _GRPBITMAPSEQUENCE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -164,5 +163,4 @@ class GRPBITMAPSEQUENCE
 #pragma endregion
 
 
-#endif
 

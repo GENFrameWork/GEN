@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_OPTION_H_
-#define _UI_ELEMENT_OPTION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -110,4 +109,3 @@ class UI_ELEMENT_OPTION : public UI_ELEMENT, public UI_PROPERTY_SELECTABLE
 #pragma endregion
 
 
-#endif

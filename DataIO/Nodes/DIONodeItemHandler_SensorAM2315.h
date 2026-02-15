@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIONODEITEMHANDLER_SENSOR_AM2315_H_
-#define _DIONODEITEMHANDLER_SENSOR_AM2315_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
@@ -65,5 +64,4 @@ class DIONODEITEMHANDLER_SENSORAM2315 : public DIONODEITEMHANDLER
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
-#endif
 

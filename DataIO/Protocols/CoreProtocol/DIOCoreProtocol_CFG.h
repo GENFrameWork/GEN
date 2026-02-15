@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCOREPROTOCOL_CFG_H_
-#define _DIOCOREPROTOCOL_CFG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -138,6 +137,5 @@ class DIOCOREPROTOCOL_CFG
 #pragma endregion
 
 
-#endif
 
 

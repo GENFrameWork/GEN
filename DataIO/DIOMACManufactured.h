@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOMACMANUFACTURED_H_
-#define _DIOMACMANUFACTURED_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -91,5 +90,4 @@ class DIOMACMANUFACTURED
 #pragma endregion
 
 
-#endif
 

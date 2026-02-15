@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XFEEDBACK_CONTROL_H_
-#define _XFEEDBACK_CONTROL_H_
+#pragma once
 
 #ifdef XFEEDBACK_CONTROL_ACTIVE
 
@@ -195,5 +194,4 @@ extern XFEEDBACK_CONTROL* XFeedback_Control;
 #endif
 
 
-#endif
 

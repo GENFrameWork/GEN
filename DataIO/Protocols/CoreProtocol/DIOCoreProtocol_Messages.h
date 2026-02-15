@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCOREPROTOCOL_MESSAGES_H_
-#define _DIOCOREPROTOCOL_MESSAGES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -132,6 +131,5 @@ class DIOCOREPROTOCOL_MESSAGES
 #pragma endregion
 
 
-#endif
 
 

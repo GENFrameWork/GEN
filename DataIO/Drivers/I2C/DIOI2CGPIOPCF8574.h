@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CGPIOPCF8574_H_
-#define _DIOI2CGPIOPCF8574_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -84,5 +83,4 @@ class DIOI2CGPIOPCF8574 : public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

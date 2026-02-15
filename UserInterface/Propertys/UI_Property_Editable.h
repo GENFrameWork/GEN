@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_PROPERTY_EDITABLE_H_
-#define _UI_PROPERTY_EDITABLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,4 +77,3 @@ class UI_PROPERTY_EDITABLE
 #pragma endregion
 
 
-#endif

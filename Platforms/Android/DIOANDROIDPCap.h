@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDPCAP_H_
-#define _DIOANDROIDPCAP_H_
+#pragma once
 
 
 #ifdef DIO_PCAP_ACTIVE
@@ -93,5 +92,4 @@ class DIOANDROIDPCAP : public DIOPCAP
 #endif
 
 
-#endif
 

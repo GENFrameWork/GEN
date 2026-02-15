@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLEDNEOPIXELWS2812B_H_
-#define _DIOLEDNEOPIXELWS2812B_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -95,5 +94,4 @@ class DIOLEDNEOPIXELWS2812B
 #pragma endregion
 
 
-#endif
 

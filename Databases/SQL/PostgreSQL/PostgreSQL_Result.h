@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _POSTGRESQL_RESULT_H_
-#define _POSTGRESQL_RESULT_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_POSTGRESQL_ACTIVE)
@@ -104,5 +103,4 @@ class POSTGRESQL_RESULT : public DB_SQL_RESULT
 #endif
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XEEPROMMEMORYMANAGER_H_
-#define _XEEPROMMEMORYMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -90,5 +89,4 @@ class XEEPROMMEMORYMANAGER
 #pragma endregion
 
 
-#endif
 

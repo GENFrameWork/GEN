@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMI2C_H_
-#define _DIOANDROIDSTREAMI2C_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -187,5 +186,4 @@ class DIOANDROIDSTREAMI2C : public DIOSTREAMI2C
 #pragma endregion
 
 
-#endif
 

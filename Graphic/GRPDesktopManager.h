@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPDESKTOPMANAGER_H_
-#define _GRPDESKTOPMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -96,5 +95,4 @@ class GRPDESKTOPMANAGER
 #pragma endregion
 
 
-#endif
 

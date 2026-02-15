@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_SYSTEM_H_
-#define _SCRIPT_LIB_SYSTEM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -80,4 +79,3 @@ void    Call_System_GetEnviromentVar         (SCRIPT_LIB* library, SCRIPT* scrip
 #pragma endregion
 
 
-#endif

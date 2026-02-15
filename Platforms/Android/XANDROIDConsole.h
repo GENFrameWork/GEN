@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDCONSOLE_H_
-#define _XANDROIDCONSOLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -66,5 +65,4 @@ class XANDROIDCONSOLE : public XLINUXCONSOLE
 #pragma endregion
 
 
-#endif
 

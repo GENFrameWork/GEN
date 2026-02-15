@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2C6AXISTRACKINGLSM303DLHC_H_
-#define _DIOI2C6AXISTRACKINGLSM303DLHC_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -210,6 +209,5 @@ class DIOI2C6AXISTRACKINGLSM303DLHC
 #pragma endregion
 
 
-#endif
 
 

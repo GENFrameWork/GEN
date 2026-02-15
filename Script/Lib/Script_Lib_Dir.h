@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_DIR_H_
-#define _SCRIPT_LIB_DIR_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -80,4 +79,3 @@ void    Call_MakeDir                (SCRIPT_LIB* library, SCRIPT* script, XVECTO
 #pragma endregion
 
 
-#endif

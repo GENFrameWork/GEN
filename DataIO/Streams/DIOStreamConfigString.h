@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMCONFIGSTRING_H_
-#define _DIOSTREAMCONFIGSTRING_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -84,5 +83,4 @@ class DIOSTREAMCONFIGSTRING
 #pragma endregion
 
 
-#endif
 

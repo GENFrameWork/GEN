@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMUDPLOCALENUMSERVERS_H_
-#define _DIOSTREAMUDPLOCALENUMSERVERS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -100,4 +99,3 @@ class DIOSTREAMUDPLOCALENUMSERVERS :  public DIOSTREAMENUMSERVERS
 #pragma endregion
 
 
-#endif

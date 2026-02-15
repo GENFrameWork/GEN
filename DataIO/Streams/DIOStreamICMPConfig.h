@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMICMPCONFIG_H_
-#define _DIOSTREAMICMPCONFIG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -88,5 +87,4 @@ class DIOSTREAMICMPCONFIG : public DIOSTREAMCONFIG
 #pragma endregion
 
 
-#endif
 

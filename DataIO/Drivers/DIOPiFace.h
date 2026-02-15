@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOPIFACE_H_
-#define _DIOPIFACE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,5 +77,4 @@ class DIOPIFACE : public DIOSPIGPIOMCP23S17
 #pragma endregion
 
 
-#endif
 

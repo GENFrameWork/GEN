@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _COMPRESSLZW_H_
-#define _COMPRESSLZW_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -125,5 +124,4 @@ class COMPRESS_LZW : public COMPRESSBASE
 #pragma endregion
 
 
-#endif
 

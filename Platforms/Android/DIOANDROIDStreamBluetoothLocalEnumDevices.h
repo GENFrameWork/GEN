@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES_H_
-#define _DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMBLUETOOTH_ACTIVE)
@@ -76,5 +75,4 @@ class DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES :  public DIOSTREAMBLUETOOTHLOCA
 #endif
 
 
-#endif
 

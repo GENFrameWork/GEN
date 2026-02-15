@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSSTREAMTCPIPSERVER_H_
-#define _DIOWINDOWSSTREAMTCPIPSERVER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -122,5 +121,4 @@ class DIOWINDOWSSTREAMTCPIPSERVER: public DIOSTREAMTCPIPSERVER, public XFSMACHIN
 #pragma endregion
 
 
-#endif
 

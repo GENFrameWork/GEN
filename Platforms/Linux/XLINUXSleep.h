@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXSLEEP_H_
-#define _XLINUXSLEEP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -76,5 +75,4 @@ class XLINUXSLEEP : public XSLEEP
 #pragma endregion
 
 
-#endif
 

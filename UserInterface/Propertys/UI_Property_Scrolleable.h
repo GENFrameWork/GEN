@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_PROPERTY_SCROLLEABLE_H_
-#define _UI_PROPERTY_SCROLLEABLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -116,4 +115,3 @@ class UI_PROPERTY_SCROLLEABLE
 #pragma endregion
 
 
-#endif

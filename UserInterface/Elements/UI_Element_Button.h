@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_BUTTON_H_
-#define _UI_ELEMENT_BUTTON_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -70,6 +69,5 @@ class UI_ELEMENT_BUTTON : public UI_ELEMENT_OPTION
 #pragma endregion
 
 
-#endif
 
 

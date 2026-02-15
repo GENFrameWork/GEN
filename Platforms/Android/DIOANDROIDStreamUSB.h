@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMUSB_H_
-#define _DIOANDROIDSTREAMUSB_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMUSB_ACTIVE)
@@ -129,5 +128,4 @@ class DIOANDROIDSTREAMUSB : public DIOSTREAMUSB , public XFSMACHINE
 #endif
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES_H_
-#define _DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMTWIFI_ACTIVE)
@@ -112,5 +111,4 @@ class DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES :  public DIOSTREAMWIFIREMOTEENUMDEV
 #endif
 
 
-#endif
 

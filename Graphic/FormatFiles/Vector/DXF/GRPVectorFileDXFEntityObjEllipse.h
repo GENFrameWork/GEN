@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFENTITYOBJELLIPSE_H_
-#define _GRPVECTORFILEDXFENTITYOBJELLIPSE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -109,5 +108,4 @@ class GRPVECTORFILEDXFENTITYOBJELLIPSE : public GRPVECTORFILEDXFENTITYOBJ
 #pragma endregion
 
 
-#endif
 

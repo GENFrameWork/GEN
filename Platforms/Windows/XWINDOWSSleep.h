@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSSLEEP_H_
-#define _XWINDOWSSLEEP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -83,4 +82,3 @@ class XWINDOWSSLEEP : public XSLEEP
 #pragma endregion
 
 
-#endif

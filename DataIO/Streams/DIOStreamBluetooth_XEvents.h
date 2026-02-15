@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMBLUETOOTH_XEVENTS_H_
-#define _DIOSTREAMBLUETOOTH_XEVENTS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -62,5 +61,4 @@ enum DIOSTREAMBLUETOOTH_XEVENT_TYPE
 #pragma endregion
 
 
-#endif
 

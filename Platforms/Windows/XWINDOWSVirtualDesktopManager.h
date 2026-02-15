@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSVIRTUALDESKTOPMANAGER_H_
-#define _XWINDOWSVIRTUALDESKTOPMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -127,5 +126,4 @@ class XWINDOWSVIRTUALDESKTOPMANAGER
 #pragma endregion
 
 
-#endif
 

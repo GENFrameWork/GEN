@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDTHREAD_H_
-#define _XANDROIDTHREAD_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -74,6 +73,5 @@ class XANDROIDTHREAD  : public XLINUXTHREAD
 #pragma endregion
 
 
-#endif
 
 

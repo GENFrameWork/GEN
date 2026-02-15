@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCAMERA_H_
-#define _DIOCAMERA_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -89,7 +88,6 @@ class DIOCAMERA : public XOBSERVER, public XSUBJECT
 #pragma endregion
 
 
-#endif
 
 
 

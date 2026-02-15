@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDDEBUGTRACE_H_
-#define _XANDROIDDEBUGTRACE_H_
+#pragma once
 
 
 #ifdef XDEBUG_TRACE
@@ -79,5 +78,4 @@ class XANDROIDDEBUGTRACE : public XLINUXDEBUGTRACE
 #endif
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_TEXT_H_
-#define _UI_ELEMENT_TEXT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -84,6 +83,5 @@ class UI_ELEMENT_TEXT : public UI_ELEMENT
 #pragma endregion
 
 
-#endif
 
 

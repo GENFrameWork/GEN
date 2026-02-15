@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XTRANSLATION_GEN_H_
-#define _XTRANSLATION_GEN_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -177,4 +176,3 @@ class XTRANSLATION_GEN
 #pragma endregion
 
 
-#endif

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDFACTORY_H_
-#define _XANDROIDFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -102,5 +101,4 @@ class XANDROIDFACTORY : public XFACTORY
 #pragma endregion
 
 
-#endif
 

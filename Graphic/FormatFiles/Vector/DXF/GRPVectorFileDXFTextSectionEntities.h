@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFTEXTSECTIONENTITIES_H_
-#define _GRPVECTORFILEDXFTEXTSECTIONENTITIES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -165,5 +164,4 @@ class GRPVECTORFILEDXFTEXTSECTIONENTITIES : public GRPVECTORFILEDXFTEXTSECTION
 #pragma endregion
 
 
-#endif
 

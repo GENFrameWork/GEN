@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSFACTORY_H_
-#define _XWINDOWSFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -92,5 +91,4 @@ class XWINDOWSFACTORY : public XFACTORY
 #pragma endregion
 
 
-#endif
 

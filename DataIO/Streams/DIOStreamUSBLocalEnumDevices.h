@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMUSBLOCALENUMDEVICES_H_
-#define _DIOSTREAMUSBLOCALENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -93,5 +92,4 @@ class DIOSTREAMUSBLOCALENUMDEVICES : public DIOSTREAMENUMDEVICES
 #pragma endregion
 
 
-#endif
 

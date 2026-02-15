@@ -26,8 +26,7 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOESP32STREAMUART_H_
-#define _DIOESP32STREAMUART_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMUART_ACTIVE)
@@ -135,7 +134,6 @@ extern DIOESP32STREAMUART*  diostreamuartptrhandle[DIOESP32STREAMIUART_MAXHANDLE
 
 #endif
 
-#endif
 
 
 

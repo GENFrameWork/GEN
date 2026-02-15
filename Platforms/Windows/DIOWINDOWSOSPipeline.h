@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSOSPIPELINE_H_
-#define _DIOWINDOWSOSPIPELINE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -82,5 +81,4 @@ class DIOWINDOWSOSPIPELINE : public DIOOSPIPELINE
 #pragma endregion
 
 
-#endif
 

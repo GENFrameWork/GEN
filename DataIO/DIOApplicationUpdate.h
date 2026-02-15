@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOAPPLICATIONUPDATE_H_
-#define _DIOAPPLICATIONUPDATE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -244,5 +243,4 @@ class DIOAPPLICATIONUPDATE : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

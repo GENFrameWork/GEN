@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSPROCESSMANAGER_H_
-#define _XWINDOWSPROCESSMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -103,4 +102,3 @@ class XWINDOWSPROCESSMANAGER : public XPROCESSMANAGER
 #pragma endregion
 
 
-#endif

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXGPIORPI_H_
-#define _DIOLINUXGPIORPI_H_
+#pragma once
 
 
 #ifdef HW_RASPBERRYPI
@@ -158,5 +157,4 @@ class DIOLINUXGPIORPI : public DIOLINUXGPIO
 #endif
 
 
-#endif
 

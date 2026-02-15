@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOALERTS_CONDITIONS_H_
-#define _DIOALERTS_CONDITIONS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -64,5 +63,4 @@ enum DIOALERTS_CONDITIONS_ID
 #pragma endregion
 
 
-#endif
 

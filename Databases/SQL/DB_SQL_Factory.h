@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DB_SQL_FACTORY_H_
-#define _DB_SQL_FACTORY_H_
+#pragma once
 
 #ifdef DB_SQL_ACTIVE
 
@@ -74,5 +73,4 @@ class DB_SQL_FACTORY
 #endif
 
 
-#endif
 

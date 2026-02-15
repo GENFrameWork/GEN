@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFXDATACTRL_H_
-#define _GRPVECTORFILEDXFXDATACTRL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -81,5 +80,4 @@ class GRPVECTORFILEDXFXDATACTRL
 #pragma endregion
 
 
-#endif
 

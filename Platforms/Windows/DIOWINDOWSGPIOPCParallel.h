@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSGPIOPCPARALLEL_H_
-#define _DIOWINDOWSGPIOPCPARALLEL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -111,4 +110,3 @@ class DIOWINDOWSGPIOPCPARALLEL : public DIOGPIO
 #pragma endregion
 
 
-#endif

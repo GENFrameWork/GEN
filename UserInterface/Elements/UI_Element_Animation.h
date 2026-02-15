@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_ANIMATION_H_
-#define _UI_ELEMENT_ANIMATION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -108,5 +107,4 @@ class UI_ELEMENT_ANIMATION : public UI_ELEMENT
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPCURSORMOTION_H_
-#define _INPCURSORMOTION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -166,5 +165,4 @@ class INPCURSORMOTION
 #pragma endregion
 
 
-#endif
 

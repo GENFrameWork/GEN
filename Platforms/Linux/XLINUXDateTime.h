@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXDATETIME_H_
-#define _XLINUXDATETIME_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -81,4 +80,3 @@ class XLINUXDATETIME : public XDATETIME
 #pragma endregion
 
 
-#endif

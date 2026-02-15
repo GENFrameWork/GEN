@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XCONSOLE_H_
-#define _XCONSOLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -135,4 +134,3 @@ XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed();
 #pragma endregion
 
 
-#endif

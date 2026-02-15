@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPWINDOWSSIMULATE_H_
-#define _INPWINDOWSSIMULATE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -86,7 +85,6 @@ class INPWINDOWSSIMULATE : public INPSIMULATE
 #pragma endregion
 
 
-#endif
 
 
 

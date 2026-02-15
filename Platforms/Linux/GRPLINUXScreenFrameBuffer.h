@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPLINUXSCREENFRAMEBUFFER_H_
-#define _GRPLINUXSCREENFRAMEBUFFER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -92,5 +91,4 @@ class GRPLINUXSCREENFRAMEBUFFER : public GRPSCREEN
 #pragma endregion
 
 
-#endif
 

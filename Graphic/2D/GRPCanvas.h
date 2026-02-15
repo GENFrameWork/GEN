@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPCANVAS_H_
-#define _GRPCANVAS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -216,4 +215,3 @@ class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
 #pragma endregion
 
 
-#endif

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2C9AXISTRACKINGMPU9150_H_
-#define _DIOI2C9AXISTRACKINGMPU9150_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -739,5 +738,4 @@ class DIOI2C9AXISTRACKINGMPU9150 : public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

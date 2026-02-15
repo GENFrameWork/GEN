@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXNETWORKMANAGER_H_
-#define _DIOLINUXNETWORKMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -118,5 +117,4 @@ class DIOLINUXNETWORKMANAGER : public XOBSERVER
 #pragma endregion
 
 
-#endif
 

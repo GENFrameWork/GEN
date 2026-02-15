@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XVECTORSTL_H_
-#define _XVECTORSTL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -232,5 +231,4 @@ class XVECTORSTL : public std::vector<T>
 
 #include "XMemory_Control_Deactive.h"
 
-#endif
 

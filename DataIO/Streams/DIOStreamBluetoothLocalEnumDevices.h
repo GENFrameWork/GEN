@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMBLUETOOTHLOCALENUMDEVICES_H_
-#define _DIOSTREAMBLUETOOTHLOCALENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,5 +77,4 @@ class DIOSTREAMBLUETOOTHLOCALENUMDEVICES :  public DIOSTREAMENUMDEVICES
 #pragma endregion
 
 
-#endif
 

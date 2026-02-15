@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWUPDATE_H_
-#define _APPFLOWUPDATE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -169,5 +168,4 @@ class APPFLOWUPDATE : public XOBSERVER, public XSUBJECT
 #pragma endregion
 
 
-#endif
 

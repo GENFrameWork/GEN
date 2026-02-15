@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XORDEREDLIST_H_
-#define _XORDEREDLIST_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -114,4 +113,3 @@ class XORDEREDLIST : public XLIST<T>
 #pragma endregion
 
 
-#endif

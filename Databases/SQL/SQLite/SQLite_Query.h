@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SQLITE_QUERY_H_
-#define _SQLITE_QUERY_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_SQLITE_ACTIVE)
@@ -113,5 +112,4 @@ class SQLITE_QUERY : public DB_SQL_QUERY
 #endif
 
 
-#endif
 

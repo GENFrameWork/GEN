@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES_XEVENT_H_
-#define _DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -80,5 +79,4 @@ class DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

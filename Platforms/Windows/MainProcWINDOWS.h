@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MAINPROCWINDOWS_H_
-#define _MAINPROCWINDOWS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -148,6 +147,5 @@ extern int                          Exception_Filter                  (XDWORD co
 #pragma endregion
 
 
-#endif
 
 

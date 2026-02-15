@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_TIMER_H_
-#define _SCRIPT_LIB_TIMER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -76,4 +75,3 @@ void    Call_Sleep                    (SCRIPT_LIB* library, SCRIPT* script, XVEC
 #pragma endregion
 
 
-#endif

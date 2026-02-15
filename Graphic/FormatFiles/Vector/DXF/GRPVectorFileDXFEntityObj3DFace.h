@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFENTITYOBJ3DFACE_H_
-#define _GRPVECTORFILEDXFENTITYOBJ3DFACE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -74,5 +73,4 @@ class GRPVECTORFILEDXFENTITYOBJ3DFACE : public GRPVECTORFILEDXFENTITYOBJ
 #pragma endregion
 
 
-#endif
 

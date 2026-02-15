@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCOREPROTOCOL_HEADER_H_
-#define _DIOCOREPROTOCOL_HEADER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -232,6 +231,5 @@ class DIOCOREPROTOCOL_HEADER : public XSERIALIZABLE
 #pragma endregion
 
 
-#endif
 
 

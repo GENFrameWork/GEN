@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SNDFILEWAV_H_
-#define _SNDFILEWAV_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -107,5 +106,4 @@ class SNDFILEWAV : public SNDFILE
 #pragma endregion
 
 
-#endif
 

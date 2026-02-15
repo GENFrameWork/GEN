@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _COMPRESSMANAGER_H_
-#define _COMPRESSMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -79,4 +78,3 @@ class COMPRESSMANAGER
 #pragma endregion
 
 
-#endif

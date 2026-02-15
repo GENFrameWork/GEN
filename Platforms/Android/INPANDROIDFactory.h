@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPANDROIDFACTORY_H_
-#define _INPANDROIDFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -67,5 +66,4 @@ class INPANDROIDFACTORY : public INPFACTORY
 #pragma endregion
 
 
-#endif
 

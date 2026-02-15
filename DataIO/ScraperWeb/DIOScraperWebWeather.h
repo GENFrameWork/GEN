@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSCRAPERWEBWEATHER_H_
-#define _DIOSCRAPERWEBWEATHER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -81,5 +80,4 @@ class DIOSCRAPERWEBWEATHER : public DIOSCRAPERWEB
 #pragma endregion
 
 
-#endif
 

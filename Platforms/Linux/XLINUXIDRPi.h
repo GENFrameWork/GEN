@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXIDRPI_H_
-#define _XLINUXIDRPI_H_
+#pragma once
 
 
 #ifdef HW_RASPBERRYPI
@@ -103,5 +102,4 @@ class XLINUXIDRPI
 #endif
 
 
-#endif
 

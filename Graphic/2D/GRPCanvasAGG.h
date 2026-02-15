@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPCANVASAGG_H_
-#define _GRPCANVASAGG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -1366,5 +1365,4 @@ class GRPCANVASAGG: public GRPCANVAS
 
 #include "XMemory_Control_Deactive.h"
 
-#endif
 

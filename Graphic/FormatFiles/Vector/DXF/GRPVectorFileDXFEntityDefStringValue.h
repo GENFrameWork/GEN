@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFENTITYDEFSTRINGVALUE_H_
-#define _GRPVECTORFILEDXFENTITYDEFSTRINGVALUE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -101,7 +100,6 @@ class GRPVECTORFILEDXFENTITYDEFSTRINGLIST
 #pragma endregion
 
 
-#endif
 
 
 

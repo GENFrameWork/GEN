@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWWEBSERVER_H_
-#define _APPFLOWWEBSERVER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -119,5 +118,4 @@ class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
 #pragma endregion
 
 
-#endif
 

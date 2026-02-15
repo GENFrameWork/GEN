@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPWINDOWSCONTEXT_H_
-#define _GRPWINDOWSCONTEXT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -90,5 +89,4 @@ class GRPWINDOWSCONTEXT : public GRPCONTEXT
 #pragma endregion
 
 
-#endif
 

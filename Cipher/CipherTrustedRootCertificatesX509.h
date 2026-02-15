@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERTRUSTEDROOTCERTIFICATESX509_H_
-#define _CIPHERTRUSTEDROOTCERTIFICATESX509_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -77,5 +76,4 @@ class CIPHERTRUSTEDROOTCERTIFICATESX509
 #pragma endregion
 
 
-#endif
 

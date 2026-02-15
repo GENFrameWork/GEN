@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSCRAPERWEBUSERAGENTID_H_
-#define _DIOSCRAPERWEBUSERAGENTID_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -98,6 +97,5 @@ class DIOSCRAPERWEBUSERAGENTID : public DIOSCRAPERWEB
 #pragma endregion
 
 
-#endif
 
 

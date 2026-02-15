@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCHECKINTERNETCONNECTION_H_
-#define _DIOCHECKINTERNETCONNECTION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -100,4 +99,3 @@ class DIOCHECKINTERNETCONNECTION
 #pragma endregion
 
 
-#endif

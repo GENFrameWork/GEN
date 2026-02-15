@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWMAIN_H_
-#define _APPFLOWMAIN_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -89,5 +88,4 @@ extern APPFLOWMAIN GEN_appmain;
 #pragma endregion
 
 
-#endif
 

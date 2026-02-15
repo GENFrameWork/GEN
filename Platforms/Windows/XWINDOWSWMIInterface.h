@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSWMIINTERFACE_H_
-#define _XWINDOWSWMIINTERFACE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -134,5 +133,4 @@ class XWINDOWSWMIINTERFACE
 #pragma endregion
 
 
-#endif
 

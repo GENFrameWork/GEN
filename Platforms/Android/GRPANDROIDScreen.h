@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPANDROIDSCREEN_H_
-#define _GRPANDROIDSCREEN_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -89,5 +88,4 @@ class GRPANDROIDSCREEN : public GRPSCREEN
 #pragma endregion
 
 
-#endif
 

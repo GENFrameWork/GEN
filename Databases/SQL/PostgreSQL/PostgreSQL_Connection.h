@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _POSTGRESQL_CONNECTION_H_
-#define _POSTGRESQL_CONNECTION_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_POSTGRESQL_ACTIVE)
@@ -92,5 +91,4 @@ class POSTGRESQL_CONNECTION : public DB_SQL_CONNECTION
 #endif
 
 
-#endif
 

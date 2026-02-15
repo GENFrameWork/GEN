@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_CHECKBOX_H_
-#define _UI_ELEMENT_CHECKBOX_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -77,5 +76,4 @@ class UI_ELEMENT_CHECKBOX : public UI_ELEMENT_OPTION
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWCONSOLE_H_
-#define _APPFLOWCONSOLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -97,4 +96,3 @@ class APPFLOWCONSOLE : public APPFLOWBASE
 #pragma endregion
 
 
-#endif

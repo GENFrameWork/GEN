@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXFACTORY_H_
-#define _DIOLINUXFACTORY_H_
+#pragma once
 
 
 #ifdef DIO_ACTIVE
@@ -94,4 +93,3 @@ class DIOLINUXFACTORY : public DIOFACTORY
 #endif
 
 
-#endif

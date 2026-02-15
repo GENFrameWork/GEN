@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSFACTORY_H_
-#define _DIOWINDOWSFACTORY_H_
+#pragma once
 
 #ifdef DIO_ACTIVE
 
@@ -92,5 +91,4 @@ class DIOWINDOWSFACTORY : public DIOFACTORY
 #endif
 
 
-#endif
 

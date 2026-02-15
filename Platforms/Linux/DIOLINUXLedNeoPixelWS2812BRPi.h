@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXLEDNEOPIXELWS2812BRPI_H_
-#define _DIOLINUXLEDNEOPIXELWS2812BRPI_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -92,5 +91,4 @@ class DIOLINUXLEDNEOPIXELWS2812BRPI : public DIOLEDNEOPIXELWS2812B
 #pragma endregion
 
 
-#endif
 

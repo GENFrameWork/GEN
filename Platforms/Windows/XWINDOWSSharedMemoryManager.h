@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSSHAREDMEMORYMANAGER_H_
-#define _XWINDOWSSHAREDMEMORYMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -79,5 +78,4 @@ class XWINDOWSSHAREDMEMORYMANAGER : public XSHAREDMEMORYMANAGER
 #pragma endregion
 
 
-#endif
 

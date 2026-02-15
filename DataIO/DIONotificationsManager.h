@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIONOTIFICATIONSMANAGER_H_
-#define _DIONOTIFICATIONSMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -113,5 +112,4 @@ class DIONOTIFICATIONSMANAGER
 #pragma endregion
 
 
-#endif
 

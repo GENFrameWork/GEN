@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMTCPIP_H_
-#define _DIOANDROIDSTREAMTCPIP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -67,7 +66,6 @@ class DIOANDROIDSTREAMTCPIP : public DIOLINUXSTREAMTCPIP
 #pragma endregion
 
 
-#endif
 
 
 

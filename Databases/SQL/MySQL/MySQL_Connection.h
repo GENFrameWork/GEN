@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MYSQL_CONNECTION_H_
-#define _MYSQL_CONNECTION_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_MYSQL_ACTIVE)
@@ -94,5 +93,4 @@ class MYSQL_CONNECTION : public DB_SQL_CONNECTION
 #endif
 
 
-#endif
 

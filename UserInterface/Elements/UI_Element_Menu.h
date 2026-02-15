@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_MENU_H_
-#define _UI_ELEMENT_MENU_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -101,5 +100,4 @@ class UI_ELEMENT_MENU : public UI_ELEMENT_FORM
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_WINDOW_H_
-#define _SCRIPT_LIB_WINDOW_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -126,6 +125,5 @@ void        FillLineDebug                 (GRPBITMAP* bitmapscreen, XDWORD*  buf
 #pragma endregion
 
 
-#endif
 
 

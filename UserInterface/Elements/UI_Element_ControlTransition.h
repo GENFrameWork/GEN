@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_CONTROLTRANSITION_H_
-#define _UI_ELEMENT_CONTROLTRANSITION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -70,5 +69,4 @@ class UI_ELEMENT_CONTROLTRANSITION
 #pragma endregion
 
 
-#endif
 

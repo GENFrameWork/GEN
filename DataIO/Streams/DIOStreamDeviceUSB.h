@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMDEVICEUSB_H_
-#define _DIOSTREAMDEVICEUSB_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -192,5 +191,4 @@ class DIOSTREAMDEVICEUSB : public DIOSTREAMDEVICE
 #pragma endregion
 
 
-#endif
 

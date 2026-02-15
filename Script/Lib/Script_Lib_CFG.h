@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_CFG_H_
-#define _SCRIPT_LIB_CFG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -89,4 +88,3 @@ void    Call_GetFileCFGValue          (SCRIPT_LIB* library, SCRIPT* script, XVEC
 #pragma endregion
 
 
-#endif

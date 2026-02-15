@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES_H_
-#define _DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMBLUETOOTHLE_ACTIVE)
@@ -115,5 +114,4 @@ class DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES :  public DIOSTREAMBLUETOOTHLER
 #endif
 
 
-#endif
 

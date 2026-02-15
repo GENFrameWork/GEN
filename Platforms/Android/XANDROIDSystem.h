@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDSYSTEM_H_
-#define _XANDROIDSYSTEM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -70,5 +69,4 @@ class XANDROIDSYSTEM : public XLINUXSYSTEM
 #pragma endregion
 
 
-#endif
 

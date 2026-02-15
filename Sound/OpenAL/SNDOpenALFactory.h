@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SNDOPENALFACTORY_H_
-#define _SNDOPENALFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -165,5 +164,4 @@ class SNDOPENALFACTORY : public SNDFACTORY
 #pragma endregion
 
 
-#endif
 

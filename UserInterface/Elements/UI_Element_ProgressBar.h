@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_PROGRESSBAR_H_
-#define _UI_ELEMENT_PROGRESSBAR_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -104,5 +103,4 @@ class UI_ELEMENT_PROGRESSBAR : public UI_ELEMENT_OPTION
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMIPLOCALENUMDEVICES_H_
-#define _DIOLINUXSTREAMIPLOCALENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -69,5 +68,4 @@ class DIOLINUXSTREAMIPLOCALENUMDEVICES :  public DIOSTREAMIPLOCALENUMDEVICES
 #pragma endregion
 
 
-#endif
 

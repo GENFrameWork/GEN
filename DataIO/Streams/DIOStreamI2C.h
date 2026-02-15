@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMI2C_H_
-#define _DIOSTREAMI2C_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -114,4 +113,3 @@ class DIOSTREAMI2C : public DIOSTREAM , public XFSMACHINE
 #pragma endregion
 
 
-#endif

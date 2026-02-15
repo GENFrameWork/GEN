@@ -26,8 +26,7 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTM32STREAMUSB_H_
-#define _DIOSTM32STREAMUSB_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMUSB_ACTIVE)
@@ -124,7 +123,6 @@ extern DIOSTM32STREAMUSB*  diostreamusbptrhandle;
 
 #endif
 
-#endif
 
 
 

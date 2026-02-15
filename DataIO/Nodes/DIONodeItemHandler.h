@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIONODEITEMHANDLER_H_
-#define _DIONODEITEMHANDLER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -109,5 +108,4 @@ class DIONODEITEMHANDLER : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

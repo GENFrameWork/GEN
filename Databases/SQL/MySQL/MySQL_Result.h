@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MYSQL_RESULT_H_
-#define _MYSQL_RESULT_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_MYSQL_ACTIVE)
@@ -106,5 +105,4 @@ class MYSQL_RESULT : public DB_SQL_RESULT
 #endif
 
 
-#endif
 

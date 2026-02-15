@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_RAND_H_
-#define _SCRIPT_LIB_RAND_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -81,4 +80,3 @@ void    Call_RandBetween     (SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARI
 #pragma endregion
 
 
-#endif

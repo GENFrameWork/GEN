@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SNDOPENALFACTORY_H_
-#define _SNDOPENALFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -110,5 +109,4 @@ class SNDOPENALPLAYITEM : public XFSMACHINE
 #pragma endregion
 
 
-#endif
 

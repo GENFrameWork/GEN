@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CTOUCHSENSORAT42QT1060_H_
-#define _DIOI2CTOUCHSENSORAT42QT1060_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -157,5 +156,4 @@ class DIOI2CTOUCHSENSORAT42QT1060: public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

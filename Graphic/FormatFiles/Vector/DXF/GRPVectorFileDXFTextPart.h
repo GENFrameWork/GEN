@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFTEXTPART_H_
-#define _GRPVECTORFILEDXFTEXTPART_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -76,7 +75,6 @@ class GRPVECTORFILEDXFTEXTPART
 #pragma endregion
 
 
-#endif
 
 
 

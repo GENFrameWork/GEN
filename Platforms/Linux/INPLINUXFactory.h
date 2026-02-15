@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPLINUXFACTORY_H_
-#define _INPLINUXFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -84,4 +83,3 @@ class INPLINUXFACTORY : public INPFACTORY
 #pragma endregion
 
 
-#endif

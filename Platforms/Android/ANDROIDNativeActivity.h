@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _ANDROIDNATIVEACTIVITY_H_
-#define _ANDROIDNATIVEACTIVITY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -146,5 +145,4 @@ class ANDROIDNATIVEACTIVITY_EVENTLOOP
 #pragma endregion
 
 
-#endif
 

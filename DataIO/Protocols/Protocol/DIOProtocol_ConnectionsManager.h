@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOPROTOCOL_CONNECTIONSMANAGER_H_
-#define _DIOPROTOCOL_CONNECTIONSMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -202,5 +201,4 @@ class DIOPROTOCOL_CONNECTIONSMANAGER : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2COLEDDISPLAYSSD1306_H_
-#define _DIOI2COLEDDISPLAYSSD1306_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -185,5 +184,4 @@ class DIOI2COLEDDISPLAYSSD1306 : public DIODISPLAYDEVICE, public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

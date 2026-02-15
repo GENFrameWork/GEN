@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES_H_
-#define _DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMBLUETOOTH_ACTIVE)
@@ -153,5 +152,4 @@ BOOL __stdcall    SDP_ServiceCallback     (ULONG attribID, LPBYTE valuestream, U
 #endif
 
 
-#endif
 

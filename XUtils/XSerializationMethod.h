@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XSERIALIZATIONMETHOD_H_
-#define _XSERIALIZATIONMETHOD_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -114,5 +113,4 @@ class XSERIALIZATIONMETHOD
 #pragma endregion
 
 
-#endif
 

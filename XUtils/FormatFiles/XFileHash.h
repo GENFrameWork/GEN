@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XFILEHASH_H_
-#define _XFILEHASH_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -106,5 +105,4 @@ class XFILEHASH : public XFILECONTAINER
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SNDWINDOWSFACTORY_H_
-#define _SNDWINDOWSFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -74,6 +73,5 @@ class SNDWINDOWSFACTORY : public SNDOPENALFACTORY
 #pragma endregion
 
 
-#endif
 
 

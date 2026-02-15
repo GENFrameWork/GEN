@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSFILEBORLAND_H_
-#define _XWINDOWSFILEBORLAND_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -112,4 +111,3 @@ class XWINDOWSFILEBORLAND : public XFILE
 #pragma endregion
 
 
-#endif

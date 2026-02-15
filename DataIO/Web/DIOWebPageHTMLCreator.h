@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWEBPAGEHTMLCREATOR_H_
-#define _DIOWEBPAGEHTMLCREATOR_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -139,5 +138,4 @@ class DIOWEBPAGEHTMLCREATOR : public XSTRING, public XSUBJECT
 #pragma endregion
 
 
-#endif
 

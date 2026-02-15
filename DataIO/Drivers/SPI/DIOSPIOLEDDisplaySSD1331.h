@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSPIOLEDDISPLAYSSD1331_H_
-#define _DIOSPIOLEDDISPLAYSSD1331_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -169,5 +168,4 @@ class DIOSPIOLEDDISPLAYSSD1331 : public DIODISPLAYDEVICE, public DIODEVICESPI
 #pragma endregion
 
 
-#endif
 

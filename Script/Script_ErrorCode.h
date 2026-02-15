@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_ERRORCODE_H_
-#define _SCRIPT_ERRORCODE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -65,5 +64,4 @@ enum SCRIPT_ERRORCODE
 #pragma endregion
 
 
-#endif
 

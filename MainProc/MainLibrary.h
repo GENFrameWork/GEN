@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MAINLIBRARY_H_
-#define _MAINLIBRARY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -59,4 +58,3 @@ void GEN_API_LIB_EXP LIBRARY_End(void);
 #pragma endregion
 
 
-#endif

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPLINUXDEVICETOUCHSCREENDIRECT_H_
-#define _INPLINUXDEVICETOUCHSCREENDIRECT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -91,6 +90,5 @@ class INPLINUXDEVICETOUCHSCREENDIRECT : public INPDEVICE
 #pragma endregion
 
 
-#endif
 
 

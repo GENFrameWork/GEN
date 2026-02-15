@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOALERTS_H_
-#define _DIOALERTS_H_
+#pragma once
 
 
 #ifdef DIO_ALERTS_ACTIVE
@@ -278,5 +277,4 @@ class DIOALERTS
 #endif
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWEBSERVER_QUERYSTRINGS_H_
-#define _DIOWEBSERVER_QUERYSTRINGS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -107,5 +106,4 @@ class DIOWEBSERVER_QUERYSTRINGS
 #pragma endregion
 
 
-#endif
 

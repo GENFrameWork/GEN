@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMUSBLOCALENUMDEVICES_H_
-#define _DIOANDROIDSTREAMUSBLOCALENUMDEVICES_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMUSB_ACTIVE)
@@ -83,5 +82,4 @@ class DIOANDROIDSTREAMUSBLOCALENUMDEVICES :  public DIOSTREAMUSBLOCALENUMDEVICES
 #endif
 
 
-#endif
 

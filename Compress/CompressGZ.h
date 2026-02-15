@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _COMPRESSGZ_H_
-#define _COMPRESSGZ_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -80,5 +79,4 @@ class COMPRESS_GZ : public COMPRESSBASE
 #pragma endregion
 
 
-#endif
 

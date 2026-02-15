@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES_H_
-#define _DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMBLUETOOTH_ACTIVE)
@@ -143,7 +142,6 @@ class DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES :  public DIOSTREAMBLUETOOTHREM
 #endif
 
 
-#endif
 
 
 

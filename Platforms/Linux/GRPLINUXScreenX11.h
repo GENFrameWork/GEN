@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPLINUXSCREENX11_H_
-#define _GRPLINUXSCREENX11_H_
+#pragma once
 
 
 #ifdef LINUX_X11_ACTIVE
@@ -153,5 +152,4 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
 #endif
 
 
-#endif
 

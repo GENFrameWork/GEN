@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SQLITE_DATABASE_H_
-#define _SQLITE_DATABASE_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_SQLITE_ACTIVE)
@@ -110,5 +109,4 @@ class SQLITE_DATABASE : public DB_SQL_DATABASE
 #endif
 
 
-#endif
 

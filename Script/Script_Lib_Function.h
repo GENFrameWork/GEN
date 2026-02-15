@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_FUNCTION_H_
-#define _SCRIPT_LIB_FUNCTION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -87,5 +86,4 @@ class SCRIPT_LIB_FUNCTION
 #pragma endregion
 
 
-#endif
 

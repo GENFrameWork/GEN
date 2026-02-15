@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMDEVICEWIFI_H_
-#define _DIOSTREAMDEVICEWIFI_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -85,5 +84,4 @@ class DIOSTREAMDEVICEWIFI : public DIOSTREAMDEVICEIP
 #pragma endregion
 
 
-#endif
 

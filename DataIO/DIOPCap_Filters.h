@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOPCAP_FILTERS_H_
-#define _DIOPCAP_FILTERS_H_
+#pragma once
 
 #ifdef DIO_PCAP_ACTIVE
 
@@ -119,7 +118,6 @@ class DIOPCAP_FILTERS
 
 #endif
 
-#endif
 
 
 

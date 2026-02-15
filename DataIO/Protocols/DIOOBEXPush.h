@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOOBEXPUSH_H_
-#define _DIOOBEXPUSH_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -215,5 +214,4 @@ class DIOOBEXPUSH : public XFSMACHINE
 #pragma endregion
 
 
-#endif
 

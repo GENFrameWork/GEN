@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XSERIALIZATIONMETHODJSON_H_
-#define _XSERIALIZATIONMETHODJSON_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -123,5 +122,4 @@ class XSERIALIZATIONMETHODJSON : public XSERIALIZATIONMETHOD
 #pragma endregion
 
 
-#endif
 

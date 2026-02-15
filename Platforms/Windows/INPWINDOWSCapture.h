@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPWINDOWSCAPTURE_H_
-#define _INPWINDOWSCAPTURE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -84,5 +83,4 @@ class INPWINDOWSCAPTURE : public INPCAPTURE
 #pragma endregion
 
 
-#endif
 

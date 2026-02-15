@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOMODBUS_CLIENT_H_
-#define _DIOMODBUS_CLIENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -142,4 +141,3 @@ class DIOMODBUS_CLIENT
 #pragma endregion
 
 
-#endif

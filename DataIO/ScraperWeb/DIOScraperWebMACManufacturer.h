@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSCRAPERWEBMACMANUFACTURER_H_
-#define _DIOSCRAPERWEBMACMANUFACTURER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -96,7 +95,6 @@ class DIOSCRAPERWEBMACMANUFACTURER : public DIOSCRAPERWEB
 #pragma endregion
 
 
-#endif
 
 
 

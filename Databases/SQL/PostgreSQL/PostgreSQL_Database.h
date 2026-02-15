@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _POSTGRESQL_DATABASE_H_
-#define _POSTGRESQL_DATABASE_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_POSTGRESQL_ACTIVE)
@@ -106,5 +105,4 @@ class POSTGRESQL_DATABASE : public DB_SQL_DATABASE
 #endif
 
 
-#endif
 

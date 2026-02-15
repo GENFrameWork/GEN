@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSSYSTEM_H_
-#define _XWINDOWSSYSTEM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -492,5 +491,4 @@ class XWINDOWSSYSTEM : public XSYSTEM
 #pragma endregion
 
 
-#endif
 

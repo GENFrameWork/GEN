@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XTHREADCOLLECTED_H_
-#define _XTHREADCOLLECTED_H_
+#pragma once
 
 
 #ifdef XTHREADCOLLECTED_ACTIVE
@@ -223,5 +222,4 @@ class XTHREADSCOLLECTEDMANAGER
 #endif
 
 
-#endif
 

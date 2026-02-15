@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERKEYSFILEGKF_H_
-#define _CIPHERKEYSFILEGKF_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -122,5 +121,4 @@ class CIPHERKEYSFILEGKF
 #pragma endregion
 
 
-#endif
 

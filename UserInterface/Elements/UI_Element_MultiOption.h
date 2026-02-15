@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_MULTIOPTION_H_
-#define _UI_ELEMENT_MULTIOPTION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -72,5 +71,4 @@ class UI_ELEMENT_MULTIOPTION : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
 #pragma endregion
 
 
-#endif
 

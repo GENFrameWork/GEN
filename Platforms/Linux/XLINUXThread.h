@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXTHREAD_H_
-#define _XLINUXTHREAD_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -103,5 +102,4 @@ class XLINUXTHREAD  : public XTHREAD
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _ANDROIDJNIOBJECT_H_
-#define _ANDROIDJNIOBJECT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -105,5 +104,4 @@ class ANDROIDJNIOBJECT
 #pragma endregion
 
 
-#endif
 

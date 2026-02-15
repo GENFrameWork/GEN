@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILE_XEVENT_H_
-#define _GRPVECTORFILE_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -90,7 +89,6 @@ class GRPVECTORFILE_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 
 
 

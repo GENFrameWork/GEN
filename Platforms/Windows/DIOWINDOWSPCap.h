@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSPCAP_H_
-#define _DIOWINDOWSPCAP_H_
+#pragma once
 
 #ifdef DIO_PCAP_ACTIVE
 
@@ -90,5 +89,4 @@ class DIOWINDOWSPCAP : public DIOPCAP
 
 #endif
 
-#endif
 

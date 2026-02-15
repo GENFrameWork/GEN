@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPLINUXDEVICEKEYBOARDDIRECT_H_
-#define _INPLINUXDEVICEKEYBOARDDIRECT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -98,5 +97,4 @@ class INPLINUXDEVICEKEYBOARDDIRECT : public INPDEVICE
 #pragma endregion
 
 
-#endif
 

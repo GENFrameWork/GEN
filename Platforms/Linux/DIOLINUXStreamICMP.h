@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMICMP_H_
-#define _DIOLINUXSTREAMICMP_H_
+#pragma once
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMICMP_ACTIVE)
 
@@ -121,5 +120,4 @@ class DIOLINUXSTREAMICMP : public DIOSTREAMICMP , public XFSMACHINE
 #endif
 
 
-#endif
 

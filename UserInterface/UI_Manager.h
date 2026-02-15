@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_MANAGER_H_
-#define _UI_MANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -248,5 +247,4 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
 #pragma endregion
 
 
-#endif
 

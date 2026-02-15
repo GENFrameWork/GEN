@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSPING_H_
-#define _DIOWINDOWSPING_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -81,6 +80,5 @@ class DIOWINDOWSPING : public DIOPING
 #pragma endregion
 
 
-#endif
 
 

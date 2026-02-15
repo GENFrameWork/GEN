@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPCAPTURE_XEVENT_H_
-#define _INPCAPTURE_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -110,5 +109,4 @@ class INPCAPTURE_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

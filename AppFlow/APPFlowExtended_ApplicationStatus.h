@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWEXTENDED_APPLICATIONSTATUS_H_
-#define _APPFLOWEXTENDED_APPLICATIONSTATUS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -117,5 +116,4 @@ class APPFLOWEXTENDED_APPLICATIONSTATUS : public DIOWEBSERVER_RESOLVEENDPOINT
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMENUMSERVERS_H_
-#define _DIOSTREAMENUMSERVERS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -104,5 +103,4 @@ class DIOSTREAMENUMSERVERS :  public DIOSTREAMENUMDEVICES
 #pragma endregion
 
 
-#endif
 

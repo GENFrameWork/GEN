@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_VIRTUALKEYBOARD_H_
-#define _UI_VIRTUALKEYBOARD_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -136,5 +135,4 @@ class UI_VIRTUALKEYBOARD
 #pragma endregion
 
 
-#endif
 

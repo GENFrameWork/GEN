@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPWINDOWSFACTORY_H_
-#define _GRPWINDOWSFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -79,5 +78,4 @@ class GRPWINDOWSFACTORY : public GRPFACTORY
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTM32FACTORY_H_
-#define _DIOSTM32FACTORY_H_
+#pragma once
 
 #ifdef DIO_ACTIVE
 
@@ -61,7 +60,6 @@ class DIOSTM32FACTORY : public DIOFACTORY
 
 #endif
 
-#endif
 
 
 

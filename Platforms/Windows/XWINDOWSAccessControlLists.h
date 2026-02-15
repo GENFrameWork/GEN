@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSACCESSCONTROLLISTS_H_
-#define _XWINDOWSACCESSCONTROLLISTS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -92,5 +91,4 @@ class XWINDOWSACCESSCONTROLLISTS
 #pragma endregion
 
 
-#endif
 

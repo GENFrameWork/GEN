@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWEXTENDED_H_
-#define _APPFLOWEXTENDED_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -121,5 +120,4 @@ class APPFLOWEXTENDED
 #pragma endregion
 
 
-#endif
 

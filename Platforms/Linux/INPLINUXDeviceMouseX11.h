@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPLINUXDEVICEMOUSEX11_H_
-#define _INPLINUXDEVICEMOUSEX11_H_
+#pragma once
 
 
 #ifdef LINUX_X11_ACTIVE
@@ -96,5 +95,4 @@ class INPLINUXDEVICEMOUSEX11 : public INPDEVICE
 #endif
 
 
-#endif
 

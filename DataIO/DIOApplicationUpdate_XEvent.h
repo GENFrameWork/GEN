@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOAPPLICATIONUPDATE_XEVENT_H_
-#define _DIOAPPLICATIONUPDATE_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -126,5 +125,4 @@ class DIOAPPLICATIONUPDATE_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

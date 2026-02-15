@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XFILEDBF_H_
-#define _XFILEDBF_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -213,4 +212,3 @@ class XFILEDBF : public XFILECONTAINER
 #pragma endregion
 
 
-#endif

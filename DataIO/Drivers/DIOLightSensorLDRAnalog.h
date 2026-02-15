@@ -27,8 +27,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLIGHTSENSORLDRANALOG_H_
-#define _DIOLIGHTSENSORLDRANALOG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -100,5 +99,4 @@ class DIOLIGHTSENSORLDRANALOG :  public DIODEVICE
 #pragma endregion
 
 
-#endif
 

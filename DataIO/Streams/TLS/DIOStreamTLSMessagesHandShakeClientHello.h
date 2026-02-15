@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMTLSMESSAGEHANDSHAKECLIENTHELLO_H_
-#define _DIOSTREAMTLSMESSAGEHANDSHAKECLIENTHELLO_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -117,5 +116,4 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO : public DIOSTREAMTLS_MSG_INTERFACE
 #pragma endregion
 
 
-#endif
 

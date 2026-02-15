@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWCHECKRESOURCESHARDWARE_XEVENT_H_
-#define _APPFLOWCHECKRESOURCESHARDWARE_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -94,4 +93,3 @@ class APPFLOWCHECKRESOURCESHARDWARE_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif

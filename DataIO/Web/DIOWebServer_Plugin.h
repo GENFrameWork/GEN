@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWEBSERVER_PLUGIN_H_
-#define _DIOWEBSERVER_PLUGIN_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -94,5 +93,4 @@ class DIOWEBSERVER_PLUGIN
 #pragma endregion
 
 
-#endif
 

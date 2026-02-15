@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMTLSMESSAGEEXTENSION_H_
-#define _DIOSTREAMTLSMESSAGEEXTENSION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -441,5 +440,4 @@ class DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE : public DIOSTREAMTLS_MSG_EXTENSION
 #pragma endregion
 
 
-#endif
 

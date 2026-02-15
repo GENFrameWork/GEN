@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPWINDOWSDEVICEKEYBOARD_H_
-#define _INPWINDOWSDEVICEKEYBOARD_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -77,5 +76,4 @@ class INPWINDOWSDEVICEKEYBOARD : public INPDEVICE
 #pragma endregion
 
 
-#endif
 

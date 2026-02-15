@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMUSBCONFIG_H_
-#define _DIOSTREAMUSBCONFIG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -103,5 +102,4 @@ class DIOSTREAMUSBCONFIG : public DIOSTREAMCONFIG
 #pragma endregion
 
 
-#endif
 

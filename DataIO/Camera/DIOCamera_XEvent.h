@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCAMERA_XEVENT_H_
-#define _DIOCAMERA_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -79,4 +78,3 @@ class DIOCAMERA_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif

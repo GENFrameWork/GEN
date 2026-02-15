@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XESP32FACTORY_H_
-#define _XESP32FACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -86,4 +85,3 @@ class XESP32FACTORY : public XFACTORY
 #pragma endregion
 
 
-#endif

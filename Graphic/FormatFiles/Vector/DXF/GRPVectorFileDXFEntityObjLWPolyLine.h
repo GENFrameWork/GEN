@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFENTITYOBJLWPOLYLINE_H_
-#define _GRPVECTORFILEDXFENTITYOBJLWPOLYLINE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -103,7 +102,6 @@ class GRPVECTORFILEDXFENTITYOBJLWPOLYLINE : public GRPVECTORFILEDXFENTITYOBJ
 #pragma endregion
 
 
-#endif
 
 
 

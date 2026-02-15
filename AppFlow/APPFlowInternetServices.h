@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWINTERNETSERVICES_H_
-#define _APPFLOWINTERNETSERVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -154,5 +153,4 @@ class APPFLOWINTERNETSERVICES : public XOBSERVER, public XSUBJECT
 #pragma endregion
 
 
-#endif
 

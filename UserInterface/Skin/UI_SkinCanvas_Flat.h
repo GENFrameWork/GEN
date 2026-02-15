@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_SKINCANVAS_FLAT_H_
-#define _UI_SKINCANVAS_FLAT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -72,4 +71,3 @@ class UI_SKINCANVAS_FLAT : public UI_SKINCANVAS
 #pragma endregion
 
 
-#endif

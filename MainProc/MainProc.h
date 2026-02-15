@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MAINPROC_H_
-#define _MAINPROC_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -144,5 +143,4 @@ extern    MAIN_FUNCTION_TYPE    Main_Proc_PlatformEnd;
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIODISPLAYDEVICE_H_
-#define _DIODISPLAYDEVICE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -114,5 +113,4 @@ class DIODISPLAYDEVICE : public DIODISPLAYDEVICE_CONFIG
 #pragma endregion
 
 
-#endif
 

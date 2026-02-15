@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERCERTIFICATEX509_H_
-#define _CIPHERCERTIFICATEX509_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -195,6 +194,5 @@ class CIPHERCERTIFICATEX509
 #pragma endregion
 
 
-#endif
 
 

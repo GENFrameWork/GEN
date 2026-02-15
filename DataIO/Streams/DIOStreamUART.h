@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMUART_H_
-#define _DIOSTREAMUART_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -103,5 +102,4 @@ class DIOSTREAMUART : public DIOSTREAM
 #pragma endregion
 
 
-#endif
 

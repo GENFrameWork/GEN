@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERKEYPUBLICRSA_H_
-#define _CIPHERKEYPUBLICRSA_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -85,6 +84,5 @@ class CIPHERKEYPUBLICRSA : public CIPHERKEY
 #pragma endregion
 
 
-#endif
 
 

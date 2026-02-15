@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOBACKDOOR_H_
-#define _DIOBACKDOOR_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -417,4 +416,3 @@ DIOBACKDOOR*   DIOBACKDOOR::instance = NULL;
 #pragma endregion
 
 
-#endif

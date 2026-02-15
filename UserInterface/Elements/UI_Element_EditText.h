@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_EDITTEXT_H_
-#define _UI_ELEMENT_EDITTEXT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -90,5 +89,4 @@ class UI_ELEMENT_EDITTEXT : public UI_ELEMENT_TEXT, public UI_PROPERTY_SELECTABL
 #pragma endregion
 
 
-#endif
 

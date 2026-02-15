@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWALERTS_H_
-#define _APPFLOWALERTS_H_
+#pragma once
 
 #ifdef DIO_ALERTS_ACTIVE
 
@@ -116,5 +115,4 @@ class APPFLOWALERTS
 
 #endif
 
-#endif
 

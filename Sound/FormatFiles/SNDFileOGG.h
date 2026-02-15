@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SNDFILEOGG_H_
-#define _SNDFILEOGG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -75,5 +74,4 @@ class SNDFILEOGG : public SNDFILE
 #pragma endregion
 
 
-#endif
 

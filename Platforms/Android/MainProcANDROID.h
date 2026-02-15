@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MAINPROCANDROID_H_
-#define _MAINPROCANDROID_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -171,4 +170,3 @@ class MAINPROCANDROID :  public ANDROIDNATIVEACTIVITY_HANDLER, public ANDROIDNAT
 #pragma endregion
 
 
-#endif

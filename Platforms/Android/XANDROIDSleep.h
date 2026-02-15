@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDSLEEP_H_
-#define _XANDROIDSLEEP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -64,7 +63,6 @@ class XANDROIDSLEEP : public XLINUXSLEEP
 #pragma endregion
 
 
-#endif
 
 
 

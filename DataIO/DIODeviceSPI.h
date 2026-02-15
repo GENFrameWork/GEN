@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIODEVICESPI_H_
-#define _DIODEVICESPI_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -95,5 +94,4 @@ class DIODEVICESPI : public DIODEVICE
 #pragma endregion
 
 
-#endif
 

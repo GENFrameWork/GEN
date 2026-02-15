@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CADDACONVERTERPCF8591_H_
-#define _DIOI2CADDACONVERTERPCF8591_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -90,5 +89,4 @@ class DIOI2CADDACONVERTERPCF8591 : public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

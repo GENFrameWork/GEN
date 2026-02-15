@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIODYNDNS_MANAGER_H_
-#define _DIODYNDNS_MANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -88,4 +87,3 @@ class DIODYNDNS_MANAGER
 #pragma endregion
 
 
-#endif

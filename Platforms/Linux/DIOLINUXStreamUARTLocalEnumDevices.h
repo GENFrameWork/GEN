@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMUARTLOCALENUMDEVICES_H_
-#define _DIOLINUXSTREAMUARTLOCALENUMDEVICES_H_
+#pragma once
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMUART_ACTIVE)
 
@@ -76,5 +75,4 @@ class DIOLINUXSTREAMUARTLOCALENUMDEVICES :  public DIOSTREAMUARTLOCALENUMDEVICES
 #endif
 
 
-#endif
 

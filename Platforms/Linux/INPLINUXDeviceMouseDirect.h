@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPLINUXDEVICEMOUSEDIRECT_H_
-#define _INPLINUXDEVICEMOUSEDIRECT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -100,5 +99,4 @@ class INPLINUXDEVICEMOUSEDIRECT : public INPDEVICE
 #pragma endregion
 
 
-#endif
 

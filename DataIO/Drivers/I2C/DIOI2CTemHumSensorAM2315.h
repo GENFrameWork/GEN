@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CTEMHUMSENSORAM2315_H_
-#define _DIOI2CTEMHUMSENSORAM2315_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -83,5 +82,4 @@ class DIOI2CTEMHUMSENSORAM2315: public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

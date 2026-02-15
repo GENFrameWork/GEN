@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMUARTCONFIG_H_
-#define _DIOSTREAMUARTCONFIG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -154,4 +153,3 @@ class DIOSTREAMUARTCONFIG : public DIOSTREAMCONFIG
 #pragma endregion
 
 
-#endif

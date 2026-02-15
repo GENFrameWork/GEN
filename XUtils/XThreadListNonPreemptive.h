@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XTHREADLISTNONPREEMPTIVE_H_
-#define _XTHREADLISTNONPREEMPTIVE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -86,4 +85,3 @@ class XTHREADLISTNONPREEMPTIVE
 #pragma endregion
 
 
-#endif

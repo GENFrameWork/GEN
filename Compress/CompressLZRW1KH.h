@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _COMPRESSLZRW1KH_H_
-#define _COMPRESSLZRW1KH_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -85,5 +84,4 @@ class COMPRESS_LZRW1KH : public COMPRESSBASE
 #pragma endregion
 
 
-#endif
 

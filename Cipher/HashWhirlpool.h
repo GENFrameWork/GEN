@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _HASHWHIRLPOOL_H_
-#define _HASHWHIRLPOOL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -110,5 +109,4 @@ class HASHWHIRLPOOL : public HASH
 #pragma endregion
 
 
-#endif
 

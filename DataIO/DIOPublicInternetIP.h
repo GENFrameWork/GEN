@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOPUBLICINTERNETIP_H_
-#define _DIOPUBLICINTERNETIP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -88,7 +87,6 @@ class DIOPUBLICINTERNETIP
 #pragma endregion
 
 
-#endif
 
 
 

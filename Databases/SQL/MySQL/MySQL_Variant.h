@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MYSQL_VARIANT_H_
-#define _MYSQL_VARIANT_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_MYSQL_ACTIVE)
@@ -87,5 +86,4 @@ class MYSQL_VARIANT : public DB_SQL_VARIANT
 #endif
 
 
-#endif
 

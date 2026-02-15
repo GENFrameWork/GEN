@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSTHREAD_H_
-#define _XWINDOWSTHREAD_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -98,5 +97,4 @@ class XWINDOWSTHREAD : public XTHREAD
 #pragma endregion
 
 
-#endif
 

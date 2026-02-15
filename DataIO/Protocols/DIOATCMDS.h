@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOATCMDS_H_
-#define _DIOATCMDS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -238,5 +237,4 @@ class DIOATCMDS  : public XFSMACHINE
 #pragma endregion
 
 
-#endif
 

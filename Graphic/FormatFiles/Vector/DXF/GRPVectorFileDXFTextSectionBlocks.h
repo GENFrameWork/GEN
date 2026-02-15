@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFTEXTSECTIONBLOCKS_H_
-#define _GRPVECTORFILEDXFTEXTSECTIONBLOCKS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -115,5 +114,4 @@ class GRPVECTORFILEDXFTEXTSECTIONBLOCKS : public GRPVECTORFILEDXFTEXTSECTION
 #pragma endregion
 
 
-#endif
 

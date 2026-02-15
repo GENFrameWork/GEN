@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPDISPLAYDEVICE_H_
-#define _GRPDISPLAYDEVICE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -83,5 +82,4 @@ class GRPDISPLAYDEVICE : public GRPSCREEN
 #pragma endregion
 
 
-#endif
 

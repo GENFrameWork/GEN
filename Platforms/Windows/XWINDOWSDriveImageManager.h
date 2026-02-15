@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSDRIVEIMAGEMANAGER_H_
-#define _XWINDOWSDRIVEIMAGEMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -119,5 +118,4 @@ class XWINDOWSDRIVEIMAGEMANAGER : public XDRIVEIMAGEMANAGER
 #pragma endregion
 
 
-#endif
 

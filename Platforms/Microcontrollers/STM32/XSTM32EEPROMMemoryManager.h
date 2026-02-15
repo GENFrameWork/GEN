@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XSTM32EEPROMMEMORYMANAGER_H_
-#define _XSTM32EEPROMMEMORYMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
@@ -65,7 +64,6 @@ class XSTM32EEPROMMEMORYMANAGER : public XEEPROMMEMORYMANAGER
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
-#endif
 
 
 

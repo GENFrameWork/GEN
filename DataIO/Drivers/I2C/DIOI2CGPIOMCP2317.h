@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CGPIOMCP2317_H_
-#define _DIOI2CGPIOMCP2317_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -100,5 +99,4 @@ class DIOI2CGPIOMCP2317 :  public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

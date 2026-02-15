@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMUARTLOCALENUMDEVICES_H_
-#define _DIOSTREAMUARTLOCALENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,5 +77,4 @@ class DIOSTREAMUARTLOCALENUMDEVICES : public DIOSTREAMENUMDEVICES
 #pragma endregion
 
 
-#endif
 

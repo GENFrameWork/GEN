@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPSCREEN_H_
-#define _GRPSCREEN_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -240,4 +239,3 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 #pragma endregion
 
 
-#endif

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SNDOPENALBUFFER_H_
-#define _SNDOPENALBUFFER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -88,4 +87,3 @@ class SNDOPENALBUFFER
 #pragma endregion
 
 
-#endif

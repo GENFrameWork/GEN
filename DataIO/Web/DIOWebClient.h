@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWEBCLIENT_H_
-#define _DIOWEBCLIENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -179,5 +178,4 @@ class DIOWEBCLIENT : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

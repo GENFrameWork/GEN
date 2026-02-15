@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDTRACE_H_
-#define _XANDROIDTRACE_H_
+#pragma once
 
 
 #ifdef XTRACE_ACTIVE
@@ -79,5 +78,4 @@ class XANDROIDTRACE : public XLINUXTRACE
 #endif
 
 
-#endif
 

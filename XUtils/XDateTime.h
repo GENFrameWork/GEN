@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XDATETIME_H_
-#define _XDATETIME_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -279,5 +278,4 @@ class XDATETIME : public FACTORYBASE
 #pragma endregion
 
 
-#endif
 

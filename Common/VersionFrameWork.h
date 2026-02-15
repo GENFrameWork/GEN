@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _VERSIONFRAMEWORK_H_
-#define _VERSIONFRAMEWORK_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -117,5 +116,4 @@ class VERSIONFRAMEWORK
 #pragma endregion
 
 
-#endif
 

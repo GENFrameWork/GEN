@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSRAND_H_
-#define _XWINDOWSRAND_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -68,5 +67,4 @@ class XWINDOWSRAND : public XRAND
 #pragma endregion
 
 
-#endif
 

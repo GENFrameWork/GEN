@@ -26,8 +26,7 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTM32STREAMUART_H_
-#define _DIOSTM32STREAMUART_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMUART_ACTIVE)
@@ -135,7 +134,6 @@ extern DIOSTM32STREAMUART*  diostreamuartptrhandle[DIOSTM32STREAMIUART_MAXHANDLE
 
 #endif
 
-#endif
 
 
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXFACTORY_H_
-#define _XLINUXFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -90,4 +89,3 @@ class XLINUXFACTORY : public XFACTORY
 #pragma endregion
 
 
-#endif

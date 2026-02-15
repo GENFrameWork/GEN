@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSSTREAMI2C_H_
-#define _DIOWINDOWSSTREAMI2C_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,4 +77,3 @@ class DIOWINDOWSSTREAMI2C : public DIOSTREAMI2C
 #pragma endregion
 
 
-#endif

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWIFIMANAGERMODE_H_
-#define _DIOWIFIMANAGERMODE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -109,5 +108,4 @@ class DIOWIFIMANAGERMODE
 #pragma endregion
 
 
-#endif
 

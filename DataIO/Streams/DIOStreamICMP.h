@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMICMP_H_
-#define _DIOSTREAMICMP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -150,4 +149,3 @@ class DIOSTREAMICMP : public DIOSTREAM
 #pragma endregion
 
 
-#endif

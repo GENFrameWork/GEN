@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPWINDOWSDEVICEMOUSE_H_
-#define _INPWINDOWSDEVICEMOUSE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -80,7 +79,6 @@ class INPWINDOWSDEVICEMOUSE : public INPDEVICE
 #pragma endregion
 
 
-#endif
 
 
 

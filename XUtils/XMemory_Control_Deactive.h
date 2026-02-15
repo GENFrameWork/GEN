@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XMEMORY_CONTROL_DEACTIVE_H_
-#define _XMEMORY_CONTROL_DEACTIVE_H_
+#pragma once
 
 
   #ifdef XMEMORY_CONTROL_ACTIVE
@@ -38,4 +37,3 @@
 
 
 
-#endif

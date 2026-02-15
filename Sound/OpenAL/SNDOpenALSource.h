@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SNDOPENALSOURCE_H_
-#define _SNDOPENALSOURCE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -123,4 +122,3 @@ class SNDOPENALSOURCE
 #pragma endregion
 
 
-#endif

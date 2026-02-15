@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDSHAREDMEMORY_H_
-#define _XANDROIDSHAREDMEMORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -64,5 +63,4 @@ class XANDROIDSHAREDMEMORY : public XLINUXSHAREDMEMORYMANAGER
 #pragma endregion
 
 
-#endif
 

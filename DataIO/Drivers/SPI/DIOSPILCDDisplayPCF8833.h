@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSPILCDDISPLAYPCF8833_H_
-#define _DIOSPILCDDISPLAYPCF8833_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -227,5 +226,4 @@ class DIOSPILCDDISPLAYPCF8833 : public DIODISPLAYDEVICE, public DIODEVICESPI
 #pragma endregion
 
 
-#endif
 

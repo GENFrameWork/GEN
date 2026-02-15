@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXGPIOARM_H_
-#define _DIOLINUXGPIOARM_H_
+#pragma once
 
 #if defined(HW_ARM) || defined(HW_ARM64)
 
@@ -74,5 +73,4 @@ class DIOLINUXGPIOARM: public DIOLINUXGPIO
 #endif
 
 
-#endif
 

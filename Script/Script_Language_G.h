@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LANGUAGE_G_H_
-#define _SCRIPT_LANGUAGE_G_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -358,5 +357,4 @@ class SCRIPT_LNG_G : public SCRIPT
 #pragma endregion
 
 
-#endif
 

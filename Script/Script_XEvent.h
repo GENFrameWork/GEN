@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_XEVENT_H_
-#define _SCRIPT_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -99,4 +98,3 @@ class SCRIPT_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSTRACE_H_
-#define _XWINDOWSTRACE_H_
+#pragma once
 
 
 #ifdef XTRACE_ACTIVE
@@ -108,5 +107,4 @@ class XWINDOWSTRACE : public XTRACE
 #endif
 
 
-#endif
 

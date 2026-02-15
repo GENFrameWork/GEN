@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOAIOBIMAINBOARD_H_
-#define _DIOAIOBIMAINBOARD_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -177,7 +176,6 @@ class DIOAIOBIMAINBOARD
 #pragma endregion
 
 
-#endif
 
 
 

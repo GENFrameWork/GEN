@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDRAND_H_
-#define _XANDROIDRAND_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -66,5 +65,4 @@ class XANDROIDRAND : public XLINUXRAND
 #pragma endregion
 
 
-#endif
 

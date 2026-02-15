@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLOCATIONADDRESS_H_
-#define _DIOLOCATIONADDRESS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -83,4 +82,3 @@ class DIOLOCATIONADDRESS
 #pragma endregion
 
 
-#endif

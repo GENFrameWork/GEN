@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _CIPHERKEYPRIVATERSA_H_
-#define _CIPHERKEYPRIVATERSA_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -83,5 +82,4 @@ class CIPHERKEYPRIVATERSA : public CIPHERKEY
 #pragma endregion
 
 
-#endif
 

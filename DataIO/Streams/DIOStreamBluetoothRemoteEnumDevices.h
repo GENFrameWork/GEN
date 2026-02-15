@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMBLUETOOTHREMOTEENUMDEVICES_H_
-#define _DIOSTREAMBLUETOOTHREMOTEENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -77,5 +76,4 @@ class DIOSTREAMBLUETOOTHREMOTEENUMDEVICES :  public DIOSTREAMENUMDEVICES
 #pragma endregion
 
 
-#endif
 

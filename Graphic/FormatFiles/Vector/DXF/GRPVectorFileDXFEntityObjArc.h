@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFENTITYOBJARC_H_
-#define _GRPVECTORFILEDXFENTITYOBJARC_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -105,5 +104,4 @@ class GRPVECTORFILEDXFENTITYOBJARC : public GRPVECTORFILEDXFENTITYOBJ
 #pragma endregion
 
 
-#endif
 

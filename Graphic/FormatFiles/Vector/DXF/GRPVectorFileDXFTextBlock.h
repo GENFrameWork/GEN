@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFTEXTBLOCK_H_
-#define _GRPVECTORFILEDXFTEXTBLOCK_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -98,7 +97,6 @@ class GRPVECTORFILEDXFTEXTBLOCK
 #pragma endregion
 
 
-#endif
 
 
 

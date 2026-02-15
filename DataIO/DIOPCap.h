@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOPCAP_H_
-#define _DIOPCAP_H_
+#pragma once
 
 #ifdef DIO_PCAP_ACTIVE
 
@@ -300,5 +299,4 @@ class DIOPCAP
 
 #endif
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCOREPROTOCOL_XEVENT_H_
-#define _DIOCOREPROTOCOL_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -85,7 +84,6 @@ class DIOCOREPROTOCOL_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 
 
 

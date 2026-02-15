@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPWINDOWSFACTORY_H_
-#define _INPWINDOWSFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -80,5 +79,4 @@ class INPWINDOWSFACTORY : public INPFACTORY
 #pragma endregion
 
 
-#endif
 

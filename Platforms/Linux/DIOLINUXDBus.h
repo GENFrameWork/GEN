@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXDBUS_H_
-#define _DIOLINUXDBUS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -179,5 +178,4 @@ class DIOLINUXDBUS : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

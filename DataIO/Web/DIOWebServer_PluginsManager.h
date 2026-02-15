@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWEBSERVER_PLUGINSMANAGER_H_
-#define _DIOWEBSERVER_PLUGINSMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -82,5 +81,4 @@ class DIOWEBSERVER_PLUGINSMANAGER
 #pragma endregion
 
 
-#endif
 

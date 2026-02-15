@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSSTREAMUDP_H_
-#define _DIOWINDOWSSTREAMUDP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -118,4 +117,3 @@ class DIOWINDOWSSTREAMUDP : public DIOSTREAMUDP , public XFSMACHINE
 #pragma endregion
 
 
-#endif

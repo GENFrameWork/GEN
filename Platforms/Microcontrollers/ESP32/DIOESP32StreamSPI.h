@@ -26,8 +26,7 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOESP32STREAMSPI_H_
-#define _DIOESP32STREAMSPI_H_
+#pragma once
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMSPI_ACTIVE)
 
@@ -128,7 +127,6 @@ class DIOESP32STREAMSPI : public DIOSTREAMSPI
 #endif
 
 
-#endif
 
 
 

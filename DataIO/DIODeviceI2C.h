@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIODEVICEI2C_H_
-#define _DIODEVICEI2C_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -96,5 +95,4 @@ class DIODEVICEI2C : public DIODEVICE
 #pragma endregion
 
 
-#endif
 

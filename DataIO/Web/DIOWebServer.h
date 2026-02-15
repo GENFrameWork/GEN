@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWEBSERVER_H_
-#define _DIOWEBSERVER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -505,5 +504,4 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
 #pragma endregion
 
 
-#endif
 

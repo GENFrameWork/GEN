@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSDIR_H_
-#define _XWINDOWSDIR_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -87,5 +86,4 @@ class XWINDOWSDIR : public XDIR
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFCONFIG_H_
-#define _GRPVECTORFILEDXFCONFIG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -84,5 +83,4 @@ class GRPVECTORFILEDXFCONFIG : public GRPVECTORFILECONFIG
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMSPICONFIG_H_
-#define _DIOSTREAMSPICONFIG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -136,5 +135,4 @@ class DIOSTREAMSPICONFIG : public DIOSTREAMCONFIG
 #pragma endregion
 
 
-#endif
 

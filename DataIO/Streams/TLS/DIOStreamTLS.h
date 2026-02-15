@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMTLS_H_
-#define _DIOSTREAMTLS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -733,5 +732,4 @@ class DIOSTREAMTLS :  public T
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMBLUETOOTHCONFIG_H_
-#define _DIOSTREAMBLUETOOTHCONFIG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -94,5 +93,4 @@ class DIOSTREAMBLUETOOTHCONFIG : public DIOSTREAMCONFIG
 #pragma endregion
 
 
-#endif
 

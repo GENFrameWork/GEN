@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMSPI_H_
-#define _DIOANDROIDSTREAMSPI_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMSPI_ACTIVE)
@@ -88,5 +87,4 @@ class DIOANDROIDSTREAMSPI : public DIOSTREAMSPI
 #endif
 
 
-#endif
 

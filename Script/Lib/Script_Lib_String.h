@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_STRING_H_
-#define _SCRIPT_LIB_STRING_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -80,4 +79,3 @@ void    Call_SPrintf          (SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVAR
 #pragma endregion
 
 
-#endif

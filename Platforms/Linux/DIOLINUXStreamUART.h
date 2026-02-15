@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMUART_H_
-#define _DIOLINUXSTREAMUART_H_
+#pragma once
 
 
 #if defined(DIO_ACTIVE) && defined(DIO_STREAMUART_ACTIVE)
@@ -138,6 +137,5 @@ class DIOLINUXSTREAMUART : public DIOSTREAMUART , public XFSMACHINE
 #endif
 
 
-#endif
 
 

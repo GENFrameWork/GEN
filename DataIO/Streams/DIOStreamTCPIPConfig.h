@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMTCPIPCONFIG_H_
-#define _DIOSTREAMTCPIPCONFIG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -96,5 +95,4 @@ class DIOSTREAMTCPIPCONFIG  : public DIOSTREAMCONFIG, public DIOSTREAMCONFIGSTRI
 #pragma endregion
 
 
-#endif
 

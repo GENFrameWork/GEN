@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPBITMAP_H_
-#define _GRPBITMAP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -455,4 +454,3 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
 #include "XMemory_Control_Deactive.h"
 
-#endif

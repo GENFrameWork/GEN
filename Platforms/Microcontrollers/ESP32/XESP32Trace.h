@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XESP32TRACE_H_
-#define _XESP32TRACE_H_
+#pragma once
 
 #ifdef XTRACE_ACTIVE
 
@@ -83,4 +82,3 @@ class XESP32TRACE : public XTRACE
 #endif
 
 
-#endif

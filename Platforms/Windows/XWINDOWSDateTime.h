@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XWINDOWSDATETIME_H_
-#define _XWINDOWSDATETIME_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -85,5 +84,4 @@ class XWINDOWSDATETIME : public XDATETIME
 #pragma endregion
 
 
-#endif
 

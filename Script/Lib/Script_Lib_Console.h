@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_CONSOLE_H_
-#define _SCRIPT_LIB_CONSOLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -82,4 +81,3 @@ void    Call_Console_Printf                   (SCRIPT_LIB* library, SCRIPT* scri
 #pragma endregion
 
 
-#endif

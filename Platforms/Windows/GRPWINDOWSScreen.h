@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPWINDOWSSCREEN_H_
-#define _GRPWINDOWSSCREEN_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -129,4 +128,3 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
 #pragma endregion
 
 
-#endif

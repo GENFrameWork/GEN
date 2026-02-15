@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXGPIOPCPARALLEL_H_
-#define _DIOLINUXGPIOPCPARALLEL_H_
+#pragma once
 
 
 #ifdef HW_INTEL
@@ -98,5 +97,4 @@ class DIOLINUXGPIOPCPARALLEL : public DIOGPIO
 #endif
 
 
-#endif
 

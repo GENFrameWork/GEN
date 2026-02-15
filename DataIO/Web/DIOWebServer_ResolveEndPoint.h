@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWEBSERVER_RESOLVEENDPOINT_H_
-#define _DIOWEBSERVER_RESOLVEENDPOINT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -78,6 +77,5 @@ class DIOWEBSERVER_RESOLVEENDPOINT : public XSERIALIZABLE
 #pragma endregion
 
 
-#endif
 
 

@@ -27,8 +27,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPBITMAPFILETGA_H_
-#define _GRPBITMAPFILETGA_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -178,5 +177,4 @@ class GRPBITMAPFILETGA : public GRPBITMAPFILEBASE
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CEEPROM24XXX_H_
-#define _DIOI2CEEPROM24XXX_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -117,5 +116,4 @@ class DIOI2CEEPROM24XXX : public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

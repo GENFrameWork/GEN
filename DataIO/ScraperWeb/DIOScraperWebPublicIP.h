@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSCRAPERWEBPUBLICIP_H_
-#define _DIOSCRAPERWEBPUBLICIP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -93,5 +92,4 @@ class DIOSCRAPERWEBPUBLICIP : public DIOSCRAPERWEB
 #pragma endregion
 
 
-#endif
 

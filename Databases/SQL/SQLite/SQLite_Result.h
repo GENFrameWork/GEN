@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SQLITE_RESULT_H_
-#define _SQLITE_RESULT_H_
+#pragma once
 
 
 #ifndef SQLITE_CORE
@@ -102,5 +101,4 @@ class SQLITE_RESULT : public DB_SQL_RESULT
 #pragma endregion
 
 
-#endif
 

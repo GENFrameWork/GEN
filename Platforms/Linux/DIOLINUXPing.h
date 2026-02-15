@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXPING_H_
-#define _DIOLINUXPING_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -74,5 +73,4 @@ class DIOLINUXPING  : public  DIOPING
 #pragma endregion
 
 
-#endif
 

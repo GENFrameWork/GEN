@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _POSTGRESQL_QUERY_H_
-#define _POSTGRESQL_QUERY_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_POSTGRESQL_ACTIVE)
@@ -197,4 +196,3 @@ class POSTGRESQL_QUERY : public DB_SQL_QUERY
 #endif
 
 
-#endif

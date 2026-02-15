@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMUDP_H_
-#define _DIOLINUXSTREAMUDP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -112,5 +111,4 @@ class DIOLINUXSTREAMUDP : public DIOSTREAMUDP , public XFSMACHINE
 #pragma endregion
 
 
-#endif
 

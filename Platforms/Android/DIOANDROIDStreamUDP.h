@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDSTREAMUDP_H_
-#define _DIOANDROIDSTREAMUDP_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -121,5 +120,4 @@ class DIOANDROIDSTREAMUDP : public DIOSTREAMUDP , public XFSMACHINE
 #pragma endregion
 
 
-#endif
 

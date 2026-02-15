@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPLINUXFACTORY_H_
-#define _GRPLINUXFACTORY_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -77,5 +76,4 @@ class GRPLINUXFACTORY : public GRPFACTORY
 #pragma endregion
 
 
-#endif
 

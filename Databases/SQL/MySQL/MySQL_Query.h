@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _MYSQL_QUERY_H_
-#define _MYSQL_QUERY_H_
+#pragma once
 
 
 #if defined(DB_SQL_ACTIVE) && defined(DB_MYSQL_ACTIVE)
@@ -105,6 +104,5 @@ class MYSQL_QUERY : public DB_SQL_QUERY
 #endif
 
 
-#endif
 
 

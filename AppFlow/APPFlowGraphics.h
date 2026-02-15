@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APPFLOWGRAPHICS_H_
-#define _APPFLOWGRAPHICS_H_
+#pragma once
 
 #ifdef GRP_ACTIVE
 
@@ -120,4 +119,3 @@ class APPFLOWGRAPHICS : public APPFLOWCONSOLE, public XOBSERVER
 #endif
 
 
-#endif

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSCRAPERWEBCACHE_H_
-#define _DIOSCRAPERWEBCACHE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -95,5 +94,4 @@ class DIOSCRAPERWEBCACHE
 #pragma endregion
 
 
-#endif
 

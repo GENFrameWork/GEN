@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDPING_H_
-#define _DIOANDROIDPING_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -73,5 +72,4 @@ class DIOANDROIDPING  : public  DIOPING
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPANDROIDDEVICEKEYBOARD_H_
-#define _INPANDROIDDEVICEKEYBOARD_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -208,7 +207,6 @@ class INPANDROIDDEVICEKEYBOARD : public INPDEVICE
 #pragma endregion
 
 
-#endif
 
 
 

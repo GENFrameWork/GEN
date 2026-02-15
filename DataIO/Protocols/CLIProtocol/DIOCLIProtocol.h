@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCLIPROTOCOL_H_
-#define _DIOCLIPROTOCOL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -188,6 +187,5 @@ class DIOCLIPROTOCOL
 #pragma endregion
 
 
-#endif
 
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSPITOUCHSCREENSTMPE610_H_
-#define _DIOSPITOUCHSCREENSTMPE610_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -225,5 +224,4 @@ class DIOSPITOUCHSCREENSTMPE610 : public DIODEVICE
 #pragma endregion
 
 
-#endif
 

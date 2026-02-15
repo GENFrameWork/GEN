@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPVECTORFILEDXFTEXTSECTION_H_
-#define _GRPVECTORFILEDXFTEXTSECTION_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -151,5 +150,4 @@ class GRPVECTORFILEDXFTEXTSECTION : public XSUBJECT, public GRPVECTORFILEDXFTEXT
 #pragma endregion
 
 
-#endif
 

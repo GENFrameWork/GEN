@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES_H_
-#define _DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -140,5 +139,4 @@ class DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES :  public DIOSTREAMBLUETOOTHREMOT
 #endif
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _SCRIPT_LIB_INPUTSIMULATE_H_
-#define _SCRIPT_LIB_INPUTSIMULATE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -84,6 +83,5 @@ void      Call_Mouse_Click              (SCRIPT_LIB* library, SCRIPT* script, XV
 #pragma endregion
 
 
-#endif
 
 

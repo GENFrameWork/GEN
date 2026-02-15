@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOTEMHUMSENSORAM2301_H_
-#define _DIOTEMHUMSENSORAM2301_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -104,5 +103,4 @@ class DIOTEMHUMSENSORAM2301 : public DIODEVICE
 #pragma endregion
 
 
-#endif
 

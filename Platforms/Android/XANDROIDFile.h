@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDFILE_H_
-#define _XANDROIDFILE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -69,6 +68,5 @@ class XANDROIDFILE : public XLINUXFILE
 #pragma endregion
 
 
-#endif
 
 

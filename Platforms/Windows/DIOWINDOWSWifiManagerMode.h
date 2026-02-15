@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOWINDOWSWIFIMANAGERMODE_H_
-#define _DIOWINDOWSWIFIMANAGERMODE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -79,5 +78,4 @@ class DIOWINDOWSWIFIMANAGERMODE : public DIOWIFIMANAGERMODE
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOPROTOCOL_H_
-#define _DIOPROTOCOL_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -494,5 +493,4 @@ class DIOPROTOCOL : public XSUBJECT
 #pragma endregion
 
 
-#endif
 

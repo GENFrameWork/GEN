@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDDIR_H_
-#define _XANDROIDDIR_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -66,6 +65,5 @@ class XANDROIDDIR : public XLINUXDIR
 #pragma endregion
 
 
-#endif
 
 

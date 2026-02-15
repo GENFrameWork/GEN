@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _GRPRECT_H_
-#define _GRPRECT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -257,5 +256,4 @@ typedef GRPRECTBASE<double> GRPRECTDOUBLE;
 
 #include "XMemory_Control_Deactive.h"
 
-#endif
 

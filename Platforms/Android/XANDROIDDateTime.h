@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XANDROIDDATETIME_H_
-#define _XANDROIDDATETIME_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -67,5 +66,4 @@ class XANDROIDDATETIME : public XLINUXDATETIME
 #pragma endregion
 
 
-#endif
 

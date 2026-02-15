@@ -26,8 +26,7 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XSTM32TRACE_H_
-#define _XSTM32TRACE_H_
+#pragma once
 
 #ifdef XTRACE_ACTIVE
 
@@ -72,5 +71,4 @@ class XSTM32TRACE : public XTRACE
 #endif
 
 
-#endif
 

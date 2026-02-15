@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXSTREAMI2C_H_
-#define _DIOLINUXSTREAMI2C_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -188,5 +187,4 @@ class DIOLINUXSTREAMI2C : public DIOSTREAMI2C
 #pragma endregion
 
 
-#endif
 

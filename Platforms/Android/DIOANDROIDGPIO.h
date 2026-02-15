@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOANDROIDGPIO_H_
-#define _DIOANDROIDGPIO_H_
+#pragma once
 
 
 #ifdef ANDROID
@@ -85,6 +84,5 @@ class DIOANDROIDGPIO : public DIOGPIO
 #endif
 
 
-#endif
 
 

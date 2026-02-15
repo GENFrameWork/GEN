@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XMEMORY_CONTROL_H_
-#define _XMEMORY_CONTROL_H_
+#pragma once
 
 
 #ifdef XMEMORY_CONTROL_ACTIVE
@@ -205,5 +204,4 @@ class XMEMORY_CONTROL
 #pragma endregion
 
 
-#endif
 

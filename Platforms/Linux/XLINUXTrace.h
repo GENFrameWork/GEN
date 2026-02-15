@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXTRACE_H_
-#define _XLINUXTRACE_H_
+#pragma once
 
 
 #ifdef XTRACE_ACTIVE
@@ -101,5 +100,4 @@ class XLINUXTRACE : public XTRACE
 #endif
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UI_ELEMENT_IMAGE_H_
-#define _UI_ELEMENT_IMAGE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -83,5 +82,4 @@ class UI_ELEMENT_IMAGE : public UI_ELEMENT
 #pragma endregion
 
 
-#endif
 

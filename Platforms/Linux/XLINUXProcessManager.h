@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XLINUXPROCESSMANAGER_H_
-#define _XLINUXPROCESSMANAGER_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -84,5 +83,4 @@ class XLINUXPROCESSMANAGER : public XPROCESSMANAGER
 #pragma endregion
 
 
-#endif
 

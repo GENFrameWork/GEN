@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOATCMDGSM_H_
-#define _DIOATCMDGSM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -146,5 +145,4 @@ class DIOATCMDGSM  : public DIOATCMDS
 #pragma endregion
 
 
-#endif
 

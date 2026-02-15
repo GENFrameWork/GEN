@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOI2CPWMCONTROLERPCA9685_H_
-#define _DIOI2CPWMCONTROLERPCA9685_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -104,5 +103,4 @@ class DIOI2CPWMCONTROLERPCA9685 : public DIODEVICEI2C
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _INPCURSOR_H_
-#define _INPCURSOR_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -119,5 +118,4 @@ class INPCURSOR : public INPCURSORMOTIONPOINT
 #pragma endregion
 
 
-#endif
 

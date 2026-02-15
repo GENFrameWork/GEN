@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOLINUXDBUS_XEVENT_H_
-#define _DIOLINUXDBUS_XEVENT_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -94,5 +93,4 @@ class DIOLINUXDBUS_XEVENT : public XEVENT
 #pragma endregion
 
 
-#endif
 

@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOCLIPROTOCOLBUS_H_
-#define _DIOCLIPROTOCOLBUS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -120,4 +119,3 @@ class DIOCLIPROTOCOLBUS : public DIOCLIPROTOCOL
 #pragma endregion
 
 
-#endif

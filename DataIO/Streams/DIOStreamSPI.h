@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DIOSTREAMSPI_H_
-#define _DIOSTREAMSPI_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -138,5 +137,4 @@ class DIOSTREAMSPI : public DIOSTREAM , public XFSMACHINE
 #pragma endregion
 
 
-#endif
 
