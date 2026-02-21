@@ -499,7 +499,7 @@ void UI_ELEMENT::SetBoundaryLine(UI_BOUNDARYLINE& boundaryline)
 * ---------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetMargin(UI_ELEMENT_TYPE_ALIGN position)
 {
-  switch(position)
+  switch((int)position)
     {
       case UI_ELEMENT_TYPE_ALIGN_LEFT   : return margin[0]; break;
       case UI_ELEMENT_TYPE_ALIGN_RIGHT	: return margin[1]; break;
@@ -523,7 +523,7 @@ double UI_ELEMENT::GetMargin(UI_ELEMENT_TYPE_ALIGN position)
 * ---------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetMargin(UI_ELEMENT_TYPE_ALIGN position, double value)
 {
-  switch(position)
+  switch((int)position)
     {
       case UI_ELEMENT_TYPE_ALIGN_LEFT   : margin[0] = value; break;
       case UI_ELEMENT_TYPE_ALIGN_RIGHT	: margin[1] = value; break;

@@ -533,7 +533,10 @@ GRPBITMAP* GRPBITMAPFILE::Load(GRPPROPERTYMODE forcemode)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILE::Save(XCHAR* xpath, GRPBITMAP* bitmap, int quality)
 {  
-  if(!xpath) return NULL;
+  if(!xpath) 
+    {
+      return false;
+    }
 
   XPATH               _xpath;
   GRPBITMAPFILE_TYPE  type        = GetTypeFromExtenxion(xpath);

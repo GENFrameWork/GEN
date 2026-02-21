@@ -4085,6 +4085,7 @@ bool XSTRING::ConvertCharacterUnicodeToASCII(XCHAR character, XBYTE& asciicharac
         {
           switch(asccicode)
             {
+                                    default      :
               case XSTRINGASCIICODE_7BIT         : asciicharacter = '_';                              break;
               case XSTRINGASCIICODE_CODEPAGE_437 : asciicharacter = asccicodeentrys[c].codepage437;   break;
               case XSTRINGASCIICODE_CODEPAGE_850 : asciicharacter = asccicodeentrys[c].codepage850;   break;
@@ -4139,6 +4140,7 @@ bool XSTRING::ConvertASCIICharacterToUnicode(XBYTE asciicharacter, XCHAR& charac
     {       
       switch(asccicode)
         {
+                                default      :
           case XSTRINGASCIICODE_7BIT         : if(asccicodeentrys[c].code7bit == asciicharacter)
                                                  {
                                                    character = asccicodeentrys[c].character;
@@ -4367,6 +4369,7 @@ XSTRINGASCIICODE XSTRING::ConsoleCodePageToConvertASCII(XDWORD symbolused)
 
   switch(symbolused)
     {
+                                  default      :
       case XCONSOLE_SYMBOLSUSED_NOTCONSOLE     : ASCIIcode = XSTRINGASCIICODE_NONE;           break;
       case XCONSOLE_SYMBOLSUSED_UNKNWON        : ASCIIcode = XSTRINGASCIICODE_7BIT;           break; ;
       case XCONSOLE_SYMBOLSUSED_NOTSUPPORTED   : ASCIIcode = XSTRINGASCIICODE_7BIT;           break; 

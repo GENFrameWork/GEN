@@ -157,7 +157,9 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, bool& value)
       case XVARIANT_TYPE_STRING         :
       case XVARIANT_TYPE_DATE           :
       case XVARIANT_TYPE_TIME           :
-      case XVARIANT_TYPE_DATETIME       : return false;
+      case XVARIANT_TYPE_DATETIME       : 
+                            default     : return false;
+                      
 
     }
 
@@ -206,7 +208,8 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, int& value)
       case XVARIANT_TYPE_STRING         :
       case XVARIANT_TYPE_DATE           :
       case XVARIANT_TYPE_TIME           :
-      case XVARIANT_TYPE_DATETIME       : return false;
+      case XVARIANT_TYPE_DATETIME       : 
+                            default     : return false;
 
     }
 
@@ -277,7 +280,8 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, float& value)
       case XVARIANT_TYPE_STRING         :
       case XVARIANT_TYPE_DATE           :
       case XVARIANT_TYPE_TIME           :
-      case XVARIANT_TYPE_DATETIME       : return false;
+      case XVARIANT_TYPE_DATETIME       : 
+                              default   : return false;
 
     }
 
@@ -325,7 +329,8 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, double& value)
       case XVARIANT_TYPE_STRING         :
       case XVARIANT_TYPE_DATE           :
       case XVARIANT_TYPE_TIME           :
-      case XVARIANT_TYPE_DATETIME       : return false;
+      case XVARIANT_TYPE_DATETIME       : 
+                            default     : return false;
 
     }
 
@@ -367,7 +372,8 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, XSTRING& value)
 
       case XVARIANT_TYPE_DATE           :
       case XVARIANT_TYPE_TIME           :
-      case XVARIANT_TYPE_DATETIME       : return false;
+      case XVARIANT_TYPE_DATETIME       : 
+                            default     : return false;
 
     }
 

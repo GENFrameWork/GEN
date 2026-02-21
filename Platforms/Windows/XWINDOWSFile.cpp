@@ -416,7 +416,9 @@ bool XWINDOWSFILE::Close()
 bool XWINDOWSFILE::Erase(XCHAR* xpath,bool overwrite)
 {
   bool  status = true;
-  XPATH _xpath = xpath;
+  XPATH _xpath;
+
+  _xpath = xpath;
 
   _xpath.Slash_Normalize(true);
 

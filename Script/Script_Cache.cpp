@@ -295,7 +295,7 @@ bool SCRIPT_CACHE::Cache_Del(XDWORD ID)
 {
   if(!ID)
     {
-      return NULL;
+      return false;
     }
   
   if(!SCRIPT_CACHE::Cache_Get(ID))

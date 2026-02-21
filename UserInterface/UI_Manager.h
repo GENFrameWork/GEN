@@ -139,7 +139,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            SetPreselectElement                       (UI_ELEMENT* element = NULL);
     bool                            ResetPreselect                            ();
       
-    bool                            SendEvent                                 (UI_XEVENT_TYPE event, ...);
+    bool                            SendEvent                                 (int event, ...);
     bool                            ChangeAutomaticTextElementValue           (UI_ELEMENT* element, XSTRING* maskvalue, XSTRING* maskresolved);
     bool                            ChangeTextElementValue                    (UI_ELEMENT* element, XSTRING* text, XSTRING& value);
     

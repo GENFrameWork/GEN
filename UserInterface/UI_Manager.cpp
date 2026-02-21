@@ -1822,7 +1822,7 @@ bool UI_MANAGER::ResetPreselect()
 * @return     bool : true if is succesful. 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UI_MANAGER::SendEvent(UI_XEVENT_TYPE event, ...)
+bool UI_MANAGER::SendEvent(int event, ...)
 {
   UI_XEVENT xevent(this, event);
   va_list   arg;
@@ -1932,6 +1932,8 @@ bool UI_MANAGER::SendEvent(UI_XEVENT_TYPE event, ...)
                                                       }
                                                       break;
 
+                                      default       : break;
+
 
 
     }
@@ -1947,6 +1949,8 @@ bool UI_MANAGER::SendEvent(UI_XEVENT_TYPE event, ...)
                                                             if(maskresolve) maskresolve->Set(xevent.GetMaskTextResolved()->Get()); 
                                                           }  
                                                           break;
+
+                                          default       : break;
             }
         }  
     }
@@ -2185,6 +2189,8 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
 
                                         }  
                                         break;
+
+                        default       : break;
     }
 
 
@@ -3393,7 +3399,9 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Option(XFILEXMLELEMENT* node, UI_LAYOUT
 
                       case UI_ELEMENT_TYPE_TEXT       : element_option->Set_UIText((UI_ELEMENT_TEXT*)element);                    
                                                         element_option->GetComposeElements()->Add(element);
-                                                        break;                     
+                                                        break; 
+
+                                        default       : break;                    
                     }                     
                 }              
             }
@@ -3792,7 +3800,9 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
 
                       case UI_ELEMENT_TYPE_TEXT       : element_progressbar->Set_UIText((UI_ELEMENT_TEXT*)element);                    
                                                         element_progressbar->GetComposeElements()->Add(element);
-                                                        break;                     
+                                                        break;  
+
+                                        default       : break;                   
                     }                     
                 }              
             }

@@ -433,9 +433,10 @@ duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
                                          }
                                          break;
 
-      case XVARIANT_TYPE_DATE          :                                                                   break;
-      case XVARIANT_TYPE_TIME          :                                                                   break;
-      case XVARIANT_TYPE_DATETIME      :                                                                   break;
+      case XVARIANT_TYPE_DATE          : break;
+      case XVARIANT_TYPE_TIME          : break;
+      case XVARIANT_TYPE_DATETIME      : break;
+                    default            : break;
     }
 
 
@@ -490,10 +491,9 @@ void SCRIPT_LNG_JAVASCRIPT::Clean()
 * @return     double : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
+#if !defined(COMPILER_CLANG_CL) && !defined(COMPILER_CLANG)
 double __builtin_inf(void)
 {
-  return (double)0xFFFFFFFFFFFFFFFF;
+  return (double)0xFFFFFFFFFFFFFFFF;  
 }
-
-
-
+#endif
