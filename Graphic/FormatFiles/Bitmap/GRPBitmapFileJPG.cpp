@@ -58,13 +58,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         METHODDEF(void) GRPBITMAPFILEJPG_ErrorExit(j_common_ptr info)
+* 
 * @brief      GRPBITMAPFILEJPG_ErrorExit
 * @ingroup    GRAPHIC
 * 
 * @param[in]  info :
-*
-* @return     METHODDEF(void) :
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 METHODDEF(void) GRPBITMAPFILEJPG_ErrorExit(j_common_ptr info)

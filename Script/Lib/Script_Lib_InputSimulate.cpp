@@ -234,8 +234,8 @@ void Call_Key_UnPress(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* p
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void Call_OpenURL(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
-* @brief      Call_OpenURL
+* @fn         void Call_Key_Click(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
+* @brief      Call_Key_Click
 * @ingroup    SCRIPT
 * 
 * @param[in]  library : 

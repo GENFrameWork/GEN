@@ -176,7 +176,7 @@ jstring ANDROIDJNIOBJECT::GetJString(const XSTRING& str)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void ANDROIDJNIOBJECT::CallMethod<void>(ANDROIDJNIMETHOD method, ...)
+* 
 * @brief      Call method<void>
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -201,7 +201,7 @@ void ANDROIDJNIOBJECT::CallMethod<void>(ANDROIDJNIMETHOD method, ...)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool ANDROIDJNIOBJECT::CallMethod<bool>(ANDROIDJNIMETHOD method, ...)
+* 
 * @brief      Call method<bool>
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -230,7 +230,7 @@ bool ANDROIDJNIOBJECT::CallMethod<bool>(ANDROIDJNIMETHOD method, ...)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         int ANDROIDJNIOBJECT::CallMethod<int>(ANDROIDJNIMETHOD method, ...)
+* 
 * @brief      Call method<int>
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -259,7 +259,7 @@ int ANDROIDJNIOBJECT::CallMethod<int>(ANDROIDJNIMETHOD method, ...)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         jobject ANDROIDJNIOBJECT::CallMethod<jobject>(ANDROIDJNIMETHOD method, ...)
+* 
 * @brief      Call method<jobject>
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -292,7 +292,7 @@ jobject ANDROIDJNIOBJECT::CallMethod<jobject>(ANDROIDJNIMETHOD method, ...)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         template<> long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD method, ...)
+* 
 * @brief      call method<long long>
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -321,7 +321,7 @@ template<> long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD me
 template<>
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XSTRING ANDROIDJNIOBJECT::CallMethod<XSTRING>(ANDROIDJNIMETHOD method, ...)
+* 
 * @brief      Call method< XSTRING>
 * @ingroup    PLATFORM_ANDROID
 * 
