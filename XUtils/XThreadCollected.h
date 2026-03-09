@@ -48,10 +48,11 @@
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define CREATEXTHREAD             XTHREADSCOLLECTEDMANAGER::GetInstance().CreateThread
-#define DELETEXTHREAD             XTHREADSCOLLECTEDMANAGER::GetInstance().DeleteThread
-#define ACTIVATEXTHREADGROUP      XTHREADSCOLLECTEDMANAGER::GetInstance().ActivateGroup
-#define DEACTIVATEXTHREADGROUP    XTHREADSCOLLECTEDMANAGER::GetInstance().DeactivateGroup
+#define CREATEXTHREAD               XTHREADSCOLLECTEDMANAGER::GetInstance().CreateThread
+#define DELETEXTHREAD               XTHREADSCOLLECTEDMANAGER::GetInstance().DeleteThread
+
+#define ACTIVATEXTHREADGROUP(id)    (void)XTHREADSCOLLECTEDMANAGER::GetInstance().ActivateGroup(id)
+#define DEACTIVATEXTHREADGROUP(id)  (void)XTHREADSCOLLECTEDMANAGER::GetInstance().DeactivateGroup(id)
 
 
 
@@ -207,9 +208,11 @@ class XTHREADSCOLLECTEDMANAGER
 
   #define CREATEXTHREAD               GEN_XFACTORY.CreateThread
   #define DELETEXTHREAD               GEN_XFACTORY.DeleteThread
+
   #define XTHREADCOLLECTED            XTHREAD
-  #define ACTIVATEXTHREADGROUP        //
-  #define DEACTIVATEXTHREADGROUP      //
+
+  #define ACTIVATEXTHREADGROUP(id)    (void)(id)
+  #define DEACTIVATEXTHREADGROUP(id)  (void)(id)
 
 #endif
 

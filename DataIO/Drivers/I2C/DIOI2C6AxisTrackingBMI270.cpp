@@ -8792,7 +8792,7 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::null_ptr_check(const struct bmi2_dev *dev)
 {
     XBYTESIG rslt = BMI2_OK;
 
-    if((dev == NULL) /*|| (dev->read == NULL) || (dev->write == NULL) || (dev->delay_us == NULL)*/)
+    if(dev == NULL /*|| (dev->read == NULL) || (dev->write == NULL) || (dev->delay_us == NULL)*/)
     {
         /* Device structure pointer is not valid */
         rslt = BMI2_E_NULL_PTR;

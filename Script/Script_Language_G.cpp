@@ -652,6 +652,8 @@ bool SCRIPT_LNG_G_VAR::ConvertFromXVariant(XVARIANT& variant)
       case XVARIANT_TYPE_DATE           :
       case XVARIANT_TYPE_TIME           :
       case XVARIANT_TYPE_DATETIME       : return false;
+
+                              default   : break;
     }
  
   return true;
@@ -3519,6 +3521,7 @@ bool SCRIPT_LNG_G::Interpret()
 
                 case SCRIPT_LNG_G_TOKENIREPS_END    : break;
 
+                                      default     : break;
 
               }
           }

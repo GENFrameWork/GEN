@@ -80,7 +80,7 @@ MYSQL_RESULT::~MYSQL_RESULT()
           if(bindresults[e].buffer)
             {
               switch(bindresults[e].buffer_type)
-                {
+                {                             
                   case MYSQL_TYPE_FLOAT       : delete((float*)bindresults[e].buffer);
                                                 break;
 
@@ -98,7 +98,9 @@ MYSQL_RESULT::~MYSQL_RESULT()
                                                 break;
 
                   case MYSQL_TYPE_DATETIME    : delete((MYSQL_TIME*)bindresults[e].buffer);
-                                                break;
+                                                break; 
+
+                              default         : break;
                 }
             }
 
@@ -255,7 +257,7 @@ bool MYSQL_RESULT::ProcessRow()
       if(!bindresults[e].buffer) continue;
 
       switch(bindresults[e].buffer_type)
-        {
+        {                    
           case MYSQL_TYPE_SHORT       : { int value  = *(int*)bindresults[e].buffer;
                                           (*variant) = value;
                                         }
@@ -304,7 +306,9 @@ bool MYSQL_RESULT::ProcessRow()
                                           received.ConvertFromUTF8((XBYTE*)value,size);
                                           (*variant) = received;
                                         }
-                                        break;
+                                        break; 
+
+                      default         : break;
 
 
         }

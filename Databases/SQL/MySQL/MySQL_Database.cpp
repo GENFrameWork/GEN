@@ -499,6 +499,8 @@ bool MYSQL_DATABASE::SetDatabaseEncoding(DB_SQL_DATABASE_ENCODING encodingtouse)
       case DB_SQL_DATABASE_ENCODING_WIN1256             :
       case DB_SQL_DATABASE_ENCODING_WIN1257             :
       case DB_SQL_DATABASE_ENCODING_WIN1258             : break;
+
+                                        default         : break;
     }
 
   Error (__L("Unable to set the charset encoding"));

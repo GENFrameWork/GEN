@@ -1492,6 +1492,7 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ManageProtocolConnectionsClient()
 
           switch(diostreamcfg->GetType())
             {
+                                  default   :
               case DIOSTREAMTYPE_UNKNOWN    : break;
               case DIOSTREAMTYPE_UART       : break;
               case DIOSTREAMTYPE_USB        : break;

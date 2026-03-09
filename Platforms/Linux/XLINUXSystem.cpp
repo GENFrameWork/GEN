@@ -65,8 +65,10 @@
 #include <sys/resource.h>
 #include <linux/reboot.h>
 
+#ifdef SND_ACTIVE
 #ifndef ANDROID
 #include <alsa/asoundlib.h>
+#endif
 #endif
 
 #include "XLINUXFactory.h"

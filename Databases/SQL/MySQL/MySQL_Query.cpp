@@ -420,7 +420,7 @@ bool MYSQL_QUERY::BindParametersToQuery()
           param[e].is_null          = &static_cast<MYSQL_DATABASE*>(this->database)->isnull;
           param[e].length           = 0;
 
-          switch(variant->GetType())
+          switch((DB_SQL_VARIANT_TYPE)variant->GetType())
             {
               case DB_SQL_VARIANT_TYPE_INTEGER        : param[e].buffer_type      = MYSQL_TYPE_SHORT;
                                                         param[e].buffer           = (unsigned char*)variant->GetData();

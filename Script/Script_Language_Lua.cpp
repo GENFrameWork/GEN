@@ -461,6 +461,8 @@ int LUA_LibraryCallBack(lua_State* state)
       case XVARIANT_TYPE_DATE          :                                                                    break;
       case XVARIANT_TYPE_TIME          :                                                                    break;
       case XVARIANT_TYPE_DATETIME      :                                                                    break;
+
+                             default   :                                                                    break;
     }
 
 

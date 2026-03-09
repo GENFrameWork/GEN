@@ -403,7 +403,7 @@ bool SQLITE_QUERY::BindParametersToQuery()
       XDWORD          statementindex  = statementbindings.GetKey(e);
       DB_SQL_VARIANT* variant         = statementbindings.GetElement(e);
 
-      switch(variant->GetType())
+      switch((DB_SQL_VARIANT_TYPE)variant->GetType())
         {
           case DB_SQL_VARIANT_TYPE_INTEGER    : { int rc = sqlite3_bind_int(ppstmt, statementindex, (int)*variant);
                                                   switch(rc)
@@ -475,6 +475,8 @@ bool SQLITE_QUERY::BindParametersToQuery()
                                                     }
                                                 }
                                                 break;
+
+                                    default   : break;
 
         }
     }

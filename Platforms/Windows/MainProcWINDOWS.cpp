@@ -164,7 +164,7 @@ XSTRING*                allexceptiontext  = NULL;
 DWORD WINAPI            Service_WorkerThread          (LPVOID lpParam);
 
 bool                    Exception_Printf              (bool iserror, XCHAR* title, XCHAR* mask, ...);
-BOOL                    Exception_ConsoleHandler      (DWORD fdwctrltype);
+BOOL WINAPI             Exception_ConsoleHandler      (DWORD fdwctrltype);
 
 
 
@@ -1165,7 +1165,7 @@ int wmain(int argc, wchar_t* argv[])
       _controlfp_s(NULL, 0, _EM_ZERODIVIDE); //  | _EM_OVERFLOW | _EM_UNDERFLOW | _EM_INVALID);
       #endif
 
-      if(!SetConsoleCtrlHandler((PHANDLER_ROUTINE)Exception_ConsoleHandler, TRUE)) return -1;
+      if(!SetConsoleCtrlHandler(Exception_ConsoleHandler, TRUE)) return -1;
 
       int status            = 0;
       int returngoogletest  = 0;
@@ -1205,7 +1205,7 @@ int wmain(int argc, wchar_t* argv[])
 
       mainprocwindows.End();
 
-      if(!SetConsoleCtrlHandler((PHANDLER_ROUTINE)Exception_ConsoleHandler, FALSE)) 
+      if(!SetConsoleCtrlHandler(Exception_ConsoleHandler, FALSE)) 
         {
           return -1;
         }
@@ -1446,17 +1446,12 @@ void MAINPROCWINDOWSSTACKWALKER::OnCallstackEntry(CallstackEntryType eType, Call
     }
 }
 
-
 #endif
-
-
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         BOOL Exception_ConsoleHandler(DWORD fdwctrltype)
+* @fn         BOOL WINAPI Exception_ConsoleHandler(DWORD fdwctrltype)
 * @brief      Exception_ConsoleHandler
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -1465,7 +1460,7 @@ void MAINPROCWINDOWSSTACKWALKER::OnCallstackEntry(CallstackEntryType eType, Call
 * @return     BOOL : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-BOOL Exception_ConsoleHandler(DWORD fdwctrltype)
+BOOL WINAPI Exception_ConsoleHandler(DWORD fdwctrltype)
 {
   #ifdef APPFLOW_ACTIVE
   APPFLOWBASE* app = NULL;

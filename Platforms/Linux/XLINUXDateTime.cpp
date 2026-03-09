@@ -293,7 +293,7 @@ int XLINUXDATETIME::GetMeridianDifference()
 bool XLINUXDATETIME::IsDayLigthSavingTime(int* bias)
 {
   struct tm*  currentdate;
-  long        currentdatesecs;
+  time_t      currentdatesecs;
 
   time(&currentdatesecs);
   currentdate = localtime(&currentdatesecs);

@@ -281,7 +281,7 @@ int GRPVECTORFILEDXFENTITYOBJ::GetTypeSpace()
 * @param[in]  typeSpace : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPVECTORFILEDXFENTITYOBJ::SetTypeSpace(int typeSpace)
+void GRPVECTORFILEDXFENTITYOBJ::SetTypeSpace(int typespace)
 {
   this->typespace = typespace;
 }
