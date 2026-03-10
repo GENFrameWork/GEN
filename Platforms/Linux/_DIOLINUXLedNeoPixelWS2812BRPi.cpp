@@ -103,16 +103,10 @@ DIOLINUXLEDNEOPIXELWS2812BRPI::DIOLINUXLEDNEOPIXELWS2812BRPI()
   config.channel[0].brightness = brightnesslevel;
   config.channel[0].strip_type = NEOPIXELWS2812BRPI_DEFAULT_STRIP_TYPE;
   
-  // ws2811 API requires both PWM channels initialized even when only channel[0] is used.
-  // RPI_PWM_CHANNELS is defined as 1 in pwm.h so channel[1] triggers -Warray-bounds.
-  // The access is intentional — suppress locally.
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Warray-bounds"
   config.channel[1].gpionum    = 0;
   config.channel[1].count      = 0;
   config.channel[1].invert     = 0;
-  config.channel[1].brightness = 0;
-  #pragma GCC diagnostic pop
+  config.channel[1].brightness = 0;  
 }
 
 

@@ -317,6 +317,8 @@ class DIOREMOTEFILECFG : public XFILECFG
                                                                                                                           }
                                                                                                                       }
                                                                                                                       break;
+
+                                                                                                         default    : break;  
                                                                                 }
 
                                                                               if(_value)

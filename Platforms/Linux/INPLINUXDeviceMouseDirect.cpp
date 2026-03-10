@@ -240,6 +240,7 @@ bool INPLINUXDEVICEMOUSEDIRECT::Update()
                                           case INPBUTTON_STATE_PRESSED  : (event.value==0) ? button->SetState(INPBUTTON_STATE_RELEASED) : button->SetState(INPBUTTON_STATE_HOLD);     break;
                                           case INPBUTTON_STATE_RELEASED :
                                           case INPBUTTON_STATE_HOLD     : (event.value==0) ? button->SetState(INPBUTTON_STATE_RELEASED) : button->SetState(INPBUTTON_STATE_PRESSED);  break;
+                                                            default     : break;
                                         }
 
                                       button->SetPressed((event.value==1)?true:false);
@@ -257,6 +258,7 @@ bool INPLINUXDEVICEMOUSEDIRECT::Update()
                                               case INPBUTTON_STATE_PRESSED  : (event.value==0) ? button->SetState(INPBUTTON_STATE_RELEASED) : button->SetState(INPBUTTON_STATE_HOLD);     break;
                                               case INPBUTTON_STATE_RELEASED :
                                               case INPBUTTON_STATE_HOLD     : (event.value==0) ? button->SetState(INPBUTTON_STATE_RELEASED) : button->SetState(INPBUTTON_STATE_PRESSED);  break;
+                                                                default     : break;
                                             }
 
                                           button->SetPressed((event.value==1)?true:false);
