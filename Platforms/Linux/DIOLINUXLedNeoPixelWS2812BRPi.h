@@ -70,8 +70,7 @@ class DIOLINUXLEDNEOPIXELWS2812BRPI : public DIOLEDNEOPIXELWS2812B
   private:
 
     void                      Clean                             ();
-
-    //RPI_MODEL                 model;    
+   
     ws2811_t                  config;
 };
 

@@ -135,9 +135,7 @@ DIOLINUXLEDNEOPIXELWS2812BRPI::~DIOLINUXLEDNEOPIXELWS2812BRPI()
 * @fn         bool DIOLINUXLEDNEOPIXELWS2812BRPI::Ini(XDWORD nled)
 * @brief      Ini
 * @ingroup    PLATFORM_LINUX
-* 
-* @param[in]  nled : 
-* 
+*  
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/

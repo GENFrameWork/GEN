@@ -90,7 +90,7 @@ DIOLEDNEOPIXELWS2812B::~DIOLEDNEOPIXELWS2812B()
 * @brief      Ini
 * @ingroup    DATAIO
 * 
-* @param[in]  nled : 
+* @param[in]  nled : number of LEDs in the strip
 * 
 * @return     bool : true if is succesful. 
 * 
