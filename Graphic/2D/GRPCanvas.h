@@ -182,8 +182,6 @@ class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
 
   protected:
 
-    //GRPRECTINT                    screenzone;
-
     XBYTE*                        buffer;
     XDWORD                        buffersize;
 

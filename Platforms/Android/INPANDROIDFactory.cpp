@@ -31,7 +31,6 @@
 #include "GEN_Defines.h"
 
 
-
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "INPANDROIDFactory.h"
@@ -44,16 +43,12 @@
 #include "INPANDROIDDeviceMouse.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -95,6 +90,8 @@ INPDEVICE* INPANDROIDFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                       }
                                       break;
 
+                       default     :  break;
+
     }
 
   return inpdevice;
@@ -129,6 +126,8 @@ bool INPANDROIDFACTORY::DeleteDevice(INPDEVICE* device)
                                         if(mouse) delete mouse;                                        
                                       }
                                       break;
+
+                       default     :  break;
     }
 
 

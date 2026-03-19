@@ -34,16 +34,20 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
+#include <android/log.h>
+
 #include "XLINUXTrace.h"
+
+#include "VersionFrameWork.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define XANDROIDDEBUG_LOG_INFO(...)       __android_log_print(ANDROID_LOG_INFO, FRAMEWORKNAME, "%s", __VA_ARGS__)
-#define XANDROIDDEBUG_LOG_ERROR(...)      __android_log_print(ANDROID_LOG_INFO, FRAMEWORKNAME, "%s", __VA_ARGS__)
-#define XANDROIDDEBUG_LOG_WARNING(...)    __android_log_print(ANDROID_LOG_INFO, FRAMEWORKNAME, "%s", __VA_ARGS__)
-#define XANDROIDDEBUG_LOG_DEBUG(...)      __android_log_print(ANDROID_LOG_INFO, FRAMEWORKNAME, "%s", __VA_ARGS__)
+#define XANDROIDDEBUG_LOG_INFO(...)       __android_log_print(ANDROID_LOG_INFO, VERSIONFRAMEWORK_NAME, "%s", __VA_ARGS__)
+#define XANDROIDDEBUG_LOG_ERROR(...)      __android_log_print(ANDROID_LOG_INFO, VERSIONFRAMEWORK_NAME, "%s", __VA_ARGS__)
+#define XANDROIDDEBUG_LOG_WARNING(...)    __android_log_print(ANDROID_LOG_INFO, VERSIONFRAMEWORK_NAME, "%s", __VA_ARGS__)
+#define XANDROIDDEBUG_LOG_DEBUG(...)      __android_log_print(ANDROID_LOG_INFO, VERSIONFRAMEWORK_NAME, "%s", __VA_ARGS__)
 
 
 

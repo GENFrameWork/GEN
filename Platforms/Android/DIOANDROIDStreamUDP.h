@@ -81,7 +81,7 @@ enum DIOANDROIDUDPFSMSTATES
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
 
-class THREAD;
+class XTHREADCOLLECTED;
 
 
 class DIOANDROIDSTREAMUDP : public DIOSTREAMUDP , public XFSMACHINE
@@ -104,7 +104,7 @@ class DIOANDROIDSTREAMUDP : public DIOSTREAMUDP , public XFSMACHINE
 
     void                      Clean                                 ();
 
-    XTHREAD*                  threadconnection;
+    XTHREADCOLLECTED*         threadconnection;
     int                       handle;
     XSTRING                   remoteaddress;
 };

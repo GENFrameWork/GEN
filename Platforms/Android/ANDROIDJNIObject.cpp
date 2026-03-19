@@ -31,15 +31,14 @@
 #include "GEN_Defines.h"
 
 
-
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "ANDROIDJNIObject.h"
-
 #include "ANDROIDJNI.h"
 
 #include <stdarg.h>
 
+#include "XBuffer.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -47,10 +46,7 @@
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -70,19 +66,15 @@
 ANDROIDJNIOBJECT::ANDROIDJNIOBJECT(XSTRING classname, XSTRING constructorsignature, ...)
 {
   JNIEnv*   JEnv = ANDROIDJNI::GetJNIEnv();
-  char*     cstr = NULL;
+  XBUFFER   cstr;
   
-  classname.CreateOEM(cstr);
-
-  jniclass = ANDROIDJNI::FindJNIClass(cstr);  
-  delete cstr;
-
-  constructorsignature.CreateOEM(cstr);
-
-  jmethodID constructor = JEnv->GetMethodID(jniclass, "<init>", cstr);
-  delete cstr;
-
-
+  classname.ConvertToASCII(cstr);
+  jniclass = ANDROIDJNI::FindJNIClass((char*)cstr.Get());  
+  
+  cstr.Empty();
+  constructorsignature.ConvertToASCII(cstr);
+  jmethodID constructor = JEnv->GetMethodID(jniclass, "<init>", (char*)cstr.Get());
+  
   va_list params;
 
   va_start(params, constructorsignature);
@@ -131,16 +123,13 @@ ANDROIDJNIMETHOD ANDROIDJNIOBJECT::GetClassMethod(XSTRING method, XSTRING signat
 
   JNIEnv* env = ANDROIDJNI::GetJNIEnv();
 
-  char* cmethod;
-  char* csignature;
+  XBUFFER cmethod;
+  XBUFFER csignature;
 
-  method.CreateOEM(cmethod);
-  signature.CreateOEM(csignature);
+  method.ConvertToASCII(cmethod);
+  signature.ConvertToASCII(csignature);
 
-  m.method = env->GetMethodID(jniclass, cmethod, csignature);
-
-  delete cmethod;
-  delete csignature;
+  m.method = env->GetMethodID(jniclass, (char*)cmethod.Get(), (char*)csignature.Get());
 
   return m;
 }
@@ -161,14 +150,16 @@ jstring ANDROIDJNIOBJECT::GetJString(const XSTRING& str)
 {
   jstring r;
 
-  char* cstr;
-  str.CreateOEM(cstr);
+  XBUFFER cstr;
+  XSTRING _str;
+
+  _str = str;
+
+  _str.ConvertToASCII(cstr);
 
   JNIEnv* env = ANDROIDJNI::GetJNIEnv();
 
-  r = env->NewStringUTF(cstr);
-
-  delete cstr;
+  r = env->NewStringUTF((char*)cstr.Get());
 
   return r;
 }
@@ -189,11 +180,11 @@ void ANDROIDJNIOBJECT::CallMethod<void>(ANDROIDJNIMETHOD method, ...)
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();
 
-  va_list Params;
+  va_list params;
 
-  va_start(Params, method);
-  JEnv->CallVoidMethodV(jniobject, method.method, Params);
-  va_end(Params);
+  va_start(params, method);
+  JEnv->CallVoidMethodV(jniobject, method.method, params);
+  va_end(params);
 
   ANDROIDJNI::CheckJavaException();
 }
@@ -216,11 +207,11 @@ bool ANDROIDJNIOBJECT::CallMethod<bool>(ANDROIDJNIMETHOD method, ...)
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();
 
-  va_list Params;
+  va_list params;
 
-  va_start(Params, method);
-  bool RetVal = JEnv->CallBooleanMethodV(jniobject, method.method, Params);
-  va_end(Params);
+  va_start(params, method);
+  bool RetVal = JEnv->CallBooleanMethodV(jniobject, method.method, params);
+  va_end(params);
 
   ANDROIDJNI::CheckJavaException();
 
@@ -245,11 +236,11 @@ int ANDROIDJNIOBJECT::CallMethod<int>(ANDROIDJNIMETHOD method, ...)
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();
 
-  va_list Params;
+  va_list params;
 
-  va_start(Params, method);
-  int RetVal = JEnv->CallIntMethodV(jniobject, method.method, Params);
-  va_end(Params);
+  va_start(params, method);
+  int RetVal = JEnv->CallIntMethodV(jniobject, method.method, params);
+  va_end(params);
 
   ANDROIDJNI::CheckJavaException();
 
@@ -274,11 +265,11 @@ jobject ANDROIDJNIOBJECT::CallMethod<jobject>(ANDROIDJNIMETHOD method, ...)
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();
 
-  va_list Params;
+  va_list params;
 
-  va_start(Params, method);
-  jobject val = JEnv->CallObjectMethodV(jniobject, method.method, Params);
-  va_end(Params);
+  va_start(params, method);
+  jobject val = JEnv->CallObjectMethodV(jniobject, method.method, params);
+  va_end(params);
 
   ANDROIDJNI::CheckJavaException();
 
@@ -306,11 +297,11 @@ template<> long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD me
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();
 
-  va_list Params;
+  va_list params;
 
-  va_start(Params, method);
-  long long RetVal = JEnv->CallLongMethodV(jniobject, method.method, Params);
-  va_end(Params);
+  va_start(params, method);
+  long long RetVal = JEnv->CallLongMethodV(jniobject, method.method, params);
+  va_end(params);
 
   ANDROIDJNI::CheckJavaException();
 
@@ -335,11 +326,11 @@ XSTRING ANDROIDJNIOBJECT::CallMethod<XSTRING>(ANDROIDJNIMETHOD method, ...)
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();
 
-  va_list Params;
+  va_list params;
 
-  va_start(Params, method);
-  jstring RetVal = static_cast<jstring>(JEnv->CallObjectMethodV(jniobject, method.method, Params));
-  va_end(Params);
+  va_start(params, method);
+  jstring RetVal = static_cast<jstring>(JEnv->CallObjectMethodV(jniobject, method.method, params));
+  va_end(params);
 
   ANDROIDJNI::CheckJavaException();
 

@@ -157,6 +157,8 @@ DIOSTREAMENUMDEVICES* DIOANDROIDFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTY
       #ifdef DIO_STREAMTWIFI_ACTIVE
       case DIOSTREAMENUMTYPE_WIFI_REMOTE        : _class = new DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES();               break;
       #endif
+                                    default     : break;
+
     }
 
   if(_class)_class->SetType(type);
@@ -238,6 +240,7 @@ DIOSTREAM* DIOANDROIDFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
       #ifdef DIO_STREAMI2C_ACTIVE
       case DIOSTREAMTYPE_I2C        : _class = new DIOANDROIDSTREAMI2C();         break;
       #endif
+                        default     : break;
     }
 
   if(_class)

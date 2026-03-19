@@ -41,17 +41,25 @@
 #include <fcntl.h>
 
 #include "XANDROIDFactory.h"
+#include "XANDROIDTrace.h"
 #include "XANDROIDRand.h"
 #include "XANDROIDSleep.h"
+
+#ifdef XSYSTEM_ACTIVE
 #include "XANDROIDSystem.h"
+#endif
+
+#ifdef XSHAREDMEMORYMANAGER_ACTIVE
+#include "XANDROIDSharedMemoryManager.h"
+#endif
+
 
 #ifdef GRP_ACTIVE
-#include "GRPANDROIDFactory.h"
 #include "GRPANDROIDScreen.h"
+#include "GRPANDROIDFactory.h"
 #endif
 
 #ifdef INP_ACTIVE
-#include "INPButton.h"
 #include "INPANDROIDDeviceKeyboard.h"
 #include "INPANDROIDDeviceMouse.h"
 #include "INPManager.h"
@@ -60,33 +68,38 @@
 #endif
 
 #ifdef SND_ACTIVE
-#include "SNDAndroidFactory.h"
+#include "SNDANDROIDFactory.h"
 #endif
 
 #ifdef DIO_ACTIVE
 #include "DIODNSResolver.h"
 #include "DIOANDROIDFactory.h"
-  #ifdef DIO_ALERTS_ACTIVE
-  #include "DIOAlerts.h"
-  #endif
+
+#ifdef DIO_ALERTS_ACTIVE
+#include "DIOAlerts.h"
+#endif
 #endif
 
 #include "VersionFrameWork.h"
 
 #include "XFeedback_Control.h"
-#include "XPathsManager.h"
-#include "XThreadCollected.h"
 #include "XRand.h"
+#include "XDir.h"
+#include "XSleep.h"
+#include "XPath.h"
 #include "XString.h"
 #include "XLog.h"
-#include "XDateTime.h"
-#include "XDir.h"
 #include "XFile.h"
-#include "XFileZIP.h"
 #include "XTimer.h"
-#include "XTranslation.h"
+#include "XThreadCollected.h"
+#include "XDateTime.h"
 #include "XTranslation_GEN.h"
-#include "XTrace.h"
+#include "XTranslation.h"
+#include "XPublisher.h"
+#include "XFileZIP.h"
+
+#include "APPFlowBase.h"
+#include "APPFlowGraphics.h"
 
 #include "GRPXEvent.h"
 #include "GRPViewPort.h"
@@ -94,15 +107,10 @@
 
 #include "ANDROIDJNI.h"
 
-#include "APPFlowGraphics.h"
-
-
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -113,7 +121,6 @@ XANDROIDTRACE    androiddebugtrace;
 
 MAINPROCANDROID  androidmain;
 void*            java_vm;
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -162,21 +169,15 @@ MAINPROCANDROID::~MAINPROCANDROID()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCANDROID::Ini(XSTRING* apkpath, XSTRING* datapath, APPFLOWMAIN* appmain, APPFLOWBASE_MODE_TYPE applicationmode)
 {
-  // #Imanol : required for openal as static library
+  // required for openal as static library
   java_vm = androidapplication->activity->vm;
 
   this->appmain = appmain;
 
-
-  #ifdef APPFLOW_ACTIVE
-
-  if(!appmain)            return false;
-  if(!appmain->Create())  return false;
-
-  #endif
-
-
-  if(!Factorys_Ini()) return false;
+  if(!Factorys_Ini()) 
+    {
+      return false;
+    }
 
   XPATH xpathroot;
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathroot);
@@ -195,10 +196,22 @@ bool MAINPROCANDROID::Ini(XSTRING* apkpath, XSTRING* datapath, APPFLOWMAIN* appm
   GetDPI(androidapplication);
 
   #ifdef APPFLOW_ACTIVE
-  if(appmain)
+
+  if(!appmain)            
     {
-      if(!appmain->Ini(this, applicationmode)) return false;
+      return false;
     }
+
+  if(!appmain->Create())  
+    {
+      return false;
+    }
+
+  if(!appmain->Ini(this, applicationmode)) 
+    {
+      return false;
+    }
+
   #endif
 
   GetXPathExec()->SetOnlyDriveAndPath();
@@ -244,26 +257,27 @@ bool MAINPROCANDROID::Update()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCANDROID::End()
 {
-  #ifdef INP_ACTIVE
-  DeleteInputDevices();  
-  #endif
-  
   #ifdef APPFLOW_ACTIVE
-  if(appmain) appmain->End();
+  if(appmain) 
+    {
+      appmain->End();
+      appmain->Delete();
+    }
   #endif
 
-  GetXPathExec()->Empty();
 
   DeleteAllExecParams();
 
+  GetXPathExec()->Empty();
+
+  XFILE_DISPLAYNOTCLOSEFILES
   XFEEDBACK_CONTROL_DISPLAYFEEDBACK  
   XFEEDBACK_CONTROL_DELETE 
 
   Factorys_End();
 
-  #ifdef APPFLOW_ACTIVE
-  if(appmain) appmain->Delete();
-  #endif
+  XMEMORY_CONTROL_DEACTIVATED
+  XMEMORY_CONTROL_DISPLAYMEMORYLEAKS
 
   return true;
 }
@@ -311,7 +325,7 @@ void MAINPROCANDROID::SetAndroidApplication(android_app* application)
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* MAINPROCANDROID::GetKeyboard()
 {
-  return keyboard;
+  return NULL;
 }
 
 
@@ -325,8 +339,8 @@ INPDEVICE* MAINPROCANDROID::GetKeyboard()
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* MAINPROCANDROID::GetTouchscreen()
-{
-  return mouse;
+{  
+  return NULL;
 }
 #endif
 
@@ -838,7 +852,10 @@ void MAINPROCANDROID::OnCreateWindow()
               canvas   = NULL;
               
               if(viewport) canvas = viewport->GetCanvas();
-              if(canvas) viewport->GetCanvas()->GetScreenZone()->Set(0, 0, mainscreen->GetWidth(), mainscreen->GetHeight());
+              if(canvas) 
+                {
+                  // viewport->GetCanvas()->GetScreenZone()->Set(0, 0, mainscreen->GetWidth(), mainscreen->GetHeight());
+                }
 
               #ifdef INP_ACTIVE
               if(!CreateInputDevices(&INPMANAGER::GetInstance(), (GRPANDROIDSCREEN*)mainscreen)) return;
@@ -1072,42 +1089,80 @@ void MAINPROCANDROID::Clean()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCANDROID::Factorys_Ini()
 {
-  XFACTORY::SetInstance(new XANDROIDFACTORY());
-  if(!XFACTORY::GetIsInstanced()) return false;
+  if(!XFACTORY::SetInstance(new XANDROIDFACTORY()))
+    {
+      return false;
+    }
 
   XFEEDBACK_CONTROL_CREATE
 
   #ifdef XSYSTEM_ACTIVE  
-  if(!XSYSTEM::SetInstance(new XANDROIDSYSTEM())) return false;
-  XBUFFER::SetHardwareUseLittleEndian(GEN_XSYSTEM.HardwareUseLittleEndian());
+  if(!XSYSTEM::SetInstance(new XANDROIDSYSTEM())) 
+    {
+      return false;
+    }
+  XBUFFER::SetGlobalHardwareUseLittleEndian(GEN_XSYSTEM.HardwareUseLittleEndian());
   #endif
   
-  if(!XRAND::SetInstance(new XANDROIDRAND())) return false;
+  if(!XRAND::SetInstance(new XANDROIDRAND())) 
+    {
+      return false;
+    }
   
   #ifdef XSLEEP_ACTIVE
-  if(!XSLEEP::SetInstance(new XANDROIDSLEEP())) return false;
+  if(!XSLEEP::SetInstance(new XANDROIDSLEEP())) 
+    {
+      return false;
+    }
   #endif
+
+  #ifdef XSHAREDMEMORYMANAGER_ACTIVE
+  if(!XSHAREDMEMORYMANAGER::SetInstance(new XANDROIDSHAREDMEMORYMANAGER())) 
+    {
+      return false;  
+    }
+  #endif
+    
 
   #ifdef XTRACE_VIRTUALCLOCKTICK
   xtimerclock = new XTIMERCLOCK();
-  if(!xtimerclock) return false;
+  if(!xtimerclock) 
+    {
+      return false;
+    }
   #endif
 
   #ifdef INP_ACTIVE  
-  if(!INPFACTORY::SetInstance(new INPANDROIDFACTORYDEVICES())) return false;
+  if(!INPFACTORY::SetInstance(new INPANDROIDFACTORY())) 
+    {
+      return false;
+    }
   #endif
 
   #ifdef DIO_ACTIVE
-  if(!DIOFACTORY::SetInstance(new DIOANDROIDFACTORY())) return false;
+  if(!DIOFACTORY::SetInstance(new DIOANDROIDFACTORY())) 
+    {
+      return false;
+    }
   #endif
 
   #ifdef SND_ACTIVE  
-  if (!SNDFACTORY::Instance=new SNDANDROIDFACTORY()) return false;
-  SNDFACTORY::Get()->IniEvents();
+  if(!SNDFACTORY::SetInstance(new SNDANDROIDFACTORY())) 
+    {    
+      return false;
+    }
+
+  if(!SNDFACTORY::GetInstance().Ini()) 
+    {
+      // return false;
+    }
   #endif
 
-  #ifdef GRP_ACTIVE;
-  if(!GRPFACTORY::SetInstance(new GRPANDROIDFACTORY())) return false;
+  #ifdef GRP_ACTIVE
+  if(!GRPFACTORY::SetInstance(new GRPANDROIDFACTORY())) 
+    {
+      return false;
+    }
   #endif
 
   return true;
@@ -1130,7 +1185,11 @@ bool MAINPROCANDROID::Factorys_End()
   #endif
 
   #ifdef SND_ACTIVE
-  SNDFACTORY::DelInstance();
+  if(SNDFACTORY::GetIsInstanced())
+    {
+      SNDFACTORY::GetInstance().End();
+      SNDFACTORY::DelInstance();
+    }
   #endif
 
   #ifdef DIO_ACTIVE
@@ -1177,14 +1236,6 @@ bool MAINPROCANDROID::Factorys_End()
 
   #ifdef XPROCESSMANAGER_ACTIVE
   XPROCESSMANAGER::DelInstance();
-  #endif
-
-  #ifdef XEEPROMMEMORYMANAGER_ACTIVE
-  XEEPROMMEMORYMANAGER::DelInstance();
-  #endif
-
-  #ifdef XDRIVEIMAGE_ACTIVE
-  XDRIVEIMAGE::DelInstance();
   #endif
 
   #ifdef XSHAREDMEMORYMANAGER_ACTIVE   
@@ -1493,10 +1544,10 @@ bool MAINPROCANDROID::AssetsDir_DeleteAll()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCANDROID::CreateInputDevices(INPMANAGER* inpmanager, GRPANDROIDSCREEN* screen)
 {
-  keyboard  = (INPANDROIDDEVICEKEYBOARD*)INPANDROIDFACTORYDEVICES::GetInstance().CreateDevice(INPDEVICE_TYPE_KEYBOARD , screen);
+  keyboard  = (INPANDROIDDEVICEKEYBOARD*)INPANDROIDFACTORY::GetInstance().CreateDevice(INPDEVICE_TYPE_KEYBOARD , screen);
   if(keyboard) GEN_INPMANAGER.AddDevice(keyboard);
 
-  mouse     = (INPANDROIDDEVICEMOUSE*)INPANDROIDFACTORYDEVICES::GetInstance().CreateDevice(INPDEVICE_TYPE_MOUSE       , screen);
+  mouse     = (INPANDROIDDEVICEMOUSE*)INPANDROIDFACTORY::GetInstance().CreateDevice(INPDEVICE_TYPE_MOUSE       , screen);
   if(mouse) GEN_INPMANAGER.AddDevice(mouse);
 
   return true;
@@ -1569,7 +1620,7 @@ void android_main(android_app* application)
 
   eventloop.Run(&androidmain, &androidmain);
 
-  VERSION::DelInstance();
+  VERSIONFRAMEWORK::DelInstance();
 
   XFILE_DISPLAYNOTCLOSEFILES
   XFEEDBACK_CONTROL_DISPLAYFEEDBACK

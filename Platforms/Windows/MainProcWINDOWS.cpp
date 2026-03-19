@@ -53,27 +53,27 @@
 #include "XWINDOWSSleep.h"
 
 #ifdef XSYSTEM_ACTIVE
-  #include "XWINDOWSSystem.h"
+#include "XWINDOWSSystem.h"
 #endif
 
 #ifdef DIO_OSPIPELINE_ACTIVE
-  #include "DIOWINDOWSOSPipeline.h"
+#include "DIOWINDOWSOSPipeline.h"
 #endif
 
 #ifdef XPROCESSMANAGER_ACTIVE
-  #include "XWINDOWSProcessManager.h"
+#include "XWINDOWSProcessManager.h"
 #endif
 
 #ifdef XSHAREDMEMORYMANAGER_ACTIVE
-  #include "XWINDOWSSharedMemoryManager.h"
+#include "XWINDOWSSharedMemoryManager.h"
 #endif
 
 #ifdef XDRIVEIMAGEMANAGER_ACTIVE
-  #include "XWINDOWSDriveImageManager.h"
+#include "XWINDOWSDriveImageManager.h"
 #endif
 
 #ifdef XEEPROMMEMORYMANAGER_ACTIVE
-  #include "XWINDOWSEEPROMMemoryManager.h"
+#include "XWINDOWSEEPROMMemoryManager.h"
 #endif
 
 
@@ -83,11 +83,9 @@
 #endif
 
 #ifdef INP_ACTIVE
-#include "INPWINDOWSDeviceKeyboard.h"
-#include "INPWINDOWSDeviceMouse.h"
-#include "INPWINDOWSFactory.h"
 #include "INPManager.h"
 #include "INPFactory.h"
+#include "INPWINDOWSFactory.h"
 #endif
 
 #ifdef SND_ACTIVE
@@ -98,25 +96,25 @@
 #include "DIODNSResolver.h"
 #include "DIOWINDOWSFactory.h"
 
-  #ifdef DIO_GPIO_ACTIVE
-  #include "DIOGPIO.h"
-    #ifdef DIO_GPIO_PCPARALLEL_ACTIVE
-    #include "DIOWINDOWSGPIOPCParallel.h"
-    #endif   
-  #endif
+#ifdef DIO_GPIO_ACTIVE
+#include "DIOGPIO.h"
+#ifdef DIO_GPIO_PCPARALLEL_ACTIVE
+#include "DIOWINDOWSGPIOPCParallel.h"
+#endif   
+#endif
 
-  #ifdef DIO_PING_ACTIVE
-  #include "DIOWINDOWSPing.h"
-  #include "DIOPing.h"
-  #endif
+#ifdef DIO_PING_ACTIVE
+#include "DIOWINDOWSPing.h"
+#include "DIOPing.h"
+#endif
 
-  #ifdef DIO_PUBLICINTERNETIP_ACTIVE
-  #include "DIOPublicInternetIP.h"
-  #endif
+#ifdef DIO_PUBLICINTERNETIP_ACTIVE
+#include "DIOPublicInternetIP.h"
+#endif
 
-  #ifdef DIO_ALERTS_ACTIVE
-  #include "DIOAlerts.h"
-  #endif
+#ifdef DIO_ALERTS_ACTIVE
+#include "DIOAlerts.h"
+#endif
 
 #endif
 
@@ -139,7 +137,6 @@
 #include "XTranslation_GEN.h"
 #include "XTranslation.h"
 #include "XPublisher.h"
-
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/

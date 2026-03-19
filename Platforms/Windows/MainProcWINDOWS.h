@@ -39,23 +39,23 @@
 #include "XString.h"
 #include "XSystem.h"
 
+#ifdef APPFLOW_ACTIVE
 #include "APPFlowBase.h"
 #include "APPFlowMain.h"
+#endif
 
 #include "MainProc.h"
-
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 #ifndef APPMODE_SERVICE_NAME
-  #define APPMODE_SERVICE_NAME              __L("GEN Service")
+#define APPMODE_SERVICE_NAME              __L("GEN Service")
 #endif
 
 #ifndef APPMODE_SERVICE_DISPLAYNAME
-  #define APPMODE_SERVICE_DISPLAYNAME       __L("GEN Service")
+#define APPMODE_SERVICE_DISPLAYNAME       __L("GEN Service")
 #endif
-
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/

@@ -31,7 +31,6 @@
 #include "GEN_Defines.h"
 
 
-
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -65,25 +64,28 @@
 #include "MainProcLINUX.h"
 
 #include "XLINUXFactory.h"
+#include "XLINUXTrace.h"
 #include "XLINUXRand.h"
 #include "XLINUXSleep.h"
+
+#ifdef XSYSTEM_ACTIVE
 #include "XLINUXSystem.h"
-#include "XLINUXTrace.h"
+#endif
 
 #ifdef XPROCESSMANAGER_ACTIVE
-  #include "XLINUXProcessManager.h"
+#include "XLINUXProcessManager.h"
 #endif
 
 #ifdef XSHAREDMEMORYMANAGER_ACTIVE
-  #include "XLINUXSharedMemoryManager.h"
+#include "XLINUXSharedMemoryManager.h"
 #endif
 
 #ifdef XDRIVEIMAGE_ACTIVE
-  #include "XLINUXDriveImage.h"
+#include "XLINUXDriveImage.h"
 #endif
 
 #ifdef XEEPROMMEMORYMANAGER_ACTIVE
-  #include "XLINUXEEPROMMemoryManager.h"
+#include "XLINUXEEPROMMemoryManager.h"
 #endif
 
 
@@ -105,38 +107,33 @@
 #include "DIODNSResolver.h"
 #include "DIOLINUXFactory.h"
 
-  #ifdef DIO_GPIO_ACTIVE
+#ifdef DIO_GPIO_ACTIVE
+#include "DIOLINUXGPIO.h"
+#ifdef HW_INTEL
+#ifdef DIO_GPIO_PCPARALLEL_ACTIVE
+#include "DIOLINUXGPIOPCParallel.h"
+#endif
+#endif
+#ifdef HW_RASPBERRYPI
+#include "DIOLINUXGPIORPi.h"
+#endif
+#if defined(HW_ARM) || defined(HW_ARM64)
+#include "DIOLINUXGPIOARM.h"
+#endif
+#endif
 
-    #include "DIOLINUXGPIO.h"
+#ifdef DIO_PING_ACTIVE
+#include "DIOLINUXPing.h"
+#include "DIOPing.h"
+#endif
 
-    #ifdef HW_INTEL
-      #ifdef DIO_GPIO_PCPARALLEL_ACTIVE
-        #include "DIOLINUXGPIOPCParallel.h"
-      #endif
-    #endif
-    
-    #ifdef HW_RASPBERRYPI
-    #include "DIOLINUXGPIORPi.h"
-    #endif
-    
-    #if defined(HW_ARM) || defined(HW_ARM64)
-    #include "DIOLINUXGPIOARM.h"
-    #endif
+#ifdef DIO_PUBLICINTERNETIP_ACTIVE
+#include "DIOPublicInternetIP.h"
+#endif
 
-  #endif
-
-  #ifdef DIO_PING_ACTIVE
-  #include "DIOLINUXPing.h"
-  #include "DIOPing.h"
-  #endif
-
-  #ifdef DIO_PUBLICINTERNETIP_ACTIVE
-  #include "DIOPublicInternetIP.h"
-  #endif
-
-  #ifdef DIO_ALERTS_ACTIVE
-  #include "DIOAlerts.h"
-  #endif
+#ifdef DIO_ALERTS_ACTIVE
+#include "DIOAlerts.h"
+#endif
 #endif
 
 #include "VersionFrameWork.h"
@@ -162,12 +159,9 @@
 #include "APPFlowBase.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -182,7 +176,6 @@ XSTRING               allexceptiontext;
 bool                  libmainproclinux      = false;
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 void                  Signal_Ini                (void);
@@ -190,8 +183,6 @@ static void           Signal_Handler            (int sig);
 bool                  Signal_Printf             (bool iserror, XCHAR* title, XCHAR* mask, ...);
 static inline void    Signal_PrintfStackTrace   (FILE *out = stderr, unsigned int max_frames = 63);
 bool                  Signal_RunLevel           (XCHAR& previous, XCHAR& actual);
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------

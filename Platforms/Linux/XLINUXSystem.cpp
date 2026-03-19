@@ -863,7 +863,10 @@ void XLINUXSYSTEM::Clean()
 * ---------------------------------------------------------------------------------------------------------------------*/
 void int_handler(int code)
 {
+  #ifdef _PATH_NOLOGIN
 	unlink(_PATH_NOLOGIN);
+  #endif
+
 	signal(SIGINT, SIG_DFL);
 
 	exit(1);
@@ -1018,10 +1021,9 @@ void unmount_disks_ourselves()
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::Sound_SetLevel(bool read, long* level)
-{
+{ 
+  #ifdef SND_ACTIVE 
   #ifndef ANDROID
-
-  #ifdef SND_ACTIVE    
 
   snd_mixer_t*          handle;
   snd_mixer_elem_t*     elem;
@@ -1162,13 +1164,15 @@ bool XLINUXSYSTEM::Sound_SetLevel(bool read, long* level)
 
   snd_mixer_close(handle);
 
+  #endif
+
   return true;
+
+
 
   #else
 
   return false;
-
-  #endif   
 
   #endif 
 }

@@ -40,7 +40,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <fcntl.h>
 #include <linux/fb.h>
 #include <sys/mman.h>
@@ -239,7 +238,7 @@ bool GRPLINUXSCREENFRAMEBUFFER::Delete()
 
   if(handlefb!=-1)  close(handlefb);
 
-  return GRPSCREEN::Delete();;
+  return GRPSCREEN::Delete();
 }
 
 

@@ -30,7 +30,6 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-
 #include "XBase.h"
 #include "XString.h"
 #include "XPath.h"
@@ -49,11 +48,7 @@
 #include "MainProc.h"
 
 
-
-
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-
-
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -132,12 +127,12 @@ class MAINPROCANDROID :  public ANDROIDNATIVEACTIVITY_HANDLER, public ANDROIDNAT
     XVECTOR<XPATH*>*                AssetsDir_GetAll                    ();
     XPATH*                          AssetsDir_Get                       (int index);
     bool                            AssetsDir_DeleteAll                 ();
-    
+
     #ifdef INP_ACTIVE
     bool                            CreateInputDevices                  (INPMANAGER* inpmanager, GRPANDROIDSCREEN* screen);
     bool                            DeleteInputDevices                  ();
-    #endif
-
+    #endif  
+  
     void                            Clean                               ();
 
     #ifdef INP_ACTIVE

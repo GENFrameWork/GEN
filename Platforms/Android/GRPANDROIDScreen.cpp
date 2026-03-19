@@ -71,7 +71,7 @@ GRPANDROIDSCREEN::GRPANDROIDSCREEN(): GRPSCREEN()
 
   SetIsBufferInverse(true);
 
-  SetStyle(GRPSCREENSTYLE_FULLSCREEN);
+  Styles_Set(GRPSCREENSTYLE_FULLSCREEN);
 
   isvalid = true;
 }
@@ -105,8 +105,6 @@ GRPANDROIDSCREEN::~GRPANDROIDSCREEN()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Create(bool show)
 {
-  CreateBuffers();
-
   return GRPSCREEN::Create(show);
 }
 
@@ -148,7 +146,7 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
     {
       if(ANativeWindow_lock(anativehandle, &abuffer, NULL) >= 0)
         {
-          memcpy(abuffer.bits, canvas->GetBuffer(), height * width * GetBytesperPixel());
+          memcpy(abuffer.bits, canvas->Buffer_Get(), height * width * GetBytesperPixel());
           ANativeWindow_unlockAndPost(anativehandle);
         }
     }
@@ -158,7 +156,7 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
 
       if(ANativeWindow_lock(anativehandle, &abuffer, NULL) >= 0)
         {
-          memcpy((XBYTE*)abuffer.bits, buffer, height * width * GetBytesperPixel());
+          memcpy((XBYTE*)abuffer.bits, canvas->Buffer_Get(), height * width * GetBytesperPixel());
 
           ANativeWindow_unlockAndPost(anativehandle);
         }
@@ -188,7 +186,6 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Delete()
 {
-  DeleteBuffers();
 
   isactive = false;
 

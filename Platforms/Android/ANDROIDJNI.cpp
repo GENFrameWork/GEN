@@ -38,6 +38,7 @@
 
 #include "android_native_app_glue.h"
 
+#include "XString.h"
 #include "XTrace.h"
 
 //#pragma endregion
@@ -184,13 +185,16 @@ void ANDROIDJNI::DetachJNIEnv()
 * @return     jclass : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-jclass ANDROIDJNI::FindJNIClass(const XSTRING & name)
+jclass ANDROIDJNI::FindJNIClass(const XSTRING& name)
 {
-  char* cname = NULL;
+  XBUFFER cname;
+  XSTRING _name;
 
-  name.CreateOEM(cname);
+  _name = name;
 
-  return ANDROIDJNI::FindJNIClass(cname);
+  (XSTRING)_name.ConvertToASCII(cname);
+
+  return ANDROIDJNI::FindJNIClass((const char*)cname.Get());
 }
 
 
@@ -249,6 +253,7 @@ jclass ANDROIDJNI::FindJNIClass(const char* name)
 
   jstring ClassNameObj = env->NewStringUTF(name);
   jclass FoundClass = static_cast<jclass>(env->CallObjectMethod(ClassLoader, FindClassMethod, ClassNameObj));
+
   ANDROIDJNI::CheckJavaException();
   env->DeleteLocalRef(ClassNameObj);
 
