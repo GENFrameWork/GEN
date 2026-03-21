@@ -78,7 +78,7 @@ enum DIOANDROIDICMPFSMSTATES
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class XTHREAD;
+class XTHREADCOLLECTED;
 
 
 class DIOANDROIDSTREAMICMP : public DIOSTREAMICMP , public XFSMACHINE
@@ -100,7 +100,7 @@ class DIOANDROIDSTREAMICMP : public DIOSTREAMICMP , public XFSMACHINE
     static void               ThreadRunFunction                     (void* thread); 
     void                      Clean                                 ();
 
-    XTHREAD*                  threadconnection;
+    XTHREADCOLLECTED*         threadconnection;
     int                       handle;
     XSTRING                   remoteaddress;
 };

@@ -56,7 +56,6 @@
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/ioctl.h>
-#include <sys/time.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <net/if.h>
@@ -494,7 +493,7 @@ void DIOANDROIDSTREAMICMP::ThreadRunFunction(void* thread)
                                                                       {
                                                                         XBUFFER charstr;
                                                                         
-                                                                        string.ConvertToASCII(charstr);                                                                        
+                                                                        IPstring.ConvertToASCII(charstr);                                                                        
                                                                         loc_addr.sin_addr.s_addr  = inet_addr(charstr.GetPtrChar());
 
                                                                       } else loc_addr.sin_addr.s_addr = htonl(INADDR_ANY);
