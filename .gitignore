@@ -6,6 +6,7 @@ syntax: glob
 *.a
 *.lib
 *.so*
+*.idb
 *.log
 *.sdf
 *.VC.db
@@ -23,3 +24,13 @@ syntax: glob
 *.pdb
 *.err
 *.ai
+*.d
+
+
+# Files compilated
+/**/CMake/.vs
+/**/CMake/.vscode
+/**/CMake/out
+/**/CMake/Build
+/output.txt
+/outfile.txt
