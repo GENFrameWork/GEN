@@ -224,7 +224,9 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
       (*returncode) = 0;
     }
 
-  #define OUTBUF_SIZE   (10*1024*1024)
+  //#define OUTBUF_SIZE   (10*1024*1024)
+
+  #define OUTBUF_SIZE   (4*1024)
   
   PROCESS_INFORMATION processinfo;
   STARTUPINFOW        startupinfo;
@@ -247,17 +249,8 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
       
       if(params)
         {
-          command.AddFormat(__L(" %s"), params);
-        }
-      
-      /*
-      XBUFFER buffersymbolused;
-      
-      if(!AdjustStringToConsolaSymbolsUsed(command, buffersymbolused))
-        {
-          return false;
-        }
-      */
+          command.AddFormat(__L(" %s"), params);          
+        }        
 
       memset(&saattr, 0, sizeof(saattr));
       saattr.nLength              = sizeof(SECURITY_ATTRIBUTES);
@@ -283,7 +276,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
       startupinfo.hStdInput   = stdhandle_in_read;    // GetStdHandle(STD_INPUT_HANDLE);
       startupinfo.dwFlags    |= STARTF_USESTDHANDLES;
 
-      if(CreateProcessW(NULL, (LPWSTR)command.Get() /*buffersymbolused.GetPtrChar()*/, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &startupinfo, &processinfo))
+      if(CreateProcessW(NULL, (LPWSTR)command.Get(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &startupinfo, &processinfo))
         {
           CloseHandle(stdhandle_out_write);
           
@@ -302,7 +295,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
           CloseHandle(stdhandle_in_write);
 
           if(out)
-            {
+            {             
               memset(outbuftmp, 0, OUTBUF_SIZE);
 
               for(;;)
@@ -311,13 +304,14 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
                     {
                       break;
                     }
-
+          
                   if(bytes_read > 0)
                     {                    
                       out->Add(outbuftmp, bytes_read);
                     }
                 }             
             }
+
 
           if(WaitForSingleObject(processinfo.hProcess, (out?INFINITE:500)) == WAIT_OBJECT_0)
             {
@@ -330,6 +324,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
 
                   CloseHandle(processinfo.hProcess);
                   CloseHandle(processinfo.hThread);
+
                 }
 
               status = true;
@@ -344,6 +339,8 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
   
   return status;
 }
+
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------

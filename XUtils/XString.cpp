@@ -4140,7 +4140,9 @@ bool XSTRING::ConvertASCIICharacterToUnicode(XBYTE asciicharacter, XCHAR& charac
     {       
       switch(asccicode)
         {
-                                default      :
+                                default      : character = asccicodeentrys[c].character;
+                                               break;
+   
           case XSTRINGASCIICODE_7BIT         : if(asccicodeentrys[c].code7bit == asciicharacter)
                                                  {
                                                    character = asccicodeentrys[c].character;

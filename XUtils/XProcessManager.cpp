@@ -38,6 +38,7 @@
 #include "XProcessManager.h"
 
 #include "XConsole.h"
+#include "XTrace.h"
 
 
 
@@ -589,7 +590,7 @@ bool XPROCESSMANAGER::OpenURL(XCHAR* url)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
 {
-  return false;
+  return Application_Execute(applicationpath, params, in, out, returncode);   
 }
 
 
@@ -646,10 +647,10 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
   bool status = Application_Execute(applicationpath, params, _in.GetSize()?&_in:NULL, out?&_out:NULL, returncode);
 
   if(out)
-    {
+    {      
       if(!_out.IsEmpty())
-        {
-          AdjustConsolaSymbolsUsedToString(_out, (*out));
+        {          
+          AdjustConsolaSymbolsUsedToString(_out, (*out));      
         }
     }
 
@@ -674,7 +675,7 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
 {
-  return false;
+   return Application_ExecuteElevated(applicationpath, params, in, out, returncode); 
 }
 
 
@@ -816,7 +817,7 @@ bool XPROCESSMANAGER::AdjustConsolaSymbolsUsedToString(XBUFFER& origin_buffer, X
     }
    else
     {
-      if(stringasccicode != XSTRINGASCIICODE_NONE)
+      //if(stringasccicode != XSTRINGASCIICODE_NONE)
         {
           string.ConvertFromASCII(origin_buffer, stringasccicode);            
         }      
