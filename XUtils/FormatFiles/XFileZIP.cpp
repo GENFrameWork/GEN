@@ -82,8 +82,8 @@ XFILECMPZIP::XFILECMPZIP(bool compress, void* filehdl)
   if(!zipoper)
     {
       unz_file_info64 info;
-      char*           _name    = new char[_MAXPATH];
-      char*           _comment = new char[_MAXPATH];
+      char*           _name    = GEN_NEW char[_MAXPATH];
+      char*           _comment = GEN_NEW char[_MAXPATH];
 
       if(_name && _comment)
         {
@@ -663,7 +663,7 @@ bool XFILEZIP::Open(XPATH& xpath)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP* XFILEZIP::CreateFileCmp(XPATH& xpath)
 {
-  XFILECMPZIP* filecmp = new XFILECMPZIP(true,filehdl);
+  XFILECMPZIP* filecmp = GEN_NEW XFILECMPZIP(true,filehdl);
   if(filecmp) filecmp->SetName(xpath);
 
   return filecmp;
@@ -686,7 +686,7 @@ XDWORD XFILEZIP::GetFileCRC(XFILE*  xfile)
   if(!xfile)           return 0;
   if(!xfile->IsOpen()) return 0;
 
-  XBYTE*  buffer    = new XBYTE[maxsizebuffer];
+  XBYTE*  buffer    = GEN_NEW XBYTE[maxsizebuffer];
   XDWORD  size;
   XDWORD  crcfile       = 0;
 
@@ -747,7 +747,7 @@ bool XFILEZIP::AddFile(XPATH& xpath, XPATH& xpathnew, XCHAR* password)
 
           if(filecmp->Create(crcfile, &zfinfo, password))
             {
-              XBYTE*          buffer        = new XBYTE[maxsizebuffer];
+              XBYTE*          buffer        = GEN_NEW XBYTE[maxsizebuffer];
               XDWORD          size          = 0;
               XQWORD          totalsize     = 0;
               XQWORD          totalsizefile = xfile->GetSize();
@@ -1120,7 +1120,7 @@ bool XFILEUNZIP::DelFile(int index, XCHAR* password)
   XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
   if(!xfile) return false;
 
-  XFILEZIP* filezip  = new XFILEZIP();
+  XFILEZIP* filezip  = GEN_NEW XFILEZIP();
   if(!filezip)
     {
       GEN_XFACTORY.Delete_File(xfile);
@@ -1333,7 +1333,7 @@ bool XFILEUNZIP::DecompressFile(XFILECMPZIP* filecmp, XPATH& xpathtarget, XCHAR*
         {
           if(xfile->Create(xpath))
             {
-              XBYTE* buffer= new XBYTE[maxsizebuffer];
+              XBYTE* buffer= GEN_NEW XBYTE[maxsizebuffer];
               if(buffer)
                 {
                   XQWORD totalbytesread = 0;
@@ -1470,7 +1470,7 @@ XFILECMPZIP* XFILEUNZIP::CreateCurrentFile()
 
   if(!filehdl) return NULL;
 
-  filecmp = new XFILECMPZIP(false,(void*)filehdl);
+  filecmp = GEN_NEW XFILECMPZIP(false,(void*)filehdl);
   if(!filecmp) return NULL;
 
   if(!filecmp->IsActive()) return NULL;

@@ -192,7 +192,7 @@ bool DIOSTREAMSPI::Open()
       if(GPIO_Entry[DIOSTREAMSPI_GPIO_CS])    GEN_DIOGPIO.SetMode(GPIO_Entry[DIOSTREAMSPI_GPIO_CS]    , DIOGPIO_MODE_INPUT);     
     }
 
-  bufferread   = new XBYTE[DIOSTREAMSPI_MAXSIZEBUFFER];
+  bufferread   = GEN_NEW XBYTE[DIOSTREAMSPI_MAXSIZEBUFFER];
 
   mode              = config->GetMode();
   nbitsword         = config->GetNBitsWord();

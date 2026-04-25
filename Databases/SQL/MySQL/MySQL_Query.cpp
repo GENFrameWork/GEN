@@ -127,7 +127,7 @@ bool MYSQL_QUERY::Execute()
   XDWORD size = query.GetSize();
   if(!size)
     {
-      DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+      DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
       if(!error) return false;
 
       database->ClearPreviousErrors();
@@ -140,7 +140,7 @@ bool MYSQL_QUERY::Execute()
       return false;
    }
 
-  XBUFFER* querystringbuffer = new XBUFFER();
+  XBUFFER* querystringbuffer = GEN_NEW XBUFFER();
   query.ConvertToUTF8   (*querystringbuffer );
   buffers.Add           (querystringbuffer  );
 
@@ -201,7 +201,7 @@ bool MYSQL_QUERY::UnbindAll()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_QUERY::Bind(XDWORD ID, DB_SQL_DATETIME& datetime)
 {
-  MYSQL_VARIANT* variant=new MYSQL_VARIANT();
+  MYSQL_VARIANT* variant=GEN_NEW MYSQL_VARIANT();
   if(!variant)  return true;
 
   (*variant) = datetime;
@@ -240,7 +240,7 @@ bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
 
   if(!stmt)
     {
-      DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+      DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
       if(!error) return false;
 
       error->description.Set(mysql_error(db));
@@ -254,7 +254,7 @@ bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
       // Set up statement
       if(mysql_stmt_prepare(stmt, sql, (unsigned long)strlen(sql)) != 0)
         {
-          DB_SQL_ERROR* error=new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+          DB_SQL_ERROR* error=GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
           if(!error) return false;
 
           error->description.Set(mysql_error(db));
@@ -282,7 +282,7 @@ bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
 
       if(RC != DB_SQL_MYSQL_OK)
         {
-          DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+          DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
           if(!error) return false;
 
           error->description.Set(mysql_error(db));
@@ -300,7 +300,7 @@ bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
 
           if(!result)
             {
-              DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
+              DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
               if(!error) return false;
 
               error->description.Set(__L("not enought memory for result"));
@@ -323,7 +323,7 @@ bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
       RC = mysql_stmt_store_result(stmt);
       if(RC!= DB_SQL_MYSQL_OK)
         {
-          DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+          DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
           if(!error) return false;
 
           error->description.Set(mysql_error(db));
@@ -366,7 +366,7 @@ bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT* MYSQL_QUERY::ConstructResult()
 {
-  MYSQL_RESULT* result = new MYSQL_RESULT();
+  MYSQL_RESULT* result = GEN_NEW MYSQL_RESULT();
   if(!result) return NULL;
 
   result->query = this;
@@ -396,7 +396,7 @@ bool MYSQL_QUERY::BindParametersToQuery()
       param=NULL;
     }
 
-  param = new MYSQL_BIND[statementbindings.GetSize()];
+  param = GEN_NEW MYSQL_BIND[statementbindings.GetSize()];
   if(!param)
     {
       database->Error(__L("Not enought memory"));
@@ -442,7 +442,7 @@ bool MYSQL_QUERY::BindParametersToQuery()
               case DB_SQL_VARIANT_TYPE_STRING         : { DB_SQL_STRING variantdata;
                                                           variantdata.Set((XCHAR*)*variant);
 
-                                                          XBUFFER*  variantdatabuffer = new XBUFFER();
+                                                          XBUFFER*  variantdatabuffer = GEN_NEW XBUFFER();
 
                                                           variantdata.ConvertToUTF8(*variantdatabuffer);
                                                           buffers.Add(variantdatabuffer);
@@ -470,7 +470,7 @@ bool MYSQL_QUERY::BindParametersToQuery()
 
       if(mysql_stmt_bind_param(stmt, param) != 0)
         {
-          DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+          DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
           if(!error) return false;
 
           error->description.Set(mysql_error(mysqldb));
@@ -507,7 +507,7 @@ bool MYSQL_QUERY::BindParametersToResult()
   result->bind_results_size = ncols;
 
   result->bindresults = NULL;
-  result->bindresults = new MYSQL_BIND[ncols];
+  result->bindresults = GEN_NEW MYSQL_BIND[ncols];
   if(!result->bindresults)
     {
       this->database->Error(__L("Not enought memory"));
@@ -525,8 +525,8 @@ bool MYSQL_QUERY::BindParametersToResult()
       result->bindresults[e].buffer_type      = field->type;
       switch(field->type)
         {
-          case MYSQL_TYPE_DATETIME  : result->bindresults[e].buffer = new MYSQL_TIME;                   break;
-                            default : result->bindresults[e].buffer = new unsigned char[field->length]; break;
+          case MYSQL_TYPE_DATETIME  : result->bindresults[e].buffer = GEN_NEW MYSQL_TIME;                   break;
+                            default : result->bindresults[e].buffer = GEN_NEW unsigned char[field->length]; break;
         }
 
       if(!result->bindresults[e].buffer)
@@ -546,7 +546,7 @@ bool MYSQL_QUERY::BindParametersToResult()
   int RC = mysql_stmt_bind_result(stmt, result->bindresults);
   if(RC)
     {
-      DB_SQL_ERROR* error=new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+      DB_SQL_ERROR* error=GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
       if(!error) return false;
 
       error->description.Set(mysql_stmt_error(stmt));

@@ -392,7 +392,7 @@ bool MAINPROCLINUX::End()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCLINUX::Factorys_Ini()
 {
-  if(!XFACTORY::SetInstance(new XLINUXFACTORY())) 
+  if(!XFACTORY::SetInstance(GEN_NEW XLINUXFACTORY())) 
     {
       return false;
     }
@@ -400,55 +400,55 @@ bool MAINPROCLINUX::Factorys_Ini()
   XFEEDBACK_CONTROL_CREATE
   
   #ifdef XSYSTEM_ACTIVE  
-  if(!XSYSTEM::SetInstance(new XLINUXSYSTEM())) 
+  if(!XSYSTEM::SetInstance(GEN_NEW XLINUXSYSTEM())) 
     {
       return false;
     }
   XBUFFER::SetGlobalHardwareUseLittleEndian(GEN_XSYSTEM.HardwareUseLittleEndian());
   #endif  
   
-  if(!XRAND::SetInstance(new XLINUXRAND())) 
+  if(!XRAND::SetInstance(GEN_NEW XLINUXRAND())) 
     {
       return false;
     }
 
   #ifdef XSLEEP_ACTIVE
-  if(!XSLEEP::SetInstance(new XLINUXSLEEP())) 
+  if(!XSLEEP::SetInstance(GEN_NEW XLINUXSLEEP())) 
     {
       return false;
     }
   #endif
     
   #ifdef XPROCESSMANAGER_ACTIVE
-  if(!XPROCESSMANAGER::SetInstance(new XLINUXPROCESSMANAGER())) 
+  if(!XPROCESSMANAGER::SetInstance(GEN_NEW XLINUXPROCESSMANAGER())) 
     {
       return false;
     }
   #endif
   
   #ifdef XSHAREDMEMORYMANAGER_ACTIVE
-  if(!XSHAREDMEMORYMANAGER::SetInstance(new XLINUXSHAREDMEMORYMANAGER())) 
+  if(!XSHAREDMEMORYMANAGER::SetInstance(GEN_NEW XLINUXSHAREDMEMORYMANAGER())) 
     {
       return false;  
     }
   #endif
     
   #ifdef XDRIVEIMAGE_ACTIVE
-  if(!XDRIVEIMAGE::SetInstance(new XLINUXDRIVEIMAGE())) 
+  if(!XDRIVEIMAGE::SetInstance(GEN_NEW XLINUXDRIVEIMAGE())) 
     {
       return false;
     }
   #endif
 
   #ifdef XEEPROMMEMORYMANAGER_ACTIVE
-  if(!XEEPROMMEMORYMANAGER::SetInstance(new XLINUXEEPROMMEMORYMANAGER())) 
+  if(!XEEPROMMEMORYMANAGER::SetInstance(GEN_NEW XLINUXEEPROMMEMORYMANAGER())) 
     {
       return false;
     }
   #endif
 
   #ifdef XTRACE_VIRTUALCLOCKTICK
-  xtimerclock = new XTIMERCLOCK();
+  xtimerclock = GEN_NEW XTIMERCLOCK();
   if(!xtimerclock) 
     {
       return false;
@@ -456,14 +456,14 @@ bool MAINPROCLINUX::Factorys_Ini()
   #endif
 
   #ifdef INP_ACTIVE
-  if(!INPFACTORY::SetInstance(new INPLINUXFACTORY())) 
+  if(!INPFACTORY::SetInstance(GEN_NEW INPLINUXFACTORY())) 
     {
       return false;  
     }
   #endif
 
   #ifdef DIO_ACTIVE
-  if(!DIOFACTORY::SetInstance(new DIOLINUXFACTORY())) 
+  if(!DIOFACTORY::SetInstance(GEN_NEW DIOLINUXFACTORY())) 
     {
       return false;
     }
@@ -472,7 +472,7 @@ bool MAINPROCLINUX::Factorys_Ini()
 
       #ifdef HW_INTEL
         #ifdef DIO_GPIO_PCPARALLEL_ACTIVE
-        if(!DIOGPIO::SetInstance(new DIOLINUXGPIOPCPARALLEL())) 
+        if(!DIOGPIO::SetInstance(GEN_NEW DIOLINUXGPIOPCPARALLEL())) 
           {
             return false;
           }
@@ -480,14 +480,14 @@ bool MAINPROCLINUX::Factorys_Ini()
       #endif
 
       #ifdef HW_RASPBERRYPI
-      if(!DIOGPIO::SetInstance(new DIOLINUXGPIORPI())) 
+      if(!DIOGPIO::SetInstance(GEN_NEW DIOLINUXGPIORPI())) 
         {
           return false;
         }
       #endif
 
       #if defined(HW_ARM) || defined(HW_ARM64)
-      if(!DIOGPIO::SetInstance(new DIOLINUXGPIOARM())) 
+      if(!DIOGPIO::SetInstance(GEN_NEW DIOLINUXGPIOARM())) 
         {
           return false;
         }
@@ -501,7 +501,7 @@ bool MAINPROCLINUX::Factorys_Ini()
     #endif
 
     #ifdef DIO_PING_ACTIVE    
-    if(!DIOPING::SetInstance(new DIOLINUXPING())) 
+    if(!DIOPING::SetInstance(GEN_NEW DIOLINUXPING())) 
       {
         return false;
       }    
@@ -510,7 +510,7 @@ bool MAINPROCLINUX::Factorys_Ini()
   #endif
 
   #ifdef SND_ACTIVE
-  if(!SNDFACTORY::SetInstance(new SNDLINUXFACTORY())) 
+  if(!SNDFACTORY::SetInstance(GEN_NEW SNDLINUXFACTORY())) 
     {    
       return false;
     }
@@ -522,7 +522,7 @@ bool MAINPROCLINUX::Factorys_Ini()
   #endif
 
   #ifdef GRP_ACTIVE
-  if(!GRPFACTORY::SetInstance(new GRPLINUXFACTORY())) 
+  if(!GRPFACTORY::SetInstance(GEN_NEW GRPLINUXFACTORY())) 
     {
       return false;
     }

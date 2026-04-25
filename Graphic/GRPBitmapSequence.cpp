@@ -139,7 +139,7 @@ int GRPBITMAPFRAME::GetAjustY()
 * @brief      Set bitmap
 * @ingroup    GRAPHIC
 *
-* @param[in]  bitmap : new bitmap of frame
+* @param[in]  bitmap : GEN_NEW bitmap of frame
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFRAME::SetBitmap(GRPBITMAP* bitmap)
@@ -154,7 +154,7 @@ void GRPBITMAPFRAME::SetBitmap(GRPBITMAP* bitmap)
 * @brief      Set ajust x
 * @ingroup    GRAPHIC
 *
-* @param[in]  x : new ajust x
+* @param[in]  x : GEN_NEW ajust x
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFRAME::SetAjustX(int ajustx)
@@ -169,7 +169,7 @@ void GRPBITMAPFRAME::SetAjustX(int ajustx)
 * @brief      Set ajust y
 * @ingroup    GRAPHIC
 *
-* @param[in]  y : new ajust y
+* @param[in]  y : GEN_NEW ajust y
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFRAME::SetAjustY(int ajusty)
@@ -248,7 +248,7 @@ GRPBITMAPSEQUENCE::~GRPBITMAPSEQUENCE()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::AddFrame(GRPBITMAP* bitmap, int ajustx, int ajusty)
 {
-  GRPBITMAPFRAME* frame = new GRPBITMAPFRAME();
+  GRPBITMAPFRAME* frame = GEN_NEW GRPBITMAPFRAME();
   if(!frame) return false;
 
   frame->SetBitmap(bitmap);
@@ -661,7 +661,7 @@ bool GRPBITMAPSEQUENCE::AjustTime(int framebysec)
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPSEQUENCE* GRPBITMAPSEQUENCE::Copy()
 {
-  GRPBITMAPSEQUENCE* sequence = new GRPBITMAPSEQUENCE();
+  GRPBITMAPSEQUENCE* sequence = GEN_NEW GRPBITMAPSEQUENCE();
   if(!sequence)
     {
       return NULL;

@@ -233,7 +233,7 @@ bool GRPBITMAPFILEBMPHEADER::Load(XFILE* file)
           if(!file->Read(&red   ,1)) return false;
           if(!file->Read(&alpha ,1)) return false;
 
-          GRPBITMAPFILEBMPCOLORPALETE* colorpalette = new GRPBITMAPFILEBMPCOLORPALETE(red, green, blue, alpha);
+          GRPBITMAPFILEBMPCOLORPALETE* colorpalette = GEN_NEW GRPBITMAPFILEBMPCOLORPALETE(red, green, blue, alpha);
           if(colorpalette) palette.Add((XBYTE)c, colorpalette);
         }
     }
@@ -318,7 +318,7 @@ bool GRPBITMAPFILEBMPHEADER::Load(XBYTE* buffer, XDWORD size, XDWORD& indexbuffe
           memcpy((XBYTE*)&red   , &buffer[indexbuffer], 1);   indexbuffer++;
           memcpy((XBYTE*)&alpha , &buffer[indexbuffer], 1);   indexbuffer++;
 
-          GRPBITMAPFILEBMPCOLORPALETE* colorpalette = new GRPBITMAPFILEBMPCOLORPALETE(red, green, blue, alpha);
+          GRPBITMAPFILEBMPCOLORPALETE* colorpalette = GEN_NEW GRPBITMAPFILEBMPCOLORPALETE(red, green, blue, alpha);
           if(colorpalette) palette.Add((XBYTE)c, colorpalette);
         }
     }
@@ -548,7 +548,7 @@ GRPBITMAP* GRPBITMAPFILEBMP::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
       XBYTE*  databuffer    = NULL;
       int     index         = 0;
 
-      databuffer = new XBYTE[sizebmp];
+      databuffer = GEN_NEW XBYTE[sizebmp];
       if(databuffer)
         {
           file->SetPosition(header.GetOffsetData());
@@ -675,7 +675,7 @@ GRPBITMAP* GRPBITMAPFILEBMP::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
       XBYTE*  databuffer    = NULL;
       int     index         = 0;
 
-      databuffer = new XBYTE[sizebmp];
+      databuffer = GEN_NEW XBYTE[sizebmp];
       if(databuffer)
         {
           memcpy(databuffer, &buffer[indexbuffer], sizebmp);
@@ -814,7 +814,7 @@ bool GRPBITMAPFILEBMP::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
 
   if(file->Write((XBYTE*)header.GetHeaderInfo(), sizeof(GRPBITMAPFILEBMPHEADERINFO)))
     {
-      XBYTE* databuffer = new XBYTE[sizebmp];
+      XBYTE* databuffer = GEN_NEW XBYTE[sizebmp];
       if(databuffer)
         {
           for(int y=height-1; y>-1; y--)

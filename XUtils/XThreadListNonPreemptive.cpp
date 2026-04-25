@@ -68,7 +68,7 @@ XTHREADLISTNONPREEMPTIVE* XTHREADLISTNONPREEMPTIVE::instance = NULL;
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADLISTNONPREEMPTIVE& XTHREADLISTNONPREEMPTIVE::GetInstance()
 {
-  if(!instance) instance = new XTHREADLISTNONPREEMPTIVE();
+  if(!instance) instance = GEN_NEW XTHREADLISTNONPREEMPTIVE();
 
   return (*instance);
 }

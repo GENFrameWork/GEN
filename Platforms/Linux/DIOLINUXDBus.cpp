@@ -340,7 +340,7 @@ bool DIOLINUXDBUS_MESSAGE::GetResult(XVECTOR<XSTRING*>& result)
     {              
       for(int c=0; c<lenght; c++)
         {
-          XSTRING* string = new XSTRING();
+          XSTRING* string = GEN_NEW XSTRING();
           if(string)
             {
               string->Set(result_char[c]);          
@@ -871,7 +871,7 @@ bool DIOLINUXDBUS::Signal_Add(XCHAR* type, XCHAR* name)
 
   if(!status) return status;
   
-  DIOLINUXDBUS_SIGNAL* signal = new DIOLINUXDBUS_SIGNAL();
+  DIOLINUXDBUS_SIGNAL* signal = GEN_NEW DIOLINUXDBUS_SIGNAL();
   if(signal)
     {
       signal->GetType()->Set(type);

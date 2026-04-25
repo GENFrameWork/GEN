@@ -369,14 +369,14 @@ DIOSTREAM* DIOLINUXSTREAMTCPIPSERVER::CreateStream()
 {
   DIOSTREAMTCPIPCONFIG* _config = NULL;
 
-  _config = new DIOSTREAMTCPIPCONFIG();
+  _config = GEN_NEW DIOSTREAMTCPIPCONFIG();
   if(_config)
     {
       _config->SetMode(DIOSTREAMMODE_SERVER);
       _config->SetRemotePort(config->GetRemotePort());
     }  
 
-  DIOLINUXSTREAMTCPIP* diostream =  new DIOLINUXSTREAMTCPIP();
+  DIOLINUXSTREAMTCPIP* diostream =  GEN_NEW DIOLINUXSTREAMTCPIP();
   if(diostream)
     {      
       diostream->SetConfig(_config);

@@ -465,7 +465,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::TargetURL_Add(XCHAR* URL)
 {
   if(!URL)    return false;
 
-  DIOURL* _URL = new DIOURL();
+  DIOURL* _URL = GEN_NEW DIOURL();
   if(!_URL) return false;
 
   (*_URL) = URL;
@@ -1413,7 +1413,7 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ManageProtocolConnectionsServer()
 
   if(!ProtocolConnections_GetNFreeToConnect())
     {
-      DIOPROTOCOL_CONNECTION* protocolconnection = new DIOPROTOCOL_CONNECTION(diostreamcfg);
+      DIOPROTOCOL_CONNECTION* protocolconnection = GEN_NEW DIOPROTOCOL_CONNECTION(diostreamcfg);
       if(protocolconnection)
         {
           DIOPROTOCOL* protocol = CreateProtocol();
@@ -1523,7 +1523,7 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ManageProtocolConnectionsClient()
 
                                                     if(!address.IsEmpty())
                                                       {
-                                                        DIOURL* url= new DIOURL();
+                                                        DIOURL* url= GEN_NEW DIOURL();
                                                         if(url)
                                                           {
                                                             (*url) = address.Get();
@@ -1544,7 +1544,7 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ManageProtocolConnectionsClient()
 
           if(haveservervalid)
             {
-              DIOPROTOCOL_CONNECTION* protocolconnection = new DIOPROTOCOL_CONNECTION(diostreamcfg);
+              DIOPROTOCOL_CONNECTION* protocolconnection = GEN_NEW DIOPROTOCOL_CONNECTION(diostreamcfg);
               if(protocolconnection)
                 {
                   DIOPROTOCOL* protocol = CreateProtocol();

@@ -78,7 +78,7 @@ enum XFILEJSONCONTROLCHAR
 
 #define XFILEJSON_SPACETABS                             2
 
-#define XFILEJSON_ADDVALUE(node, name, value)           { XFILEJSONVALUE* jsonvalue = new XFILEJSONVALUE();             \
+#define XFILEJSON_ADDVALUE(node, name, value)           { XFILEJSONVALUE* jsonvalue = GEN_NEW XFILEJSONVALUE();             \
                                                           if(jsonvalue)                                                 \
                                                             {                                                           \
                                                               jsonvalue->SetName(name);                                 \
@@ -87,7 +87,7 @@ enum XFILEJSONCONTROLCHAR
                                                             }                                                           \
                                                         }
 
-#define XFILEJSON_ADDVALUE_NULL(node, name)             { XFILEJSONVALUE* jsonvalue = new XFILEJSONVALUE();             \
+#define XFILEJSON_ADDVALUE_NULL(node, name)             { XFILEJSONVALUE* jsonvalue = GEN_NEW XFILEJSONVALUE();             \
                                                           if(jsonvalue)                                                 \
                                                             {                                                           \
                                                               jsonvalue->SetName(name);                                 \

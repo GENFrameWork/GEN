@@ -279,7 +279,7 @@ DIOPCAPFRAME::DIOPCAPFRAME(bool hardwareuselittleendian, bool isloopback)
   this->hardwareuselittleendian = hardwareuselittleendian;
   this->isloopback              = isloopback;
 
-  data = new XBUFFER();
+  data = GEN_NEW XBUFFER();
 }
 
 
@@ -963,7 +963,7 @@ DIOPCAP::DIOPCAP()
 {
   Clean();
 
-  filters = new DIOPCAP_FILTERS();
+  filters = GEN_NEW DIOPCAP_FILTERS();
 }
 
 
@@ -1240,7 +1240,7 @@ bool DIOPCAP::Frames_Add(XBYTE* data,XDWORD size, bool isloopback)
 
   XDWORD allheaderssize = 0;
 
-  DIOPCAPFRAME* frame = new DIOPCAPFRAME(GEN_XSYSTEM.HardwareUseLittleEndian(), isloopback);
+  DIOPCAPFRAME* frame = GEN_NEW DIOPCAPFRAME(GEN_XSYSTEM.HardwareUseLittleEndian(), isloopback);
   if(frame)
     {
       if(frame->SetData(data,size))

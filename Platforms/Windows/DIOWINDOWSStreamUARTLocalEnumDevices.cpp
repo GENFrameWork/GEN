@@ -106,10 +106,10 @@ bool DIOWINDOWSSTREAMUARTLOCALENUMDEVICES::Search()
   if(status==ERROR_SUCCESS)
     {
       DWORD   index  = 0;
-      XCHAR*  name   = new XCHAR[_MAXSTR];
+      XCHAR*  name   = GEN_NEW XCHAR[_MAXSTR];
       DWORD   sizename;
       DWORD   type;
-      XCHAR*  value  = new XCHAR[_MAXSTR];
+      XCHAR*  value  = GEN_NEW XCHAR[_MAXSTR];
       DWORD   sizevalue;
 
       if((value)&&(name))
@@ -126,7 +126,7 @@ bool DIOWINDOWSSTREAMUARTLOCALENUMDEVICES::Search()
               status=RegEnumValue(hkey, index, name, &sizename, NULL, &type, (XBYTE*)value, &sizevalue);
               if(status==ERROR_SUCCESS)
                 {
-                  DIOSTREAMDEVICE* device = new DIOSTREAMDEVICE();
+                  DIOSTREAMDEVICE* device = GEN_NEW DIOSTREAMDEVICE();
                   if(device)
                     {
                       device->SetIndex(index);

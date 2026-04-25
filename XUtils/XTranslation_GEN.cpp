@@ -137,7 +137,7 @@ bool XTRANSLATION_GEN::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION_GEN& XTRANSLATION_GEN::GetInstance()
 {
-  if(!instance) instance = new XTRANSLATION_GEN();
+  if(!instance) instance = GEN_NEW XTRANSLATION_GEN();
 
   return (*instance);
 }
@@ -241,14 +241,14 @@ bool XTRANSLATION_GEN::Sentence_Add(XDWORD ID, XDWORD codelanguage, XCHAR* sente
 
   if(Sentence_Get(ID, codelanguage)) return false;
 
-  XTRANSLATION_GEN_SENTENCE* sentenceGEN = new XTRANSLATION_GEN_SENTENCE();
+  XTRANSLATION_GEN_SENTENCE* sentenceGEN = GEN_NEW XTRANSLATION_GEN_SENTENCE();
   if(!sentenceGEN) return false;
 
   int sizesentence = XSTRING::GetSize(sentence);
 
   sentenceGEN->ID           = ID;
   sentenceGEN->codelanguage = codelanguage;
-  sentenceGEN->sentence     = new XCHAR[sizesentence+1];
+  sentenceGEN->sentence     = GEN_NEW XCHAR[sizesentence+1];
   sentenceGEN->fixed        = fixed;
   if(!sentenceGEN->sentence)
     {

@@ -785,7 +785,7 @@ void DIOCLIPROTOCOL::ReceivedCommandManager()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::AddAnswer(XSTRING& originID, XSTRING& command, XSTRING& answer)
 {
-  DIOCLIPROTOCOLANSWER* protocolanswer = new DIOCLIPROTOCOLANSWER();
+  DIOCLIPROTOCOLANSWER* protocolanswer = GEN_NEW DIOCLIPROTOCOLANSWER();
   if(!protocolanswer) return false;
 
   if(xmutexanswers) xmutexanswers->Lock();
@@ -959,7 +959,7 @@ bool DIOCLIPROTOCOL::AddCommand(XCHAR* command, int nparams)
   protocolcommand = GetCommand(commandstring.Get());
   if(protocolcommand) return false;
 
-  protocolcommand = new DIOCLIPROTOCOLCOMMAND();
+  protocolcommand = GEN_NEW DIOCLIPROTOCOLCOMMAND();
   if(!protocolcommand) return false;
 
   protocolcommand->Set(commandstring.Get(), nparams);
@@ -1061,7 +1061,7 @@ bool DIOCLIPROTOCOL::ExtractParamsFromCommand(XSTRING& stringreceived, XSTRING& 
       int indexspace = stringreceived.Find(__L(","), true, index);
       if(indexspace != XSTRING_NOTFOUND)
         {
-          XSTRING* param = new XSTRING();
+          XSTRING* param = GEN_NEW XSTRING();
           if(param)
             {
               stringreceived.Copy(index, indexspace, (*param));
@@ -1078,7 +1078,7 @@ bool DIOCLIPROTOCOL::ExtractParamsFromCommand(XSTRING& stringreceived, XSTRING& 
         {
           if(index < (int)stringreceived.GetSize())
             {
-              XSTRING* param = new XSTRING();
+              XSTRING* param = GEN_NEW XSTRING();
               if(param)
                 {
                   stringreceived.Copy(index, stringreceived.GetSize(), (*param));

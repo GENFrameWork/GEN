@@ -260,7 +260,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::GetAddrFromLocalDevice(int locald
 {
   struct hci_dev_info* di;
 
-  di = new hci_dev_info();
+  di = GEN_NEW hci_dev_info();
   if(!di) return false;
 
   int error = hci_devinfo(localdeviceindex, di);
@@ -340,7 +340,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevices(XVECTOR<DIOSTREAMDEVI
   int           nanswers;
   bool          status         = false;
 
-  info = (inquiry_info*)new XBYTE[maxanswers * sizeof(inquiry_info)];
+  info = (inquiry_info*)GEN_NEW XBYTE[maxanswers * sizeof(inquiry_info)];
   if(!info) return false;
 
   int flags = IREQ_CACHE_FLUSH;
@@ -353,7 +353,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevices(XVECTOR<DIOSTREAMDEVI
       inquiry_info*  infodev = (info+c);
       char           addr[32];
 
-      DIOSTREAMDEVICEBLUETOOTH* device = new DIOSTREAMDEVICEBLUETOOTH();
+      DIOSTREAMDEVICEBLUETOOTH* device = GEN_NEW DIOSTREAMDEVICEBLUETOOTH();
       if(device)
         {
           uint32_t devclass;
@@ -400,7 +400,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesName(DIOSTREAMDEVICEBL
   XSTRING  MACstring;
   bool     status = false;
 
-  char* name = new char[_MAXSTR];
+  char* name = GEN_NEW char[_MAXSTR];
   if(!name)  return false;
 
   memset(name,0,_MAXSTR);
@@ -542,7 +542,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDeviceServices(DIOSTREAMDEVIC
 
       if(_rec && ((int)_rec!=-1))
         {
-          DIOSTREAMDEVICEBLUETOOTHSDPSERVICE* service = new DIOSTREAMDEVICEBLUETOOTHSDPSERVICE();
+          DIOSTREAMDEVICEBLUETOOTHSDPSERVICE* service = GEN_NEW DIOSTREAMDEVICEBLUETOOTHSDPSERVICE();
           if(service)
             {
               sdp_data_t* data     = 0;

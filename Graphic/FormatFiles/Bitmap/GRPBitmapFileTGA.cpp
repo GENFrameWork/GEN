@@ -387,12 +387,12 @@ GRPBITMAP* GRPBITMAPFILETGA::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
 
       file->SetPosition(header.GetOffsetData());
 
-      XBUFFER* filebuffer = new XBUFFER((height * width * bytesppixel), true);
+      XBUFFER* filebuffer = GEN_NEW XBUFFER((height * width * bytesppixel), true);
 
       file->Read(filebuffer->Get(), height * width * bytesppixel);
       filebuffer->SetPosition(0);
 
-      colors = new GRP2DCOLOR_RGBA8[(height * width)+ 256 ];
+      colors = GEN_NEW GRP2DCOLOR_RGBA8[(height * width)+ 256 ];
       if(colors)
         {
           while(index < (height * width) )
@@ -538,13 +538,13 @@ GRPBITMAP* GRPBITMAPFILETGA::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
       XDWORD sizetoread = (height * width * bytesppixel);
       if(size > sizetoread) sizetoread = size;
 
-      XBUFFER* filebuffer = new XBUFFER(sizetoread, true);
+      XBUFFER* filebuffer = GEN_NEW XBUFFER(sizetoread, true);
 
       memcpy(filebuffer->Get(), &buffer[indexbuffer], (size - indexbuffer));
 
       filebuffer->SetPosition(0);
 
-      colors = new GRP2DCOLOR_RGBA8[(height * width)+ 256 ];
+      colors = GEN_NEW GRP2DCOLOR_RGBA8[(height * width)+ 256 ];
       if(colors)
         {
           while(index < (height * width) )
@@ -689,7 +689,7 @@ bool GRPBITMAPFILETGA::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
 
   if(file->Write((XBYTE*)header.GetHeaderInfo(), sizeof(GRPBITMAPFILETGAHEADERINFO)))
     {
-      XBYTE* databuffer = new XBYTE[sizebmp];
+      XBYTE* databuffer = GEN_NEW XBYTE[sizebmp];
       if(databuffer)
         {
           for(int y=height-1; y>-1; y--)

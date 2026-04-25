@@ -173,7 +173,7 @@ bool DIOSCRAPERWEBCACHE::Add(XSTRING& ask, DIOSCRAPERWEBCACHE_RESULT* result)
 
   bool status = false;
 
-  XSTRING* _ask = new XSTRING();
+  XSTRING* _ask = GEN_NEW XSTRING();
   if(_ask)
     {
       (*_ask) = ask.Get();

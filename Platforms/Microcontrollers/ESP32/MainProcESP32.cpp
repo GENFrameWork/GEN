@@ -249,31 +249,31 @@ bool MAINPROCESP32::End()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCESP32::Factorys_Ini()
 {
-  if(!XFACTORY::SetInstance(new XESP32FACTORY())) return false;
+  if(!XFACTORY::SetInstance(GEN_NEW XESP32FACTORY())) return false;
   
   #ifdef XSYSTEM_ACTIVE  
-  if(!XSYSTEM::SetInstance(new XESP32SYSTEM()))  return false;
+  if(!XSYSTEM::SetInstance(GEN_NEW XESP32SYSTEM()))  return false;
   XBUFFER::SetHardwareUseLittleEndian(GEN_XSYSTEM.HardwareUseLittleEndian());
   #endif
   
   #ifdef XSLEEP_ACTIVE
-  if(!XSLEEP::SetInstance(new XESP32SLEEP())) return false;
+  if(!XSLEEP::SetInstance(GEN_NEW XESP32SLEEP())) return false;
   #endif
 
-  if(!XRAND::SetInstance(new XESP32RAND())) return false;
+  if(!XRAND::SetInstance(GEN_NEW XESP32RAND())) return false;
   
   
   #ifdef XEEPROMMEMORYMANAGER_ACTIVE  
-  XEEPROMMEMORYMANAGER::SetInstance(new XESP32EEPROMMEMORYMANAGER());
+  XEEPROMMEMORYMANAGER::SetInstance(GEN_NEW XESP32EEPROMMEMORYMANAGER());
   if(!XEEPROMMEMORYMANAGER::GetIsInstanced()) return false;  
   #endif
 
   #ifdef DIO_ACTIVE
-  DIOFACTORY::SetInstance(new DIOESP32FACTORY());
+  DIOFACTORY::SetInstance(GEN_NEW DIOESP32FACTORY());
   if(!DIOFACTORY::GetIsInstanced()) return false;
 
     #ifdef DIO_GPIO_ACTIVE
-    DIOGPIO::SetInstance(new DIOESP32GPIO());
+    DIOGPIO::SetInstance(GEN_NEW DIOESP32GPIO());
     if(!DIOGPIO::GetIsInstanced()) return false;
 
     if(!DIOGPIO::GetInstance().Ini()) return false;

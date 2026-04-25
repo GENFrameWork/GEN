@@ -721,7 +721,7 @@ XTHREADCOLLECTED* XTHREADSCOLLECTED::Create(XTHREADGROUPID groupID, XCHAR* ID, X
 
       xthreadsvectormutex->Lock();
 
-      xthreadcollected = new XTHREADCOLLECTED();
+      xthreadcollected = GEN_NEW XTHREADCOLLECTED();
       if(xthreadcollected)
         {
           xthreadcollected->SetGroupID(groupID);
@@ -744,7 +744,7 @@ XTHREADCOLLECTED* XTHREADSCOLLECTED::Create(XTHREADGROUPID groupID, XCHAR* ID, X
     }
     else
     {
-      xthreadcollected = new XTHREADCOLLECTED(groupID, ID, function, param);
+      xthreadcollected = GEN_NEW XTHREADCOLLECTED(groupID, ID, function, param);
       if(xthreadcollected)
         {
 
@@ -992,7 +992,7 @@ void XTHREADSCOLLECTED::Clean()
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSCOLLECTEDMANAGER& XTHREADSCOLLECTEDMANAGER::GetInstance()
 {
-  if(!instance) instance = new XTHREADSCOLLECTEDMANAGER();
+  if(!instance) instance = GEN_NEW XTHREADSCOLLECTEDMANAGER();
 
   return (*instance);
 }
@@ -1142,7 +1142,7 @@ XTHREADCOLLECTED* XTHREADSCOLLECTEDMANAGER::CreateThread(XTHREADGROUPID groupID,
       XTHREADSCOLLECTED* xthreadscollected = GetThreadsCollectedByGroupID(groupID);
       if(!xthreadscollected)
         {
-          xthreadscollected = new XTHREADSCOLLECTED(groupID);
+          xthreadscollected = GEN_NEW XTHREADSCOLLECTED(groupID);
           if(xthreadscollected) groupthreadsvector.Add(xthreadscollected);
         }
 
@@ -1152,7 +1152,7 @@ XTHREADCOLLECTED* XTHREADSCOLLECTEDMANAGER::CreateThread(XTHREADGROUPID groupID,
     }
     else
     {
-      XTHREADSCOLLECTED* xthreadscollected = new XTHREADSCOLLECTED();
+      XTHREADSCOLLECTED* xthreadscollected = GEN_NEW XTHREADSCOLLECTED();
       if(xthreadscollected)
         {
           xthreadcollected = xthreadscollected->Create(groupID, ID, function, param);
@@ -1197,7 +1197,7 @@ bool XTHREADSCOLLECTEDMANAGER::DeleteThread(XTHREADGROUPID groupID, XTHREADCOLLE
     }
     else
     {
-      XTHREADSCOLLECTED* xthreadscollected = new XTHREADSCOLLECTED();
+      XTHREADSCOLLECTED* xthreadscollected = GEN_NEW XTHREADSCOLLECTED();
       if(xthreadscollected)
         {
           status = xthreadscollected->Delete(groupID, xthreadcollected);

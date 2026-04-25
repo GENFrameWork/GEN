@@ -292,7 +292,7 @@ bool POSTGRESQL_DATABASE::ReleaseSavepoint(XCHAR* savepoint)
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_QUERY* POSTGRESQL_DATABASE::CreateQuery()
 {
-  POSTGRESQL_QUERY* query = new POSTGRESQL_QUERY(this);
+  POSTGRESQL_QUERY* query = GEN_NEW POSTGRESQL_QUERY(this);
   return query;
 }
 
@@ -308,7 +308,7 @@ DB_SQL_QUERY* POSTGRESQL_DATABASE::CreateQuery()
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_CONNECTION* POSTGRESQL_DATABASE::CreateConnection()
 {
-  POSTGRESQL_CONNECTION* pgconnection= new POSTGRESQL_CONNECTION(this);
+  POSTGRESQL_CONNECTION* pgconnection= GEN_NEW POSTGRESQL_CONNECTION(this);
 
   return pgconnection;
 }
@@ -350,7 +350,7 @@ bool POSTGRESQL_DATABASE::GetTables()
                     variant=row->Get(e);
                     if(variant.GetType()==(XVARIANT_TYPE)DB_SQL_VARIANT_TYPE_STRING)
                       {
-                        DB_SQL_STRING* tablename = new DB_SQL_STRING();
+                        DB_SQL_STRING* tablename = GEN_NEW DB_SQL_STRING();
                         if(tablename)
                           {
                             tablename->Set((XCHAR*)variant);

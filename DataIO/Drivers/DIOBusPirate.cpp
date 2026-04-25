@@ -255,7 +255,7 @@ bool DIOBUSPIRATE::ReadI2CSnifferCommand(XBUFFER& in, XBUFFER& out)
 
   XSTRING string;
 
-  XBYTE* buffer = new XBYTE[stringsize+1];
+  XBYTE* buffer = GEN_NEW XBYTE[stringsize+1];
   if(!buffer) return false;
 
   memset(buffer, 0, stringsize+1);

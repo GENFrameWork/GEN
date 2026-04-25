@@ -71,7 +71,7 @@ DIOMPSSE::DIOMPSSE()
   Clean();
 
   dioenumUSBdevices  = (DIOSTREAMUSBLOCALENUMDEVICES*)GEN_DIOFACTORY.CreateStreamEnumDevices(DIOSTREAMENUMTYPE_USB_LOCAL);
-  if(dioenumUSBdevices)  diostreamUSBcfg = new DIOSTREAMUSBCONFIG();
+  if(dioenumUSBdevices)  diostreamUSBcfg = GEN_NEW DIOSTREAMUSBCONFIG();
 }
 
 

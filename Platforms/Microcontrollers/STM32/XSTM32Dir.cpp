@@ -343,7 +343,7 @@ bool XSTM32DIR::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* sea
   if(!xpath)         return false;
   if(!patternsearch) return false;
 
-  XBYTE* findfiledata = new XBYTE[sizeof(XSTM32DIR_SEARCHINFO)];
+  XBYTE* findfiledata = GEN_NEW XBYTE[sizeof(XSTM32DIR_SEARCHINFO)];
   if(!findfiledata) return false;
 
   memset(findfiledata, 0, sizeof(XSTM32DIR_SEARCHINFO));

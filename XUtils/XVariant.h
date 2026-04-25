@@ -67,7 +67,7 @@ enum XVARIANT_TYPE
 #define XVARIANT_CREATE(vtype, ctype, value)      if(data) Destroy(); \
                                                   type  = vtype; \
                                                   size  = sizeof(ctype); \
-                                                  data = (void*)new ctype; \
+                                                  data = (void*)GEN_NEW ctype; \
                                                   if(data) *((ctype*)data) = value;
 
 

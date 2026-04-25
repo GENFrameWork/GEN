@@ -110,7 +110,7 @@ XFILECFG_VALUETYPE XFILECFGVALUE::GetType()
 * @brief      Set type
 * @ingroup    XUTILS
 *
-* @param[in]  type : new type of value
+* @param[in]  type : GEN_NEW type of value
 *
 * @return     bool : true if is succesful.
 *
@@ -173,7 +173,7 @@ void* XFILECFGVALUE::GetValue()
 * @brief      Set value
 * @ingroup    XUTILS
 *
-* @param[in]  value : new data of value
+* @param[in]  value : GEN_NEW data of value
 *
 * @return     bool : true if is succesful.
 *
@@ -486,7 +486,7 @@ XFILECFG::XFILECFG(XCHAR* namefile)
 {
   Clean();
 
-  fileini = new XFILEINI();
+  fileini = GEN_NEW XFILEINI();
 
   if(namefile) 
     {
@@ -845,7 +845,7 @@ XPATH* XFILECFG::GetPathFile()
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFGVALUE* XFILECFG::AddValue(XFILECFG_VALUETYPE type, XCHAR* group, XCHAR* ID, void* value, XCHAR* remark_text, XDWORD remark_xpos)
 {
-  XFILECFGVALUE* CFGvalue = new XFILECFGVALUE();
+  XFILECFGVALUE* CFGvalue = GEN_NEW XFILECFGVALUE();
   if(!CFGvalue) return NULL;
 
   CFGvalue->SetType(type);
@@ -923,7 +923,7 @@ XVARIANT* XFILECFG::GetValue(XCHAR* group, XCHAR* ID)
         {
           if((!cfgvalue->GetGroup()->Compare(group, true)) && (!cfgvalue->GetID()->Compare(ID, true)))
             {
-              value = new XVARIANT();
+              value = GEN_NEW XVARIANT();
               if(value)
                 {
                   switch(cfgvalue->GetType())
@@ -973,7 +973,7 @@ XVARIANT* XFILECFG::GetValue(XFILECFGVALUE* CFGvalue)
       return NULL;
     }
 
-  value = new XVARIANT();
+  value = GEN_NEW XVARIANT();
   if(!value) return NULL;
       
   switch(CFGvalue->GetType())
@@ -1116,7 +1116,7 @@ bool XFILECFG::AddRemark(XCHAR* group, XCHAR* text, XDWORD xpos, XDWORD relative
 {
   if(!fileini) return false;
 
-  XFILEINIREMARK* remark =  new XFILEINIREMARK();
+  XFILEINIREMARK* remark =  GEN_NEW XFILEINIREMARK();
   if(!remark) return false;
   
   remark->SetType(XFILEINI_TYPEREMARK_ALL_LINE);
@@ -1152,7 +1152,7 @@ bool XFILECFG::AddRemark(XCHAR* group, XCHAR* ID, XCHAR* text, XDWORD xpos, XDWO
 {
   if(!fileini) return false;
 
-  XFILEINIREMARK* remark =  new XFILEINIREMARK();
+  XFILEINIREMARK* remark =  GEN_NEW XFILEINIREMARK();
   if(!remark) return false;
   
   remark->SetType(XFILEINI_TYPEREMARK_IN_KEY);
@@ -1328,7 +1328,7 @@ bool XFILECFG::AjustRemarks()
 
           if(!found)
             {
-              XFILEINIREMARK* add_remark = new XFILEINIREMARK();
+              XFILEINIREMARK* add_remark = GEN_NEW XFILEINIREMARK();
               if(add_remark)
                 {
                   remark->CopyTo(add_remark);

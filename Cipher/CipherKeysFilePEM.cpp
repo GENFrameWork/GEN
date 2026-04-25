@@ -256,7 +256,7 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
 
           if(!entrybuffer)
             {
-              entrybuffer = new CIPHERKEYSFILEPEM_ENTRYBUFFER(); 
+              entrybuffer = GEN_NEW CIPHERKEYSFILEPEM_ENTRYBUFFER(); 
               if(entrybuffer)
                 {
                   entrybuffer->end_line = XSTRING_NOTFOUND;
@@ -350,7 +350,7 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
             {      
               decodeobjtype = CIPHERKEYSFILETYPE_CERTIFICATEX509;     
 
-              decodeobj = (CIPHERKEY*)new CIPHERCERTIFICATEX509();  
+              decodeobj = (CIPHERKEY*)GEN_NEW CIPHERCERTIFICATEX509();  
               if(decodeobj)
                 {                  
                   if(asn1.Decode(entrybuffer->data, this))
@@ -638,7 +638,7 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
                                                                     {                 
                                                                       if(!certificate->GetPublicCipherKey())
                                                                         {
-                                                                          CIPHERKEYPUBLICRSA* cipherkey =  new CIPHERKEYPUBLICRSA();
+                                                                          CIPHERKEYPUBLICRSA* cipherkey =  GEN_NEW CIPHERKEYPUBLICRSA();
                                                                           if(cipherkey)
                                                                             {
                                                                               modulus.ImportFromBinary(event->GetData()->Get(), event->GetData()->GetSize());
@@ -680,7 +680,7 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
               case CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PUBLIC	:
               case CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PUBLIC	: if((event->GetTagType() == XBER_TAGTYPE_BIT_STRING) && (keytype != CIPHERKEYTYPE_UNKNOWN))
                                                                   {
-                                                                    CIPHERKEYECDSA* cipherkey = new CIPHERKEYECDSA();
+                                                                    CIPHERKEYECDSA* cipherkey = GEN_NEW CIPHERKEYECDSA();
                                                                     if(cipherkey)
                                                                       {
                                                                         cipherkey->SetType(keytype);
@@ -751,11 +751,11 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
             { 
               switch(hashtype)
                 { 
-                  case HASHTYPE_SHA1   : hash  = new HASHSHA1();                  break;
-                  case HASHTYPE_SHA224 : hash  = new HASHSHA2(HASHSHA2TYPE_224);  break;      
-                  case HASHTYPE_SHA256 : hash  = new HASHSHA2(HASHSHA2TYPE_256);  break;
-                  case HASHTYPE_SHA384 : hash  = new HASHSHA2(HASHSHA2TYPE_384);  break;
-                  case HASHTYPE_SHA512 : hash  = new HASHSHA2(HASHSHA2TYPE_512);  break;                   
+                  case HASHTYPE_SHA1   : hash  = GEN_NEW HASHSHA1();                  break;
+                  case HASHTYPE_SHA224 : hash  = GEN_NEW HASHSHA2(HASHSHA2TYPE_224);  break;      
+                  case HASHTYPE_SHA256 : hash  = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);  break;
+                  case HASHTYPE_SHA384 : hash  = GEN_NEW HASHSHA2(HASHSHA2TYPE_384);  break;
+                  case HASHTYPE_SHA512 : hash  = GEN_NEW HASHSHA2(HASHSHA2TYPE_512);  break;                   
                               default  : break;
                 }            
 

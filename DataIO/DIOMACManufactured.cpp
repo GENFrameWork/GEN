@@ -106,7 +106,7 @@ bool DIOMACMANUFACTURED::Web_GetManufactured(DIOMAC& MAC, XSTRING& manufactured)
 {
   bool status = false;
 
-  DIOSCRAPERWEBMACMANUFACTURER* macmanufactured = new DIOSCRAPERWEBMACMANUFACTURER;
+  DIOSCRAPERWEBMACMANUFACTURER* macmanufactured = GEN_NEW DIOSCRAPERWEBMACMANUFACTURER;
   if(macmanufactured)
     {
       status = macmanufactured->Get(MAC, manufactured);
@@ -142,7 +142,7 @@ bool DIOMACMANUFACTURED::File_GetManufactured(XPATH& xpath, DIOMAC& MAC, XSTRING
     }
 
   HASHMD5   hashmd5;
-  XFILEXDB* xfilexdb = new XFILEXDB( &hashmd5, xpath);
+  XFILEXDB* xfilexdb = GEN_NEW XFILEXDB( &hashmd5, xpath);
   bool      status;
 
   if(xfilexdb)
@@ -196,7 +196,7 @@ bool DIOMACMANUFACTURED::File_GetManufacturedMACs(XPATH& xpath, XSTRING& manufac
     }
 
   HASHMD5   hashmd5;
-  XFILEXDB* xfilexdb = new XFILEXDB( &hashmd5, xpath);
+  XFILEXDB* xfilexdb = GEN_NEW XFILEXDB( &hashmd5, xpath);
   bool      status;
 
   if(xfilexdb)
@@ -258,7 +258,7 @@ bool DIOMACMANUFACTURED::File_Download(XBUFFER& xbuffer, int timeout)
   url  = DIOMACMANUFACTURED_URL;
   url += DIOMACMANUFACTURED_URLNAMEFILE;
 
-  DIOWEBCLIENT* webclient = new DIOWEBCLIENT;
+  DIOWEBCLIENT* webclient = GEN_NEW DIOWEBCLIENT;
   if(!webclient) return false;
 
   status = webclient->Get(url, xbuffer, DIOWEBCLIENT_DEFAULTUSERAGENT, timeout);
@@ -285,7 +285,7 @@ bool DIOMACMANUFACTURED::File_Convert(XBUFFER& xbuffer, XPATH& xpath)
 {
   if(xpath.IsEmpty()) return false;
 
-  XFILETXT* xfiletxtoui = new XFILETXT();
+  XFILETXT* xfiletxtoui = GEN_NEW XFILETXT();
   if(!xfiletxtoui) return false;
 
   XMAP<XDWORD, XSTRING*>  idmap;
@@ -318,7 +318,7 @@ bool DIOMACMANUFACTURED::File_Convert(XBUFFER& xbuffer, XPATH& xpath)
 
                   if(idmap.Find(ID)==-1)
                     {
-                      XSTRING* name = new XSTRING();
+                      XSTRING* name = GEN_NEW XSTRING();
                       if(name)
                         {
                           line->Copy(start,(*name));
@@ -337,7 +337,7 @@ bool DIOMACMANUFACTURED::File_Convert(XBUFFER& xbuffer, XPATH& xpath)
   XDWORD    initablepos = 0;
   XDWORD    filepos     = 0;
 
-  XFILEXDB* xfilexdb = new XFILEXDB( &hashmd5, xpath);
+  XFILEXDB* xfilexdb = GEN_NEW XFILEXDB( &hashmd5, xpath);
   if(xfilexdb)
     {
       xfilexdb->Set(XFILE_XDB_ID, XFILEXDB_TYPE, DIOMACMANUFACTURED_FILE_VERSION, DIOMACMANUFACTURED_FILE_IDSTRING);

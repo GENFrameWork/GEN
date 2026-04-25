@@ -396,8 +396,8 @@ bool GRPWINDOWSSCREEN::Set_Position(int x, int y)
 * @brief      Resize
 * @ingroup    PLATFORM_WINDOWS
 *
-* @param[in]  width : new width of the screen
-* @param[in]  height : new height of the screen
+* @param[in]  width : GEN_NEW width of the screen
+* @param[in]  height : GEN_NEW height of the screen
 *
 * @return     bool : true if is succesful.
 *

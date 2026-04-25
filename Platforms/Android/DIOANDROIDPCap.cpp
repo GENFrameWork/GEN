@@ -176,7 +176,7 @@ bool DIOANDROIDPCAP::CreateListNetInterfaces()
   // Create list
   for(netinterface=allnetinterfaces; netinterface; netinterface=netinterface->next)
     {
-      DIOPCAPNETINTERFACE* _netinterface = new DIOPCAPNETINTERFACE();
+      DIOPCAPNETINTERFACE* _netinterface = GEN_NEW DIOPCAPNETINTERFACE();
       if(_netinterface)
         {
           XSTRING string;

@@ -279,10 +279,10 @@ bool DIOSTM32STREAMSPI::Open()
 
   if(!DIOSTM32STREAMSPI::ports[indexport])
     {
-      DIOSTM32STREAMSPIPORT* port = new DIOSTM32STREAMSPIPORT();
+      DIOSTM32STREAMSPIPORT* port = GEN_NEW DIOSTM32STREAMSPIPORT();
       if(!port) return false;
 
-      hspi = new SPI_HandleTypeDef();
+      hspi = GEN_NEW SPI_HandleTypeDef();
       if(!hspi)
         {
           delete port;

@@ -85,7 +85,7 @@ VERSIONFRAMEWORK& VERSIONFRAMEWORK::GetInstance()
 {
   if(!instance) 
     {
-      instance = new VERSIONFRAMEWORK();
+      instance = GEN_NEW VERSIONFRAMEWORK();
     }
 
   return (*instance);

@@ -142,10 +142,10 @@ bool DIOI2CMONITORGAUGELTC2942::SetAC(XWORD ac)
   // Backup control register 
   if(!ReadRegister(DIOI2CMONITORGAUGELTC2942_REG_CONTROL,ctrl))           return false;
   
-  // Shutdown analog section before programming new AC value 
+  // Shutdown analog section before programming GEN_NEW AC value 
   if(!WriteRegister(DIOI2CMONITORGAUGELTC2942_REG_CONTROL, ctrl | DIOI2CMONITORGAUGELTC2942_CTL_SHUTDOWN))   return false;
   
-  // Program new AC value 
+  // Program GEN_NEW AC value 
   if(!WriteRegister(DIOI2CMONITORGAUGELTC2942_REG_AC_H, ac >> 8)!=0)      return false;
   
   if(!WriteRegister(DIOI2CMONITORGAUGELTC2942_REG_AC_L, ac & 0xFF)!=0)    return false;
@@ -277,11 +277,11 @@ bool DIOI2CMONITORGAUGELTC2942::Initialize()
   // M=32 for 1050mA battery AC max value 39.530    
         
 	ctrl &= DIOI2CMONITORGAUGELTC2942_CTL_PSCM_MSK;      // clear prescaler M bits
-	ctrl |= DIOI2CMONITORGAUGELTC2942_PSCM_32;          // configure new value
+	ctrl |= DIOI2CMONITORGAUGELTC2942_PSCM_32;          // configure GEN_NEW value
 
 	// Disable AL/CC pin 
 	ctrl &= DIOI2CMONITORGAUGELTC2942_CTL_ALCC_MSK;     // clear AL/CC bits
-	ctrl |= DIOI2CMONITORGAUGELTC2942_ALCC_DISABLED;    // configure new value
+	ctrl |= DIOI2CMONITORGAUGELTC2942_ALCC_DISABLED;    // configure GEN_NEW value
 
 	// Write control register 
 	if(!WriteRegister(DIOI2CMONITORGAUGELTC2942_REG_CONTROL, ctrl))

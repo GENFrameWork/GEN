@@ -110,7 +110,7 @@ bool XRAND::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XRAND& XRAND::GetInstance()
 {
-  if(!instance) instance = new XRAND();
+  if(!instance) instance = GEN_NEW XRAND();
 
   return (*instance);
 }
@@ -123,7 +123,7 @@ XRAND& XRAND::GetInstance()
 * @note       STATIC
 * @ingroup    XUTILS
 *
-* @param[in]  _instance : new instance
+* @param[in]  _instance : GEN_NEW instance
 *
 * @return     bool : true if is succesful.
 *
@@ -173,8 +173,8 @@ bool XRAND::DelInstance()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XRAND::Ini()
 {
-  const int* prime1    = new int();
-  const int* prime2    = new int();
+  const int* prime1    = GEN_NEW int();
+  const int* prime2    = GEN_NEW int();
 
   XQWORD initialvaluelong = (XQWORD)time(NULL);
 

@@ -72,7 +72,7 @@ DIOREMOTEFILECFG::DIOREMOTEFILECFG(XCHAR* namefile): XFILECFG(namefile)
 {
   Clean();
 
-  webclient = new DIOWEBCLIENT();
+  webclient = GEN_NEW DIOWEBCLIENT();
 }
 
 

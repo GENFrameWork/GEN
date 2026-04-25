@@ -316,7 +316,7 @@ bool INPLINUXDEVICEMOUSEDIRECT::CreateAllButtons()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEMOUSEDIRECT::CreateAllCursors()
 {
-  INPCURSOR* cursor = new INPCURSOR();
+  INPCURSOR* cursor = GEN_NEW INPCURSOR();
   if(!cursor) return false;
 
   cursor->SetID(INPCURSOR_ID_MOUSE);

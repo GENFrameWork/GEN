@@ -150,7 +150,7 @@ XSTRING* XFILEJSONVALUE::GetName()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::SetName(XSTRING& name)
 {
-  XSTRING* _name = new XSTRING(name);
+  XSTRING* _name = GEN_NEW XSTRING(name);
   if(!_name) return false;
 
   this->name = _name;
@@ -172,7 +172,7 @@ bool XFILEJSONVALUE::SetName(XSTRING& name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::SetName(XCHAR* name)
 {
-  XSTRING* _name = new XSTRING(name);
+  XSTRING* _name = GEN_NEW XSTRING(name);
   if(!_name) return false;
 
   this->name = _name;
@@ -847,7 +847,7 @@ bool XFILEJSONVALUE::Delete()
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONVALUE* XFILEJSONVALUE::Clone()
 {
-  XFILEJSONVALUE* newvalue = new XFILEJSONVALUE();
+  XFILEJSONVALUE* newvalue = GEN_NEW XFILEJSONVALUE();
   if(!newvalue) return NULL;  
 
   newvalue->SetType(type);
@@ -967,7 +967,7 @@ bool XFILEJSONOBJECT::Add(XCHAR* name, XFILEJSONARRAY* array)
 
   array->SetFather(this);
 
-  XFILEJSONVALUE* value = new XFILEJSONVALUE();
+  XFILEJSONVALUE* value = GEN_NEW XFILEJSONVALUE();
   if(!value) return false;
 
   value->SetName(name);
@@ -1015,7 +1015,7 @@ bool XFILEJSONOBJECT::Add(XCHAR* name, XFILEJSONOBJECT* object)
 
   object->SetFather(this);
 
-  XFILEJSONVALUE* value = new XFILEJSONVALUE();
+  XFILEJSONVALUE* value = GEN_NEW XFILEJSONVALUE();
   if(!value) return false;
 
   value->SetName(name);
@@ -1121,7 +1121,7 @@ bool XFILEJSONOBJECT::DeleteAllValues()
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XFILEJSONOBJECT::Clone()
 {
-  XFILEJSONOBJECT* cloneobj = new XFILEJSONOBJECT();
+  XFILEJSONOBJECT* cloneobj = GEN_NEW XFILEJSONOBJECT();
   if(!cloneobj) return NULL;
 
   cloneobj->SetFather(father);
@@ -1257,7 +1257,7 @@ bool XFILEJSONARRAY::SetName(XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONARRAY* XFILEJSONARRAY::Clone()
 {
-  XFILEJSONARRAY* clonearray = new XFILEJSONARRAY();
+  XFILEJSONARRAY* clonearray = GEN_NEW XFILEJSONARRAY();
   if(!clonearray) return NULL;
 
   clonearray->SetName(name.Get());
@@ -1384,7 +1384,7 @@ bool XFILEJSON::DecodeAllLines()
 
   if(positionbracket > positionbrace)  position = positionbrace + 1;  else position =  positionbracket;
 
-  root = new XFILEJSONOBJECT();
+  root = GEN_NEW XFILEJSONOBJECT();
   if(!root) return false;
 
   bool status = DecodeObject(position, true, root);
@@ -1792,7 +1792,7 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
     {
       XFILEJSONCONTROLCHAR ctrlchar;
 
-      XFILEJSONVALUE* value = new XFILEJSONVALUE();
+      XFILEJSONVALUE* value = GEN_NEW XFILEJSONVALUE();
       if(!value) return false;
 
       if(isobject)
@@ -1829,7 +1829,7 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
       ctrlchar = SearchNextControlCharacter(position);
       switch(ctrlchar)
         {
-          case XFILEJSONCONTROLCHAR_OPENBRACE     : { XFILEJSONOBJECT* newobject = new XFILEJSONOBJECT();
+          case XFILEJSONCONTROLCHAR_OPENBRACE     : { XFILEJSONOBJECT* newobject = GEN_NEW XFILEJSONOBJECT();
                                                       if(!object) return false;
 
                                                       value->Set(newobject);
@@ -1846,7 +1846,7 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
                                                     }
                                                     break;
 
-          case XFILEJSONCONTROLCHAR_OPENBRACKET   : { XFILEJSONARRAY* newarray = new XFILEJSONARRAY();
+          case XFILEJSONCONTROLCHAR_OPENBRACKET   : { XFILEJSONARRAY* newarray = GEN_NEW XFILEJSONARRAY();
                                                       if(!object) return false;
 
                                                       value->Set(newarray);

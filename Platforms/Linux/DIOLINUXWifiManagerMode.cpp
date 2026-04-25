@@ -607,7 +607,7 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_GetListRemoteAP(XVECTOR<XSTRING*>& nameAPs)
 
       if(indexstart)
         {
-          XSTRING* newstr = new XSTRING();
+          XSTRING* newstr = GEN_NEW XSTRING();
           if(newstr)
             {
               output.Copy(indexstart+1, index, (*newstr));

@@ -143,7 +143,7 @@ XLICENSE::XLICENSE()
 {
   Clean();
 
-  license = new XBUFFER();
+  license = GEN_NEW XBUFFER();
 
   RegisterEvent(XLICENSEXEVENT_TYPE_INVALID);
   RegisterEvent(XLICENSEXEVENT_TYPE_EXPIRED);
@@ -197,7 +197,7 @@ bool XLICENSE::GenerateMachineID(XLICENSEID& licenseID)
 
   origin.ConvertToUTF8(originbuffer);
     
-  sha2 = new HASHSHA2(HASHSHA2TYPE_256);
+  sha2 = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
   if(!sha2)
     {
       return false;
@@ -550,7 +550,7 @@ bool XLICENSE::LoadFromFile(XPATH& xpath, XSTRING& applicationID, XBUFFER* licen
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::LoadFromURL(DIOURL& url, int timeout, XSTRING* IPlocal, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 {
-  DIOWEBCLIENT* webclient = new DIOWEBCLIENT;
+  DIOWEBCLIENT* webclient = GEN_NEW DIOWEBCLIENT;
   if(!webclient) 
     {
       return false;

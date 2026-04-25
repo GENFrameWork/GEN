@@ -101,7 +101,7 @@ class DIOSTREAMTLS :  public T
                                               
                                               timeout = DIOSTREAMTLS_TIMEOUT;  
 
-                                              fsmachine = new XFSMACHINE(0);  
+                                              fsmachine = GEN_NEW XFSMACHINE(0);  
 
                                               IniFSMachine();                                               
                                             } 
@@ -321,7 +321,7 @@ class DIOSTREAMTLS :  public T
 
                                               // -----------------------------------------------------------------------------------
 
-                                              DIOSTREAMTLS_MSG_EXTENSION_SNI* extension_SNI = new DIOSTREAMTLS_MSG_EXTENSION_SNI();
+                                              DIOSTREAMTLS_MSG_EXTENSION_SNI* extension_SNI = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SNI();
                                               if(extension_SNI)
                                                 {
                                                   DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME extension_SNI_servername;
@@ -337,7 +337,7 @@ class DIOSTREAMTLS :  public T
 
                                               // ---------------------------------------
 
-                                              DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS* extension_supportedgroups = new DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS();
+                                              DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS* extension_supportedgroups = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS();
                                               if(extension_supportedgroups)
                                                 { 
                                                   extension_supportedgroups->List_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
@@ -349,7 +349,7 @@ class DIOSTREAMTLS :  public T
 
                                               // ---------------------------------------
 
-                                              DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS* extension_ECpointformats = new DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS();
+                                              DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS* extension_ECpointformats = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS();
                                               if(extension_ECpointformats)
                                                 { 
                                                   extension_ECpointformats->List_Add(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
@@ -359,7 +359,7 @@ class DIOSTREAMTLS :  public T
 
                                               // ---------------------------------------
 
-                                              DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* extension_signaturealgorithms = new DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS();
+                                              DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* extension_signaturealgorithms = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS();
                                               if(extension_signaturealgorithms)
                                                 {  
                                                   extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
@@ -374,7 +374,7 @@ class DIOSTREAMTLS :  public T
 
                                               // ---------------------------------------
 
-                                              DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension_ALPN = new DIOSTREAMTLS_MSG_EXTENSION_ALPN();
+                                              DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension_ALPN = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_ALPN();
                                               if(extension_ALPN)
                                                 { 
                                                   extension_ALPN->List_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_2);
@@ -385,7 +385,7 @@ class DIOSTREAMTLS :  public T
 
                                               // ---------------------------------------
 
-                                              DIOSTREAMTLS_MSG_EXTENSION_EMS* extension_EMS = new DIOSTREAMTLS_MSG_EXTENSION_EMS();
+                                              DIOSTREAMTLS_MSG_EXTENSION_EMS* extension_EMS = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_EMS();
                                               if(extension_EMS)
                                                 {
 
@@ -395,7 +395,7 @@ class DIOSTREAMTLS :  public T
 
                                               // ---------------------------------------
 
-                                              DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS* extension_supportedversions = new DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS();
+                                              DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS* extension_supportedversions = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS();
                                               if(extension_supportedversions)
                                                 { 
                                                   extension_supportedversions->List_Add(DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
@@ -406,7 +406,7 @@ class DIOSTREAMTLS :  public T
 
                                               // -----------------------------------------------------------------------------------
   
-                                              DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES* extension_PSKkeyexchangemodes = new DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES();
+                                              DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES* extension_PSKkeyexchangemodes = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES();
                                               if(extension_PSKkeyexchangemodes)
                                                 { 
                                                   extension_PSKkeyexchangemodes->List_Add(DIOSTREAMTLS_MSG_PSKKEYEXCHANGEMODE_PSK);
@@ -417,7 +417,7 @@ class DIOSTREAMTLS :  public T
 
                                               // -----------------------------------------------------------------------------------
   
-                                              DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension_keyshare = new DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE();
+                                              DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension_keyshare = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE();
                                               if(extension_keyshare)
                                                 { 
                                                   DIOSTREAMTLS_MSG_EXTENSION_KEY key;
@@ -640,7 +640,7 @@ class DIOSTREAMTLS :  public T
                                                   return false;              
                                                 }
 
-                                              if(fsmachine->GetEvent() == DIOSTREAMTLS_XFSMEVENT_NONE) // Not new event
+                                              if(fsmachine->GetEvent() == DIOSTREAMTLS_XFSMEVENT_NONE) // Not GEN_NEW event
                                                 {
                                                   switch(fsmachine->GetCurrentState())
                                                     {

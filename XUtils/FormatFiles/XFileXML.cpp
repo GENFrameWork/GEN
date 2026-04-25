@@ -462,7 +462,7 @@ bool XFILEXMLELEMENT::SetName(XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XSTRING& name, XSTRING& value)
 {
-  XFILEXMLATTRIBUTE* attribute = new XFILEXMLATTRIBUTE(name,value);
+  XFILEXMLATTRIBUTE* attribute = GEN_NEW XFILEXMLATTRIBUTE(name,value);
   if(!attribute) return NULL;
 
   attributes.Add(attribute);
@@ -485,7 +485,7 @@ XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XSTRING& name, XSTRING& value)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XCHAR* name, XCHAR* value)
 {
-  XFILEXMLATTRIBUTE* attribute = new XFILEXMLATTRIBUTE(name,value);
+  XFILEXMLATTRIBUTE* attribute = GEN_NEW XFILEXMLATTRIBUTE(name,value);
   if(!attribute) return NULL;
 
   attributes.Add(attribute);
@@ -818,7 +818,7 @@ bool XFILEXMLELEMENT::SetValue(XCHAR* value)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement()
 {
-  XFILEXMLELEMENT* element = new XFILEXMLELEMENT();
+  XFILEXMLELEMENT* element = GEN_NEW XFILEXMLELEMENT();
   if(!element) return NULL;
 
   element->SetFather(this);
@@ -842,7 +842,7 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement()
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name)
 {
-  XFILEXMLELEMENT* element = new XFILEXMLELEMENT(name);
+  XFILEXMLELEMENT* element = GEN_NEW XFILEXMLELEMENT(name);
   if(!element) return NULL;
 
   element->SetFather(this);
@@ -866,7 +866,7 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name)
 {
-  XFILEXMLELEMENT* element = new XFILEXMLELEMENT(name);
+  XFILEXMLELEMENT* element = GEN_NEW XFILEXMLELEMENT(name);
   if(!element) return NULL;
 
   element->SetFather(this);
@@ -891,7 +891,7 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name,XSTRING& value)
 {
-  XFILEXMLELEMENT* element = new XFILEXMLELEMENT(name,value);
+  XFILEXMLELEMENT* element = GEN_NEW XFILEXMLELEMENT(name,value);
   if(!element) return NULL;
 
   element->SetFather(this);
@@ -916,7 +916,7 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name,XSTRING& value)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name,XCHAR* value)
 {
-  XFILEXMLELEMENT* element = new XFILEXMLELEMENT(name,value);
+  XFILEXMLELEMENT* element = GEN_NEW XFILEXMLELEMENT(name,value);
   if(!element) return NULL;
 
   element->SetFather(this);
@@ -1694,7 +1694,7 @@ bool XFILEXML::DecodeConfig(XSTRING& string)
       indexname = values.Copy(__L("\""),__L("\""),false,indexname,value);
       if(indexname==XSTRING_NOTFOUND) break;
 
-      XFILEXMLATTRIBUTE* attribute = new XFILEXMLATTRIBUTE(name,value);
+      XFILEXMLATTRIBUTE* attribute = GEN_NEW XFILEXMLATTRIBUTE(name,value);
       if(!attribute) break;
 
       cfgattributes.Add(attribute);
@@ -1801,7 +1801,7 @@ bool XFILEXML::DecodeElement(XSTRING& string, XFILEXMLELEMENTTYPELINE typeline)
 
                                                 if(!root)
                                                   {
-                                                    element = new XFILEXMLELEMENT();
+                                                    element = GEN_NEW XFILEXMLELEMENT();
                                                     if(!element) return false;
                                                     root          = element;
                                                     actualelement = root;

@@ -83,7 +83,7 @@ bool DIOPUBLICINTERNETIP::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPUBLICINTERNETIP& DIOPUBLICINTERNETIP::GetInstance()
 {
-  if(!instance) instance = new DIOPUBLICINTERNETIP();
+  if(!instance) instance = GEN_NEW DIOPUBLICINTERNETIP();
 
   return (*instance);
 }

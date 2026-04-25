@@ -639,7 +639,7 @@ bool XERRORSMSG::AddMsg(int code, int level, int image, int sound, XCHAR* title,
 
   if(FindMsg(code)) return false;
 
-  error = new XERRORMSG(code,title,msg);
+  error = GEN_NEW XERRORMSG(code,title,msg);
   if(!error) return false;
 
   error->SetLevel(level);

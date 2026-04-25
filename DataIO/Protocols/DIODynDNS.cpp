@@ -69,7 +69,7 @@ DIODYNDNS::DIODYNDNS()
 {
   Clean();
 
-  webclient = new DIOWEBCLIENT;
+  webclient = GEN_NEW DIOWEBCLIENT;
 }
 
 
@@ -199,7 +199,7 @@ bool DIODYNDNS::IsChangedPublicIP(DIOURL& url, bool& ischanged, DIOIP* newpublic
 
   ischanged = false;
 
-  _url    = new DIOURL();
+  _url    = GEN_NEW DIOURL();
   if(!_url) 
     {
       return false;

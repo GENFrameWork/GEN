@@ -154,7 +154,7 @@ bool DIOSPITFTDISPLAYILI9341::Clear(XWORD color)
 {
   int size = (GetSizeBuffer() / sizeof(XWORD));
 
-  XWORD* buffer = new XWORD[size];
+  XWORD* buffer = GEN_NEW XWORD[size];
   if(!buffer) return false;
 
   for(int c=0; c<size; c++)

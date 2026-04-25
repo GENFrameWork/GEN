@@ -90,7 +90,7 @@ bool APPFLOWLOG::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWLOG& APPFLOWLOG::GetInstance()
 {
-  if(!instance) instance = new APPFLOWLOG();
+  if(!instance) instance = GEN_NEW APPFLOWLOG();
 
   return (*instance);
 }

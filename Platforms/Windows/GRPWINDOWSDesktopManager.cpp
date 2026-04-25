@@ -107,7 +107,7 @@ BOOL CALLBACK GRPWINDOWSDESKTOPMONITORS::MonitorEnum(HMONITOR hmon,HDC hdc,LPREC
       return FALSE;  
     }
 
-  GRPRECTINT* newmonitor = new GRPRECTINT();
+  GRPRECTINT* newmonitor = GEN_NEW GRPRECTINT();
   if(newmonitor)
     {
       newmonitor->x1  = rectmonitor->left;

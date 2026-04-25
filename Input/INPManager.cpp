@@ -85,7 +85,7 @@ bool INPMANAGER::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 INPMANAGER& INPMANAGER::GetInstance()
 {
-  if(!instance) instance = new INPMANAGER();
+  if(!instance) instance = GEN_NEW INPMANAGER();
 
   return (*instance);
 }

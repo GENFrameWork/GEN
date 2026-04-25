@@ -102,7 +102,7 @@ GRPPROPERTYMODE GRPPROPERTIES::GetMode()
 * @brief      Set mode
 * @ingroup    GRAPHIC
 *
-* @param[in]  mode : new mode of property
+* @param[in]  mode : GEN_NEW mode of property
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPPROPERTIES::SetMode(GRPPROPERTYMODE mode)
@@ -147,8 +147,8 @@ int GRPPROPERTIES::GetPositionY()
 * @brief      Set position
 * @ingroup    GRAPHIC
 *
-* @param[in]  x : new x position
-* @param[in]  y : new y position
+* @param[in]  x : GEN_NEW x position
+* @param[in]  y : GEN_NEW y position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPPROPERTIES::SetPosition(int x, int y)
@@ -179,7 +179,7 @@ XDWORD GRPPROPERTIES::GetWidth()
 * @brief      Set width
 * @ingroup    GRAPHIC
 *
-* @param[in]  width : new width
+* @param[in]  width : GEN_NEW width
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPPROPERTIES::SetWidth(XDWORD width)
@@ -209,7 +209,7 @@ XDWORD GRPPROPERTIES::GetHeight()
 * @brief      Set height
 * @ingroup    GRAPHIC
 *
-* @param[in]  height : new height
+* @param[in]  height : GEN_NEW height
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPPROPERTIES::SetHeight(XDWORD height)
@@ -256,7 +256,7 @@ XDWORD GRPPROPERTIES::GetMaxWidth()
 * @brief      Set max width
 * @ingroup    GRAPHIC
 *
-* @param[in]  width : new width
+* @param[in]  width : GEN_NEW width
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPPROPERTIES::SetMaxWidth(XDWORD maxwidth)
@@ -286,7 +286,7 @@ XDWORD GRPPROPERTIES::GetMaxHeight()
 * @brief      Set max height
 * @ingroup    GRAPHIC
 *
-* @param[in]  maxheight : new max height
+* @param[in]  maxheight : GEN_NEW max height
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPPROPERTIES::SetMaxHeight(XDWORD maxheight)
@@ -378,7 +378,7 @@ XDWORD GRPPROPERTIES::GetStride()
 * @brief      Set stride
 * @ingroup    GRAPHIC
 *
-* @param[in]  stride : new stride
+* @param[in]  stride : GEN_NEW stride
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPPROPERTIES::SetStride(XDWORD stride)
@@ -474,7 +474,7 @@ XBYTE GRPPROPERTIES::GetBytesperPixel()
 * @brief      Copy propertys from
 * @ingroup    GRAPHIC
 *
-* @param[in]  properties : new properties to assing
+* @param[in]  properties : GEN_NEW properties to assing
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPPROPERTIES::CopyPropertysFrom(GRPPROPERTIES* properties)

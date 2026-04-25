@@ -375,7 +375,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_DeleteAll()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateConnection()
 {  
-  DIOCOREPROTOCOL_CONNECTION* protocol = new DIOCOREPROTOCOL_CONNECTION();
+  DIOCOREPROTOCOL_CONNECTION* protocol = GEN_NEW DIOCOREPROTOCOL_CONNECTION();
 
   return protocol;
 }
@@ -395,7 +395,7 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateConnection
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateProtocol(DIOCOREPROTOCOL_CONNECTION* connection, DIOSTREAM* diostream)
 {  
-  DIOCOREPROTOCOL* protocol = new DIOCOREPROTOCOL(&protocolCFG, diostream);
+  DIOCOREPROTOCOL* protocol = GEN_NEW DIOCOREPROTOCOL(&protocolCFG, diostream);
 
   return protocol;
 }
@@ -826,7 +826,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateIDMachine(XUUID& ID)
 
   origin.ConvertToUTF8(originbuffer);
     
-  sha2 = new HASHSHA2(HASHSHA2TYPE_256);
+  sha2 = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
   if(!sha2)
     {
       return false;
@@ -1488,7 +1488,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::GenerateResponseUpdateClass(XFILEJSON& 
   root = xfileJSON.GetRoot();
   if(!root)
     {
-      root = new XFILEJSONOBJECT();
+      root = GEN_NEW XFILEJSONOBJECT();
       if(!root) 
         {
           return false;
@@ -1755,7 +1755,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent_DIOStream(DIOSTREAM_XEVENT*
 
                                                         if(!connection->GetRegisterData())
                                                           {
-                                                            DIOCOREPROTOCOL_REGISTERDATA* registerdata = new DIOCOREPROTOCOL_REGISTERDATA();
+                                                            DIOCOREPROTOCOL_REGISTERDATA* registerdata = GEN_NEW DIOCOREPROTOCOL_REGISTERDATA();
                                                             if(registerdata)
                                                               {
                                                                 connection->SetRegisterData(registerdata);
@@ -1906,7 +1906,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
 
                       switch(header.GetMessageType())
                         {
-                          case DIOCOREPROTOCOL_HEADER_MESSAGETYPE_REQUEST   : { message = new DIOCOREPROTOCOL_MESSAGE();
+                          case DIOCOREPROTOCOL_HEADER_MESSAGETYPE_REQUEST   : { message = GEN_NEW DIOCOREPROTOCOL_MESSAGE();
                                                                                 if(message)
                                                                                   {
                                                                                     message->SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION_READ);
@@ -1919,7 +1919,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
                                                                               } 
                                                                               break;
 
-                          case DIOCOREPROTOCOL_HEADER_MESSAGETYPE_RESPONSE  : { message = new DIOCOREPROTOCOL_MESSAGE();
+                          case DIOCOREPROTOCOL_HEADER_MESSAGETYPE_RESPONSE  : { message = GEN_NEW DIOCOREPROTOCOL_MESSAGE();
                                                                                 if(message)
                                                                                   {                                                                               
                                                                                     message->SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION_READ);

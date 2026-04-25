@@ -309,7 +309,7 @@ bool XFILEINISECTION::SetKey(XSTRING& key,XSTRING& value)
 
   if(isnew)
     {
-      okey = new XFILEINIKEY();
+      okey = GEN_NEW XFILEINIKEY();
       if(!okey) return false;
     }
 
@@ -916,7 +916,7 @@ bool XFILEINI::CreateSection(XSTRING& section)
 
   XFILEINISECTION* osection;
 
-  osection = new XFILEINISECTION();
+  osection = GEN_NEW XFILEINISECTION();
   if(!osection) return false;
 
   if(!osection->SetName(section)) return false;
@@ -1494,7 +1494,7 @@ bool XFILEINI::ConvertFromLines()
       XSTRING* line = GetLine(c);
       if(line)
         {          
-          XFILEINIREMARK* remark =  new XFILEINIREMARK();   
+          XFILEINIREMARK* remark =  GEN_NEW XFILEINIREMARK();   
           if(remark)
             {
               if(!line->HaveCharacters())

@@ -242,7 +242,7 @@ bool DIOCLIPROTOCOLBUS::GetEnumRemoteDevices(XVECTOR<XSTRING*>& remotedevices)
 
   for(XDWORD c=0; c<enum_remotedevices.GetSize(); c++)
     {
-      XSTRING* device = new XSTRING();
+      XSTRING* device = GEN_NEW XSTRING();
       if(device)
         {
           (*device) = enum_remotedevices.Get(c)->Get();
@@ -382,7 +382,7 @@ bool DIOCLIPROTOCOLBUS::ReceivedCommand(XSTRING& originID, XSTRING& command, XVE
 
           if(!found)
             {
-              XSTRING* origin = new XSTRING();
+              XSTRING* origin = GEN_NEW XSTRING();
               if(origin)
                 {
                   (*origin) = originID;    

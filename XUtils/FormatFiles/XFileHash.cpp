@@ -144,7 +144,7 @@ bool XFILEHASH::Open(XPATH& pathname, bool readonly, bool checkhash, bool checkv
   if(!file->Read((XBYTE*)&sizeIDstring, sizeof(XDWORD))) return false;
   if(sizeIDstring)
     {
-      XWORD* IDstr = new XWORD[sizeIDstring+1];
+      XWORD* IDstr = GEN_NEW XWORD[sizeIDstring+1];
       if(IDstr)
         {
           memset((XBYTE*)IDstr, 0, sizeof(XWORD)*(sizeIDstring+1));

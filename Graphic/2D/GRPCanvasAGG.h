@@ -267,7 +267,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                 {
                                                                                   Clean();
 
-                                                                                  vectorfont_manager = new AGG_FONT_MANAGER(vectorfont_engine); 
+                                                                                  vectorfont_manager = GEN_NEW AGG_FONT_MANAGER(vectorfont_engine); 
                                                                                 }
 
 
@@ -301,7 +301,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                       return false;
                                                                                     }
 
-                                                                                  buffer = new XBYTE[buffersize];
+                                                                                  buffer = GEN_NEW XBYTE[buffersize];
                                                                                   if(!buffer) 
                                                                                     {
                                                                                       return false;
@@ -309,42 +309,42 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                   rbuffer.attach(buffer, width , height, (IsBufferInverse()?1:-1)*((int)width * GetBytesperPixel()));
 
-                                                                                  pixelformatbuffer = new PIXELFORMATBUFFER(rbuffer);
+                                                                                  pixelformatbuffer = GEN_NEW PIXELFORMATBUFFER(rbuffer);
                                                                                   if(!pixelformatbuffer) 
                                                                                     {
                                                                                       return false;
                                                                                     }
 
-                                                                                  renderer_base =  new agg::renderer_base<PIXELFORMATBUFFER>(*pixelformatbuffer);
+                                                                                  renderer_base =  GEN_NEW agg::renderer_base<PIXELFORMATBUFFER>(*pixelformatbuffer);
                                                                                   if(!renderer_base)  
                                                                                     {
                                                                                       return false;
                                                                                     }
 
-                                                                                  renderer_scanline =  new agg::renderer_scanline_aa_solid<agg::renderer_base<PIXELFORMATBUFFER> >(*renderer_base);
+                                                                                  renderer_scanline =  GEN_NEW agg::renderer_scanline_aa_solid<agg::renderer_base<PIXELFORMATBUFFER> >(*renderer_base);
                                                                                   if(!renderer_scanline) 
                                                                                     {
                                                                                       return false;
                                                                                     }
 
-                                                                                  renderer_primitives = new agg::renderer_primitives<agg::renderer_base<PIXELFORMATBUFFER> >(*renderer_base);
+                                                                                  renderer_primitives = GEN_NEW agg::renderer_primitives<agg::renderer_base<PIXELFORMATBUFFER> >(*renderer_base);
                                                                                   if(!renderer_primitives) 
                                                                                     {
                                                                                       return false;
                                                                                     }
 
-                                                                                  dashline = new GRPCANVASAGG_DASHED_LINE<agg::rasterizer_scanline_aa<>,
+                                                                                  dashline = GEN_NEW GRPCANVASAGG_DASHED_LINE<agg::rasterizer_scanline_aa<>,
                                                                                                                           agg::renderer_scanline_aa_solid<agg::renderer_base<PIXELFORMATBUFFER> >,
                                                                                                                           agg::scanline_u8 > (rasterizer_type, *renderer_scanline, scanline_type);
 
 
-                                                                                  rasterglyph =  new AGG_GLYPH_GEN(0);
+                                                                                  rasterglyph =  GEN_NEW AGG_GLYPH_GEN(0);
                                                                                   if(!rasterglyph) 
                                                                                     {
                                                                                       return false;
                                                                                     }
 
-                                                                                  renderer_rastertext = new agg::renderer_raster_htext_solid<agg::renderer_base<PIXELFORMATBUFFER>, AGG_GLYPH_GEN> (*renderer_base, *rasterglyph);
+                                                                                  renderer_rastertext = GEN_NEW agg::renderer_raster_htext_solid<agg::renderer_base<PIXELFORMATBUFFER>, AGG_GLYPH_GEN> (*renderer_base, *rasterglyph);
                                                                                   if(!renderer_rastertext) 
                                                                                     {
                                                                                       return false;
@@ -1353,6 +1353,6 @@ class GRPCANVASAGG: public GRPCANVAS
 
 
 
-#include "XMemory_Control_Deactive.h"
+
 
 

@@ -94,7 +94,7 @@ SNDFILEWAV::~SNDFILEWAV()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFILEWAV::LoadFile()
 {
-  xbufferdecodeddata = new XBUFFER(false);
+  xbufferdecodeddata = GEN_NEW XBUFFER(false);
   if(!xbufferdecodeddata)
     {
       return false;
@@ -134,7 +134,7 @@ bool SNDFILEWAV::LoadFile()
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool SNDFILEWAV::Open(XCHAR* path)
 {
-  fileRIFF = new XFILERIFF();
+  fileRIFF = GEN_NEW XFILERIFF();
   if(!fileRIFF) return false;
 
   if(!fileRIFF->Open(path)) return false;

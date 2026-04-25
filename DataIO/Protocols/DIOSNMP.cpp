@@ -329,7 +329,7 @@ bool DIOSNMP_BASE::Open(XCHAR* IPtarget, int port, bool checkavailableNMS, XCHAR
   if(!IPtarget)     return false;
   if(!IPtarget[0])  return false;
 
-  diostreamudpcfg = new DIOSTREAMUDPCONFIG();
+  diostreamudpcfg = GEN_NEW DIOSTREAMUDPCONFIG();
   if(!diostreamudpcfg)  return false;
 
   diostreamudpcfg->SetMode(DIOSTREAMMODE_CLIENT);

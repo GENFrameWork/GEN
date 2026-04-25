@@ -85,21 +85,21 @@ DB_SQL_DATABASE* DB_SQL_FACTORY::Create( DB_SQL_DATABASE_TYPE databasetype)
     {
       case DB_SQL_DATABASE_TYPE_MYSQL       :
                                               #ifdef DB_MYSQL_ACTIVE
-                                              db = new MYSQL_DATABASE();
+                                              db = GEN_NEW MYSQL_DATABASE();
                                               return db;
                                               #endif
                                               break;
 
       case DB_SQL_DATABASE_TYPE_POSTGRESQL  :
                                               #ifdef DB_POSTGRESQL_ACTIVE
-                                              db = new POSTGRESQL_DATABASE();
+                                              db = GEN_NEW POSTGRESQL_DATABASE();
                                               return db;
                                               #endif
                                               break;
 
       case DB_SQL_DATABASE_TYPE_SQLITE      :
                                               #ifdef DB_SQLITE_ACTIVE
-                                              db = new SQLITE_DATABASE();
+                                              db = GEN_NEW SQLITE_DATABASE();
                                               return db;
                                               #endif
                                               break;

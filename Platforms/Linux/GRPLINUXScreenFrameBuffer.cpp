@@ -248,8 +248,8 @@ bool GRPLINUXSCREENFRAMEBUFFER::Delete()
 * @brief      Resize
 * @ingroup    PLATFORM_LINUX
 *
-* @param[in]  width : new width
-* @param[in]  height : new height
+* @param[in]  width : GEN_NEW width
+* @param[in]  height : GEN_NEW height
 *
 * @return     bool : true if is succesful.
 *

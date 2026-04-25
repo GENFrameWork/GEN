@@ -271,7 +271,7 @@ XBUFFER* XFILEXDB::GetRecord(XDWORD ID)
 
   if(!GetPrimaryFile()->Read((XBYTE*)&size ,sizeof(XDWORD))) return NULL;
 
-  XBUFFER* xbuffer = new XBUFFER();
+  XBUFFER* xbuffer = GEN_NEW XBUFFER();
   if(xbuffer)
     {
       if(size)
@@ -322,7 +322,7 @@ XBUFFER* XFILEXDB::GetRecordIndex(XDWORD index)
 
   if(!GetPrimaryFile()->Read((XBYTE*)&size ,sizeof(XDWORD))) return NULL;
 
-  XBUFFER* xbuffer = new XBUFFER();
+  XBUFFER* xbuffer = GEN_NEW XBUFFER();
   if(xbuffer)
     {
       if(size)

@@ -399,7 +399,7 @@ bool DIOANDROIDSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACst
     {
       xpathfile += __L("pincodes");
 
-      XFILETXT* filetxt = new XFILETXT();
+      XFILETXT* filetxt = GEN_NEW XFILETXT();
       if(!filetxt) return false;
 
       status = filetxt->Open(xpathfile, false);

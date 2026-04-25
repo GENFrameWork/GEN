@@ -80,7 +80,7 @@ bool UI_TEXTS::GetIsInstanced()
 * ---------------------------------------------------------------------------------------------------------------------*/
 UI_TEXTS& UI_TEXTS::GetInstance()
 {
-  if(!instance) instance = new UI_TEXTS();
+  if(!instance) instance = GEN_NEW UI_TEXTS();
 
   return (*instance);
 }
@@ -126,12 +126,12 @@ bool UI_TEXTS::Add(XCHAR* name, XCHAR* text)
   if(!name)   return false;
   if(!text)   return false;
 
-  XSTRING* _name = new XSTRING();
+  XSTRING* _name = GEN_NEW XSTRING();
   if(!_name) return false;
 
   _name->Set(name);
 
-  XSTRING* _text = new XSTRING();
+  XSTRING* _text = GEN_NEW XSTRING();
   if(_text) 
     {     
       _text->Set(text);

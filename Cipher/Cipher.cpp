@@ -72,8 +72,8 @@ CIPHER::CIPHER()
   type             = CIPHERTYPE_XOR;
   paddingadjustsize = 0;
 
-  inivector = new XBUFFER();
-  result    = new XBUFFER();
+  inivector = GEN_NEW XBUFFER();
+  result    = GEN_NEW XBUFFER();
 }
 
 

@@ -77,7 +77,7 @@ DIOSTREAMUDPLOCALENUMSERVERS::DIOSTREAMUDPLOCALENUMSERVERS(): DIOSTREAMENUMSERVE
   xthread  = CREATEXTHREAD(XTHREADGROUPID_DIOSTREAMUDP, __L("DIOSTREAMUDPLOCALENUMSERVERS::DIOSTREAMUDPLOCALENUMSERVERS"), ThreadDiscoveryLocalServer, this);
   if(xthread) xthread->Ini(false);
 
-  diostreamudpcfg = new DIOSTREAMUDPCONFIG();
+  diostreamudpcfg = GEN_NEW DIOSTREAMUDPCONFIG();
   diostreamudp    = (DIOSTREAMUDP*)GEN_DIOFACTORY.CreateStreamIO(diostreamudpcfg);
 }
 
@@ -365,7 +365,7 @@ void DIOSTREAMUDPLOCALENUMSERVERS::ThreadDiscoveryLocalServer(void* data)
                       {
                         if(!discoveryenum->IsDeviceAvailable(address.Get()))
                           {
-                            DIOSTREAMDEVICEIP* device = new DIOSTREAMDEVICEIP();
+                            DIOSTREAMDEVICEIP* device = GEN_NEW DIOSTREAMDEVICEIP();
                             if(device)
                               {
                                 device->GetIP()->Set(address);

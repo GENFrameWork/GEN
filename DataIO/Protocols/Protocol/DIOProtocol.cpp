@@ -908,7 +908,7 @@ DIOPROTOCOL::DIOPROTOCOL(DIOSTREAM* diostream)
   AddCommand(DIOPROTOCOL_CMDTYPE_SENDALERT                  , __L("SSDDDDBSSS")       , __L("B")            , RCV_SendAlert                     , __L("SendAlert")                  );
   #endif
 
-  fileprogress = new DIOPROTOCOL_FILE();
+  fileprogress = GEN_NEW DIOPROTOCOL_FILE();
   if(!fileprogress) return;
 
   GEN_XFACTORY_CREATE(xmutexanswers, Create_Mutex())
@@ -1385,7 +1385,7 @@ XDATETIME* DIOPROTOCOL::GetDateTime()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::AddCommand(XDWORD type, XCHAR* inmask, XCHAR* outmask, DIOPROTOCOL_RECEIVEDFUNC receivedfunc, XCHAR* description)
 {
-  DIOPROTOCOL_COMMAND* cmd = new DIOPROTOCOL_COMMAND(type,inmask,outmask,receivedfunc,description);
+  DIOPROTOCOL_COMMAND* cmd = GEN_NEW DIOPROTOCOL_COMMAND(type,inmask,outmask,receivedfunc,description);
   if(!cmd) return false;
 
   commands.Add(cmd);
@@ -1437,7 +1437,7 @@ DIOPROTOCOL_ANSWER* DIOPROTOCOL::AddAnswer(XDWORD type, XDWORD ID, XBUFFER& xbuf
 {
   if(xmutexanswers) xmutexanswers->Lock();
 
-  DIOPROTOCOL_ANSWER* answer = new DIOPROTOCOL_ANSWER(type, ID, xbuffer);
+  DIOPROTOCOL_ANSWER* answer = GEN_NEW DIOPROTOCOL_ANSWER(type, ID, xbuffer);
   if(answer) answers.Add(answer);
 
   if(xmutexanswers) xmutexanswers->UnLock();
@@ -1562,7 +1562,7 @@ DIOPROTOCOL_ANSWER* DIOPROTOCOL::AddAsk(XDWORD type, XDWORD ID, XBUFFER& xbuffer
 {
   if(xmutexasks) xmutexasks->Lock();
 
-  DIOPROTOCOL_ANSWER* ask = new DIOPROTOCOL_ANSWER(type, ID, xbuffer);
+  DIOPROTOCOL_ANSWER* ask = GEN_NEW DIOPROTOCOL_ANSWER(type, ID, xbuffer);
   if(ask) asks.Add(ask);
 
   if(xmutexasks) xmutexasks->UnLock();
@@ -3183,7 +3183,7 @@ XDWORD DIOPROTOCOL::CRC32OfFile(XPATH& xpath)
 {
   XDWORD value = 0;
 
-  HASHCRC32* crc32 = new HASHCRC32();
+  HASHCRC32* crc32 = GEN_NEW HASHCRC32();
   if(!crc32) return false;
 
   XFILE* GEN_XFACTORY_CREATE(file, Create_File());
@@ -3312,7 +3312,7 @@ bool DIOPROTOCOL::CMD_GetFileBlock(DIOPROTOCOL_FILE* fp)
 
   if(Command(cmd->GetType(), xbuffer))
     {
-      XBYTE* filebuffer = new XBYTE[DIOPROTOCOL_MAXFILEBLOCK];
+      XBYTE* filebuffer = GEN_NEW XBYTE[DIOPROTOCOL_MAXFILEBLOCK];
       if(filebuffer)
         {
           XBYTE   islastblock   = 0;
@@ -3378,7 +3378,7 @@ int DIOPROTOCOL::RCV_GetFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cm
   int                 ssize  = 0;
   bool                status = false;
 
-  XBYTE* filebuffer = new XBYTE[DIOPROTOCOL_MAXFILEBLOCK];
+  XBYTE* filebuffer = GEN_NEW XBYTE[DIOPROTOCOL_MAXFILEBLOCK];
   if(filebuffer)
     {
       memset(filebuffer, 0, DIOPROTOCOL_MAXFILEBLOCK);
@@ -3448,7 +3448,7 @@ bool DIOPROTOCOL::CMD_SendFileBlock(DIOPROTOCOL_FILE* fp)
   bool    status = false;
 
 
-  XBYTE* filebuffer = new XBYTE[DIOPROTOCOL_MAXFILEBLOCK];
+  XBYTE* filebuffer = GEN_NEW XBYTE[DIOPROTOCOL_MAXFILEBLOCK];
   if(filebuffer)
     {
       XBYTE islastblock = 0;
@@ -3518,7 +3518,7 @@ int DIOPROTOCOL::RCV_SendFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* c
   int   ssize       = 0;
   bool  status      = false;
 
-  XBYTE* filebuffer = new XBYTE[DIOPROTOCOL_MAXFILEBLOCK];
+  XBYTE* filebuffer = GEN_NEW XBYTE[DIOPROTOCOL_MAXFILEBLOCK];
   if(filebuffer)
     {
       XBYTE islastblock = 0;

@@ -111,7 +111,7 @@ XSHAREDMEMORYMANAGER& XSHAREDMEMORYMANAGER::GetInstance()
 {
   if(!instance) 
     {
-      instance = new XSHAREDMEMORYMANAGER();
+      instance = GEN_NEW XSHAREDMEMORYMANAGER();
     }
 
   return (*instance);
@@ -125,7 +125,7 @@ XSHAREDMEMORYMANAGER& XSHAREDMEMORYMANAGER::GetInstance()
 * @note       STATIC
 * @ingroup    XUTILS
 *
-* @param[in]  _instance : new instance
+* @param[in]  _instance : GEN_NEW instance
 *
 * @return     bool : true if is succesful.
 *

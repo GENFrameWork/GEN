@@ -92,7 +92,7 @@ bool APPFLOWALERTS::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWALERTS& APPFLOWALERTS::GetInstance()
 {
-  if(!instance) instance = new APPFLOWALERTS();
+  if(!instance) instance = GEN_NEW APPFLOWALERTS();
 
   return (*instance);
 }

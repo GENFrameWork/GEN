@@ -106,7 +106,7 @@ bool DIOPROTOCOL_APPLICATIONDATA::AddAlert(DIOALERT& alert)
 
   if(xmutexalert) xmutexalert->Lock();
 
-  DIOALERT* _alert = new DIOALERT();
+  DIOALERT* _alert = GEN_NEW DIOALERT();
   if(_alert)
     {
       _alert->CopyFrom(&alert);

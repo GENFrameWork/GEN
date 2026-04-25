@@ -241,7 +241,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
   XSTRING             command;
   bool                status = false;
 
-  outbuftmp  = new XBYTE[OUTBUF_SIZE];
+  outbuftmp  = GEN_NEW XBYTE[OUTBUF_SIZE];
   
   if(outbuftmp)
     {      
@@ -530,7 +530,7 @@ bool XWINDOWSPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& appl
 
   if(Process32First(snapshot, &processentry))
     {      
-      do{ XPROCESS* xprocess = new XPROCESS();
+      do{ XPROCESS* xprocess = GEN_NEW XPROCESS();
           if(xprocess)
             {
               HANDLE  processhandle = NULL;
@@ -597,7 +597,7 @@ bool XWINDOWSPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& appl
                             }
                            else
                             {                                                                    
-                              XPROCESS* newxprocess = new XPROCESS();
+                              XPROCESS* newxprocess = GEN_NEW XPROCESS();
                               if(newxprocess)
                                 {
                                   newxprocess->CopyFrom((*xprocess));  

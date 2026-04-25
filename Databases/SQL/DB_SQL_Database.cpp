@@ -268,7 +268,7 @@ DB_SQL_VECTOR<DB_SQL_ERROR*>* DB_SQL_DATABASE::GetErrorList()
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT* DB_SQL_DATABASE::CreateVariant()
 {
-  return new DB_SQL_VARIANT();
+  return GEN_NEW DB_SQL_VARIANT();
 }
 
 
@@ -401,7 +401,7 @@ bool DB_SQL_DATABASE::Execute(DB_SQL_QUERY* constructedquery)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_DATABASE::Error(XCHAR* errorstring)
 {
-  DB_SQL_ERROR* error=new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+  DB_SQL_ERROR* error=GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
   if(!error) return;
 
   error->description.Set(errorstring);
@@ -716,7 +716,7 @@ bool DB_SQL_DATABASE::ExecuteQuery(DB_SQL_QUERY* wellconstructedquery)
 {
   if(!connection)
     {
-      DB_SQL_ERROR* error=new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_CONNECTION_ERROR);
+      DB_SQL_ERROR* error=GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_CONNECTION_ERROR);
       error->description.Set(__L("DATABASE not connected"));
 
       GetErrorList()->Add(error);

@@ -113,7 +113,7 @@ bool DIOFACTORY::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOFACTORY& DIOFACTORY::GetInstance()
 {
-  if(!instance) instance = new DIOFACTORY();
+  if(!instance) instance = GEN_NEW DIOFACTORY();
 
   return (*instance);
 }
@@ -357,7 +357,7 @@ bool DIOFACTORY::DeleteNotificationsManager(DIONOTIFICATIONSMANAGER* notificatio
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOLEDNEOPIXELWS2812B* DIOFACTORY::CreateLedNeopixelWS2812B()
 {
-  DIOLEDNEOPIXELWS2812B* ledneopixelws2812b = new DIOLEDNEOPIXELWS2812B();
+  DIOLEDNEOPIXELWS2812B* ledneopixelws2812b = GEN_NEW DIOLEDNEOPIXELWS2812B();
 
   return ledneopixelws2812b;
 }

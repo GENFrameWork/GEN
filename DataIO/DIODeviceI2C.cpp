@@ -155,7 +155,7 @@ bool DIODEVICEI2C::Ini(int port, int remotedeviceaddress, int timeout)
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(XCHAR* localdevicename, int remotedeviceaddress)
 {
-  DIOSTREAMI2CCONFIG* diostreamcfg = new DIOSTREAMI2CCONFIG();
+  DIOSTREAMI2CCONFIG* diostreamcfg = GEN_NEW DIOSTREAMI2CCONFIG();
   if(!diostreamcfg)  return NULL;
 
   diostreamcfg->GetLocalDeviceName()->Set(localdevicename);
@@ -180,7 +180,7 @@ DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(XCHAR* localdevicename, int remot
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(int port, int remotedeviceaddress)
 {
-  DIOSTREAMI2CCONFIG* diostreamcfg = new DIOSTREAMI2CCONFIG();
+  DIOSTREAMI2CCONFIG* diostreamcfg = GEN_NEW DIOSTREAMI2CCONFIG();
   if(!diostreamcfg)  return NULL;
 
   diostreamcfg->SetPort(port);

@@ -73,7 +73,7 @@ HASHCRC32::HASHCRC32() : HASH()
 
   type = HASHTYPE_CRC32;
 
-  resulttmp = new XBUFFER();
+  resulttmp = GEN_NEW XBUFFER();
 
   XDWORD value = 0xffffffff;
   resulttmp->Add((XDWORD)value);

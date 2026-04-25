@@ -255,7 +255,7 @@ bool DIOEMAILADDRESS::IsValid()
   if(!GetDomain(domain))  return false;
 
   DIOIP   IP;
-  DIOURL* url = new DIOURL();
+  DIOURL* url = GEN_NEW DIOURL();
   if(!url) return false;
 
   url->Set(domain);

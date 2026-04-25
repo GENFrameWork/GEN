@@ -219,6 +219,6 @@ class XVECTORSTL : public std::vector<T>
 
 
 
-#include "XMemory_Control_Deactive.h"
+
 
 

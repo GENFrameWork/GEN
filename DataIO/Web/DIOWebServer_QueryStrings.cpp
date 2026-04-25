@@ -179,8 +179,8 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XSTRING& ID, XCHAR* value)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, XCHAR* value)
 {
-  XSTRING* _ID    = new XSTRING();
-  XSTRING* _value = new XSTRING();
+  XSTRING* _ID    = GEN_NEW XSTRING();
+  XSTRING* _value = GEN_NEW XSTRING();
 
   if((!_ID) || (!_value))
     {
@@ -213,8 +213,8 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, XCHAR* value)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, int value)
 {
-  XSTRING* _ID    = new XSTRING();
-  XSTRING* _value = new XSTRING();
+  XSTRING* _ID    = GEN_NEW XSTRING();
+  XSTRING* _value = GEN_NEW XSTRING();
 
   if((!_ID) || (!_value))
     {

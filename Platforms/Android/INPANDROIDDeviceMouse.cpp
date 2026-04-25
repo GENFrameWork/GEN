@@ -232,7 +232,7 @@ bool INPANDROIDDEVICEMOUSE::CreateAllCursors()
 
   for(int c=0;c<5;c++)
     {
-      cursor = new INPCURSOR();
+      cursor = GEN_NEW INPCURSOR();
       if(!cursor) return false;
 
       cursor->SetID(INPCURSOR_ID(INPCURSOR_ID_MOUSE+c));

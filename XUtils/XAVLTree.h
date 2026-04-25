@@ -204,7 +204,7 @@ class XAVLTREE
                                                   }
                                               }
 
-                                            XAVLNODE<K>* add = node = new XAVLNODE<K>(key);
+                                            XAVLNODE<K>* add = node = GEN_NEW XAVLNODE<K>(key);
                                             nelements++;
                                             if(!node)
                                               {
@@ -725,6 +725,6 @@ class XITERATOR
 
 
 
-#include "XMemory_Control_Deactive.h"
+
 
 

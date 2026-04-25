@@ -138,24 +138,24 @@ DIOSTREAMENUMDEVICES* DIOANDROIDFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTY
   switch(type)
     {
       #ifdef DIO_STREAMUART_ACTIVE
-      case DIOSTREAMENUMTYPE_UART_LOCAL         : _class = new DIOANDROIDSTREAMUARTLOCALENUMDEVICES();                break;
+      case DIOSTREAMENUMTYPE_UART_LOCAL         : _class = GEN_NEW DIOANDROIDSTREAMUARTLOCALENUMDEVICES();                break;
       #endif
 
       #ifdef DIO_STREAMUSB_ACTIVE
-      case DIOSTREAMENUMTYPE_USB_LOCAL          : _class = new DIOANDROIDSTREAMUSBLOCALENUMDEVICES();                 break;
+      case DIOSTREAMENUMTYPE_USB_LOCAL          : _class = GEN_NEW DIOANDROIDSTREAMUSBLOCALENUMDEVICES();                 break;
       #endif
 
       #if defined(DIO_STREAMUDP_ACTIVE) || defined(DIO_STREAMTCPIP_ACTIVE)
-      case DIOSTREAMENUMTYPE_IP_LOCAL           : _class = new DIOANDROIDSTREAMIPLOCALENUMDEVICES();                  break;
+      case DIOSTREAMENUMTYPE_IP_LOCAL           : _class = GEN_NEW DIOANDROIDSTREAMIPLOCALENUMDEVICES();                  break;
       #endif
 
       #ifdef DIO_STREAMBLUETOOTH_ACTIVE
-      case DIOSTREAMENUMTYPE_BLUETOOTH_LOCAL    : _class = new DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES();           break;
-      case DIOSTREAMENUMTYPE_BLUETOOTH_REMOTE   : _class = new DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES();          break;
+      case DIOSTREAMENUMTYPE_BLUETOOTH_LOCAL    : _class = GEN_NEW DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES();           break;
+      case DIOSTREAMENUMTYPE_BLUETOOTH_REMOTE   : _class = GEN_NEW DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES();          break;
       #endif
 
       #ifdef DIO_STREAMTWIFI_ACTIVE
-      case DIOSTREAMENUMTYPE_WIFI_REMOTE        : _class = new DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES();               break;
+      case DIOSTREAMENUMTYPE_WIFI_REMOTE        : _class = GEN_NEW DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES();               break;
       #endif
                                     default     : break;
 
@@ -210,35 +210,35 @@ DIOSTREAM* DIOANDROIDFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
       case DIOSTREAMTYPE_UNKNOWN    : return NULL;
 
       #ifdef DIO_STREAMUART_ACTIVE
-      case DIOSTREAMTYPE_UART       : _class = new DIOANDROIDSTREAMUART();        break;
+      case DIOSTREAMTYPE_UART       : _class = GEN_NEW DIOANDROIDSTREAMUART();        break;
       #endif
 
       #ifdef DIO_STREAMUSB_ACTIVE
-      case DIOSTREAMTYPE_USB        : _class = new DIOANDROIDSTREAMUSB();         break;
+      case DIOSTREAMTYPE_USB        : _class = GEN_NEW DIOANDROIDSTREAMUSB();         break;
       #endif
 
       #ifdef DIO_STREAMICMP_ACTIVE
-      case DIOSTREAMTYPE_ICMP       : _class = new DIOANDROIDSTREAMICMP();        break;
+      case DIOSTREAMTYPE_ICMP       : _class = GEN_NEW DIOANDROIDSTREAMICMP();        break;
       #endif
 
       #ifdef DIO_STREAMUDP_ACTIVE
-      case DIOSTREAMTYPE_UDP        : _class = new DIOANDROIDSTREAMUDP();         break;
+      case DIOSTREAMTYPE_UDP        : _class = GEN_NEW DIOANDROIDSTREAMUDP();         break;
       #endif
 
       #ifdef DIO_STREAMTCPIP_ACTIVE
-      case DIOSTREAMTYPE_TCPIP      : _class = new DIOANDROIDSTREAMTCPIP();       break;
+      case DIOSTREAMTYPE_TCPIP      : _class = GEN_NEW DIOANDROIDSTREAMTCPIP();       break;
       #endif
 
       #ifdef DIO_STREAMBLUETOOTH_ACTIVE
-      case DIOSTREAMTYPE_BLUETOOTH  : _class = new DIOANDROIDSTREAMBLUETOOTH();   break;
+      case DIOSTREAMTYPE_BLUETOOTH  : _class = GEN_NEW DIOANDROIDSTREAMBLUETOOTH();   break;
       #endif
 
       #ifdef DIO_STREAMSPI_ACTIVE
-      case DIOSTREAMTYPE_SPI        : _class = new DIOANDROIDSTREAMSPI();         break;
+      case DIOSTREAMTYPE_SPI        : _class = GEN_NEW DIOANDROIDSTREAMSPI();         break;
       #endif
 
       #ifdef DIO_STREAMI2C_ACTIVE
-      case DIOSTREAMTYPE_I2C        : _class = new DIOANDROIDSTREAMI2C();         break;
+      case DIOSTREAMTYPE_I2C        : _class = GEN_NEW DIOANDROIDSTREAMI2C();         break;
       #endif
                         default     : break;
     }
@@ -285,7 +285,7 @@ bool DIOANDROIDFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPING* DIOANDROIDFACTORY::CreatePing()
 {
-  DIOANDROIDPING* _class = new DIOANDROIDPING();
+  DIOANDROIDPING* _class = GEN_NEW DIOANDROIDPING();
 
   return (DIOPING*)_class;
 }
@@ -327,7 +327,7 @@ bool DIOANDROIDFACTORY::DeletePing(DIOPING* ping)
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP* DIOANDROIDFACTORY::CreatePCap()
 {
-  DIOANDROIDPCAP* _class = new DIOANDROIDPCAP();
+  DIOANDROIDPCAP* _class = GEN_NEW DIOANDROIDPCAP();
 
   return (DIOPCAP*)_class;
 }
@@ -370,7 +370,7 @@ bool DIOANDROIDFACTORY::DeletePCap(DIOPCAP* pcap)
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOGPIO* DIOANDROIDFACTORY::CreateGPIO()
 {
-  DIOANDROIDGPIO* _class = new DIOANDROIDGPIO();
+  DIOANDROIDGPIO* _class = GEN_NEW DIOANDROIDGPIO();
 
   return (DIOGPIO*)_class;
 }

@@ -255,7 +255,7 @@ void DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES::ThreadEnumDevices(void* data)
                                                                 break;
                                                               }
 
-                                                            DIOSTREAMDEVICEBLUETOOTH* device = new DIOSTREAMDEVICEBLUETOOTH();
+                                                            DIOSTREAMDEVICEBLUETOOTH* device = GEN_NEW DIOSTREAMDEVICEBLUETOOTH();
                                                             if(!device) break;
 
                                                             XSTRING MAC;
@@ -367,7 +367,7 @@ void DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES::SearchServices()
       bool         done;
 
       qssize = sizeof(WSAQUERYSET);
-      qs = (WSAQUERYSET*)new XBYTE[qssize];
+      qs = (WSAQUERYSET*)GEN_NEW XBYTE[qssize];
 
       ZeroMemory( qs, qssize );
 
@@ -400,7 +400,7 @@ void DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES::SearchServices()
               if( error == WSAEFAULT )
                 {
                   delete [] qs;
-                  qs = (WSAQUERYSET*)new XBYTE[qssize];
+                  qs = (WSAQUERYSET*)GEN_NEW XBYTE[qssize];
                 }
                else
                 {
@@ -416,7 +416,7 @@ void DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES::SearchServices()
             }
            else
             {
-              DIOSTREAMDEVICEBLUETOOTHSDPSERVICE* service = new DIOSTREAMDEVICEBLUETOOTHSDPSERVICE();
+              DIOSTREAMDEVICEBLUETOOTHSDPSERVICE* service = GEN_NEW DIOSTREAMDEVICEBLUETOOTHSDPSERVICE();
               if(service)
                 {
                   service->GetName()->Set(qs->lpszServiceInstanceName);

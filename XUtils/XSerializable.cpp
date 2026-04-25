@@ -101,7 +101,7 @@ XSERIALIZABLE::~XSERIALIZABLE()
 * --------------------------------------------------------------------------------------------------------------------*/
 XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XBUFFER& databinary)
 {
-  XSERIALIZATIONMETHODBINARY* serializable  = new XSERIALIZATIONMETHODBINARY();
+  XSERIALIZATIONMETHODBINARY* serializable  = GEN_NEW XSERIALIZATIONMETHODBINARY();
   if(serializable)
     {
       serializable->SetBufferData(&databinary);
@@ -126,7 +126,7 @@ XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XBUFFER& databinary)
 * --------------------------------------------------------------------------------------------------------------------*/
 XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XFILEJSON& fileJSON)
 {
-  XSERIALIZATIONMETHODJSON* serializable  = new XSERIALIZATIONMETHODJSON();
+  XSERIALIZATIONMETHODJSON* serializable  = GEN_NEW XSERIALIZATIONMETHODJSON();
   if(serializable)
     {
       serializable->SetFileJSON(&fileJSON);
@@ -135,7 +135,7 @@ XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XFILEJSON& fileJSON)
   XFILEJSONOBJECT* root =  fileJSON.GetRoot();
   if(!root)
     {
-      root = new XFILEJSONOBJECT();
+      root = GEN_NEW XFILEJSONOBJECT();
       if(root) 
         {
           fileJSON.SetRoot(root);

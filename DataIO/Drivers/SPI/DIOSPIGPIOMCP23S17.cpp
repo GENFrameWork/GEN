@@ -102,7 +102,7 @@ bool DIOSPIGPIOMCP23S17::IniDevice()
 {
   if(!isdiostreamSPIexternal)
     {
-      diostreamcfg = new DIOSTREAMSPICONFIG();
+      diostreamcfg = GEN_NEW DIOSTREAMSPICONFIG();
       if(!diostreamcfg)  return false;
 
       diostreamcfg->SetSPIMode(DIOSTREAMSPI_MODE_0);

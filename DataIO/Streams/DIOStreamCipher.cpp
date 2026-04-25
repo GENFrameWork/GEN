@@ -78,7 +78,7 @@ DIOSTREAMCIPHER::DIOSTREAMCIPHER(DIOSTREAMCONFIG* config, CIPHER* cipher): DIOST
   this->config      = config;
   this->cipher      = cipher;
 
-  hashcrc32 = new HASHCRC32();
+  hashcrc32 = GEN_NEW HASHCRC32();
   if(hashcrc32)
     {
       diostream = (DIOSTREAM*)GEN_DIOFACTORY.CreateStreamIO(config);

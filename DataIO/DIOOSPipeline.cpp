@@ -114,7 +114,7 @@ bool DIOOSPIPELINE::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOSPIPELINE& DIOOSPIPELINE::GetInstance()
 {
-  if(!instance) instance = new DIOOSPIPELINE();
+  if(!instance) instance = GEN_NEW DIOOSPIPELINE();
 
   return (*instance);
 }
@@ -127,7 +127,7 @@ DIOOSPIPELINE& DIOOSPIPELINE::GetInstance()
 * @note       STATIC
 * @ingroup    DATAIO
 *
-* @param[in]  _instance : new instance
+* @param[in]  _instance : GEN_NEW instance
 *
 * @return     bool : true if is succesful.
 *

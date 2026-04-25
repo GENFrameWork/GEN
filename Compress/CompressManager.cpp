@@ -112,25 +112,25 @@ COMPRESSBASE* COMPRESSMANAGER::Create(COMPRESSBASE_TYPE type)
   switch(type)
     {
       #ifdef COMPRESS_LZW_ACTIVE
-      case COMPRESSBASE_TYPE_LZW      : compress = new COMPRESS_LZW();        
+      case COMPRESSBASE_TYPE_LZW      : compress = GEN_NEW COMPRESS_LZW();        
                                         break;
       #endif
 
       #ifdef COMPRESS_LZRW1KH_ACTIVE
-      case COMPRESSBASE_TYPE_LZRW1KH  : compress = new COMPRESS_LZRW1KH();    
+      case COMPRESSBASE_TYPE_LZRW1KH  : compress = GEN_NEW COMPRESS_LZRW1KH();    
                                         break;
       #endif
 
       #ifdef COMPRESS_ZIP_ACTIVE
-      case COMPRESSBASE_TYPE_ZIP      : compress = new COMPRESS_ZIP();        
+      case COMPRESSBASE_TYPE_ZIP      : compress = GEN_NEW COMPRESS_ZIP();        
                                         break;
       #endif
 
       #ifdef COMPRESS_GZ_ACTIVE
-      case COMPRESSBASE_TYPE_GZ       : compress = new COMPRESS_GZ();         
+      case COMPRESSBASE_TYPE_GZ       : compress = GEN_NEW COMPRESS_GZ();         
                                         break;
       #endif
-                            default   : compress = new COMPRESSBASE();        break;
+                            default   : compress = GEN_NEW COMPRESSBASE();        break;
     }
 
   if(compress) lastcompresstype = type;
@@ -150,7 +150,7 @@ COMPRESSBASE* COMPRESSMANAGER::Create(COMPRESSBASE_TYPE type)
 * --------------------------------------------------------------------------------------------------------------------*/
 COMPRESSMANAGER* COMPRESSMANAGER::GetInstance()
 {
-  if(!instance) instance = new COMPRESSMANAGER();
+  if(!instance) instance = GEN_NEW COMPRESSMANAGER();
 
   return instance;
 }

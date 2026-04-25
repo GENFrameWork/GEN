@@ -107,7 +107,7 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
 
   CloseFile();
 
-  filedbf = new XFILEDBF();
+  filedbf = GEN_NEW XFILEDBF();
   if(!filedbf) return false;
 
   if(!filedbf->Open(xpath))
@@ -155,7 +155,7 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
   for(c=0;c<nrecords;c++)
     {
       XFILEDBF_RECORD* record    = filedbf->ReadRecord(c);
-      XSTRING*         fsentence = new XSTRING(_MAXSTR);
+      XSTRING*         fsentence = GEN_NEW XSTRING(_MAXSTR);
 
       if(fsentence)
         {

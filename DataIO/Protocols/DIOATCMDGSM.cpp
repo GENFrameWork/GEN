@@ -883,8 +883,8 @@ bool DIOATCMDGSM::CodecPDUFormat(XCHAR* number, XCHAR* message, bool inoctets, i
   XSTRING                      _number;
   XSTRING                      _message;
   int                          value;
-  XBYTE*                       codec7 = new XBYTE[256];
-  XBYTE*                       codec8 = new XBYTE[256];
+  XBYTE*                       codec7 = GEN_NEW XBYTE[256];
+  XBYTE*                       codec8 = GEN_NEW XBYTE[256];
   int                          size7  = 0;
   int                          size8  = 0;
   int                          c;

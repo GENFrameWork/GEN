@@ -322,7 +322,7 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
   IEnumWbemClassObject*        penumerator  = NULL;
 
 
-  result = new XWINDOWSWMIINTERFACE_RESULT();
+  result = GEN_NEW XWINDOWSWMIINTERFACE_RESULT();
   if(!result) return NULL;
 
   //-----------------------------------------------------------------------------------------
@@ -435,13 +435,13 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
                                   {
                                     switch(vtprop.vt)
                                       {
-                                        case VT_NULL  : { XSTRING* resultstr = new XSTRING();
+                                        case VT_NULL  : { XSTRING* resultstr = GEN_NEW XSTRING();
                                                           if(resultstr) 
                                                             {
                                                               result->GetResultsString()->Add(resultstr);
                                                             }
 
-                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                           if(resultvariant) 
                                                             {
                                                               (*resultvariant) = NULL;
@@ -452,14 +452,14 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
 
                                         case VT_I2    : { XWORD data = vtprop.intVal;
 
-                                                          XSTRING* resultstr = new XSTRING();
+                                                          XSTRING* resultstr = GEN_NEW XSTRING();
                                                           if(resultstr)
                                                             {
                                                               resultstr->ConvertFromInt(data);
                                                               result->GetResultsString()->Add(resultstr);
                                                             }
 
-                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                           if(resultvariant) 
                                                             {
                                                               (*resultvariant) = data;
@@ -470,14 +470,14 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
 
                                         case VT_I4    : { XDWORD data = vtprop.lVal;
 
-                                                          XSTRING* resultstr = new XSTRING();
+                                                          XSTRING* resultstr = GEN_NEW XSTRING();
                                                           if(resultstr)
                                                             {
                                                               resultstr->ConvertFromInt(data);
                                                               result->GetResultsString()->Add(resultstr);
                                                             }
 
-                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                           if(resultvariant) 
                                                             {
                                                               (*resultvariant) = data;
@@ -488,14 +488,14 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
 
                                         case VT_BOOL  : { BOOL data = vtprop.lVal;
 
-                                                          XSTRING* resultstr = new XSTRING();
+                                                          XSTRING* resultstr = GEN_NEW XSTRING();
                                                           if(resultstr)
                                                             {
                                                               resultstr->Format(__L("%s"), (data?__L("true"):__L("false")));
                                                               result->GetResultsString()->Add(resultstr);
                                                             }
 
-                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                           if(resultvariant) 
                                                             {
                                                               (*resultvariant) = data;
@@ -513,13 +513,13 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
                                                             {
                                                               if(allowemptyitems)
                                                                 {
-                                                                  XSTRING* resultstr = new XSTRING();
+                                                                  XSTRING* resultstr = GEN_NEW XSTRING();
                                                                   if(resultstr)
                                                                     {
                                                                       result->GetResultsString()->Add(resultstr);
                                                                     }
 
-                                                                  XVARIANT* resultvariant = new XVARIANT();
+                                                                  XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                                   if(resultvariant) 
                                                                     {
                                                                       (*resultvariant) = (*resultstr);
@@ -529,7 +529,7 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
                                                             }
                                                            else
                                                             {
-                                                              XSTRING* resultstr = new XSTRING();
+                                                              XSTRING* resultstr = GEN_NEW XSTRING();
                                                               if(resultstr)
                                                                 {
                                                                   (*resultstr) = (XCHAR*)val;
@@ -537,7 +537,7 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
                                                                   
                                                                 }
 
-                                                              XVARIANT* resultvariant = new XVARIANT();
+                                                              XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                               if(resultvariant) 
                                                                 {
                                                                   (*resultvariant) = (*resultstr);
@@ -549,14 +549,14 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
 
                                         case VT_UI1   : { XBYTE data = vtprop.bVal;
 
-                                                          XSTRING* resultstr = new XSTRING();
+                                                          XSTRING* resultstr = GEN_NEW XSTRING();
                                                           if(resultstr)
                                                             {
                                                               resultstr->ConvertFromDWord((XDWORD)data);
                                                               result->GetResultsString()->Add(resultstr);
                                                             }
 
-                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                           if(resultvariant) 
                                                             {
                                                               (*resultvariant) = data;
@@ -567,14 +567,14 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
                                         
                                         case VT_I1    : { char data = vtprop.cVal;
 
-                                                          XSTRING* resultstr = new XSTRING();
+                                                          XSTRING* resultstr = GEN_NEW XSTRING();
                                                           if(resultstr)
                                                             {
                                                               resultstr->ConvertFromInt((int)data);
                                                               result->GetResultsString()->Add(resultstr);
                                                             }
 
-                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                           if(resultvariant) 
                                                             {
                                                               (*resultvariant) = data;
@@ -585,14 +585,14 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
 
                                         case VT_UI2   : { XWORD data = vtprop.uiVal;
 
-                                                          XSTRING* resultstr = new XSTRING();
+                                                          XSTRING* resultstr = GEN_NEW XSTRING();
                                                           if(resultstr)
                                                             {
                                                               resultstr->ConvertFromDWord((XWORD)data);
                                                               result->GetResultsString()->Add(resultstr);
                                                             }
 
-                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                           if(resultvariant) 
                                                             {
                                                               (*resultvariant) = data;
@@ -603,14 +603,14 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
 
                                         case VT_UI4   : { XDWORD data = vtprop.ulVal;
 
-                                                          XSTRING* resultstr = new XSTRING();
+                                                          XSTRING* resultstr = GEN_NEW XSTRING();
                                                           if(resultstr)
                                                             {
                                                               resultstr->ConvertFromDWord((XWORD)data);
                                                               result->GetResultsString()->Add(resultstr);
                                                             }
 
-                                                          XVARIANT* resultvariant = new XVARIANT();
+                                                          XVARIANT* resultvariant = GEN_NEW XVARIANT();
                                                           if(resultvariant) 
                                                             {
                                                               (*resultvariant) = data;
@@ -720,7 +720,7 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVECTOR<XSTR
             {
               for(XDWORD c=0; c<result->GetResultsString()->GetSize(); c++)
                 {
-                  XSTRING* resultstring = new XSTRING();
+                  XSTRING* resultstring = GEN_NEW XSTRING();
                   if(resultstring)
                     {
                       (*resultstring) = (XCHAR*)result->GetResultsString()->Get(c)->Get();
@@ -813,7 +813,7 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVECTOR<XVAR
             {
               for(XDWORD c=0; c<result->GetResultsString()->GetSize(); c++)
                 {
-                  XVARIANT* resultvariant = new XVARIANT();
+                  XVARIANT* resultvariant = GEN_NEW XVARIANT();
                   if(resultvariant)
                     {
                       (*resultvariant) = (XVARIANT)(*result->GetResultsVariant()->Get(c));

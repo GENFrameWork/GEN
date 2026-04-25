@@ -176,7 +176,7 @@ bool MAINPROC::CreateParams(int nparams, char* params[])
 {
   for(int c=1; c<nparams; c++)
     {
-      XSTRING* param = new XSTRING();
+      XSTRING* param = GEN_NEW XSTRING();
       if(param)
         {
           (*param) = params[c];
@@ -204,7 +204,7 @@ bool MAINPROC::CreateParams(int nparams, XCHAR* params[])
 {
   for(int c=1; c<nparams; c++)
     {
-      XSTRING* param = new XSTRING();
+      XSTRING* param = GEN_NEW XSTRING();
       if(param)
         {
           (*param) = params[c];
@@ -232,7 +232,7 @@ bool MAINPROC::CreateParams(int nparams, XCHAR* params)
 {
   for(int c=1; c<nparams; c++)
     {
-      XSTRING* param = new XSTRING();
+      XSTRING* param = GEN_NEW XSTRING();
       if(param)
         {
           (*param) = params[c];
@@ -266,7 +266,7 @@ bool MAINPROC::CreateParams(XCHAR* commandline)
 
   do{ if((_commandline.Get()[c] == __C(' ')) || (_commandline.GetSize() == c))
         {
-          XSTRING* param = new XSTRING();
+          XSTRING* param = GEN_NEW XSTRING();
           if(param)
             {
               _commandline.Copy(start, c, (*param));

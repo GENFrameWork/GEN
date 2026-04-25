@@ -502,7 +502,7 @@ DIOCOREPROTOCOL::DIOCOREPROTOCOL(DIOCOREPROTOCOL_CFG* protocolCFG, DIOSTREAM* di
 {
   Clean();
 
-  compressmanager = new COMPRESSMANAGER();
+  compressmanager = GEN_NEW COMPRESSMANAGER();
   if(compressmanager)
     {
 	    compressor = compressmanager->Create(COMPRESSBASE_TYPE_GZ);
@@ -1061,7 +1061,7 @@ XDWORD DIOCOREPROTOCOL::ReceivedMsg(DIOCOREPROTOCOL_HEADER& header, XBUFFER& con
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param)
 {
-  DIOCOREPROTOCOL_HEADER* header = new DIOCOREPROTOCOL_HEADER();
+  DIOCOREPROTOCOL_HEADER* header = GEN_NEW DIOCOREPROTOCOL_HEADER();
   if(!header)
     {
       return NULL;
@@ -1399,7 +1399,7 @@ bool DIOCOREPROTOCOL::Commands_Add(XDWORD type, XCHAR* command, DIOCOREPROTOCOL_
     }
 
 
-  DIOCOREPROTOCOL_COMMAND* coreprotocolcommand = new DIOCOREPROTOCOL_COMMAND();
+  DIOCOREPROTOCOL_COMMAND* coreprotocolcommand = GEN_NEW DIOCOREPROTOCOL_COMMAND();
   if(!coreprotocolcommand)
     {
       return false;
@@ -1585,7 +1585,7 @@ bool DIOCOREPROTOCOL::UpdateClass_Add(XCHAR* classname, XSERIALIZABLE* classptr,
       return false;
     }
 
-  DIOCOREPROTOCOL_UPDATECLASS* updateclass =  new DIOCOREPROTOCOL_UPDATECLASS();
+  DIOCOREPROTOCOL_UPDATECLASS* updateclass =  GEN_NEW DIOCOREPROTOCOL_UPDATECLASS();
   if(!updateclass)
     {
       return false;

@@ -351,7 +351,7 @@ bool DIOSMTP::Ini()
   if(!diostream)                return false;
   if(!diostream->GetConfig())   return false;
 
-  message = new XFILETXT();
+  message = GEN_NEW XFILETXT();
   if(!message) return false;
 
   serverconnectiontimeout  = DIOSMTP_DEFAULTTIMEOUT;
@@ -627,7 +627,7 @@ bool DIOSMTP::AddRecipient(DIOSMTPRECIPIENTTYPE type, XCHAR* name, XCHAR* email,
       if(!_email.IsValid()) return false;
     }
 
-  DIOSMTPRECIPIENT* recipient = new DIOSMTPRECIPIENT();
+  DIOSMTPRECIPIENT* recipient = GEN_NEW DIOSMTPRECIPIENT();
   if(!recipient) return false;
 
   recipient->SetType(type);
@@ -844,7 +844,7 @@ bool DIOSMTP::AddAttachment(XCHAR* path, bool check, XDWORD sizelimit)
 {
   if(!path) return false;
 
-  DIOSMTPATTACHMENT* attachment = new DIOSMTPATTACHMENT();
+  DIOSMTPATTACHMENT* attachment = GEN_NEW DIOSMTPATTACHMENT();
   if(!attachment) return false;
 
   attachment->GetXPath()->Set(path);

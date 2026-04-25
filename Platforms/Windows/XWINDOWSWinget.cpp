@@ -254,7 +254,7 @@ bool XWINDOWSWINGET::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWINGET& XWINDOWSWINGET::GetInstance()
 {
-  if(!instance) instance = new XWINDOWSWINGET();
+  if(!instance) instance = GEN_NEW XWINDOWSWINGET();
 
   return (*instance);
 }
@@ -346,7 +346,7 @@ bool XWINDOWSWINGET::List(XWINDOWSWINGET_LISTRESULT* listresult)
                 {
                   if(!list_name.Get(c)->IsEmpty() || !list_ID.Get(c)->IsEmpty())
                     {                        
-                      XWINDOWSWINGET_ELEMENTRESULT* elementresult = new XWINDOWSWINGET_ELEMENTRESULT();
+                      XWINDOWSWINGET_ELEMENTRESULT* elementresult = GEN_NEW XWINDOWSWINGET_ELEMENTRESULT();
                       if(elementresult)  
                         {
                           elementresult->name = list_name.Get(c)->Get();
@@ -418,7 +418,7 @@ bool XWINDOWSWINGET::ListUpdateAvailable(XWINDOWSWINGET_LISTRESULT* listresult)
                         {
                           if(!list_name.Get(c)->IsEmpty() || !list_ID.Get(c)->IsEmpty())
                             {                        
-                              XWINDOWSWINGET_ELEMENTRESULT* elementresult = new XWINDOWSWINGET_ELEMENTRESULT();
+                              XWINDOWSWINGET_ELEMENTRESULT* elementresult = GEN_NEW XWINDOWSWINGET_ELEMENTRESULT();
                               if(elementresult)  
                                 {
                                   elementresult->name             = list_name.Get(c)->Get();
@@ -505,7 +505,7 @@ bool XWINDOWSWINGET::Find(XCHAR* search, XWINDOWSWINGET_LISTRESULT* listresult)
                     {
                       if(!list_name.Get(c)->IsEmpty() || !list_ID.Get(c)->IsEmpty())
                         {                        
-                          XWINDOWSWINGET_ELEMENTRESULT* elementresult = new XWINDOWSWINGET_ELEMENTRESULT();
+                          XWINDOWSWINGET_ELEMENTRESULT* elementresult = GEN_NEW XWINDOWSWINGET_ELEMENTRESULT();
                           if(elementresult)  
                             {
                               elementresult->name             = list_name.Get(c)->Get();
@@ -995,7 +995,7 @@ void XWINDOWSWINGET::NormalizeUnicode(XBYTE* data)
   
   if(!LooksLikeUTF8(buffer, len)) 
     {
-      char* tmp = new char[32768];
+      char* tmp = GEN_NEW char[32768];
       
       if(tmp)
         {  
@@ -1083,7 +1083,7 @@ bool XWINDOWSWINGET::GenerateList(XSTRING& result,  XVECTOR<XSTRING*>* list)
           break;
         }
   
-      XSTRING* element = new XSTRING();
+      XSTRING* element = GEN_NEW XSTRING();
       if(!element)
         {
           break;

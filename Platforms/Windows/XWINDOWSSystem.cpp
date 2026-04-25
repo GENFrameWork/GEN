@@ -1405,7 +1405,7 @@ XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::AddCPUUsageStatus(XCHAR* processn
   XWINDOWSSYSTEM_CPUUSAGESTATUS* cus = GetCPUUsageStatus(processname);
   if(cus) return cus;
   
-  cus = new XWINDOWSSYSTEM_CPUUSAGESTATUS();
+  cus = GEN_NEW XWINDOWSSYSTEM_CPUUSAGESTATUS();
   if(!cus) return NULL;
 
   cus->processname = processname;
@@ -1481,7 +1481,7 @@ XWINDOWSSYSTEM_CPUUSAGESTATUS* XWINDOWSSYSTEM::AddCPUUsageStatus(XDWORD processI
   XWINDOWSSYSTEM_CPUUSAGESTATUS* cus = GetCPUUsageStatus(processID);
   if(cus) return cus;
   
-  cus = new XWINDOWSSYSTEM_CPUUSAGESTATUS();
+  cus = GEN_NEW XWINDOWSSYSTEM_CPUUSAGESTATUS();
   if(!cus) return NULL;
 
   cus->processID = processID;

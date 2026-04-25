@@ -70,8 +70,8 @@ XFEEDBACK::XFEEDBACK()
 {
   Clean();
 
-  modulename = new XSTRING();  
-  text       = new XSTRING();
+  modulename = GEN_NEW XSTRING();  
+  text       = GEN_NEW XSTRING();
 }
 
 
@@ -305,7 +305,7 @@ bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, XFEEDBACK_CODE code,int
       return false;
     }
 
-  XFEEDBACK* feedback = new XFEEDBACK();
+  XFEEDBACK* feedback = GEN_NEW XFEEDBACK();
   if(feedback)
     {
       feedback->SetCode(code);
@@ -480,7 +480,7 @@ bool XFEEDBACK_CONTROL::AddFeedbakText(XFEEDBACK_CODE code, XCHAR* text)
 {
   XSTRING* textcontainer;
 
-  textcontainer = new XSTRING();
+  textcontainer = GEN_NEW XSTRING();
   if(textcontainer)
     {
       textcontainer->Set(text);

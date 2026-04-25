@@ -343,7 +343,7 @@ duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
 
   for(c = 0; c < nargs; c++)
     {
-      XVARIANT* variant = new XVARIANT();
+      XVARIANT* variant = GEN_NEW XVARIANT();
       if(variant)
         {
           switch((int)duk_get_type(context, c))

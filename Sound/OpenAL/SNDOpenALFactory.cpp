@@ -201,7 +201,7 @@ bool SNDOPENALFACTORY::Update()
                   continue;
                 }
 
-              if(playitem->GetEvent() == SNDOPENALPLAYITEM_XFSMEVENT_NONE) // Not new event
+              if(playitem->GetEvent() == SNDOPENALPLAYITEM_XFSMEVENT_NONE) // Not GEN_NEW event
                 {
                   switch(playitem->GetCurrentState())
                     {
@@ -454,13 +454,13 @@ bool SNDOPENALFACTORY::Sound_Play(SNDITEM* item, SNDPLAYCFG* playCFG, int ntimes
       return false;
     }
 
-  SNDOPENALSOURCE* source = new SNDOPENALSOURCE();
+  SNDOPENALSOURCE* source = GEN_NEW SNDOPENALSOURCE();
   if(!source)
     {
       return false;
     }
 
-  SNDOPENALPLAYITEM* soundplayitem = new SNDOPENALPLAYITEM();
+  SNDOPENALPLAYITEM* soundplayitem = GEN_NEW SNDOPENALPLAYITEM();
   if(!soundplayitem) 
     {
       delete source;

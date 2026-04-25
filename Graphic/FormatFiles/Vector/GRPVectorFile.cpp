@@ -214,7 +214,7 @@ GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type)
                             default   : break;
 
       #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
-      case GRPVECTORFILETYPE_DXF      : vectorFile = new GRPVECTORFILEDXF();
+      case GRPVECTORFILETYPE_DXF      : vectorFile = GEN_NEW GRPVECTORFILEDXF();
                                         break; 
       #endif      
    }
@@ -335,7 +335,7 @@ bool GRPVECTORFILE::DetectFileFormatText(XPATH& pathfile)
   XFILETXTFORMATCHAR  formatchar  =  XFILETXTFORMATCHAR_UNKNOWN;
   bool                isText      = false;
   
-  XFILETXT* fileTXT = new XFILETXT();
+  XFILETXT* fileTXT = GEN_NEW XFILETXT();
   if(fileTXT)  
     {
       if(fileTXT->Open(pathfile))

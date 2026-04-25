@@ -67,7 +67,7 @@
 GRPCANVAS_VECTORFONT_CONFIG::GRPCANVAS_VECTORFONT_CONFIG()
 {
   Clean();    
-  color = new GRP2DCOLOR_RGBA8(0, 0, 0);
+  color = GEN_NEW GRP2DCOLOR_RGBA8(0, 0, 0);
 }
 
 
@@ -360,7 +360,7 @@ GRPCANVAS::~GRPCANVAS()
 bool GRPCANVAS::Buffer_Create()
 {
   buffersize = (width * height * GetBytesperPixel());
-  buffer     = new XBYTE[buffersize];
+  buffer     = GEN_NEW XBYTE[buffersize];
 
   return true;
 }
@@ -679,7 +679,7 @@ double GRPCANVAS::GetLineWidth()
 * @brief      Set line width
 * @ingroup    GRAPHIC
 *
-* @param[in]  linewidth : new line width
+* @param[in]  linewidth : GEN_NEW line width
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPCANVAS::SetLineWidth(double linewidth)
@@ -709,7 +709,7 @@ double GRPCANVAS::GetDashLength()
 * @brief      Set dash lenght
 * @ingroup    GRAPHIC
 *
-* @param[in]  dashlength : new dash lenght
+* @param[in]  dashlength : GEN_NEW dash lenght
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPCANVAS::SetDashLenght(double dashlength)

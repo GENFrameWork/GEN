@@ -112,7 +112,7 @@ INPCURSOR_ID INPCURSOR::GetID()
 * @brief      Set ID
 * @ingroup    INPUT
 *
-* @param[in]  ID : new ID of cursor
+* @param[in]  ID : GEN_NEW ID of cursor
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::SetID(INPCURSOR_ID ID)
@@ -286,9 +286,9 @@ bool INPCURSOR::AddPointToMotion(bool ispressed)
 * @brief      Set
 * @ingroup    INPUT
 *
-* @param[in]  x : new x position
-* @param[in]  y : new y position
-* @param[in]  z : new x position
+* @param[in]  x : GEN_NEW x position
+* @param[in]  y : GEN_NEW y position
+* @param[in]  z : GEN_NEW x position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::Set(float x , float y, float z)
@@ -313,7 +313,7 @@ void INPCURSOR::Set(float x , float y, float z)
 * @brief      Set x
 * @ingroup    INPUT
 *
-* @param[in]  x : new x position
+* @param[in]  x : GEN_NEW x position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::SetX(float x)
@@ -332,7 +332,7 @@ void INPCURSOR::SetX(float x)
 * @brief      Set y
 * @ingroup    INPUT
 *
-* @param[in]  y : new y position
+* @param[in]  y : GEN_NEW y position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::SetY(float y)
@@ -351,7 +351,7 @@ void INPCURSOR::SetY(float y)
 * @brief      Set z
 * @ingroup    INPUT
 *
-* @param[in]  z : new z position
+* @param[in]  z : GEN_NEW z position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::SetZ(float z)

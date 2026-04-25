@@ -106,7 +106,7 @@ bool DIOLINUXSTREAMBLUETOOTHLOCALENUMDEVICES::Search()
 
   while(hci_devinfo(indexdev, &di)>=0)
     {
-      DIOSTREAMDEVICEBLUETOOTH* device = new DIOSTREAMDEVICEBLUETOOTH();
+      DIOSTREAMDEVICEBLUETOOTH* device = GEN_NEW DIOSTREAMDEVICEBLUETOOTH();
       if(device)
         {
           char addr[32];

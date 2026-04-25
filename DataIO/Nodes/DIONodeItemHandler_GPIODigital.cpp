@@ -416,7 +416,7 @@ DIONODEITEMHANDLER_GPIODIGITAL::DIONODEITEMHANDLER_GPIODIGITAL(XLIST<DIONODEITEM
 
   for(XDWORD c=0; c<entrysGPIO->GetSize(); c++)
     {
-      DIONODEITEMHANDLER_ENTRYGPIO* entryGPIO = new DIONODEITEMHANDLER_ENTRYGPIO();
+      DIONODEITEMHANDLER_ENTRYGPIO* entryGPIO = GEN_NEW DIONODEITEMHANDLER_ENTRYGPIO();
       if(entryGPIO)
         {
           entryGPIO->CopyFrom(entrysGPIO->Get(c));
@@ -626,7 +626,7 @@ bool DIONODEITEMHANDLER_GPIODIGITAL::SetNodeItem(DIONODEITEM* nodeitem)
       DIONODEITEMHANDLER_ENTRYGPIO* entryGPIO = entrysGPIO.Get(c);
       if(entryGPIO)
         {
-          DIONODEITEMVALUE* value = new DIONODEITEMVALUE();
+          DIONODEITEMVALUE* value = GEN_NEW DIONODEITEMVALUE();
           if(value)
             {                    
               (*value->GetValue()) = false;                    

@@ -68,7 +68,7 @@ HASHCRC16::HASHCRC16() : HASH()
 
   type = HASHTYPE_CRC16;
 
-  resulttmp = new XBUFFER();
+  resulttmp = GEN_NEW XBUFFER();
 
   //XWORD value = 0xffff;
   XWORD value = 0x0000;

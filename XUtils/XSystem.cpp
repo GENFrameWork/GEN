@@ -122,7 +122,7 @@ bool XSYSTEM::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM& XSYSTEM::GetInstance()
 {
-  if(!instance) instance = new XSYSTEM();
+  if(!instance) instance = GEN_NEW XSYSTEM();
 
   return (*instance);
 }
@@ -135,7 +135,7 @@ XSYSTEM& XSYSTEM::GetInstance()
 * @note       STATIC
 * @ingroup    XUTILS
 *
-* @param[in]  _instance : new instance
+* @param[in]  _instance : GEN_NEW instance
 *
 * @return     bool : true if is succesful.
 *

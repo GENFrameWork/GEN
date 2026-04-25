@@ -104,7 +104,7 @@ bool DIOLINUXNETWORKMANAGER::Ini()
 {
   bool status;
 
-  dbus = new DIOLINUXDBUS();
+  dbus = GEN_NEW DIOLINUXDBUS();
   if(!dbus) return false;
 
   status = dbus->Ini();  
@@ -252,7 +252,7 @@ bool DIOLINUXNETWORKMANAGER::GetDevices(XVECTOR<DIOSTREAMDEVICEIP*>& devices)
 
   for(XDWORD c=0; c<pathdevices.GetSize(); c++)
     {    
-      DIOSTREAMDEVICEIP* deviceIP =  new DIOSTREAMDEVICEIP();
+      DIOSTREAMDEVICEIP* deviceIP =  GEN_NEW DIOSTREAMDEVICEIP();
       if(deviceIP)
         {      
           deviceIP->SetIndex(c);

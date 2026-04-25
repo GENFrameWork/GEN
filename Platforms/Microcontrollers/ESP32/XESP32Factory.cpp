@@ -103,7 +103,7 @@ DELETEFUNC(XESP32FACTORY  , XMUTEX          , XESP32MUTEX            , Delete_Mu
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XESP32FACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* data)
 {
-  XESP32THREAD* _class =  new XESP32THREAD(groupID, ID,function,data);
+  XESP32THREAD* _class =  GEN_NEW XESP32THREAD(groupID, ID,function,data);
   return (XTHREAD*)_class;
 }
 

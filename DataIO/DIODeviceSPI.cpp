@@ -156,7 +156,7 @@ bool DIODEVICESPI::Ini(int port, int chipselect, int timeout)
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(XCHAR* localdevicename)
 {
-  DIOSTREAMSPICONFIG* diostreamcfg = new DIOSTREAMSPICONFIG();
+  DIOSTREAMSPICONFIG* diostreamcfg = GEN_NEW DIOSTREAMSPICONFIG();
   if(!diostreamcfg)  return NULL;
 
   diostreamcfg->SetSPIMode(DIOSTREAMSPI_MODE_0);
@@ -185,7 +185,7 @@ DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(XCHAR* localdevicename)
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(int port, int chipselect)
 {
-  DIOSTREAMSPICONFIG* diostreamcfg = new DIOSTREAMSPICONFIG();
+  DIOSTREAMSPICONFIG* diostreamcfg = GEN_NEW DIOSTREAMSPICONFIG();
   if(!diostreamcfg)  return NULL;
 
   diostreamcfg->SetPort(port);

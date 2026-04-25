@@ -113,10 +113,10 @@ DB_SQL_CONNECTION::~DB_SQL_CONNECTION()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_CONNECTION::SetOption(XCHAR* key, XCHAR* value)
 {
-  DB_SQL_STRING* newkey = new DB_SQL_STRING();
+  DB_SQL_STRING* newkey = GEN_NEW DB_SQL_STRING();
   if(newkey)
     {
-      DB_SQL_STRING* newvalue = new DB_SQL_STRING();
+      DB_SQL_STRING* newvalue = GEN_NEW DB_SQL_STRING();
       if(newvalue)
         {
           newkey->Set   (key);

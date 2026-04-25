@@ -197,7 +197,7 @@ bool DIOWEBHEADER::AddLine(XCHAR* line)
 {
   XSTRING* _line;
 
-  _line  = new XSTRING();
+  _line  = GEN_NEW XSTRING();
   if(!_line) return false;
 
   (*_line) = line;

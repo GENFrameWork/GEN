@@ -256,7 +256,7 @@ bool DIODNSRESOLVER::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODNSRESOLVER& DIODNSRESOLVER::GetInstance()
 {
-  if(!instance) instance = new DIODNSRESOLVER();
+  if(!instance) instance = GEN_NEW DIODNSRESOLVER();
 
   return (*instance);
 }
@@ -344,7 +344,7 @@ bool DIODNSRESOLVER::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int querytype, XD
               GEN_DIODNSRESOLVER.DNSServer_AddDNSServer(__L("64.6.65.6"));
             }
 
-          DIODNSPROTOCOLCLIENT* dnsprotocolclient = new DIODNSPROTOCOLCLIENT();
+          DIODNSPROTOCOLCLIENT* dnsprotocolclient = GEN_NEW DIODNSPROTOCOLCLIENT();
           if(dnsprotocolclient)
             {
               for(XDWORD c=0; c<listDNSservers.GetSize(); c++)
@@ -443,7 +443,7 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(XCHAR* server)
 {
   if(!server) return false;
 
-  DIODNSRESOLVER_DNSSERVER* DNSserver = new DIODNSRESOLVER_DNSSERVER();
+  DIODNSRESOLVER_DNSSERVER* DNSserver = GEN_NEW DIODNSRESOLVER_DNSSERVER();
   if(!DNSserver) return false;
 
   XSTRING string;
@@ -507,7 +507,7 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(XSTRING& server)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::DNSServer_AddDNSServer(XBYTE* serverIP, XWORD port)
 {
-  DIODNSRESOLVER_DNSSERVER* DNSserver = new DIODNSRESOLVER_DNSSERVER();
+  DIODNSRESOLVER_DNSSERVER* DNSserver = GEN_NEW DIODNSRESOLVER_DNSSERVER();
   if(!DNSserver) return false;
 
   DNSserver->GetIP()->Set(serverIP);
@@ -540,7 +540,7 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(DIOIP& serverIP, XWORD port)
 {
   if(DNSServer_IsIPonList(serverIP)) return false;
   
-  DIODNSRESOLVER_DNSSERVER* DNSserver = new DIODNSRESOLVER_DNSSERVER();
+  DIODNSRESOLVER_DNSSERVER* DNSserver = GEN_NEW DIODNSRESOLVER_DNSSERVER();
   if(!DNSserver) return false;
 
   DNSserver->GetIP()->Set(serverIP.Get());
@@ -678,7 +678,7 @@ bool DIODNSRESOLVER::DNSServer_DeleteAllList()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::Host_Add(XCHAR* host, XCHAR* IPresolved)
 {
-  DIODNSRESOLVER_HOSTRESOLVED* hostresolved = new DIODNSRESOLVER_HOSTRESOLVED();
+  DIODNSRESOLVER_HOSTRESOLVED* hostresolved = GEN_NEW DIODNSRESOLVER_HOSTRESOLVED();
   if(!hostresolved) return false;
 
   hostresolved->GetHost()->Set(host);

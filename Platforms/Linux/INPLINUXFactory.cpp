@@ -97,7 +97,7 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
     {
       switch(type)
         {
-          case INPDEVICE_TYPE_KEYBOARD    : { INPLINUXDEVICEKEYBOARDX11* keyboard = new INPLINUXDEVICEKEYBOARDX11();
+          case INPDEVICE_TYPE_KEYBOARD    : { INPLINUXDEVICEKEYBOARDX11* keyboard = GEN_NEW INPLINUXDEVICEKEYBOARDX11();
                                               if(keyboard)
                                                 {
                                                   keyboard->SetScreen(param);
@@ -106,7 +106,7 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                             }
                                             break;
 
-          case INPDEVICE_TYPE_MOUSE       : { INPLINUXDEVICEMOUSEX11* mouse= new INPLINUXDEVICEMOUSEX11();
+          case INPDEVICE_TYPE_MOUSE       : { INPLINUXDEVICEMOUSEX11* mouse= GEN_NEW INPLINUXDEVICEMOUSEX11();
                                               if(mouse)
                                                 {
                                                   mouse->SetScreen(param);
@@ -125,7 +125,7 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
     {
       switch(type)
         {
-          case INPDEVICE_TYPE_KEYBOARD    : { INPLINUXDEVICEKEYBOARDDIRECT* keyboard = new INPLINUXDEVICEKEYBOARDDIRECT();
+          case INPDEVICE_TYPE_KEYBOARD    : { INPLINUXDEVICEKEYBOARDDIRECT* keyboard = GEN_NEW INPLINUXDEVICEKEYBOARDDIRECT();
                                               if(keyboard)
                                                 {
                                                   keyboard->SetScreen(param);
@@ -134,7 +134,7 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                              }
                                             break;
 
-          case INPDEVICE_TYPE_MOUSE       : { INPLINUXDEVICEMOUSEDIRECT* mouse = new INPLINUXDEVICEMOUSEDIRECT();
+          case INPDEVICE_TYPE_MOUSE       : { INPLINUXDEVICEMOUSEDIRECT* mouse = GEN_NEW INPLINUXDEVICEMOUSEDIRECT();
                                               if(mouse)
                                                 {
                                                   mouse->SetScreen(param);
@@ -143,7 +143,7 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                             }
                                             break;
 
-          case INPDEVICE_TYPE_TOUCHSCREEN : { INPLINUXDEVICETOUCHSCREENDIRECT* touchscreen = new INPLINUXDEVICETOUCHSCREENDIRECT();
+          case INPDEVICE_TYPE_TOUCHSCREEN : { INPLINUXDEVICETOUCHSCREENDIRECT* touchscreen = GEN_NEW INPLINUXDEVICETOUCHSCREENDIRECT();
                                               if(touchscreen)
                                                 {
                                                   touchscreen->SetScreen(param);
@@ -199,7 +199,7 @@ bool INPLINUXFACTORY::GetDeviceHandlers(INPDEVICE_TYPE devicetype, XVECTOR<INPLI
 {
   bool status = false;
   
-  XFILETXT* xfiletxtdevices =  new XFILETXT();
+  XFILETXT* xfiletxtdevices =  GEN_NEW XFILETXT();
   if(xfiletxtdevices)
     {
       XPATH xpathdevices;
@@ -218,7 +218,7 @@ bool INPLINUXFACTORY::GetDeviceHandlers(INPDEVICE_TYPE devicetype, XVECTOR<INPLI
                   int index = line->Find(__L("I:"), true);
                   if(index == 0)
                     {
-                      INPLINUXDEVICEID* deviceID = new INPLINUXDEVICEID();
+                      INPLINUXDEVICEID* deviceID = GEN_NEW INPLINUXDEVICEID();
                       if(deviceID)
                         {
                           do{ line = xfiletxtdevices->GetLine(c);
@@ -361,7 +361,7 @@ bool INPLINUXFACTORY::GetDeviceHandlers(INPDEVICE_TYPE devicetype, XVECTOR<INPLI
 * --------------------------------------------------------------------------------------------------------------------*/
 INPSIMULATE* INPLINUXFACTORY::CreateSimulator()
 {
-  INPSIMULATE* inpsimulated = (INPSIMULATE*)new INPLINUXSIMULATE();
+  INPSIMULATE* inpsimulated = (INPSIMULATE*)GEN_NEW INPLINUXSIMULATE();
 
   return inpsimulated;
 }

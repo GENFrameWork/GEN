@@ -270,8 +270,8 @@ bool GRPBITMAP::Rotate(float degrees)
 * @brief      Scale
 * @ingroup    GRAPHIC
 *
-* @param[in]  nwidth : new width
-* @param[in]  nheight : new height
+* @param[in]  nwidth : GEN_NEW width
+* @param[in]  nheight : GEN_NEW height
 *
 * @return     bool : true if is succesful.
 *

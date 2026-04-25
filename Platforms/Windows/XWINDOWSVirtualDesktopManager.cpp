@@ -145,7 +145,7 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSVIRTUALDESKTOPMANAGER& XWINDOWSVIRTUALDESKTOPMANAGER::GetInstance()
 {
-  if(!instance) instance = new XWINDOWSVIRTUALDESKTOPMANAGER();
+  if(!instance) instance = GEN_NEW XWINDOWSVIRTUALDESKTOPMANAGER();
 
   return (*instance);
 }
@@ -209,7 +209,7 @@ XVECTOR<XWINDOWSVIRTUALDESKTOP*>* XWINDOWSVIRTUALDESKTOPMANAGER::EnumAllDesktops
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::AddDesktopToList(XSTRING& name)
 {
-  XWINDOWSVIRTUALDESKTOP* desktop = new XWINDOWSVIRTUALDESKTOP();
+  XWINDOWSVIRTUALDESKTOP* desktop = GEN_NEW XWINDOWSVIRTUALDESKTOP();
   if(!desktop) return false;
 
   desktop->GetName()->Set(name);
@@ -223,7 +223,7 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::AddDesktopToList(XSTRING& name)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XCHAR* name, bool addexplorer)
-* @brief      Create new desktop
+* @brief      Create GEN_NEW desktop
 * @ingroup    PLATFORM_WINDOWS
 *
 * @param[in]  name :
@@ -277,7 +277,7 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XCHAR* name, bool addexplor
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XSTRING& name, bool addexplorer)
-* @brief      Create new desktop
+* @brief      Create GEN_NEW desktop
 * @ingroup    PLATFORM_WINDOWS
 *
 * @param[in]  name :

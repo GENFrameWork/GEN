@@ -132,7 +132,7 @@ bool SNDFACTORY::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDFACTORY& SNDFACTORY::GetInstance()
 {
-  if(!instance) instance = new SNDFACTORY();
+  if(!instance) instance = GEN_NEW SNDFACTORY();
 
   return (*instance);
 }
@@ -521,7 +521,7 @@ SNDITEM* SNDFACTORY::CreateItem(XCHAR* path)
       return NULL;
     }
 
-  SNDITEM* item = new SNDITEM();
+  SNDITEM* item = GEN_NEW SNDITEM();
   if(!item)
     {
       return NULL;
@@ -599,7 +599,7 @@ SNDITEM* SNDFACTORY::CreateItem(XDWORD frecuency, XDWORD duration)
       return NULL;
     }
 
-  SNDITEM* item = new SNDITEM();
+  SNDITEM* item = GEN_NEW SNDITEM();
   if(!item)
     {
       return NULL;
@@ -609,7 +609,7 @@ SNDITEM* SNDFACTORY::CreateItem(XDWORD frecuency, XDWORD duration)
 
   item->GetID()->Format(__L("frec: %d (Hz) - time: %d (msec)"), frecuency, duration);
 
-  SNDNOTE* note = new SNDNOTE();
+  SNDNOTE* note = GEN_NEW SNDNOTE();
   if(!note)
     {
       delete item;

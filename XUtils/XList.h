@@ -185,14 +185,14 @@ class XLIST
 
                                       if(newsize >= nelements)
                                         {
-                                          // should insert new elements at the tail
+                                          // should insert GEN_NEW elements at the tail
                                           XDWORD toinsert = newsize - nelements;
 
                                           XLISTDATA<T>* data = lastelement;
 
                                           for(XDWORD i = 0; i < toinsert; i++)
                                             {
-                                              XLISTDATA<T>* newdata = new XLISTDATA<T>();
+                                              XLISTDATA<T>* newdata = GEN_NEW XLISTDATA<T>();
                                               if(!newdata) return false;
 
                                               newdata->prev = data;
@@ -238,8 +238,8 @@ class XLIST
                                             }
                                         }
 
-                                      // new element to add
-                                      XLISTDATA<T>* data = new XLISTDATA<T>();
+                                      // GEN_NEW element to add
+                                      XLISTDATA<T>* data = GEN_NEW XLISTDATA<T>();
                                       data->active = true;
                                       data->data = element;
 
@@ -403,7 +403,7 @@ class XLIST
                                     {
                                       if(nelements == 0)
                                         {
-                                          XLISTDATA<T>* newdata = new XLISTDATA<T>();
+                                          XLISTDATA<T>* newdata = GEN_NEW XLISTDATA<T>();
                                           if(!newdata) return false;
 
                                           newdata->data = element;
@@ -422,7 +422,7 @@ class XLIST
                                       // last element is a general case
                                       if(position == firstelement)
                                         {
-                                          XLISTDATA<T>* newdata = new XLISTDATA<T>();
+                                          XLISTDATA<T>* newdata = GEN_NEW XLISTDATA<T>();
                                           newdata->data = element;
                                           newdata->next = firstelement;
                                           firstelement->prev = newdata;
@@ -432,7 +432,7 @@ class XLIST
                                         }
 
                                       XLISTDATA<T>* previous = position->prev;
-                                      XLISTDATA<T>* newdata = new XLISTDATA<T>();
+                                      XLISTDATA<T>* newdata = GEN_NEW XLISTDATA<T>();
                                       if(!newdata) return false;
 
                                       newdata->data = element;
@@ -846,7 +846,7 @@ T                                   operator*                                 ()
 
 
 
-#include "XMemory_Control_Deactive.h"
+
 
 
 

@@ -71,7 +71,7 @@ GRPVIDEOFILEAVI::GRPVIDEOFILEAVI()
 {
   Clean();
 
-  fileRIFF = new XFILERIFF();
+  fileRIFF = GEN_NEW XFILERIFF();
 }
 
 
@@ -153,7 +153,7 @@ bool GRPVIDEOFILEAVI::Open(XCHAR* path)
 
   for(XDWORD index=0; index < propertys.nframes; index++)
     { 
-      GRPVIDEOFILEAVI_INDEXENTRY* indexentry = new GRPVIDEOFILEAVI_INDEXENTRY;
+      GRPVIDEOFILEAVI_INDEXENTRY* indexentry = GEN_NEW GRPVIDEOFILEAVI_INDEXENTRY;
       if(!indexentry) return false;  
 
       if(!fileRIFF->GetFileBase()->Read((XBYTE*)indexentry, sizeof(GRPVIDEOFILEAVI_INDEXENTRY))) return false;
@@ -360,7 +360,7 @@ XBYTE* GRPVIDEOFILEAVI::GetDataFrame(XDWORD index_frame, XDWORD& sizeframe)
     
   if(datasize != indexentry->chunklength) return NULL;  
     
-  XBYTE* data = new XBYTE[datasize];
+  XBYTE* data = GEN_NEW XBYTE[datasize];
   if(!data) return NULL;
   
   if(!fileRIFF->GetFileBase()->SetPosition(frame_list->GetPositionFileData()))
@@ -418,7 +418,7 @@ bool GRPVIDEOFILEAVI::AddFrame(XBYTE* dataframe, XDWORD dataframesize)
   movi_node->AddChild(frame_node);
   
 
-  GRPVIDEOFILEAVI_INDEXENTRY* indexentry = new GRPVIDEOFILEAVI_INDEXENTRY();
+  GRPVIDEOFILEAVI_INDEXENTRY* indexentry = GEN_NEW GRPVIDEOFILEAVI_INDEXENTRY();
   if(indexentry) 
     {
       indexentry->chunkID     = fileRIFF->GetTypeFromString(GRPVIDEOFILEAVI_TYPECHUNKFRAME);
@@ -493,7 +493,7 @@ bool GRPVIDEOFILEAVI::CreateAndWriteJUNK(XFILERIFF_LIST_NODE* father_node, XDWOR
   XFILERIFF_LIST_NODE* junk_node = fileRIFF->CreateChunkNode(__L("JUNK"), datasize);
   if(!junk_node) return false;
 
-  XBYTE* data = new XBYTE[datasize];
+  XBYTE* data = GEN_NEW XBYTE[datasize];
   if(!data) return false;
 
   memset(data, 0, datasize);

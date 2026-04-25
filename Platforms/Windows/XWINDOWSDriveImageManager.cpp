@@ -114,7 +114,7 @@ bool XWINDOWSDRIVEIMAGEMANAGER::GetDrives(XVECTOR<XDRIVEIMAGEMANAGER_DRIVE*>& dr
           path.Format( __L("\\\\.\\%c:\\"), __C('A') + c);
           if(CheckDriveType(path, ID))
             {
-              XDRIVEIMAGEMANAGER_DRIVE* drive = new XDRIVEIMAGEMANAGER_DRIVE();
+              XDRIVEIMAGEMANAGER_DRIVE* drive = GEN_NEW XDRIVEIMAGEMANAGER_DRIVE();
               if(drive)
                 {
                   XSTRING label;
@@ -209,7 +209,7 @@ bool XWINDOWSDRIVEIMAGEMANAGER::Read(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD sta
 
   buffer.Delete();
 
-  _buffer = new XBYTE[maxbuffer];
+  _buffer = GEN_NEW XBYTE[maxbuffer];
   if(!_buffer) return false;
 
   if(maxnsectorsblock > numbersectors) maxnsectorsblock = numbersectors;
@@ -278,7 +278,7 @@ bool XWINDOWSDRIVEIMAGEMANAGER::Write(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD st
   XQWORD sizewrite          = 0;
   bool   status             = false;
 
-  _buffer = new XBYTE[maxbuffer];
+  _buffer = GEN_NEW XBYTE[maxbuffer];
   if(!_buffer) return false;
 
   if(maxnsectorsblock > numbersectors) maxnsectorsblock = numbersectors;
@@ -612,7 +612,7 @@ bool XWINDOWSDRIVEIMAGEMANAGER::CheckDriveType(XPATH& path, XQWORD& ID)
                                 if(hdevice == INVALID_HANDLE_VALUE) break;
 
                                 int sizearray  = sizeof(STORAGE_DEVICE_DESCRIPTOR) + 512 - 1;
-                                pdevdesc       = (PSTORAGE_DEVICE_DESCRIPTOR)new BYTE[sizearray];
+                                pdevdesc       = (PSTORAGE_DEVICE_DESCRIPTOR)GEN_NEW BYTE[sizearray];
 
                                 pdevdesc->Size = sizearray;
 

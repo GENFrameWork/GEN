@@ -428,7 +428,7 @@ bool XSERIALIZATIONMETHODJSON::AddStruct(XCHAR* name, bool open)
 
   if(open)
     {
-      XFILEJSONOBJECT* structnode =  new XFILEJSONOBJECT();
+      XFILEJSONOBJECT* structnode =  GEN_NEW XFILEJSONOBJECT();
       if(!structnode)
         {
           return false;
@@ -470,7 +470,7 @@ bool XSERIALIZATIONMETHODJSON::AddArray(XDWORD nelements, XCHAR* name, bool open
 
   if(open)
     {
-      XFILEJSONARRAY* arraynode =  new XFILEJSONARRAY();
+      XFILEJSONARRAY* arraynode =  GEN_NEW XFILEJSONARRAY();
       if(!arraynode)
         {
           return false;

@@ -333,7 +333,7 @@ DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
 
   GEN_XFACTORY_CREATE(timerout, CreateTimer())
   
-  diostreamcfg = new DIOSTREAMTCPIPCONFIG();
+  diostreamcfg = GEN_NEW DIOSTREAMTCPIPCONFIG();
   if(diostreamcfg) diostream = (DIOSTREAMTCPIP*)GEN_DIOFACTORY.CreateStreamIO(diostreamcfg);
 }
 
@@ -1293,7 +1293,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
       _tofile = (XFILE*)to;
     }
 
-  XBYTE* buffer = new XBYTE[maxsizebuffer];
+  XBYTE* buffer = GEN_NEW XBYTE[maxsizebuffer];
   if(buffer)
     {
       XQWORD  totalsizeread = 0;

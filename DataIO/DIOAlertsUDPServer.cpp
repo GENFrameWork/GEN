@@ -105,7 +105,7 @@ bool DIOALERTSUDPSERVER::Ini(XCHAR* URL, int port)
 {
   bool status = false;
 
-  UDPdiostreamcfg = new DIOSTREAMUDPCONFIG();
+  UDPdiostreamcfg = GEN_NEW DIOSTREAMUDPCONFIG();
   if(!UDPdiostreamcfg)  return false;
 
   UDPdiostreamcfg->SetMode(DIOSTREAMMODE_SERVER);
@@ -113,7 +113,7 @@ bool DIOALERTSUDPSERVER::Ini(XCHAR* URL, int port)
   UDPdiostreamcfg->SetRemotePort(port);
   UDPdiostreamcfg->SetIsUsedDatagrams(true);
 
-  UDPdiostream = new DIOSTREAMUDPACKNOWLEDGE(UDPdiostreamcfg);
+  UDPdiostream = GEN_NEW DIOSTREAMUDPACKNOWLEDGE(UDPdiostreamcfg);
   if(UDPdiostream)
     {
       status = UDPdiostream->Open();
@@ -371,7 +371,7 @@ bool DIOALERTSUDPSERVER::ReceivedEvents()
 
       if(data.GetSize())
         {
-          alert = new DIOALERT();
+          alert = GEN_NEW DIOALERT();
           if(alert)
             {
               XSTRING string;

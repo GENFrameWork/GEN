@@ -417,7 +417,7 @@ bool XWINDOWSREGISTRYKEY::EnumValues(XVECTOR<XSTRING*>* valuelist)
 
       if(status == ERROR_SUCCESS)
         {
-          XSTRING* _namevalue = new XSTRING();
+          XSTRING* _namevalue = GEN_NEW XSTRING();
           if(_namevalue)
             {
               (*_namevalue) = namevalue;
@@ -694,7 +694,7 @@ bool XWINDOWSREGISTRYMANAGER::EnumKeys(XWINDOWSREGISTRYKEY& registrykey, XVECTOR
 
       if(status == ERROR_SUCCESS)
         {
-          XSTRING* _namekey = new XSTRING();
+          XSTRING* _namekey = GEN_NEW XSTRING();
           if(_namekey)
             {
               (*_namekey) = namekey;

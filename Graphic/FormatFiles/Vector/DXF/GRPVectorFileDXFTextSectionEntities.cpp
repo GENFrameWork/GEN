@@ -381,7 +381,7 @@ GRPVECTORFILEDXFTEXTSECTIONENTITYDEF GRPVECTORFILEDXFTEXTSECTIONENTITIES::defent
                                                                                                                            "2097152 (0x200000) = Enables grid follows workplane switching.") },                                        
                                        { 340 , __L("HARD-POINTER_ID-HDL")           , __L("Hard-pointer ID-handle to entity that serves as the viewport's clipping boundary (only present if viewport is non-rectangular)") },
                                        {   1 , __L("PLOT_STYLE_SHEET_NAME")         , __L("Plot style sheet name assigned to this viewport") },
-                                       { 281 , __L("RENDER_MODE")                   , __L("Render mode: 0 = 2D Optimized (classic 2D), 1 = Wireframe, 2 = Hidden line, 3 = Flat shaded, 4 = Gouraud shaded, 5 = Flat shaded with wireframe, 6 = Gouraud shaded with wireframe, All rendering modes other than 2D Optimized engage the new 3D graphics pipeline. These values directly correspond to the SHADEMODE command and the AcDbAbstractViewTableRecord::RenderMode enum.") },
+                                       { 281 , __L("RENDER_MODE")                   , __L("Render mode: 0 = 2D Optimized (classic 2D), 1 = Wireframe, 2 = Hidden line, 3 = Flat shaded, 4 = Gouraud shaded, 5 = Flat shaded with wireframe, 6 = Gouraud shaded with wireframe, All rendering modes other than 2D Optimized engage the GEN_NEW 3D graphics pipeline. These values directly correspond to the SHADEMODE command and the AcDbAbstractViewTableRecord::RenderMode enum.") },
                                        {  71 , __L("UCS_VIEWPORT_FLAG")             , __L("UCS per viewport flag: 0 = The UCS will not change when this viewport becomes active. 1 = This viewport stores its own UCS which will become the current UCS whenever the viewport is activated") },
                                        {  74 , __L("DISPLAY_UCS_ICON")              , __L("Display UCS icon at UCS origin flag: Controls whether UCS icon represents viewport UCS or current UCS (these will be different if UCSVP is 1 and viewport is not active). However, this field is currently being ignored and the icon always represents the viewport UCS") },
                                        { 110 , __L("UCS_ORIGIN_X")                  , __L("UCS origin DXF: X value; APP: 3D point") },
@@ -810,7 +810,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILE
   enumentities.DeleteKeyContents();
   enumentities.DeleteAll();
 
-  part = new GRPVECTORFILEDXFTEXTPART();
+  part = GEN_NEW GRPVECTORFILEDXFTEXTPART();
 
   do{ line = fileTXT->GetLine(indexline);
       if(line) 
@@ -834,7 +834,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILE
                           parts.Add(part); 
                           part = NULL;
                   
-                          part = new GRPVECTORFILEDXFTEXTPART ();
+                          part = GEN_NEW GRPVECTORFILEDXFTEXTPART ();
                         }
 
                       if(part && (part->iniline == -1))
@@ -886,7 +886,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILE
       part = parts.Get(c);
       if(part)
         {
-          GRPVECTORFILEDXFENTITY* entity = new GRPVECTORFILEDXFENTITY();
+          GRPVECTORFILEDXFENTITY* entity = GEN_NEW GRPVECTORFILEDXFENTITY();
           if(entity)
             {          
               entity->GetName()->Set(part->name);
@@ -902,7 +902,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILE
                       int type = line->ConvertToInt();
                   
                                
-                      GRPVECTORFILEDXFVALUE* value = new GRPVECTORFILEDXFVALUE();
+                      GRPVECTORFILEDXFVALUE* value = GEN_NEW GRPVECTORFILEDXFVALUE();
                       if(value)
                         {      
                           GRPVECTORFILEDXFTEXTSECTIONENTITYDEFTYPE* defType = IsKnownTypeValue(part->name, type);
@@ -981,7 +981,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILE
 
                                   case GRPVECTORFILEDXFTEXTSECTION_XDATACTRL_STATUS_INI : if(!xdatactrl)                
                                                                                             {
-                                                                                              xdatactrl = new GRPVECTORFILEDXFXDATACTRL();
+                                                                                              xdatactrl = GEN_NEW GRPVECTORFILEDXFXDATACTRL();
                                                                                               if(xdatactrl)                
                                                                                                 {
                                                                                                   XSTRING name;
@@ -1080,7 +1080,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::AddEntityEnum(XCHAR* nameentity)
 
   if(index == GRPVECTORFILEDXFEntities_NotEnumEntity) 
     {
-      XSTRING* name = new XSTRING();
+      XSTRING* name = GEN_NEW XSTRING();
       if(name)
         {
           (*name) = nameentity;

@@ -142,7 +142,7 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForAdmin(XCHAR* filename)
   ea[1].Trustee.TrusteeType     = TRUSTEE_IS_GROUP;
   ea[1].Trustee.ptstrName       = (LPTSTR) adminSID;
 
-  // Create a new ACL that contains the new ACEs.
+  // Create a GEN_NEW ACL that contains the GEN_NEW ACEs.
   SetEntriesInAcl(EXPLICIT_ACCESS_MAXNUM_ADMIN, ea, NULL, &ACL);
 
   // Initialize a security descriptor.
@@ -207,7 +207,7 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForSystemUser(XCHAR* filen
   ea[0].Trustee.TrusteeType     = TRUSTEE_IS_GROUP;
   ea[0].Trustee.ptstrName       = (LPTSTR)systemSID;
 
-  // Create a new ACL that contains the new ACEs.
+  // Create a GEN_NEW ACL that contains the GEN_NEW ACEs.
   SetEntriesInAcl(EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER, ea, NULL, &ACL);
 
   // Initialize a security descriptor.
@@ -266,7 +266,7 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFilePermissionForEveryone(XCHAR* filename)
   ea[0].Trustee.TrusteeType       = TRUSTEE_IS_WELL_KNOWN_GROUP;
   ea[0].Trustee.ptstrName         = (LPTSTR) everyoneSID;
 
-  // Create a new ACL that contains the new ACEs.
+  // Create a GEN_NEW ACL that contains the GEN_NEW ACEs.
   SetEntriesInAcl(1, ea, NULL, &ACL);
 
   // Initialize a security descriptor.

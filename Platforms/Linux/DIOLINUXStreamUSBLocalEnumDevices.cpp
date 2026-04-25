@@ -178,7 +178,7 @@ bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::Search()
 
                   //XTRACE_PRINTCOLOR(2, __L("%s - [port %d] class[%s]"), devicepath.Get(), port, classstr.Get());
 
-                  DIOSTREAMDEVICEUSB* device = new DIOSTREAMDEVICEUSB();
+                  DIOSTREAMDEVICEUSB* device = GEN_NEW DIOSTREAMDEVICEUSB();
                   if( device)
                     {                    
                       GetDescriptor(udevdevice, device->GetDescriptor());

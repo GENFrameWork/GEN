@@ -422,7 +422,7 @@ class XVECTOR
                                       XDWORD  _narray   = nelements;
                                       int     sizearray = (_narray*sizeof(T));
 
-                                      array = new T[_narray];
+                                      array = GEN_NEW T[_narray];
                                       if(!array) 
                                         {
                                           return false;
@@ -440,7 +440,7 @@ class XVECTOR
                                       if((nelements >= narray) || (!narray))
                                         {
                                           XDWORD newsize  = nelements + addinlimit;                                       
-                                          T*     newarray = new T[newsize];
+                                          T*     newarray = GEN_NEW T[newsize];
 
                                           if(!newarray) 
                                             {
@@ -521,6 +521,6 @@ class XVECTOR
 
 
 
-#include "XMemory_Control_Deactive.h"
+
 
 

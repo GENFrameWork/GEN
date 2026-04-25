@@ -112,7 +112,7 @@ bool XEEPROMMEMORYMANAGER::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XEEPROMMEMORYMANAGER& XEEPROMMEMORYMANAGER::GetInstance()
 {
-  if(!instance) instance = new XEEPROMMEMORYMANAGER();
+  if(!instance) instance = GEN_NEW XEEPROMMEMORYMANAGER();
 
   return (*instance);
 }
@@ -125,7 +125,7 @@ XEEPROMMEMORYMANAGER& XEEPROMMEMORYMANAGER::GetInstance()
 * @note       STATIC
 * @ingroup    XUTILS
 *
-* @param[in]  _instance : new instance
+* @param[in]  _instance : GEN_NEW instance
 *
 * @return     bool : true if is succesful.
 *

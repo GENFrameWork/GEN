@@ -196,7 +196,7 @@ bool DIONODE::GetSubGroups(XVECTOR<XSTRING*>& listsubgroups)
   
   pathgroup.Slash_Delete();
 
-  do{ XSTRING* _subgroup = new XSTRING();
+  do{ XSTRING* _subgroup = GEN_NEW XSTRING();
       if(_subgroup)
         {
           pathgroup.GetNamefileExt(*_subgroup);        

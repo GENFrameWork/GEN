@@ -72,7 +72,7 @@ APPFLOWEXTENDED_INTERNETSTATUS::APPFLOWEXTENDED_INTERNETSTATUS(APPFLOWCFG* cfg) 
 
   this->cfg = cfg;
 
-  internetservices = new APPFLOWINTERNETSERVICES();
+  internetservices = GEN_NEW APPFLOWINTERNETSERVICES();
   if(internetservices) 
     {
       internetservices->Ini(cfg);

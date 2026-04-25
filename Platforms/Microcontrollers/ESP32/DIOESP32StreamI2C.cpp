@@ -282,10 +282,10 @@ bool DIOESP32STREAMI2C::Open()
 
   if(!DIOESP32STREAMI2C::ports[indexport])
     {
-      DIOESP32STREAMI2CPORT* port = new DIOESP32STREAMI2CPORT();
+      DIOESP32STREAMI2CPORT* port = GEN_NEW DIOESP32STREAMI2CPORT();
       if(!port) return false;
 
-      hi2c = new I2C_HandleTypeDef();
+      hi2c = GEN_NEW I2C_HandleTypeDef();
       if(!hi2c)
         {
           delete port;

@@ -118,7 +118,7 @@ bool APPFLOWCHECKRESOURCESHARDWARE::Ini(APPFLOWCFG* cfg)
 
   this->cfg = cfg;
 
-  xscheduler = new XSCHEDULER();
+  xscheduler = GEN_NEW XSCHEDULER();
   if(!xscheduler) return false;
 
   XSCHEDULERTASK* xtask;
@@ -127,7 +127,7 @@ bool APPFLOWCHECKRESOURCESHARDWARE::Ini(APPFLOWCFG* cfg)
 
   if(cfg->CheckResourcesHardware_GetMemStatusCheckCadence())
     {
-      xtask = new XSCHEDULERTASK(xscheduler);
+      xtask = GEN_NEW XSCHEDULERTASK(xscheduler);
       if(!xtask) return false;
 
       xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, cfg->CheckResourcesHardware_GetMemStatusCheckCadence());
@@ -151,7 +151,7 @@ bool APPFLOWCHECKRESOURCESHARDWARE::Ini(APPFLOWCFG* cfg)
   
   if(cfg->CheckResourcesHardware_GetTotalCPUUsageCheckCadence())
     {
-      xtask = new XSCHEDULERTASK(xscheduler);
+      xtask = GEN_NEW XSCHEDULERTASK(xscheduler);
       if(!xtask) return false;
 
       xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, cfg->CheckResourcesHardware_GetTotalCPUUsageCheckCadence());
@@ -164,7 +164,7 @@ bool APPFLOWCHECKRESOURCESHARDWARE::Ini(APPFLOWCFG* cfg)
 
   if(cfg->CheckResourcesHardware_GetAppCPUUsageCheckCadence())
     {
-      xtask = new XSCHEDULERTASK(xscheduler);
+      xtask = GEN_NEW XSCHEDULERTASK(xscheduler);
       if(!xtask) return false;
 
       xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, cfg->CheckResourcesHardware_GetAppCPUUsageCheckCadence());

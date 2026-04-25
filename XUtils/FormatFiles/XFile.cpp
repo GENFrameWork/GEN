@@ -337,7 +337,7 @@ bool XFILE::EraseBlock(XQWORD size)
 
   sizetomove = GetSize() - position - size;
 
-  tbuffer= new XBYTE [XFILE_MAXBUFFER];
+  tbuffer= GEN_NEW XBYTE [XFILE_MAXBUFFER];
   if(!tbuffer) return false;
 
   nblocks = (XDWORD)(sizetomove / XFILE_MAXBUFFER);
@@ -394,7 +394,7 @@ bool XFILE::InsertBlock(XBYTE* buffer, XDWORD size)
 
   origin = position;
 
-  movebuffer= new XBYTE [XFILE_MAXBUFFER];
+  movebuffer= GEN_NEW XBYTE [XFILE_MAXBUFFER];
   if(!movebuffer) return false;
 
   ActualizeSize();
@@ -480,7 +480,7 @@ bool XFILE::OverwriteContent(XCHAR* xpath)
   int         block     = (XDWORD)(cachesize/sizeblock);
   int         mod       = (XDWORD)(cachesize%sizeblock);
 
-  buffer = new XBYTE [sizeblock];
+  buffer = GEN_NEW XBYTE [sizeblock];
   if(!buffer) return false;
 
   memset(buffer,0,sizeblock);

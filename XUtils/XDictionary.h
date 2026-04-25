@@ -81,7 +81,7 @@ class XDICTIONARY
                                             if(entries.Get(e)->key == key)  return entries.Get(e)->value;
                                           }
 
-                                         entries.Add(new XDICTIONARYENTRY<T>);
+                                         entries.Add(GEN_NEW XDICTIONARYENTRY<T>);
 
                                          ntries.GetLast()->key    = key;
                                          entries.GetLast()->value = T();

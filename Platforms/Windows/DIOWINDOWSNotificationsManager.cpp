@@ -235,7 +235,7 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
   //toast_template.setAttributionText(attribute);
   //toast_template.setImagePath(imagepath);
 
-  if(WinToast::instance()->showToast(toast_template, new DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER() /*handler*/) < 0) 
+  if(WinToast::instance()->showToast(toast_template, GEN_NEW DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER() /*handler*/) < 0) 
     {
       return false;
     }

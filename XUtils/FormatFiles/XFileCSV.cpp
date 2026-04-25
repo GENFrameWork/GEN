@@ -166,7 +166,7 @@ bool XFILECSV_RECORD::AddElement(XSTRING& element)
 {
   //if(element.IsEmpty()) return false;
 
-  XSTRING* string = new XSTRING();
+  XSTRING* string = GEN_NEW XSTRING();
   if(!string) return false;
 
   (*string) = element;
@@ -193,7 +193,7 @@ bool XFILECSV_RECORD::AddElement(XCHAR* element)
   if(!element)    return false;
   //if(!element[0]) return false;
 
-  XSTRING* string = new XSTRING();
+  XSTRING* string = GEN_NEW XSTRING();
   if(!string) return false;
 
   (*string) = element;
@@ -222,7 +222,7 @@ bool XFILECSV_RECORD::Copy(XFILECSV_RECORD* header)
 
   for(int c=0;c<header->GetNElements();c++)
     {
-      XSTRING* string = new XSTRING();
+      XSTRING* string = GEN_NEW XSTRING();
       if(string)
         {
           XCHAR* string2 =  header->GetElement(c);
@@ -680,7 +680,7 @@ bool XFILECSV::Serialization(bool read, bool haveheader)
               line = GetLine(c)->Get();
               if(!line.IsEmpty())
                 {
-                  record = new XFILECSV_RECORD();
+                  record = GEN_NEW XFILECSV_RECORD();
                   if(record)
                     {
                       CreateRecordOfLine(line,record);

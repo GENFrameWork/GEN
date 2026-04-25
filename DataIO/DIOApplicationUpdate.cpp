@@ -491,7 +491,7 @@ DIOAPPLICATIONUPDATE::DIOAPPLICATIONUPDATE(XDWORD applicationversion, XDWORD app
   #endif
 
   GEN_XFACTORY_CREATE(xdir, Create_Dir())
-  webclient = new DIOWEBCLIENT;
+  webclient = GEN_NEW DIOWEBCLIENT;
 
   RegisterEvent(DIOAPPLICATIONUPDATE_XEVENT_TYPE_GETVERSIONAVAILABLE);
   RegisterEvent(DIOAPPLICATIONUPDATE_XEVENT_TYPE_CHECKVERSIONAVAILABLE);
@@ -586,7 +586,7 @@ bool DIOAPPLICATIONUPDATE::GetVersionAvailable(DIOURL& url, int port, DIOAPPLICA
     {
       error = DIOAPPLICATIONUPDATE_ERROR_INVALIDOPERATION;
 
-      XFILEINI* ini = new XFILEINI();
+      XFILEINI* ini = GEN_NEW XFILEINI();
       if(ini)
         {
           if(ini->Open(xpath))
@@ -624,7 +624,7 @@ bool DIOAPPLICATIONUPDATE::GetVersionAvailable(DIOURL& url, int port, DIOAPPLICA
 
                       if(xpathfile.GetSize() && sizefile && CRC32)
                         {
-                          DIOAPPLICATIONUPDATE_FILE* updatefile = new DIOAPPLICATIONUPDATE_FILE(xpathfile, CRC32, sizefile);
+                          DIOAPPLICATIONUPDATE_FILE* updatefile = GEN_NEW DIOAPPLICATIONUPDATE_FILE(xpathfile, CRC32, sizefile);
                           if(updatefile) filestoupdate.Add(updatefile);
                         }
                     }
@@ -788,7 +788,7 @@ bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XCHAR* addtargetpath,
       // Descompress File
       if(!extenxion.Compare(__L(".zip"), true))
         {
-          XFILEUNZIP* unzip = new XFILEUNZIP();
+          XFILEUNZIP* unzip = GEN_NEW XFILEUNZIP();
           if(unzip)
             {
               if(unzip->Open(xpathfile))
@@ -1284,7 +1284,7 @@ bool DIOAPPLICATIONUPDATE::GetListOfVersionsToRestore(XVECTOR<DIOAPPLICATIONUPDA
 
                   if(version || subversion || subversionerror)
                     {
-                      DIOAPPLICATIONUPDATE_VERSIONDATA* versiondata = new DIOAPPLICATIONUPDATE_VERSIONDATA();
+                      DIOAPPLICATIONUPDATE_VERSIONDATA* versiondata = GEN_NEW DIOAPPLICATIONUPDATE_VERSIONDATA();
                       if(versiondata)
                         {
                           versiondata->SetVersion(version);
@@ -1572,7 +1572,7 @@ bool DIOAPPLICATIONUPDATE::EliminateOldRestorations(int maxrestorations)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOAPPLICATIONUPDATE::IsNewVersion(DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata)
-* @brief      Is new version
+* @brief      Is GEN_NEW version
 * @ingroup    DATAIO
 *
 * @param[in]  updateversiondata :
@@ -1694,7 +1694,7 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_CreateList(XPATH& xpathupdate)
                   GEN_XFACTORY.Delete_File(xfile);
                 }
 
-              DIOAPPLICATIONUPDATE_FILE* updatefile = new DIOAPPLICATIONUPDATE_FILE(xpathadd, CRC32file.GetResultCRC32(), sizefile);
+              DIOAPPLICATIONUPDATE_FILE* updatefile = GEN_NEW DIOAPPLICATIONUPDATE_FILE(xpathadd, CRC32file.GetResultCRC32(), sizefile);
               if(updatefile)
                 {
                   XSTRING filename;
@@ -1885,8 +1885,8 @@ bool DIOAPPLICATIONUPDATE::CopyFile(XPATH& origin, XPATH& target)
 
       HASHCRC32* CRC32file[2];
 
-      CRC32file[0] = new HASHCRC32();
-      CRC32file[1] = new HASHCRC32();
+      CRC32file[0] = GEN_NEW HASHCRC32();
+      CRC32file[1] = GEN_NEW HASHCRC32();
 
       if(CRC32file[0] && CRC32file[1])
         {

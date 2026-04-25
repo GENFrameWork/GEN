@@ -102,7 +102,7 @@ APPFLOWINTERNETSERVICES::APPFLOWINTERNETSERVICES()
   if(xdatetime_UTC) xdatetime_UTC->Read();
 
   #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE
-  dyndnsmanager = new DIODYNDNS_MANAGER();
+  dyndnsmanager = GEN_NEW DIODYNDNS_MANAGER();
   #endif  
 }
 
@@ -181,7 +181,7 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
 
   this->cfg = cfg;
 
-  xscheduler = new XSCHEDULER();
+  xscheduler = GEN_NEW XSCHEDULER();
   if(!xscheduler) 
     {
       return false;
@@ -193,7 +193,7 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
 
   if(cfg->InternetServices_GetCheckInternetStatusCadence())
     {
-      xtask = new XSCHEDULERTASK( xscheduler);
+      xtask = GEN_NEW XSCHEDULERTASK( xscheduler);
       if(!xtask) 
         {
           return false;
@@ -206,7 +206,7 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
 
       xscheduler->Task_Add(xtask);
 
-      checkinternetconnection = new DIOCHECKINTERNETCONNECTION(5);
+      checkinternetconnection = GEN_NEW DIOCHECKINTERNETCONNECTION(5);
       status =(checkinternetconnection)?true:false;
     }
 
@@ -214,7 +214,7 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
   
   if(cfg->InternetServices_GetCheckIPsChangeCadence())
     {
-      xtask = new XSCHEDULERTASK(xscheduler);
+      xtask = GEN_NEW XSCHEDULERTASK(xscheduler);
       if(!xtask) 
         {
           return false;
@@ -249,7 +249,7 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
     {       
       for(XDWORD c=0; c<cfg->InternetServices_GetUpdateTimeNTPServers()->GetSize(); c++)
         {
-          XSTRING* server = new XSTRING();
+          XSTRING* server = GEN_NEW XSTRING();
           if(server)
             {               
               server->Set(cfg->InternetServices_GetUpdateTimeNTPServer(c)->Get());
@@ -259,7 +259,7 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
             }
         }
      
-      xtask = new XSCHEDULERTASK( xscheduler);
+      xtask = GEN_NEW XSCHEDULERTASK( xscheduler);
       if(!xtask) 
         {
           return false;
@@ -961,10 +961,10 @@ bool APPFLOWINTERNETSERVICES::AdjustTimerByNTP(XVECTOR<XSTRING*>* servers)
 
   bool    status = false;
 
-  DIONTP* ntp = new DIONTP();
+  DIONTP* ntp = GEN_NEW DIONTP();
   if(ntp)
     {
-      DIOURL* url = new DIOURL();
+      DIOURL* url = GEN_NEW DIOURL();
       if(url)
         {
 

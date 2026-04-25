@@ -475,7 +475,7 @@ bool XFILEDFU::Close()
 * ---------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_IMAGE* XFILEDFU::Read_Image()
 {
-  XFILEDFU_IMAGE* image = new XFILEDFU_IMAGE();
+  XFILEDFU_IMAGE* image = GEN_NEW XFILEDFU_IMAGE();
   if(!image) return NULL;
 
   bool status = false;
@@ -514,7 +514,7 @@ XFILEDFU_IMAGE* XFILEDFU::Read_Image()
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_ELEMENT* XFILEDFU::Read_Element()
 {
-  XFILEDFU_ELEMENT* element = new XFILEDFU_ELEMENT();
+  XFILEDFU_ELEMENT* element = GEN_NEW XFILEDFU_ELEMENT();
   if(!element) return NULL;
 
   bool status = false;

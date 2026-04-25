@@ -80,7 +80,7 @@ enum APPFLOWBASE_MODE_TYPE
 #define APPLICATIONCREATEINSTANCE(CLASSNAME, VARIABLE)    CLASSNAME* VARIABLE = NULL;                     \
                                                           APPFLOWBASE* APPFLOWBASE::Create()              \
                                                           {                                               \
-                                                            VARIABLE = new CLASSNAME();                   \
+                                                            VARIABLE = GEN_NEW CLASSNAME();               \
                                                             return VARIABLE;                              \
                                                           }
 

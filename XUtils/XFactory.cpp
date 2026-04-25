@@ -111,7 +111,7 @@ XFACTORY& XFACTORY::GetInstance()
 {
   if(!instance)
     {
-      instance = new XFACTORY();
+      instance = GEN_NEW XFACTORY();
     }
 
   return (*instance);

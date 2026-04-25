@@ -260,7 +260,7 @@ bool DIOSCRAPERWEBSEXNAME::Get(XCHAR* name, DIOSCRAPERWEBSEXNAMETYPE& sexnametyp
 
               if(usecache)
                 {
-                  sexnameresult = new DIOSEXNAME_RESULT();
+                  sexnameresult = GEN_NEW DIOSEXNAME_RESULT();
                   if(sexnameresult)
                     {
                       if(nameclear) sexnameresult->GetNameClear()->Set(nameclear->Get());

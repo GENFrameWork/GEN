@@ -156,7 +156,7 @@ bool DIOLINUXSTREAMIPLOCALENUMDEVICES::Search()
            return false;
          }
 
-        DIOSTREAMDEVICEIP* device = new DIOSTREAMDEVICEIP();
+        DIOSTREAMDEVICEIP* device = GEN_NEW DIOSTREAMDEVICEIP();
         if(device)
           {
             device->SetIsActive(true);

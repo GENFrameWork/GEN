@@ -202,7 +202,7 @@ bool DIOSCRAPERWEBPUBLICIP::Get(DIOIP& IP, int timeoutforurl,  XSTRING* localIP,
 
                   if(usecache)
                     {
-                      DIOPUBLICIP_RESULT* publicIPresult = new DIOPUBLICIP_RESULT();
+                      DIOPUBLICIP_RESULT* publicIPresult = GEN_NEW DIOPUBLICIP_RESULT();
                       if(publicIPresult)
                         {
                           publicIPresult->Get()->Set(stringIP.Get());

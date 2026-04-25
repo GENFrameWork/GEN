@@ -1870,7 +1870,7 @@ void DIOI2C9AXISTRACKINGMPU9150::SetSlave4Register(XBYTE reg)
 //  DIOI2C9AXISTRACKINGMPU9150::SetSlave4OutputByte
 */
 /**
-//  Set new byte to write to Slave 4.
+//  Set GEN_NEW byte to write to Slave 4.
 //  This register stores the data to be written into the Slave 4. If I2C_SLV4_RW
 //  is set 1 (set to read), this register has no effect.
 //
@@ -3977,7 +3977,7 @@ void DIOI2C9AXISTRACKINGMPU9150::ResetTemperaturePath()
 //  Get accelerometer power-on delay.
 //  The accelerometer data path provides samples to the sensor registers, Motion
 //  detection, Zero Motion detection, and Free Fall detection modules. The
-//  signal path contains filters which must be flushed on wake-up with new
+//  signal path contains filters which must be flushed on wake-up with GEN_NEW
 //  samples before the detection modules begin operations. The default wake-up
 //  delay, of 4ms can be lengthened by up to 3ms. This additional delay is
 //  specified in ACCEL_ON_DELAY in units of 1 LSB = 1 ms. The user may select
@@ -4916,11 +4916,11 @@ XWORDSIG DIOI2C9AXISTRACKINGMPU9150::GetFIFOCount()
 //
 //  if the FIFO buffer has overflowed, the status bit FIFO_OFLOW_INT is
 //  automatically set to 1. This bit is located in INT_STATUS (Register 58).
-//  When the FIFO buffer has overflowed, the oldest data will be lost and new
+//  When the FIFO buffer has overflowed, the oldest data will be lost and GEN_NEW
 //  data will be written to the FIFO.
 //
 //  If the FIFO buffer is empty, reading this register will return the last byte
-//  that was previously read from the FIFO until new data is available. The user
+//  that was previously read from the FIFO until GEN_NEW data is available. The user
 //  should check FIFO_COUNT to ensure that the FIFO buffer is not read when
 //  empty.
 //

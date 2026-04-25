@@ -273,7 +273,7 @@ DIOPING::DIOPING()
   GEN_XFACTORY_CREATE(xtimer       , CreateTimer())
   GEN_XFACTORY_CREATE(xmutexreplys , Create_Mutex())
 
-  urltarget = new DIOURL();
+  urltarget = GEN_NEW DIOURL();
 
   HASHCRC32 crc32;  
   XBUFFER   xbuffer;
@@ -361,7 +361,7 @@ bool DIOPING::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPING& DIOPING::GetInstance()
 {
-  if(!instance) instance = new DIOPING();
+  if(!instance) instance = GEN_NEW DIOPING();
 
   return (*instance);
 }
@@ -850,7 +850,7 @@ bool DIOPING::AddReply(XWORD sequence, XCHAR* fromIP, XDWORD sizerequest, XDWORD
 
   xmutexreplys->Lock();
 
-  DIOPINGREPLY* pinganswer = new DIOPINGREPLY();
+  DIOPINGREPLY* pinganswer = GEN_NEW DIOPINGREPLY();
   if(pinganswer)
     {
       pinganswer->SetSequence(sequence);

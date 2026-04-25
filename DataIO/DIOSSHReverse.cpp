@@ -86,7 +86,7 @@ bool DIOSSHREVERSE::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSSHREVERSE& DIOSSHREVERSE::GetInstance()
 {
-  if(!instance) instance = new DIOSSHREVERSE();
+  if(!instance) instance = GEN_NEW DIOSSHREVERSE();
 
   return (*instance);
 }
@@ -227,7 +227,7 @@ bool DIOSSHREVERSE::DownloadCFG(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
   bool    status  = false;
   bool    result  = false;
 
-  DIOWEBCLIENT* webclient = new DIOWEBCLIENT();
+  DIOWEBCLIENT* webclient = GEN_NEW DIOWEBCLIENT();
   if(!webclient)  return false;
 
   _URL.Set(URL);
@@ -237,7 +237,7 @@ bool DIOSSHREVERSE::DownloadCFG(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
   status = webclient->Get(_URL, xbuffer, NULL, 3);
   if(status)
     {
-      XFILEINI* fileini = new XFILEINI();
+      XFILEINI* fileini = GEN_NEW XFILEINI();
       if(fileini)
         {
           status = fileini->AddBufferLines(XFILETXTFORMATCHAR_ASCII, xbuffer);
@@ -261,7 +261,7 @@ bool DIOSSHREVERSE::DownloadCFG(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
                         {
                           if(value.ConvertToBoolean()
                             {
-                              DIOURL* urlorigin = new DIOURL();
+                              DIOURL* urlorigin = GEN_NEW DIOURL();
                               if(urlorigin)
                                 {
                                   XSTRING _publicIP;
@@ -467,7 +467,7 @@ bool DIOSSHREVERSE::IsRunning()
       XSTRING publicIPtarget;
       int     returncode = 0;
 
-      DIOURL* URLpublic = new DIOURL();
+      DIOURL* URLpublic = GEN_NEW DIOURL();
       if(URLpublic)
         {
           URLpublic->Set(URLtarget.Get());
@@ -486,7 +486,7 @@ bool DIOSSHREVERSE::IsRunning()
           command.Format(__L("netstat -napt > %s"), xpath.Get());
           if(GEN_XPROCESSMANAGER.MakeCommand(command.Get(), output, &returncode))
             {
-              XFILETXT* xfiletxt = new XFILETXT();
+              XFILETXT* xfiletxt = GEN_NEW XFILETXT();
               if(xfiletxt)
                 {
                   if(xfiletxt->Open(xpath, true))

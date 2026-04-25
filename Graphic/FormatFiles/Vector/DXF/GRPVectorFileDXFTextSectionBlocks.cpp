@@ -386,7 +386,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
   int                                 indexline = iniline;
   XSTRING*                            line;
   
-  part = new GRPVECTORFILEDXFTEXTPART();
+  part = GEN_NEW GRPVECTORFILEDXFTEXTPART();
 
   do{ line = fileTXT->GetLine(indexline);
       if(line) 
@@ -411,7 +411,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
                           parts.Add(part); 
                           part = NULL;
                   
-                          part = new GRPVECTORFILEDXFTEXTPART ();
+                          part = GEN_NEW GRPVECTORFILEDXFTEXTPART ();
                         }
                        else
                         {
@@ -449,7 +449,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
       part = parts.Get(c);
       if(part)
         {         
-          GRPVECTORFILEDXFTEXTBLOCK* block = new GRPVECTORFILEDXFTEXTBLOCK();
+          GRPVECTORFILEDXFTEXTBLOCK* block = GEN_NEW GRPVECTORFILEDXFTEXTBLOCK();
           if(block)
             {               
               GRPVECTORFILEDXFTEXTSECTIONBLOCKDEF* blockDef = IsKnownBlock(part->name);
@@ -489,7 +489,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
                             {  
                               GRPVECTORFILEDXF::ParserTextFilePrepareLine(line); 
                                                      
-                              GRPVECTORFILEDXFTEXTSECTIONENTITIES* sectionEntities = new GRPVECTORFILEDXFTEXTSECTIONENTITIES();
+                              GRPVECTORFILEDXFTEXTSECTIONENTITIES* sectionEntities = GEN_NEW GRPVECTORFILEDXFTEXTSECTIONENTITIES();
                               if(sectionEntities)
                                 { 
                                   sectionEntities->iniline = indexline - 1;
@@ -511,7 +511,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
 
                       if(!nomorevalues)    
                         {
-                          GRPVECTORFILEDXFVALUE* value = new GRPVECTORFILEDXFVALUE();
+                          GRPVECTORFILEDXFVALUE* value = GEN_NEW GRPVECTORFILEDXFVALUE();
                           if(value)
                             {      
                               GRPVECTORFILEDXFTEXTSECTIONBLOCKDEFTYPE* defType = IsKnownTypeValue(part->name, type);
@@ -592,7 +592,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
 
                                       case GRPVECTORFILEDXFTEXTSECTION_XDATACTRL_STATUS_INI    :  if(!xdatactrl)                
                                                                                                     {
-                                                                                                      xdatactrl = new GRPVECTORFILEDXFXDATACTRL();
+                                                                                                      xdatactrl = GEN_NEW GRPVECTORFILEDXFXDATACTRL();
                                                                                                       if(xdatactrl)                
                                                                                                         {
                                                                                                            XSTRING name;

@@ -458,7 +458,7 @@ bool INPLINUXDEVICEKEYBOARDDIRECT::Old_CreateDevices()
     {
       INPLINUXDEVICEID* deviceID = NULL;
 
-      deviceID = new INPLINUXDEVICEID();
+      deviceID = GEN_NEW INPLINUXDEVICEID();
       if(!deviceID) return false;
 
       deviceID->SetFileDescriptor(old_fd);

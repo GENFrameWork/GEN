@@ -239,7 +239,7 @@ bool XLINUXTHREAD::Ini(bool run)
    else
     {
       thhandle = 0;
-      // If pthread_create() fails, no new thread is created and the contents of the location referenced by thread are UNDEFINED.
+      // If pthread_create() fails, no GEN_NEW thread is created and the contents of the location referenced by thread are UNDEFINED.
     }
 
   return (!_status)?true:false;

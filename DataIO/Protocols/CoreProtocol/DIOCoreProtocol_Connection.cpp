@@ -1268,7 +1268,7 @@ bool DIOCOREPROTOCOL_CONNECTION::GetResult(XUUID* ID_message, XFILEJSON& result,
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Update()
 {
-  if(GetEvent() == DIOCOREPROTOCOL_CONNECTION_XFSMEVENT_NONE) // Not new event
+  if(GetEvent() == DIOCOREPROTOCOL_CONNECTION_XFSMEVENT_NONE) // Not GEN_NEW event
     {
       switch(GetCurrentState())
         {
@@ -1927,7 +1927,7 @@ bool DIOCOREPROTOCOL_CONNECTION::CreateIDConnection(XUUID& ID)
 
   origin.ConvertToUTF8(originbuffer);
     
-  sha2 = new HASHSHA2(HASHSHA2TYPE_256);
+  sha2 = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
   if(!sha2)
     {
       return false;
@@ -2015,7 +2015,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
   XDWORD sendsize = protocol->SendMsg(header, contentresult);
   if(sendsize)
     {
-      DIOCOREPROTOCOL_MESSAGE* message = new DIOCOREPROTOCOL_MESSAGE();
+      DIOCOREPROTOCOL_MESSAGE* message = GEN_NEW DIOCOREPROTOCOL_MESSAGE();
       if(message)
         {
           message->SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION_WRITE);
@@ -2101,7 +2101,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
   XDWORD sendsize = protocol->SendMsg(header, contentresult);
   if(sendsize)
     {
-      DIOCOREPROTOCOL_MESSAGE* message = new DIOCOREPROTOCOL_MESSAGE();
+      DIOCOREPROTOCOL_MESSAGE* message = GEN_NEW DIOCOREPROTOCOL_MESSAGE();
       if(message)
         {
           message->SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION_WRITE);
@@ -2187,7 +2187,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
   XDWORD sendsize = protocol->SendMsg(header, contentresult);
   if(sendsize)
     {
-      DIOCOREPROTOCOL_MESSAGE* message = new DIOCOREPROTOCOL_MESSAGE();
+      DIOCOREPROTOCOL_MESSAGE* message = GEN_NEW DIOCOREPROTOCOL_MESSAGE();
       if(message)
         {
           message->SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION_WRITE);
@@ -2273,7 +2273,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
   XDWORD sendsize = protocol->SendMsg(header, contentresult);
   if(sendsize)
     {     
-      DIOCOREPROTOCOL_MESSAGE* message = new DIOCOREPROTOCOL_MESSAGE();
+      DIOCOREPROTOCOL_MESSAGE* message = GEN_NEW DIOCOREPROTOCOL_MESSAGE();
       if(message)
         {
           message->SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION_WRITE);

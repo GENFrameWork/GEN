@@ -87,7 +87,7 @@ bool SCRIPT_CACHE::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_CACHE& SCRIPT_CACHE::GetInstance()
 {
-  if(!instance) instance = new SCRIPT_CACHE();
+  if(!instance) instance = GEN_NEW SCRIPT_CACHE();
   return (*instance);
 }
 
@@ -170,7 +170,7 @@ bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script)
 
   XSTRING* _script;   
 
-  _script = new XSTRING();
+  _script = GEN_NEW XSTRING();
 
   if(!_script)
     {

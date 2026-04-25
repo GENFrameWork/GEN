@@ -63,7 +63,7 @@ DIONODEITEMHANDLER_SENSORAM2315::DIONODEITEMHANDLER_SENSORAM2315(int port, int r
 {
   Clean();
 
-  am2315 = new DIOI2CTEMHUMSENSORAM2315();
+  am2315 = GEN_NEW DIOI2CTEMHUMSENSORAM2315();
 
   this->port                = port; 
   this->remoteitemaddress   = remoteitemaddress; 
@@ -246,7 +246,7 @@ bool DIONODEITEMHANDLER_SENSORAM2315::SetNodeItem(DIONODEITEM* nodeitem)
  
   for(XDWORD c=0; c<2; c++)
     {
-      DIONODEITEMVALUE* value = new DIONODEITEMVALUE();
+      DIONODEITEMVALUE* value = GEN_NEW DIONODEITEMVALUE();
       if(value) 
         {
           switch(c)

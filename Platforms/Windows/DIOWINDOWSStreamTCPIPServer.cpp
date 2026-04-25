@@ -352,14 +352,14 @@ DIOSTREAM* DIOWINDOWSSTREAMTCPIPSERVER::CreateStream()
 {
   DIOSTREAMTCPIPCONFIG* _config = NULL;
 
-  _config = new DIOSTREAMTCPIPCONFIG();
+  _config = GEN_NEW DIOSTREAMTCPIPCONFIG();
   if(_config)
     {
       _config->SetMode(DIOSTREAMMODE_SERVER);
       _config->SetRemotePort(config->GetRemotePort());
     }  
 
-  DIOWINDOWSSTREAMTCPIP* diostream =  new DIOWINDOWSSTREAMTCPIP();
+  DIOWINDOWSSTREAMTCPIP* diostream =  GEN_NEW DIOWINDOWSSTREAMTCPIP();
   if(diostream)
     {      
       diostream->SetConfig(_config);

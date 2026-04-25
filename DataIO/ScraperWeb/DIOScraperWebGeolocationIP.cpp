@@ -538,7 +538,7 @@ bool DIOSCRAPERWEBGEOLOCATIONIP::Get(DIOIP& IP, DIOGEOLOCATIONIP_RESULT& geoloca
             {
               if(usecache)
                 {
-                  DIOGEOLOCATIONIP_RESULT* geoIPresult = new DIOGEOLOCATIONIP_RESULT();
+                  DIOGEOLOCATIONIP_RESULT* geoIPresult = GEN_NEW DIOGEOLOCATIONIP_RESULT();
                   if(geoIPresult)
                     {
                       XSTRING IPstring;

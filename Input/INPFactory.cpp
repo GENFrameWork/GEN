@@ -107,7 +107,7 @@ bool INPFACTORY::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 INPFACTORY& INPFACTORY::GetInstance()
 {
-  if(!instance) instance = new INPFACTORY();
+  if(!instance) instance = GEN_NEW INPFACTORY();
 
   return (*instance);
 }

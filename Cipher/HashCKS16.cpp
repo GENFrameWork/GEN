@@ -68,7 +68,7 @@ HASHCKS16::HASHCKS16() : HASH()
 
   type = HASHTYPE_CKS16;
 
-  resulttmp = new XBUFFER();
+  resulttmp = GEN_NEW XBUFFER();
 
   XWORD value = 0x0000;
   resulttmp->Add((XWORD)value);

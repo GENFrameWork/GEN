@@ -247,29 +247,29 @@ bool MAINPROCSTM32::End()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCSTM32::Factorys_Ini()
 {
-  XFACTORY::SetInstance(new XSTM32FACTORY());
+  XFACTORY::SetInstance(GEN_NEW XSTM32FACTORY());
   if(!XFACTORY::GetIsInstanced()) return false;
 
-  XRAND::SetInstance(new XSTM32RAND());
+  XRAND::SetInstance(GEN_NEW XSTM32RAND());
   if(!XRAND::GetIsInstanced()) return false;
 
-  XSLEEP::SetInstance(new XSTM32SLEEP());
+  XSLEEP::SetInstance(GEN_NEW XSTM32SLEEP());
   if(!XSLEEP::GetIsInstanced()) return false;
 
-  XSYSTEM::SetInstance(new XSTM32SYSTEM());
+  XSYSTEM::SetInstance(GEN_NEW XSTM32SYSTEM());
   if(!XSYSTEM::GetIsInstanced()) return false;
   
   #ifdef XEEPROMMEMORYMANAGER_ACTIVE  
-  XEEPROMMEMORYMANAGER::SetInstance(new XSTM32EEPROMMEMORYMANAGER());
+  XEEPROMMEMORYMANAGER::SetInstance(GEN_NEW XSTM32EEPROMMEMORYMANAGER());
   if(!XEEPROMMEMORYMANAGER::GetIsInstanced()) return false;  
   #endif
 
   #ifdef DIO_ACTIVE
-  DIOFACTORY::SetInstance(new DIOSTM32FACTORY());
+  DIOFACTORY::SetInstance(GEN_NEW DIOSTM32FACTORY());
   if(!DIOFACTORY::GetIsInstanced()) return false;
 
     #ifdef DIO_GPIO_ACTIVE
-    DIOGPIO::SetInstance(new DIOSTM32GPIO());
+    DIOGPIO::SetInstance(GEN_NEW DIOSTM32GPIO());
     if(!DIOGPIO::GetIsInstanced()) return false;
 
     if(!DIOGPIO::GetInstance().Ini()) return false;

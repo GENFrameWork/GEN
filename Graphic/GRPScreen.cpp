@@ -80,7 +80,7 @@ GRPSCREEN::GRPSCREEN()
   RegisterEvent(GRPXEVENT_TYPE_SCREEN_CHANGESIZE);
   RegisterEvent(GRPXEVENT_TYPE_SCREEN_CHANGEFOCUS);
 
-  framerate = new GRPFRAMERATE();
+  framerate = GEN_NEW GRPFRAMERATE();
 
   desktopmanager = GEN_GRPFACTORY.CreateDesktopManager();
 }
@@ -799,7 +799,7 @@ GRPVIEWPORT* GRPSCREEN::GetViewport(XCHAR* ID)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::CreateViewport(XCHAR* ID, float posx, float posy, float width, float height, XDWORD canvasposx, XDWORD canvasposy, XDWORD canvaswidth, XDWORD canvasheight)
 {
-  GRPVIEWPORT* viewport = new GRPVIEWPORT();
+  GRPVIEWPORT* viewport = GEN_NEW GRPVIEWPORT();
   if(!viewport)  return false;
 
   viewport->GetID()->Set(ID);

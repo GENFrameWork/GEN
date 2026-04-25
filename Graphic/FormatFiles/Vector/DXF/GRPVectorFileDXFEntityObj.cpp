@@ -144,16 +144,16 @@ GRPVECTORFILEDXFENTITYOBJ* GRPVECTORFILEDXFENTITYOBJ::CreateInstance(GRPVECTORFI
             {
               case GRPVECTORFILEDXFENTITYOBJTYPE_UNKNOWN      :
                                                  default      : break;
-              case GRPVECTORFILEDXFENTITYOBJTYPE_3DFACE       : entityobj = new GRPVECTORFILEDXFENTITYOBJ3DFACE(entity2class[c].entityname);       break; 
-              case GRPVECTORFILEDXFENTITYOBJTYPE_ARC          : entityobj = new GRPVECTORFILEDXFENTITYOBJARC(entity2class[c].entityname);          break;            
-              case GRPVECTORFILEDXFENTITYOBJTYPE_CIRCLE       : entityobj = new GRPVECTORFILEDXFENTITYOBJCIRCLE(entity2class[c].entityname);       break;          
-              case GRPVECTORFILEDXFENTITYOBJTYPE_ELLIPSE      : entityobj = new GRPVECTORFILEDXFENTITYOBJELLIPSE(entity2class[c].entityname);      break;         
-              case GRPVECTORFILEDXFENTITYOBJTYPE_LINE         : entityobj = new GRPVECTORFILEDXFENTITYOBJLINE(entity2class[c].entityname);         break;            
-              case GRPVECTORFILEDXFENTITYOBJTYPE_LWPOLYLINE   : entityobj = new GRPVECTORFILEDXFENTITYOBJLWPOLYLINE(entity2class[c].entityname);   break;      
-              case GRPVECTORFILEDXFENTITYOBJTYPE_MTEXT        : entityobj = new GRPVECTORFILEDXFENTITYOBJMTEXT(entity2class[c].entityname);        break;           
-              case GRPVECTORFILEDXFENTITYOBJTYPE_POINT        : entityobj = new GRPVECTORFILEDXFENTITYOBJPOINT(entity2class[c].entityname);        break;           
-              case GRPVECTORFILEDXFENTITYOBJTYPE_POLYLINE     : entityobj = new GRPVECTORFILEDXFENTITYOBJPOLYLINE(entity2class[c].entityname);     break;        
-              case GRPVECTORFILEDXFENTITYOBJTYPE_TEXT         : entityobj = new GRPVECTORFILEDXFENTITYOBJTEXT(entity2class[c].entityname);         break;                              
+              case GRPVECTORFILEDXFENTITYOBJTYPE_3DFACE       : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJ3DFACE(entity2class[c].entityname);       break; 
+              case GRPVECTORFILEDXFENTITYOBJTYPE_ARC          : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJARC(entity2class[c].entityname);          break;            
+              case GRPVECTORFILEDXFENTITYOBJTYPE_CIRCLE       : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJCIRCLE(entity2class[c].entityname);       break;          
+              case GRPVECTORFILEDXFENTITYOBJTYPE_ELLIPSE      : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJELLIPSE(entity2class[c].entityname);      break;         
+              case GRPVECTORFILEDXFENTITYOBJTYPE_LINE         : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJLINE(entity2class[c].entityname);         break;            
+              case GRPVECTORFILEDXFENTITYOBJTYPE_LWPOLYLINE   : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJLWPOLYLINE(entity2class[c].entityname);   break;      
+              case GRPVECTORFILEDXFENTITYOBJTYPE_MTEXT        : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJMTEXT(entity2class[c].entityname);        break;           
+              case GRPVECTORFILEDXFENTITYOBJTYPE_POINT        : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJPOINT(entity2class[c].entityname);        break;           
+              case GRPVECTORFILEDXFENTITYOBJTYPE_POLYLINE     : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJPOLYLINE(entity2class[c].entityname);     break;        
+              case GRPVECTORFILEDXFENTITYOBJTYPE_TEXT         : entityobj = GEN_NEW GRPVECTORFILEDXFENTITYOBJTEXT(entity2class[c].entityname);         break;                              
             }
         }
     }

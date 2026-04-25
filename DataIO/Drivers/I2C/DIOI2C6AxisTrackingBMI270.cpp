@@ -1200,7 +1200,7 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::SetFeatureConfig(struct bmi2_dev *bmi2_dev)
         /* 1LSB equals to 0.48mg. Default is 83mg, setting to 50mg. */
         config.cfg.any_motion.threshold = 0x9C;//0x68;
 
-        /* Set new configurations. */
+        /* Set GEN_NEW configurations. */
         rslt = bmi270_set_sensor_config(&config, 1, bmi2_dev);
         bmi2_error_codes_print_result(rslt);
     }
@@ -1220,7 +1220,7 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::SetFeatureConfig(struct bmi2_dev *bmi2_dev)
         /* 1LSB equals to 0.48mg. Default is 83mg, setting to 50mg. */
         config.cfg.no_motion.threshold = 0x68;
 
-        /* Set new configurations. */
+        /* Set GEN_NEW configurations. */
         rslt = bmi270_set_sensor_config(&config, 1, bmi2_dev);
         bmi2_error_codes_print_result(rslt);
     }		
@@ -1235,7 +1235,7 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::SetFeatureConfig(struct bmi2_dev *bmi2_dev)
     {
       //config.cfg.step_counter_params
 
-        /* Set new configurations. */
+        /* Set GEN_NEW configurations. */
         //rslt = bmi270_set_sensor_config(&config, 1, bmi2_dev);
         //bmi2_error_codes_print_result(rslt);
     }				

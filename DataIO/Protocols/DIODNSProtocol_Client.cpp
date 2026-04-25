@@ -77,7 +77,7 @@ DIODNSPROTOCOLCLIENT::DIODNSPROTOCOLCLIENT()
 {
   Clean();
 
-  diostreamudpcfg = new DIOSTREAMUDPCONFIG();
+  diostreamudpcfg = GEN_NEW DIOSTREAMUDPCONFIG();
   diostreamudp    = (DIOSTREAMUDP*)GEN_DIOFACTORY.CreateStreamIO(diostreamudpcfg);
 }
 
@@ -280,7 +280,7 @@ bool DIODNSPROTOCOLCLIENT::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int queryty
                  
                   for(int c=0; c<answerscount; c++)
                     {
-                      RES_RECORD* result = new RES_RECORD();
+                      RES_RECORD* result = GEN_NEW RES_RECORD();
                       if(result)
                         {
                           XBYTE* reader = &answerbuffer.Get()[askbuffer.GetSize()];

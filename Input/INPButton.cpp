@@ -110,7 +110,7 @@ INPBUTTON_ID INPBUTTON::GetID()
 * @brief      Set ID
 * @ingroup    INPUT
 *
-* @param[in]  ID : new ID to Set
+* @param[in]  ID : GEN_NEW ID to Set
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetID(INPBUTTON_ID ID)
@@ -140,7 +140,7 @@ XWORD INPBUTTON::GetKeyCode()
 * @brief      Set key code
 * @ingroup    INPUT
 *
-* @param[in]  keycode : new Key Code of button
+* @param[in]  keycode : GEN_NEW Key Code of button
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetKeyCode(XWORD keycode)
@@ -170,7 +170,7 @@ XCHAR INPBUTTON::GetSymbol()
 * @brief      Set symbol
 * @ingroup    INPUT
 *
-* @param[in]  symbol : new Symbol of key
+* @param[in]  symbol : GEN_NEW Symbol of key
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetSymbol(XCHAR symbol)
@@ -200,7 +200,7 @@ INPBUTTON_STATE INPBUTTON::GetState()
 * @brief      Set state
 * @ingroup    INPUT
 *
-* @param[in]  state : new state
+* @param[in]  state : GEN_NEW state
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetState(INPBUTTON_STATE state)
@@ -230,7 +230,7 @@ float INPBUTTON::GetPressure()
 * @brief      Set pressure
 * @ingroup    INPUT
 *
-* @param[in]  pressure : new pressure
+* @param[in]  pressure : GEN_NEW pressure
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetPressure(float pressure)
@@ -328,10 +328,10 @@ XQWORD INPBUTTON::GetTimePressed()
 * @brief      Create button
 * @ingroup    INPUT
 *
-* @param[in]  buttons : vector to add new button
-* @param[in]  keycode : key code of new button
-* @param[in]  ID : ID of new button
-* @param[in]  symbol : symbol of new button
+* @param[in]  buttons : vector to add GEN_NEW button
+* @param[in]  keycode : key code of GEN_NEW button
+* @param[in]  ID : ID of GEN_NEW button
+* @param[in]  symbol : symbol of GEN_NEW button
 *
 * @return     bool : true if is succesful.
 *
@@ -342,7 +342,7 @@ bool INPBUTTON::CreateButton(XVECTOR<INPBUTTON*>* buttons, int keycode, INPBUTTO
 
   INPBUTTON* button;
 
-  button = new INPBUTTON();
+  button = GEN_NEW INPBUTTON();
   if(!button) return false;
 
   button->SetKeyCode(keycode);

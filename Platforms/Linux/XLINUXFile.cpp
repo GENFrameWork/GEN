@@ -158,7 +158,7 @@ bool XLINUXFILE::Create(XCHAR* xpath)
 * @brief      Set size
 * @ingroup    PLATFORM_LINUX
 *
-* @param[in]  size : new size
+* @param[in]  size : GEN_NEW size
 *
 * @return     bool : true if is succesful.
 *
@@ -205,7 +205,7 @@ bool XLINUXFILE::GetPosition(XQWORD& position)
 * @brief      Set position
 * @ingroup    PLATFORM_LINUX
 *
-* @param[in]  position : new position of file
+* @param[in]  position : GEN_NEW position of file
 *
 * @return     bool : true if is succesful.
 *
@@ -422,7 +422,7 @@ bool XLINUXFILE::Erase(XCHAR* xpath,bool overwrite)
 * @ingroup    PLATFORM_LINUX
 *
 * @param[in]  xpathold : xpath origin
-* @param[in]  xpathnew : new xpath
+* @param[in]  xpathnew : GEN_NEW xpath
 *
 * @return     bool : true if is succesful.
 *
@@ -490,7 +490,7 @@ bool XLINUXFILE::DeleteStructHandle()
 * @brief      Change attributes
 * @ingroup    PLATFORM_LINUX
 *
-* @param[in]  attributes : new atributes
+* @param[in]  attributes : GEN_NEW atributes
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXFILE::ChangeAttributes(XCHAR* attributes)

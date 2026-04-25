@@ -83,7 +83,7 @@ INPDEVICE* INPWINDOWSFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
       case INPDEVICE_TYPE_TOUCHSCREEN   :
       case INPDEVICE_TYPE_WIIMOTE       : break;
 
-      case INPDEVICE_TYPE_KEYBOARD      : { INPWINDOWSDEVICEKEYBOARD* keyboard = new INPWINDOWSDEVICEKEYBOARD();
+      case INPDEVICE_TYPE_KEYBOARD      : { INPWINDOWSDEVICEKEYBOARD* keyboard = GEN_NEW INPWINDOWSDEVICEKEYBOARD();
                                             if(keyboard)
                                               {
                                                 keyboard->SetScreen(param);
@@ -92,7 +92,7 @@ INPDEVICE* INPWINDOWSFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                           }
                                           break;
 
-      case INPDEVICE_TYPE_MOUSE         : { INPWINDOWSDEVICEMOUSE* mouse = new INPWINDOWSDEVICEMOUSE();
+      case INPDEVICE_TYPE_MOUSE         : { INPWINDOWSDEVICEMOUSE* mouse = GEN_NEW INPWINDOWSDEVICEMOUSE();
                                             if(mouse)
                                               {
                                                 mouse->SetScreen(param);
@@ -140,7 +140,7 @@ bool INPWINDOWSFACTORY::DeleteDevice(INPDEVICE* device)
 * --------------------------------------------------------------------------------------------------------------------*/
 INPSIMULATE* INPWINDOWSFACTORY::CreateSimulator()
 {
-  INPSIMULATE* inpsimulated = (INPSIMULATE*)new INPWINDOWSSIMULATE();
+  INPSIMULATE* inpsimulated = (INPSIMULATE*)GEN_NEW INPWINDOWSSIMULATE();
 
   return inpsimulated;
 }
@@ -185,7 +185,7 @@ bool INPWINDOWSFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)
 * --------------------------------------------------------------------------------------------------------------------*/
 INPCAPTURE* INPWINDOWSFACTORY::CreateCapture()
 {
-  INPCAPTURE* inpcapture = (INPCAPTURE*)new INPWINDOWSCAPTURE();
+  INPCAPTURE* inpcapture = (INPCAPTURE*)GEN_NEW INPWINDOWSCAPTURE();
 
   return inpcapture;
 }

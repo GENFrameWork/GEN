@@ -808,7 +808,7 @@ bool XBER::SetOID(XCHAR* OIDstring)
 * @brief      Copy
 * @ingroup    XUTILS
 *
-* @param[in]  newxber : pointer to new BER to assign
+* @param[in]  newxber : pointer to GEN_NEW BER to assign
 *
 * @return     bool : true if is succesful.
 *
@@ -828,7 +828,7 @@ bool XBER::Copy(XBER* newxber)
       XBER* xbertmp = (XBER*)sequences.Get(c);
       if(xbertmp)
         {
-          XBER* newxberseq = new XBER();
+          XBER* newxberseq = GEN_NEW XBER();
           if(newxberseq)
             {
               if(xbertmp->Copy(newxberseq))  newxber->sequences.Add(newxberseq);
@@ -855,7 +855,7 @@ bool XBER::Sequence_AddTo(XBER& xber)
 {
   data.Delete();
 
-  XBER* newxber = new XBER();
+  XBER* newxber = GEN_NEW XBER();
   if(!newxber) return false;
 
   if(!xber.Copy(newxber))
@@ -1120,7 +1120,7 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
                          
       while(subdata.GetSize())
         {                  
-          sub_ber = new XBER();
+          sub_ber = GEN_NEW XBER();
           if(sub_ber) 
             {                                        
               if(!sub_ber->SetFromDumpInternal(subdata, observer))

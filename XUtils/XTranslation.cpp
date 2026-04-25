@@ -90,7 +90,7 @@ bool XTRANSLATION::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION& XTRANSLATION::GetInstance()
 {
-  if(!instance) instance = new XTRANSLATION();
+  if(!instance) instance = GEN_NEW XTRANSLATION();
 
   return (*instance);
 }
@@ -221,7 +221,7 @@ bool XTRANSLATION::Translate_Add(XDWORD ID, XCHAR* sentence, XDWORD fixed)
       if(sizesentence > fixed) sizesentence = fixed;
     }
 
-  XCHAR* newsentence = new XCHAR[sizesentence+1];
+  XCHAR* newsentence = GEN_NEW XCHAR[sizesentence+1];
   if(newsentence)
     {
       memset(newsentence, 0        , (sizesentence+1) * sizeof(XCHAR));

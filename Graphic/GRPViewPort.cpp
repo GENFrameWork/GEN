@@ -155,7 +155,7 @@ GRPVIEWPORT_PROJECTIONTYPE GRPVIEWPORT::GetProjectionType()
 * @brief      Set projection type
 * @ingroup    GRAPHIC
 *
-* @param[in]  projectiontype : new projection type
+* @param[in]  projectiontype : GEN_NEW projection type
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIEWPORT::SetProjectionType(GRPVIEWPORT_PROJECTIONTYPE projectiontype)

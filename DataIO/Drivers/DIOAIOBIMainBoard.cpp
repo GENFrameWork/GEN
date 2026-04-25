@@ -92,7 +92,7 @@ bool DIOAIOBIMAINBOARD::Ini()
 {
   for(int c=0; c<3; c++)
     {
-      pcf8574[c] = new DIOI2CGPIOPCF8574();
+      pcf8574[c] = GEN_NEW DIOI2CGPIOPCF8574();
       if(!pcf8574[c]) return false;
     }
 
@@ -119,7 +119,7 @@ bool DIOAIOBIMAINBOARD::Ini()
       SetDigitalOutput(c, false);
     }
 
-  eeprom  = new DIOI2CEEPROM24XXX();
+  eeprom  = GEN_NEW DIOI2CEEPROM24XXX();
   if(!eeprom) return false;
 
   eeprom->SetType(DIOI2CEEPROM24XXXTYPE_16);
@@ -131,7 +131,7 @@ bool DIOAIOBIMAINBOARD::Ini()
     }
 
 
-  pca9685 = new DIOI2CPWMCONTROLERPCA9685();
+  pca9685 = GEN_NEW DIOI2CPWMCONTROLERPCA9685();
   if(!pca9685) return false;
 
   if(!pca9685->Ini(DIOAIOBIMAINBOARD_I2CDEVICENAME, DIOAIOBIMAINBOARD_I2CPWM, DIOAIOBIMAINBOARD_DEFAULTTIMEOUT))

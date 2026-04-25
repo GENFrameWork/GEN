@@ -248,7 +248,7 @@ bool INPLINUXDEVICETOUCHSCREENDIRECT::CreateAllButtons()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICETOUCHSCREENDIRECT::CreateAllCursors()
 {
-  INPCURSOR* cursor = new INPCURSOR();
+  INPCURSOR* cursor = GEN_NEW INPCURSOR();
   if(!cursor) return false;
 
   cursor->SetID(INPCURSOR_ID_TOUCHSCREEN1);

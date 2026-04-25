@@ -37,7 +37,7 @@
 
 #define CREATEFUNC(CLASSNAME,GENERIC,SPECIFIC,NAME)   GENERIC* CLASSNAME::NAME()                  \
                                                       {                                           \
-                                                        SPECIFIC* _class = new SPECIFIC();        \
+                                                        SPECIFIC* _class = GEN_NEW SPECIFIC();        \
                                                         return (GENERIC*)_class;                  \
                                                       }
 

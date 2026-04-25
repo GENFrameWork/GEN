@@ -236,7 +236,7 @@ bool DIOSCRAPERWEBUSERAGENTID::Get(XCHAR* useragent, XSTRING& browser, XSTRING& 
 
           if(usecache)
             {
-              useragentresult = new DIOUSERAGENTID_RESULT();
+              useragentresult = GEN_NEW DIOUSERAGENTID_RESULT();
               if(useragentresult)
                 {
                   useragentresult->GetBrowser()->Set(browser);

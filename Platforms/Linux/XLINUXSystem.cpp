@@ -153,7 +153,7 @@ XSYSTEM_HARDWARETYPE XLINUXSYSTEM::GetTypeHardware(int* revision)
     {
       (*revision) = -1;
 
-      XFILETXT* xfileTXT = new XFILETXT();
+      XFILETXT* xfileTXT = GEN_NEW XFILETXT();
       if(xfileTXT)
         {
           XPATH xpath;

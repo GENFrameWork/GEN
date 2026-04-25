@@ -396,7 +396,7 @@ bool DIOLINUXSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACstri
     {
       xpathfile += __L("pincodes");
 
-      XFILETXT* filetxt = new XFILETXT();
+      XFILETXT* filetxt = GEN_NEW XFILETXT();
       if(!filetxt) return false;
 
       status = filetxt->Open(xpathfile, false);

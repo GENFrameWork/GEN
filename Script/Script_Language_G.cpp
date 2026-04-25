@@ -639,7 +639,7 @@ bool SCRIPT_LNG_G_VAR::ConvertFromXVariant(XVARIANT& variant)
 
       case XVARIANT_TYPE_FLOAT          : return false;
 
-      case XVARIANT_TYPE_STRING         : { XSTRING* string = new XSTRING();
+      case XVARIANT_TYPE_STRING         : { XSTRING* string = GEN_NEW XSTRING();
                                             if(!string) break;
 
                                             (*string) = (const XSTRING&)variant;
@@ -965,10 +965,10 @@ int SCRIPT_LNG_G::Run(int* returnval)
   ipprg        = script.Get();
 
   
-  SCRIPT_LNG_G_VAR* versionvar = new SCRIPT_LNG_G_VAR();
+  SCRIPT_LNG_G_VAR* versionvar = GEN_NEW SCRIPT_LNG_G_VAR();
   if(versionvar)
     {
-      XSTRING* version = new XSTRING();
+      XSTRING* version = GEN_NEW XSTRING();
       if(version)
         {
           version->Format(__L("%d.%d.%d"), SCRIPT_LNG_G_VERSION, SCRIPT_LNG_G_SUBVERSION, SCRIPT_LNG_G_SUBVERSIONERR);
@@ -1031,7 +1031,7 @@ int SCRIPT_LNG_G::Run(int* returnval)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_G::AddCommand(XCHAR* command,SCRIPT_LNG_G_TOKENIREPS token)
 {
-  SCRIPT_LNG_G_COMMAND* _command = new SCRIPT_LNG_G_COMMAND();
+  SCRIPT_LNG_G_COMMAND* _command = GEN_NEW SCRIPT_LNG_G_COMMAND();
   if(!_command) return false;
 
   if(!_command->Set(command, token)) return false;
@@ -1085,7 +1085,7 @@ int SCRIPT_LNG_G::GetFuncParams(SCRIPT_LNG_G_VAR* params)
       return count;
     }
 
-  do{ SCRIPT_LNG_G_VAR* param = new SCRIPT_LNG_G_VAR();
+  do{ SCRIPT_LNG_G_VAR* param = GEN_NEW SCRIPT_LNG_G_VAR();
       if(param)
         {
           EvalExp((*param));
@@ -1438,7 +1438,7 @@ void SCRIPT_LNG_G::EvalExp(SCRIPT_LNG_G_VAR& value)
     }
    else
     {
-      XSTRING* string = new XSTRING();
+      XSTRING* string = GEN_NEW XSTRING();
       if(string)
         {
           (*string) = currenttoken;
@@ -1495,7 +1495,7 @@ void SCRIPT_LNG_G::EvalExp0(SCRIPT_LNG_G_VAR& value)
 
                if(tokentype == SCRIPT_LNG_G_TOKENTYPES_STRING)
                  {
-                   XSTRING* string = new XSTRING();
+                   XSTRING* string = GEN_NEW XSTRING();
                    if(string)
                      {
                        (*string) = currenttoken;
@@ -1568,7 +1568,7 @@ void SCRIPT_LNG_G::EvalExp1(SCRIPT_LNG_G_VAR& value)
 
       if(tokentype == SCRIPT_LNG_G_TOKENTYPES_STRING)
         {
-          XSTRING* strpvalue = new XSTRING();
+          XSTRING* strpvalue = GEN_NEW XSTRING();
           if(strpvalue)
             {
               XSTRING* strvalue = value.GetValueString();
@@ -1825,7 +1825,7 @@ void SCRIPT_LNG_G::Atom(SCRIPT_LNG_G_VAR& value)
                                                           int nparams = GetFuncParams(params);                                                          
                                                           for(int c=0; c<nparams; c++)
                                                             {
-                                                              XVARIANT* variant = new XVARIANT();
+                                                              XVARIANT* variant = GEN_NEW XVARIANT();
                                                               if(variant)
                                                                 {
                                                                   params[c].ConvertToXVariant((*variant));
@@ -1909,7 +1909,7 @@ void SCRIPT_LNG_G::Atom(SCRIPT_LNG_G_VAR& value)
                                                 }
                                                 return;
 
-      case SCRIPT_LNG_G_TOKENTYPES_STRING     : { XSTRING* string= new XSTRING();;
+      case SCRIPT_LNG_G_TOKENTYPES_STRING     : { XSTRING* string= GEN_NEW XSTRING();;
                                                   if(string)  
                                                     {  
                                                       (*string) = currenttoken;        
@@ -1927,12 +1927,12 @@ void SCRIPT_LNG_G::Atom(SCRIPT_LNG_G_VAR& value)
                                                     }
                                                    else
                                                     {
-                                                      string = new XSTRING();
+                                                      string = GEN_NEW XSTRING();
 
                                                       if(string) 
                                                       value.SetValueString(string);
 
-                                                      SCRIPT_LNG_G_VAR* vt = new SCRIPT_LNG_G_VAR();
+                                                      SCRIPT_LNG_G_VAR* vt = GEN_NEW SCRIPT_LNG_G_VAR();
                                                       if(vt)
                                                         {
                                                           vt->SetType(SCRIPT_LNG_G_TOKENIREPS_STRING);
@@ -2060,7 +2060,7 @@ void SCRIPT_LNG_G::AssignVariable(XCHAR* variablename, SCRIPT_LNG_G_VAR& value)
                                 {
                                   if(string1 != string2)
                                     {
-                                      XSTRING* newstring = new XSTRING();
+                                      XSTRING* newstring = GEN_NEW XSTRING();
                                       if(newstring)
                                         {
                                           delete string1;
@@ -2109,7 +2109,7 @@ void SCRIPT_LNG_G::AssignVariable(XCHAR* variablename, SCRIPT_LNG_G_VAR& value)
                             {
                               if(string1 != string2)
                                 {
-                                  XSTRING* newstring = new XSTRING();
+                                  XSTRING* newstring = GEN_NEW XSTRING();
                                   if(newstring)
                                     {
                                       delete string1;
@@ -2339,7 +2339,7 @@ void SCRIPT_LNG_G::DeclareGlobalVariable()
             }
         }
 
-      vt = new SCRIPT_LNG_G_VAR();
+      vt = GEN_NEW SCRIPT_LNG_G_VAR();
       if(!vt) return;
 
       vt->SetType(vartype);      
@@ -2348,7 +2348,7 @@ void SCRIPT_LNG_G::DeclareGlobalVariable()
                   
       if((vartype==SCRIPT_LNG_G_TOKENIREPS_STRING)&&(!vt->GetValueString()))
         {
-          XSTRING* string = new XSTRING();
+          XSTRING* string = GEN_NEW XSTRING();
           if(string) 
             {
               vt->SetValueString(string);
@@ -2404,7 +2404,7 @@ void SCRIPT_LNG_G::DeclareLocalVariable()
             }
           }
 
-      vt = new SCRIPT_LNG_G_VAR();
+      vt = GEN_NEW SCRIPT_LNG_G_VAR();
       if(!vt) 
         {
           return;
@@ -2416,7 +2416,7 @@ void SCRIPT_LNG_G::DeclareLocalVariable()
 
       if((vartype==SCRIPT_LNG_G_TOKENIREPS_STRING)&&(!vt->GetValueString()))
         {
-          XSTRING* string = new XSTRING();
+          XSTRING* string = GEN_NEW XSTRING();
           if(string) 
             {
               vt->SetValueString(string);
@@ -2866,7 +2866,7 @@ void SCRIPT_LNG_G::PreScan()
                 {
                   if(currenttoken[0] == __C('('))
                     {
-                      functiontype = new SCRIPT_LNG_G_FUNCTIONTYPE();
+                      functiontype = GEN_NEW SCRIPT_LNG_G_FUNCTIONTYPE();
                       if(!functiontype) return;
 
                       for(int c=0;c<(int)functiontable.GetSize();c++)
@@ -2949,7 +2949,7 @@ void SCRIPT_LNG_G::GetArgs()
     }
 
   // Process a comma-separated list of values.
-  do{ value = new SCRIPT_LNG_G_VAR();
+  do{ value = GEN_NEW SCRIPT_LNG_G_VAR();
       if(!value) break;
 
       EvalExp((*value));

@@ -141,7 +141,7 @@ GRPBITMAP* GRPBITMAPFILEJPG::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
   bitmap = GRPFACTORY::GetInstance().CreateBitmap(header.width, header.height, GRPPROPERTYMODE_24_RGB_888);
   if(bitmap)
     {
-      XBYTE* databuffer = new XBYTE[header.size];
+      XBYTE* databuffer = GEN_NEW XBYTE[header.size];
       if(databuffer)
         {
           if(DecodeToBufferFromFile(databuffer))
@@ -214,7 +214,7 @@ GRPBITMAP* GRPBITMAPFILEJPG::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
   bitmap = GRPFACTORY::GetInstance().CreateBitmap(header.width, header.height, GRPPROPERTYMODE_24_RGB_888);
   if(bitmap)
     {
-      XBYTE* databuffer = new XBYTE[header.size];
+      XBYTE* databuffer = GEN_NEW XBYTE[header.size];
       if(databuffer)
         {
           if(DecodeToBufferFromRawBuffer(buffer, size, databuffer))
@@ -286,7 +286,7 @@ bool GRPBITMAPFILEJPG::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
   int size    = bitmap->GetWidth() * bitmap->GetHeight() * 3;
   bool status = true;
 
-  XBYTE* databuffer = new XBYTE[size];
+  XBYTE* databuffer = GEN_NEW XBYTE[size];
   if(databuffer)
     {
       int index = 0;
@@ -362,7 +362,7 @@ bool GRPBITMAPFILEJPG::ReadHeaderFile(GRPBITMAPFILEJPGHEADER* header)
 
 
   XQWORD file_size = GetPrimaryFile()->GetSize();
-  XBYTE* file_buffer = new XBYTE[(XDWORD)file_size];
+  XBYTE* file_buffer = GEN_NEW XBYTE[(XDWORD)file_size];
 
   GetPrimaryFile()->SetPosition(0);
   GetPrimaryFile()->Read(file_buffer, (XDWORD)file_size);
@@ -476,7 +476,7 @@ bool GRPBITMAPFILEJPG::DecodeToBufferFromFile(XBYTE* buffer)
 
   
   XQWORD file_size = GetPrimaryFile()->GetSize();
-  XBYTE* file_buffer=new XBYTE[(XDWORD)file_size];
+  XBYTE* file_buffer=GEN_NEW XBYTE[(XDWORD)file_size];
 
   GetPrimaryFile()->SetPosition(0);
   GetPrimaryFile()->Read(file_buffer, (XDWORD)file_size);

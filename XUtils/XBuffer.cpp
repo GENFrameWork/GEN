@@ -180,7 +180,7 @@ XDWORD XBUFFER::GetSize()
 * @brief      Set size
 * @ingroup    XUTILS
 *
-* @param[in]  size : new size of buffer
+* @param[in]  size : GEN_NEW size of buffer
 *
 * @return     bool : true if is succesful.
 *
@@ -272,7 +272,7 @@ XDWORD XBUFFER::GetPosition()
 * @brief      Set position
 * @ingroup    XUTILS
 *
-* @param[in]  position : new position of pointer.
+* @param[in]  position : GEN_NEW position of pointer.
 *
 * @return     bool : true if is succesful.
 *
@@ -1201,7 +1201,7 @@ bool XBUFFER::Extract(XSTRING& string, XDWORD ppos, XDWORD psize)
 {
   string.Empty();
 
-  XDWORD* _string = new XDWORD[psize];
+  XDWORD* _string = GEN_NEW XDWORD[psize];
   int     _size   = psize * sizeof(XDWORD);
 
   if(!_string) return false;
@@ -2002,7 +2002,7 @@ bool XBUFFER::Set(XSTRING& data, int topos)
   // should create temporary array and then put that
   // but on stack it's too much?
 
-  XDWORD* tmp = new XDWORD[data.GetSize()];
+  XDWORD* tmp = GEN_NEW XDWORD[data.GetSize()];
   if(!tmp) return false;
 
   for(XDWORD i = 0; i < data.GetSize(); i++)
@@ -2130,7 +2130,7 @@ XDWORD XBUFFER::SetWithMask(XSTRING* mask, int topos, ...)
 * @brief      Resize
 * @ingroup    XUTILS
 *
-* @param[in]  newsize : new size of bufffer.
+* @param[in]  newsize : GEN_NEW size of bufffer.
 * @param[in]  setblocked : blocked this operation.
 *
 * @return     bool : true if is succesful.
@@ -2157,7 +2157,7 @@ bool XBUFFER::Resize(XDWORD newsize, bool setblocked)
 
           sizeassign = (newsize + addblockmemsize); 
 
-          newbuffer = new XBYTE[sizeassign];
+          newbuffer = GEN_NEW XBYTE[sizeassign];
           if(newbuffer)
             {             
               memset(newbuffer , 0,  sizeassign);

@@ -172,7 +172,7 @@ bool XMEMORY_CONTROL::Activate(bool isactive)
 * @return     void* :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void* XMEMORY_CONTROL::Assign(XDWORD size, const char* pathfile, int line)
+void* XMEMORY_CONTROL::Assign(XDWORD size, char* pathfile, int line)
 {
   if(!size) 
     {
@@ -203,94 +203,6 @@ void* XMEMORY_CONTROL::Assign(XDWORD size, const char* pathfile, int line)
   UnLock();
 
   return ptr;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void* XMEMORY_CONTROL::ReAssign(void* ptr, XDWORD size, const char* pathfile, int line)
-* @brief      Re assign preserving the current contents when possible
-* @ingroup    XUTILS
-*
-* @param[in]  ptr :
-* @param[in]  size :
-* @param[in]  pathfile :
-* @param[in]  line :
-*
-* @return     void* :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void* XMEMORY_CONTROL::ReAssign(void* ptr, XDWORD size, const char* pathfile, int line)
-{
-  if(!ptr) return Assign(size, pathfile, line);
-
-  if(!size)
-    {
-      Free(ptr);
-      return NULL;
-    }
-
-  Lock();
-
-  XDWORD index   = 0;
-  XDWORD oldsize = 0;
-  bool   found   = SearchAssignIndex(false, ptr, index);
-
-  if(found) oldsize = assignlist[index].size;
-
-  void* newptr = realloc(ptr, size);
-  if(!newptr)
-    {
-      UnLock();
-      return NULL;
-    }
-
-  if(found)
-    {
-      assignlist[index].ptr  = newptr;
-      assignlist[index].size = size;
-
-      if(pathfile)
-        {
-          memset(assignlist[index].namemodule, 0, XMEMORY_CONTROL_MAXNAMEMODULESIZE);
-
-          const char* module = pathfile?pathfile:"unknown";
-          XDWORD      len    = (XDWORD)strlen(module);
-          int         c      = (int)len - 1;
-
-          while(c>=0)
-            {
-              if((module[c] == '\\')  || (module[c] == '/')) break;
-              c--;
-            }
-
-          XDWORD sizenamemodule = len - (c + 1);
-          if(sizenamemodule >= XMEMORY_CONTROL_MAXNAMEMODULESIZE) sizenamemodule = (XMEMORY_CONTROL_MAXNAMEMODULESIZE-1);
-
-          memcpy(assignlist[index].namemodule, &module[c+1], sizenamemodule);
-          assignlist[index].namemodule[sizenamemodule] = 0;
-          assignlist[index].linemodule = line;
-        }
-
-      used = used - oldsize + size;
-    }
-   else
-    {
-      if(!RegisterAssign(newptr, size, pathfile, line))
-        {
-          // XTRACE_PRINTCOLOR(4, __L("[XMemory Control] ALERT: Make Realloc -> The memory allocation could not be registered!"));
-        }
-
-      nassigns++;
-      maxnassigns = __MAX(nassigns, maxnassigns);
-      used       += size;
-    }
-
-  maxused = __MAX(used, maxused);
-
-  UnLock();
-
-  return newptr;
 }
 
 
@@ -340,14 +252,9 @@ bool XMEMORY_CONTROL::FreeAll()
 {
   Lock();
 
-  if(assignlist) memset(assignlist, 0, sizeof(XMEMORY_CONTROL_ASSIGN)*nregisterelements);
+  memset(assignlist, 0, sizeof(XMEMORY_CONTROL_ASSIGN*)*nregisterelements);
 
   free(assignlist);
-  assignlist             = NULL;
-  nregisterelements      = 0;
-  nblockregisterelements = 0;
-  nassigns               = 0;
-  used                   = 0;
 
   UnLock();
 
@@ -595,7 +502,7 @@ XDWORD XMEMORY_CONTROL::CRC32(XBYTE* data, XWORD size)
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, const char* pathfile, int line)
+bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, char* pathfile, int line)
 {
   XDWORD index = 0;
 
@@ -608,21 +515,19 @@ bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, const char* pathfil
   assignlist[index].ptr         = ptr;
   assignlist[index].size        = size;
 
-  const char* module = pathfile?pathfile:"unknown";
-  XDWORD      len    = (XDWORD)strlen(module);
-  int         c      = (int)len - 1;
+  XDWORD sizenamemodule = (XDWORD)strlen(pathfile)+1;
+  int    c              = (int)sizenamemodule;
 
   while(c>=0)
     {
-      if((module[c] == '\\')  || (module[c] == '/')) break;
+      if((pathfile[c] == '\\')  || (pathfile[c] == '/')) break;
       c--;
     }
 
-  XDWORD sizenamemodule = len - (c + 1);
+  sizenamemodule    -= c;
   if(sizenamemodule >= XMEMORY_CONTROL_MAXNAMEMODULESIZE) sizenamemodule = (XMEMORY_CONTROL_MAXNAMEMODULESIZE-1);
 
-  memcpy(assignlist[index].namemodule, &module[c+1], sizenamemodule);
-  assignlist[index].namemodule[sizenamemodule] = 0;
+  memcpy(assignlist[index].namemodule, &pathfile[c+1], sizenamemodule);
 
   assignlist[index].linemodule  = line;
 
@@ -682,7 +587,7 @@ bool XMEMORY_CONTROL::ResizeAssignList()
 
   XDWORD sizeextra  = (sizeof(XMEMORY_CONTROL_ASSIGN) *  (newnregisterelements - nregisterelements));
 
-  // Erase new block
+  // Erase GEN_NEW block
   memset(&assignlist[nregisterelements], 0, sizeextra);
 
   nregisterelements = newnregisterelements;
@@ -715,7 +620,7 @@ bool XMEMORY_CONTROL::SearchAssignIndex(bool free, void* ptr, XDWORD& index)
   #ifdef MICROCONTROLLER
   start = 0;
   #else
-  start = CRC32((XBYTE*)&ptr, (XWORD)sizeof(ptr));
+  start = CRC32((XBYTE*)&ptr, sizeof(XDWORD));
   start &= (nregisterelements -1);
   #endif
 
@@ -787,153 +692,127 @@ void XMEMORY_CONTROL::Clean()
 }
 
 
-
-/*---- GLOBAL NEW/DELETE OPERATORS -----------------------------------------------------------------------------------*/
-
-
-static void* XMemoryControlAlloc(size_t size, const char* namefile, int line, bool throwexception)
-{
-  if(!size) size = 1;
-
-  void* ptr = NULL;
-
-  if(XMemory_Control.IsActive()) ptr = XMemory_Control.Assign((XDWORD)size, namefile, line);
-  else                           ptr = malloc(size);
-
-  if(ptr) return ptr;
-
-  if(throwexception)
-    {
-      #if defined(__EXCEPTIONS) || defined(_CPPUNWIND)
-      throw std::bad_alloc();
-      #endif
-    }
-
-  return NULL;
-}
+#undef GEN_NEW
 
 
-static void XMemoryControlFree(void* ptr)
-{
-  if(!ptr) return;
-
-  if(XMemory_Control.IsActive()) XMemory_Control.Free(ptr);
-  else                           free(ptr);
-}
-
-
-void* operator new(size_t size)
-{
-  return XMemoryControlAlloc(size, "operator new", 0, true);
-}
-
-
-void* operator new[](size_t size)
-{
-  return XMemoryControlAlloc(size, "operator new[]", 0, true);
-}
-
-
-void* operator new(size_t size, const std::nothrow_t&) throw()
-{
-  return XMemoryControlAlloc(size, "operator new nothrow", 0, false);
-}
-
-
-void* operator new[](size_t size, const std::nothrow_t&) throw()
-{
-  return XMemoryControlAlloc(size, "operator new[] nothrow", 0, false);
-}
-
-
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void* operator new(std::size_t size, char const* namefile, int line)
+* @brief      perator GEN_NEW
+* @ingroup    XUTILS
+*
+* @param[in]  size :
+* @param[in]  const* namefile :
+* @param[in]  line :
+*
+* @return     void* :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void* operator new(size_t size, char const* namefile, int line)
 {
-  return XMemoryControlAlloc(size, namefile, line, true);
-}
-
-
-void* operator new[](size_t size, char const* namefile, int line)
-{
-  return XMemoryControlAlloc(size, namefile, line, true);
-}
-
-
-void operator delete(void* ptr) throw ()
-{
-  XMemoryControlFree(ptr);
-}
-
-
-void operator delete[] (void* ptr) throw ()
-{
-  XMemoryControlFree(ptr);
-}
-
-
-void operator delete(void* ptr, const std::nothrow_t&) throw()
-{
-  XMemoryControlFree(ptr);
-}
-
-
-void operator delete[] (void* ptr, const std::nothrow_t&) throw()
-{
-  XMemoryControlFree(ptr);
-}
-
-
-#if (__cplusplus >= 201402L) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
-void operator delete(void* ptr, size_t size) throw()
-{
-  (void)size;
-  XMemoryControlFree(ptr);
-}
-
-
-void operator delete[] (void* ptr, size_t size) throw()
-{
-  (void)size;
-  XMemoryControlFree(ptr);
-}
-#endif
-
-
-void operator delete(void* ptr, char const* namefile, int line) throw()
-{
-  (void)namefile;
-  (void)line;
-  XMemoryControlFree(ptr);
-}
-
-
-void operator delete[] (void* ptr, char const* namefile, int line) throw()
-{
-  (void)namefile;
-  (void)line;
-  XMemoryControlFree(ptr);
+  if(XMemory_Control.IsActive())
+    {
+      return XMemory_Control.Assign((XDWORD)size, (char*)namefile, line);
+    }
+   else
+    {
+      return malloc(size);
+    }
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void* operator new[](std::size_t size, char const* namefile, int line)
+* @brief      perator GEN_NEW[]
+* @ingroup    XUTILS
+*
+* @param[in]  size :
+* @param[in]  const* namefile :
+* @param[in]  line :
+*
+* @return     void* :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void* operator new[](size_t size, char const* namefile, int line)
+{
+  if(XMemory_Control.IsActive())
+    {
+      return XMemory_Control.Assign((XDWORD)size, (char*)namefile, line);
+    }
+   else
+    {
+      return malloc(size);
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void operator delete(void* ptr) noexcept
+* @brief      perator delete
+* @ingroup    XUTILS
+*
+* @param[in]  ptr) noexcep :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void operator delete(void* ptr) throw ()
+{
+  if(XMemory_Control.IsActive())
+    {
+      XMemory_Control.Free(ptr);
+    }
+   else
+    {
+      free(ptr);
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void operator delete[] (void* ptr) noexcept
+* @brief      perator delete[]
+* @ingroup    XUTILS
+*
+* @param[in]  ptr) noexcep :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void operator delete[] (void* ptr) throw ()
+{
+  if(XMemory_Control.IsActive())
+    {
+      XMemory_Control.Free(ptr);
+    }
+   else
+    {
+      free(ptr);
+    }
+}
+
+
+#define GEN_NEW new(GEN_MODULE_EXEC, GEN_LINE_EXEC)
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void* ReAlloc(void* assign, size_t size, const char* namefile, int line)
-* @brief      ReAlloc preserving current contents when possible
+* @fn         void* ReAlloc(void* assign, size_t size)
+* @brief      eAlloc
 * @ingroup    XUTILS
 * 
 * @param[in]  assign : 
 * @param[in]  size : 
-* @param[in]  namefile :
-* @param[in]  line :
 * 
 * @return     void* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void* ReAlloc(void* assign, size_t size, const char* namefile, int line)
+void* ReAlloc(void* assign, size_t size)
 {
-  if(XMemory_Control.IsActive()) return XMemory_Control.ReAssign(assign, (XDWORD)size, namefile, line);
-
-  return realloc(assign, size);
+  FREE((XBYTE*)assign);
+  
+  return MALLOC(size);
 }
+
 
 
 

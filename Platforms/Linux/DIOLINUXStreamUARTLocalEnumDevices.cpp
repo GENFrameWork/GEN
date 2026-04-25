@@ -195,7 +195,7 @@ bool DIOLINUXSTREAMUARTLOCALENUMDEVICES::Search()
 
                       if(isvalid)
                         {
-                          DIOSTREAMDEVICE* device = new DIOSTREAMDEVICE();
+                          DIOSTREAMDEVICE* device = GEN_NEW DIOSTREAMDEVICE();
                           if(device)
                             {
                               //device->SetIndex(index);

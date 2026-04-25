@@ -77,10 +77,10 @@ XFSMACHINESTATE::XFSMACHINESTATE(int stateID, int ntransitions)
   inputs               = NULL;
   outputstates         = NULL;
 
-  inputs = new int[this->maxtransitions];
+  inputs = GEN_NEW int[this->maxtransitions];
   if(!inputs) return;
 
-  outputstates = new int[this->maxtransitions];
+  outputstates = GEN_NEW int[this->maxtransitions];
   if(!outputstates)
     {
       delete[] inputs;
@@ -426,7 +426,7 @@ bool XFSMACHINE::AddState(int state, int event, int tostate,...)
 
   narg+=2;
 
-  _state = new XFSMACHINESTATE(state,(narg/2));
+  _state = GEN_NEW XFSMACHINESTATE(state,(narg/2));
   if(!_state) return false;
 
   _state->AddTransition(event,tostate);
@@ -473,7 +473,7 @@ bool XFSMACHINE::AddSecuencialStates(int state, int maxsecuencialtransitions)
 {
   XFSMACHINESTATE* _state;
 
-  _state = new XFSMACHINESTATE(state,maxsecuencialtransitions);
+  _state = GEN_NEW XFSMACHINESTATE(state,maxsecuencialtransitions);
   if(!_state) return false;
 
   for(int c=0;c<maxsecuencialtransitions;c++)

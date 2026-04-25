@@ -111,7 +111,7 @@ SCRIPT::SCRIPT()
   GEN_XFACTORY_CREATE(xtimer, CreateTimer())
   if(!xtimer) return;
 
-  xfiletxt = new XFILETXT();
+  xfiletxt = GEN_NEW XFILETXT();
   if(!xfiletxt) return;
 
   RegisterEvent(SCRIPT_XEVENT_TYPE_ERROR);
@@ -259,19 +259,19 @@ SCRIPT* SCRIPT::Create(SCRIPT_TYPE type)
 
       case SCRIPT_TYPE_G            : 
                                       #ifdef SCRIPT_G_ACTIVE
-                                      script = new SCRIPT_LNG_G();
+                                      script = GEN_NEW SCRIPT_LNG_G();
                                       #endif
                                       break;  
 
       case SCRIPT_TYPE_LUA          : 
                                       #ifdef SCRIPT_LUA_ACTIVE
-                                      script = new SCRIPT_LNG_LUA();
+                                      script = GEN_NEW SCRIPT_LNG_LUA();
                                       #endif
                                       break;
 
       case SCRIPT_TYPE_JAVASCRIPT   :  
                                       #ifdef SCRIPT_JAVASCRIPT_ACTIVE
-                                      script = new SCRIPT_LNG_JAVASCRIPT();
+                                      script = GEN_NEW SCRIPT_LNG_JAVASCRIPT();
                                       #endif
                                       break;     
     }
@@ -925,7 +925,7 @@ SCRIPT_LIB_FUNCTION* SCRIPT::GetLibraryFunction(void* ptrfunction)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY libfunction)
 {
-  SCRIPT_LIB_FUNCTION* function = new SCRIPT_LIB_FUNCTION(library, name, libfunction);
+  SCRIPT_LIB_FUNCTION* function = GEN_NEW SCRIPT_LIB_FUNCTION(library, name, libfunction);
   if(!function) return false;
 
   libraryfunctions.Add(function);
@@ -974,53 +974,53 @@ bool SCRIPT::AddInternalLibraries()
       switch(c)
         {
           // Standard 
-          case  0 : lib = new SCRIPT_LIB_MATH();        break;
-          case  1 : lib = new SCRIPT_LIB_RAND();        break;
-          case  2 : lib = new SCRIPT_LIB_TIMER();       break;
-          case  3 : lib = new SCRIPT_LIB_STRING();      break;
-          case  4 : lib = new SCRIPT_LIB_PATH();        break;
-          case  5 : lib = new SCRIPT_LIB_DIR();         break;
-          case  6 : lib = new SCRIPT_LIB_TRACE();       break;
+          case  0 : lib = GEN_NEW SCRIPT_LIB_MATH();        break;
+          case  1 : lib = GEN_NEW SCRIPT_LIB_RAND();        break;
+          case  2 : lib = GEN_NEW SCRIPT_LIB_TIMER();       break;
+          case  3 : lib = GEN_NEW SCRIPT_LIB_STRING();      break;
+          case  4 : lib = GEN_NEW SCRIPT_LIB_PATH();        break;
+          case  5 : lib = GEN_NEW SCRIPT_LIB_DIR();         break;
+          case  6 : lib = GEN_NEW SCRIPT_LIB_TRACE();       break;
 
           // Optionals
           case  7 :
                     #ifdef SCRIPT_LIB_SYSTEM_ACTIVE
-                    lib = new SCRIPT_LIB_SYSTEM();        
+                    lib = GEN_NEW SCRIPT_LIB_SYSTEM();        
                     #endif
                     break;
           case  8 :
                     #ifdef SCRIPT_LIB_PROCESS_ACTIVE
-                    lib = new SCRIPT_LIB_PROCESS();        
+                    lib = GEN_NEW SCRIPT_LIB_PROCESS();        
                     #endif
                     break;
           case  9 :
                     #ifdef SCRIPT_LIB_LOG_ACTIVE
-                    lib = new SCRIPT_LIB_LOG();        
+                    lib = GEN_NEW SCRIPT_LIB_LOG();        
                     #endif
                     break;
           case 10 :
                     #ifdef SCRIPT_LIB_CONSOLE_ACTIVE
-                    lib = new SCRIPT_LIB_CONSOLE();        
+                    lib = GEN_NEW SCRIPT_LIB_CONSOLE();        
                     #endif
                     break;
           case 11 :
                     #ifdef SCRIPT_LIB_CFG_ACTIVE
-                    lib = new SCRIPT_LIB_CFG();                                
+                    lib = GEN_NEW SCRIPT_LIB_CFG();                                
                     #endif
                     break;
           case 12 :
                     #ifdef SCRIPT_LIB_WINDOW_ACTIVE
-                    lib = new SCRIPT_LIB_WINDOW();        
+                    lib = GEN_NEW SCRIPT_LIB_WINDOW();        
                     #endif
                     break;
           case 13 :
                     #ifdef SCRIPT_LIB_INPUTSIMULATE_ACTIVE
-                    lib = new SCRIPT_LIB_INPUTSIMULATE();        
+                    lib = GEN_NEW SCRIPT_LIB_INPUTSIMULATE();        
                     #endif
                     break;
           case 14 :
                     #ifdef SCRIPT_LIB_DEVTEST_ACTIVE
-                    lib = new SCRIPT_LIB_DEVTEST();        
+                    lib = GEN_NEW SCRIPT_LIB_DEVTEST();        
                     #endif
                     break;
         } 

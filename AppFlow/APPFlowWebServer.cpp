@@ -76,7 +76,7 @@ APPFLOWWEBSERVER::APPFLOWWEBSERVER()
 {
   Clean();
 
-  webserver = new DIOWEBSERVER();
+  webserver = GEN_NEW DIOWEBSERVER();
 }
 
 
@@ -121,14 +121,14 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
   /*
   if(chekuseragentid)
     {
-      useragentID = new DIOSCRAPERWEBUSERAGENTID();
+      useragentID = GEN_NEW DIOSCRAPERWEBUSERAGENTID();
       if(!useragentID) return false;
     }
   */
 
   if(!cfg->WebServer_PathPHP()->IsEmpty())
     {
-      pluginPHP = new DIOWEBSERVER_PLUGIN_PHP();
+      pluginPHP = GEN_NEW DIOWEBSERVER_PLUGIN_PHP();
       if(pluginPHP)
         {
           pluginPHP->Config(cfg->WebServer_PathPHP());
@@ -606,7 +606,7 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
 
       if(!status)
         {
-          DIOWEBPAGEHTMLCREATOR* webHTMLpage = new DIOWEBPAGEHTMLCREATOR();
+          DIOWEBPAGEHTMLCREATOR* webHTMLpage = GEN_NEW DIOWEBPAGEHTMLCREATOR();
           if(webHTMLpage)
             {
               DIOWEBSERVER_XEVENT xevent(this, DIOWEBSERVER_XEVENT_TYPE_REQUEST_ENDPOINT);
@@ -724,7 +724,7 @@ bool APPFLOWWEBSERVER::GenerateMessagePage(XSTRING& leyend, DIOWEBPAGEHTMLCREATO
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connection,  DIOWEBHEADER_RESULT result, XCHAR* leyend)
 {
-  DIOWEBPAGEHTMLCREATOR* webHTMLpage = new DIOWEBPAGEHTMLCREATOR();
+  DIOWEBPAGEHTMLCREATOR* webHTMLpage = GEN_NEW DIOWEBPAGEHTMLCREATOR();
   if(!webHTMLpage) return false;
 
   GenerateMessagePage(leyend, (*webHTMLpage));

@@ -168,7 +168,7 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchGUID(const GUID* interfaceclassg
 
               if(SetupDiGetDeviceInterfaceDetail(hdevinfo, &devinterfacedata, devinterfacedetaildata, size, &size, &devinfodata))
                 {
-                  DIOSTREAMDEVICEUSB* device = new DIOSTREAMDEVICEUSB();
+                  DIOSTREAMDEVICEUSB* device = GEN_NEW DIOSTREAMDEVICEUSB();
                   if(device)
                     {
                       device->SetIndex(devices.GetSize());
@@ -393,7 +393,7 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetUSBDescriptor(HDEVINFO& hdevinfo, i
           USB_DESCRIPTOR_REQUEST*  requestpacket    = NULL;
           USB_DEVICE_DESCRIPTOR*   devicedescriptor = NULL;
           int                      buffersize       = sizeof(USB_DESCRIPTOR_REQUEST) + sizeof(USB_DEVICE_DESCRIPTOR);
-          XBYTE*                   buffer           = new XBYTE[buffersize];
+          XBYTE*                   buffer           = GEN_NEW XBYTE[buffersize];
 
           if(buffer)
             {

@@ -175,7 +175,7 @@ int INPLINUXDEVICEID::GetFileDescriptor()
 * @brief      Set file descriptor
 * @ingroup    PLATFORM_LINUX
 *
-* @param[in]  filedescriptor : new file descriptor
+* @param[in]  filedescriptor : GEN_NEW file descriptor
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPLINUXDEVICEID::SetFileDescriptor(int filedescriptor)

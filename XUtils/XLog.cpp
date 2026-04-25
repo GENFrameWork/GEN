@@ -128,7 +128,7 @@ XLOGBASE::XLOGBASE()
   GEN_XFACTORY_CREATE(xtimer, CreateTimer())
   GEN_XFACTORY_CREATE(mutex, Create_Mutex())
   
-  filelog = new XFILETXT();
+  filelog = GEN_NEW XFILETXT();
 }
 
     
@@ -622,7 +622,7 @@ bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XCHAR*
 
           nentrys++;
 
-          lastentry = new XLOGENTRY();
+          lastentry = GEN_NEW XLOGENTRY();
           if(lastentry)
             {
               lastentry->position = position;
@@ -862,7 +862,7 @@ bool XLOGBASE::CalculateInitialStatus()
   bool    endfile;
   XDWORD  br;
   XBUFFER dataline;
-  XBYTE*  readbuffer = new XBYTE[XFILETXT_MAXBUFFER];
+  XBYTE*  readbuffer = GEN_NEW XBYTE[XFILETXT_MAXBUFFER];
   if(!readbuffer) return false;
 
   memset(readbuffer, 0, XFILETXT_MAXBUFFER);
@@ -884,7 +884,7 @@ bool XLOGBASE::CalculateInitialStatus()
                 {
                   nentrys++;
 
-                  lastentry = new XLOGENTRY();
+                  lastentry = GEN_NEW XLOGENTRY();
                   if(lastentry)
                     {
                       lastentry->position = bufferpos;
@@ -910,7 +910,7 @@ bool XLOGBASE::CalculateInitialStatus()
                     {
                       nentrys++;
 
-                      lastentry = new XLOGENTRY();
+                      lastentry = GEN_NEW XLOGENTRY();
                       if(lastentry)
                         {
                           lastentry->position = bufferpos;
@@ -965,7 +965,7 @@ bool XLOGBASE::FlushMemoryEntrys()
 
               nentrys++;
 
-              lastentry = new XLOGENTRY();
+              lastentry = GEN_NEW XLOGENTRY();
               if(lastentry)
                 {
                   lastentry->position = position;
@@ -1201,7 +1201,7 @@ bool XLOGBASE::Backup_AdjustNFiles(XCHAR* pathnamelog, bool iscompress)
 
   if(iscompress)
     {
-      XFILEZIP* xfilezip = new XFILEZIP();
+      XFILEZIP* xfilezip = GEN_NEW XFILEZIP();
       if(xfilezip)
         {
           XPATH xpathzipfile;
@@ -1385,7 +1385,7 @@ bool XLOG::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XLOG& XLOG::GetInstance()
 {
-  if(!instance) instance = new XLOG();
+  if(!instance) instance = GEN_NEW XLOG();
 
   return (*instance);
 }

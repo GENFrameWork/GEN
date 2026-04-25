@@ -264,7 +264,7 @@ void DIOLINUXSTREAMWIFIREMOTEENUMDEVICES::ThreadEnumDevices(void* param)
                                                                 result = head.result;
                                                                 while (NULL != result)
                                                                   {
-                                                                    DIOSTREAMDEVICEWIFI* device = new DIOSTREAMDEVICEWIFI();
+                                                                    DIOSTREAMDEVICEWIFI* device = GEN_NEW DIOSTREAMDEVICEWIFI();
                                                                     if(device)
                                                                       {
                                                                         device->SetIndex(index);

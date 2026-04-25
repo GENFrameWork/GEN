@@ -101,7 +101,7 @@ DELETEFUNC(XANDROIDFACTORY, XMUTEX     , XANDROIDMUTEX      , Delete_Mutex)
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XANDROIDFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* param)
 {
-  XANDROIDTHREAD* _class =  new XANDROIDTHREAD(groupID, ID, function, param);
+  XANDROIDTHREAD* _class =  GEN_NEW XANDROIDTHREAD(groupID, ID, function, param);
   return (XTHREAD*)_class;
 }
 

@@ -102,7 +102,7 @@ GRPSCREEN* GRP3DCONTEXT::GetScreen()
 * @brief      Set screen
 * @ingroup    GRAPHIC
 *
-* @param[in]  screen : new screen class (handle)
+* @param[in]  screen : GEN_NEW screen class (handle)
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP3DCONTEXT::SetScreen(GRPSCREEN* screen)

@@ -462,7 +462,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XCHAR* server, XWORD port)
       return false;
     }
 
-  DIODNSRESOLVER_DNSSERVER* dnsserver = new DIODNSRESOLVER_DNSSERVER();
+  DIODNSRESOLVER_DNSSERVER* dnsserver = GEN_NEW DIODNSRESOLVER_DNSSERVER();
   if(!dnsserver)
     {
       return false;
@@ -512,7 +512,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XBYTE* serverIP, XWORD port)
       return false;
     }
 
-  DIODNSRESOLVER_DNSSERVER* dnsserver = new DIODNSRESOLVER_DNSSERVER();
+  DIODNSRESOLVER_DNSSERVER* dnsserver = GEN_NEW DIODNSRESOLVER_DNSSERVER();
   if(!dnsserver)
     {
       return false;
@@ -539,7 +539,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XBYTE* serverIP, XWORD port)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(DIOIP& serverIP, XWORD port)
 {
-  DIODNSRESOLVER_DNSSERVER* dnsserver = new DIODNSRESOLVER_DNSSERVER();
+  DIODNSRESOLVER_DNSSERVER* dnsserver = GEN_NEW DIODNSRESOLVER_DNSSERVER();
   if(!dnsserver)
     {
       return false;

@@ -90,7 +90,7 @@ APPFLOWEXTENDED_APPLICATIONSTATUS::APPFLOWEXTENDED_APPLICATIONSTATUS(APPFLOWCFG*
   GEN_VERSION.GetAppVersion(app_version, app_subversion, app_versionerror, appversion);
 
   xtimeroperatingtime = GEN_XFACTORY.CreateTimer();
-  checkresourceshardware = new APPFLOWCHECKRESOURCESHARDWARE();
+  checkresourceshardware = GEN_NEW APPFLOWCHECKRESOURCESHARDWARE();
 }
 
 

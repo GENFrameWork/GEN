@@ -327,7 +327,7 @@ int ID_IBAN::Mod97(XSTRING& IBANstr)
   iban = (char*)xbuffer.Get();
   size = (int)strlen(iban);
 
-  temp = new char[size + 5];
+  temp = GEN_NEW char[size + 5];
 
   if (!temp)
   {

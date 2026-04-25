@@ -716,7 +716,7 @@ void DIOWEBSERVER_AUTHENTICATION::Clean()
 DIOWEBSERVER_REQUEST::DIOWEBSERVER_REQUEST()
 {
   Clean();
-  data = new XBUFFER();
+  data = GEN_NEW XBUFFER();
 }
 
 
@@ -2053,7 +2053,7 @@ bool DIOWEBSERVER_CONNECTION::ReadRequest()
 
       data->Delete();
 
-      XBYTE* buffer = new XBYTE[DIOWEBSERVER_MAXBUFFER];
+      XBYTE* buffer = GEN_NEW XBYTE[DIOWEBSERVER_MAXBUFFER];
       if(!buffer) return false;
 
       do{ memset(buffer,0,DIOWEBSERVER_MAXBUFFER);
@@ -2151,7 +2151,7 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_CreateAcceptKey(XSTRING& key, XSTRING& r
 
   result.Empty();
 
-  HASHSHA1* sha1 = new HASHSHA1();
+  HASHSHA1* sha1 = GEN_NEW HASHSHA1();
   if(!sha1) return false;
 
   XBUFFER charstr;
@@ -2674,7 +2674,7 @@ bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutse
   isactive        = false;
   doexit          = false;
 
-  diostreamcfg = new DIOSTREAMTCPIPCONFIG();
+  diostreamcfg = GEN_NEW DIOSTREAMTCPIPCONFIG();
   if(!diostreamcfg) return false;
 
   this->port                      = port;
@@ -2881,7 +2881,7 @@ bool DIOWEBSERVER::AddAuthentication(XSTRING& guest, XSTRING& login, XSTRING& pa
     }
    else
     {
-      authentication = new DIOWEBSERVER_AUTHENTICATION();
+      authentication = GEN_NEW DIOWEBSERVER_AUTHENTICATION();
       if(!authentication) return false;
 
       authentication->Set(guest,login,password);
@@ -3039,7 +3039,7 @@ bool DIOWEBSERVER::AddPlayablePageExtension(XCHAR* extension)
 {
   if(!extension) return false;
 
-  XSTRING* _string = new XSTRING(extension);
+  XSTRING* _string = GEN_NEW XSTRING(extension);
   if(!_string) return false;
 
   playablepageextensions.Add(_string);
@@ -3061,7 +3061,7 @@ bool DIOWEBSERVER::AddPlayablePageExtension(XCHAR* extension)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::AddPlayablePageExtension(XSTRING& extension)
 {
-  XSTRING* _string = new XSTRING(extension);
+  XSTRING* _string = GEN_NEW XSTRING(extension);
   if(!_string) return false;
 
   playablepageextensions.Add(_string);
@@ -3646,7 +3646,7 @@ int DIOWEBSERVER::Connections_GetNConnectionsSendingPage()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOWEBSERVER::Connections_CreateNew()
-* @brief      Connections create new
+* @brief      Connections create GEN_NEW
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -3659,7 +3659,7 @@ bool DIOWEBSERVER::Connections_CreateNew()
 
   if(xmutexconnections) xmutexconnections->Lock();
 
-  DIOWEBSERVER_CONNECTION* connection = new DIOWEBSERVER_CONNECTION();
+  DIOWEBSERVER_CONNECTION* connection = GEN_NEW DIOWEBSERVER_CONNECTION();
   if(connection)
     {
       if(connection->Ini(this, diostreamcfg))

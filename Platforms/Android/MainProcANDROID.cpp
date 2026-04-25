@@ -374,7 +374,7 @@ bool MAINPROCANDROID::OnTouchEvent(AInputEvent* event)
 
           if(pointerIndex >= mouse->GetCursors()->GetSize())
             {
-              INPCURSOR* cursor = new INPCURSOR();
+              INPCURSOR* cursor = GEN_NEW INPCURSOR();
               if(cursor)
                 {
                   cursor->SetID(INPCURSOR_ID(INPCURSOR_ID_TOUCHSCREEN1+pointerIndex));
@@ -386,7 +386,7 @@ bool MAINPROCANDROID::OnTouchEvent(AInputEvent* event)
 
           if(pointerIndex >= mouse->GetButtons()->GetSize())
             {
-              INPBUTTON* button = new INPBUTTON();
+              INPBUTTON* button = GEN_NEW INPBUTTON();
               if(button)
                 {
                   button->SetID(INPBUTTON_ID_TOUCHSCREEN);
@@ -1032,7 +1032,7 @@ bool MAINPROCANDROID::GetDPI(struct android_app* app)
 {
 
   //#ifdef GRP_ACTIVE
-  //grpfactory  = new GRPANDROIDFACTORY();
+  //grpfactory  = GEN_NEW GRPANDROIDFACTORY();
   //if(!grpfactory) return false;
 
   //// get the screen dpi  //DIEGO : supongo que meter esto en una funci?n consum_a tinta de monitor, no? de hecho , no hay una clase para manejar el JNI????
@@ -1089,7 +1089,7 @@ void MAINPROCANDROID::Clean()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCANDROID::Factorys_Ini()
 {
-  if(!XFACTORY::SetInstance(new XANDROIDFACTORY()))
+  if(!XFACTORY::SetInstance(GEN_NEW XANDROIDFACTORY()))
     {
       return false;
     }
@@ -1097,27 +1097,27 @@ bool MAINPROCANDROID::Factorys_Ini()
   XFEEDBACK_CONTROL_CREATE
 
   #ifdef XSYSTEM_ACTIVE  
-  if(!XSYSTEM::SetInstance(new XANDROIDSYSTEM())) 
+  if(!XSYSTEM::SetInstance(GEN_NEW XANDROIDSYSTEM())) 
     {
       return false;
     }
   XBUFFER::SetGlobalHardwareUseLittleEndian(GEN_XSYSTEM.HardwareUseLittleEndian());
   #endif
   
-  if(!XRAND::SetInstance(new XANDROIDRAND())) 
+  if(!XRAND::SetInstance(GEN_NEW XANDROIDRAND())) 
     {
       return false;
     }
   
   #ifdef XSLEEP_ACTIVE
-  if(!XSLEEP::SetInstance(new XANDROIDSLEEP())) 
+  if(!XSLEEP::SetInstance(GEN_NEW XANDROIDSLEEP())) 
     {
       return false;
     }
   #endif
 
   #ifdef XSHAREDMEMORYMANAGER_ACTIVE
-  if(!XSHAREDMEMORYMANAGER::SetInstance(new XANDROIDSHAREDMEMORYMANAGER())) 
+  if(!XSHAREDMEMORYMANAGER::SetInstance(GEN_NEW XANDROIDSHAREDMEMORYMANAGER())) 
     {
       return false;  
     }
@@ -1125,7 +1125,7 @@ bool MAINPROCANDROID::Factorys_Ini()
     
 
   #ifdef XTRACE_VIRTUALCLOCKTICK
-  xtimerclock = new XTIMERCLOCK();
+  xtimerclock = GEN_NEW XTIMERCLOCK();
   if(!xtimerclock) 
     {
       return false;
@@ -1133,21 +1133,21 @@ bool MAINPROCANDROID::Factorys_Ini()
   #endif
 
   #ifdef INP_ACTIVE  
-  if(!INPFACTORY::SetInstance(new INPANDROIDFACTORY())) 
+  if(!INPFACTORY::SetInstance(GEN_NEW INPANDROIDFACTORY())) 
     {
       return false;
     }
   #endif
 
   #ifdef DIO_ACTIVE
-  if(!DIOFACTORY::SetInstance(new DIOANDROIDFACTORY())) 
+  if(!DIOFACTORY::SetInstance(GEN_NEW DIOANDROIDFACTORY())) 
     {
       return false;
     }
   #endif
 
   #ifdef SND_ACTIVE  
-  if(!SNDFACTORY::SetInstance(new SNDANDROIDFACTORY())) 
+  if(!SNDFACTORY::SetInstance(GEN_NEW SNDANDROIDFACTORY())) 
     {    
       return false;
     }
@@ -1159,7 +1159,7 @@ bool MAINPROCANDROID::Factorys_Ini()
   #endif
 
   #ifdef GRP_ACTIVE
-  if(!GRPFACTORY::SetInstance(new GRPANDROIDFACTORY())) 
+  if(!GRPFACTORY::SetInstance(GEN_NEW GRPANDROIDFACTORY())) 
     {
       return false;
     }
@@ -1279,7 +1279,7 @@ bool MAINPROCANDROID::Factorys_End()
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCANDROID::OverturnAssetsToExternalLocation(XPATH& origin, XPATH& datapath, XPATH& target)
 {
-  XFILEUNZIP* unzip = new XFILEUNZIP();
+  XFILEUNZIP* unzip = GEN_NEW XFILEUNZIP();
   if(!unzip) return false;
 
   XSTRING  assetsstring;
@@ -1379,7 +1379,7 @@ bool MAINPROCANDROID::AssetsDir_CreateAll(XPATH& origin)
   AssetsDir_DeleteAll();
 
   XPATH       targetpath;
-  XFILEUNZIP* unzip   = new XFILEUNZIP();
+  XFILEUNZIP* unzip   = GEN_NEW XFILEUNZIP();
   XSTRING     assetsstring;
   bool        status  = false;
 
@@ -1463,7 +1463,7 @@ bool MAINPROCANDROID::AssetsDir_Add(XPATH* assetsdir)
 {
   if(!assetsdir) return false;
 
-  XPATH* newpath = new XPATH();
+  XPATH* newpath = GEN_NEW XPATH();
   if(!newpath) return false;
 
   newpath->Set(assetsdir->Get());   

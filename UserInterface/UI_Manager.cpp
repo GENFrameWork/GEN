@@ -132,7 +132,7 @@ UI_MANAGER& UI_MANAGER::GetInstance()
 {
   if(!instance) 
     {
-      instance = new UI_MANAGER();
+      instance = GEN_NEW UI_MANAGER();
     }
 
   return (*instance);
@@ -194,7 +194,7 @@ bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
     }
    else
     {
-      unzipfile = new XFILEUNZIP();
+      unzipfile = GEN_NEW XFILEUNZIP();
       if(!unzipfile) 
         {
           return false;
@@ -1701,7 +1701,7 @@ UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPP
       return animation;
     }
 
-  animation = new UI_ANIMATION();
+  animation = GEN_NEW UI_ANIMATION();
   if(!animation) 
     {
       return NULL;
@@ -2327,7 +2327,7 @@ bool UI_MANAGER::CreaterVirtualKeyboard(UI_LAYOUT* layout, GRPSCREEN* screen)
       return false;
     }
 
-  virtualkeyboard = new UI_VIRTUALKEYBOARD();
+  virtualkeyboard = GEN_NEW UI_VIRTUALKEYBOARD();
   if(!virtualkeyboard) 
     {
       return false;
@@ -2453,13 +2453,13 @@ UI_SKIN* UI_MANAGER::Skin_Create(XSTRING& skintypename, UI_SKIN_DRAWMODE drawmod
 
                                             if(!skintypename.Compare(UI_SKIN_NAME_DEFAULT, true) || !skintypename.Compare(UI_SKIN_NAME_UNKNOWN, true))
                                               {
-                                                ui_skin = (UI_SKIN*)new UI_SKINCANVAS(screen, viewportindex); 
+                                                ui_skin = (UI_SKIN*)GEN_NEW UI_SKINCANVAS(screen, viewportindex); 
                                               }
                                              else
                                               {
                                                 if(!skintypename.Compare(UI_SKIN_NAME_FLAT, true))
                                                   {
-                                                    ui_skin = (UI_SKIN*)new UI_SKINCANVAS_FLAT(screen, viewportindex); 
+                                                    ui_skin = (UI_SKIN*)GEN_NEW UI_SKINCANVAS_FLAT(screen, viewportindex); 
                                                   }
                                               }
                                           }
@@ -2781,7 +2781,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* 
     }
    else
     {
-      element_text = new UI_ELEMENT_TEXT();
+      element_text = GEN_NEW UI_ELEMENT_TEXT();
       if(!element_text) return NULL;
     }
 
@@ -2929,7 +2929,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
     }
    else
     {
-      element_textbox = new UI_ELEMENT_TEXTBOX();
+      element_textbox = GEN_NEW UI_ELEMENT_TEXTBOX();
       if(!element_textbox) return NULL;
     }
 
@@ -3065,7 +3065,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
     }
    else
     {
-      element_image = new UI_ELEMENT_IMAGE();
+      element_image = GEN_NEW UI_ELEMENT_IMAGE();
       if(!element_image) return NULL;
     }
 
@@ -3156,7 +3156,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
     }
    else
     {
-      element_animation = new UI_ELEMENT_ANIMATION();
+      element_animation = GEN_NEW UI_ELEMENT_ANIMATION();
       if(!element_animation) return NULL;
     }
 
@@ -3242,7 +3242,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
                 {
                   for(XDWORD d=0; d<animation->GetBitmaps()->GetSize(); d++)
                     {
-                      UI_ELEMENT_IMAGE* element_img = new UI_ELEMENT_IMAGE();
+                      UI_ELEMENT_IMAGE* element_img = GEN_NEW UI_ELEMENT_IMAGE();
                       if(element_img) 
                         {
                           GRPBITMAP* bitmap = NULL; 
@@ -3319,7 +3319,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Option(XFILEXMLELEMENT* node, UI_LAYOUT
     }
    else
     {
-      element_option = new UI_ELEMENT_OPTION();
+      element_option = GEN_NEW UI_ELEMENT_OPTION();
       if(!element_option) return NULL;
     }
 
@@ -3439,7 +3439,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_MultiOption(XFILEXMLELEMENT* node, UI_L
     }
    else
     {
-      element_multioption = new UI_ELEMENT_MULTIOPTION();
+      element_multioption = GEN_NEW UI_ELEMENT_MULTIOPTION();
       if(!element_multioption) return NULL;     
     }
 
@@ -3495,7 +3495,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_MultiOption(XFILEXMLELEMENT* node, UI_L
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Button(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {  
-  UI_ELEMENT_BUTTON* element_button = new UI_ELEMENT_BUTTON();
+  UI_ELEMENT_BUTTON* element_button = GEN_NEW UI_ELEMENT_BUTTON();
   if(!element_button) return NULL;
 
   return GetLayoutElement_Option(node, layout, father, element_button);
@@ -3504,7 +3504,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Button(XFILEXMLELEMENT* node, UI_LAYOUT
 
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_CheckBox(XFILEXMLELEMENT* node, UI_LAYOUT* layout,  UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {  
-  UI_ELEMENT_CHECKBOX* element_checkbox = new UI_ELEMENT_CHECKBOX();
+  UI_ELEMENT_CHECKBOX* element_checkbox = GEN_NEW UI_ELEMENT_CHECKBOX();
   if(!element_checkbox) return NULL;
 
   return GetLayoutElement_Option(node, layout,  father, element_checkbox);
@@ -3527,7 +3527,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_CheckBox(XFILEXMLELEMENT* node, UI_LAYO
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_EditText(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {  
-  UI_ELEMENT_EDITTEXT* element_edittext = new UI_ELEMENT_EDITTEXT();
+  UI_ELEMENT_EDITTEXT* element_edittext = GEN_NEW UI_ELEMENT_EDITTEXT();
   if(!element_edittext) return NULL;
 
   return GetLayoutElement_Text(node, layout, father, element_edittext);
@@ -3559,7 +3559,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* 
     }
    else
     {
-      element_form = new UI_ELEMENT_FORM();
+      element_form = GEN_NEW UI_ELEMENT_FORM();
       if(!element_form) return NULL;      
     }
 
@@ -3662,7 +3662,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Menu(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {   
-  UI_ELEMENT_MENU* element_menu = new UI_ELEMENT_MENU();
+  UI_ELEMENT_MENU* element_menu = GEN_NEW UI_ELEMENT_MENU();
   if(!element_menu) return NULL;
 
   return GetLayoutElement_Form(node, layout, father, element_menu);
@@ -3685,7 +3685,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Menu(XFILEXMLELEMENT* node, UI_LAYOUT* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_ListBox(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {
-  UI_ELEMENT_LISTBOX* element_listbox = new UI_ELEMENT_LISTBOX();
+  UI_ELEMENT_LISTBOX* element_listbox = GEN_NEW UI_ELEMENT_LISTBOX();
   if(!element_listbox) return NULL;
 
   UI_ELEMENT* element_menu = NULL;
@@ -3744,7 +3744,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
     }
    else
     {
-      element_progressbar = new UI_ELEMENT_PROGRESSBAR();
+      element_progressbar = GEN_NEW UI_ELEMENT_PROGRESSBAR();
       if(!element_progressbar) return NULL;
     }
 
@@ -3833,7 +3833,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
         {
           UI_ELEMENT* element_progressrect = NULL;
 
-          element_progressrect = new UI_ELEMENT();
+          element_progressrect = GEN_NEW UI_ELEMENT();
           if(element_progressrect)
             {
               int value[4] = { 0, 0, 0, 0 }; 
@@ -4099,7 +4099,7 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
                   value = nodelayout->GetValueAttribute(__L("backgroundimg"));                          
                   if(value) background_namefile[0] = value;                  
 
-                  UI_LAYOUT* layout = new UI_LAYOUT(ui_skin);
+                  UI_LAYOUT* layout = GEN_NEW UI_LAYOUT(ui_skin);
                   if(layout)
                     {
                       XSTRING  bckcolor;
@@ -4183,7 +4183,7 @@ GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTY
   GRPBITMAP*      bitmap  = NULL;  
   bool            status  = false; 
 
-  bitmapfile = new GRPBITMAPFILE();
+  bitmapfile = GEN_NEW GRPBITMAPFILE();
   if(!bitmapfile) 
     {
       return NULL;

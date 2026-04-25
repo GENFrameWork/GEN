@@ -215,7 +215,7 @@ class XFILECFG : public XSUBJECT
 
                                           for(int c=1; c<nkeys+1; c++)
                                             {
-                                              T* value = new T();
+                                              T* value = GEN_NEW T();
                                               if(!value) 
                                                 {
                                                   values.DeleteContents();

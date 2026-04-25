@@ -491,7 +491,7 @@ bool XDIR::Copy(XPATH& xpathsource,XPATH& xpathtarget)
         {
           if(ftarget->Create(xpathtarget))
             {
-              XBYTE* buffer = new XBYTE[COPYFILE_MAXBUFFER];
+              XBYTE* buffer = GEN_NEW XBYTE[COPYFILE_MAXBUFFER];
               if(buffer)
                 {
                   XDWORD rsize  = 0;

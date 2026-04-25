@@ -113,7 +113,7 @@ GRPFACTORY& GRPFACTORY::GetInstance()
 {
   if(!instance)
     {
-      instance = new GRPFACTORY();
+      instance = GEN_NEW GRPFACTORY();
     }
 
   return (*instance);
@@ -265,13 +265,13 @@ GRPCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
     {
       case GRPPROPERTYMODE_08_INDEX     : break;
       case GRPPROPERTYMODE_16_RGBA_4444 : break;
-      case GRPPROPERTYMODE_16_RGBA_5551 : canvas =  (GRPCANVAS*)new GRPCANVASAGG<agg::pixfmt_rgb555, agg::rgba8>();   break;
-      case GRPPROPERTYMODE_16_RGB_565   : canvas =  (GRPCANVAS*)new GRPCANVASAGG<agg::pixfmt_rgb565, agg::rgba8>();   break;
+      case GRPPROPERTYMODE_16_RGBA_5551 : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_rgb555, agg::rgba8>();   break;
+      case GRPPROPERTYMODE_16_RGB_565   : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_rgb565, agg::rgba8>();   break;
       case GRPPROPERTYMODE_16_SRGB_565  : break;
-      case GRPPROPERTYMODE_24_RGB_888   : canvas =  (GRPCANVAS*)new GRPCANVASAGG<agg::pixfmt_rgb24 , agg::rgba8>();   break;
-      case GRPPROPERTYMODE_24_BGR_888   : canvas =  (GRPCANVAS*)new GRPCANVASAGG<agg::pixfmt_bgr24 , agg::rgba8>();   break;
-      case GRPPROPERTYMODE_32_RGBA_8888 : canvas =  (GRPCANVAS*)new GRPCANVASAGG<agg::pixfmt_rgba32, agg::rgba8>();   break;
-      case GRPPROPERTYMODE_32_BGRA_8888 : canvas =  (GRPCANVAS*)new GRPCANVASAGG<agg::pixfmt_bgra32, agg::rgba8>();   break;
+      case GRPPROPERTYMODE_24_RGB_888   : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_rgb24 , agg::rgba8>();   break;
+      case GRPPROPERTYMODE_24_BGR_888   : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_bgr24 , agg::rgba8>();   break;
+      case GRPPROPERTYMODE_32_RGBA_8888 : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_rgba32, agg::rgba8>();   break;
+      case GRPPROPERTYMODE_32_BGRA_8888 : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_bgra32, agg::rgba8>();   break;
                                default  : break;
     }
 
@@ -334,13 +334,13 @@ GRPBITMAP* GRPFACTORY::CreateBitmap(int width, int height, GRPPROPERTYMODE mode,
     {
       case GRPPROPERTYMODE_08_INDEX     : break;
       case GRPPROPERTYMODE_16_RGBA_4444 : break;
-      case GRPPROPERTYMODE_16_RGBA_5551 : bitmap =  (GRPBITMAP*)new GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_rgb555, agg::rgba8>(width, height, mode, isbufferinverse);   break;
-      case GRPPROPERTYMODE_16_RGB_565   : bitmap =  (GRPBITMAP*)new GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_rgb565, agg::rgba8>(width, height, mode, isbufferinverse);   break;
+      case GRPPROPERTYMODE_16_RGBA_5551 : bitmap =  (GRPBITMAP*)GEN_NEW GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_rgb555, agg::rgba8>(width, height, mode, isbufferinverse);   break;
+      case GRPPROPERTYMODE_16_RGB_565   : bitmap =  (GRPBITMAP*)GEN_NEW GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_rgb565, agg::rgba8>(width, height, mode, isbufferinverse);   break;
       case GRPPROPERTYMODE_16_SRGB_565  : break;
-      case GRPPROPERTYMODE_24_RGB_888   : bitmap =  (GRPBITMAP*)new GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_rgb24 , agg::rgba8>(width, height, mode, isbufferinverse);   break;
-      case GRPPROPERTYMODE_24_BGR_888   : bitmap =  (GRPBITMAP*)new GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_bgr24 , agg::rgba8>(width, height, mode, isbufferinverse);   break;
-      case GRPPROPERTYMODE_32_RGBA_8888 : bitmap =  (GRPBITMAP*)new GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_rgba32, agg::rgba8>(width, height, mode, isbufferinverse);   break;
-      case GRPPROPERTYMODE_32_BGRA_8888 : bitmap =  (GRPBITMAP*)new GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_bgra32, agg::rgba8>(width, height, mode, isbufferinverse);   break;
+      case GRPPROPERTYMODE_24_RGB_888   : bitmap =  (GRPBITMAP*)GEN_NEW GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_rgb24 , agg::rgba8>(width, height, mode, isbufferinverse);   break;
+      case GRPPROPERTYMODE_24_BGR_888   : bitmap =  (GRPBITMAP*)GEN_NEW GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_bgr24 , agg::rgba8>(width, height, mode, isbufferinverse);   break;
+      case GRPPROPERTYMODE_32_RGBA_8888 : bitmap =  (GRPBITMAP*)GEN_NEW GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_rgba32, agg::rgba8>(width, height, mode, isbufferinverse);   break;
+      case GRPPROPERTYMODE_32_BGRA_8888 : bitmap =  (GRPBITMAP*)GEN_NEW GRPBITMAPPIXELFORMATBUFFER<agg::pixfmt_bgra32, agg::rgba8>(width, height, mode, isbufferinverse);   break;
 
                             default     : break;
     }

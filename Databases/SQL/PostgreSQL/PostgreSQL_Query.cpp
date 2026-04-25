@@ -140,7 +140,7 @@ bool POSTGRESQL_QUERY::Execute()
   XDWORD size = value.GetSize();
   if(!size)
     {
-      DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+      DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
       if(!error) return false;
 
       error->description.Set(__L("void statement"));
@@ -175,7 +175,7 @@ bool POSTGRESQL_QUERY::Execute()
       query.Add(cursordeclare);
       query.Add(value);
 
-      XBUFFER* querystringbuffer = new XBUFFER();
+      XBUFFER* querystringbuffer = GEN_NEW XBUFFER();
       if(!querystringbuffer) return false;
 
       query.ConvertToUTF8(*querystringbuffer );
@@ -226,7 +226,7 @@ bool POSTGRESQL_QUERY::Execute()
 
               if(!result)
                 {
-                  DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
+                  DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
                   if (!error) return false;
 
                   error->description.Set(__L("not enought memory for result"));
@@ -313,7 +313,7 @@ bool POSTGRESQL_QUERY::ClearCursor()
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT* POSTGRESQL_QUERY::ConstructResult()
 {
-  POSTGRESQL_RESULT* result = new POSTGRESQL_RESULT();
+  POSTGRESQL_RESULT* result = GEN_NEW POSTGRESQL_RESULT();
   result->query = this;
 
   return result;
@@ -339,10 +339,10 @@ bool POSTGRESQL_QUERY::BindParametersToQuery()
 
   if(nparams > 0)
     {
-      paramvalues=(char**)new char*[nparams];
+      paramvalues=(char**)GEN_NEW char*[nparams];
       if(!paramvalues)
         {
-          DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
+          DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
           if(!error) return false;
 
           error->description.Set(__L("not enought memory for statements"));
@@ -355,10 +355,10 @@ bool POSTGRESQL_QUERY::BindParametersToQuery()
 
       //-----------
 
-      paramlengths = new int[nparams];
+      paramlengths = GEN_NEW int[nparams];
       if(!paramlengths)
         {
-          DB_SQL_ERROR* error=new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
+          DB_SQL_ERROR* error=GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
           if(!error) return false;
 
           error->description.Set(__L("not enought memory for statements"));
@@ -373,10 +373,10 @@ bool POSTGRESQL_QUERY::BindParametersToQuery()
 
       //-----------
 
-      paramformats = new int[nparams];
+      paramformats = GEN_NEW int[nparams];
       if(!paramformats)
         {
-          DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
+          DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
           if(!error) return false;
 
           error->description.Set(__L("not enought memory for statements"));
@@ -397,7 +397,7 @@ bool POSTGRESQL_QUERY::BindParametersToQuery()
           XSTRING bindstr;
           if(!statementbindings.Get(e)->ToString(bindstr))
             {
-              DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_UNKNOWN);
+              DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_UNKNOWN);
               if(!error) return false;
 
               error->description.Set(__L("unknown type for binding"));
@@ -408,7 +408,7 @@ bool POSTGRESQL_QUERY::BindParametersToQuery()
               return false;
             }
 
-          XBUFFER* buf = new XBUFFER();
+          XBUFFER* buf = GEN_NEW XBUFFER();
           if(buf)
             {
               bindstr.ConvertToUTF8(*buf);

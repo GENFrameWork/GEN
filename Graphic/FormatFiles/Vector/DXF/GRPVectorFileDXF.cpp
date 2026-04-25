@@ -131,7 +131,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXF::DetectType()
   
   if(DetectFileFormatText(pathfile))
     {
-      XFILETXT* file = new XFILETXT();
+      XFILETXT* file = GEN_NEW XFILETXT();
       if(file)  
         {
           if(file->Open(pathfile))
@@ -187,7 +187,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXF::Load()
 {
   GRPVECTORFILEDXFRESULT result = GRPVECTORFILERESULT_ERRORNOTMEMORY;
 
-  XFILETXT* file = new XFILETXT();
+  XFILETXT* file = GEN_NEW XFILETXT();
   if(!file)  
     {
       return GRPVECTORFILERESULT_ERRORNOTMEMORY;
@@ -330,7 +330,7 @@ GRPVECTORFILEDXFRESULT GRPVECTORFILEDXF::ParserTextSections(XFILETXT* fileTXT, X
  
   do{ if(!section)
         {
-          section = new GRPVECTORFILEDXFTEXTSECTION ();
+          section = GEN_NEW GRPVECTORFILEDXFTEXTSECTION ();
         }
     
       XSTRING* line = fileTXT->GetLine(c);

@@ -95,7 +95,7 @@ DELETEFUNC(XSTM32FACTORY  , XMUTEX          , XSTM32MUTEX            , Delete_Mu
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XSTM32FACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* data)
 {
-  XSTM32THREAD* _class =  new XSTM32THREAD(groupID, ID,function,data);
+  XSTM32THREAD* _class =  GEN_NEW XSTM32THREAD(groupID, ID,function,data);
   return (XTHREAD*)_class;
 }
 

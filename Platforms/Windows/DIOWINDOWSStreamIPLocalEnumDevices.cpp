@@ -111,7 +111,7 @@ bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
   do {  // Eliminate the virtual Wifi Adapter
         if(strcmp(padapterinfo->Description,"Microsoft Virtual WiFi Miniport Adapter"))
           {
-            DIOSTREAMDEVICEIP* device = new DIOSTREAMDEVICEIP();
+            DIOSTREAMDEVICEIP* device = GEN_NEW DIOSTREAMDEVICEIP();
             if(device)
               {
                 device->SetIndex(index++);
@@ -180,7 +180,7 @@ bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
 
 	for(aa = adapter_addresses; aa != NULL; aa = aa->Next) 
     {       
-      DIOSTREAMDEVICEIP* device = new DIOSTREAMDEVICEIP();
+      DIOSTREAMDEVICEIP* device = GEN_NEW DIOSTREAMDEVICEIP();
       if(device)
         {
           device->SetIsActive((aa->OperStatus == IfOperStatusUp?true:false));
@@ -244,7 +244,7 @@ bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
                   memset(buffer, 0, BUFSIZ);
 	                if(!getnameinfo(dnsa->Address.lpSockaddr, dnsa->Address.iSockaddrLength, buffer, sizeof(buffer), NULL, 0,NI_NUMERICHOST))
                     {
-                      XSTRING* DNSserver = new XSTRING();
+                      XSTRING* DNSserver = GEN_NEW XSTRING();
                       if(DNSserver)
                         {
                           DNSserver->Set(buffer);

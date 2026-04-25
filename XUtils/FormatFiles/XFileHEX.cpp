@@ -465,7 +465,7 @@ bool XFILEHEX::Entry_Add(XSTRING* line)
   if(!line)             return false;
   if(line->IsEmpty())   return false;
 
-  XFILEHEX_ENTRY* entry = new XFILEHEX_ENTRY();
+  XFILEHEX_ENTRY* entry = GEN_NEW XFILEHEX_ENTRY();
   if(!entry) return false;
 
   if(!DecodeLine(line, (*entry)))

@@ -94,7 +94,7 @@ DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks)
                        };
   Clean();
 
-  checkconnections = new DIOCHECKTCPIPCONNECTIONS();
+  checkconnections = GEN_NEW DIOCHECKTCPIPCONNECTIONS();
   if(!checkconnections) return;
 
   GEN_XFACTORY_CREATE(xmutexconnectioncuts, Create_Mutex())
@@ -233,7 +233,7 @@ bool DIOCHECKINTERNETCONNECTION::Check()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKINTERNETCONNECTION::AddConnectionCut(DIOCHECKTCPIPCONNECTION_CUT& connectioncut)
 {
-  DIOCHECKTCPIPCONNECTION_CUT* chekconnectioncut = new DIOCHECKTCPIPCONNECTION_CUT();
+  DIOCHECKTCPIPCONNECTION_CUT* chekconnectioncut = GEN_NEW DIOCHECKTCPIPCONNECTION_CUT();
   if(!chekconnectioncut) return false;
 
   chekconnectioncut->CopyFrom(&connectioncut);

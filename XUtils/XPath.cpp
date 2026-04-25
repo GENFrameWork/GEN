@@ -1431,7 +1431,7 @@ bool XPATH::Split(XSTRING* drive, XVECTOR<XSTRING*>& subpaths, XSTRING* name, XS
     {
       if(!newpart)
         {
-          newpart = new XSTRING();
+          newpart = GEN_NEW XSTRING();
           if(!newpart) 
             {
               return false;

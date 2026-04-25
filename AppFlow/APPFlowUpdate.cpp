@@ -323,7 +323,7 @@ bool APPFLOWUPDATE::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWUPDATE& APPFLOWUPDATE::GetInstance()
 {
-  if(!instance) instance = new APPFLOWUPDATE();
+  if(!instance) instance = GEN_NEW APPFLOWUPDATE();
 
   return (*instance);
 }
@@ -378,7 +378,7 @@ bool APPFLOWUPDATE::Ini(APPFLOWCFG* cfg, APPFLOWUPDATE_CFG* updatecfg)
 
   //--------------------------------------------------------------------------------------
 
-  xscheduler = new XSCHEDULER();
+  xscheduler = GEN_NEW XSCHEDULER();
   if(!xscheduler) return false;
 
   CreateTaskUpdate();
@@ -390,7 +390,7 @@ bool APPFLOWUPDATE::Ini(APPFLOWCFG* cfg, APPFLOWUPDATE_CFG* updatecfg)
 
   EventManager(APPFLOWUPDATE_EVENTOPERATION_REGISTER);
 
-  dioappupdate = new DIOAPPLICATIONUPDATE(update_cfg.GetAppVersion()->GetVersion()         ,
+  dioappupdate = GEN_NEW DIOAPPLICATIONUPDATE(update_cfg.GetAppVersion()->GetVersion()         ,
                                           update_cfg.GetAppVersion()->GetSubVersion()      ,
                                           update_cfg.GetAppVersion()->GetSubVersionError() ,
                                           update_cfg.GetAppName()->Get(),
@@ -486,9 +486,9 @@ bool APPFLOWUPDATE::Do()
       // Check last update available
       if(dioappupdate->IsNewVersion(applicationversiondata))
         {
-          // Have new version available
+          // Have GEN_NEW version available
 
-          // Download new version to update available to subdir root/update[x.x.x] Update Version
+          // Download GEN_NEW version to update available to subdir root/update[x.x.x] Update Version
           xpathupdate = update_cfg.GetPathRootApp()->Get();
           xpathupdate.Slash_Add();
           xpathupdate.AddFormat(dir_mask.Get() , applicationversiondata.GetVersion()
@@ -530,7 +530,7 @@ bool APPFLOWUPDATE::Do()
                                                    , update_cfg.GetAppVersion()->GetSubVersion()
                                                    , update_cfg.GetAppVersion()->GetSubVersionError());
 
-              // Change actual files for the new version
+              // Change actual files for the GEN_NEW version
               status = dioappupdate->ChangeFilesFromDownload(applicationversiondata, xpathupdate, xpathbackup, error);
 
               //-----------------------------------------------------------------------
@@ -777,7 +777,7 @@ bool APPFLOWUPDATE::LogOfEvent(DIOAPPLICATIONUPDATE_XEVENT* event)
                                                                           {
                                                                             case -1 : string.Add(__L("old"));   break;
                                                                             case  0 : string.Add(__L("equal"));  break;
-                                                                            case  1 : string.Add(__L("new"));    break;
+                                                                            case  1 : string.Add(__L("GEN_NEW"));    break;
                                                                           }
 
                                                                         if(event->GetVersionComparation() <=0) string.AddFormat(__L(". It will not be updated"));
@@ -892,7 +892,7 @@ bool APPFLOWUPDATE::CreateTaskUpdate(bool doajust)
 {
   if(!cfg) return false;
 
-  XSCHEDULERTASK* xtask = new XSCHEDULERTASK(xscheduler);
+  XSCHEDULERTASK* xtask = GEN_NEW XSCHEDULERTASK(xscheduler);
   if(!xtask) return false;
 
   bool toactive = false;

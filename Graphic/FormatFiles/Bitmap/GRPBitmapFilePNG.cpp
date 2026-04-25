@@ -139,10 +139,10 @@ GRPBITMAP* GRPBITMAPFILEPNG::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
 
                       if(!setjmp(png_jmpbuf(png)))
                         {
-                          databuffer = (png_bytep*)new XBYTE[sizeof(png_bytep) * height];
+                          databuffer = (png_bytep*)GEN_NEW XBYTE[sizeof(png_bytep) * height];
                           for(int y=0; y<(int)height; y++)
                             {
-                              databuffer[y] = (png_byte*)new XBYTE[rowbytes];
+                              databuffer[y] = (png_byte*)GEN_NEW XBYTE[rowbytes];
                             }
 
                           png_read_image(png, databuffer);
@@ -274,10 +274,10 @@ GRPBITMAP* GRPBITMAPFILEPNG::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
 
                   if(!setjmp(png_jmpbuf(png)))
                     {
-                      databuffer = (png_bytep*)new XBYTE[sizeof(png_bytep) * height];
+                      databuffer = (png_bytep*)GEN_NEW XBYTE[sizeof(png_bytep) * height];
                       for(int y=0; y<(int)height; y++)
                         {
-                          databuffer[y] = (png_byte*)new XBYTE[rowbytes];
+                          databuffer[y] = (png_byte*)GEN_NEW XBYTE[rowbytes];
                         }
 
                       png_read_image(png, databuffer);
@@ -384,10 +384,10 @@ bool GRPBITMAPFILEPNG::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
                 {
                   rowbytes = width * 4;
 
-                  databuffer = (png_bytep*)new XBYTE[sizeof(png_bytep) * height];
+                  databuffer = (png_bytep*)GEN_NEW XBYTE[sizeof(png_bytep) * height];
                   for(int y=0; y<(int)height; y++)
                     {
-                      databuffer[y] = (png_byte*)new XBYTE[rowbytes];
+                      databuffer[y] = (png_byte*)GEN_NEW XBYTE[rowbytes];
                     }
 
                   png_set_IHDR(png, info, width                     ,

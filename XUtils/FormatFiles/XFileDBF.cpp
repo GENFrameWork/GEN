@@ -134,7 +134,7 @@ XFILEDBF_RECORD::XFILEDBF_RECORD(XVECTOR<XFILEDBF_FIELD*>* fields)
 
   if(size)
     {
-      datarec = new XBYTE [size];
+      datarec = GEN_NEW XBYTE [size];
       if(datarec) memset(datarec,' ',size);
     }
 }
@@ -578,7 +578,7 @@ bool XFILEDBF_HEADER::Load(XFILE* xfile)
       headerdata = NULL;
     }
 
-  headerdata = new XBYTE[headersize];
+  headerdata = GEN_NEW XBYTE[headersize];
   if(!headerdata) return false;
 
   if(!xfile->SetPosition(0)) return false;
@@ -637,7 +637,7 @@ bool XFILEDBF_HEADER::Create(XFILE* fileb)
 {
   headersize = (XWORD)(XFILEDBF_FIELDSTART + fields.GetSize()*XFILEDBF_FIELDSIZE+ 1);
 
-  headerdata = new XBYTE [headersize];
+  headerdata = GEN_NEW XBYTE [headersize];
   if(!headerdata) return false;
 
   memset(headerdata,0,headersize);
@@ -987,7 +987,7 @@ bool XFILEDBF_HEADER::CreateField(XFILEDBF_FIELDTYPE type,XCHAR* name,XBYTE size
 {
   XFILEDBF_FIELD* field;
 
-  field = new XFILEDBF_FIELD();
+  field = GEN_NEW XFILEDBF_FIELD();
   if(!field) return false;
 
   field->name = name;
@@ -1038,14 +1038,14 @@ bool XFILEDBF_HEADER::CopyFrom(XFILEDBF_HEADER* header)
 
   if(headerdata) delete [] headerdata;
 
-  headerdata = new XBYTE[headersize];
+  headerdata = GEN_NEW XBYTE[headersize];
   if(!headerdata) return false;
 
   memcpy(headerdata, header->GetHeaderData(), headersize);
 
   for(int c=0; c<header->GetNFields(); c++)
     {
-      XFILEDBF_FIELD* field = new XFILEDBF_FIELD();
+      XFILEDBF_FIELD* field = GEN_NEW XFILEDBF_FIELD();
       if(field)
         {
           field->name = header->GetField(c)->name;
@@ -1327,10 +1327,10 @@ XFILEDBF_RECORD* XFILEDBF::ReadRecord(XDWORD nrecord)
 
   if(!sizerecord) return NULL;
 
-  record = new XFILEDBF_RECORD(header->GetFields());
+  record = GEN_NEW XFILEDBF_RECORD(header->GetFields());
   if(!record) return NULL;
 
-  XBYTE* data = new XBYTE [sizerecord];
+  XBYTE* data = GEN_NEW XBYTE [sizerecord];
   if(!data)
     {
       delete record;
@@ -1489,7 +1489,7 @@ bool XFILEDBF::DeleteRecord(XDWORD nrecord)
   char*  data;
   int    size = header->GetSizeRecord()-1;
 
-  data = new char[size+10];
+  data = GEN_NEW char[size+10];
   if(!data) return false;
 
   memset(data,0,size+10);
@@ -1528,7 +1528,7 @@ bool XFILEDBF::Pack()
   xpathtmp  = GetXPath()->Get();
   xpathtmp += __L(".tmp");
 
-  XFILEDBF* dbftmp = new XFILEDBF();
+  XFILEDBF* dbftmp = GEN_NEW XFILEDBF();
   if(!dbftmp) return false;
 
   dbftmp->GetHeader()->CopyFrom(header);
@@ -1635,7 +1635,7 @@ bool XFILEDBF::Reduction(int maxrecords, int reductionpercent)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::CreateHeader()
 {
-  header = new XFILEDBF_HEADER();
+  header = GEN_NEW XFILEDBF_HEADER();
   if(!header)  return false;
 
   return true;

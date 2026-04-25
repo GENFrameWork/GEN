@@ -156,7 +156,7 @@ bool XLINUXIDRPI::DetectBoard(RPI_MODEL& model, int& megabytes, float& revision)
 
   xpath = __L("/proc/cpuinfo");
   
-  xfiletxt = new XFILETXT();
+  xfiletxt = GEN_NEW XFILETXT();
   if(!xfiletxt) return false;
 
   if(xfiletxt->Open(xpath))

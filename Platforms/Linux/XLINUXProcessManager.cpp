@@ -318,7 +318,7 @@ bool XLINUXPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* pa
 
       string.ConvertToASCII(xbuffer);
          
-      param[c] = new char[xbuffer.GetSize()+1];
+      param[c] = GEN_NEW char[xbuffer.GetSize()+1];
       if(param[c])
         {
           memset(param[c], 0, xbuffer.GetSize()+1);
@@ -579,7 +579,7 @@ bool XLINUXPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applis
               nameall.DeleteCharacter(__C('\n'), XSTRINGCONTEXT_TO_END);
               nameall.DeleteCharacter(__C('\r'), XSTRINGCONTEXT_TO_END);
 
-              XPROCESS* xprocess = new XPROCESS();
+              XPROCESS* xprocess = GEN_NEW XPROCESS();
               if(xprocess)
                 {                  
                   xprocess->SetID((XDWORD)lpid); 

@@ -74,7 +74,7 @@ DIOSPITOUCHSCREENSTMPE610::DIOSPITOUCHSCREENSTMPE610(): DIODEVICE()
 
   GEN_XFACTORY_CREATE(xtimer, CreateTimer())
   
-  databuffer = new XBUFFER();
+  databuffer = GEN_NEW XBUFFER();
 }
 
 
@@ -122,7 +122,7 @@ bool DIOSPITOUCHSCREENSTMPE610::IniDevice(int chipselect, int timeout)
 {
   if(!isdiostreamSPIexternal)
     {
-      diostreamSPIcfg = new DIOSTREAMSPICONFIG();
+      diostreamSPIcfg = GEN_NEW DIOSTREAMSPICONFIG();
       if(!diostreamSPIcfg)  return false;
 
       diostreamSPIcfg->SetSPIMode(DIOSTREAMSPI_MODE_0);

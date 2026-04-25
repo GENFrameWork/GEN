@@ -66,7 +66,7 @@ HASH::HASH()
 {
   Clean();
 
-  result = new XBUFFER();
+  result = GEN_NEW XBUFFER();
 }
 
 

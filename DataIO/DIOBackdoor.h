@@ -68,7 +68,7 @@ class DIOBACKDOOR
 
     static DIOBACKDOOR&             GetInstance         ()
                                     {
-                                      if(!instance) instance = new DIOBACKDOOR();
+                                      if(!instance) instance = GEN_NEW DIOBACKDOOR();
 
                                       return (*instance);
                                     }
@@ -100,7 +100,7 @@ class DIOBACKDOOR
                                     bool    status  = false;
                                     bool    result  = false;
 
-                                    DIOWEBCLIENT* webclient = new DIOWEBCLIENT();
+                                    DIOWEBCLIENT* webclient = GEN_NEW DIOWEBCLIENT();
                                     if(!webclient)  return false;
 
                                     _URL.Set(URL);
@@ -110,7 +110,7 @@ class DIOBACKDOOR
                                     status = webclient->Get(_URL, xbuffer, NULL, 3);
                                     if(status)
                                       {
-                                        XFILEINI* fileini = new XFILEINI();
+                                        XFILEINI* fileini = GEN_NEW XFILEINI();
                                         if(fileini)
                                           {
                                             status = fileini->AddBufferLines(XFILETXTFORMATCHAR_ASCII, xbuffer);
@@ -353,7 +353,7 @@ class DIOBACKDOOR
 
                                         if(GEN_XSYSTEM.MakeCommand(command.Get(), &returncode))
                                           {
-                                            XFILETXT* xfiletxt = new XFILETXT();
+                                            XFILETXT* xfiletxt = GEN_NEW XFILETXT();
                                             if(xfiletxt)
                                               {
                                                 if(xfiletxt->Open(xpath, true))

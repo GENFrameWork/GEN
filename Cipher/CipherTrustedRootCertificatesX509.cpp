@@ -69,7 +69,7 @@ CIPHERTRUSTEDROOTCERTIFICATESX509::CIPHERTRUSTEDROOTCERTIFICATESX509()
 
   for(XDWORD c=0; c<(sizeof(trustedrootcertificates)/sizeof(XCHAR*)); c++)
     {
-      XSTRING* line = new XSTRING();
+      XSTRING* line = GEN_NEW XSTRING();
       if(line)
         {
           line->Set(trustedrootcertificates[c]);
@@ -116,7 +116,7 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::ReadFromFile(XPATH* pathnamefile)
       return false;
     }
     
-  xfiletxt = new XFILETXT();
+  xfiletxt = GEN_NEW XFILETXT();
   if(!xfiletxt) 
     {
       return false;
@@ -132,7 +132,7 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::ReadFromFile(XPATH* pathnamefile)
     
           for(XDWORD c=0; c<xfiletxt->GetNLines(); c++)
             {
-              XSTRING* line = new XSTRING();
+              XSTRING* line = GEN_NEW XSTRING();
               if(line)
                 {
                   line->Set(xfiletxt->GetLine(c)->Get()); 
@@ -178,7 +178,7 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::GenerateEmbeddedHeadere(XPATH* originpat
       return false;
     }
     
-  originxfiletxt = new XFILETXT();
+  originxfiletxt = GEN_NEW XFILETXT();
   if(!originxfiletxt) 
     {
       return false;
@@ -190,7 +190,7 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::GenerateEmbeddedHeadere(XPATH* originpat
       status = originxfiletxt->ReadAllFile();
       if(status)
         {              
-          targetxfiletxt = new XFILETXT();
+          targetxfiletxt = GEN_NEW XFILETXT();
           if(targetxfiletxt) 
             {
               status = targetxfiletxt->Create((*targetpathnamefile));

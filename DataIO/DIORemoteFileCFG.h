@@ -264,7 +264,7 @@ class DIOREMOTEFILECFG : public XFILECFG
                                                                                   case XFILECFG_VALUETYPE_INT       : { XVECTOR<int*>* vector = (XVECTOR<int*>*)(localvalue->GetValuesVector());
                                                                                                                         if(vector) 
                                                                                                                           {
-                                                                                                                            int* integer = new int();  
+                                                                                                                            int* integer = GEN_NEW int();  
                                                                                                                             if(integer)
                                                                                                                               {
                                                                                                                                 (*integer) = (*(int*)(value->GetData()));
@@ -278,7 +278,7 @@ class DIOREMOTEFILECFG : public XFILECFG
                                                                                   case XFILECFG_VALUETYPE_FLOAT     : { XVECTOR<float*>* vector = (XVECTOR<float*>*)(localvalue->GetValuesVector());
                                                                                                                         if(vector) 
                                                                                                                           {
-                                                                                                                            float* numberfloat = new float();  
+                                                                                                                            float* numberfloat = GEN_NEW float();  
                                                                                                                             if(numberfloat)
                                                                                                                               {
                                                                                                                                 (*numberfloat) = (*(float*)(value->GetData()));
@@ -292,7 +292,7 @@ class DIOREMOTEFILECFG : public XFILECFG
                                                                                   case XFILECFG_VALUETYPE_STRING    : { XVECTOR<XSTRING*>* vector = (XVECTOR<XSTRING*>*)(localvalue->GetValuesVector());
                                                                                                                         if(vector) 
                                                                                                                           { 
-                                                                                                                            XSTRING* string = new XSTRING();
+                                                                                                                            XSTRING* string = GEN_NEW XSTRING();
                                                                                                                             if(string)
                                                                                                                               {
                                                                                                                                 XSTRING* string2 = (XSTRING*)value->GetData();  
@@ -307,7 +307,7 @@ class DIOREMOTEFILECFG : public XFILECFG
                                                                                   case XFILECFG_VALUETYPE_BOOLEAN   : { XVECTOR<bool*>* vector = (XVECTOR<bool*>*)(localvalue->GetValuesVector());
                                                                                                                         if(vector) 
                                                                                                                           { 
-                                                                                                                            bool* boolean = new bool();  
+                                                                                                                            bool* boolean = GEN_NEW bool();  
                                                                                                                             if(boolean)
                                                                                                                               {      
                                                                                                                                 (*boolean) = (*(bool*)(value->GetData()));        

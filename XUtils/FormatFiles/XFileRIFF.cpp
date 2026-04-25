@@ -372,7 +372,7 @@ bool XFILERIFF::ReadAllLists()
   XFILERIFF_LIST*      root_data;
 
 
-  root_data = new XFILERIFF_LIST();
+  root_data = GEN_NEW XFILERIFF_LIST();
   if(!root_data) 
     {
       return false;
@@ -418,7 +418,7 @@ bool XFILERIFF::ReadAllLists()
 
       //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[LIST] %s"), string.Get());   
  
-      root = new XFILERIFF_LIST_NODE(root_data);
+      root = GEN_NEW XFILERIFF_LIST_NODE(root_data);
       if(root) 
         {        
           xtreelist.SetRoot(root);
@@ -472,7 +472,7 @@ XQWORD XFILERIFF::ReadNodeLists(XFILERIFF_LIST_NODE* node)
           
           xfilebase->GetPosition(positionfiledata);
 
-          list = new XFILERIFF_LIST();
+          list = GEN_NEW XFILERIFF_LIST();
           if(!list) return 0;
       
           list->SetType(data[0]);
@@ -480,7 +480,7 @@ XQWORD XFILERIFF::ReadNodeLists(XFILERIFF_LIST_NODE* node)
           list->SetTypeList(data[2]);
           list->SetPositionFileData(positionfiledata);
 
-          subnode = new XFILERIFF_LIST_NODE(list);
+          subnode = GEN_NEW XFILERIFF_LIST_NODE(list);
           if(!subnode)  return 0;
 
           node->AddChild(subnode);
@@ -497,14 +497,14 @@ XQWORD XFILERIFF::ReadNodeLists(XFILERIFF_LIST_NODE* node)
         {
           xfilebase->GetPosition(positionfiledata);
 
-          list = new XFILERIFF_LIST();
+          list = GEN_NEW XFILERIFF_LIST();
           if(!list) return 0;
      
           list->SetType(data[0]);
           list->SetSize(data[1]);          
           list->SetPositionFileData(positionfiledata);
 
-          subnode = new XFILERIFF_LIST_NODE(list);
+          subnode = GEN_NEW XFILERIFF_LIST_NODE(list);
           if(!subnode)  return 0;
 
           node->AddChild(subnode);
@@ -806,10 +806,10 @@ XFILERIFF_LIST_NODE* XFILERIFF::GetChunkNode(XCHAR* typestr, XCHAR* fathertypeli
 * ---------------------------------------------------------------------------------------------------------------------*/
 XFILERIFF_LIST_NODE* XFILERIFF::CreateListNode(XDWORD type, XDWORD typelist)
 {
-  XFILERIFF_LIST* list = new XFILERIFF_LIST();
+  XFILERIFF_LIST* list = GEN_NEW XFILERIFF_LIST();
   if(!list) return NULL;
 
-  XFILERIFF_LIST_NODE* node = new XFILERIFF_LIST_NODE(list);
+  XFILERIFF_LIST_NODE* node = GEN_NEW XFILERIFF_LIST_NODE(list);
   if(!node)   
     {
       delete list;
@@ -864,10 +864,10 @@ XFILERIFF_LIST_NODE* XFILERIFF::CreateListNode(XCHAR* typestr, XCHAR* typelistst
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILERIFF_LIST_NODE* XFILERIFF::CreateChunkNode(XDWORD type, XDWORD datasize)
 {
-  XFILERIFF_LIST* list = new XFILERIFF_LIST();
+  XFILERIFF_LIST* list = GEN_NEW XFILERIFF_LIST();
   if(!list) return NULL;
 
-  XFILERIFF_LIST_NODE* node = new XFILERIFF_LIST_NODE(list);
+  XFILERIFF_LIST_NODE* node = GEN_NEW XFILERIFF_LIST_NODE(list);
   if(!node)   
     {
       delete list;

@@ -131,7 +131,7 @@ bool DIOWINDOWSSTREAMBLUETOOTHLOCALENUMDEVICES::Search()
 
           if(status == ERROR_SUCCESS)
             {
-              DIOSTREAMDEVICEBLUETOOTH* device = new DIOSTREAMDEVICEBLUETOOTH();
+              DIOSTREAMDEVICEBLUETOOTH* device = GEN_NEW DIOSTREAMDEVICEBLUETOOTH();
               if(device)
                 {
                   device->SetIndex(index);

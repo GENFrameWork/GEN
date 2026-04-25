@@ -165,7 +165,7 @@ bool XTRACE_TARGET::GetAim(XSTRING& aim)
 * @brief      Set aim
 * @ingroup    XUTILS
 *
-* @param[in]  aim : new aim of target
+* @param[in]  aim : GEN_NEW aim of target
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRACE_TARGET::SetAim(XSTRING& aim)
@@ -181,7 +181,7 @@ void XTRACE_TARGET::SetAim(XSTRING& aim)
 * @brief      Set aim
 * @ingroup    XUTILS
 *
-* @param[in]  aim : new aim of target
+* @param[in]  aim : GEN_NEW aim of target
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRACE_TARGET::SetAim(XCHAR* aim)
@@ -336,7 +336,7 @@ XQWORD XTRACE_TARGET::GetNETHandle()
 * @brief       Set NET handle
 * @ingroup    XUTILS
 *
-* @param[in]  NEThandle : new Net Handle of target
+* @param[in]  NEThandle : GEN_NEW Net Handle of target
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRACE_TARGET:: SetNETHandle(XQWORD NEThandle)
@@ -757,7 +757,7 @@ XTRACE_STATUS_MSG* XTRACE_STATUS_MSGS::StatusMsg_Add(XSTRING* line)
   XTRACE_STATUS_MSG* status_msg = StatusMsg_Get(name.Get());
   if(!status_msg)
     {
-      status_msg = new XTRACE_STATUS_MSG();
+      status_msg = GEN_NEW XTRACE_STATUS_MSG();
       if(!status_msg) return NULL;
 
       isnew = true;  
@@ -1066,7 +1066,7 @@ XDWORD XTRACE::GetSizeLimit()
 * @brief      Set size limit
 * @ingroup    XUTILS
 *
-* @param[in]  sizelimit : new size limit
+* @param[in]  sizelimit : GEN_NEW size limit
 *
 * @return     bool : true if is succesful.
 *
@@ -1101,7 +1101,7 @@ XCHAR* XTRACE::Application_GetName()
 * @brief      Application set name
 * @ingroup    XUTILS
 *
-* @param[in]  applicationname : new application name
+* @param[in]  applicationname : GEN_NEW application name
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRACE::Application_SetName(XCHAR* applicationname)
@@ -1120,7 +1120,7 @@ void XTRACE::Application_SetName(XCHAR* applicationname)
 * @brief      Application set name
 * @ingroup    XUTILS
 *
-* @param[in]  applicationname : new application name
+* @param[in]  applicationname : GEN_NEW application name
 * @param[in]  size : size of application name
 *
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -1137,7 +1137,7 @@ void XTRACE::Application_SetName(XCHAR* applicationname, XDWORD size)
 * @brief      Application set name
 * @ingroup    XUTILS
 *
-* @param[in]  applicationname : new application name
+* @param[in]  applicationname : GEN_NEW application name
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRACE::Application_SetName(XSTRING& applicationname)
@@ -1171,9 +1171,9 @@ void XTRACE::Application_GetVersion(int& applicationversion, int& applicationsub
 * @brief      Application set version
 * @ingroup    XUTILS
 *
-* @param[in]  applicationversion : new version number
-* @param[in]  applicationsubversion : new subversion number
-* @param[in]  applicationsubversionerr : new subversion error number
+* @param[in]  applicationversion : GEN_NEW version number
+* @param[in]  applicationsubversion : GEN_NEW subversion number
+* @param[in]  applicationsubversionerr : GEN_NEW subversion error number
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRACE::Application_SetVersion(int applicationversion, int applicationsubversion, int applicationsubversionerr)
@@ -1205,7 +1205,7 @@ XCHAR* XTRACE::Application_GetID()
 * @brief      Application set ID
 * @ingroup    XUTILS
 *
-* @param[in]  applicationID : new string application ID
+* @param[in]  applicationID : GEN_NEW string application ID
 * @param[in]  size : size application ID
 *
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -1222,7 +1222,7 @@ void XTRACE::Application_SetID(XCHAR* applicationID, XDWORD size)
 * @brief      Application set ID
 * @ingroup    XUTILS
 *
-* @param[in]  applicationID : new string application ID
+* @param[in]  applicationID : GEN_NEW string application ID
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRACE::Application_SetID(XSTRING& applicationID)
@@ -2100,7 +2100,7 @@ bool XTRACE::ObtainLocalIP()
 * @brief      Set local IP string
 * @ingroup    XUTILS
 *
-* @param[in]  localIPstring : new local ip in string format
+* @param[in]  localIPstring : GEN_NEW local ip in string format
 *
 * @return     bool : true if is succesful.
 *

@@ -282,10 +282,10 @@ bool DIOSTM32STREAMI2C::Open()
 
   if(!DIOSTM32STREAMI2C::ports[indexport])
     {
-      DIOSTM32STREAMI2CPORT* port = new DIOSTM32STREAMI2CPORT();
+      DIOSTM32STREAMI2CPORT* port = GEN_NEW DIOSTM32STREAMI2CPORT();
       if(!port) return false;
 
-      hi2c = new I2C_HandleTypeDef();
+      hi2c = GEN_NEW I2C_HandleTypeDef();
       if(!hi2c)
         {
           delete port;

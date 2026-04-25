@@ -238,7 +238,7 @@ DIOCHECKTCPIPCONNECTION::DIOCHECKTCPIPCONNECTION()
 {
   Clean();
 
-  url = new DIOURL();
+  url = GEN_NEW DIOURL();
   
   GEN_XFACTORY_CREATE(timerconnexion, CreateTimer()) 
 }
@@ -659,7 +659,7 @@ void DIOCHECKTCPIPCONNECTIONS::Setup(int timeconnectionchecks, bool validsomeisc
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(XCHAR* url, XDWORD& ID)
 {
-  DIOCHECKTCPIPCONNECTION* connection = new DIOCHECKTCPIPCONNECTION();
+  DIOCHECKTCPIPCONNECTION* connection = GEN_NEW DIOCHECKTCPIPCONNECTION();
   if(!connection) return false;
 
   if(connection->Set(url))

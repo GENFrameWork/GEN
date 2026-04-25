@@ -171,7 +171,7 @@ bool UI_VIRTUALKEYBOARD::Ini(UI_LAYOUT* layout, GRPSCREEN* screen)
   this->screen = screen; 
   this->skin   = layout->GetSkin(); 
 
-  main_form = new UI_ELEMENT_FORM();
+  main_form = GEN_NEW UI_ELEMENT_FORM();
   if(!main_form) return false;
 
   main_form->GetName()->Set(__L("Virtual Keyboard"));
@@ -531,7 +531,7 @@ UI_ANIMATION* UI_VIRTUALKEYBOARD::AddImageCache(XCHAR* name, XCHAR* resource)
   animation = GEN_UI_ANIMATIONS.Get(resource);
   if(animation) return animation;
 
-  animation = new UI_ANIMATION();
+  animation = GEN_NEW UI_ANIMATION();
   if(!animation) return NULL;
   
   XSTRING resourcename;
@@ -606,18 +606,18 @@ GRPBITMAP* UI_VIRTUALKEYBOARD::LoadKeyImage(XCHAR* pathimage)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::AddKeyButton(XCHAR* leyend, XCHAR* text, XCHAR* xpathbitmap, UI_VIRTUALKEYBOARD_KEYINFO& keyinfo)
 {  
-  UI_ELEMENT_MULTIOPTION* element_multioption = new UI_ELEMENT_MULTIOPTION();
+  UI_ELEMENT_MULTIOPTION* element_multioption = GEN_NEW UI_ELEMENT_MULTIOPTION();
   if(!element_multioption) return false;
 
   for(int c=0; c<4; c++)
     { 
-      UI_ELEMENT_OPTION*            element_option  = new UI_ELEMENT_OPTION();
+      UI_ELEMENT_OPTION*            element_option  = GEN_NEW UI_ELEMENT_OPTION();
       UI_PROPERTY_SELECTABLE_STATE  state           = (UI_PROPERTY_SELECTABLE_STATE)c;
       if(!element_option) return false;
   
       if(text)
         {  
-          UI_ELEMENT_TEXT* element_text = new UI_ELEMENT_TEXT();
+          UI_ELEMENT_TEXT* element_text = GEN_NEW UI_ELEMENT_TEXT();
           if(element_text) 
             {          
               element_text->SetFather(element_option);
@@ -651,7 +651,7 @@ bool UI_VIRTUALKEYBOARD::AddKeyButton(XCHAR* leyend, XCHAR* text, XCHAR* xpathbi
 
       if(xpathbitmap)
         {     
-          UI_ELEMENT_ANIMATION* element_animation = new UI_ELEMENT_ANIMATION();
+          UI_ELEMENT_ANIMATION* element_animation = GEN_NEW UI_ELEMENT_ANIMATION();
           if(element_animation) 
             {                  
               GRPBITMAP* bitmap = NULL;
@@ -660,7 +660,7 @@ bool UI_VIRTUALKEYBOARD::AddKeyButton(XCHAR* leyend, XCHAR* text, XCHAR* xpathbi
               element_animation->GetName()->Add(UI_VIRTUALKEYBOARD_ELEMENTID);
               element_animation->GetName()->Add(leyend);
           
-              UI_ELEMENT_IMAGE* element_image = new UI_ELEMENT_IMAGE();
+              UI_ELEMENT_IMAGE* element_image = GEN_NEW UI_ELEMENT_IMAGE();
               if(element_image) 
                 {                  
                   bitmap = LoadKeyImage(xpathbitmap);

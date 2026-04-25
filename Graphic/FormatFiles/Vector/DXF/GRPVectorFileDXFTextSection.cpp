@@ -246,16 +246,16 @@ GRPVECTORFILEDXFTEXTSECTION* GRPVECTORFILEDXFTEXTSECTION::CreateInstance(GRPVECT
       case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_UNKNOWN        :  
                                                   default         : break;
 
-      case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_HEADER         : section = new GRPVECTORFILEDXFTEXTSECTIONHEADER();                                                               
+      case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_HEADER         : section = GEN_NEW GRPVECTORFILEDXFTEXTSECTIONHEADER();                                                               
                                                                     break;  
 
       case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_CLASSES        : break;   
       case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_TABLES         : break;    
 
-      case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_BLOCKS         : section = new GRPVECTORFILEDXFTEXTSECTIONBLOCKS();
+      case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_BLOCKS         : section = GEN_NEW GRPVECTORFILEDXFTEXTSECTIONBLOCKS();
                                                                     break; 
 
-      case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_ENTITIES       : section = new GRPVECTORFILEDXFTEXTSECTIONENTITIES();
+      case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_ENTITIES       : section = GEN_NEW GRPVECTORFILEDXFTEXTSECTIONENTITIES();
                                                                     break;  
                                                               
       case GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_OBJECTS        : break; 

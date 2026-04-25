@@ -382,7 +382,7 @@ int LUA_LibraryCallBack(lua_State* state)
 
   for(int c=1; c <= nargs; ++c)
     {
-      XVARIANT* variant = new XVARIANT();
+      XVARIANT* variant = GEN_NEW XVARIANT();
       if(variant)
         {
           switch(lua_type(state, c))

@@ -343,7 +343,7 @@ void Call_Window_GetPosX(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
                                           xpathbitmapref.Slash_Add();
                                           xpathbitmapref.Add(bitmaprefname);
 
-                                          GRPBITMAPFILE* bitmapfileref = new GRPBITMAPFILE(xpathbitmapref);
+                                          GRPBITMAPFILE* bitmapfileref = GEN_NEW GRPBITMAPFILE(xpathbitmapref);
                                           if(bitmapfileref)
                                             {                   
                                               #ifdef SCRIPT_LIB_WINDOWS_DEBUG                              

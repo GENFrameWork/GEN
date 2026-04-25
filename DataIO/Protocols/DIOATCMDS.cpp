@@ -702,7 +702,7 @@ bool DIOATCMDS::AddCommand(XDWORD type, XCHAR* command,bool isunsolicited)
   DIOATCMD* ATcommand = GetCommand(type);
   if(ATcommand) return false;
 
-  ATcommand = new DIOATCMD();
+  ATcommand = GEN_NEW DIOATCMD();
   if(!ATcommand) return false;
 
   ATcommand->Set(type,command,isunsolicited);
@@ -957,7 +957,7 @@ bool DIOATCMDS::AddSendCommand(XSTRING* sendcommand)
   if(!sendcommand)           return false;
   if(sendcommand->IsEmpty()) return false;
 
-  XSTRING* sc = new XSTRING();
+  XSTRING* sc = GEN_NEW XSTRING();
   if(!sc) return false;
 
   for(XDWORD c=0;c<sendcommand->GetSize();c++)
@@ -1643,7 +1643,7 @@ void DIOATCMDS::ThreadConnection(void* param)
 
                   if(!dioatcmds->CheckUnsolicitedAnswer(answer))
                     {
-                      XSTRING* answerkeep = new XSTRING();
+                      XSTRING* answerkeep = GEN_NEW XSTRING();
                       if(answerkeep)
                         {
                           (*answerkeep) = answer;

@@ -129,7 +129,7 @@ XCHAR* MYSQL_DATABASE::GetTypeName()
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT* MYSQL_DATABASE::CreateVariant()
 {
-  return new DB_SQL_VARIANT();
+  return GEN_NEW DB_SQL_VARIANT();
 }
 
 
@@ -326,7 +326,7 @@ bool MYSQL_DATABASE::ReleaseSavepoint(XCHAR* savepoint)
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_QUERY* MYSQL_DATABASE::CreateQuery()
 {
-  DB_SQL_QUERY* query = new MYSQL_QUERY(this);
+  DB_SQL_QUERY* query = GEN_NEW MYSQL_QUERY(this);
   return query;
 }
 
@@ -342,7 +342,7 @@ DB_SQL_QUERY* MYSQL_DATABASE::CreateQuery()
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_CONNECTION* MYSQL_DATABASE::CreateConnection()
 {
-  DB_SQL_CONNECTION* conn = new MYSQL_CONNECTION(this);
+  DB_SQL_CONNECTION* conn = GEN_NEW MYSQL_CONNECTION(this);
   return conn;
 }
 
@@ -383,7 +383,7 @@ bool MYSQL_DATABASE::GetTables()
                 {
                   if(row->Get(e).GetType()==(XVARIANT_TYPE)DB_SQL_VARIANT_TYPE_STRING)
                     {
-                      DB_SQL_STRING* tablename=new DB_SQL_STRING();
+                      DB_SQL_STRING* tablename=GEN_NEW DB_SQL_STRING();
                       if(tablename)
                         {
                           tablename->Set((XCHAR*)row->Get(0));

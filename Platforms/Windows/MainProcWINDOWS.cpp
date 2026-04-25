@@ -421,7 +421,7 @@ bool MAINPROCWINDOWS::End()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCWINDOWS::Factorys_Ini()
 {  
-  if(!XFACTORY::SetInstance(new XWINDOWSFACTORY()))
+  if(!XFACTORY::SetInstance(GEN_NEW XWINDOWSFACTORY()))
     {
       return false;
     }
@@ -429,7 +429,7 @@ bool MAINPROCWINDOWS::Factorys_Ini()
   XFEEDBACK_CONTROL_CREATE
   
   #ifdef XSYSTEM_ACTIVE  
-  if(!XSYSTEM::SetInstance(new XWINDOWSSYSTEM()))  
+  if(!XSYSTEM::SetInstance(GEN_NEW XWINDOWSSYSTEM()))  
     {
       return false;
     }
@@ -437,7 +437,7 @@ bool MAINPROCWINDOWS::Factorys_Ini()
   #endif
 
   #ifdef DIO_OSPIPELINE_ACTIVE  
-  if(!DIOOSPIPELINE::SetInstance(new DIOWINDOWSOSPIPELINE()))  
+  if(!DIOOSPIPELINE::SetInstance(GEN_NEW DIOWINDOWSOSPIPELINE()))  
     {
       return false;
     } 
@@ -445,47 +445,47 @@ bool MAINPROCWINDOWS::Factorys_Ini()
   #endif
   
   #ifdef XSLEEP_ACTIVE
-  if(!XSLEEP::SetInstance(new XWINDOWSSLEEP())) 
+  if(!XSLEEP::SetInstance(GEN_NEW XWINDOWSSLEEP())) 
     {
       return false;
     }
   #endif
 
-  if(!XRAND::SetInstance(new XWINDOWSRAND())) 
+  if(!XRAND::SetInstance(GEN_NEW XWINDOWSRAND())) 
     {
       return false;
     }
   
   #ifdef XPROCESSMANAGER_ACTIVE
-  if(!XPROCESSMANAGER::SetInstance(new XWINDOWSPROCESSMANAGER())) 
+  if(!XPROCESSMANAGER::SetInstance(GEN_NEW XWINDOWSPROCESSMANAGER())) 
     {
       return false;
     }
   #endif
   
   #ifdef XSHAREDMEMORYMANAGER_ACTIVE
-  if(!XSHAREDMEMORYMANAGER::SetInstance(new XWINDOWSSHAREDMEMORYMANAGER())) 
+  if(!XSHAREDMEMORYMANAGER::SetInstance(GEN_NEW XWINDOWSSHAREDMEMORYMANAGER())) 
     {
       return false;
     }
   #endif
 
   #ifdef XDRIVEIMAGE_ACTIVE
-  if(!XDRIVEIMAGE::SetInstance(new XWINDOWSDRIVEIMAGE())) 
+  if(!XDRIVEIMAGE::SetInstance(GEN_NEW XWINDOWSDRIVEIMAGE())) 
     {
       return false;
     }
   #endif
 
   #ifdef XEEPROMMEMORYMANAGER_ACTIVE
-  if(!XEEPROMMEMORYMANAGER::SetInstance(new XWINDOWSEEPROMMEMORYMANAGER())) 
+  if(!XEEPROMMEMORYMANAGER::SetInstance(GEN_NEW XWINDOWSEEPROMMEMORYMANAGER())) 
     {
       return false;
     }
   #endif
 
   #ifdef XTRACE_VIRTUALCLOCKTICK
-  xtimerclock = new XTIMERCLOCK();
+  xtimerclock = GEN_NEW XTIMERCLOCK();
   if(!xtimerclock) 
     {
       return false;
@@ -493,14 +493,14 @@ bool MAINPROCWINDOWS::Factorys_Ini()
   #endif
 
   #ifdef INP_ACTIVE
-  if(!INPFACTORY::SetInstance(new INPWINDOWSFACTORY())) 
+  if(!INPFACTORY::SetInstance(GEN_NEW INPWINDOWSFACTORY())) 
     {
       return false;  
     }
   #endif
 
   #ifdef DIO_ACTIVE
-  if(!DIOFACTORY::SetInstance(new DIOWINDOWSFACTORY())) 
+  if(!DIOFACTORY::SetInstance(GEN_NEW DIOWINDOWSFACTORY())) 
     {
       return false;
     }
@@ -508,7 +508,7 @@ bool MAINPROCWINDOWS::Factorys_Ini()
     #ifdef DIO_GPIO_ACTIVE
 
       #ifdef DIO_GPIO_PCPARALLEL_ACTIVE
-      if(!DIOGPIO::SetInstance(new DIOWINDOWSGPIOPCPARALLEL())) 
+      if(!DIOGPIO::SetInstance(GEN_NEW DIOWINDOWSGPIOPCPARALLEL())) 
         {
           return false;    
         }
@@ -522,7 +522,7 @@ bool MAINPROCWINDOWS::Factorys_Ini()
     #endif
 
     #ifdef DIO_PING_ACTIVE    
-    if(!DIOPING::SetInstance(new DIOWINDOWSPING())) 
+    if(!DIOPING::SetInstance(GEN_NEW DIOWINDOWSPING())) 
       {
         return false;
       }    
@@ -531,7 +531,7 @@ bool MAINPROCWINDOWS::Factorys_Ini()
   #endif
 
   #ifdef SND_ACTIVE
-  if(!SNDFACTORY::SetInstance(new SNDWINDOWSFACTORY())) 
+  if(!SNDFACTORY::SetInstance(GEN_NEW SNDWINDOWSFACTORY())) 
     {
       return false;
     }
@@ -542,7 +542,7 @@ bool MAINPROCWINDOWS::Factorys_Ini()
   #endif
 
   #ifdef GRP_ACTIVE
-  if(!GRPFACTORY::SetInstance(new GRPWINDOWSFACTORY())) 
+  if(!GRPFACTORY::SetInstance(GEN_NEW GRPWINDOWSFACTORY())) 
     {
       return false;
     }
@@ -1526,7 +1526,7 @@ int Exception_Filter(XDWORD code, struct _EXCEPTION_POINTERS* ep)
   XSTRING description;
   XSTRING string;
 
-  allexceptiontext = new XSTRING();
+  allexceptiontext = GEN_NEW XSTRING();
   if(!allexceptiontext) return 0;
 
   APPFLOWBASE* app = NULL;

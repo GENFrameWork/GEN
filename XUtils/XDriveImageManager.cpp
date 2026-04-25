@@ -124,7 +124,7 @@ XDRIVEIMAGEMANAGER& XDRIVEIMAGEMANAGER::GetInstance()
 {
   if(!instance) 
     {
-      instance = new XDRIVEIMAGEMANAGER();
+      instance = GEN_NEW XDRIVEIMAGEMANAGER();
     }
 
   return (*instance);
@@ -138,7 +138,7 @@ XDRIVEIMAGEMANAGER& XDRIVEIMAGEMANAGER::GetInstance()
 * @note       STATIC
 * @ingroup    XUTILS
 *
-* @param[in]  _instance : new instance
+* @param[in]  _instance : GEN_NEW instance
 *
 * @return     bool : true if is succesful.
 *

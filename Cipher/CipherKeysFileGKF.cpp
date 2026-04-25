@@ -78,7 +78,7 @@ CIPHERKEYSFILEGKF::CIPHERKEYSFILEGKF(XPATH& xpath)
 
   this->xpath  = xpath;
 
-  xfilexml = new XFILEXML();
+  xfilexml = GEN_NEW XFILEXML();
   if(!xfilexml) return;
 
   ReadAllFile();
@@ -219,7 +219,7 @@ bool CIPHERKEYSFILEGKF::AddKey(CIPHERKEY& key)
     {
       case CIPHERKEYTYPE_UNKNOWN        : break;
 
-      case CIPHERKEYTYPE_SYMMETRICAL    : { CIPHERKEYSYMMETRICAL* keysimetrical = new CIPHERKEYSYMMETRICAL();
+      case CIPHERKEYTYPE_SYMMETRICAL    : { CIPHERKEYSYMMETRICAL* keysimetrical = GEN_NEW CIPHERKEYSYMMETRICAL();
 
                                             keysimetrical->CopyFrom((CIPHERKEYSYMMETRICAL*)&key);
 
@@ -227,14 +227,14 @@ bool CIPHERKEYSFILEGKF::AddKey(CIPHERKEY& key)
                                           }
                                           break;
 
-      case CIPHERKEYTYPE_RSA_PUBLIC     : { CIPHERKEYPUBLICRSA* keypublic = new CIPHERKEYPUBLICRSA();
+      case CIPHERKEYTYPE_RSA_PUBLIC     : { CIPHERKEYPUBLICRSA* keypublic = GEN_NEW CIPHERKEYPUBLICRSA();
 
                                             keypublic->CopyFrom((CIPHERKEYPUBLICRSA*)&key);
                                             keys.Add(keypublic);
                                           }
                                           break;
 
-      case CIPHERKEYTYPE_RSA_PRIVATE    : { CIPHERKEYPRIVATERSA* keyprivate = new CIPHERKEYPRIVATERSA();
+      case CIPHERKEYTYPE_RSA_PRIVATE    : { CIPHERKEYPRIVATERSA* keyprivate = GEN_NEW CIPHERKEYPRIVATERSA();
 
                                             keyprivate->CopyFrom((CIPHERKEYPRIVATERSA*)&key);
                                             keys.Add(keyprivate);
@@ -314,7 +314,7 @@ bool CIPHERKEYSFILEGKF::UpdateFile()
 
   if(!xfilexml->Create(xpath))   return false;
 
-  XFILEXMLELEMENT* noderoot = new XFILEXMLELEMENT(CIPHERKEYSFILEGKF_NODENAME_ROOT);
+  XFILEXMLELEMENT* noderoot = GEN_NEW XFILEXMLELEMENT(CIPHERKEYSFILEGKF_NODENAME_ROOT);
   if(!noderoot) return false;
 
   XFILEXMLELEMENT* node   = NULL;
@@ -419,7 +419,7 @@ bool CIPHERKEYSFILEGKF::UpdateFile()
     {
       XFILEXMLATTRIBUTE* attribute;
 
-      attribute = new XFILEXMLATTRIBUTE(__L("version"),__L("1.0"));
+      attribute = GEN_NEW XFILEXMLATTRIBUTE(__L("version"),__L("1.0"));
       if(attribute) CFGatributes->Add(attribute);      
     }
 
@@ -666,7 +666,7 @@ bool CIPHERKEYSFILEGKF::ReadAllFile()
                                 {
                                   case CIPHERKEYTYPE_UNKNOWN        : break;
 
-                                  case CIPHERKEYTYPE_SYMMETRICAL  : { CIPHERKEYSYMMETRICAL* keysimetrical = new CIPHERKEYSYMMETRICAL();
+                                  case CIPHERKEYTYPE_SYMMETRICAL  : { CIPHERKEYSYMMETRICAL* keysimetrical = GEN_NEW CIPHERKEYSYMMETRICAL();
                                                                       if(keysimetrical)
                                                                         {
                                                                           if(node->GetValueAttribute(CIPHERKEYSFILEGKF_ATTRNAME_CIPHERKEY_KEY  , string))
@@ -682,7 +682,7 @@ bool CIPHERKEYSFILEGKF::ReadAllFile()
                                                                     }
                                                                     break;
 
-                                  case CIPHERKEYTYPE_RSA_PUBLIC   : { CIPHERKEYPUBLICRSA* keypublic = new CIPHERKEYPUBLICRSA();
+                                  case CIPHERKEYTYPE_RSA_PUBLIC   : { CIPHERKEYPUBLICRSA* keypublic = GEN_NEW CIPHERKEYPUBLICRSA();
                                                                       if(keypublic)
                                                                         {
                                                                           XMPINTEGER modulus;
@@ -710,7 +710,7 @@ bool CIPHERKEYSFILEGKF::ReadAllFile()
                                                                     }
                                                                     break;
 
-                                  case CIPHERKEYTYPE_RSA_PRIVATE  : { CIPHERKEYPRIVATERSA* keyprivate = new CIPHERKEYPRIVATERSA();
+                                  case CIPHERKEYTYPE_RSA_PRIVATE  : { CIPHERKEYPRIVATERSA* keyprivate = GEN_NEW CIPHERKEYPRIVATERSA();
                                                                       if(keyprivate)
                                                                         {
                                                                           XMPINTEGER prime1factor;

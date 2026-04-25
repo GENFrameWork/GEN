@@ -863,7 +863,7 @@ bool XFILETXT::WriteAllFile()
   XBYTE*  buffer;
   bool    status    = true;
 
-  buffer  = new XBYTE[XFILETXT_MAXBUFFER];
+  buffer  = GEN_NEW XBYTE[XFILETXT_MAXBUFFER];
   if(buffer)
     {
       int bw;
@@ -972,7 +972,7 @@ bool XFILETXT::ReadNLines(int nlines)
   XDWORD  br;
   XBUFFER dataline(false);
 
-  XBYTE*  readbuffer = new XBYTE[XFILETXT_MAXBUFFER];
+  XBYTE*  readbuffer = GEN_NEW XBYTE[XFILETXT_MAXBUFFER];
   if(!readbuffer) return false;
 
   memset(readbuffer, 0, XFILETXT_MAXBUFFER);
@@ -1083,7 +1083,7 @@ bool XFILETXT::AddLine(XCHAR* line)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLine(XSTRING& line)
 {
-  XSTRING* string = new XSTRING(line);
+  XSTRING* string = GEN_NEW XSTRING(line);
   if(!string) return false;
 
   lines.Add(string);
@@ -1106,7 +1106,7 @@ bool XFILETXT::AddLine(XSTRING& line)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLine(XBUFFER& data, XFILETXTFORMATCHAR formatchar)
 { 
-  XSTRING* string = new XSTRING();
+  XSTRING* string = GEN_NEW XSTRING();
   if(!string) return false;
 
   XSTRINGCODING format = XSTRINGCODING_UNKWOWN;
@@ -1161,7 +1161,7 @@ bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line
                                             string.ConvertFromUTF8((XBYTE*)line, sizeline);
                                             break;
 
-      case XFILETXTFORMATCHAR_UTF16_BE    : { XCHAR* unibuffer = new XCHAR[sizeline];
+      case XFILETXTFORMATCHAR_UTF16_BE    : { XCHAR* unibuffer = GEN_NEW XCHAR[sizeline];
                                               XWORD* wline     = (XWORD*)line;
 
                                               if(unibuffer)
@@ -1179,7 +1179,7 @@ bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line
                                              }
                                              break;
 
-      case XFILETXTFORMATCHAR_UTF16_LE   :  {  XCHAR* unibuffer = new XCHAR[sizeline];
+      case XFILETXTFORMATCHAR_UTF16_LE   :  {  XCHAR* unibuffer = GEN_NEW XCHAR[sizeline];
                                                XWORD*          wline     = (XWORD*)line;
                                                if(unibuffer)
                                                  {
@@ -1217,7 +1217,7 @@ bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLine(XFILETXTFORMATCHAR formatchar, XBYTE* line, XDWORD sizeline)
 {
-  XSTRING* string = new XSTRING();
+  XSTRING* string = GEN_NEW XSTRING();
   if(!string) return false;
 
   if(GenerateLineFromBuffer(formatchar, line, sizeline, (*string)))
@@ -1281,7 +1281,7 @@ bool XFILETXT::AddLineAlready(XSTRING& line, XDWORD* resultsizeline, XDWORD* res
 
   bool status = true;
 
-  XBYTE* buffer = new XBYTE[XFILETXT_MAXBUFFER];
+  XBYTE* buffer = GEN_NEW XBYTE[XFILETXT_MAXBUFFER];
   if(buffer)
     {
       int bw = 0;
@@ -1386,7 +1386,7 @@ bool XFILETXT::InsertLine(int index, XCHAR* line)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::InsertLine(int index, XSTRING& line)
 {
-  XSTRING* string = new XSTRING(line);
+  XSTRING* string = GEN_NEW XSTRING(line);
   if(!string) return false;
 
   return lines.Insert(index,string);
@@ -1688,7 +1688,7 @@ bool XFILETXT::CopyTo(XFILETXT* filetxt)
 
   for(int c=0; c<GetNLines(); c++)
     {
-      XSTRING* line  = new XSTRING();
+      XSTRING* line  = GEN_NEW XSTRING();
       if(line)
         {
           (*line) = GetLine(c)->Get();

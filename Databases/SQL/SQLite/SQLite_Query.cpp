@@ -104,7 +104,7 @@ bool SQLITE_QUERY::Execute()
       return false;
     }
 
-  XBUFFER* buffer = new XBUFFER();
+  XBUFFER* buffer = GEN_NEW XBUFFER();
   if(!buffer) return false;
 
   GetValue()->ConvertToUTF8(*buffer);
@@ -115,7 +115,7 @@ bool SQLITE_QUERY::Execute()
   XDWORD size = buffer->GetSize();
   if(!size)
     {
-      DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+      DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
       if(!error) return false;
 
       error->description.Set(__L("void statement"));
@@ -266,7 +266,7 @@ int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
   int preparereturncode = sqlite3_prepare_v2(db, sql, size, &ppstmt, 0);
   if(preparereturncode)
     {
-      DB_SQL_ERROR* error=new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+      DB_SQL_ERROR* error=GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
       if(!error) return 1;
 
       error->description.Set(sqlite3_errmsg(db));
@@ -298,7 +298,7 @@ int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
       int rc = sqlite3_step(ppstmt);
       switch(rc)
         {
-          case SQLITE_LOCKED  : { DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_CONNECTION_ERROR);
+          case SQLITE_LOCKED  : { DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_CONNECTION_ERROR);
                                   if(!error) return 1;
 
                                   error->description.Set(sqlite3_errmsg(db));
@@ -309,7 +309,7 @@ int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
                                 }
                                 break;
 
-          case SQLITE_PERM    : { DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_CONNECTION_ERROR);
+          case SQLITE_PERM    : { DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_CONNECTION_ERROR);
                                   if(!error) return 1;
 
                                   error->description.Set(sqlite3_errmsg(db));
@@ -328,7 +328,7 @@ int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
                                 break;
 
           case SQLITE_ERROR   : // statment failed
-                                { DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
+                                { DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_STATEMENT_ERROR);
                                   if (!error) return 1;
 
                                   error->description.Set(sqlite3_errmsg(db));
@@ -357,7 +357,7 @@ int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
                                       result = ConstructResult();
                                       if(!result)
                                         {
-                                          DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
+                                          DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
                                           if(!error) return 1;
 
                                           error->description.Set(__L("not enought memory for result"));
@@ -421,7 +421,7 @@ bool SQLITE_QUERY::BindParametersToQuery()
 
                                                   datetime.GetDateTimeToString(XDATETIME_FORMAT_STANDARD, string);
 
-                                                  XBUFFER* variantdatabuffer = new XBUFFER();
+                                                  XBUFFER* variantdatabuffer = GEN_NEW XBUFFER();
                                                   if(!variantdatabuffer) break;
 
                                                   string.ConvertToUTF8(*variantdatabuffer);
@@ -440,7 +440,7 @@ bool SQLITE_QUERY::BindParametersToQuery()
                                                 }
                                                 break;
 
-          case DB_SQL_VARIANT_TYPE_STRING     : { XBUFFER* variantdatabuffer = new XBUFFER();
+          case DB_SQL_VARIANT_TYPE_STRING     : { XBUFFER* variantdatabuffer = GEN_NEW XBUFFER();
                                                   if(!variantdatabuffer) break;
 
                                                   XSTRING string;
@@ -496,7 +496,7 @@ bool SQLITE_QUERY::BindParametersToQuery()
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT* SQLITE_QUERY::ConstructResult()
 {
-  SQLITE_RESULT* set = new SQLITE_RESULT();
+  SQLITE_RESULT* set = GEN_NEW SQLITE_RESULT();
   if(set)
     {
       set->query      = this;

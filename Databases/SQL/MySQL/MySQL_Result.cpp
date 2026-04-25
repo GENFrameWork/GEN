@@ -239,13 +239,13 @@ bool MYSQL_RESULT::ProcessRow()
 
   for(XQWORD e=0; e<ncol; e++)
     {
-      DB_SQL_STRING* columnname = new DB_SQL_STRING();
+      DB_SQL_STRING* columnname = GEN_NEW DB_SQL_STRING();
       if(!columnname) return false;
 
       MYSQL_FIELD* field = &ares->fields[e];
       columnname->Set(field->name);
 
-      DB_SQL_VARIANT* variant = new DB_SQL_VARIANT();
+      DB_SQL_VARIANT* variant = GEN_NEW DB_SQL_VARIANT();
       if(!variant)
         {
           delete(columnname);

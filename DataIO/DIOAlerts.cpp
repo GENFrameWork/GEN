@@ -417,7 +417,7 @@ XDWORD DIOALERT::CalculateID(bool withdatetime)
 {
   if(!xdatetime)  return false;
 
-  HASHCRC32* hashcrc32 = new HASHCRC32();
+  HASHCRC32* hashcrc32 = GEN_NEW HASHCRC32();
   if(!hashcrc32) return 0;
 
   XSTRING IDstring;
@@ -611,7 +611,7 @@ bool DIOALERTS::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOALERTS& DIOALERTS::GetInstance()
 {
-  if(!instance) instance = new DIOALERTS();
+  if(!instance) instance = GEN_NEW DIOALERTS();
 
   return (*instance);
 }
@@ -657,28 +657,28 @@ bool DIOALERTS::Ini()
 
   //-------------------------
 
-  SMTPdiostreamcfg = new DIOSTREAMTCPIPCONFIG();
+  SMTPdiostreamcfg = GEN_NEW DIOSTREAMTCPIPCONFIG();
   if(!SMTPdiostreamcfg)  return false;
 
   SMTPdiostream = (DIOSTREAM*)GEN_DIOFACTORY.CreateStreamIO((DIOSTREAMCONFIG*)SMTPdiostreamcfg);
   if(!SMTPdiostream)  return false;
 
-  SMTP = new DIOSMTP( SMTPdiostream);
+  SMTP = GEN_NEW DIOSMTP( SMTPdiostream);
   if(!SMTP) return false;
 
   if(!SMTP->Ini()) return false;
 
   //-------------------------
 
-  WEBdiowebclient = new DIOWEBCLIENT();
+  WEBdiowebclient = GEN_NEW DIOWEBCLIENT();
   if(!WEBdiowebclient) return false;
 
   //-------------------------
 
-  UDPdiostreamcfg = new DIOSTREAMUDPCONFIG();
+  UDPdiostreamcfg = GEN_NEW DIOSTREAMUDPCONFIG();
   if(!UDPdiostreamcfg)  return false;
 
-  UDPdiostream = new DIOSTREAMUDPACKNOWLEDGE((DIOSTREAMUDPCONFIG*)UDPdiostreamcfg);
+  UDPdiostream = GEN_NEW DIOSTREAMUDPACKNOWLEDGE((DIOSTREAMUDPCONFIG*)UDPdiostreamcfg);
   if(!UDPdiostream)  return false;
 
   isinitialized  = true;
@@ -801,7 +801,7 @@ DIOALERT* DIOALERTS::CreateAlert(XCHAR* applicationID, DIOALERTLEVEL level, XCHA
   if(!title)    return NULL;
   if(!message)  return NULL;
 
-  DIOALERT* alert = new DIOALERT();
+  DIOALERT* alert = GEN_NEW DIOALERT();
   if(alert)
     {
       if(alert->GetDateTime()) alert->GetDateTime()->Read();
@@ -993,7 +993,7 @@ bool DIOALERTS::Sender_SMSConfig(DIOSTREAM* diostream, int nrecipients, ...)
 
   while(nr)
     {
-      XSTRING* recipient = new XSTRING();
+      XSTRING* recipient = GEN_NEW XSTRING();
       if(recipient)
         {
           (*recipient) = (XCHAR*)va_arg(arg, XCHAR*);
@@ -1049,7 +1049,7 @@ bool DIOALERTS::Sender_WEBConfig(XCHAR* command, bool isuseget, int nrecipients,
 
   while(nr)
     {
-      DIOURL* recipient = new DIOURL();
+      DIOURL* recipient = GEN_NEW DIOURL();
       if(recipient)
         {
           (*recipient) = (XCHAR*)va_arg(arg, XCHAR*);
@@ -1113,7 +1113,7 @@ bool DIOALERTS::Sender_UDPConfig(int port, int nrecipients, ...)
   UDPrecipients.DeleteContents();
   UDPrecipients.DeleteAll();
 
-  DIOURL* URL = new DIOURL();
+  DIOURL* URL = GEN_NEW DIOURL();
   if(!URL) return false;
 
   va_list  arg;
@@ -1128,7 +1128,7 @@ bool DIOALERTS::Sender_UDPConfig(int port, int nrecipients, ...)
 
       if(!URL->IsEmpty())
         {
-          DIOIP* IP = new DIOIP();
+          DIOIP* IP = GEN_NEW DIOIP();
           if(IP)
             {
               URL->ResolveURL((*IP));
@@ -1273,7 +1273,7 @@ bool DIOALERTS::AddCondition(XDWORD conditionID, int timelimitforrepeat, int eve
 
   if(!condition)
     {
-      condition = new DIOALERT_CONDITION();
+      condition = GEN_NEW DIOALERT_CONDITION();
       must_add  = true;
     }
   
@@ -1511,7 +1511,7 @@ bool DIOALERTS::Sender_SMSSend(DIOALERT* alert)
 
   bool status = false;
 
-  DIOATCMDGSM* SMSdioatcmdgsm = new DIOATCMDGSM( SMSdiostream);
+  DIOATCMDGSM* SMSdioatcmdgsm = GEN_NEW DIOATCMDGSM( SMSdiostream);
   if(SMSdioatcmdgsm)
     {
       if(SMSdioatcmdgsm->Ini(30, false, false))
@@ -1652,10 +1652,10 @@ bool DIOALERTS::Sender_WEBSend(DIOALERT* alert)
           XFILEJSON json;
           XBUFFER   postbuffer;
 
-          XFILEJSONOBJECT* root   = new XFILEJSONOBJECT();
+          XFILEJSONOBJECT* root   = GEN_NEW XFILEJSONOBJECT();
           if(root) 
             {
-              XFILEJSONOBJECT* main  = new XFILEJSONOBJECT();
+              XFILEJSONOBJECT* main  = GEN_NEW XFILEJSONOBJECT();
               if(main) 
                 {
                   XFILEJSON_ADDVALUE(main, DIOALERTS_QSPARAM_APPLICATIONID , applicationIDstring.Get());                  

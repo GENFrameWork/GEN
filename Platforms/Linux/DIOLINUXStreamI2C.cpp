@@ -319,7 +319,7 @@ void DIOLINUXSTREAMI2C::ThreadConnection(void* data)
                                                                     {
                                                                       if(diostream->sizeread)
                                                                         {
-                                                                          XBYTE* _data = new XBYTE[diostream->sizeread];
+                                                                          XBYTE* _data = GEN_NEW XBYTE[diostream->sizeread];
                                                                           if(_data)
                                                                             {
                                                                               if(diostream->ReadDirect(_data, diostream->sizeread))

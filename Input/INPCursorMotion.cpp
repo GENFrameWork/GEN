@@ -139,9 +139,9 @@ float INPCURSORMOTIONPOINT::GetZ()
 * @brief      Set
 * @ingroup    INPUT
 *
-* @param[in]  x : new x position
-* @param[in]  y : new y position
-* @param[in]  z : new z position
+* @param[in]  x : GEN_NEW x position
+* @param[in]  y : GEN_NEW y position
+* @param[in]  z : GEN_NEW z position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSORMOTIONPOINT::Set(float x, float y, float z)
@@ -158,7 +158,7 @@ void INPCURSORMOTIONPOINT::Set(float x, float y, float z)
 * @brief      Set x
 * @ingroup    INPUT
 *
-* @param[in]  x : new x position
+* @param[in]  x : GEN_NEW x position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSORMOTIONPOINT::SetX(float x)
@@ -173,7 +173,7 @@ void INPCURSORMOTIONPOINT::SetX(float x)
 * @brief      Set y
 * @ingroup    INPUT
 *
-* @param[in]  y : new y position
+* @param[in]  y : GEN_NEW y position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSORMOTIONPOINT::SetY(float y)
@@ -188,7 +188,7 @@ void INPCURSORMOTIONPOINT::SetY(float y)
 * @brief      Set z
 * @ingroup    INPUT
 *
-* @param[in]  z : new z position
+* @param[in]  z : GEN_NEW z position
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSORMOTIONPOINT::SetZ(float z)
@@ -320,16 +320,16 @@ INPCURSORMOTIONPOINT* INPCURSORMOTION::GetLastPoint()
 * @brief      Add point
 * @ingroup    INPUT
 *
-* @param[in]  x : new x point
-* @param[in]  y : new y point
-* @param[in]  z : new z point
+* @param[in]  x : GEN_NEW x point
+* @param[in]  y : GEN_NEW y point
+* @param[in]  z : GEN_NEW z point
 *
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCURSORMOTION::AddPoint(float x, float y, float z)
 {
-  INPCURSORMOTIONPOINT* point = new INPCURSORMOTIONPOINT();
+  INPCURSORMOTIONPOINT* point = GEN_NEW INPCURSORMOTIONPOINT();
   if(!point) return false;
 
   point->Set(x,y,z);
@@ -956,7 +956,7 @@ XQWORD INPCURSORMOTION::GetTimeElapsed()
 * @brief      Set time elapsed
 * @ingroup    INPUT
 *
-* @param[in]  timeelapsed : new time elapsed
+* @param[in]  timeelapsed : GEN_NEW time elapsed
 *
 * @return     bool : true if is succesful.
 *

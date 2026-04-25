@@ -1751,7 +1751,7 @@ bool XFILECOBOL::Open(int nfiles, XCHAR* xpathcpyfiles, XCHAR* xpathdatfiles, ..
       xpath_cpy.Slash_Add();
       xpath_cpy += namefile;
 
-      XFILETXT*  file_fd = new XFILETXT();
+      XFILETXT*  file_fd = GEN_NEW XFILETXT();
       if(file_fd)
         {
           if(file_fd->Open(xpath_cpy, true))
@@ -2108,7 +2108,7 @@ bool XFILECOBOL::CapabilitiesFile_Load(XPATH& xpathcapabilitiesfile)
 
   CapabilitiesFile_UnLoad();
 
-  filetxt = new XFILETXT();
+  filetxt = GEN_NEW XFILETXT();
   if(!filetxt) return false;
 
   if(filetxt->Open(xpathcapabilitiesfile))
@@ -2120,8 +2120,8 @@ bool XFILECOBOL::CapabilitiesFile_Load(XPATH& xpathcapabilitiesfile)
         {
           for(XDWORD c=0; c<lines->GetSize(); c++)
             {
-              XSTRING* IDfile    = new XSTRING();
-              XPATH*   xpathfile = new XPATH();
+              XSTRING* IDfile    = GEN_NEW XSTRING();
+              XPATH*   xpathfile = GEN_NEW XPATH();
 
               if(IDfile && xpathfile)
                 {
@@ -2779,10 +2779,10 @@ bool XFILECOBOL::TraslateTextToHandle(XVECTOR<XSTRING*>* lines, XFILECOBOL_HANDL
 
       switch(linetype)
         {
-          case XFILECOBOL_LINE_TYPE_FD          : { XFILECOBOL_FIELD* rootfielddata = new XFILECOBOL_FIELD();
+          case XFILECOBOL_LINE_TYPE_FD          : { XFILECOBOL_FIELD* rootfielddata = GEN_NEW XFILECOBOL_FIELD();
                                                     if(!rootfielddata) return false;
 
-                                                    XFILECOBOL_FD_TREENODE* rootfieldnode = new XFILECOBOL_FD_TREENODE(rootfielddata);
+                                                    XFILECOBOL_FD_TREENODE* rootfieldnode = GEN_NEW XFILECOBOL_FD_TREENODE(rootfielddata);
                                                     if(!rootfieldnode)
                                                       {
                                                         delete rootfielddata;
@@ -2845,10 +2845,10 @@ bool XFILECOBOL::TraslateTextToHandle(XVECTOR<XSTRING*>* lines, XFILECOBOL_HANDL
           case XFILECOBOL_LINE_TYPE_FIELD       : { XFILECOBOL_FIELD*       fielddata = NULL;
                                                     XFILECOBOL_FD_TREENODE* fieldnode = NULL;
 
-                                                    fielddata = new XFILECOBOL_FIELD();
+                                                    fielddata = GEN_NEW XFILECOBOL_FIELD();
                                                     if(fielddata)
                                                       {
-                                                        fieldnode = new XFILECOBOL_FD_TREENODE(fielddata);
+                                                        fieldnode = GEN_NEW XFILECOBOL_FD_TREENODE(fielddata);
                                                         if(!fieldnode) break;
 
                                                       } else break;
@@ -3011,10 +3011,10 @@ XFILECOBOL_FD_TREENODE* XFILECOBOL::DuplicateNodeWithSubnodes(int index, XFILECO
   namesubnode =  node->GetData()->GetName()->Get();
   if(!ChangeNameNodeWithOccurs(index, &namesubnode)) return NULL;
 
-  newfielddata = new XFILECOBOL_FIELD();
+  newfielddata = GEN_NEW XFILECOBOL_FIELD();
   if(newfielddata)
     {
-      newfieldnode = new XFILECOBOL_FD_TREENODE(newfielddata);
+      newfieldnode = GEN_NEW XFILECOBOL_FD_TREENODE(newfielddata);
       if(!newfieldnode) return NULL;
 
     } else return NULL;

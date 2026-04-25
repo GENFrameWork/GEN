@@ -338,7 +338,7 @@ bool XWINDOWSDIR::FirstSearch(XCHAR* xpath,XCHAR* patternsearch,XDIRELEMENT* sea
       return false;
     }
 
-  XBYTE* findfiledata = new XBYTE[sizeof(WIN32_FIND_DATA)];
+  XBYTE* findfiledata = GEN_NEW XBYTE[sizeof(WIN32_FIND_DATA)];
   if(!findfiledata) 
     {
       return false;

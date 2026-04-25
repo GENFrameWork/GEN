@@ -143,7 +143,7 @@ GRP2DVERTEXS::~GRP2DVERTEXS()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVERTEXS::Add(double x, double y)
 {
-  GRP2DVERTEX* vertex = new GRP2DVERTEX();
+  GRP2DVERTEX* vertex = GEN_NEW GRP2DVERTEX();
   if(!vertex) return false;
 
   vertex->x = x;

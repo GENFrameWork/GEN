@@ -378,7 +378,7 @@ bool GRP2DREBUILDAREAS::CreateRebuildArea(double x, double y, double width, doub
   GRPBITMAP* bitmap = GetBitmap(_x, _y, _width, _height);
   if(!bitmap) return false;
 
-  GRP2DREBUILDAREA* newarea = new GRP2DREBUILDAREA();
+  GRP2DREBUILDAREA* newarea = GEN_NEW GRP2DREBUILDAREA();
   if(!newarea)
     {
       delete bitmap;

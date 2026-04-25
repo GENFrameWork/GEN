@@ -420,7 +420,7 @@ bool DIOOBEXPUSH::Ini(int timeout)
   if(!diostream)               return false;
   if(!diostream->GetConfig()) return false;
 
-  sendbuffer = new XBUFFER();
+  sendbuffer = GEN_NEW XBUFFER();
   GEN_XFACTORY_CREATE(xfile, Create_File())
   GEN_XFACTORY_CREATE(xtimer, CreateTimer());
  
@@ -593,7 +593,7 @@ XQWORD DIOOBEXPUSH::GetAskTimeElapsed()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::SendFileList_AddFile(XPATH& xpath,XSTRING& namesend,XDWORD ID)
 {
-  DIOOBEXPUSHFILE* obexpushfile = new DIOOBEXPUSHFILE();
+  DIOOBEXPUSHFILE* obexpushfile = GEN_NEW DIOOBEXPUSHFILE();
   if(!obexpushfile) return false;
 
   obexpushfile->GetXPath()->Set(xpath);

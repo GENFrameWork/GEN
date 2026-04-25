@@ -197,7 +197,7 @@ void COMPRESS_LZW::LZW_Decode(XBYTE* inbuffer,XBYTE* outbuffer)
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD COMPRESS_LZW::LZW_GIF_Encode(XBYTE* dibbuffer,XBYTE* outbuffer,XDWORD dibwidth,XDWORD dibheight,XWORD colorbit)
 {
-  hash = new XWORD [LZW_MAX_HASHSIZE] ;
+  hash = GEN_NEW XWORD [LZW_MAX_HASHSIZE] ;
 
   if((hash == NULL) || (dibbuffer == NULL) || (outbuffer == NULL)) return 0;
 
@@ -272,7 +272,7 @@ XDWORD COMPRESS_LZW::LZW_GIF_Encode(XBYTE* dibbuffer,XBYTE* outbuffer,XDWORD dib
 * --------------------------------------------------------------------------------------------------------------------*/
 void COMPRESS_LZW::LZW_GIF_Decode(XBYTE* inbuffer,XBYTE* dibbuffer,XDWORD dibwidth,XDWORD dibheight,bool binterlace)
 {
-  strbegin = new LZW_STRING [LZW_MAX_TABLE_SIZE + 32];
+  strbegin = GEN_NEW LZW_STRING [LZW_MAX_TABLE_SIZE + 32];
 
   if((strbegin == NULL) || (inbuffer == NULL) || (dibbuffer == NULL)) return;
 

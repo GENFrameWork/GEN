@@ -80,19 +80,19 @@ DIOSCRAPERWEB::DIOSCRAPERWEB()
 {
   Clean();
 
-  xml = new XFILEXML();
+  xml = GEN_NEW XFILEXML();
   if(!xml)  return;
 
   GEN_XFACTORY_CREATE(xmutexdo, Create_Mutex())
   if(!xmutexdo) return;
 
-  webclient = new DIOWEBCLIENT;
+  webclient = GEN_NEW DIOWEBCLIENT;
   if(!webclient) return;
 
-  cache = new DIOSCRAPERWEBCACHE();
+  cache = GEN_NEW DIOSCRAPERWEBCACHE();
   if(!cache) return;
 
-  URLdownload = new DIOURL();
+  URLdownload = GEN_NEW DIOURL();
 }
 
 
@@ -231,7 +231,7 @@ bool DIOSCRAPERWEB::Download(DIOURL& URL, XPATH& xpath)
   DIOURL downloadURL;
   bool   status;
 
-  DIOWEBCLIENT* webclient = new DIOWEBCLIENT();
+  DIOWEBCLIENT* webclient = GEN_NEW DIOWEBCLIENT();
   if(!webclient)  return false;
 
   downloadURL.Set(URL.Get());
@@ -311,7 +311,7 @@ bool DIOSCRAPERWEB::Do(XCHAR* namewebservice, int timeoutforurl, XSTRING* localI
 
                       if(!format.Compare(__L("JSON"),true))
                         {
-                          XFILEJSON* json = new XFILEJSON();
+                          XFILEJSON* json = GEN_NEW XFILEJSON();
                           if(json)
                             {
                               json->DeleteAllLines();
@@ -511,8 +511,8 @@ bool DIOSCRAPERWEB::ChangeURL(XCHAR* maskurl, DIOURL& url)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::AddValue(XCHAR* name, XCHAR* value)
 {
-  XSTRING* _name  = new XSTRING();
-  XSTRING* _value = new XSTRING();
+  XSTRING* _name  = GEN_NEW XSTRING();
+  XSTRING* _value = GEN_NEW XSTRING();
 
   if((!_name )||(!_value))
     {

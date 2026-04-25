@@ -71,7 +71,7 @@ XPATHSMANAGERSECTION::XPATHSMANAGERSECTION()
 {
   Clean();
 
-  xpath = new XPATH();
+  xpath = GEN_NEW XPATH();
 }
 
 
@@ -136,7 +136,7 @@ bool XPATHSMANAGER::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATHSMANAGER& XPATHSMANAGER::GetInstance()
 {
-  if(!instance) instance = new XPATHSMANAGER();
+  if(!instance) instance = GEN_NEW XPATHSMANAGER();
   return (*instance);
 }
 
@@ -308,7 +308,7 @@ bool XPATHSMANAGER::AddPathSection(XPATHSMANAGERSECTIONTYPE sectiontype, XSTRING
   XPATHSMANAGERSECTION* xpathsection = GetPathSection(sectiontype);
   if(!xpathsection)
     {
-      xpathsection = new XPATHSMANAGERSECTION();
+      xpathsection = GEN_NEW XPATHSMANAGERSECTION();
       if(!xpathsection) return false;
 
       xpathsection->type  = sectiontype;
@@ -501,7 +501,7 @@ XPATHSMANAGER::XPATHSMANAGER()
 {
   Clean();
 
-  appexecpath = new XPATH;
+  appexecpath = GEN_NEW XPATH;
 }
 
 

@@ -122,12 +122,12 @@ SNDFILE* SNDFILE::Create(XCHAR* path)
   
   if(!ext.Compare(__L(".ogg"), true))
     {
-      sndfile = new SNDFILEOGG();  
+      sndfile = GEN_NEW SNDFILEOGG();  
     }
 
   if(!ext.Compare(__L(".wav"), true))
     {
-      sndfile = new SNDFILEWAV();  
+      sndfile = GEN_NEW SNDFILEWAV();  
     }
 
   if(sndfile)

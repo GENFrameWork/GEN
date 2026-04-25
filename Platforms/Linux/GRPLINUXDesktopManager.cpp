@@ -159,7 +159,7 @@ bool GRPLINUXDESKTOPMONITORS::MonitorEnum()
 
           // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("%d) screen: X:%d,Y:%d  %dx%d"), c, crtc_info->x, crtc_info->y, crtc_info->width, crtc_info->height);
 
-          GRPRECTINT* newmonitor = new GRPRECTINT();
+          GRPRECTINT* newmonitor = GEN_NEW GRPRECTINT();
           if(newmonitor)
             {
               newmonitor->x1  = crtc_info->x;
@@ -195,7 +195,7 @@ bool GRPLINUXDESKTOPMONITORS::MonitorEnum()
   /*
   if(!GetMonitorsRects()->GetSize())
     {    
-      GRPRECTINT* newmonitor = new GRPRECTINT();
+      GRPRECTINT* newmonitor = GEN_NEW GRPRECTINT();
       if(newmonitor)
         {
           newmonitor->x1  = 0;

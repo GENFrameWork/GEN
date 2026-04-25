@@ -466,7 +466,7 @@ bool DIOPCAP_FILTERS::Entrys_Add(XCHAR* name, XDWORD typeprotocol, int nports, .
   DIOPCAP_FILTER_ENTRY* _entry = Entrys_Get(name);
   if(!_entry)
     {
-      _entry = new DIOPCAP_FILTER_ENTRY();
+      _entry = GEN_NEW DIOPCAP_FILTER_ENTRY();
       if(!_entry)
         {
           return false;  

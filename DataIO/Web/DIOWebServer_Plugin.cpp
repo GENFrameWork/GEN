@@ -111,7 +111,7 @@ XSTRING* DIOWEBSERVER_PLUGIN::GetName()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_PLUGIN::PageExtension_Add(XCHAR* ext)
 {
-  XSTRING* _ext = new XSTRING();
+  XSTRING* _ext = GEN_NEW XSTRING();
   if(!_ext) return false;
 
   _ext->Set(ext);

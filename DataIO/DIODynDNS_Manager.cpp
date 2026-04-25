@@ -128,7 +128,7 @@ bool DIODYNDNS_MANAGER::AddDNS(XSTRING& DNS)
 {
   if(DNS.IsEmpty()) return false;
 
-  XSTRING* _DNS = new XSTRING();
+  XSTRING* _DNS = GEN_NEW XSTRING();
   if(!_DNS) return false;
 
   _DNS->Set(DNS);
@@ -198,7 +198,7 @@ bool DIODYNDNS_MANAGER::AssingAll(bool* endproccess)
       return true;
     }
 
-  DIODYNDNS* dyndns = new DIODYNDNS();
+  DIODYNDNS* dyndns = GEN_NEW DIODYNDNS();
   if(!dyndns) 
     {
       return false;

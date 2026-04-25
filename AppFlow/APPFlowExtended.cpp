@@ -103,7 +103,7 @@ bool APPFLOWEXTENDED::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED& APPFLOWEXTENDED::GetInstance()
 {
-  if(!instance) instance = new APPFLOWEXTENDED();
+  if(!instance) instance = GEN_NEW APPFLOWEXTENDED();
 
   return (*instance);
 }
@@ -229,7 +229,7 @@ bool APPFLOWEXTENDED::APPStart(APPFLOWCFG* appcfg, APPFLOWCONSOLE* appconsole)
 
 
   #ifdef APPFLOW_EXTENDED_APPLICATIONSTATUS_ACTIVE
-  applicationstatus = new APPFLOWEXTENDED_APPLICATIONSTATUS(appcfg);
+  applicationstatus = GEN_NEW APPFLOWEXTENDED_APPLICATIONSTATUS(appcfg);
   if(!applicationstatus)
     {
       return false;
@@ -256,7 +256,7 @@ bool APPFLOWEXTENDED::APPStart(APPFLOWCFG* appcfg, APPFLOWCONSOLE* appconsole)
 
 
   #ifdef APPFLOW_EXTENDED_INTERNETSTATUS_ACTIVE
-  internetstatus = new APPFLOWEXTENDED_INTERNETSTATUS(appcfg);
+  internetstatus = GEN_NEW APPFLOWEXTENDED_INTERNETSTATUS(appcfg);
   if(!internetstatus)
     {
       return false;

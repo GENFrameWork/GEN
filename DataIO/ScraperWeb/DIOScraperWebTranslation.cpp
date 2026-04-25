@@ -307,7 +307,7 @@ bool DIOSCRAPERWEBTRANSLATION::Get(XCHAR* text, XLANGUAGE_CODE languagetextcode,
 
           if(usecache)
             {
-              translationresult = new DIOTRANSLATION_RESULT();
+              translationresult = GEN_NEW DIOTRANSLATION_RESULT();
               if(translationresult)
                 {
                   translationresult->SetLanguageTextCode(languagetextcode);

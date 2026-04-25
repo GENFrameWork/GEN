@@ -450,22 +450,22 @@ GRPBITMAP* GRPBITMAPFILE::Load(XCHAR* xpath, GRPPROPERTYMODE forcemode)
                               default : break;
 
       #ifdef GRP_BITMAP_FILE_BMP_ACTIVE
-      case GRPBITMAPFILE_TYPE_BMP     : grpfilebase = new GRPBITMAPFILEBMP(); 
+      case GRPBITMAPFILE_TYPE_BMP     : grpfilebase = GEN_NEW GRPBITMAPFILEBMP(); 
                                         break;
       #endif
 
       #ifdef GRP_BITMAP_FILE_JPG_ACTIVE
-      case GRPBITMAPFILE_TYPE_JPG     : grpfilebase = new GRPBITMAPFILEJPG(); 
+      case GRPBITMAPFILE_TYPE_JPG     : grpfilebase = GEN_NEW GRPBITMAPFILEJPG(); 
                                         break;
       #endif
 
       #ifdef GRP_BITMAP_FILE_PNG_ACTIVE
-      case GRPBITMAPFILE_TYPE_PNG     : grpfilebase = new GRPBITMAPFILEPNG(); 
+      case GRPBITMAPFILE_TYPE_PNG     : grpfilebase = GEN_NEW GRPBITMAPFILEPNG(); 
                                         break;
       #endif
 
       #ifdef GRP_BITMAP_FILE_JPG_ACTIVE
-      case GRPBITMAPFILE_TYPE_TGA     : grpfilebase = new GRPBITMAPFILETGA(); 
+      case GRPBITMAPFILE_TYPE_TGA     : grpfilebase = GEN_NEW GRPBITMAPFILETGA(); 
                                         break;  
       #endif
     }
@@ -551,22 +551,22 @@ bool GRPBITMAPFILE::Save(XCHAR* xpath, GRPBITMAP* bitmap, int quality)
                             default   : break;
 
       #ifdef GRP_BITMAP_FILE_BMP_ACTIVE
-      case GRPBITMAPFILE_TYPE_BMP     : grpfilebase = new GRPBITMAPFILEBMP(); 
+      case GRPBITMAPFILE_TYPE_BMP     : grpfilebase = GEN_NEW GRPBITMAPFILEBMP(); 
                                         break;
       #endif
 
       #ifdef GRP_BITMAP_FILE_JPG_ACTIVE
-      case GRPBITMAPFILE_TYPE_JPG     : grpfilebase = new GRPBITMAPFILEJPG(); 
+      case GRPBITMAPFILE_TYPE_JPG     : grpfilebase = GEN_NEW GRPBITMAPFILEJPG(); 
                                         break;
       #endif
 
       #ifdef GRP_BITMAP_FILE_PNG_ACTIVE
-      case GRPBITMAPFILE_TYPE_PNG     : grpfilebase = new GRPBITMAPFILEPNG(); 
+      case GRPBITMAPFILE_TYPE_PNG     : grpfilebase = GEN_NEW GRPBITMAPFILEPNG(); 
                                         break;
       #endif
 
       #ifdef GRP_BITMAP_FILE_JPG_ACTIVE
-      case GRPBITMAPFILE_TYPE_TGA     : grpfilebase = new GRPBITMAPFILETGA(); 
+      case GRPBITMAPFILE_TYPE_TGA     : grpfilebase = GEN_NEW GRPBITMAPFILETGA(); 
                                         break;  
       #endif
     }
@@ -637,7 +637,7 @@ GRPBITMAPSEQUENCE* GRPBITMAPFILE::LoadSequence(XCHAR* namemask, int inisequence,
 {
   if(xpath.IsEmpty()) return NULL;
 
-  GRPBITMAPSEQUENCE* bitmapsequence = new GRPBITMAPSEQUENCE();
+  GRPBITMAPSEQUENCE* bitmapsequence = GEN_NEW GRPBITMAPSEQUENCE();
   if(!bitmapsequence) return NULL;
 
   XSTRING namefile;

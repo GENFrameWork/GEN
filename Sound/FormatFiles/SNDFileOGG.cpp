@@ -100,7 +100,7 @@ bool SNDFILEOGG::LoadFile()
 {
   XFILE* xfile = NULL;
 
-  xbuffer = new XBUFFER(false);
+  xbuffer = GEN_NEW XBUFFER(false);
   if(!xbuffer)
     {
       return false;
@@ -155,7 +155,7 @@ bool SNDFILEOGG::LoadFile()
 
   duration = (int)(stb_vorbis_stream_length_in_seconds(stream)*1000);
 
-  xbufferdecodeddata = new XBUFFER(false);
+  xbufferdecodeddata = GEN_NEW XBUFFER(false);
   if(!xbufferdecodeddata)
     {
       return false;

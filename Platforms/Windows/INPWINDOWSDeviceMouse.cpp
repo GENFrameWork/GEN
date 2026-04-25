@@ -288,7 +288,7 @@ bool INPWINDOWSDEVICEMOUSE::CreateAllCursors()
 {
   INPCURSOR* cursor;
 
-  cursor = new INPCURSOR();
+  cursor = GEN_NEW INPCURSOR();
   if(!cursor) return false;
 
   cursor->SetID(INPCURSOR_ID_MOUSE);

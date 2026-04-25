@@ -71,8 +71,8 @@ DIOSTREAM::DIOSTREAM()
 {
   Clean();
 
-  inbuffer  = new XBUFFER();
-  outbuffer = new XBUFFER();
+  inbuffer  = GEN_NEW XBUFFER();
+  outbuffer = GEN_NEW XBUFFER();
 
   GEN_XFACTORY_CREATE(xmutextimerout    , Create_Mutex())
   GEN_XFACTORY_CREATE(xtimerconnection  , CreateTimer())
@@ -507,7 +507,7 @@ bool DIOSTREAM::ReadStr(XSTRING& string)
 
   if(!foundreturn) return false;
 
-  XBYTE* buffer = new XBYTE[stringsize+1];
+  XBYTE* buffer = GEN_NEW XBYTE[stringsize+1];
   if(!buffer) return false;
 
   memset(buffer, 0, stringsize+1);

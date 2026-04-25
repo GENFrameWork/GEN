@@ -84,7 +84,7 @@ UI_ANIMATIONS& UI_ANIMATIONS::GetInstance()
 {
   if(!instance) 
     {
-      instance = new UI_ANIMATIONS();
+      instance = GEN_NEW UI_ANIMATIONS();
     }
 
   return (*instance);

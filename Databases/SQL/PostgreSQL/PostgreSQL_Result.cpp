@@ -210,10 +210,10 @@ bool POSTGRESQL_RESULT::ProcessRow()
 
   for(int e=0; e<ncol; e++)
     {
-      DB_SQL_STRING* head=new DB_SQL_STRING();
+      DB_SQL_STRING* head=GEN_NEW DB_SQL_STRING();
       if(!head)
         {
-          DB_SQL_ERROR* error=new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
+          DB_SQL_ERROR* error=GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
           if(!error) return false;
 
           error->description.Set(__L("not enought memory for result"));
@@ -230,10 +230,10 @@ bool POSTGRESQL_RESULT::ProcessRow()
   // Row
   for(int e=0; e<ncol; e++)
     {
-      DB_SQL_VARIANT* variant=new DB_SQL_VARIANT();
+      DB_SQL_VARIANT* variant=GEN_NEW DB_SQL_VARIANT();
       if(!variant)
         {
-          DB_SQL_ERROR* error = new DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
+          DB_SQL_ERROR* error = GEN_NEW DB_SQL_ERROR(DB_SQL_ERROR_TYPE_MEMORY_ERROR);
           if(!error) return false;
 
           error->description.Set(__L("not enought memory for result"));

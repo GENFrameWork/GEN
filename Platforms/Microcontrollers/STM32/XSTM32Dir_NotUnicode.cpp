@@ -329,7 +329,7 @@ bool XSTM32DIR_NOTUNICODE::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRE
   if(!xpath)         return false;
   if(!patternsearch) return false;
 
-  XBYTE* findfiledata = new XBYTE[sizeof(XSTM32DIR_NOTUNICODE_SEARCHINFO)];
+  XBYTE* findfiledata = GEN_NEW XBYTE[sizeof(XSTM32DIR_NOTUNICODE_SEARCHINFO)];
   if(!findfiledata) return false;
 
   memset(findfiledata, 0, sizeof(XSTM32DIR_NOTUNICODE_SEARCHINFO));

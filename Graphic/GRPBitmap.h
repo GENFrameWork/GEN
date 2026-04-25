@@ -156,7 +156,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
                                                             if((w <= 0) || (h <=0)) return NULL;
 
-                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = new GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(w, h, mode);
+                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = GEN_NEW GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(w, h, mode);
                                                             if(!bitmap) return NULL;
 
                                                             COLORTYPE* color;
@@ -176,7 +176,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
     GRPBITMAP*                                            Clone                           ()
                                                           {
-                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bmp = new GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(width, height, mode);
+                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bmp = GEN_NEW GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(width, height, mode);
                                                             if(!bmp) return NULL;
 
                                                             if(!bmp->CopyBuffer(buffer))
@@ -226,7 +226,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
     bool                                                  FlipHorizontal                  ()
                                                           {
 
-                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = new GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(width, height, mode);
+                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = GEN_NEW GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(width, height, mode);
                                                             if(!bitmap) return false;
 
                                                             COLORTYPE* color;
@@ -250,7 +250,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
     bool                                                  FlipVertical                    ()
                                                           {
-                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = new GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(width, height, mode);
+                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = GEN_NEW GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(width, height, mode);
                                                             if(!bitmap) return false;
 
                                                             COLORTYPE* color;
@@ -289,7 +289,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
                                                             //int bytesppixel = 4;
 
-                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = new GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(w, h, mode);
+                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = GEN_NEW GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(w, h, mode);
                                                             if(!bitmap) return false;
 
                                                             int w2 = (w/2);
@@ -332,7 +332,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
                                                             xratio = (float)width  / nwidth;
                                                             yratio = (float)height / nheight;
 
-                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = new GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(nwidth, nheight, mode);
+                                                            GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = GEN_NEW GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(nwidth, nheight, mode);
                                                             if(!bitmap) return false; 
 
                                                             COLORTYPE* color;
@@ -379,17 +379,17 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
                                                           {
                                                             buffersize = width * height * GetBytesperPixel();
 
-                                                            buffer = new XBYTE[buffersize];
+                                                            buffer = GEN_NEW XBYTE[buffersize];
                                                             if(!buffer) return false;
 
                                                             memset(buffer, 0, buffersize);
 
                                                             rbuffer.attach(buffer, width , height, (IsBufferInverse()?1:-1)*((int)width * GetBytesperPixel()));
 
-                                                            pixelformatbuffer = new PIXELFORMATBUFFER(rbuffer);
+                                                            pixelformatbuffer = GEN_NEW PIXELFORMATBUFFER(rbuffer);
                                                             if(!pixelformatbuffer) return false;
 
-                                                            renderer_base =  new agg::renderer_base<PIXELFORMATBUFFER>(*pixelformatbuffer);
+                                                            renderer_base =  GEN_NEW agg::renderer_base<PIXELFORMATBUFFER>(*pixelformatbuffer);
                                                             if(!renderer_base)  return false;
 
                                                             return true;
@@ -442,5 +442,5 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
 
 
-#include "XMemory_Control_Deactive.h"
+
 

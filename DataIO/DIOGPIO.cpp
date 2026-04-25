@@ -490,7 +490,7 @@ bool DIOGPIO::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOGPIO& DIOGPIO::GetInstance()
 {
-  if(!instance) instance = new DIOGPIO();
+  if(!instance) instance = GEN_NEW DIOGPIO();
 
   return (*instance);
 }
@@ -570,7 +570,7 @@ XVECTOR<DIOGPIO_ENTRY*>* DIOGPIO::GPIOEntry_GetAll()
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOGPIO_ENTRY* DIOGPIO::GPIOEntry_CreateByPin(XDWORD ID, XWORD pin, DIOGPIO_PINSGROUP group)
 {
-  DIOGPIO_ENTRY* entry = new DIOGPIO_ENTRY();
+  DIOGPIO_ENTRY* entry = GEN_NEW DIOGPIO_ENTRY();
   if(!entry) return NULL;
 
   entry->SetID(ID);
@@ -598,7 +598,7 @@ DIOGPIO_ENTRY* DIOGPIO::GPIOEntry_CreateByPin(XDWORD ID, XWORD pin, DIOGPIO_PINS
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOGPIO_ENTRY* DIOGPIO::GPIOEntry_CreateByGPIO(XDWORD ID, XQWORD GPIO)
 {
-  DIOGPIO_ENTRY* entry = new DIOGPIO_ENTRY();
+  DIOGPIO_ENTRY* entry = GEN_NEW DIOGPIO_ENTRY();
   if(!entry) return NULL;
 
   entry->SetID(ID);  
@@ -627,7 +627,7 @@ DIOGPIO_ENTRY* DIOGPIO::GPIOEntry_CreateByGPIO(XDWORD ID, XQWORD GPIO)
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOGPIO_ENTRY* DIOGPIO::GPIOEntry_Create(XDWORD ID, XWORD pin, XQWORD GPIO)
 {
-  DIOGPIO_ENTRY* entry = new DIOGPIO_ENTRY();
+  DIOGPIO_ENTRY* entry = GEN_NEW DIOGPIO_ENTRY();
   if(!entry) return NULL;
   
   entry->SetID(ID);

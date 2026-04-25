@@ -3001,7 +3001,7 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
 
   actual_color.CopyFrom(element_textbox->GetColor());
 
-  textbox_part = new UI_SKIN_TEXTBOX_PART();
+  textbox_part = GEN_NEW UI_SKIN_TEXTBOX_PART();
   if(!textbox_part) return false;
    
   textbox_part->SetLineNumber(nline);
@@ -3191,7 +3191,7 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
               textbox_part->SetHeight((XDWORD)canvas->VectorFont_GetHeight(__L("A")));
               parts.Add(textbox_part);  
 
-              textbox_part = new UI_SKIN_TEXTBOX_PART();
+              textbox_part = GEN_NEW UI_SKIN_TEXTBOX_PART();
               if(!textbox_part) return false;
             }
    

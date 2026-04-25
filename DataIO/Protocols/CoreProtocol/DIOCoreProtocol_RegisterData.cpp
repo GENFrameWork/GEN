@@ -293,7 +293,7 @@ bool DIOCOREPROTOCOL_REGISTERDATA::CreateIDMachine(XUUID& ID)
 
   origin.ConvertToUTF8(originbuffer);
     
-  sha2 = new HASHSHA2(HASHSHA2TYPE_256);
+  sha2 = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
   if(!sha2)
     {
       return false;

@@ -242,6 +242,6 @@ typedef GRPRECTBASE<float>  GRPRECTFLOAT;
 typedef GRPRECTBASE<double> GRPRECTDOUBLE;
 
 
-#include "XMemory_Control_Deactive.h"
+
 
 

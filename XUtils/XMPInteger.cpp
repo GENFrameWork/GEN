@@ -224,7 +224,7 @@ bool XMPINTEGER::Grow(XDWORD nblimbs)
 
   if(GetNLimbs() < nblimbs)
     {
-      newlimbs = (XLIMB*) new XBYTE[nblimbs * XMPINTEGER_CHARSINLIMB];
+      newlimbs = (XLIMB*) GEN_NEW XBYTE[nblimbs * XMPINTEGER_CHARSINLIMB];
       if(!newlimbs) return false;
 
       memset(newlimbs, 0, nblimbs * XMPINTEGER_CHARSINLIMB );
@@ -272,7 +272,7 @@ bool XMPINTEGER::Shrink(XDWORD nblimbs)
 
   if(c<nblimbs ) c = nblimbs;
 
-  newlimbs = (XLIMB*)new XBYTE[ c * XMPINTEGER_CHARSINLIMB];
+  newlimbs = (XLIMB*)GEN_NEW XBYTE[ c * XMPINTEGER_CHARSINLIMB];
   if(newlimbs) return false;
 
   memset(newlimbs, 0, (c * XMPINTEGER_CHARSINLIMB));
@@ -842,7 +842,7 @@ int XMPINTEGER::CompareSignedValues(XMPINTEGER& xmpinteger)
 int XMPINTEGER::CompareSignedValues(int integer)
 {
  XMPINTEGER xmpinteger;
- XLIMB*     pointer = new XLIMB();
+ XLIMB*     pointer = GEN_NEW XLIMB();
 
  (*pointer)  = ( integer < 0 ) ? -integer : integer;
 
@@ -1060,7 +1060,7 @@ bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteg
 bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger, int integer)
 {
   XMPINTEGER _xmpinteger2;
-  XLIMB*      pointer = new XLIMB();
+  XLIMB*      pointer = GEN_NEW XLIMB();
 
   (*pointer) = ( integer < 0 ) ? -integer : integer;
 
@@ -1087,7 +1087,7 @@ bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger, int integer)
 bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger, int integer)
 {
   XMPINTEGER  _xmpinteger2;
-  XLIMB*      pointer = new XLIMB();
+  XLIMB*      pointer = GEN_NEW XLIMB();
 
  (*pointer) = (integer < 0 ) ? -integer : integer;
 
@@ -1176,7 +1176,7 @@ bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2
 bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, int integer)
 {
   XMPINTEGER _xmpinteger;
-  XLIMB*      pointer = new XLIMB();
+  XLIMB*      pointer = GEN_NEW XLIMB();
 
   _xmpinteger.SetSign(1);
   _xmpinteger.SetNLimbs(1);
@@ -1369,7 +1369,7 @@ bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPI
 bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, int integerb)
 {
   XMPINTEGER _B;
-  XLIMB*      pointer = new XLIMB();
+  XLIMB*      pointer = GEN_NEW XLIMB();
 
   (*pointer) = ( integerb < 0 ) ? -integerb : integerb;
   _B.SetSign(( integerb < 0 ) ? -1 : 1);
@@ -1559,7 +1559,7 @@ void XMPINTEGER::MontgomeryMultiplication(XMPINTEGER* A, XMPINTEGER* B, XMPINTEG
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::MontgomeryReduction(XMPINTEGER* A, XMPINTEGER* N, XLIMB mm, XMPINTEGER* T)
 {
-  XLIMB*     z = new XLIMB();
+  XLIMB*     z = GEN_NEW XLIMB();
   XMPINTEGER U;
 
   (*z) = 1;

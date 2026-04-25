@@ -167,7 +167,7 @@ bool DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Search()
 
 
   // ----------------------------------------------------------------------------------------------  
-  // Setup new HCI filter
+  // Setup GEN_NEW HCI filter
 
   hci_filter_clear(&new_hcifilter);
   hci_filter_set_ptype(HCI_EVENT_PKT       , &new_hcifilter);
@@ -325,7 +325,7 @@ void DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES::ThreadEnumDevices(void* param)
           DIOSTREAMDEVICEBLUETOOTHLE* device = (DIOSTREAMDEVICEBLUETOOTHLE*)LEremotedevices->GetDeviceByMAC(LEMACdevicestring.Get());
           if(!device) 
             {
-              device = new DIOSTREAMDEVICEBLUETOOTHLE();
+              device = GEN_NEW DIOSTREAMDEVICEBLUETOOTHLE();
               isnewdevice = true;
             }       
                 
@@ -348,7 +348,7 @@ void DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES::ThreadEnumDevices(void* param)
       
       if(LEremotedevices->GetSearchMode() & DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES_SEARCHMODE_EVENT)
         {
-          DIOSTREAMDEVICEBLUETOOTHLE* device_event = new DIOSTREAMDEVICEBLUETOOTHLE();
+          DIOSTREAMDEVICEBLUETOOTHLE* device_event = GEN_NEW DIOSTREAMDEVICEBLUETOOTHLE();
           if(device_event)
             {
                 

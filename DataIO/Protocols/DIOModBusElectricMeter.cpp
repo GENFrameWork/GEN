@@ -129,7 +129,7 @@ DIOMODBUSELECTRICMETER::DIOMODBUSELECTRICMETER(DIOSTREAM* diostream, DIOMODBUS_C
 {
   Clean();
 
-  modbusprotocol = new DIOMODBUS_CLIENT(diostream, mode);
+  modbusprotocol = GEN_NEW DIOMODBUS_CLIENT(diostream, mode);
   if(modbusprotocol)
     {
       RegisterEvent(DIOMODBUSELECTRICMETERXEVENT_TYPE_C_TR_AA_READVALUES);
@@ -239,7 +239,7 @@ bool DIOMODBUSELECTRICMETER::CMD_C_CI_NU_2_ReadAllValues(int TM, XDATETIME* time
     {
       DIO_C_CI_NU_2_RESULT* result;
 
-      result = new DIO_C_CI_NU_2_RESULT();
+      result = GEN_NEW DIO_C_CI_NU_2_RESULT();
       if(result)
         {
           result->GetDateTime()->Read();

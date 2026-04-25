@@ -178,31 +178,31 @@ DIOSTREAMENUMDEVICES* DIOWINDOWSFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTY
       case DIOSTREAMENUMTYPE_UNKNOWN            : return NULL;
 
       #ifdef DIO_STREAMUART_ACTIVE
-      case DIOSTREAMENUMTYPE_UART_LOCAL         : _class = new DIOWINDOWSSTREAMUARTLOCALENUMDEVICES();                break;
+      case DIOSTREAMENUMTYPE_UART_LOCAL         : _class = GEN_NEW DIOWINDOWSSTREAMUARTLOCALENUMDEVICES();                break;
       #endif
 
       #ifdef DIO_STREAMUSB_ACTIVE
-      case DIOSTREAMENUMTYPE_USB_LOCAL          : _class = new DIOWINDOWSSTREAMUSBLOCALENUMDEVICES();                 break;
+      case DIOSTREAMENUMTYPE_USB_LOCAL          : _class = GEN_NEW DIOWINDOWSSTREAMUSBLOCALENUMDEVICES();                 break;
       #endif
 
       #if defined(DIO_STREAMUDP_ACTIVE) || defined(DIO_STREAMTCPIP_ACTIVE)
-      case DIOSTREAMENUMTYPE_IP_LOCAL           : _class = new DIOWINDOWSSTREAMIPLOCALENUMDEVICES();                  break;
+      case DIOSTREAMENUMTYPE_IP_LOCAL           : _class = GEN_NEW DIOWINDOWSSTREAMIPLOCALENUMDEVICES();                  break;
       #endif
 
       #if defined(DIO_STREAMBLUETOOTH_ACTIVE) || defined(DIO_STREAMBLUETOOTHLE_ACTIVE)
-      case DIOSTREAMENUMTYPE_BLUETOOTH_LOCAL    : _class = new DIOWINDOWSSTREAMBLUETOOTHLOCALENUMDEVICES();           break;
+      case DIOSTREAMENUMTYPE_BLUETOOTH_LOCAL    : _class = GEN_NEW DIOWINDOWSSTREAMBLUETOOTHLOCALENUMDEVICES();           break;
       #endif
 
       #ifdef DIO_STREAMBLUETOOTH_ACTIVE
-      case DIOSTREAMENUMTYPE_BLUETOOTH_REMOTE   : _class = new DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES();          break;
+      case DIOSTREAMENUMTYPE_BLUETOOTH_REMOTE   : _class = GEN_NEW DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES();          break;
       #endif
 
       #ifdef DIO_STREAMBLUETOOTHLE_ACTIVE
-      case DIOSTREAMENUMTYPE_BLUETOOTHLE_REMOTE : _class = new DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES();        break;
+      case DIOSTREAMENUMTYPE_BLUETOOTHLE_REMOTE : _class = GEN_NEW DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES();        break;
       #endif
 
       #ifdef DIO_STREAMTWIFI_ACTIVE
-      case DIOSTREAMENUMTYPE_WIFI_REMOTE        : _class = new DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES();               break;
+      case DIOSTREAMENUMTYPE_WIFI_REMOTE        : _class = GEN_NEW DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES();               break;
       #endif
 
                                       default   : return NULL;
@@ -262,49 +262,49 @@ DIOSTREAM* DIOWINDOWSFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
           case DIOSTREAMTYPE_UNKNOWN    : return NULL;
 
           #ifdef DIO_STREAMUART_ACTIVE
-          case DIOSTREAMTYPE_UART       : _class = new DIOWINDOWSSTREAMUART();        
+          case DIOSTREAMTYPE_UART       : _class = GEN_NEW DIOWINDOWSSTREAMUART();        
                                           break;
           #endif
 
           #ifdef DIO_STREAMUSB_ACTIVE
-          case DIOSTREAMTYPE_USB        : _class = new DIOWINDOWSSTREAMUSB();         
+          case DIOSTREAMTYPE_USB        : _class = GEN_NEW DIOWINDOWSSTREAMUSB();         
                                           break;
           #endif
 
           #ifdef DIO_STREAMICMP_ACTIVE
-          case DIOSTREAMTYPE_ICMP       : _class = new DIOWINDOWSSTREAMICMP();        
+          case DIOSTREAMTYPE_ICMP       : _class = GEN_NEW DIOWINDOWSSTREAMICMP();        
                                           break;
           #endif
 
           #ifdef DIO_STREAMUDP_ACTIVE
-          case DIOSTREAMTYPE_UDP        : _class = new DIOWINDOWSSTREAMUDP();         
+          case DIOSTREAMTYPE_UDP        : _class = GEN_NEW DIOWINDOWSSTREAMUDP();         
                                           break;
           #endif
 
           #ifdef DIO_STREAMTCPIP_ACTIVE
           case DIOSTREAMTYPE_TCPIP      : if(config->GetMode() == DIOSTREAMMODE_SERVERMULTISOCKET)
                                             {
-                                              _class = new DIOWINDOWSSTREAMTCPIPSERVER();
+                                              _class = GEN_NEW DIOWINDOWSSTREAMTCPIPSERVER();
                                             }                                      
                                            else
                                             {
-                                              _class = new DIOWINDOWSSTREAMTCPIP();
+                                              _class = GEN_NEW DIOWINDOWSSTREAMTCPIP();
                                             } 
                                           break;
           #endif
 
           #if defined(DIO_STREAMBLUETOOTH_ACTIVE) || defined(DIO_STREAMBLUETOOTHLE_ACTIVE)
-          case DIOSTREAMTYPE_BLUETOOTH  : _class = new DIOWINDOWSSTREAMBLUETOOTH();   
+          case DIOSTREAMTYPE_BLUETOOTH  : _class = GEN_NEW DIOWINDOWSSTREAMBLUETOOTH();   
                                           break;
           #endif
 
           #ifdef DIO_STREAMSPI_ACTIVE
-          case DIOSTREAMTYPE_SPI        : _class = new DIOWINDOWSSTREAMSPI();         
+          case DIOSTREAMTYPE_SPI        : _class = GEN_NEW DIOWINDOWSSTREAMSPI();         
                                           break;
           #endif
 
           #ifdef DIO_STREAMI2C_ACTIVE
-          case DIOSTREAMTYPE_I2C        : _class = new DIOWINDOWSSTREAMI2C();         
+          case DIOSTREAMTYPE_I2C        : _class = GEN_NEW DIOWINDOWSSTREAMI2C();         
                                           break;
           #endif
 
@@ -320,11 +320,11 @@ DIOSTREAM* DIOWINDOWSFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
           #if defined(DIO_STREAMTCPIP_ACTIVE) && defined(DIO_STREAMTLS_ACTIVE)
           case DIOSTREAMTYPE_TCPIP      : if(config->GetMode() == DIOSTREAMMODE_SERVERMULTISOCKET)
                                             {
-                                              //_class = new DIOWINDOWSSTREAMTCPIPSERVER();
+                                              //_class = GEN_NEW DIOWINDOWSSTREAMTCPIPSERVER();
                                             }                                      
                                            else
                                             {
-                                              _class = new DIOSTREAMTLS<DIOWINDOWSSTREAMTCPIP>();
+                                              _class = GEN_NEW DIOSTREAMTLS<DIOWINDOWSSTREAMTCPIP>();
                                             } 
                                           break;
           #endif

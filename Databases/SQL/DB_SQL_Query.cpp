@@ -220,7 +220,7 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, DB_SQL_VARIANT* variant)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, int integer)
 {
-  DB_SQL_VARIANT* variant = new DB_SQL_VARIANT();
+  DB_SQL_VARIANT* variant = GEN_NEW DB_SQL_VARIANT();
   if(!variant) return false;
 
   (*variant) = integer;
@@ -243,7 +243,7 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, int integer)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, XCHAR* string)
 {
-  DB_SQL_VARIANT* variant = new DB_SQL_VARIANT();
+  DB_SQL_VARIANT* variant = GEN_NEW DB_SQL_VARIANT();
   if(!variant) return false;
 
   (*variant) = string;
@@ -266,7 +266,7 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, XCHAR* string)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, float decimal)
 {
-  DB_SQL_VARIANT* variant = new DB_SQL_VARIANT();
+  DB_SQL_VARIANT* variant = GEN_NEW DB_SQL_VARIANT();
   if(!variant) return false;
 
   (*variant) = decimal;
@@ -289,7 +289,7 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, float decimal)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, char* string)
 {
-  DB_SQL_VARIANT* variant = new DB_SQL_VARIANT();
+  DB_SQL_VARIANT* variant = GEN_NEW DB_SQL_VARIANT();
   if(!variant) return false;
 
   (*variant) = string;
@@ -312,7 +312,7 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, char* string)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD id, XDATETIME& datetime)
 {
-  DB_SQL_VARIANT* variant = new DB_SQL_VARIANT();
+  DB_SQL_VARIANT* variant = GEN_NEW DB_SQL_VARIANT();
   if(!variant) return false;
 
   (*variant) = datetime;

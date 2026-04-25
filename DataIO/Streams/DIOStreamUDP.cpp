@@ -71,7 +71,7 @@
 DIOSTREAMUDPDATAGRAM::DIOSTREAMUDPDATAGRAM()
 {
   Clean();
-  data = new XBUFFER();
+  data = GEN_NEW XBUFFER();
 }
 
 
@@ -290,7 +290,7 @@ DIOSTREAMUDP::DIOSTREAMUDP() : DIOSTREAM()
   Clean();
 
   GEN_XFACTORY_CREATE(datagramsmutex, Create_Mutex())
-  host = new DIOURL();
+  host = GEN_NEW DIOURL();
 }
 
 
@@ -758,7 +758,7 @@ bool DIOSTREAMUDP::AddDatagram(bool istosend, XCHAR* address, XWORD port, XBYTE*
 
   if(datagramsmutex)  datagramsmutex->Lock();
 
-  DIOSTREAMUDPDATAGRAM* datagram = new DIOSTREAMUDPDATAGRAM();
+  DIOSTREAMUDPDATAGRAM* datagram = GEN_NEW DIOSTREAMUDPDATAGRAM();
   if(datagram)
     {
       datagram->SetIsToSend(istosend);

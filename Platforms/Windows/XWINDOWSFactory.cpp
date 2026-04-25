@@ -121,7 +121,7 @@ DELETEFUNC(XWINDOWSFACTORY, XMUTEX    , XWINDOWSMUTEX             , Delete_Mutex
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XWINDOWSFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
 {
-  XWINDOWSTHREAD* _class =  new XWINDOWSTHREAD(groupID, ID, function, param);
+  XWINDOWSTHREAD* _class =  GEN_NEW XWINDOWSTHREAD(groupID, ID, function, param);
   return (XTHREAD*)_class;
 }
 

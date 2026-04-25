@@ -605,7 +605,7 @@ bool XFSTRING::Explode(XCHAR token, XVECTOR<XFSTRING*>* receive)
 
       if((end - start) > 0)
         {
-          XFSTRING* tok = new XFSTRING();
+          XFSTRING* tok = GEN_NEW XFSTRING();
           if(!tok) return false;
 
           Copy(start, end, (*tok));

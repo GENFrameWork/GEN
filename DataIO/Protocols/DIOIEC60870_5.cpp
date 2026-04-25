@@ -1161,7 +1161,7 @@ bool DIOIEC60870_5::CMD_C_CI_NU_2_ReadAllValues(int TM, XDATETIME* timestart, XD
           DIO_C_CI_NU_2_RESULT* result;
           bool                  status2 = true;
 
-          do{ result = new DIO_C_CI_NU_2_RESULT();
+          do{ result = GEN_NEW DIO_C_CI_NU_2_RESULT();
               if(result)
                 {
                   status2 = CMD_C_CI_NU_2_Read(result, timeout);

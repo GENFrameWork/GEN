@@ -160,10 +160,10 @@ UI_ELEMENT_MENU::~UI_ELEMENT_MENU()
 * ---------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_OPTION* UI_ELEMENT_MENU::Option_AddText(UI_ELEMENT_MENU_OPTION_CFG& option_cfg)
 {  
-  UI_ELEMENT_OPTION* element_option = new UI_ELEMENT_OPTION();
+  UI_ELEMENT_OPTION* element_option = GEN_NEW UI_ELEMENT_OPTION();
   if(element_option)
     {
-      UI_ELEMENT_TEXT* element_text = new UI_ELEMENT_TEXT();
+      UI_ELEMENT_TEXT* element_text = GEN_NEW UI_ELEMENT_TEXT();
       if(element_text) 
         {          
           element_text->SetFather(element_option);

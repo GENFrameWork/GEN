@@ -94,19 +94,19 @@ DIOSTREAM* DIOESP32FACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
                           default   : return NULL;
 
       #ifdef DIO_STREAMUART_ACTIVE
-      case DIOSTREAMTYPE_UART       : _class = new DIOESP32STREAMUART();        break;
+      case DIOSTREAMTYPE_UART       : _class = GEN_NEW DIOESP32STREAMUART();        break;
       #endif
 
       #ifdef DIO_STREAMUSB_ACTIVE
-      case DIOSTREAMTYPE_USB        : _class = new DIOESP32STREAMUSB();         break;
+      case DIOSTREAMTYPE_USB        : _class = GEN_NEW DIOESP32STREAMUSB();         break;
       #endif
 
       #ifdef DIO_STREAMSPI_ACTIVE
-      case DIOSTREAMTYPE_SPI        : _class = new DIOESP32STREAMSPI();         break;
+      case DIOSTREAMTYPE_SPI        : _class = GEN_NEW DIOESP32STREAMSPI();         break;
       #endif
 
       #ifdef DIO_STREAMI2C_ACTIVE
-      case DIOSTREAMTYPE_I2C        : _class = new DIOESP32STREAMI2C();         break;
+      case DIOSTREAMTYPE_I2C        : _class = GEN_NEW DIOESP32STREAMI2C();         break;
       #endif
     }
 
@@ -156,7 +156,7 @@ bool DIOESP32FACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 * ---------------------------------------------------------------------------------------------------------------------*/
 DIOLEDNEOPIXELWS2812B* DIOESP32FACTORY::CreateLedNeopixelWS2812B()
 {
-  DIOESP32LEDNEOPIXELWS2812B* ledneopixelws2812b = new DIOESP32LEDNEOPIXELWS2812B();
+  DIOESP32LEDNEOPIXELWS2812B* ledneopixelws2812b = GEN_NEW DIOESP32LEDNEOPIXELWS2812B();
 
   return ledneopixelws2812b;
 }

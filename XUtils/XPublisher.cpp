@@ -135,7 +135,7 @@ bool XPUBLISHER::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XPUBLISHER& XPUBLISHER::GetInstance()
 {
-  if(!instance) instance = new XPUBLISHER();
+  if(!instance) instance = GEN_NEW XPUBLISHER();
 
   return (*instance);
 }
@@ -344,7 +344,7 @@ bool XPUBLISHER::SubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* obser
 
       if(!found)
         {
-          XPUBLISHERENTRY* publisherentry = new XPUBLISHERENTRY();
+          XPUBLISHERENTRY* publisherentry = GEN_NEW XPUBLISHERENTRY();
           if(publisherentry)
             {
               publisherentry->type     = type;

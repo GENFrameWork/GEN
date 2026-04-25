@@ -70,20 +70,20 @@ GRPVECTORFILEDXFTEXTSECTIONHEADERDEFVARIABLE GRPVECTORFILEDXFTEXTSECTIONHEADER::
   { __L("$AXISUNIT")                , 2, { {  10, __L("X") }, { 20, __L("Y") } } ,  __L("Axis X and Y tick spacing (not functional in Release 12)") },
   { __L("$BLIPMODE")                , 1, { {  70, __L("")  } } ,  __L("Blip mode on if nonzero") },
   { __L("$CAMERADISPLAY")           , 1, { { 290, __L("")  } } ,  __L("Turns the display of camera objects on or off. Minimum AutoCAD version: R2007") },
-  { __L("$CAMERAHEIGHT")            , 1, { {  40, __L("")  } } ,  __L("Specifies the default height for new camera objects. Minimum AutoCAD version: R2007") },     
+  { __L("$CAMERAHEIGHT")            , 1, { {  40, __L("")  } } ,  __L("Specifies the default height for GEN_NEW camera objects. Minimum AutoCAD version: R2007") },     
   { __L("$CECOLOR")                 , 1, { {  62, __L("")  } } ,  __L("Current entity color number: 0 = BYBLOCK; 256 = BYLAYER") },
   { __L("$CELTSCALE")               , 1, { {  40, __L("")  } } ,  __L("Current entity linetype scale") },
   { __L("$CELTYPE")                 , 1, { {   6, __L("")  } } ,  __L("Entity linetype name, or BYBLOCK or BYLAYER") },
-  { __L("$CELWEIGHT")               , 1, { { 370, __L("")  } } ,  __L("Lineweight of new objects") },
-  { __L("$CEPSNID")                 , 1, { { 390, __L("")  } } ,  __L("Plotstyle handle of new objects; if CEPSNTYPE is 3, then this value indicates the handle") },
-  { __L("$CEPSNTYPE")               , 1, { { 380, __L("")  } } ,  __L("Plot style type of new objects: 0 = Plot style by layer, 1 = Plot style by block, 2 = Plot style by dictionary default, 3 = Plot style by object ID/handle") },
+  { __L("$CELWEIGHT")               , 1, { { 370, __L("")  } } ,  __L("Lineweight of GEN_NEW objects") },
+  { __L("$CEPSNID")                 , 1, { { 390, __L("")  } } ,  __L("Plotstyle handle of GEN_NEW objects; if CEPSNTYPE is 3, then this value indicates the handle") },
+  { __L("$CEPSNTYPE")               , 1, { { 380, __L("")  } } ,  __L("Plot style type of GEN_NEW objects: 0 = Plot style by layer, 1 = Plot style by block, 2 = Plot style by dictionary default, 3 = Plot style by object ID/handle") },
   { __L("$CHAMFERA")                , 1, { {  40, __L("")  } } ,  __L("First chamfer distance") },
   { __L("$CHAMFERB")                , 1, { {  40, __L("")  } } ,  __L("Second chamfer distance") },
   { __L("$CHAMFERC")                , 1, { {  40, __L("")  } } ,  __L("Chamfer length") },
   { __L("$CHAMFERD")                , 1, { {  40, __L("")  } } ,  __L("Chamfer angle") },
   { __L("$CLAYER")                  , 1, { {   8, __L("")  } } ,  __L("Current layer name 11") },
   { __L("$COORDS")                  , 1, { {  70, __L("")  } } ,  __L("0 = static coordinate display, 1 = continuous update, 2 = 'd<a' format") },
-  { __L("$CMATERIAL")               , 1, { { 280, __L("")  } } ,  __L("Sets the material of new objects. Minimum AutoCAD version: R2007") },
+  { __L("$CMATERIAL")               , 1, { { 280, __L("")  } } ,  __L("Sets the material of GEN_NEW objects. Minimum AutoCAD version: R2007") },
   { __L("$CMLJUST")                 , 1, { {  70, __L("")  } } ,  __L("Current multiline justification: 0 = Top; 1 = Middle; 2 = Bottom") },
   { __L("$CMLSCALE")                , 1, { {  40, __L("")  } } ,  __L("Current multiline scale") },
   { __L("$CMLSTYLE")                , 1, { {   2, __L("")  } } ,  __L("Current multiline style name") },
@@ -174,10 +174,10 @@ GRPVECTORFILEDXFTEXTSECTIONHEADERDEFVARIABLE GRPVECTORFILEDXFTEXTSECTIONHEADER::
   { __L("$DGNFRAME")                , 1, { { 280, __L("")  } } ,  __L("Determines whether DGN underlay frames are visible or plotted in the current drawing. Minimum AutoCAD version: R2007") },
   { __L("$DRAGVS")                  , 1, { { 349, __L("")  } } ,  __L("Hard-pointer ID to visual style while creating 3D solid primitives. The default value is NULL") },
   { __L("$DWFFRAME")                , 1, { { 280, __L("")  } } ,  __L("Determines whether DWF or DWFx underlay frames are visible or plotted in the current drawing. Minimum AutoCAD version: R2007") },
-  { __L("$DWGCODEPAGE")             , 1, { {   3, __L("")  } } ,  __L("Drawing code page. Set to the system code page when a new drawing is created, but not otherwise maintained by AutoCAD") },
+  { __L("$DWGCODEPAGE")             , 1, { {   3, __L("")  } } ,  __L("Drawing code page. Set to the system code page when a GEN_NEW drawing is created, but not otherwise maintained by AutoCAD") },
   { __L("$DRAGMODE")                , 1, { {  70, __L("")  } } ,  __L("0 = off, 1 = on, 2 = auto") },
   { __L("$ELEVATION")               , 1, { {  40, __L("")  } } ,  __L("Current elevation set by ELEV command") },
-  { __L("$ENDCAPS")                 , 1, { { 280, __L("")  } } ,  __L("Lineweight endcaps setting for new objects: 0 = None, 1 = Round, 2 = Angle, 3 = Square") },
+  { __L("$ENDCAPS")                 , 1, { { 280, __L("")  } } ,  __L("Lineweight endcaps setting for GEN_NEW objects: 0 = None, 1 = Round, 2 = Angle, 3 = Square") },
   { __L("$EXTMAX")                  , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("X, Y, and Z drawing extents upper-right corner (in WCS)") },
   { __L("$EXTMIN")                  , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("X, Y, and Z drawing extents lower-left corner (in WCS)") },
   { __L("$EXTNAMES")                , 1, { { 290, __L("")  } } ,  __L("Controls symbol table naming: 0 = Release 14 compatibility. Limits names to 31 characters in length. Names can include the letters A to Z, the numerals 0 to 9, and the special characters dollar sign ($), underscore (_), and hyphen (-)., 1 = AutoCAD 2000. Names can be up to 255 characters in length, and can include the letters A to Z, the numerals 0 to 9, spaces, and any special characters not used for other purposes by Microsoft Windows and AutoCAD") },
@@ -197,7 +197,7 @@ GRPVECTORFILEDXFTEXTSECTIONHEADERDEFVARIABLE GRPVECTORFILEDXFTEXTSECTIONHEADER::
   { __L("$INTERFEREVPVS")           , 1, { { 346, __L("")  } } ,  __L("Hard-pointer ID to the visual style for the viewport during interference checking. Default visual style is 3d Wireframe") },
   { __L("$INTERSECTIONCOLOR")       , 1, { {  70, __L("")  } } ,  __L("Specifies the entity color of intersection polylines: Values 1-255 designate an AutoCAD color index (ACI) 0 = Color BYBLOCK, 256 = Color BYLAYER, 257 = Color BYENTITY") },
   { __L("$INTERSECTIONDISPLAY")     , 1, { { 290, __L("")  } } ,  __L("Specifies the display of intersection polylines: 0 = Turns off the display of intersection polylines 1 = Turns on the display of intersection polylines") },
-  { __L("$JOINSTYLE")               , 1, { { 280, __L("")  } } ,  __L("Lineweight joint setting for new objects: 0=None 1= Round 2 = Angle 3 = Flat") },
+  { __L("$JOINSTYLE")               , 1, { { 280, __L("")  } } ,  __L("Lineweight joint setting for GEN_NEW objects: 0=None 1= Round 2 = Angle 3 = Flat") },
   { __L("$LATITUDE")                , 1, { {  40, __L("")  } } ,  __L("The latitude of the geographic location assigned to the drawing. Minimum AutoCAD version: R2007") },
   { __L("$LASTSAVEDBY")             , 1, { {   1, __L("")  } } ,  __L("Name of the last user to modify the file. Minimum AutoCAD version: R2004") },  
   { __L("$LENSLENGTH")              , 1, { {  40, __L("")  } } ,  __L("Stores the length of the lens in millimeters used in perspective viewing. Minimum AutoCAD version: R2007") },
@@ -245,16 +245,16 @@ GRPVECTORFILEDXFTEXTSECTIONHEADERDEFVARIABLE GRPVECTORFILEDXFTEXTSECTIONHEADER::
   { __L("$PSOLWIDTH")               , 1, { {  40, __L("")  } } ,  __L("Controls the default width for a swept solid object created with the POLYSOLID command. Minimum AutoCAD version: R2007") },
   { __L("$PSLTSCALE")               , 1, { {  70, __L("")  } } ,  __L("Controls paper space linetype scaling 1 = no special linetype scaling 0 = viewport scaling governs linetype scaling") },
   { __L("$PSTYLEMODE")              , 1, { { 290, __L("")  } } ,  __L("Indicates whether the current drawing is in a Color-Dependent or Named Plot Style mode: 0 = Uses named plot style tables in the current drawing, 1 = Uses color-dependent plot style tables in the current drawing") },
-  { __L("$PSVPSCALE")               , 1, { {  40, __L("")  } } ,  __L("View scale factor for new viewports: 0 = Scaled to fit >0 = Scale factor (a positive real value)") },
+  { __L("$PSVPSCALE")               , 1, { {  40, __L("")  } } ,  __L("View scale factor for GEN_NEW viewports: 0 = Scaled to fit >0 = Scale factor (a positive real value)") },
   { __L("$PUCSBASE")                , 1, { {   2, __L("")  } } ,  __L("Name of the UCS that defines the origin and orientation of orthographic UCS settings (paper space only)") },
   { __L("$PUCSNAME")                , 1, { {   2, __L("")  } } ,  __L("Current paper space UCS name") },
   { __L("$PUCSORG")                 , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Current paper space UCS origin") },
-  { __L("$PUCSORGBACK")             , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing paper space UCS to BACK when PUCSBASE is set to WORLD") },
-  { __L("$PUCSORGBOTTOM")           , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing paper space UCS to BOTTOM when PUCSBASE is set to WORLD") },
-  { __L("$PUCSORGFRONT")            , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing paper space UCS to FRONT when PUCSBASE is set to WORLD") },
-  { __L("$PUCSORGLEFT")             , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing paper space UCS to LEFT when PUCSBASE is set to WORLD") },
-  { __L("$PUCSORGRIGHT")            , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing paper space UCS to RIGHT when PUCSBASE is set to WORLD") },
-  { __L("$PUCSORGTOP")              , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing paper space UCS to TOP when PUCSBASE is set to WORLD") },
+  { __L("$PUCSORGBACK")             , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing paper space UCS to BACK when PUCSBASE is set to WORLD") },
+  { __L("$PUCSORGBOTTOM")           , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing paper space UCS to BOTTOM when PUCSBASE is set to WORLD") },
+  { __L("$PUCSORGFRONT")            , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing paper space UCS to FRONT when PUCSBASE is set to WORLD") },
+  { __L("$PUCSORGLEFT")             , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing paper space UCS to LEFT when PUCSBASE is set to WORLD") },
+  { __L("$PUCSORGRIGHT")            , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing paper space UCS to RIGHT when PUCSBASE is set to WORLD") },
+  { __L("$PUCSORGTOP")              , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing paper space UCS to TOP when PUCSBASE is set to WORLD") },
   { __L("$PUCSORTHOREF")            , 1, { {   2, __L("")  } } ,  __L("If paper space UCS is orthographic (PUCSORTHOVIEW not equal to 0), this is the name of the UCS that the orthographic UCS is relative to. If blank, UCS is relative to WORLD") },
   { __L("$PUCSORTHOVIEW")           , 1, { {  70, __L("")  } } ,  __L("Orthographic view type of paper space UCS: 0 = UCS is not orthographic,1 = Top, 2 = Bottom, 3 = Front, 4 = Back, 5 = Left, 6 = Right") },
   { __L("$PUCSXDIR")                , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Current paper space UCS X axis") },
@@ -272,7 +272,7 @@ GRPVECTORFILEDXFTEXTSECTIONHEADERDEFVARIABLE GRPVECTORFILEDXFTEXTSECTIONHEADER::
   { __L("$STEPSPERSEC")             , 1, { {  40, __L("")  } } ,  __L("Specifies the number of steps taken per second when you are in walk or fly mode. Minimum AutoCAD version: R2007") },
   { __L("$STEPSIZE")                , 1, { {  40, __L("")  } } ,  __L("Specifies the size of each step when in walk or fly mode, in drawing units. Minimum AutoCAD version: R2007") },
   { __L("$STYLESHEET")              , 1, { {   1, __L("")  } } ,  __L("Path to the stylesheet for the drawing. Minimum AutoCAD version: R2000") },
-  { __L("$SOLIDHIST")               , 1, { { 280, __L("")  } } ,  __L("Controls whether new composite solids retain a history of their original components. Minimum AutoCAD version: R2007") },
+  { __L("$SOLIDHIST")               , 1, { { 280, __L("")  } } ,  __L("Controls whether GEN_NEW composite solids retain a history of their original components. Minimum AutoCAD version: R2007") },
   { __L("$SORTENTS")                , 1, { { 280, __L("")  } } ,  __L("Controls the object sorting methods; accessible from the Options dialog box User Preferences tab. SORTENTS uses the following bitcodes: 0 = Disables SORTENTS 1 = Sorts for object selection, 2 = Sorts for object snap, 4 = Sorts for redraws; obsolete,  8 = Sorts for MSLIDE command slide creation; obsolete, 16 = Sorts for REGEN commands 32 = Sorts for plotting, 64 = Sorts for PostScript output; obsolete") },
   { __L("$SPLFRAME")                , 1, { {  70, __L("")  } } ,  __L("Spline control polygon display; 1 = on, 0 = off") },  
   { __L("$SPLINESEGS")              , 1, { {  70, __L("")  } } ,  __L("Number of line segments per spline patch") },
@@ -300,12 +300,12 @@ GRPVECTORFILEDXFTEXTSECTIONHEADERDEFVARIABLE GRPVECTORFILEDXFTEXTSECTIONHEADER::
   { __L("$UCSBASE")                 , 1, { {   2, __L("")  } } ,  __L("Name of the UCS that defines the origin and orientation of orthographic UCS settings") },
   { __L("$UCSNAME")                 , 1, { {   2, __L("")  } } ,  __L("Name of current UCS") },
   { __L("$UCSORG")                  , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Origin of current UCS (in WCS)") },
-  { __L("$UCSORGBACK")              , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing model space UCS to BACK when UCSBASE is set to WORLD") },
-  { __L("$UCSORGBOTTOM")            , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing model space UCS to BOTTOM when UCSBASE is set to WORLD") },
-  { __L("$UCSORGFRONT")             , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing model space UCS to FRONT when UCSBASE is set to WORLD") },
-  { __L("$UCSORGLEFT")              , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing model space UCS to LEFT when UCSBASE is set to WORLD") },
-  { __L("$UCSORGRIGHT")             , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing model space UCS to RIGHT when UCSBASE is set to WORLD") },
-  { __L("$UCSORGTOP")               , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the new UCS origin after changing model space UCS to TOP when UCSBASE is set to WORLD") },
+  { __L("$UCSORGBACK")              , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing model space UCS to BACK when UCSBASE is set to WORLD") },
+  { __L("$UCSORGBOTTOM")            , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing model space UCS to BOTTOM when UCSBASE is set to WORLD") },
+  { __L("$UCSORGFRONT")             , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing model space UCS to FRONT when UCSBASE is set to WORLD") },
+  { __L("$UCSORGLEFT")              , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing model space UCS to LEFT when UCSBASE is set to WORLD") },
+  { __L("$UCSORGRIGHT")             , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing model space UCS to RIGHT when UCSBASE is set to WORLD") },
+  { __L("$UCSORGTOP")               , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Point which becomes the GEN_NEW UCS origin after changing model space UCS to TOP when UCSBASE is set to WORLD") },
   { __L("$UCSORTHOREF")             , 1, { {   2, __L("")  } } ,  __L("If model space UCS is orthographic (UCSORTHOVIEW not equal to 0), this is the name of the UCS that the orthographic UCS is relative to. If blank, UCS is relative to WORLD") },
   { __L("$UCSORTHOVIEW")            , 1, { {  70, __L("")  } } ,  __L("Orthographic view type of model space UCS: 0 = UCS is not orthographic, 1 = Top, 2 = Bottom, 3 = Front, 4 = Back, 5 = Left, 6 = Right") },
   { __L("$UCSXDIR")                 , 3, { {  10, __L("X") }, { 20, __L("Y") }, { 30, __L("Z") } } ,  __L("Direction of current UCS's X axis (in WCS)") },
@@ -425,13 +425,13 @@ bool GRPVECTORFILEDXFTEXTSECTIONHEADER::IsKnownVariable(XSTRING& namevar)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONHEADER::AddVariable(XCHAR* namevar, XVARIANT* variant)
 { 
-  XSTRING* namevarStr = new XSTRING();
+  XSTRING* namevarStr = GEN_NEW XSTRING();
   if(!namevarStr) 
     {
       return false;
     }
 
-  XVARIANT* variantCpy = new XVARIANT();
+  XVARIANT* variantCpy = GEN_NEW XVARIANT();
   if(!variantCpy) 
     {
       return false;
@@ -689,7 +689,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONHEADER::ParserTextSection(XFILETX
 
   do{ if(!part)
         {
-          part = new GRPVECTORFILEDXFTEXTPART ();
+          part = GEN_NEW GRPVECTORFILEDXFTEXTPART ();
         }
 
       XSTRING* line = fileTXT->GetLine(c);

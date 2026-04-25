@@ -94,7 +94,7 @@ DIOCAMERA::~DIOCAMERA()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCAMERA::Ini()
 {
-  xscheduler = new XSCHEDULER();
+  xscheduler = GEN_NEW XSCHEDULER();
   if(!xscheduler) return false;
 
   SubscribeEvent(XEVENT_TYPE_SCHEDULER, xscheduler);

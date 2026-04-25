@@ -72,7 +72,7 @@ DIOSTREAMICMPDATAGRAM::DIOSTREAMICMPDATAGRAM()
 {
   Clean();
 
-  data = new XBUFFER();
+  data = GEN_NEW XBUFFER();
 }
 
 
@@ -258,7 +258,7 @@ DIOSTREAMICMP::DIOSTREAMICMP() : DIOSTREAM()
   Clean();
 
   GEN_XFACTORY_CREATE(datagramsmutex, Create_Mutex())
-  host           = new DIOURL();
+  host           = GEN_NEW DIOURL();
 }
 
 
@@ -621,7 +621,7 @@ bool DIOSTREAMICMP::AddDatagram(bool istosend, XCHAR* address, XBYTE* data, XDWO
 
   if(datagramsmutex)  datagramsmutex->Lock();
 
-  DIOSTREAMICMPDATAGRAM* datagram = new DIOSTREAMICMPDATAGRAM();
+  DIOSTREAMICMPDATAGRAM* datagram = GEN_NEW DIOSTREAMICMPDATAGRAM();
   if(datagram)
     {
       datagram->SetIsToSend(istosend);

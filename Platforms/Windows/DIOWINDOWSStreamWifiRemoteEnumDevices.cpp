@@ -217,7 +217,7 @@ bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::Search()
           bssentry = (WLAN_BSS_ENTRY*)&bsslist->wlanBssEntries[j];
           if(bssentry)
             {
-              DIOSTREAMDEVICEWIFI* wifidevice = new DIOSTREAMDEVICEWIFI();
+              DIOSTREAMDEVICEWIFI* wifidevice = GEN_NEW DIOSTREAMDEVICEWIFI();
               if(wifidevice)
                 {
                   XSTRING name;

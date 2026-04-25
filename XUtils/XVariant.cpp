@@ -687,7 +687,7 @@ const XVARIANT& XVARIANT::operator = (const XDATETIME& value)
   type  = XVARIANT_TYPE_DATETIME; 
   size  = sizeof(XDATETIME); 
 
-  data = (void*)new XDATETIME;
+  data = (void*)GEN_NEW XDATETIME;
   if(data) 
     {
       static_cast<XDATETIME*>(data)->CopyFrom((XDATETIME&)value);
@@ -718,7 +718,7 @@ const XVARIANT& XVARIANT::operator = (const XBUFFER& value)
   type = XVARIANT_TYPE_BUFFER;
   size = sizeof(XBUFFER);
 
-  data = new XBUFFER();  
+  data = GEN_NEW XBUFFER();  
   if(data)
     {
       static_cast<XBUFFER*>(data)->CopyFrom((XBUFFER&)value);
@@ -1144,7 +1144,7 @@ bool XVARIANT::Set(XVARIANT_TYPE type, void* data, XDWORD size)
 
   if(size)
     {
-      this->data = new XBYTE[size];
+      this->data = GEN_NEW XBYTE[size];
       if(!this->data)
         {
           return false;
@@ -1182,7 +1182,7 @@ bool XVARIANT::GetDataFromString(char* string)
       Destroy();
     }
 
-  data = new XSTRING();
+  data = GEN_NEW XSTRING();
   if(!data) return false;
 
   type = XVARIANT_TYPE_STRING;
@@ -1215,7 +1215,7 @@ bool XVARIANT::GetDataFromString(XCHAR* string)
       Destroy();
     }
 
-  data = new XSTRING();
+  data = GEN_NEW XSTRING();
   if(!data) return false;
 
   type = XVARIANT_TYPE_STRING;
@@ -1519,7 +1519,7 @@ bool XVARIANT::FromString(XSTRING& from, XVARIANT_TYPE from_type)
                                                 size = sizeof(XCHAR);
                                                 break;
 
-          case XVARIANT_TYPE_STRING           : { XSTRING* string = new XSTRING();
+          case XVARIANT_TYPE_STRING           : { XSTRING* string = GEN_NEW XSTRING();
                                                   if(string)
                                                     {    
                                                       string->Set(from.Get());
@@ -1589,7 +1589,7 @@ bool XVARIANT::FromString(XSTRING& from, XVARIANT_TYPE from_type)
                                                 }
                                                 break;
 
-          case XVARIANT_TYPE_BUFFER           : { XBUFFER* buffer = new XBUFFER();
+          case XVARIANT_TYPE_BUFFER           : { XBUFFER* buffer = GEN_NEW XBUFFER();
                                                   if(buffer)
                                                     {                                                      
                                                       buffer->ConvertFromBase64(from);

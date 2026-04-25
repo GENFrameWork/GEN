@@ -102,7 +102,7 @@ DELETEFUNC(XLINUXFACTORY, XMUTEX     , XLINUXMUTEX      , Delete_Mutex)
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XLINUXFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* param)
 {
-  XLINUXTHREAD* _class =  new XLINUXTHREAD(groupID, ID, function, param);
+  XLINUXTHREAD* _class =  GEN_NEW XLINUXTHREAD(groupID, ID, function, param);
   return (XTHREAD*)_class;
 }
 

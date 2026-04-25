@@ -468,7 +468,7 @@ bool XPROCESSMANAGER::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XPROCESSMANAGER& XPROCESSMANAGER::GetInstance()
 {
-  if(!instance) instance = new XPROCESSMANAGER();
+  if(!instance) instance = GEN_NEW XPROCESSMANAGER();
 
   return (*instance);
 }
@@ -481,7 +481,7 @@ XPROCESSMANAGER& XPROCESSMANAGER::GetInstance()
 * @note       STATIC
 * @ingroup    XUTILS
 *
-* @param[in]  _instance : new instance
+* @param[in]  _instance : GEN_NEW instance
 *
 * @return     bool : true if is succesful.
 *

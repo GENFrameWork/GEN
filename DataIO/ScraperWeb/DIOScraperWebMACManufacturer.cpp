@@ -218,7 +218,7 @@ bool DIOSCRAPERWEBMACMANUFACTURER::Get(DIOMAC& MAC, XSTRING& manufactured, int t
             {
               if(usecache)
                 {
-                  macmanufacturedresult = new DIOMACMANUFACTURED_RESULT();
+                  macmanufacturedresult = GEN_NEW DIOMACMANUFACTURED_RESULT();
                   if(macmanufacturedresult)
                     {
                       macmanufacturedresult->Get()->Set(manufactured);

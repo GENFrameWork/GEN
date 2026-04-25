@@ -72,7 +72,7 @@ INPDEVICE* INPANDROIDFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 
   switch(type)
     {
-      case INPDEVICE_TYPE_KEYBOARD :  { INPANDROIDDEVICEKEYBOARD* keyboard = new INPANDROIDDEVICEKEYBOARD();
+      case INPDEVICE_TYPE_KEYBOARD :  { INPANDROIDDEVICEKEYBOARD* keyboard = GEN_NEW INPANDROIDDEVICEKEYBOARD();
                                         if(keyboard)
                                           {
                                             keyboard->SetScreen(param);
@@ -81,7 +81,7 @@ INPDEVICE* INPANDROIDFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                       }
                                       break;
 
-      case INPDEVICE_TYPE_MOUSE    :  { INPANDROIDDEVICEMOUSE* mouse = new INPANDROIDDEVICEMOUSE();
+      case INPDEVICE_TYPE_MOUSE    :  { INPANDROIDDEVICEMOUSE* mouse = GEN_NEW INPANDROIDDEVICEMOUSE();
                                         if(mouse)
                                           {
                                             mouse->SetScreen(param);
@@ -117,12 +117,12 @@ bool INPANDROIDFACTORY::DeleteDevice(INPDEVICE* device)
 
   switch(device->GetType())
     {
-      case INPDEVICE_TYPE_KEYBOARD :  { INPANDROIDDEVICEKEYBOARD* keyboard = new INPANDROIDDEVICEKEYBOARD();
+      case INPDEVICE_TYPE_KEYBOARD :  { INPANDROIDDEVICEKEYBOARD* keyboard = GEN_NEW INPANDROIDDEVICEKEYBOARD();
                                         if(keyboard) delete keyboard;                                          
                                       }
                                       break;
 
-      case INPDEVICE_TYPE_MOUSE    :  { INPANDROIDDEVICEMOUSE* mouse = new INPANDROIDDEVICEMOUSE();
+      case INPDEVICE_TYPE_MOUSE    :  { INPANDROIDDEVICEMOUSE* mouse = GEN_NEW INPANDROIDDEVICEMOUSE();
                                         if(mouse) delete mouse;                                        
                                       }
                                       break;

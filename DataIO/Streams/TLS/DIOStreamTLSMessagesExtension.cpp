@@ -522,7 +522,7 @@ XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>* DIOSTREAMTLS_MSG_EXTENSION_
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Add(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
 {
-  DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername =  new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
+  DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername =  GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
   if(!_servername)
     {
       return false;
@@ -610,7 +610,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* exte
       DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = list.Get(c);
       if(servername)
         {
-          DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername = new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
+          DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
           if(_servername)
             { 
               servername->CopyTo(_servername);
@@ -654,7 +654,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* ex
       DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = extension->List_Get()->Get(c);
       if(servername)
         {
-          DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername = new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
+          DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* _servername = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
           if(_servername)
             { 
               _servername->CopyFrom(servername);
@@ -719,7 +719,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer, bool showdeb
 
   for(XDWORD c=0; c<list_length; c++)
     {
-      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = new DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
+      DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME();
       if(servername)
         {
           servername->GetFromBuffer(buffer, showdebug);
@@ -1614,7 +1614,7 @@ XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>* DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::L
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Add(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
 {
-  DIOSTREAMTLS_MSG_EXTENSION_KEY* _key =  new DIOSTREAMTLS_MSG_EXTENSION_KEY();
+  DIOSTREAMTLS_MSG_EXTENSION_KEY* _key =  GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEY();
   if(!_key)
     {
       return false;
@@ -1702,7 +1702,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEYS
       DIOSTREAMTLS_MSG_EXTENSION_KEY* key = list.Get(c);
       if(key)
         {
-          DIOSTREAMTLS_MSG_EXTENSION_KEY* _key = new DIOSTREAMTLS_MSG_EXTENSION_KEY();
+          DIOSTREAMTLS_MSG_EXTENSION_KEY* _key = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEY();
           if(_key)
             { 
               key->CopyTo(_key);
@@ -1745,7 +1745,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KE
       DIOSTREAMTLS_MSG_EXTENSION_KEY* key = extension->List_Get()->Get(c);
       if(key)
         {
-          DIOSTREAMTLS_MSG_EXTENSION_KEY* _key = new DIOSTREAMTLS_MSG_EXTENSION_KEY();
+          DIOSTREAMTLS_MSG_EXTENSION_KEY* _key = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEY();
           if(_key)
             { 
               _key->CopyFrom(key);
@@ -1810,7 +1810,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer, bool sh
 
   for(XDWORD c=0; c<list_length; c++)
     {
-      DIOSTREAMTLS_MSG_EXTENSION_KEY* key = new DIOSTREAMTLS_MSG_EXTENSION_KEY();
+      DIOSTREAMTLS_MSG_EXTENSION_KEY* key = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEY();
       if(key)
         {
           key->GetFromBuffer(buffer, showdebug);

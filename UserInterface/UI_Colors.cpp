@@ -80,7 +80,7 @@ bool UI_COLORS::GetIsInstanced()
 * ---------------------------------------------------------------------------------------------------------------------*/
 UI_COLORS& UI_COLORS::GetInstance()
 {
-  if(!instance) instance = new UI_COLORS();
+  if(!instance) instance = GEN_NEW UI_COLORS();
 
   return (*instance);
 }
@@ -126,12 +126,12 @@ bool UI_COLORS::Add(XCHAR* name, XCHAR* colorstr)
   if(!name)       return false;
   if(!colorstr)   return false;
 
-  XSTRING* _name = new XSTRING();
+  XSTRING* _name = GEN_NEW XSTRING();
   if(!_name) return false;
 
   _name->Set(name);
 
-  XSTRING* _colorstr = new XSTRING();
+  XSTRING* _colorstr = GEN_NEW XSTRING();
   if(_colorstr) 
     {     
       _colorstr->Set(colorstr);

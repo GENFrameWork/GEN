@@ -1225,7 +1225,7 @@ bool XSTRING::Add(const XCHAR* string)
       return false;
     }
 
-  XSTRING* xstring = new XSTRING(string);
+  XSTRING* xstring = GEN_NEW XSTRING(string);
   if(!xstring) return false;
 
   Add((*xstring));
@@ -3319,7 +3319,7 @@ bool XSTRING::ConvertFromShort(short value, const XCHAR* mask)
   char*     str;
   XSTRING  _mask;
 
-  str = new char[XSTRING_MAXTEMPOSTR];
+  str = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!str) return false;
 
   memset(str,0,XSTRING_MAXTEMPOSTR);
@@ -3356,7 +3356,7 @@ bool XSTRING::ConvertFromWord(XWORD value, const XCHAR* mask)
   char*     str;
   XSTRING  _mask;
 
-  str = new char[XSTRING_MAXTEMPOSTR];
+  str = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!str) return false;
 
   memset(str,0,XSTRING_MAXTEMPOSTR);
@@ -3393,7 +3393,7 @@ bool XSTRING::ConvertFromInt(int value, const XCHAR* mask)
   char*     str;
   XSTRING  _mask;
 
-  str = new char[XSTRING_MAXTEMPOSTR];
+  str = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!str) return false;
 
   memset(str,0,XSTRING_MAXTEMPOSTR);
@@ -3431,7 +3431,7 @@ bool XSTRING::ConvertFromDWord(XDWORD value, const XCHAR* mask)
   char*    str;
   XSTRING  _mask;
 
-  str = new char[XSTRING_MAXTEMPOSTR];
+  str = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!str) return false;
 
   memset(str,0,XSTRING_MAXTEMPOSTR);
@@ -3468,7 +3468,7 @@ bool XSTRING::ConvertFromLongLong(long long value, const XCHAR* mask)
   char*    str;
   XSTRING  _mask;
 
-  str = new char[XSTRING_MAXTEMPOSTR];
+  str = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!str) return false;
 
   memset(str,0,XSTRING_MAXTEMPOSTR);
@@ -3505,7 +3505,7 @@ bool XSTRING::ConvertFromQWord(XQWORD value, const XCHAR* mask)
   char*    str;
   XSTRING  _mask;
 
-  str = new char[XSTRING_MAXTEMPOSTR];
+  str = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!str) return false;
 
   memset(str,0,XSTRING_MAXTEMPOSTR);
@@ -3542,7 +3542,7 @@ bool XSTRING::ConvertFromFloat(float value, const XCHAR* mask)
   char*    str;
   XSTRING  _mask;
 
-  str = new char[XSTRING_MAXTEMPOSTR];
+  str = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!str) return false;
 
   memset(str,0,XSTRING_MAXTEMPOSTR);
@@ -3584,7 +3584,7 @@ bool XSTRING::ConvertFromDouble(double value, const XCHAR* mask)
   char*    str;
   XSTRING  _mask;
 
-  str = new char[XSTRING_MAXTEMPOSTR];
+  str = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!str) return false;
 
   memset(str,0,XSTRING_MAXTEMPOSTR);
@@ -5440,7 +5440,7 @@ bool XSTRING::Split(XCHAR separator, XVECTOR<XSTRING*>& results, bool addsubstri
     {
       if((text[c] == separator) || (!text[c]))
         {
-          XSTRING* string = new XSTRING();
+          XSTRING* string = GEN_NEW XSTRING();
           if(string)
             {
               Copy(start, (*string));
@@ -5504,7 +5504,7 @@ bool XSTRING::FormatArg(const XCHAR* mask, va_list* arg, bool isspecialweb)
 
   int c  = 0;
 
-  XCHAR* param = new XCHAR[16];
+  XCHAR* param = GEN_NEW XCHAR[16];
   if(param)
     {
       while(mask[c])
@@ -5850,7 +5850,7 @@ bool XSTRING::UnFormat(const XCHAR* mask,...)
 
   va_start(arg, mask);
 
-  XCHAR* param = new XCHAR[16];
+  XCHAR* param = GEN_NEW XCHAR[16];
   if(param)
     {
       int   nparam;
@@ -6292,7 +6292,7 @@ bool XSTRING::Explode(XCHAR token, XVECTOR<XSTRING*>* receive)
 
       if((end-start)>0)
         {
-          XSTRING* tok=new XSTRING();
+          XSTRING* tok=GEN_NEW XSTRING();
           if(!tok)  return false;
 
           Copy(start, end, (*tok));
@@ -6412,7 +6412,7 @@ bool XSTRING::ReAllocBuffer(XDWORD sizechar)
 
   XDWORD newsizechar      = (sizechar + XSTRING_EXCESSCHARS);
   XDWORD newsizecharbytes = (newsizechar * sizeof(XCHAR));
-  XCHAR* newtext          = (XCHAR*)new XBYTE[newsizecharbytes];
+  XCHAR* newtext          = (XCHAR*)GEN_NEW XBYTE[newsizecharbytes];
   if(!newtext) 
     {
       return false;
@@ -6502,7 +6502,7 @@ bool XSTRING::ConvertStringWithMask(XCHAR* mask, XCHAR* string, XCHAR* result)
   _mask   = mask;
   _string = string;
 
-  char* resultchar = new char[XSTRING_MAXTEMPOSTR];
+  char* resultchar = GEN_NEW char[XSTRING_MAXTEMPOSTR];
   if(!resultchar) return false;
 
   memset(resultchar, 0, XSTRING_MAXTEMPOSTR);

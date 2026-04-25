@@ -109,7 +109,7 @@ bool XSLEEP::GetIsInstanced()
 * --------------------------------------------------------------------------------------------------------------------*/
 XSLEEP& XSLEEP::GetInstance()
 {
-  if(!instance) instance = new XSLEEP();
+  if(!instance) instance = GEN_NEW XSLEEP();
 
   return (*instance);
 }
@@ -122,7 +122,7 @@ XSLEEP& XSLEEP::GetInstance()
 * @note       STATIC
 * @ingroup    XUTILS
 *
-* @param[in]  _instance : new instance
+* @param[in]  _instance : GEN_NEW instance
 *
 * @return     bool : true if is succesful.
 *

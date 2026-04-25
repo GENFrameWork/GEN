@@ -69,8 +69,8 @@
 #define XMEMORY_CONTROL_MAXIMUNLEAKSTODISPLAY   100
 
 #define XMEMORY_CONTROL_DISPLAYMEMORYLEAKS      XMemory_Control.DisplayAll(true);
-#define XMEMORY_CONTROL_GETMEMORYUSED           XMemory_Control.GetUsed()
-#define XMEMORY_CONTROL_GETMEMORYNBLOCKS        XMemory_Control.GetNAssigns()
+#define XMEMORY_CONTROL_GETMEMORYUSED           XMemory_Control.GetMemoryUsed()
+#define XMEMORY_CONTROL_GETMEMORYNBLOCKS        XMemory_Control.GetMemoryNBlocks()
 
 #define XMEMORY_CONTROL_ACTIVATED               XMemory_Control.Activate(true);
 #define XMEMORY_CONTROL_DEACTIVATED             XMemory_Control.Activate(false);
@@ -108,8 +108,7 @@ class XMEMORY_CONTROL
     bool                        IsActive                    ();
     bool                        Activate                    (bool isactive);
 
-    void*                       Assign                      (XDWORD size, const char* namefile, int line);
-    void*                       ReAssign                    (void* ptr, XDWORD size, const char* namefile, int line);
+    void*                       Assign                      (XDWORD size, char* namefile, int line);
     void                        Free                        (void* ptr);
 
     bool                        FreeAll                     ();
@@ -127,7 +126,7 @@ class XMEMORY_CONTROL
     XDWORD                      CRC32ForByte                (XDWORD ini);
     XDWORD                      CRC32                       (XBYTE* data, XWORD size);
 
-    bool                        RegisterAssign              (void* ptr, XDWORD size, const char* pathfile, int line);
+    bool                        RegisterAssign              (void* ptr, XDWORD size, char* pathfile, int line);
     bool                        DeRegisterAssign            (void* ptr, XDWORD& size);
 
     bool                        ResizeAssignList            ();
@@ -165,41 +164,21 @@ class XMEMORY_CONTROL
 
   extern XMEMORY_CONTROL XMemory_Control;
 
-  void* operator new      (size_t size);
-  void* operator new[]    (size_t size);
-  void* operator new      (size_t size, const std::nothrow_t&) throw();
-  void* operator new[]    (size_t size, const std::nothrow_t&) throw();
-
-  void  operator delete   (void* ptr) throw ();
-  void  operator delete[] (void* ptr) throw ();
-  void  operator delete   (void* ptr, const std::nothrow_t&) throw();
-  void  operator delete[] (void* ptr, const std::nothrow_t&) throw();
-
-  #if (__cplusplus >= 201402L) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
-  void  operator delete   (void* ptr, size_t size) throw();
-  void  operator delete[] (void* ptr, size_t size) throw();
-  #endif
-
-
   void* operator new      (size_t size, char const* namefile, int line);
   void* operator new[]    (size_t size, char const* namefile, int line);
-  void  operator delete   (void* ptr, char const* namefile, int line) throw();
-  void  operator delete[] (void* ptr, char const* namefile, int line) throw();
+  void  operator delete   (void* ptr) throw ();
+  void  operator delete[] (void* ptr) throw ();
 
-  void* ReAlloc           (void* assign, size_t size, const char* namefile, int line);
+  void* ReAlloc           (void* assign, size_t size);
 
-  // Do not redefine the global token "new" in this header: it breaks STL placement-new and allocators.
-  // Use GEN_NEW explicitly in GEN sources that want file/line memory tracking.
-  #define GEN_NEW                                 new(GEN_MODULE_EXEC, GEN_LINE_EXEC)
+  #define GEN_NEW new(GEN_MODULE_EXEC, GEN_LINE_EXEC)
 
-  #define MALLOC(size)                            ((XBYTE*)XMemory_Control.Assign((XDWORD)(size), GEN_MODULE_EXEC, GEN_LINE_EXEC))
-  #define CALLOC(nelements, elementsize)          ((XBYTE*)XMemory_Control.Assign((XDWORD)((nelements) * (elementsize)), GEN_MODULE_EXEC, GEN_LINE_EXEC))
-  #define REALLOC(assign, size)                   ReAlloc(assign, size, GEN_MODULE_EXEC, GEN_LINE_EXEC)
-  #define FREE(assign)                            XMemory_Control.Free(assign);
+  #define MALLOC(size)                            GEN_NEW XBYTE[size]
+  #define CALLOC(nelements, elementsize)          GEN_NEW XBYTE[nelements * elementsize]
+  #define REALLOC(assign, size)                   ReAlloc(assign, size)                      
+  #define FREE(assign)                            delete [] assign;
 
 #else
-
-  #define GEN_NEW                                 new
 
   #define MALLOC(size)                            malloc(size)
   #define CALLOC(nelements, elementsize)          calloc(nelements, elementsize)
