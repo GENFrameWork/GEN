@@ -180,6 +180,54 @@
 #endif
 
 
+#if defined(_WIN32)
+  #ifndef WINDOWS
+    #define WINDOWS
+  #endif  
+#elif defined(__ANDROID__)
+  #ifndef ANDROID
+    #define ANDROID
+  #endif  
+  #if defined(__LP64__)
+    #ifndef ANDROID64
+      #define ANDROID64
+    #endif  
+  #else
+    #ifndef ANDROID32
+      #define ANDROID32
+    #endif
+  #endif
+#elif defined(__linux__)
+  #ifndef LINUX
+    #define LINUX
+  #endif
+#elif defined(__AVR__) || defined(__XTENSA__) || \
+      (defined(__arm__) && !defined(__linux__))
+  #ifndef MICROCONTROLLER     
+    #define MICROCONTROLLER
+  #endif  
+#endif
+
+// Hardware architecture
+#if defined(_M_IX86) || defined(__i386__)
+  #ifndef HW_INTEL
+    #define HW_INTEL
+  #endif    
+#elif defined(_M_X64) || defined(__x86_64__)
+  #ifndef HW_INTEL
+    #define HW_INTEL
+  #endif
+#elif defined(_M_ARM) || defined(__arm__)
+  #ifndef HW_ARM
+    #define HW_ARM
+  #endif
+#elif defined(_M_ARM64) || defined(__aarch64__)
+  #ifndef HW_ARM
+    #define HW_ARM
+  #endif
+#endif
+
+
 // --- Macros eXtensions --------------------------------------------------------------------------
 
 #ifndef GEN_XFACTORY
