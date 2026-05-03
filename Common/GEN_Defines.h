@@ -208,6 +208,8 @@
   #endif  
 #endif
 
+
+/*
 // Hardware architecture
 #if defined(_M_IX86) || defined(__i386__)
   #ifndef HW_INTEL
@@ -226,7 +228,7 @@
     #define HW_ARM
   #endif
 #endif
-
+*/
 
 // --- Macros eXtensions --------------------------------------------------------------------------
 
