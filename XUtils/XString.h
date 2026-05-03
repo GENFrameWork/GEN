@@ -143,7 +143,7 @@ typedef struct
 
 #else
 
-  #if defined(WINDOWS)
+  #if (defined(WINDOWS) || defined(_WINDOWS))
 
     #if defined(BUILDER)
 
