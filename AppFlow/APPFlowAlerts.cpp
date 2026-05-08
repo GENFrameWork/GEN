@@ -111,7 +111,7 @@ bool APPFLOWALERTS::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -372,7 +372,7 @@ int APPFLOWALERTS::Send(XDWORD senders, XDWORD condition, DIOALERTLEVEL level, X
 
   status = GEN_DIOALERTS.Send((DIOALERTSENDER)senders, condition, alert);
 
-  delete alert;
+  GEN_DELETE alert;
 
   return status;
 }

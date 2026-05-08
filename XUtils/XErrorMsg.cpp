@@ -677,7 +677,7 @@ bool XERRORSMSG::EraseMsg(int code)
             {
               errors.Delete(error);
 
-              delete error;
+              GEN_DELETE error;
 
               return true;
             }

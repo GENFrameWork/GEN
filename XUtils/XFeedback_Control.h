@@ -74,7 +74,7 @@ enum XFEEDBACK_CODE
 #define XFEEDBACK_CONTROL_CREATE                  XFeedback_Control = GEN_NEW XFEEDBACK_CONTROL();          
 #define XFEEDBACK_CONTROL_DELETE                  if(XFeedback_Control)                                 \
                                                     {                                                   \
-                                                      delete XFeedback_Control;                         \
+                                                      GEN_DELETE XFeedback_Control;                         \
                                                       XFeedback_Control = NULL;                         \
                                                     }
   

@@ -97,7 +97,7 @@ DIOCOREPROTOCOL_HEADER::~DIOCOREPROTOCOL_HEADER()
 {
   if(serializationmethod)
     {
-      delete serializationmethod;
+      GEN_DELETE serializationmethod;
     }
 
   if(datetime_send)

@@ -340,8 +340,8 @@ bool DIOCOREPROTOCOL_MESSAGES::Delete(XUUID* IDmessage)
           status = GetAll()->Delete(request);
           if(status)
             {                  
-              delete request; 
-              delete response;
+              GEN_DELETE request; 
+              GEN_DELETE response;
 
               status  = true;
               break;

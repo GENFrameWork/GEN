@@ -105,8 +105,8 @@ XFILECMPZIP::XFILECMPZIP(bool compress, void* filehdl)
             }
         }
 
-      delete [] _name;
-      delete [] _comment;
+      GEN_DELETE_ARRAY _name;
+      GEN_DELETE_ARRAY _comment;
 
     } else  on = true;
 }
@@ -703,7 +703,7 @@ XDWORD XFILEZIP::GetFileCRC(XFILE*  xfile)
 
     } while(size == maxsizebuffer);
 
-  delete [] buffer;
+  GEN_DELETE_ARRAY buffer;
 
   xfile->SetPosition(position);
 
@@ -782,12 +782,12 @@ bool XFILEZIP::AddFile(XPATH& xpath, XPATH& xpathnew, XCHAR* password)
                     } while(size == maxsizebuffer);
                 }
 
-              delete [] buffer;
+              GEN_DELETE_ARRAY buffer;
 
               filecmp->Close();
             }
 
-          delete filecmp;
+          GEN_DELETE filecmp;
         }
 
       xfile->Close();
@@ -1016,7 +1016,7 @@ int XFILEUNZIP::GetNFiles()
 
       nfiles++;
 
-      delete filecmp;
+      GEN_DELETE filecmp;
     }
 
   return nfiles;
@@ -1088,7 +1088,7 @@ XFILECMPZIP* XFILEUNZIP::GotoFile(int index)
   do{
       if(index==c) break;
 
-      delete filecmp;
+      GEN_DELETE filecmp;
 
       c++;
       filecmp = GotoFile(false);
@@ -1135,7 +1135,7 @@ bool XFILEUNZIP::DelFile(int index, XCHAR* password)
 
   if(!filezip->Open(xpathtarget))
     {
-      delete filezip;
+      GEN_DELETE filezip;
       GEN_XFACTORY.Delete_File(xfile);
 
       return false;
@@ -1154,7 +1154,7 @@ bool XFILEUNZIP::DelFile(int index, XCHAR* password)
           if(!filecmp) break;
 
           cmpfilename = filecmp->GetName();
-          delete filecmp;
+          GEN_DELETE filecmp;
           filecmp = NULL;
 
           xpathuncmpfile = cmpfilename;
@@ -1198,7 +1198,7 @@ bool XFILEUNZIP::DelFile(int index, XCHAR* password)
 
   filezip->Close();
 
-  delete filezip;
+  GEN_DELETE filezip;
 
   Close();
 
@@ -1241,7 +1241,7 @@ bool XFILEUNZIP::DecompressFile(int sourceindex ,XPATH& xpathtarget, XCHAR* name
   int c=0;
   do{ if(sourceindex==c) break;
 
-      delete filecmp;
+      GEN_DELETE filecmp;
 
       c++;
       filecmp = GotoFile(false);
@@ -1252,7 +1252,7 @@ bool XFILEUNZIP::DecompressFile(int sourceindex ,XPATH& xpathtarget, XCHAR* name
 
   bool status = DecompressFile(filecmp,xpathtarget,nametarget,password);
 
-  delete filecmp;
+  GEN_DELETE filecmp;
 
   return status;
 }
@@ -1281,7 +1281,7 @@ bool XFILEUNZIP::DecompressFile(XSTRING& namesource,XPATH& xpathtarget,XCHAR* na
 
   bool status = DecompressFile(filecmp,xpathtarget,nametarget,password);
 
-  delete filecmp;
+  GEN_DELETE filecmp;
 
   return status;
 }
@@ -1373,7 +1373,7 @@ bool XFILEUNZIP::DecompressFile(XFILECMPZIP* filecmp, XPATH& xpathtarget, XCHAR*
 
                      } while(bytesread == (int)maxsizebuffer);
 
-                  delete [] buffer;
+                  GEN_DELETE_ARRAY buffer;
 
                   if(filecmp->UnCompressSize() != xfile->GetSize()) status = false;
                 }
@@ -1381,7 +1381,7 @@ bool XFILEUNZIP::DecompressFile(XFILECMPZIP* filecmp, XPATH& xpathtarget, XCHAR*
               xfile->Close();
             }
 
-          delete xfile;
+          GEN_DELETE xfile;
 
         }
 

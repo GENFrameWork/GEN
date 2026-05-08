@@ -98,7 +98,7 @@ GRPSCREEN::~GRPSCREEN()
 {
   if(framerate)
     {
-      delete framerate;
+      GEN_DELETE framerate;
       framerate = NULL;
     }
 
@@ -410,7 +410,7 @@ bool GRPSCREEN::Delete()
 {
   if(screencanvas)
     {
-      delete screencanvas;
+      GEN_DELETE screencanvas;
       screencanvas = NULL;
     }
 

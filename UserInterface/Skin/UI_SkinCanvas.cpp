@@ -184,7 +184,7 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
                           if(bitmap) PutBitmapNoAlpha(area->GetXPos(), area->GetYPos(), bitmap);
 
                           areas.Delete(area);                
-                          delete area;  
+                          GEN_DELETE area;  
                         }              
                     }
                 }
@@ -276,7 +276,7 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_ELEMENT* element)
                               PutBitmapNoAlpha(area->GetXPos(), area->GetYPos(), area->GetBitmap());
 
                               areas.Delete(area);                
-                              delete area;  
+                              GEN_DELETE area;  
 
                               area = NULL;
                             }              
@@ -3206,7 +3206,7 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
 
   if(outlimit)
     {
-      delete textbox_part;
+      GEN_DELETE textbox_part;
       textbox_part = NULL;
     }
    else

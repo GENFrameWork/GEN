@@ -93,7 +93,7 @@ APPFLOWEXTENDED_INTERNETSTATUS::~APPFLOWEXTENDED_INTERNETSTATUS()
   if(internetservices)
     {
       internetservices->End();
-      delete internetservices;      
+      GEN_DELETE internetservices;      
     }
 
   Clean();

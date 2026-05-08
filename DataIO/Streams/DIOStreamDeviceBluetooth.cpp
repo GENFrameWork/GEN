@@ -556,7 +556,7 @@ XVECTOR<DIOSTREAMDEVICEBLUETOOTHSDPSERVICE*>* DIOSTREAMDEVICEBLUETOOTH::Service_
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMDEVICEBLUETOOTH::Service_DeleteAll()
-* @brief      Service delete all
+* @brief      Service GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.

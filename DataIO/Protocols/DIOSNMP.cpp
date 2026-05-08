@@ -393,7 +393,7 @@ bool DIOSNMP_BASE::Close()
 
   if(diostreamudpcfg)
     {
-      delete diostreamudpcfg;
+      GEN_DELETE diostreamudpcfg;
       diostreamudpcfg = NULL;
     }
 

@@ -282,7 +282,7 @@ XBUFFER* XFILEXDB::GetRecord(XDWORD ID)
 
       if(!GetPrimaryFile()->Read((XBYTE*)xbuffer->Get() , size))
         {
-          delete xbuffer;
+          GEN_DELETE xbuffer;
           return NULL;
         }
 
@@ -333,7 +333,7 @@ XBUFFER* XFILEXDB::GetRecordIndex(XDWORD index)
 
       if(!GetPrimaryFile()->Read((XBYTE*)xbuffer->Get() , size))
         {
-          delete xbuffer;
+          GEN_DELETE xbuffer;
           return NULL;
         }
 

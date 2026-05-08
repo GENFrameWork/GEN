@@ -177,7 +177,7 @@ bool INPLINUXFACTORY::DeleteDevice(INPDEVICE* device)
 {
   if(!device)  return false;
 
-  delete device;
+  GEN_DELETE device;
 
   return true;
 }
@@ -333,7 +333,7 @@ bool INPLINUXFACTORY::GetDeviceHandlers(INPDEVICE_TYPE devicetype, XVECTOR<INPLI
                               XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Input Device] Event [%d] Type: %15s Device [%s]"), deviceID->GetEventIndex(), typestr.Get(), deviceID->GetName()->Get());                         
                               #endif                                               
                             } 
-                           else delete deviceID;                                 
+                           else GEN_DELETE deviceID;                                 
                         }   
                     }
                 }
@@ -342,7 +342,7 @@ bool INPLINUXFACTORY::GetDeviceHandlers(INPDEVICE_TYPE devicetype, XVECTOR<INPLI
           xfiletxtdevices->Close();
         }
 
-      delete xfiletxtdevices;
+      GEN_DELETE xfiletxtdevices;
     }
 
   return status;
@@ -387,7 +387,7 @@ bool INPLINUXFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)
       return false;
     }
 
-  delete inpsimulated;
+  GEN_DELETE inpsimulated;
 
   return true;
 }

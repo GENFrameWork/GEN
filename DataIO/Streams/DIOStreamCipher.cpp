@@ -119,7 +119,7 @@ DIOSTREAMCIPHER::~DIOSTREAMCIPHER()
 
   if(diostream) GEN_DIOFACTORY.DeleteStreamIO(diostream);
 
-  if(hashcrc32) delete hashcrc32;
+  if(hashcrc32) GEN_DELETE hashcrc32;
 
   Clean();
 }

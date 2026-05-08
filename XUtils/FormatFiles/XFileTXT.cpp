@@ -927,7 +927,7 @@ bool XFILETXT::WriteAllFile()
 
       status = file->Write(xbuffer);
 
-      delete [] buffer;
+      GEN_DELETE_ARRAY buffer;
     }
 
   if(status)
@@ -1025,7 +1025,7 @@ bool XFILETXT::ReadNLines(int nlines)
 
     } while(!endfile);
 
-  delete [] readbuffer;
+  GEN_DELETE_ARRAY readbuffer;
 
   return true;
 }
@@ -1174,7 +1174,7 @@ bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line
 
                                                   string.Set(unibuffer,sizeline);
 
-                                                  delete [] unibuffer;
+                                                  GEN_DELETE_ARRAY unibuffer;
                                                 }
                                              }
                                              break;
@@ -1190,7 +1190,7 @@ bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line
 
                                                    string.Set(unibuffer,sizeline);
 
-                                                   delete [] unibuffer;
+                                                   GEN_DELETE_ARRAY unibuffer;
                                                  }
                                             }
                                             break;
@@ -1226,7 +1226,7 @@ bool XFILETXT::AddLine(XFILETXTFORMATCHAR formatchar, XBYTE* line, XDWORD sizeli
     }
    else
     {
-      delete string;
+      GEN_DELETE string;
       string = NULL;
     }
 
@@ -1343,7 +1343,7 @@ bool XFILETXT::AddLineAlready(XSTRING& line, XDWORD* resultsizeline, XDWORD* res
             } else status = false;
         }
 
-      delete [] buffer;
+      GEN_DELETE_ARRAY buffer;
     }
 
   return status;
@@ -1414,7 +1414,7 @@ bool XFILETXT::DeleteLine(int index)
 
   lines.Delete(line);
 
-  delete line;
+  GEN_DELETE line;
 
   return true;
 }

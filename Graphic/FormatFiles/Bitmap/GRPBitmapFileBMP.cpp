@@ -618,7 +618,7 @@ GRPBITMAP* GRPBITMAPFILEBMP::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
 
         } else status = false;
 
-      delete [] databuffer;
+      GEN_DELETE_ARRAY databuffer;
 
     } else status = false;
 
@@ -745,7 +745,7 @@ GRPBITMAP* GRPBITMAPFILEBMP::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
 
         } else status = false;
 
-      delete [] databuffer;
+      GEN_DELETE_ARRAY databuffer;
 
     } else status = false;
 
@@ -836,7 +836,7 @@ bool GRPBITMAPFILEBMP::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
 
           if(!file->Write((XBYTE*)databuffer, sizebmp)) status = false;
 
-          delete [] databuffer;
+          GEN_DELETE_ARRAY databuffer;
 
         } else status = false;
 

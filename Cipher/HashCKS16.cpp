@@ -89,7 +89,7 @@ HASHCKS16::~HASHCKS16()
 {
   if(resulttmp)
     {
-      delete resulttmp;
+      GEN_DELETE resulttmp;
       resulttmp = NULL;
     }
 

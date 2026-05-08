@@ -653,7 +653,7 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
                   APPFLOW_LOG_ENTRY((status?XLOGLEVEL_INFO:XLOGLEVEL_ERROR), DIOWEBSERVER_LOGSECTIONID, false, __L("Request from [%s] to the web server\"%s\" %s."), IPstring.Get(), resourceconv.Get(), status?__L("sent"):__L("not send"));
                 }
 
-              delete webHTMLpage;
+              GEN_DELETE webHTMLpage;
             }
         }
        else 
@@ -733,7 +733,7 @@ bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connectio
 
   bool status = SendRequest(connection, result, (*webHTMLpage), 5);
 
-  delete webHTMLpage;
+  GEN_DELETE webHTMLpage;
 
   return status;
 }
@@ -797,20 +797,20 @@ bool APPFLOWWEBSERVER::End()
 
   if(webserver)
     {
-      delete webserver;
+      GEN_DELETE webserver;
       webserver = NULL;
     }
 
   if(pluginPHP)
     {
-      delete pluginPHP;
+      GEN_DELETE pluginPHP;
       pluginPHP = NULL;
     }
 
   /*
   if(useragentID)
     {
-      delete useragentID;
+      GEN_DELETE useragentID;
       useragentID = NULL;
     }
   */

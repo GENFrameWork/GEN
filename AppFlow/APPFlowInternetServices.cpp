@@ -154,7 +154,7 @@ APPFLOWINTERNETSERVICES::~APPFLOWINTERNETSERVICES()
   #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE
   if(dyndnsmanager)
     {
-      delete dyndnsmanager;
+      GEN_DELETE dyndnsmanager;
       dyndnsmanager = NULL;
     }
   #endif  
@@ -661,13 +661,13 @@ bool APPFLOWINTERNETSERVICES::End()
 
   if(xscheduler)
     {
-      delete xscheduler;
+      GEN_DELETE xscheduler;
       xscheduler = NULL;
     }
 
   if(checkinternetconnection)
     {
-      delete checkinternetconnection;
+      GEN_DELETE checkinternetconnection;
       checkinternetconnection = NULL;
     }
 
@@ -1005,10 +1005,10 @@ bool APPFLOWINTERNETSERVICES::AdjustTimerByNTP(XVECTOR<XSTRING*>* servers)
                 } 
             }
 
-          delete url;
+          GEN_DELETE url;
         }
 
-      delete ntp;
+      GEN_DELETE ntp;
     } 
 
   if(status)

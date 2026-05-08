@@ -185,7 +185,7 @@ class XLIST
 
                                       if(newsize >= nelements)
                                         {
-                                          // should insert GEN_NEW elements at the tail
+                                          // should insert new elements at the tail
                                           XDWORD toinsert = newsize - nelements;
 
                                           XLISTDATA<T>* data = lastelement;
@@ -215,7 +215,7 @@ class XLIST
                                           previous = data->prev;
 
                                           data->Delete();
-                                          delete data;
+                                          GEN_DELETE data;
 
                                           data = previous;
                                         }
@@ -238,7 +238,7 @@ class XLIST
                                             }
                                         }
 
-                                      // GEN_NEW element to add
+                                      // new element to add
                                       XLISTDATA<T>* data = GEN_NEW XLISTDATA<T>();
                                       data->active = true;
                                       data->data = element;
@@ -491,7 +491,7 @@ class XLIST
                                                   data->next->prev = data->prev;
                                                 }
 
-                                              delete data;
+                                              GEN_DELETE data;
                                               nelements--;
 
                                               return true;
@@ -518,7 +518,7 @@ class XLIST
                                           firstelement = firstelement->next;
                                           firstelement->prev = 0;
                                           element->Delete();
-                                          delete element;
+                                          GEN_DELETE element;
                                           nelements--;
                                           return true;
                                         }
@@ -528,7 +528,7 @@ class XLIST
                                           lastelement = lastelement->prev;
                                           lastelement->next = 0;
                                           element->Delete();
-                                          delete element;
+                                          GEN_DELETE element;
                                           nelements--;
                                           return true;
                                         }
@@ -537,7 +537,7 @@ class XLIST
                                       element->next->prev = element->prev;
 
                                       element->Delete();
-                                      delete element;
+                                      GEN_DELETE element;
 
                                       nelements--;
 
@@ -562,7 +562,7 @@ class XLIST
                                       data->Delete();
                                       nelements--;
 
-                                      delete data;
+                                      GEN_DELETE data;
                                       return true;
                                     }
 
@@ -587,7 +587,7 @@ class XLIST
                                           firstelement->prev = 0;
 
                                           data->Delete();
-                                          delete data;
+                                          GEN_DELETE data;
                                           nelements--;
 
                                           return true;
@@ -614,7 +614,7 @@ class XLIST
                                       next->prev = prev;
 
                                       data->Delete();
-                                      delete data;
+                                      GEN_DELETE data;
                                       nelements--;
 
                                       return true;
@@ -630,7 +630,7 @@ class XLIST
                                           datanext = data->next;
 
                                           data->Delete();
-                                          delete data;
+                                          GEN_DELETE data;
 
                                           data = datanext;
                                         }
@@ -662,7 +662,7 @@ class XLIST
                                           previous = data->prev;
 
                                           data->Delete();
-                                          delete data;
+                                          GEN_DELETE data;
 
                                           data = previous;
                                         }
@@ -688,9 +688,9 @@ class XLIST
                                         {
                                           next = current->next;
 
-                                          delete current->data;
+                                          GEN_DELETE current->data;
                                           current->Delete();
-                                          delete current;
+                                          GEN_DELETE current;
 
                                           current = next;
                                         }

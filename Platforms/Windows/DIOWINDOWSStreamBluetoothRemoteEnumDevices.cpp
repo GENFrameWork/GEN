@@ -386,7 +386,7 @@ void DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES::SearchServices()
           //int error = WSAGetLastError();
           //XTRACE_PRINT(__L("Search SDP Services Error %d"), error);
 
-          delete [] qs;
+          GEN_DELETE_ARRAY qs;
 
           continue;
         }
@@ -399,7 +399,7 @@ void DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES::SearchServices()
               int error = WSAGetLastError();
               if( error == WSAEFAULT )
                 {
-                  delete [] qs;
+                  GEN_DELETE_ARRAY qs;
                   qs = (WSAQUERYSET*)GEN_NEW XBYTE[qssize];
                 }
                else
@@ -431,7 +431,7 @@ void DIOWINDOWSSTREAMBLUETOOTHREMOTEENUMDEVICES::SearchServices()
             }
         }
 
-      delete [] qs;
+      GEN_DELETE_ARRAY qs;
 
       WSALookupServiceEnd(hlookup);
 

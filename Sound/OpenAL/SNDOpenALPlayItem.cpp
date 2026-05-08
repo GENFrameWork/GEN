@@ -215,7 +215,7 @@ bool SNDOPENALPLAYITEM::Delete()
 
   if(source)
     {
-      delete source;
+      GEN_DELETE source;
       source = NULL;
     }   
 

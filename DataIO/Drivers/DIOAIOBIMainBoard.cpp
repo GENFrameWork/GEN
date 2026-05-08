@@ -676,7 +676,7 @@ bool DIOAIOBIMAINBOARD::End()
         {
           pcf8574[c]->End();
 
-          delete pcf8574[c];
+          GEN_DELETE pcf8574[c];
           pcf8574[c] = NULL;
         }
     }
@@ -684,7 +684,7 @@ bool DIOAIOBIMAINBOARD::End()
   if(eeprom)
     {
       eeprom->End();
-      delete eeprom;
+      GEN_DELETE eeprom;
       eeprom = NULL;
     }
 
@@ -693,7 +693,7 @@ bool DIOAIOBIMAINBOARD::End()
     {
       pca9685->GetDIOStream()->WaitToFlushXBuffers(3);
       pca9685->End();
-      delete pca9685;
+      GEN_DELETE pca9685;
       pca9685 = NULL;
     }
 

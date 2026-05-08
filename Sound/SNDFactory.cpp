@@ -172,7 +172,7 @@ bool SNDFACTORY::DelInstance()
 {
   if(!instance) return false;
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;
@@ -545,7 +545,7 @@ SNDITEM* SNDFACTORY::CreateItem(XCHAR* path)
   SNDFILE* soundfile = SNDFILE::Create(path);
   if(!soundfile)
     {
-      delete item;
+      GEN_DELETE item;
       return NULL;
     }
 
@@ -612,7 +612,7 @@ SNDITEM* SNDFACTORY::CreateItem(XDWORD frecuency, XDWORD duration)
   SNDNOTE* note = GEN_NEW SNDNOTE();
   if(!note)
     {
-      delete item;
+      GEN_DELETE item;
       return NULL;
     }
 

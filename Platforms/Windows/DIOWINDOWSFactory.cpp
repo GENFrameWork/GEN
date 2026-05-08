@@ -229,7 +229,7 @@ bool DIOWINDOWSFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevice
 {
   if(!enumdevices)  return false;
 
-  delete enumdevices;
+  GEN_DELETE enumdevices;
 
   return true;
 };
@@ -359,7 +359,7 @@ bool DIOWINDOWSFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 {
   if(!diostream)  return false;
 
-  delete diostream;
+  GEN_DELETE diostream;
 
   return true;
 }

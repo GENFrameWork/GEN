@@ -654,7 +654,7 @@ GRPBITMAP* GRPWINDOWSSCREEN::CaptureContent(GRPRECTINT* rect, void* handle_windo
 
   if(!status)
     {
-      delete grpbitmap;
+      GEN_DELETE grpbitmap;
       grpbitmap = NULL;
     }
 

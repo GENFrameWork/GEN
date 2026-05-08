@@ -3,7 +3,7 @@
 * @file       XFactoryMacros.h
 * 
 * @class      XFACTORYMACROS
-* @brief      eXtended Utils Macros to create/delete functions of factorys
+* @brief      eXtended Utils Macros to create/GEN_DELETE functions of factorys
 * @ingroup    XUTILS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -45,7 +45,7 @@
                                                       {                                           \
                                                         if(!_class) return false;                 \
                                                         SPECIFIC* _class2 = (SPECIFIC*)_class;    \
-                                                        delete _class2;                           \
+                                                        GEN_DELETE _class2;                           \
                                                         return true;                              \
                                                       }
 

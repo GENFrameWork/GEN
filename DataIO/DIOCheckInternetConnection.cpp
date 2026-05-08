@@ -132,7 +132,7 @@ DIOCHECKINTERNETCONNECTION::~DIOCHECKINTERNETCONNECTION()
 
   if(checkconnections)
     {
-      delete checkconnections;
+      GEN_DELETE checkconnections;
       checkconnections = NULL;
     }
 

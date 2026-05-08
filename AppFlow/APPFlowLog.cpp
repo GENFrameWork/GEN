@@ -111,7 +111,7 @@ bool APPFLOWLOG::DelInstance()
     {
       instance->End();
 
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;

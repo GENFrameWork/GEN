@@ -736,7 +736,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONHEADER::ParserTextSection(XFILETX
 
   if(part && part->iniline == -1)
     {
-      delete part;
+      GEN_DELETE part;
       part = NULL;    
     }
 

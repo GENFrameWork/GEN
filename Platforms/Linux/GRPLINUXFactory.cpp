@@ -108,7 +108,7 @@ bool GRPLINUXFACTORY::DeleteScreen(GRPSCREEN* screen)
 {
   if(!screen) return false;
 
-  delete screen;
+  GEN_DELETE screen;
 
   return true;
 }
@@ -149,7 +149,7 @@ bool GRPLINUXFACTORY::DeleteContext(GRPCONTEXT* context)
 {
   if(!context) return false;
 
-  delete context;
+  GEN_DELETE context;
 
   return true;
 }

@@ -291,7 +291,7 @@ XVECTOR<XDWORD>* DIOLINUXGPIO::GPIOExport_Get()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOLINUXGPIO::GPIOExport_DeleteAll()
-* @brief      GPIO export delete all
+* @brief      GPIO export GEN_DELETE all
 * @ingroup    PLATFORM_LINUX
 *
 * @return     bool : true if is succesful. 

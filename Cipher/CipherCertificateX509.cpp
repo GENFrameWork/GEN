@@ -402,12 +402,12 @@ CIPHERCERTIFICATEX509::~CIPHERCERTIFICATEX509()
 {
   if(publiccipherkey)
     {
-      delete publiccipherkey;
+      GEN_DELETE publiccipherkey;
     }
 
   if(hash)
     {
-      delete hash;
+      GEN_DELETE hash;
     }
 
   Clean();

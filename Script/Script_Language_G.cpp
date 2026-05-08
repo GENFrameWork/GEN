@@ -675,7 +675,7 @@ bool SCRIPT_LNG_G_VAR::Clear()
 
   if((value.string) && (type == SCRIPT_LNG_G_TOKENIREPS_STRING) &&  (HaveReservedSize()))
     {
-      delete value.string;
+      GEN_DELETE value.string;
       value.string    = NULL;
     }
 
@@ -983,7 +983,7 @@ int SCRIPT_LNG_G::Run(int* returnval)
         }
        else
         {
-          delete versionvar;
+          GEN_DELETE versionvar;
         }
     }
   
@@ -1104,7 +1104,7 @@ int SCRIPT_LNG_G::GetFuncParams(SCRIPT_LNG_G_VAR* params)
 
           param->SetHaveReservedSize(false);
 
-          delete param;
+          GEN_DELETE param;
         }
 
     } while(currenttoken[0] == __C(','));
@@ -1589,7 +1589,7 @@ void SCRIPT_LNG_G::EvalExp1(SCRIPT_LNG_G_VAR& value)
                   case SCRIPT_LNG_G_DOUBLEOPERATOR_NE:  value.SetValueInteger(strvalue->Compare((*strpvalue)));               break;
                 }
 
-              delete strpvalue;
+              GEN_DELETE strpvalue;
             }
         }
        else
@@ -2063,7 +2063,7 @@ void SCRIPT_LNG_G::AssignVariable(XCHAR* variablename, SCRIPT_LNG_G_VAR& value)
                                       XSTRING* newstring = GEN_NEW XSTRING();
                                       if(newstring)
                                         {
-                                          delete string1;
+                                          GEN_DELETE string1;
                                           (*newstring) = string2->Get();
 
                                           var->SetValueString(newstring);
@@ -2112,7 +2112,7 @@ void SCRIPT_LNG_G::AssignVariable(XCHAR* variablename, SCRIPT_LNG_G_VAR& value)
                                   XSTRING* newstring = GEN_NEW XSTRING();
                                   if(newstring)
                                     {
-                                      delete string1;
+                                      GEN_DELETE string1;
                                       (*newstring) = string2->Get();
 
                                       var->SetValueString(newstring);

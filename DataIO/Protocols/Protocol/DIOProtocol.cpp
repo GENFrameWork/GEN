@@ -985,7 +985,7 @@ DIOPROTOCOL::~DIOPROTOCOL()
   GEN_XFACTORY.Delete_Mutex(xmutexwrites);
   GEN_XFACTORY.Delete_Mutex(xmutexfilesprogress);
 
-  delete fileprogress;
+  GEN_DELETE fileprogress;
 
   if(xdir)              GEN_XFACTORY.Delete_Dir(xdir);
   if(watchdog)          GEN_XFACTORY.DeleteTimer(watchdog);
@@ -1503,7 +1503,7 @@ bool DIOPROTOCOL::DeleteAnswer(XDWORD type, XDWORD ID)
           if((answer->GetType() == type) && (answer->GetID() == ID))
             {
               answers.Delete(answer);
-              delete answer;
+              GEN_DELETE answer;
 
               break;
             }
@@ -1613,7 +1613,7 @@ bool DIOPROTOCOL::DeleteAsk(XDWORD index)
   if(answer)
     {
       asks.Delete(answer);
-      delete answer;
+      GEN_DELETE answer;
     }
 
   if(xmutexasks) xmutexasks->UnLock();
@@ -2827,7 +2827,7 @@ bool DIOPROTOCOL::CMD_File(DIOPROTOCOL_DIRECTION direction, XCHAR* sourcename, X
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOPROTOCOL::CMD_DeleteFile(XCHAR* namefile, bool overwrite)
-* @brief      CMD delete file
+* @brief      CMD GEN_DELETE file
 * @ingroup    DATAIO
 *
 * @param[in]  namefile :
@@ -2866,7 +2866,7 @@ bool DIOPROTOCOL::CMD_DeleteFile(XCHAR* namefile, bool overwrite)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         int DIOPROTOCOL::RCV_DeleteFile(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
-* @brief      RCV delete file
+* @brief      RCV GEN_DELETE file
 * @ingroup    DATAIO
 *
 * @param[in]  protocol :
@@ -2969,7 +2969,7 @@ int DIOPROTOCOL::RCV_MakeDir(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XB
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOPROTOCOL::CMD_DeleteDir(XCHAR* namedir, bool all)
-* @brief      CMD delete dir
+* @brief      CMD GEN_DELETE dir
 * @ingroup    DATAIO
 *
 * @param[in]  namedir :
@@ -3008,7 +3008,7 @@ bool DIOPROTOCOL::CMD_DeleteDir(XCHAR* namedir, bool all)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         int DIOPROTOCOL::RCV_DeleteDir(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
-* @brief      RCV delete dir
+* @brief      RCV GEN_DELETE dir
 * @ingroup    DATAIO
 *
 * @param[in]  protocol :
@@ -3201,7 +3201,7 @@ XDWORD DIOPROTOCOL::CRC32OfFile(XPATH& xpath)
       GEN_XFACTORY.Delete_File(file);
     }
 
-  delete crc32;
+  GEN_DELETE crc32;
 
   return value;
 }
@@ -3347,7 +3347,7 @@ bool DIOPROTOCOL::CMD_GetFileBlock(DIOPROTOCOL_FILE* fp)
                 }
             }
 
-          delete[] filebuffer;
+          GEN_DELETE_ARRAY filebuffer;
         }
     }
 
@@ -3415,7 +3415,7 @@ int DIOPROTOCOL::RCV_GetFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cm
           if(islastblock) fp->SetActive(false);
         }
 
-      delete[] filebuffer;
+      GEN_DELETE_ARRAY filebuffer;
     }
 
   if(!status) ssize = 0;
@@ -3485,7 +3485,7 @@ bool DIOPROTOCOL::CMD_SendFileBlock(DIOPROTOCOL_FILE* fp)
             }
         }
 
-      delete[] filebuffer;
+      GEN_DELETE_ARRAY filebuffer;
     }
 
   SendEventCommand(this, fp->GetDirection(), cmd->GetType(), status, NULL, 0);
@@ -3560,7 +3560,7 @@ int DIOPROTOCOL::RCV_SendFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* c
             }
         }
 
-      delete[] filebuffer;
+      GEN_DELETE_ARRAY filebuffer;
     }
 
   if(!status) ssize = 0;

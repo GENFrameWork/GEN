@@ -249,7 +249,7 @@ bool XWINDOWSDRIVEIMAGEMANAGER::Read(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD sta
 
     }
 
-  delete [] _buffer;
+  GEN_DELETE_ARRAY _buffer;
 
   return status;
 }
@@ -318,7 +318,7 @@ bool XWINDOWSDRIVEIMAGEMANAGER::Write(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD st
       if(!status) break;
     }
 
-  delete [] _buffer;
+  GEN_DELETE_ARRAY _buffer;
 
   return status;
 }
@@ -682,7 +682,7 @@ bool XWINDOWSDRIVEIMAGEMANAGER::CheckDriveType(XPATH& path, XQWORD& ID)
                                       }
                                   }
 
-                                delete[] pdevdesc;
+                                GEN_DELETE_ARRAY pdevdesc;
 
                                 CloseHandle(hdevice);
                               }

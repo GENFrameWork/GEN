@@ -792,7 +792,7 @@ bool XTHREADSCOLLECTED::Delete(XTHREADGROUPID groupID, XTHREADCOLLECTED* xthread
 
               xthreadcollected->Exit();
               xthreadsvector.Delete(xthreadcollected);
-              delete xthreadcollected;
+              GEN_DELETE xthreadcollected;
 
               status = true;
 
@@ -807,7 +807,7 @@ bool XTHREADSCOLLECTED::Delete(XTHREADGROUPID groupID, XTHREADCOLLECTED* xthread
     }
     else
     {
-      delete xthreadcollected;
+      GEN_DELETE xthreadcollected;
     }
 
   return status;
@@ -1013,7 +1013,7 @@ bool XTHREADSCOLLECTEDMANAGER::DelInstance()
     {
       instance->DeleteAll();
 
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -1156,7 +1156,7 @@ XTHREADCOLLECTED* XTHREADSCOLLECTEDMANAGER::CreateThread(XTHREADGROUPID groupID,
       if(xthreadscollected)
         {
           xthreadcollected = xthreadscollected->Create(groupID, ID, function, param);
-          delete xthreadscollected;
+          GEN_DELETE xthreadscollected;
         }
     }
 
@@ -1201,7 +1201,7 @@ bool XTHREADSCOLLECTEDMANAGER::DeleteThread(XTHREADGROUPID groupID, XTHREADCOLLE
       if(xthreadscollected)
         {
           status = xthreadscollected->Delete(groupID, xthreadcollected);
-          delete xthreadscollected;
+          GEN_DELETE xthreadscollected;
         }
     }
 

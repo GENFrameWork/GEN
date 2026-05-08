@@ -83,7 +83,7 @@ DIODYNDNS::DIODYNDNS()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODYNDNS::~DIODYNDNS()
 {
-  delete webclient;
+  GEN_DELETE webclient;
 
   Clean();
 }
@@ -222,7 +222,7 @@ bool DIODYNDNS::IsChangedPublicIP(DIOURL& url, bool& ischanged, DIOIP* newpublic
         }
     }
 
-  delete _url;
+  GEN_DELETE _url;
 
   return status;
 }

@@ -184,7 +184,7 @@ GRPVECTORFILE* GRPVECTORFILE::CreateInstance(XPATH& pathfile)
             } 
            else 
             {
-              delete vectorFile;
+              GEN_DELETE vectorFile;
             }
         }   
     }
@@ -345,7 +345,7 @@ bool GRPVECTORFILE::DetectFileFormatText(XPATH& pathfile)
           fileTXT->Close();
         }
   
-      delete fileTXT;
+      GEN_DELETE fileTXT;
     }
   
   if(formatchar != XFILETXTFORMATCHAR_ASCII) return true;
@@ -382,7 +382,7 @@ bool GRPVECTORFILE::DetectFileFormatText(XPATH& pathfile)
           file->Close();
         }
   
-      delete file;
+      GEN_DELETE file;
     }
 
    return isText;
@@ -440,7 +440,7 @@ bool GRPVECTORFILE::DetectFile(XPATH& pathfile)
   
   bool result = file->Exist(pathfile);  
   
-  delete file;
+  GEN_DELETE file;
   
   return result;
 }

@@ -112,7 +112,7 @@ bool SNDFILEOGG::LoadFile()
   if(!xfile)
     {
       xbuffer->Delete();
-      delete xbuffer;
+      GEN_DELETE xbuffer;
       xbuffer = NULL;
       return false;
     }
@@ -120,10 +120,10 @@ bool SNDFILEOGG::LoadFile()
   if(!xfile->Open(path))
     {
       xbuffer->Delete();
-      delete xbuffer;
+      GEN_DELETE xbuffer;
       xbuffer = NULL;
 
-      delete xfile;
+      GEN_DELETE xfile;
       xfile = NULL;
 
       return false;

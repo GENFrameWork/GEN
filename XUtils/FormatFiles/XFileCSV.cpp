@@ -257,7 +257,7 @@ bool XFILECSV_RECORD::DeleteElement(int index)
 
   elements.Delete(string);
 
-  delete string;
+  GEN_DELETE string;
 
   return true;
 }
@@ -556,7 +556,7 @@ bool XFILECSV::WriteRecord(XDWORD nrecord,XFILECSV_RECORD* record)
   XFILECSV_RECORD* _record = (XFILECSV_RECORD*)records.Get(nrecord);
   if(!_record) return false;
 
-  delete _record;
+  GEN_DELETE _record;
 
   records.Set(nrecord,record);
 
@@ -603,7 +603,7 @@ bool XFILECSV::DeleteRecord(XDWORD nrecord)
 
   records.Delete(record);
 
-  delete record;
+  GEN_DELETE record;
 
   return true;
 }

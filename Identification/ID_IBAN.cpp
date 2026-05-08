@@ -355,7 +355,7 @@ int ID_IBAN::Mod97(XSTRING& IBANstr)
     }
   }
 
-  delete[] temp;
+  GEN_DELETE_ARRAY temp;
 
   return mod;
 }

@@ -401,7 +401,7 @@ bool DIOLINUXNETWORKMANAGER::End()
       UnSubscribeEvent(DIOLINUXDBUS_XEVENT_TYPE_SIGNAL  , dbus);    
 
       dbus->End();            
-      delete dbus;
+      GEN_DELETE dbus;
 
       dbus = NULL;
     }

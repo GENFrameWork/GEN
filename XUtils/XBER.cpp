@@ -860,7 +860,7 @@ bool XBER::Sequence_AddTo(XBER& xber)
 
   if(!xber.Copy(newxber))
     {
-      delete newxber;
+      GEN_DELETE newxber;
       return false;
     }
 
@@ -956,7 +956,7 @@ XDWORD XBER::Sequence_GetSize()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XBER::Sequence_DeleteAll()
-* @brief      Sequence delete all
+* @brief      Sequence GEN_DELETE all
 * @ingroup    XUTILS
 *
 * @return     bool : true if is succesful.
@@ -1125,7 +1125,7 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
             {                                        
               if(!sub_ber->SetFromDumpInternal(subdata, observer))
                 {           
-                  delete sub_ber;    
+                  GEN_DELETE sub_ber;    
                   sub_ber = NULL;
 
                   return false;  

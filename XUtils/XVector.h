@@ -297,7 +297,7 @@ class XVECTOR
                                           return false;
                                         }
 
-                                      delete [] array;
+                                      GEN_DELETE_ARRAY array;
 
                                       array      = NULL;
                                       narray     = 0;
@@ -319,7 +319,7 @@ class XVECTOR
                                               if(element)
                                                 {
                                                   DeleteLast();
-                                                  delete element;
+                                                  GEN_DELETE element;
                                                 }
                                             }
                                         }
@@ -450,7 +450,7 @@ class XVECTOR
                                           if(array)
                                             {
                                               memcpy(newarray, array, nelements*sizeof(T));
-                                              delete [] array;
+                                              GEN_DELETE_ARRAY array;
                                             }
 
                                           narray = newsize;

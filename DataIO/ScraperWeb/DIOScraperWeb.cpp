@@ -110,22 +110,22 @@ DIOSCRAPERWEB::~DIOSCRAPERWEB()
 
   if(URLdownload)
     {
-      delete URLdownload;
+      GEN_DELETE URLdownload;
     }
 
   if(cache)
     {
       cache->DeleteAll();
-      delete cache;
+      GEN_DELETE cache;
     }
 
   if(xml)
     {
       if(xml->IsOpen()) xml->Close();
-      delete xml;
+      GEN_DELETE xml;
     }
 
-  if(webclient) delete webclient;
+  if(webclient) GEN_DELETE webclient;
 
   if(xmutexdo) GEN_XFACTORY.Delete_Mutex(xmutexdo);
 
@@ -240,7 +240,7 @@ bool DIOSCRAPERWEB::Download(DIOURL& URL, XPATH& xpath)
 
   status = webclient->Get(downloadURL, xpath);
 
-  delete webclient;
+  GEN_DELETE webclient;
 
   return status;
 }
@@ -396,7 +396,7 @@ bool DIOSCRAPERWEB::Do(XCHAR* namewebservice, int timeoutforurl, XSTRING* localI
                                     }
                                 }
 
-                              delete json;
+                              GEN_DELETE json;
                             }
                         }
 
@@ -516,8 +516,8 @@ bool DIOSCRAPERWEB::AddValue(XCHAR* name, XCHAR* value)
 
   if((!_name )||(!_value))
     {
-      delete _name;
-      delete _value;
+      GEN_DELETE _name;
+      GEN_DELETE _value;
 
       return false;
     }

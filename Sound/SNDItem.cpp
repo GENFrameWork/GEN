@@ -82,13 +82,13 @@ SNDITEM::~SNDITEM()
 {
   if(soundfile)
     {
-      delete soundfile;
+      GEN_DELETE soundfile;
       soundfile = NULL;
     }
 
   if(soundnote)
     {
-      delete soundnote;
+      GEN_DELETE soundnote;
       soundnote = NULL;
     }
 

@@ -1216,7 +1216,7 @@ bool MAINPROCANDROID::Factorys_End()
   #ifdef XTRACE_VIRTUALCLOCKTICK
   if(xtimerclock)
     {
-      delete xtimerclock;
+      GEN_DELETE xtimerclock;
       xtimerclock = NULL;
     }
   #endif
@@ -1342,7 +1342,7 @@ bool MAINPROCANDROID::OverturnAssetsToExternalLocation(XPATH& origin, XPATH& dat
                         }
                     }
 
-                  delete filecmp;
+                  GEN_DELETE filecmp;
 
                   index++;
 
@@ -1357,7 +1357,7 @@ bool MAINPROCANDROID::OverturnAssetsToExternalLocation(XPATH& origin, XPATH& dat
       GEN_XFACTORY.Delete_Dir(xdir);
     }
 
-  delete unzip;
+  GEN_DELETE unzip;
 
   return status;
 }
@@ -1433,7 +1433,7 @@ bool MAINPROCANDROID::AssetsDir_CreateAll(XPATH& origin)
 
               index++;
 
-              delete filecmp;
+              GEN_DELETE filecmp;
 
             } else break;
 
@@ -1442,7 +1442,7 @@ bool MAINPROCANDROID::AssetsDir_CreateAll(XPATH& origin)
       unzip->Close();        
     }
       
-  delete unzip;
+  GEN_DELETE unzip;
 
   return status;
 }
@@ -1511,7 +1511,7 @@ XPATH* MAINPROCANDROID::AssetsDir_Get(int index)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool MAINPROCANDROID::AssetsDir_DeleteAll()
-* @brief      Assets dir delete all
+* @brief      Assets dir GEN_DELETE all
 * @ingroup    PLATFORM_ANDROID
 *
 * @return     bool : true if is succesful. 

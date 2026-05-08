@@ -275,7 +275,7 @@ bool DIODNSRESOLVER::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -372,7 +372,7 @@ bool DIODNSRESOLVER::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int querytype, XD
                     }
                 }
 
-              delete dnsprotocolclient;
+              GEN_DELETE dnsprotocolclient;
             }
 
           GEN_XFACTORY.DeleteTimer(xtimerout);
@@ -457,7 +457,7 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(XCHAR* server)
 
   if(IPstring.IsEmpty())
     {
-      delete DNSserver;
+      GEN_DELETE DNSserver;
 
       return false;
     }
@@ -467,7 +467,7 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(XCHAR* server)
 
   if(DNSServer_IsIPonList((*DNSserver->GetIP()))) 
     {
-      delete DNSserver;
+      GEN_DELETE DNSserver;
 
       return false;
     }
@@ -515,7 +515,7 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(XBYTE* serverIP, XWORD port)
 
   if(DNSServer_IsIPonList((*DNSserver->GetIP()))) 
     {
-      delete DNSserver;
+      GEN_DELETE DNSserver;
 
       return false;
     }
@@ -649,7 +649,7 @@ bool DIODNSRESOLVER::Host_FindIP(XSTRING& host, DIOIP& IPresolved)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIODNSRESOLVER::DNSServer_DeleteAllList()
-* @brief      DNS server delete all list
+* @brief      DNS server GEN_DELETE all list
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -724,7 +724,7 @@ XVECTOR<DIODNSRESOLVER_HOSTRESOLVED*>*  DIODNSRESOLVER::Host_GetList()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIODNSRESOLVER::Host_DeleteAllList()
-* @brief      Host delete all list
+* @brief      Host GEN_DELETE all list
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.

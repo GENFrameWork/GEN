@@ -142,7 +142,7 @@ bool XWINDOWSFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 {
   if(xthread)
     {
-      delete xthread;      
+      GEN_DELETE xthread;      
     }
 
   return true;

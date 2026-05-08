@@ -188,7 +188,7 @@ XSYSTEM_HARDWARETYPE XLINUXSYSTEM::GetTypeHardware(int* revision)
               xfileTXT->Close();
             }
 
-          delete xfileTXT;
+          GEN_DELETE xfileTXT;
         }
     }
 

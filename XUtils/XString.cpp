@@ -1230,7 +1230,7 @@ bool XSTRING::Add(const XCHAR* string)
 
   Add((*xstring));
 
-  delete xstring;
+  GEN_DELETE xstring;
 
   return true;
 }
@@ -3333,7 +3333,7 @@ bool XSTRING::ConvertFromShort(short value, const XCHAR* mask)
   
   Set(str);
 
-  delete [] str;
+  GEN_DELETE_ARRAY str;
 
   return true;
 }
@@ -3370,7 +3370,7 @@ bool XSTRING::ConvertFromWord(XWORD value, const XCHAR* mask)
   
   Set(str);
 
-  delete [] str;
+  GEN_DELETE_ARRAY str;
 
   return true;
 }
@@ -3408,7 +3408,7 @@ bool XSTRING::ConvertFromInt(int value, const XCHAR* mask)
   
   Set(str);
 
-  delete [] str;
+  GEN_DELETE_ARRAY str;
 
   return true;
 }
@@ -3445,7 +3445,7 @@ bool XSTRING::ConvertFromDWord(XDWORD value, const XCHAR* mask)
 
   Set(str);
 
-  delete [] str;
+  GEN_DELETE_ARRAY str;
 
   return true;
 }
@@ -3482,7 +3482,7 @@ bool XSTRING::ConvertFromLongLong(long long value, const XCHAR* mask)
   
   Set(str);
 
-  delete [] str;
+  GEN_DELETE_ARRAY str;
 
   return true;
 }
@@ -3519,7 +3519,7 @@ bool XSTRING::ConvertFromQWord(XQWORD value, const XCHAR* mask)
 
   Set(str);
 
-  delete [] str;
+  GEN_DELETE_ARRAY str;
 
   return true;
 }
@@ -3556,7 +3556,7 @@ bool XSTRING::ConvertFromFloat(float value, const XCHAR* mask)
   
   Set(str);
 
-  delete [] str;
+  GEN_DELETE_ARRAY str;
 
   if(_mask.GetSize() == 2)
     {
@@ -3598,7 +3598,7 @@ bool XSTRING::ConvertFromDouble(double value, const XCHAR* mask)
   
   Set(str);
 
-  delete [] str;
+  GEN_DELETE_ARRAY str;
 
   if(_mask.GetSize() == 2)
     {
@@ -5460,13 +5460,13 @@ bool XSTRING::Split(XCHAR separator, XVECTOR<XSTRING*>& results, bool addsubstri
                 {
                   if(c)
                         results.Add(string);
-                   else delete string;
+                   else GEN_DELETE string;
                 }
                else
                 {
                   if(string->GetSize())
                         results.Add(string);
-                   else delete string;
+                   else GEN_DELETE string;
                 }
 
               start = c+1;
@@ -5763,7 +5763,7 @@ bool XSTRING::FormatArg(const XCHAR* mask, va_list* arg, bool isspecialweb)
           Add(str);
         }
 
-      delete [] param;
+      GEN_DELETE_ARRAY param;
     }
 
   return true;
@@ -6108,7 +6108,7 @@ bool XSTRING::UnFormat(const XCHAR* mask,...)
             }
         }
 
-     delete [] param;
+     GEN_DELETE_ARRAY param;
    }
 
   va_end(arg);
@@ -6462,7 +6462,7 @@ bool XSTRING::FreeBuffer()
 
   if(text) 
     {
-      delete [] text;
+      GEN_DELETE_ARRAY text;
 
       text    = NULL;
       size    = 0;

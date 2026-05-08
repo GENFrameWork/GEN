@@ -212,7 +212,7 @@ bool DIONODE::GetSubGroups(XVECTOR<XSTRING*>& listsubgroups)
 
           if(_subgroup->IsEmpty())
             {
-              delete _subgroup;
+              GEN_DELETE _subgroup;
               break;
             }
            else 
@@ -327,7 +327,7 @@ bool DIONODE::CreateJSONSerialization()
   xfileJSON.GetAllInOneLine(string, XFILETXTTYPELF_DEFAULT);
   xfileJSON.ShowTraceJSON(XTRACE_COLOR_PURPLE);
 
-  delete serializationmethod;
+  GEN_DELETE serializationmethod;
   
   return true;
 }

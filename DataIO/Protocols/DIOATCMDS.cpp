@@ -1057,7 +1057,7 @@ bool DIOATCMDS::DeleteSendCommand(int index)
   XSTRING* sendcommand = (XSTRING*)sendcommands.Get(index);
   if(!sendcommand) return false;
 
-  delete sendcommand;
+  GEN_DELETE sendcommand;
   sendcommands.DeleteIndex(index);
 
   return true;
@@ -1320,7 +1320,7 @@ bool DIOATCMDS::DeleteAnswer(int index)
   XSTRING* answer = (XSTRING*)answers.Get(index);
   if(!answer) return false;
 
-  delete answer;
+  GEN_DELETE answer;
   answers.DeleteIndex(index);
 
   return true;
@@ -1346,7 +1346,7 @@ bool DIOATCMDS::DeleteLastAnswer()
 
   index--;
 
-  delete answer;
+  GEN_DELETE answer;
   answers.DeleteIndex(index);
 
   return true;

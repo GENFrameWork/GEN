@@ -94,7 +94,7 @@ HASHCRC32::~HASHCRC32()
 {
   if(resulttmp)
     {
-      delete resulttmp;
+      GEN_DELETE resulttmp;
       resulttmp = NULL;
     }
 

@@ -83,7 +83,7 @@ GRPBITMAPFRAME::GRPBITMAPFRAME()
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFRAME::~GRPBITMAPFRAME()
 {
-  delete bitmap;
+  GEN_DELETE bitmap;
   Clean();
 }
 

@@ -89,13 +89,13 @@ CIPHER::~CIPHER()
 {
   if(inivector)
     {
-      delete inivector;
+      GEN_DELETE inivector;
       inivector = NULL;
     }
 
   if(result)
     {
-      delete result;
+      GEN_DELETE result;
       result = NULL;
     }
 

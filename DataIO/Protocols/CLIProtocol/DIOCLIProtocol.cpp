@@ -866,7 +866,7 @@ bool DIOCLIPROTOCOL::DeleteFirstAnswer(XCHAR* command)
         {
           if(!protocolanswer->GetCommand()->Compare(command))
             {
-              delete protocolanswer;
+              GEN_DELETE protocolanswer;
               answers.DeleteIndex(c);
               status = true;
 

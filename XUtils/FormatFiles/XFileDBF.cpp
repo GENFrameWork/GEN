@@ -150,7 +150,7 @@ XFILEDBF_RECORD::XFILEDBF_RECORD(XVECTOR<XFILEDBF_FIELD*>* fields)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_RECORD::~XFILEDBF_RECORD()
 {
-  delete[] datarec;
+  GEN_DELETE_ARRAY datarec;
   Clean();
 }
 
@@ -542,7 +542,7 @@ XFILEDBF_HEADER::~XFILEDBF_HEADER()
 {
   if(headerdata)
     {
-      delete[] headerdata;
+      GEN_DELETE_ARRAY headerdata;
       headerdata = NULL;
     }
 
@@ -574,7 +574,7 @@ bool XFILEDBF_HEADER::Load(XFILE* xfile)
 
   if(headerdata)
     {
-      delete[] headerdata;
+      GEN_DELETE_ARRAY headerdata;
       headerdata = NULL;
     }
 
@@ -653,7 +653,7 @@ bool XFILEDBF_HEADER::Create(XFILE* fileb)
       headerdata[2] = xdatetime->GetMonth();
       headerdata[3] = xdatetime->GetDay();
 
-      delete xdatetime;
+      GEN_DELETE xdatetime;
     }
 
   XDWORD* nf = (XDWORD*)&headerdata[4];
@@ -1036,7 +1036,7 @@ bool XFILEDBF_HEADER::CopyFrom(XFILEDBF_HEADER* header)
 {
   headersize = header->GetHeaderSize();
 
-  if(headerdata) delete [] headerdata;
+  if(headerdata) GEN_DELETE_ARRAY headerdata;
 
   headerdata = GEN_NEW XBYTE[headersize];
   if(!headerdata) return false;
@@ -1174,7 +1174,7 @@ XFILEDBF::~XFILEDBF()
 
   if(!DeletePrimaryFile()) return;
 
-  delete header;
+  GEN_DELETE header;
 
   Clean();
 }
@@ -1264,7 +1264,7 @@ bool XFILEDBF::Close()
 {
   if(header)
     {
-      delete header;
+      GEN_DELETE header;
       CreateHeader();
     }
 
@@ -1333,7 +1333,7 @@ XFILEDBF_RECORD* XFILEDBF::ReadRecord(XDWORD nrecord)
   XBYTE* data = GEN_NEW XBYTE [sizerecord];
   if(!data)
     {
-      delete record;
+      GEN_DELETE record;
       return NULL;
     }
 
@@ -1343,15 +1343,15 @@ XFILEDBF_RECORD* XFILEDBF::ReadRecord(XDWORD nrecord)
 
   if(!file->Read(data,sizerecord))
     {
-      delete record;
-      delete[] data;
+      GEN_DELETE record;
+      GEN_DELETE_ARRAY data;
 
       return NULL;
     }
 
   record->SetData(data,sizerecord);
 
-  delete[] data;
+  GEN_DELETE_ARRAY data;
 
   return record;
 }
@@ -1503,7 +1503,7 @@ bool XFILEDBF::DeleteRecord(XDWORD nrecord)
   if(!file->Write(&delflag,1)) return false;
   if(!file->Write((XBYTE*)data,size)) return false;
 
-  delete[] data;
+  GEN_DELETE_ARRAY data;
 
   return true;
 }
@@ -1534,11 +1534,11 @@ bool XFILEDBF::Pack()
   dbftmp->GetHeader()->CopyFrom(header);
   dbftmp->GetHeader()->SetNRecords(0);
 
-  delete dbftmp->GetHeader()->GetHeaderData();
+  GEN_DELETE dbftmp->GetHeader()->GetHeaderData();
 
   if(!dbftmp->Create(xpathtmp))
     {
-      delete dbftmp;
+      GEN_DELETE dbftmp;
       return false;
     }
 
@@ -1552,13 +1552,13 @@ bool XFILEDBF::Pack()
               dbftmp->AddRecord(record);
             }
 
-          delete record;
+          GEN_DELETE record;
         }
     }
 
   dbftmp->Close();
 
-  delete dbftmp;
+  GEN_DELETE dbftmp;
 
   Close();
 
@@ -1581,7 +1581,7 @@ bool XFILEDBF::Pack()
       status = Open((*GetXPath()), GetPrimaryFile()->IsReadOnly());
       if(status)
         {
-          delete GetHeader();
+          GEN_DELETE GetHeader();
           CreateHeader();
           GetHeader()->Load(GetPrimaryFile());
         }

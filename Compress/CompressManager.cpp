@@ -165,7 +165,7 @@ COMPRESSMANAGER* COMPRESSMANAGER::GetInstance()
 * --------------------------------------------------------------------------------------------------------------------*/
 void COMPRESSMANAGER::DeleteInstance()
 {
-  if(instance) delete instance;
+  if(instance) GEN_DELETE instance;
 }
 
 

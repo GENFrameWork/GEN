@@ -155,7 +155,7 @@ bool XFACTORY::DelInstance()
 {
   if(!instance) return false;
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;

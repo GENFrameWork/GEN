@@ -98,7 +98,7 @@ DIOSPITOUCHSCREENSTMPE610::~DIOSPITOUCHSCREENSTMPE610()
 
   if(databuffer)
     {
-      delete databuffer;
+      GEN_DELETE databuffer;
       databuffer = NULL;
     }
 
@@ -333,7 +333,7 @@ bool DIOSPITOUCHSCREENSTMPE610::End()
 
       if(diostreamSPIcfg)
         {
-          delete diostreamSPIcfg;
+          GEN_DELETE diostreamSPIcfg;
           diostreamSPIcfg = NULL;
         }
     }

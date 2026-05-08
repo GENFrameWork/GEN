@@ -89,7 +89,7 @@ GRPVIDEOFILEAVI::~GRPVIDEOFILEAVI()
     {
       //fileRIFF->Close();
 
-      delete fileRIFF;
+      GEN_DELETE fileRIFF;
       fileRIFF = NULL;
     }
 
@@ -365,13 +365,13 @@ XBYTE* GRPVIDEOFILEAVI::GetDataFrame(XDWORD index_frame, XDWORD& sizeframe)
   
   if(!fileRIFF->GetFileBase()->SetPosition(frame_list->GetPositionFileData()))
     {
-      delete [] data;
+      GEN_DELETE_ARRAY data;
       return NULL;
     }
 
   if(!fileRIFF->GetFileBase()->Read(data, datasize))
     {
-      delete [] data;
+      GEN_DELETE_ARRAY data;
       return NULL;
     }
 
@@ -503,7 +503,7 @@ bool GRPVIDEOFILEAVI::CreateAndWriteJUNK(XFILERIFF_LIST_NODE* father_node, XDWOR
 
   father_node->AddChild(junk_node);
 
-  delete [] data;
+  GEN_DELETE_ARRAY data;
 
   return true;
 }

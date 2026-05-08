@@ -182,7 +182,7 @@ bool DIOANDROIDFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevice
 {
   if(!enumdevices)  return false;
 
-  delete enumdevices;
+  GEN_DELETE enumdevices;
 
   return true;
 };
@@ -267,7 +267,7 @@ DIOSTREAM* DIOANDROIDFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 bool DIOANDROIDFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 {
   if(!diostream) return false;
-  delete diostream;
+  GEN_DELETE diostream;
   return true;
 }
 #endif
@@ -307,7 +307,7 @@ bool DIOANDROIDFACTORY::DeletePing(DIOPING* ping)
   if(!ping) return false;
 
   DIOANDROIDPING* _ping = (DIOANDROIDPING*)ping;
-  delete _ping;
+  GEN_DELETE _ping;
 
   return true;
 
@@ -349,7 +349,7 @@ bool DIOANDROIDFACTORY::DeletePCap(DIOPCAP* pcap)
   if(!pcap) return false;
 
   DIOANDROIDPCAP* _pcap = (DIOANDROIDPCAP*)pcap;
-  delete _pcap;
+  GEN_DELETE _pcap;
 
   return true;
 }
@@ -392,7 +392,7 @@ bool DIOANDROIDFACTORY::DeleteGPIO(DIOGPIO* port)
   if(!port) return false;
 
   DIOANDROIDGPIO* _port = (DIOANDROIDGPIO*)port;
-  delete _port;
+  GEN_DELETE _port;
 
   return true;
 }

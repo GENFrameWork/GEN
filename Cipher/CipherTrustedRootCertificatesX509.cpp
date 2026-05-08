@@ -144,7 +144,7 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::ReadFromFile(XPATH* pathnamefile)
       xfiletxt->Close();   
     }
 
-  delete xfiletxt;
+  GEN_DELETE xfiletxt;
 
   return status;
 }
@@ -228,7 +228,7 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::GenerateEmbeddedHeadere(XPATH* originpat
       originxfiletxt->Close();   
     }
 
-  delete originxfiletxt;
+  GEN_DELETE originxfiletxt;
 
   return status;
 }
@@ -252,7 +252,7 @@ XVECTOR<XSTRING*>* CIPHERTRUSTEDROOTCERTIFICATESX509::GetLines()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool CIPHERTRUSTEDROOTCERTIFICATESX509::DeleteAllLines()
-* @brief      delete all lines
+* @brief      GEN_DELETE all lines
 * @ingroup    CIPHER
 * 
 * @return     bool : true if is succesful. 

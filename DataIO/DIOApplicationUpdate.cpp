@@ -486,7 +486,7 @@ DIOAPPLICATIONUPDATE::DIOAPPLICATIONUPDATE(XDWORD applicationversion, XDWORD app
   this->applicationname             = applicationname;
   this->xpathrootapp                = xpathrootapp;
 
-  #ifndef GEN_DEBUG
+  #ifndef DEBUG_ACTIVE
   DeleteFilesRenamed(xpathrootapp);
   #endif
 
@@ -526,7 +526,7 @@ DIOAPPLICATIONUPDATE::~DIOAPPLICATIONUPDATE()
   FilesToUpdate_DeleteList();
 
   if(xdir)      GEN_XFACTORY.Delete_Dir(xdir);
-  if(webclient) delete webclient;
+  if(webclient) GEN_DELETE webclient;
 
   Clean();
 }
@@ -639,7 +639,7 @@ bool DIOAPPLICATIONUPDATE::GetVersionAvailable(DIOURL& url, int port, DIOAPPLICA
               error = DIOAPPLICATIONUPDATE_NOT_ERROR;
             }
 
-          delete ini;
+          GEN_DELETE ini;
        }
     }
 
@@ -838,7 +838,7 @@ bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XCHAR* addtargetpath,
 
                       sourceindex++;
 
-                      delete xfilecmp;
+                      GEN_DELETE xfilecmp;
 
                     } while(status);
 
@@ -852,7 +852,7 @@ bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XCHAR* addtargetpath,
                     }
                 }
 
-              delete unzip;
+              GEN_DELETE unzip;
             }
         }
 
@@ -1793,7 +1793,7 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_CheckListChangedFiles(XPATH& xpathupdat
           if(CRC32file.GetResultCRC32() == updatefile->GetCRC32())
             {
               filestoupdate.Delete(updatefile);
-              delete updatefile;
+              GEN_DELETE updatefile;
             }
            else
             {
@@ -1809,7 +1809,7 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_CheckListChangedFiles(XPATH& xpathupdat
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOAPPLICATIONUPDATE::FilesToUpdate_DeleteList()
-* @brief      Files to update delete list
+* @brief      Files to update GEN_DELETE list
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -1896,8 +1896,8 @@ bool DIOAPPLICATIONUPDATE::CopyFile(XPATH& origin, XPATH& target)
           if(CRC32file[0]->GetResultCRC32() == CRC32file[1]->GetResultCRC32()) status = true;
         }
 
-      delete CRC32file[0];
-      delete CRC32file[1];
+      GEN_DELETE CRC32file[0];
+      GEN_DELETE CRC32file[1];
     }
 
   return status;

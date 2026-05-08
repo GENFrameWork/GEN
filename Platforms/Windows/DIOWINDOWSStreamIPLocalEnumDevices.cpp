@@ -254,7 +254,7 @@ bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
                             }
                             else
                             {
-                              delete DNSserver;
+                              GEN_DELETE DNSserver;
                             }
                         }
                     }

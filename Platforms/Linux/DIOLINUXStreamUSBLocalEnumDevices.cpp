@@ -293,7 +293,7 @@ bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::GetDescriptor(struct udev_device* udevde
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
-* @brief      Search and delete equal devices
+* @brief      Search and GEN_DELETE equal devices
 * @ingroup    PLATFORM_LINUX
 * 
 * @return     bool : true if is succesful. 
@@ -319,7 +319,7 @@ bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
                     {
                       if(!device1->GetName()->Compare(device2->GetName()->Get()))
                         {
-                          delete device1;
+                          GEN_DELETE device1;
                           devices.Delete(device1);
 
                           found = true;

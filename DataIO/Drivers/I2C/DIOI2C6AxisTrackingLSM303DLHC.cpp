@@ -556,8 +556,8 @@ DIOI2C6AXISTRACKINGLSM303DLHC::DIOI2C6AXISTRACKINGLSM303DLHC()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2C6AXISTRACKINGLSM303DLHC::~DIOI2C6AXISTRACKINGLSM303DLHC()
 {
-  delete accelerometer;
-  delete compass;
+  GEN_DELETE accelerometer;
+  GEN_DELETE compass;
 
   Clean();
 }

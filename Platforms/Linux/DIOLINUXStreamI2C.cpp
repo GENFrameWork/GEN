@@ -329,7 +329,7 @@ void DIOLINUXSTREAMI2C::ThreadConnection(void* data)
                                                                                   diostream->sizeread = 0;
                                                                                 }
 
-                                                                              delete [] _data;
+                                                                              GEN_DELETE_ARRAY _data;
                                                                             }
                                                                         }
                                                                     }

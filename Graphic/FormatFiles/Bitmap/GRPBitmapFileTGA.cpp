@@ -450,7 +450,7 @@ GRPBITMAP* GRPBITMAPFILETGA::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
             }
         }
 
-      delete filebuffer;
+      GEN_DELETE filebuffer;
 
     }
 
@@ -488,7 +488,7 @@ GRPBITMAP* GRPBITMAPFILETGA::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
         }
     }
 
-  delete [] colors;
+  GEN_DELETE_ARRAY colors;
 
   Close();
 
@@ -602,7 +602,7 @@ GRPBITMAP* GRPBITMAPFILETGA::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
             }
         }
 
-      delete filebuffer;
+      GEN_DELETE filebuffer;
 
     }
 
@@ -640,7 +640,7 @@ GRPBITMAP* GRPBITMAPFILETGA::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
         }
     }
 
-  delete [] colors;
+  GEN_DELETE_ARRAY colors;
 
   return ForceModeOfBitmap(forcemode, bitmap);
 }
@@ -711,7 +711,7 @@ bool GRPBITMAPFILETGA::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
 
           if(!file->Write((XBYTE*)databuffer, sizebmp)) status = false;
 
-          delete [] databuffer;
+          GEN_DELETE_ARRAY databuffer;
 
         } else status = false;
 

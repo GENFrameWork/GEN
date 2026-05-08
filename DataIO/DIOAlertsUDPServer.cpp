@@ -156,13 +156,13 @@ bool DIOALERTSUDPSERVER::End()
   if(UDPdiostream)
     {
       UDPdiostream->Close();
-      delete UDPdiostream;
+      GEN_DELETE UDPdiostream;
       UDPdiostream = NULL;
     }
 
   if(UDPdiostreamcfg)
     {
-      delete UDPdiostreamcfg;
+      GEN_DELETE UDPdiostreamcfg;
       UDPdiostreamcfg = NULL;
     }
 
@@ -271,7 +271,7 @@ bool DIOALERTSUDPSERVER::DeleteAlertByIndex(int index)
       if(xmutexalert) xmutexalert->Lock();
 
       alerts.Delete(alert);
-      delete alert;
+      GEN_DELETE alert;
 
       if(xmutexalert) xmutexalert->UnLock();
 
@@ -308,7 +308,7 @@ bool DIOALERTSUDPSERVER::DeleteAlertByID(XDWORD ID)
           if(alert->GetID() == ID)
             {
               alerts.Delete(alert);
-              delete alert;
+              GEN_DELETE alert;
 
               status = true;
             }
@@ -413,7 +413,7 @@ bool DIOALERTSUDPSERVER::ReceivedEvents()
                   status = alerts.Add(alert);
                 }
 
-              if(!status) delete alert;
+              if(!status) GEN_DELETE alert;
             }
         }
     }

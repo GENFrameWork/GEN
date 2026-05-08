@@ -455,7 +455,7 @@ bool DIOANDROIDSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACst
             }
         }
 
-      delete filetxt;
+      GEN_DELETE filetxt;
     }
 
   GEN_XFACTORY.Delete_Dir(xdir);

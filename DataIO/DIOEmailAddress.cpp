@@ -262,7 +262,7 @@ bool DIOEMAILADDRESS::IsValid()
 
   status = url->ResolveURL(IP);
 
-  delete url;
+  GEN_DELETE url;
 
   return status;
 }

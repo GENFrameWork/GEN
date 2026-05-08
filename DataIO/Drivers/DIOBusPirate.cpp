@@ -266,7 +266,7 @@ bool DIOBUSPIRATE::ReadI2CSnifferCommand(XBUFFER& in, XBUFFER& out)
   string.Empty();
   string = (char*)buffer;
 
-  delete [] buffer;
+  GEN_DELETE_ARRAY buffer;
 
   return true;
 }

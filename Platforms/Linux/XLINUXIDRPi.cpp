@@ -228,7 +228,7 @@ bool XLINUXIDRPI::DetectBoard(RPI_MODEL& model, int& megabytes, float& revision)
       xfiletxt->Close();
     }
 
-  delete xfiletxt;
+  GEN_DELETE xfiletxt;
 
   return status;
 }

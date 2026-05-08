@@ -111,7 +111,7 @@ class DIOSTREAMTLS :  public T
                                             {          
                                               if(fsmachine)
                                                 {
-                                                  delete fsmachine;
+                                                  GEN_DELETE fsmachine;
                                                   fsmachine = NULL;  
                                                 }
                                    

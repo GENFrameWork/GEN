@@ -721,7 +721,7 @@ bool DIOSMTP::DelRecipient(DIOEMAILADDRESS& email)
           if((*recipient->GetEmail()) == email)
             {
               recipients.Delete(recipient);
-              delete recipient;
+              GEN_DELETE recipient;
 
               return true;
             }
@@ -853,14 +853,14 @@ bool DIOSMTP::AddAttachment(XCHAR* path, bool check, XDWORD sizelimit)
     {
       if(!attachment->FileExists())
         {
-          delete attachment;
+          GEN_DELETE attachment;
           return false;
         }
     }
 
   if(attachment->GetSize()>sizelimit)
     {
-      delete attachment;
+      GEN_DELETE attachment;
       return false;
     }
 
@@ -912,7 +912,7 @@ bool DIOSMTP::DelAttachment(XCHAR* path)
           if(!attachment->GetXPath()->Compare(path))
             {
               attachments.Delete(attachment);
-              delete attachment;
+              GEN_DELETE attachment;
 
               return true;
             }
@@ -1274,7 +1274,7 @@ bool DIOSMTP::End()
 
   if(message)
     {
-      delete message;
+      GEN_DELETE message;
       message = NULL;
     }
 

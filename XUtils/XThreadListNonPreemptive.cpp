@@ -87,7 +87,7 @@ bool XTHREADLISTNONPREEMPTIVE::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;

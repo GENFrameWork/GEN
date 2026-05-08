@@ -122,7 +122,7 @@ bool APPFLOWEXTENDED::DelInstance()
 {
   if(instance)
     {      
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -319,7 +319,7 @@ bool APPFLOWEXTENDED::APPEnd()
   #ifdef APPFLOW_EXTENDED_INTERNETSTATUS_ACTIVE
   if(internetstatus)
     {
-      delete internetstatus;
+      GEN_DELETE internetstatus;
       internetstatus = NULL;  
     
       string.Format(APPFLOWCONSOLE_DEFAULT_MESSAGEMASK, XT_L(XTRANSLATION_GEN_ID_APPFLOWEXTENDED_ENDINTERNETSTATUS));
@@ -341,7 +341,7 @@ bool APPFLOWEXTENDED::APPEnd()
   #ifdef APPFLOW_EXTENDED_APPLICATIONSTATUS_ACTIVE
   if(applicationstatus)
     {
-      delete applicationstatus;
+      GEN_DELETE applicationstatus;
       applicationstatus = NULL;  
 
       string.Format(APPFLOWCONSOLE_DEFAULT_MESSAGEMASK, XT_L(XTRANSLATION_GEN_ID_APPFLOWEXTENDED_ENDAPPSTATUS));

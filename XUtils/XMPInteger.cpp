@@ -233,7 +233,7 @@ bool XMPINTEGER::Grow(XDWORD nblimbs)
         {
           memcpy(newlimbs, limbs, nlimbs * XMPINTEGER_CHARSINLIMB);
           memset(limbs, 0, nlimbs * XMPINTEGER_CHARSINLIMB);
-          delete [] limbs;
+          GEN_DELETE_ARRAY limbs;
         }
 
       nlimbs = nblimbs;
@@ -281,7 +281,7 @@ bool XMPINTEGER::Shrink(XDWORD nblimbs)
     {
       memcpy(newlimbs, limbs, (c * XMPINTEGER_CHARSINLIMB));
       memset(limbs, 0, (nlimbs * XMPINTEGER_CHARSINLIMB));
-      delete [] limbs;
+      GEN_DELETE_ARRAY limbs;
     }
 
   nlimbs = c;
@@ -2501,7 +2501,7 @@ bool XMPINTEGER::End()
   if(!limbs) return false;
 
   memset(limbs, 0, nlimbs* XMPINTEGER_CHARSINLIMB);
-  delete [] limbs;
+  GEN_DELETE_ARRAY limbs;
 
   sign    = 1;
   nlimbs  = 0;

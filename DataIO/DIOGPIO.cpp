@@ -530,7 +530,7 @@ bool DIOGPIO::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -757,7 +757,7 @@ DIOGPIO_ENTRY* DIOGPIO::GPIOEntry_GetByGPIO(XQWORD GPIO)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOGPIO::GPIOEntry_DeleteAll()
-* @brief      GPIO entry delete all
+* @brief      GPIO entry GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful. 

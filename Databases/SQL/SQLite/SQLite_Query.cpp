@@ -288,7 +288,7 @@ int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
       if(result)
         {
           UnbindAll();
-          delete result;
+          GEN_DELETE result;
           result = NULL;
         }
 

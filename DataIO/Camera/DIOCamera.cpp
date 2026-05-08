@@ -116,7 +116,7 @@ bool DIOCAMERA::End()
 {
   if(xscheduler)
     {
-      delete xscheduler;
+      GEN_DELETE xscheduler;
       xscheduler = NULL;
     }
 

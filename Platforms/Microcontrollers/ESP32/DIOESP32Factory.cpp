@@ -178,7 +178,7 @@ bool DIOESP32FACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixe
 {
   if(!ledneopixelws2812b) return false;
   
-  delete ledneopixelws2812b;
+  GEN_DELETE ledneopixelws2812b;
   ledneopixelws2812b = NULL;
   
   return true;

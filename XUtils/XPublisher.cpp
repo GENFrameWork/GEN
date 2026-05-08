@@ -154,7 +154,7 @@ bool XPUBLISHER::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -251,7 +251,7 @@ bool XPUBLISHER::DeRegisterEvent(XDWORD type, XSUBJECT* subject)
                       if((publisherentry->type == type) && (publisherentry->subject == subject))
                         {
                           eventsvector.Delete(publisherentry);
-                          delete publisherentry;
+                          GEN_DELETE publisherentry;
 
                         } else d++;
 
@@ -389,7 +389,7 @@ bool XPUBLISHER::UnSubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* obs
           if((publisherentry->type == type) && (publisherentry->subject == subject) && (publisherentry->observer == observer))
             {
               eventsvector.Delete(publisherentry);
-              delete publisherentry;
+              GEN_DELETE publisherentry;
 
               status = true;
               break;

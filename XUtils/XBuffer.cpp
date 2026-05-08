@@ -1216,7 +1216,7 @@ bool XBUFFER::Extract(XSTRING& string, XDWORD ppos, XDWORD psize)
         }
     }
 
-  delete [] _string;
+  GEN_DELETE_ARRAY _string;
 
   return true;
 }
@@ -2014,7 +2014,7 @@ bool XBUFFER::Set(XSTRING& data, int topos)
 
   if(!Set((XBYTE*)tmp, data.GetSize()*sizeof(XDWORD), topos)) return false;
 
-  delete [] tmp;
+  GEN_DELETE_ARRAY tmp;
 
   return true;
 }
@@ -2166,7 +2166,7 @@ bool XBUFFER::Resize(XDWORD newsize, bool setblocked)
                 {
                   memcpy(newbuffer , buffer, size);
 
-                  delete[] buffer;
+                  GEN_DELETE_ARRAY buffer;
 
                   buffer   = NULL;
                   size     = 0;
@@ -2223,7 +2223,7 @@ bool XBUFFER::Delete(bool setblocked)
       SetBlocked(true);
     }
 
-  if(buffer) delete [] buffer;
+  if(buffer) GEN_DELETE_ARRAY buffer;
 
   buffer        = NULL;
   size          = 0;

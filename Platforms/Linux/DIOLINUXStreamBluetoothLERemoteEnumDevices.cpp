@@ -413,7 +413,7 @@ void DIOLINUXSTREAMBLUETOOTHLEREMOTEENUMDEVICES::ThreadEnumDevicesEvent(void* pa
       LEremotedevices->xmutexdevicesevent->UnLock();
     }
 
-  delete device_event;
+  GEN_DELETE device_event;
 }
 
 

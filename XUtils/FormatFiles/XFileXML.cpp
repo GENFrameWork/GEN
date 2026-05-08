@@ -727,7 +727,7 @@ bool XFILEXMLELEMENT::DeleteAtribute(int index)
 
   attributes.Delete(attribute);
 
-  delete attribute;
+  GEN_DELETE attribute;
 
   return true;
 }
@@ -981,7 +981,7 @@ bool XFILEXMLELEMENT::DeleteElement(int index)
 
   elements.Delete(element);
 
-  delete element;
+  GEN_DELETE element;
 
   return true;
 }
@@ -1574,7 +1574,7 @@ bool XFILEXML::DeleteAllElements()
 
   if(root)
     {
-      delete root;
+      GEN_DELETE root;
       root = NULL;
     }
 

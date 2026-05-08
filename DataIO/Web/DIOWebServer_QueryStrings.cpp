@@ -184,8 +184,8 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, XCHAR* value)
 
   if((!_ID) || (!_value))
     {
-      delete _ID;
-      delete _value;
+      GEN_DELETE _ID;
+      GEN_DELETE _value;
 
       return false;
     }
@@ -218,8 +218,8 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, int value)
 
   if((!_ID) || (!_value))
     {
-      delete _ID;
-      delete _value;
+      GEN_DELETE _ID;
+      GEN_DELETE _value;
 
       return false;
     }

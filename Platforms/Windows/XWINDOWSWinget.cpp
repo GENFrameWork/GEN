@@ -273,7 +273,7 @@ bool XWINDOWSWINGET::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -571,7 +571,7 @@ bool XWINDOWSWINGET::List(bool updateavaible, XSTRING& jsonresult)
 
   // xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
  
-  delete serializationmethod;
+  GEN_DELETE serializationmethod;
 
   return status;
 }
@@ -617,7 +617,7 @@ bool XWINDOWSWINGET::Find(XCHAR* search, XSTRING& jsonresult)
 
   //xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
  
-  delete serializationmethod;
+  GEN_DELETE serializationmethod;
 
   return status;
 }
@@ -1004,7 +1004,7 @@ void XWINDOWSWINGET::NormalizeUnicode(XBYTE* data)
           CP437ToASCII((XBYTE*)tmp, data, 32768);
           strcpy((char*)data, tmp);
 
-          delete [] tmp;        
+          GEN_DELETE_ARRAY tmp;        
         }
     }
 }

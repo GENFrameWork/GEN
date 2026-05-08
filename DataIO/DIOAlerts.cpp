@@ -449,7 +449,7 @@ XDWORD DIOALERT::CalculateID(bool withdatetime)
 
   if(status) ID = hashcrc32->GetResultCRC32(); else ID = 0;
 
-  delete hashcrc32;
+  GEN_DELETE hashcrc32;
 
   return ID;
 }
@@ -630,7 +630,7 @@ bool DIOALERTS::DelInstance()
 {
   if(!instance) return false;
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;
@@ -816,7 +816,7 @@ DIOALERT* DIOALERTS::CreateAlert(XCHAR* applicationID, DIOALERTLEVEL level, XCHA
       XDWORD ID = alert->CalculateID(true);
       if(!ID)
         {
-          delete alert;
+          GEN_DELETE alert;
           return NULL;
         }
 
@@ -1141,7 +1141,7 @@ bool DIOALERTS::Sender_UDPConfig(int port, int nrecipients, ...)
 
   va_end(arg);
 
-  if(URL) delete URL;
+  if(URL) GEN_DELETE URL;
 
   if(UDPrecipients.GetSize())
     {
@@ -1348,7 +1348,7 @@ bool DIOALERTS::End()
   if(SMTP)
     {
       SMTP->End();
-      delete SMTP;
+      GEN_DELETE SMTP;
 
       SMTP = NULL;
     }
@@ -1363,7 +1363,7 @@ bool DIOALERTS::End()
 
   if(SMTPdiostreamcfg)
     {
-      delete SMTPdiostreamcfg;
+      GEN_DELETE SMTPdiostreamcfg;
 
       SMTPdiostreamcfg = NULL;
     }
@@ -1384,7 +1384,7 @@ bool DIOALERTS::End()
 
   if(WEBdiowebclient)
     {
-      delete WEBdiowebclient;
+      GEN_DELETE WEBdiowebclient;
       WEBdiowebclient = NULL;
     }
 
@@ -1398,13 +1398,13 @@ bool DIOALERTS::End()
   if(UDPdiostream)
     {
       UDPdiostream->Close();
-      delete UDPdiostream;
+      GEN_DELETE UDPdiostream;
       UDPdiostream = NULL;
     }
 
   if(UDPdiostreamcfg)
     {
-      delete UDPdiostreamcfg;
+      GEN_DELETE UDPdiostreamcfg;
       UDPdiostreamcfg = NULL;
     }
 
@@ -1565,7 +1565,7 @@ bool DIOALERTS::Sender_SMSSend(DIOALERT* alert)
           SMSdioatcmdgsm->End();
         }
 
-      delete SMSdioatcmdgsm;
+      GEN_DELETE SMSdioatcmdgsm;
     }
 
   return status;

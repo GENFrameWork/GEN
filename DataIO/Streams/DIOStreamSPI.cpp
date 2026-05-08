@@ -248,7 +248,7 @@ bool DIOSTREAMSPI::Close()
 
   if(bufferread)
     {
-      delete [] bufferread;
+      GEN_DELETE_ARRAY bufferread;
       bufferread = NULL;
     }
 

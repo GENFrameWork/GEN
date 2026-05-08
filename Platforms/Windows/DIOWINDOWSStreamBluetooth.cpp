@@ -216,7 +216,7 @@ bool DIOWINDOWSSTREAMBLUETOOTH::Close()
                                     (char*)config->GetServerPropertys(2),
                                     (void*)addr);
 
-          delete (SOCKADDR_BTH*)addr;
+          GEN_DELETE (SOCKADDR_BTH*)addr;
           addr = NULL;
         }
 

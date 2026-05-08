@@ -362,7 +362,7 @@ bool XFILE::EraseBlock(XQWORD size)
 
   SetSize(GetSize() - size);
 
-  delete [] tbuffer;
+  GEN_DELETE_ARRAY tbuffer;
 
   return status;
 }
@@ -435,7 +435,7 @@ bool XFILE::InsertBlock(XBYTE* buffer, XDWORD size)
 
   if(status==true) ActualizeSize();
 
-  delete [] movebuffer;
+  GEN_DELETE_ARRAY movebuffer;
 
   return status;
 }
@@ -499,7 +499,7 @@ bool XFILE::OverwriteContent(XCHAR* xpath)
       if(Write(buffer,mod)!=true)  status=false;
     }
 
-  delete [] buffer;
+  GEN_DELETE_ARRAY buffer;
 
   Close();
 

@@ -181,7 +181,7 @@ bool DIOSCRAPERWEBCACHE::Add(XSTRING& ask, DIOSCRAPERWEBCACHE_RESULT* result)
         {
           status = true;
 
-        } else delete _ask;
+        } else GEN_DELETE _ask;
     }
 
   if(xmutexlist) xmutexlist->UnLock();

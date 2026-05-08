@@ -288,7 +288,7 @@ bool DIOSTM32STREAMI2C::Open()
       hi2c = GEN_NEW I2C_HandleTypeDef();
       if(!hi2c)
         {
-          delete port;
+          GEN_DELETE port;
           return false;
         }
 
@@ -569,8 +569,8 @@ bool DIOSTM32STREAMI2C::Close()
     {
       HAL_I2C_DeInit(DIOSTM32STREAMI2C::ports[indexport]->GetHandleI2C());
 
-      delete DIOSTM32STREAMI2C::ports[indexport]->GetHandleI2C();
-      delete DIOSTM32STREAMI2C::ports[indexport];
+      GEN_DELETE DIOSTM32STREAMI2C::ports[indexport]->GetHandleI2C();
+      GEN_DELETE DIOSTM32STREAMI2C::ports[indexport];
 
       DIOSTM32STREAMI2C::ports[indexport] = NULL;
     }

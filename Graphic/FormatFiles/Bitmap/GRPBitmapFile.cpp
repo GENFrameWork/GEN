@@ -202,7 +202,7 @@ GRPBITMAP* GRPBITMAPFILEBASE::ForceModeOfBitmap(GRPPROPERTYMODE forcemode, GRPBI
   newbitmap = bitmap->ConvertToMode(forcemode);
   if(!newbitmap) return bitmap;
 
-  delete bitmap;
+  GEN_DELETE bitmap;
 
   return newbitmap;
 }
@@ -474,7 +474,7 @@ GRPBITMAP* GRPBITMAPFILE::Load(XCHAR* xpath, GRPPROPERTYMODE forcemode)
     {
       bitmap = grpfilebase->CreateBitmapFromFile(_xpath, forcemode);
 
-      delete grpfilebase;
+      GEN_DELETE grpfilebase;
     }
 
   return bitmap;
@@ -574,7 +574,7 @@ bool GRPBITMAPFILE::Save(XCHAR* xpath, GRPBITMAP* bitmap, int quality)
   if(grpfilebase)
     {
       status = grpfilebase->CreateFileFromBitmap(_xpath, bitmap, quality);
-      delete grpfilebase;
+      GEN_DELETE grpfilebase;
     }
 
   return status;

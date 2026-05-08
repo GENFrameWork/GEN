@@ -111,7 +111,7 @@ bool DIOPROTOCOL_APPLICATIONDATA::AddAlert(DIOALERT& alert)
     {
       _alert->CopyFrom(&alert);
       status = alerts.Add(_alert);
-      if(!status) delete _alert;
+      if(!status) GEN_DELETE _alert;
     }
 
   if(xmutexalert) xmutexalert->UnLock();

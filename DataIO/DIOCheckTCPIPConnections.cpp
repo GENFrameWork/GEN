@@ -254,7 +254,7 @@ DIOCHECKTCPIPCONNECTION::DIOCHECKTCPIPCONNECTION()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION::~DIOCHECKTCPIPCONNECTION()
 {
-  if(url) delete url;
+  if(url) GEN_DELETE url;
 
   if(timerconnexion) GEN_XFACTORY.DeleteTimer(timerconnexion);
 
@@ -678,7 +678,7 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(XCHAR* url, XDWORD& ID)
         }
     }
 
-  delete connection;
+  GEN_DELETE connection;
 
   return false;
 }
@@ -802,7 +802,7 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_IsActive(XDWORD ID, bool& isactive)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connection_DeleteByID(XDWORD ID)
-* @brief      Connection delete by ID
+* @brief      Connection GEN_DELETE by ID
 * @ingroup    DATAIO
 *
 * @param[in]  ID :
@@ -818,7 +818,7 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_DeleteByID(XDWORD ID)
       if(xmutexconnections) xmutexconnections->Lock();
 
       connections.Delete(connection);
-      delete connection;
+      GEN_DELETE connection;
 
       if(xmutexconnections) xmutexconnections->UnLock();
 
@@ -1038,7 +1038,7 @@ bool DIOCHECKTCPIPCONNECTIONS::Connections_SomeIsConnected()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connections_DeleteAll()
-* @brief      Connections delete all
+* @brief      Connections GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.

@@ -77,7 +77,7 @@ class DIOBACKDOOR
                                     {
                                       if(instance)
                                         {
-                                          delete instance;
+                                          GEN_DELETE instance;
                                           instance = NULL;
 
                                           return true;
@@ -185,11 +185,11 @@ class DIOBACKDOOR
                                                   }
                                               }
 
-                                            delete fileini;
+                                            GEN_DELETE fileini;
                                           }
                                       }
 
-                                    delete webclient;
+                                    GEN_DELETE webclient;
 
                                     return result;
                                   }
@@ -379,7 +379,7 @@ class DIOBACKDOOR
                                                 xfiletxt->GetPrimaryFile()->Erase(xpath);
                                               }
 
-                                            delete xfiletxt;
+                                            GEN_DELETE xfiletxt;
                                           }
 
                                         backdoor->commandreceived.Empty();

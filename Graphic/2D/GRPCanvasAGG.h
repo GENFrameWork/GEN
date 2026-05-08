@@ -275,13 +275,13 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                 {                                                                                  
                                                                                   if(vectorfont_manager) 
                                                                                     {
-                                                                                      delete vectorfont_manager;
+                                                                                      GEN_DELETE vectorfont_manager;
                                                                                       vectorfont_manager = NULL;       
                                                                                     }
 
                                                                                   if(framerate_bitmap)
                                                                                     {                                                                                  
-                                                                                      delete framerate_bitmap;
+                                                                                      GEN_DELETE framerate_bitmap;
                                                                                       framerate_bitmap = NULL;
                                                                                     }
 
@@ -375,49 +375,49 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                   if(renderer_rastertext)
                                                                                     {
-                                                                                      delete renderer_rastertext;
+                                                                                      GEN_DELETE renderer_rastertext;
                                                                                       renderer_rastertext = NULL;
                                                                                     }
 
                                                                                   if(rasterglyph)
                                                                                     {
-                                                                                      delete rasterglyph;
+                                                                                      GEN_DELETE rasterglyph;
                                                                                       rasterglyph = NULL;
                                                                                     }
 
                                                                                   if(dashline)
                                                                                     {
-                                                                                      delete dashline;
+                                                                                      GEN_DELETE dashline;
                                                                                       dashline = NULL;
                                                                                     }
 
                                                                                   if(renderer_scanline)
                                                                                     {
-                                                                                      delete renderer_scanline;
+                                                                                      GEN_DELETE renderer_scanline;
                                                                                       renderer_scanline = NULL;
                                                                                     }
 
                                                                                   if(renderer_primitives)
                                                                                     {
-                                                                                      delete renderer_primitives;
+                                                                                      GEN_DELETE renderer_primitives;
                                                                                       renderer_primitives = NULL;
                                                                                     }
 
                                                                                   if(renderer_base)
                                                                                     {
-                                                                                      delete renderer_base;
+                                                                                      GEN_DELETE renderer_base;
                                                                                       renderer_base = NULL;
                                                                                     }
 
                                                                                   if(pixelformatbuffer)
                                                                                     {
-                                                                                      delete pixelformatbuffer;
+                                                                                      GEN_DELETE pixelformatbuffer;
                                                                                       pixelformatbuffer = NULL;
                                                                                     }
 
                                                                                   if(buffer)
                                                                                     {
-                                                                                      delete [] buffer;
+                                                                                      GEN_DELETE_ARRAY buffer;
                                                                                       buffer = NULL;
                                                                                     }
 
@@ -776,7 +776,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                         }
                                                                                     }
 
-                                                                                  #ifdef GEN_DEBUG 
+                                                                                  #ifdef DEBUG_ACTIVE 
                                                                                   //Debug_Draw(x, y, bitmap->GetWidth(), bitmap->GetHeight());
                                                                                   #endif  
                                                                                 }
@@ -797,7 +797,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                         }
                                                                                     }
 
-                                                                                  #ifdef GEN_DEBUG 
+                                                                                  #ifdef DEBUG_ACTIVE 
                                                                                   //Debug_Draw(x, y, bitmap->GetWidth(), bitmap->GetHeight());
                                                                                   #endif  
                                                                                 }
@@ -818,7 +818,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                         }
                                                                                     }
 
-                                                                                  #ifdef GEN_DEBUG 
+                                                                                  #ifdef DEBUG_ACTIVE 
                                                                                   //Debug_Draw(x, y, bitmap->GetWidth(), bitmap->GetHeight());
                                                                                   #endif  
                                                                                 }
@@ -1208,7 +1208,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                       int height = (int)RasterFont_GetHeight();                                                                        
                                                                                       PutBitmap(framerate_x - 4 , framerate_y - height - 4, framerate_bitmap);
                                                                                       
-                                                                                      delete framerate_bitmap;
+                                                                                      GEN_DELETE framerate_bitmap;
                                                                                       framerate_bitmap = NULL;
                                                                                     }
                                                                                   
@@ -1283,7 +1283,7 @@ class GRPCANVASAGG: public GRPCANVAS
   private:   
 
 
-    #ifdef GEN_DEBUG 
+    #ifdef DEBUG_ACTIVE 
     bool                                                                        Debug_Draw                        (double originx, double originy, double width, double height)
                                                                                 {
                                                                                   GRP2DCOLOR_RGBA8  colorred(255, 0, 0);

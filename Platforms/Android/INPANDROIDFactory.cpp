@@ -118,12 +118,12 @@ bool INPANDROIDFACTORY::DeleteDevice(INPDEVICE* device)
   switch(device->GetType())
     {
       case INPDEVICE_TYPE_KEYBOARD :  { INPANDROIDDEVICEKEYBOARD* keyboard = GEN_NEW INPANDROIDDEVICEKEYBOARD();
-                                        if(keyboard) delete keyboard;                                          
+                                        if(keyboard) GEN_DELETE keyboard;                                          
                                       }
                                       break;
 
       case INPDEVICE_TYPE_MOUSE    :  { INPANDROIDDEVICEMOUSE* mouse = GEN_NEW INPANDROIDDEVICEMOUSE();
-                                        if(mouse) delete mouse;                                        
+                                        if(mouse) GEN_DELETE mouse;                                        
                                       }
                                       break;
 

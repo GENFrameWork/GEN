@@ -143,7 +143,7 @@ XLOGBASE::XLOGBASE()
 XLOGBASE::~XLOGBASE()
 {
   if(filelog)     filelog->Close();
-  if(filelog)     delete filelog;
+  if(filelog)     GEN_DELETE filelog;
   if(mutex)       GEN_XFACTORY.Delete_Mutex(mutex);
   if(xtimer)      GEN_XFACTORY.DeleteTimer(xtimer);
   if(xdatetime)   GEN_XFACTORY.DeleteDateTime(xdatetime);
@@ -931,7 +931,7 @@ bool XLOGBASE::CalculateInitialStatus()
 
     } while(!endfile);
 
-  delete [] readbuffer;
+  GEN_DELETE_ARRAY readbuffer;
 
   return true;
 }
@@ -1219,7 +1219,7 @@ bool XLOGBASE::Backup_AdjustNFiles(XCHAR* pathnamelog, bool iscompress)
               xfilezip->Close();
             }
 
-          delete xfilezip;
+          GEN_DELETE xfilezip;
 
           status = xfilebackup->Erase(pathnamelog);
         }
@@ -1404,7 +1404,7 @@ bool XLOG::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;

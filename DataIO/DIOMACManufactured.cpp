@@ -110,7 +110,7 @@ bool DIOMACMANUFACTURED::Web_GetManufactured(DIOMAC& MAC, XSTRING& manufactured)
   if(macmanufactured)
     {
       status = macmanufactured->Get(MAC, manufactured);
-      delete macmanufactured;
+      GEN_DELETE macmanufactured;
     }
 
   return status;
@@ -158,13 +158,13 @@ bool DIOMACMANUFACTURED::File_GetManufactured(XPATH& xpath, DIOMAC& MAC, XSTRING
           if(xbuffer)
             {
               manufactured.Set((XWORD*)xbuffer->Get());
-              delete xbuffer;
+              GEN_DELETE xbuffer;
             }
         }
 
       xfilexdb->End();
 
-      delete xfilexdb;
+      GEN_DELETE xfilexdb;
     }
 
   return status;
@@ -224,14 +224,14 @@ bool DIOMACMANUFACTURED::File_GetManufacturedMACs(XPATH& xpath, XSTRING& manufac
                       MACs.Add(ID);                      
                     }
 
-                  delete xbuffer;
+                  GEN_DELETE xbuffer;
                 }
             }
         }
 
       xfilexdb->End();
 
-      delete xfilexdb;
+      GEN_DELETE xfilexdb;
     }
 
   return status;
@@ -263,7 +263,7 @@ bool DIOMACMANUFACTURED::File_Download(XBUFFER& xbuffer, int timeout)
 
   status = webclient->Get(url, xbuffer, DIOWEBCLIENT_DEFAULTUSERAGENT, timeout);
 
-  delete webclient;
+  GEN_DELETE webclient;
 
   return status;
 }
@@ -330,7 +330,7 @@ bool DIOMACMANUFACTURED::File_Convert(XBUFFER& xbuffer, XPATH& xpath)
         }
     }
 
-  delete xfiletxtoui;
+  GEN_DELETE xfiletxtoui;
 
   XDWORD    nrecords =  idmap.GetSize();
   HASHMD5   hashmd5;
@@ -376,7 +376,7 @@ bool DIOMACMANUFACTURED::File_Convert(XBUFFER& xbuffer, XPATH& xpath)
                                         
                   idmapindex.Add(ID,filepos);
 
-                  delete name;
+                  GEN_DELETE name;
                 }
             }
 

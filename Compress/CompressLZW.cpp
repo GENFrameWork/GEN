@@ -251,7 +251,7 @@ XDWORD COMPRESS_LZW::LZW_GIF_Encode(XBYTE* dibbuffer,XBYTE* outbuffer,XDWORD dib
   this->Encode_WriteIndex(old);
   this->Encode_WriteIndex(LZWend);
 
-  delete [] hash;
+  GEN_DELETE_ARRAY hash;
 
   return (XDWORD)(curout - outbuffer + 1);
 }
@@ -319,7 +319,7 @@ void COMPRESS_LZW::LZW_GIF_Decode(XBYTE* inbuffer,XBYTE* dibbuffer,XDWORD dibwid
       old = code;
     }
 
-  delete [] strbegin;
+  GEN_DELETE_ARRAY strbegin;
 }
 
 

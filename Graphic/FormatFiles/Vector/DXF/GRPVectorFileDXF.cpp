@@ -158,7 +158,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXF::DetectType()
               result = GRPVECTORFILERESULT_ERRORNOTFILE;
             }
 
-          delete file;
+          GEN_DELETE file;
         } 
        else 
         {
@@ -218,7 +218,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXF::Load()
       result = GRPVECTORFILERESULT_ERRORNOTFILE;
     }
 
-   delete file;
+   GEN_DELETE file;
 
    return result.TakeAsBase();
 }
@@ -388,7 +388,7 @@ GRPVECTORFILEDXFRESULT GRPVECTORFILEDXF::ParserTextSections(XFILETXT* fileTXT, X
                   sectionType->SetGrpVectorFile(this);
                   sections.Add(sectionType);
                   
-                  delete section;                                         
+                  GEN_DELETE section;                                         
                 }
                else 
                 {
@@ -411,7 +411,7 @@ GRPVECTORFILEDXFRESULT GRPVECTORFILEDXF::ParserTextSections(XFILETXT* fileTXT, X
      
   if(section &&  (section->type == GRPVECTORFILEDXFTEXTSECTION_TYPESECTION_UNKNOWN))
     {
-      delete section;
+      GEN_DELETE section;
     }
 
   if(!sections.IsEmpty()) 

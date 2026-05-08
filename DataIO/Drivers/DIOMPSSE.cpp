@@ -87,7 +87,7 @@ DIOMPSSE::~DIOMPSSE()
 {
   if(dioenumUSBdevices) GEN_DIOFACTORY.DeleteStreamEnumDevices(dioenumUSBdevices);
 
-  if(diostreamUSBcfg)   delete diostreamUSBcfg;
+  if(diostreamUSBcfg)   GEN_DELETE diostreamUSBcfg;
 
   Clean();
 }
@@ -390,7 +390,7 @@ bool DIOMPSSE::EnumDevices()
            else
             {
               devices->Delete(device);
-              delete device;
+              GEN_DELETE device;
             }
         }
 

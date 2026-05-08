@@ -94,7 +94,7 @@ DIODNSPROTOCOLCLIENT::~DIODNSPROTOCOLCLIENT()
 {
   if(diostreamudpcfg)
     {
-      delete diostreamudpcfg;
+      GEN_DELETE diostreamudpcfg;
       diostreamudpcfg = NULL;
     }
 
@@ -314,7 +314,7 @@ bool DIODNSPROTOCOLCLIENT::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int queryty
                             }
 
                           free(result->name);
-                          delete result;
+                          GEN_DELETE result;
 
                           if(status) break;                                               
                         }

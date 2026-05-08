@@ -416,10 +416,10 @@ bool DIOLINUXSTREAMTCPIPSERVER::DeleteAllStreamDisconnected()
             {
               if(diostream->GetConfig())
                 {
-                  delete diostream->GetConfig();
+                  GEN_DELETE diostream->GetConfig();
                 }
 
-              delete diostream;
+              GEN_DELETE diostream;
               GetMultiSocketStreams()->Delete(diostream);    
 
               continue;
@@ -453,10 +453,10 @@ bool DIOLINUXSTREAMTCPIPSERVER::DeleteAllStream()
         {
           if(diostream->GetConfig())
             {
-              delete diostream->GetConfig();
+              GEN_DELETE diostream->GetConfig();
             }
 
-          delete diostream;
+          GEN_DELETE diostream;
           GetMultiSocketStreams()->Delete(diostream);    
 
           continue;          

@@ -363,7 +363,7 @@ DIOWEBCLIENT::~DIOWEBCLIENT()
 
   if(diostreamcfg)
     {
-      delete diostreamcfg;
+      GEN_DELETE diostreamcfg;
       diostreamcfg = NULL;
     }
 
@@ -1348,7 +1348,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
         } while(1);
 
-      delete [] buffer;
+      GEN_DELETE_ARRAY buffer;
     }
 
   GEN_XFACTORY.DeleteTimer(timerdownload);

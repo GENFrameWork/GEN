@@ -83,7 +83,7 @@ UI_LAYOUT::~UI_LAYOUT()
 { 
   if(ui_skin)
     {
-      delete ui_skin;
+      GEN_DELETE ui_skin;
     }
 
   Elements_DeleteAll();
@@ -233,7 +233,7 @@ UI_ELEMENT* UI_LAYOUT::Elements_Get(XCHAR* nameelement, UI_ELEMENT_TYPE type)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_LAYOUT::Elements_DeleteAll()
-* @brief      Elements delete all
+* @brief      Elements GEN_DELETE all
 * @ingroup    USERINTERFACE
 *
 * @return     bool : true if is succesful. 

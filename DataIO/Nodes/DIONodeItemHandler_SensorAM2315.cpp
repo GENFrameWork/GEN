@@ -88,7 +88,7 @@ DIONODEITEMHANDLER_SENSORAM2315::~DIONODEITEMHANDLER_SENSORAM2315()
 
   if(am2315)
     {
-      delete am2315;  
+      GEN_DELETE am2315;  
     }
 
   Clean();

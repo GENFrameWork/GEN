@@ -272,7 +272,7 @@ bool APPFLOWMAIN::Delete()
   if(application)
     {
       application->AppProc_PlatformEnd();
-      delete application;
+      GEN_DELETE application;
       application = NULL;
     }
 

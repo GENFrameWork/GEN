@@ -97,7 +97,7 @@ DIONTP::~DIONTP()
 
   if(diostreamudpcfg)
     {
-      delete diostreamudpcfg;
+      GEN_DELETE diostreamudpcfg;
       diostreamudpcfg = NULL;
     }
 

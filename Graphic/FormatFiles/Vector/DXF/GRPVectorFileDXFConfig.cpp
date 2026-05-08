@@ -85,7 +85,7 @@ GRPVECTORFILEDXFCONFIG::~GRPVECTORFILEDXFCONFIG()
 {
   if(fileCFG)
     {
-      delete fileCFG;
+      GEN_DELETE fileCFG;
     }
 
   Clean();

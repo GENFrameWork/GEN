@@ -474,7 +474,7 @@ bool INPLINUXDEVICEKEYBOARDDIRECT::Old_CreateDevices()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool INPLINUXDEVICEKEYBOARDDIRECT::Old_DeleteTerminalConfig()
-* @brief      Old delete terminal config
+* @brief      Old GEN_DELETE terminal config
 * @ingroup    PLATFORM_LINUX
 *
 * @return     bool : true if is succesful.

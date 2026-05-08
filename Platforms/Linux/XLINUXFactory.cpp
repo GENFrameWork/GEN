@@ -124,7 +124,7 @@ bool XLINUXFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
   if(!xthread) return false;
 
   XLINUXTHREAD* _xthread = (XLINUXTHREAD*)xthread;
-  delete _xthread;
+  GEN_DELETE _xthread;
 
   return true;
 };

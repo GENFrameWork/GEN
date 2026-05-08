@@ -296,7 +296,7 @@ DIOPCAPFRAME::~DIOPCAPFRAME()
 {
   if(data)
     {
-      delete data;
+      GEN_DELETE data;
       data = NULL;
     }
 
@@ -979,7 +979,7 @@ DIOPCAP::~DIOPCAP()
 {
   if(filters)
     {
-      delete filters;
+      GEN_DELETE filters;
       filters = NULL;
     }
 
@@ -1124,7 +1124,7 @@ bool DIOPCAP::Frames_Delete(int index)
   if(frame)
     {
       frames.Delete(frame);
-      delete frame;
+      GEN_DELETE frame;
       status = true;
     }
 
@@ -1152,7 +1152,7 @@ XVECTOR<DIOPCAPFRAME*>* DIOPCAP::Frames_Get()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPCAP::Frames_DeleteAll()
-* @brief      Frames delete all
+* @brief      Frames GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful. 
@@ -1342,7 +1342,7 @@ bool DIOPCAP::Frames_Add(XBYTE* data,XDWORD size, bool isloopback)
                 }
                else
                 {
-                  delete frame; 
+                  GEN_DELETE frame; 
                   frame = NULL;
                 }     
             }   

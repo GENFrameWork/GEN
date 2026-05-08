@@ -146,7 +146,7 @@ SCRIPT::~SCRIPT()
 
   if(xfiletxt)
     {
-      delete xfiletxt;
+      GEN_DELETE xfiletxt;
     }
 
   DeleteLibraryFuncions();
@@ -530,7 +530,7 @@ bool SCRIPT::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRA
                           script->Run();                                       
                         }
                       
-                      delete script;
+                      GEN_DELETE script;
                       script = NULL;
 
                     }                    

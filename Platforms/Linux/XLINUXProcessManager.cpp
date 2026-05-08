@@ -453,7 +453,7 @@ bool XLINUXPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* pa
 
    for(int c=0; c<MAXNPARAMS; c++)
     {
-      delete [] param[c];
+      GEN_DELETE_ARRAY param[c];
     }
 
   return status;

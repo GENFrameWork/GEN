@@ -97,13 +97,13 @@ DIOSTREAM::~DIOSTREAM()
 {
   if(inbuffer)
     {
-      delete inbuffer;
+      GEN_DELETE inbuffer;
       inbuffer = NULL;
     }
 
   if(outbuffer)
     {
-      delete outbuffer;
+      GEN_DELETE outbuffer;
       outbuffer = NULL;
     }
 
@@ -526,7 +526,7 @@ bool DIOSTREAM::ReadStr(XSTRING& string)
   string.Empty();
   string = (char*)buffer;
 
-  delete [] buffer;
+  GEN_DELETE_ARRAY buffer;
 
   return true;
 }

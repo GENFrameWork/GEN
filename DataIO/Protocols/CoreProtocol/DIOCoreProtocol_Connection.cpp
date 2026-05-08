@@ -115,12 +115,12 @@ DIOCOREPROTOCOL_CONNECTION::~DIOCOREPROTOCOL_CONNECTION()
 
   if(registerdata)
     {
-      delete registerdata;
+      GEN_DELETE registerdata;
     }
 
   if(protocol)
     {
-      delete protocol;
+      GEN_DELETE protocol;
     }
 
   if(xtimerstatus)
@@ -957,7 +957,7 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XCHAR* classname, XSERIALIZABLE*
 
   if(serializationmethod)
     {
-      delete serializationmethod;
+      GEN_DELETE serializationmethod;
     }
                 
   if(UpdateClass_Do(&ID_message, classname, &classcontent))
@@ -1020,7 +1020,7 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XCHAR* classname, XSERIALIZAB
 
           if(serializationmethod)
             {
-              delete serializationmethod;
+              GEN_DELETE serializationmethod;
             }
         }
     }
@@ -1433,7 +1433,7 @@ bool DIOCOREPROTOCOL_CONNECTION::Update()
 
                                                                                               if(serializationmethod)
                                                                                                 {
-                                                                                                  delete serializationmethod;
+                                                                                                  GEN_DELETE serializationmethod;
                                                                                                   serializationmethod = NULL;  
                                                                                                 } 
 
@@ -1478,7 +1478,7 @@ bool DIOCOREPROTOCOL_CONNECTION::Update()
 
                                                                               if(serializationmethod)
                                                                                 {
-                                                                                  delete serializationmethod;
+                                                                                  GEN_DELETE serializationmethod;
                                                                                   serializationmethod = NULL;  
                                                                                 }                                                                                           
                                                                             }
@@ -1584,7 +1584,7 @@ bool DIOCOREPROTOCOL_CONNECTION::Update()
 
                                                                                     if(serializationmethod)
                                                                                       {
-                                                                                        delete serializationmethod;
+                                                                                        GEN_DELETE serializationmethod;
                                                                                       }
                 
                                                                                     SendMsg(&ID_message, DIOCOREPROTOCOL_HEADER_OPERATION_REGISTERDATA, DIOCOREPROTOCOL_REGISTRATIONDATA_SEND_OPERATION_PARAM, &classcontent);
@@ -1963,7 +1963,7 @@ bool DIOCOREPROTOCOL_CONNECTION::CreateIDConnection(XUUID& ID)
 
   ID.GetToString(origin);
 
-  delete sha2;
+  GEN_DELETE sha2;
 
   return true;
 }
@@ -2043,12 +2043,12 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
 
           if(!status)
             {
-              delete message;
+              GEN_DELETE message;
             }  
         }                                                                                                                                                       
     }
 
-  delete header;
+  GEN_DELETE header;
            
   return true;
 }
@@ -2129,12 +2129,12 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
 
           if(!status)           
             {
-              delete message;
+              GEN_DELETE message;
             }  
         }                                                                                                                                                       
     }
 
-  delete header;
+  GEN_DELETE header;
            
   return true;
 }
@@ -2215,12 +2215,12 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
 
           if(!status)                       
             {
-              delete message;
+              GEN_DELETE message;
             }  
         }                                                                                                                                                 
     }
 
-  delete header;
+  GEN_DELETE header;
    
   return status;
 }
@@ -2309,12 +2309,12 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
 
           if(!status)          
             {
-              delete message;
+              GEN_DELETE message;
             }  
         }                                                                                                                                                 
     }
 
-  delete header;
+  GEN_DELETE header;
                
   return true;
 }

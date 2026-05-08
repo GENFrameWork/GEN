@@ -814,7 +814,7 @@ bool XSCHEDULER::Task_Del(int index)
   if(task)
     {
       status = tasks.Delete(task);
-      delete task;
+      GEN_DELETE task;
     }
 
   xmutexscheduler->UnLock();
@@ -851,7 +851,7 @@ bool XSCHEDULER::Task_DelForID(XDWORD ID)
           if(task->GetID()==ID)
             {
               status = tasks.Delete(task);
-              delete task;
+              GEN_DELETE task;
               break;
             }
         }

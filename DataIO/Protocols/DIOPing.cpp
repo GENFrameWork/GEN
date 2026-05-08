@@ -313,7 +313,7 @@ DIOPING::~DIOPING()
 
   if(urltarget) 
     {
-      delete urltarget;
+      GEN_DELETE urltarget;
     }
 
   if(xtimer) 
@@ -401,7 +401,7 @@ bool DIOPING::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;

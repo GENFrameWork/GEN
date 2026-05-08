@@ -298,7 +298,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::DeleteBlock(XCHAR* nameblock, XDWORD ind
   if(block)
     { 
       blocks.Delete(block);
-      delete block;
+      GEN_DELETE block;
 
       return true;
     }
@@ -440,7 +440,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
 
   if(part && part->iniline == -1)
     {
-      delete part;
+      GEN_DELETE part;
       part = NULL;    
     }
   
@@ -532,7 +532,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
                                   PostEvent(&vfevent, GetGrpVectorFile());                           
 
                                   indexline++;                          
-                                  delete value;
+                                  GEN_DELETE value;
                            
                                   continue;
 

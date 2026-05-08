@@ -113,7 +113,7 @@ void XFILERIFF_LIST::SetType(XDWORD type)
 {
   this->type = type; 
 
-  #ifdef GEN_DEBUG    
+  #ifdef DEBUG_ACTIVE    
   
   typestr[0] = (type & 0x000000FF);
   typestr[1] = (type & 0x0000FF00) >> 8;
@@ -201,7 +201,7 @@ void XFILERIFF_LIST::SetTypeList(XDWORD typelist)
 {
   this->typelist = typelist;  
 
-  #ifdef GEN_DEBUG    
+  #ifdef DEBUG_ACTIVE    
   
   typeliststr[0] = (typelist & 0x000000FF);
   typeliststr[1] = (typelist & 0x0000FF00) >> 8;
@@ -258,7 +258,7 @@ void XFILERIFF_LIST::Clean()
   typelist          = 0;  
   positionfiledata  = 0;
 
-  #ifdef GEN_DEBUG    
+  #ifdef DEBUG_ACTIVE    
   
   memset(typestr      , 0, 5);
   memset(typeliststr  , 0, 5);  
@@ -380,25 +380,25 @@ bool XFILERIFF::ReadAllLists()
    
   if(!xfilebase->Read((XBYTE*)&type, sizeof(XDWORD)))                   
     { 
-      delete root_data;
+      GEN_DELETE root_data;
       return false;
     }    
  
   if((type != XFILERIFF_TYPE_RIFF) && (type != XFILERIFF_TYPE_LIST))    
     {
-      delete root_data;
+      GEN_DELETE root_data;
       return false;
     }
 
   if(!xfilebase->Read((XBYTE*)&size, sizeof(XDWORD)))      
     {
-      delete root_data;
+      GEN_DELETE root_data;
       return false;
     }
 
   if(!size) 
     {
-      delete root_data;
+      GEN_DELETE root_data;
       return false;
     }
 
@@ -431,7 +431,7 @@ bool XFILERIFF::ReadAllLists()
         }
     }
  
-  delete root_data;
+  GEN_DELETE root_data;
 
   return false;
 }
@@ -812,7 +812,7 @@ XFILERIFF_LIST_NODE* XFILERIFF::CreateListNode(XDWORD type, XDWORD typelist)
   XFILERIFF_LIST_NODE* node = GEN_NEW XFILERIFF_LIST_NODE(list);
   if(!node)   
     {
-      delete list;
+      GEN_DELETE list;
       return NULL;
     }
 
@@ -870,7 +870,7 @@ XFILERIFF_LIST_NODE* XFILERIFF::CreateChunkNode(XDWORD type, XDWORD datasize)
   XFILERIFF_LIST_NODE* node = GEN_NEW XFILERIFF_LIST_NODE(list);
   if(!node)   
     {
-      delete list;
+      GEN_DELETE list;
       return NULL;
     }
 

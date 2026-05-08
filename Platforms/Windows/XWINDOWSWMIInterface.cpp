@@ -683,7 +683,7 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XSTRING& ans
         }
     }
 
-  delete result;
+  GEN_DELETE result;
 
   return status;
 }
@@ -733,7 +733,7 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVECTOR<XSTR
         }
     }
 
-  delete result;
+  GEN_DELETE result;
 
   return status;
 }
@@ -776,7 +776,7 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVARIANT& an
         }
     }
 
-  delete result;
+  GEN_DELETE result;
 
   return status;
 }
@@ -826,7 +826,7 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVECTOR<XVAR
         }
     }
 
-  delete result;
+  GEN_DELETE result;
 
   return status;
 }

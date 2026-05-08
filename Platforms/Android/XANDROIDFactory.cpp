@@ -123,7 +123,7 @@ bool XANDROIDFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
   if(!xthread) return false;
 
   XANDROIDTHREAD* _xthread = (XANDROIDTHREAD*)xthread;
-  delete _xthread;
+  GEN_DELETE _xthread;
 
   return true;
 };

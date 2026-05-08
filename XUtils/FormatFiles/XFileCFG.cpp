@@ -515,7 +515,7 @@ XFILECFG::XFILECFG(XCHAR* namefile)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFG::~XFILECFG()
 {
-  if(fileini) delete fileini;
+  if(fileini) GEN_DELETE fileini;
 
   DeleteAllRemarks();
   DeleteAllValues();
@@ -929,7 +929,7 @@ XVARIANT* XFILECFG::GetValue(XCHAR* group, XCHAR* ID)
                   switch(cfgvalue->GetType())
                     {
                       case XFILECFG_VALUETYPE_UNKNOWN :
-                                             default  : delete value; 
+                                             default  : GEN_DELETE value; 
                                                         value = NULL;
                                                         break;
 
@@ -979,7 +979,7 @@ XVARIANT* XFILECFG::GetValue(XFILECFGVALUE* CFGvalue)
   switch(CFGvalue->GetType())
     {
       case XFILECFG_VALUETYPE_UNKNOWN :
-                              default : delete value; 
+                              default : GEN_DELETE value; 
                                         value = NULL;
                                         break;
 
@@ -1057,7 +1057,7 @@ bool XFILECFG::SetValue(XFILECFGVALUE* CFGvalue, XVARIANT* value)
    switch(CFGvalue->GetType())
     {
       case XFILECFG_VALUETYPE_UNKNOWN :
-                              default : { delete (XBYTE*)(CFGvalue->GetValue());
+                              default : { GEN_DELETE (XBYTE*)(CFGvalue->GetValue());
                                           CFGvalue->SetValue(NULL);                                          
                                         }
                                         break;
@@ -1203,7 +1203,7 @@ bool XFILECFG::DelCFGValue(XCHAR* group, XCHAR* ID)
 
   values.Delete(CFGvalue);
 
-  delete CFGvalue;
+  GEN_DELETE CFGvalue;
   
   return true;
 }

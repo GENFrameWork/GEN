@@ -109,7 +109,7 @@ MYSQL_RESULT::~MYSQL_RESULT()
 
         }
 
-      delete[] bindresults;
+      GEN_DELETE_ARRAY bindresults;
       bindresults = NULL;
 
     }

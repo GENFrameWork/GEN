@@ -30,7 +30,7 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#undef XMEMORY_CONTROL_ACTIVE
+//#undef XMEMORY_CONTROL_ACTIVE
 
 
 #include <windows.h>

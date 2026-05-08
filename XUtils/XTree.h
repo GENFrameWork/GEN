@@ -116,7 +116,7 @@ class XTREE_NODE
                                         child->DeleteContents();
                                         child->DeleteAll();
 
-                                        delete child;
+                                        GEN_DELETE child;
 
                                         if(!children.Delete(child)) return false;
 
@@ -143,7 +143,7 @@ class XTREE_NODE
                                       {
                                         if(!data) return false;
 
-                                        delete data;
+                                        GEN_DELETE data;
                                         data = NULL;
 
                                         return true;
@@ -336,7 +336,7 @@ class XTREE
 
     virtual                          ~XTREE                   ()
                                       {
-                                        if(root) delete root;
+                                        if(root) GEN_DELETE root;
 
                                         Clean();
                                       }
@@ -348,7 +348,7 @@ class XTREE
 
     void                              SetRoot                 (XTREE_NODE<T>* root)
                                       {
-                                        if(this->root)  delete this->root;
+                                        if(this->root)  GEN_DELETE this->root;
                                         this->root = root;
                                       }
 

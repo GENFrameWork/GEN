@@ -339,7 +339,7 @@ bool XFILEINISECTION::DeleteKey(XSTRING& key)
   if(!okey) return false;
 
   keys.Delete(okey);
-  delete okey;
+  GEN_DELETE okey;
 
   return true;
 }
@@ -975,7 +975,7 @@ bool XFILEINI::DeleteSection(XSTRING& section)
                   sections.Delete(osection);
 
                   osection->Clean();
-                  delete osection;
+                  GEN_DELETE osection;
 
                   return true;
                 }
@@ -1584,7 +1584,7 @@ bool XFILEINI::ConvertFromLines()
 
               switch(remark->GetType())
                 {
-                  case XFILEINI_TYPEREMARK_UNKNOWN     : delete remark;   
+                  case XFILEINI_TYPEREMARK_UNKNOWN     : GEN_DELETE remark;   
                                                          break; 
 
                   case XFILEINI_TYPEREMARK_ALL_LINE    : remarks.Add(remark);

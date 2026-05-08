@@ -152,7 +152,7 @@ bool XRAND::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -181,8 +181,8 @@ bool XRAND::Ini()
   initialvaluelong += (XQWORD)prime1;
   initialvaluelong += (XQWORD)prime2;
 
-  delete prime1;
-  delete prime2;
+  GEN_DELETE prime1;
+  GEN_DELETE prime2;
 
   srand((int)(initialvaluelong));
 

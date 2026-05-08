@@ -86,7 +86,7 @@ DIODEVICESPI::~DIODEVICESPI()
 {
   if(xtimerout) GEN_XFACTORY.DeleteTimer(xtimerout);
 
-  if(diostreamcfg) delete diostreamcfg;
+  if(diostreamcfg) GEN_DELETE diostreamcfg;
 
   Clean();
 }
@@ -248,7 +248,7 @@ bool DIODEVICESPI::End()
 
   if(diostreamcfg) 
     {
-      delete diostreamcfg;
+      GEN_DELETE diostreamcfg;
       diostreamcfg = NULL;
     }
 

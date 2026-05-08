@@ -333,7 +333,7 @@ void DB_SQL_QUERY::ClearBuffers()
   for(XDWORD e=0; e<buffers.GetSize(); e++)
     {
       XBUFFER * buffer = buffers.Get(e);
-      delete buffer;
+      GEN_DELETE buffer;
     }
 
   buffers.DeleteAll();

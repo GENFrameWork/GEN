@@ -147,7 +147,7 @@ bool INPFACTORY::DelInstance()
 {
   if(!instance) return false;
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;
@@ -178,7 +178,7 @@ INPDEVICE* INPFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 * @brief      Delete device
 * @ingroup    INPUT
 *
-* @param[in]  device : delete device
+* @param[in]  device : GEN_DELETE device
 *
 * @return     bool : true if is succesful.
 *

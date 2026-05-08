@@ -419,7 +419,7 @@ bool SQLITE_DATABASE::SetDatabaseEncoding(DB_SQL_DATABASE_ENCODING encodingtouse
                                                         query->Set(__L("PRAGMA encoding=\"UTF-8\""));
                                                         int rc = query->Execute();
 
-                                                        delete query;
+                                                        GEN_DELETE query;
 
                                                         return rc==0;
                                                       }

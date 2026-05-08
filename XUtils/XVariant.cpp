@@ -1649,39 +1649,39 @@ bool XVARIANT::Destroy()
         { 
           case XVARIANT_TYPE_NULL           : break;
 
-          case XVARIANT_TYPE_BOOLEAN        : delete (bool*)data;           break;
+          case XVARIANT_TYPE_BOOLEAN        : GEN_DELETE (bool*)data;           break;
 
-          case XVARIANT_TYPE_SHORT          : delete (short*)data;          break;
-          case XVARIANT_TYPE_WORD           : delete (XWORD*)data;          break;          
-          case XVARIANT_TYPE_INTEGER        : delete (int*)data;            break;
-          case XVARIANT_TYPE_DWORD          : delete (XDWORD*)data;         break;          
-          case XVARIANT_TYPE_DOUBLEINTEGER  : delete (long long*)data;      break;
-          case XVARIANT_TYPE_QWORD          : delete (XQWORD*)data;         break;
+          case XVARIANT_TYPE_SHORT          : GEN_DELETE (short*)data;          break;
+          case XVARIANT_TYPE_WORD           : GEN_DELETE (XWORD*)data;          break;          
+          case XVARIANT_TYPE_INTEGER        : GEN_DELETE (int*)data;            break;
+          case XVARIANT_TYPE_DWORD          : GEN_DELETE (XDWORD*)data;         break;          
+          case XVARIANT_TYPE_DOUBLEINTEGER  : GEN_DELETE (long long*)data;      break;
+          case XVARIANT_TYPE_QWORD          : GEN_DELETE (XQWORD*)data;         break;
 
-          case XVARIANT_TYPE_FLOAT          : delete (float*)(data);        break;
-          case XVARIANT_TYPE_DOUBLE         : delete (double*)(data);       break;
+          case XVARIANT_TYPE_FLOAT          : GEN_DELETE (float*)(data);        break;
+          case XVARIANT_TYPE_DOUBLE         : GEN_DELETE (double*)(data);       break;
 
-          case XVARIANT_TYPE_CHAR           : delete (char*)(data);         break;
-          case XVARIANT_TYPE_XCHAR          : delete (XCHAR*)(data);        break;          
+          case XVARIANT_TYPE_CHAR           : GEN_DELETE (char*)(data);         break;
+          case XVARIANT_TYPE_XCHAR          : GEN_DELETE (XCHAR*)(data);        break;          
 
           case XVARIANT_TYPE_STRING         : { XSTRING* string = (XSTRING*)data;
-                                                delete string;      
+                                                GEN_DELETE string;      
                                               }
                                               break;      
 
           case XVARIANT_TYPE_DATE           :
           case XVARIANT_TYPE_TIME           :
           case XVARIANT_TYPE_DATETIME       : { XDATETIME* datetime = (XDATETIME*)data;    
-                                                delete datetime;  
+                                                GEN_DELETE datetime;  
                                               }
                                               break;
 
           case XVARIANT_TYPE_BUFFER         : { XBUFFER* buffer = (XBUFFER*)data;
-                                                delete buffer;      
+                                                GEN_DELETE buffer;      
                                               }
                                               break;
 
-          case XVARIANT_TYPE_POINTER        : delete (XBYTE*)(data);         break;           
+          case XVARIANT_TYPE_POINTER        : GEN_DELETE (XBYTE*)(data);         break;           
 
                                   default   : break;
         }

@@ -152,7 +152,7 @@ bool UI_MANAGER::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
     }  
 
@@ -368,7 +368,7 @@ bool UI_MANAGER::CloseUnZipFile()
     }
 
   unzipfile->Close();
-  delete unzipfile;
+  GEN_DELETE unzipfile;
 
   unzipfile = NULL;
 
@@ -496,7 +496,7 @@ UI_LAYOUT* UI_MANAGER::Layouts_Get(XSTRING& name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_MANAGER::Layouts_DeleteAll()
-* @brief      Layouts delete all
+* @brief      Layouts GEN_DELETE all
 * @ingroup    USERINTERFACE
 *
 * @return     bool : true if is succesful. 
@@ -1731,7 +1731,7 @@ UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPP
       return animation;
     }
   
-  delete animation;
+  GEN_DELETE animation;
 
   return NULL;  
 }
@@ -2359,7 +2359,7 @@ bool UI_MANAGER::DeleteVirtualKeyboard()
 
   status = virtualkeyboard->End();
 
-  delete virtualkeyboard;
+  GEN_DELETE virtualkeyboard;
   virtualkeyboard = NULL;
 
   return status;    
@@ -2402,7 +2402,7 @@ UI_MANAGER::~UI_MANAGER()
   
   if(unzipfile)
     {
-      delete unzipfile;
+      GEN_DELETE unzipfile;
       unzipfile = NULL;
     }  
 
@@ -2790,7 +2790,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* 
 
   if(!GetLayoutElement_Base(node, layout, element_text))
     {
-      delete element_text;
+      GEN_DELETE element_text;
       return NULL;
     }
 
@@ -2800,7 +2800,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* 
     {
       if(!GetParentSizeFont(node->GetFather(), sizefont))
         {
-          delete element_text;
+          GEN_DELETE element_text;
           return NULL;
         }
     }
@@ -2937,7 +2937,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
 
   if(!GetLayoutElement_Base(node, layout, element_textbox, true))
     {
-      delete element_textbox;
+      GEN_DELETE element_textbox;
       return NULL;
     }
 
@@ -2951,7 +2951,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
     {
       if(!GetParentSizeFont(node->GetFather(), sizefont))
         {
-          delete element_textbox;
+          GEN_DELETE element_textbox;
           return NULL;
         }
     }
@@ -3073,7 +3073,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
   
   if(!GetLayoutElement_Base(node, layout, element_image))
     {
-      delete element_image;
+      GEN_DELETE element_image;
       return NULL;
     }
 
@@ -3164,7 +3164,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
   
   if(!GetLayoutElement_Base(node, layout, element_animation))
     {
-      delete element_animation;
+      GEN_DELETE element_animation;
       return NULL;
     } 
 
@@ -3327,7 +3327,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Option(XFILEXMLELEMENT* node, UI_LAYOUT
 
   if(!GetLayoutElement_Base(node, layout, element_option))
     {
-      delete element_option;
+      GEN_DELETE element_option;
       return NULL;
     } 
 
@@ -3447,7 +3447,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_MultiOption(XFILEXMLELEMENT* node, UI_L
  
   if(!GetLayoutElement_Base(node, layout, element_multioption))
     {
-      delete element_multioption;
+      GEN_DELETE element_multioption;
       return NULL;
     }
 
@@ -3567,7 +3567,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* 
  
   if(!GetLayoutElement_Base(node, layout, element_form))
     {
-      delete element_form;
+      GEN_DELETE element_form;
       return NULL;
     }
 
@@ -3752,7 +3752,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
 
   if(!GetLayoutElement_Base(node, layout, element_progressbar))
     {
-      delete element_progressbar;
+      GEN_DELETE element_progressbar;
       return NULL;
     } 
 
@@ -4224,7 +4224,7 @@ GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTY
       bitmap = bitmapfile->Load(xpath, mode);    
     }
 
-  delete bitmapfile;
+  GEN_DELETE bitmapfile;
 
   return bitmap;
 }

@@ -97,7 +97,7 @@ CIPHERKEYSFILEGKF::~CIPHERKEYSFILEGKF()
 {
   DeleteAllKeys();
 
-  if(xfilexml) delete xfilexml;
+  if(xfilexml) GEN_DELETE xfilexml;
 
   Clean();
 }
@@ -269,7 +269,7 @@ bool CIPHERKEYSFILEGKF::DeleteKey(CIPHERKEYTYPE type)
           if(key->GetType() == type)
             {
               keys.Delete(key);
-              delete key;
+              GEN_DELETE key;
             }
         }
     }

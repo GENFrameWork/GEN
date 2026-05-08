@@ -195,7 +195,7 @@ void Call_GetFileCFGValue(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
       if(variable) 
         {
           variable->ToString(datakey);        
-          delete variable;
+          GEN_DELETE variable;
         }
 
     }

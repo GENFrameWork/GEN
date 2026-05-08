@@ -109,7 +109,7 @@ bool XTRANSLATION::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -521,7 +521,7 @@ bool XTRANSLATION::Translate_Delete()
     {
       if(sentences[c])
         {
-          delete [] sentences[c];
+          GEN_DELETE_ARRAY sentences[c];
           sentences[c] = NULL;
         }
     }

@@ -144,7 +144,7 @@ XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XFILEJSON& fileJSON)
 
   if(!root) 
     {
-      delete serializable;
+      GEN_DELETE serializable;
       serializable = NULL;
     }
    else
@@ -305,7 +305,7 @@ bool XSERIALIZABLE::HasBeenChanged()
           contentstring.ConvertToUTF8(contentbinary);
 
           SetSerializationMethod(NULL);  
-          delete serializationmethod;  
+          GEN_DELETE serializationmethod;  
 
           hasbeenchanged = !contentbinary.Compare(cache);
           if(hasbeenchanged)

@@ -85,7 +85,7 @@ XPATHSMANAGERSECTION::XPATHSMANAGERSECTION()
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATHSMANAGERSECTION::~XPATHSMANAGERSECTION()
 {
-  if(xpath) delete xpath;
+  if(xpath) GEN_DELETE xpath;
 
   Clean();
 }
@@ -154,7 +154,7 @@ bool XPATHSMANAGER::DelInstance()
 {
   if(!instance) return false;
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;
@@ -519,7 +519,7 @@ XPATHSMANAGER::~XPATHSMANAGER()
 
   if(appexecpath)
     {
-      delete appexecpath;
+      GEN_DELETE appexecpath;
     }
 
   Clean();

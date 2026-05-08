@@ -165,7 +165,7 @@ GRPBITMAP* GRPBITMAPFILEJPG::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
 
             } else status = false;
 
-          delete [] databuffer;
+          GEN_DELETE_ARRAY databuffer;
 
         } else status = false;
 
@@ -237,7 +237,7 @@ GRPBITMAP* GRPBITMAPFILEJPG::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
 
             } else status = false;
 
-          delete [] databuffer;
+          GEN_DELETE_ARRAY databuffer;
 
         } else status = false;
 
@@ -312,7 +312,7 @@ bool GRPBITMAPFILEJPG::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
       status = EncodeToFile(bitmap->GetWidth(), bitmap->GetHeight(),  databuffer, quality, false);
     }
 
-  delete [] databuffer;
+  GEN_DELETE_ARRAY databuffer;
 
   Close();
 
@@ -378,7 +378,7 @@ bool GRPBITMAPFILEJPG::ReadHeaderFile(GRPBITMAPFILEJPGHEADER* header)
 
   GetPrimaryFile()->SetPosition(0);
 
-  delete [] file_buffer;
+  GEN_DELETE_ARRAY file_buffer;
 
   return true;
 }
@@ -509,7 +509,7 @@ bool GRPBITMAPFILEJPG::DecodeToBufferFromFile(XBYTE* buffer)
 
   GetPrimaryFile()->SetPosition(0);
 
-  delete [] file_buffer;
+  GEN_DELETE_ARRAY file_buffer;
 
   return true;
 }

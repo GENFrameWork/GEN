@@ -606,7 +606,7 @@ bool MAINPROCWINDOWS::Factorys_End()
   #ifdef XTRACE_VIRTUALCLOCKTICK
   if(xtimerclock)
     {
-      delete xtimerclock;
+      GEN_DELETE xtimerclock;
       xtimerclock = NULL;
     }
   #endif
@@ -1673,7 +1673,7 @@ int Exception_Filter(XDWORD code, struct _EXCEPTION_POINTERS* ep)
                                                   if(alert)
                                                     {
                                                       GEN_DIOALERTS.Send(DIOALERTSSENDER_ALL, DIOALERTS_CONDITIONS_ID_GENINTERN_EXCEPTION, alert);
-                                                      delete alert;
+                                                      GEN_DELETE alert;
                                                     }
                                                   #endif
 
@@ -1688,7 +1688,7 @@ int Exception_Filter(XDWORD code, struct _EXCEPTION_POINTERS* ep)
 
   if(allexceptiontext)
     {
-      delete allexceptiontext;
+      GEN_DELETE allexceptiontext;
       allexceptiontext = NULL;
     }
 

@@ -427,7 +427,7 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetUSBDescriptor(HDEVINFO& hdevinfo, i
                   device->GetDescriptor()->SetNumConfigurations(devicedescriptor->bNumConfigurations);
                 }
 
-              delete [] buffer;
+              GEN_DELETE_ARRAY buffer;
             }
         }
 
@@ -441,7 +441,7 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetUSBDescriptor(HDEVINFO& hdevinfo, i
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
-* @brief      Search and delete equal devices
+* @brief      Search and GEN_DELETE equal devices
 * @ingroup    PLATFORM_WINDOWS
 *
 * @return     bool : true if is succesful.
@@ -468,7 +468,7 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
                       if((!device1->GetLocation()->Compare(device2->GetLocation()->Get()) && (device1->GetClass() == device2->GetClass())))
                         {
                           devices.Delete(device1);
-                          delete device1;
+                          GEN_DELETE device1;
 
                           found = true;
                           break;

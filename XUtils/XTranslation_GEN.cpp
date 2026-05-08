@@ -84,7 +84,7 @@ XTRANSLATION_GEN_SENTENCE::XTRANSLATION_GEN_SENTENCE()
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION_GEN_SENTENCE::~XTRANSLATION_GEN_SENTENCE()
 {
-  if(sentence) delete [] sentence;
+  if(sentence) GEN_DELETE_ARRAY sentence;
 
   Clean();
 }
@@ -156,7 +156,7 @@ bool XTRANSLATION_GEN::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -252,7 +252,7 @@ bool XTRANSLATION_GEN::Sentence_Add(XDWORD ID, XDWORD codelanguage, XCHAR* sente
   sentenceGEN->fixed        = fixed;
   if(!sentenceGEN->sentence)
     {
-      delete sentenceGEN;
+      GEN_DELETE sentenceGEN;
       return false;
     }
 
@@ -465,7 +465,7 @@ bool XTRANSLATION_GEN::Sentences_AddAll()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XTRANSLATION_GEN::Sentences_DeleteAll()
-* @brief      Sentences delete all
+* @brief      Sentences GEN_DELETE all
 * @ingroup    XUTILS
 *
 * @return     bool : true if is succesful.

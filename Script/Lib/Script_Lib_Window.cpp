@@ -364,7 +364,7 @@ void Call_Window_GetPosX(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
                                               if(bitmaprefcap)
                                                 {
                                                   bitmapfileref->Save(xpathbitmaptest, bitmaprefcap);
-                                                  delete bitmaprefcap;
+                                                  GEN_DELETE bitmaprefcap;
                                                 }
                                               */  
                                               #endif
@@ -387,8 +387,8 @@ void Call_Window_GetPosX(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
                                                     }      
                                                 }                                                 
 
-                                              delete bitmapref;
-                                              delete bitmapfileref;    
+                                              GEN_DELETE bitmapref;
+                                              GEN_DELETE bitmapfileref;    
                                             }                                            
                                         }
                                        else  
@@ -408,7 +408,7 @@ void Call_Window_GetPosX(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
                                       windowsposy = 0xFFFFFE;
                                     }
 
-                                  delete bitmapscreen;
+                                  GEN_DELETE bitmapscreen;
 
                                   GEN_GRPFACTORY.DeleteScreen(screen);                                
                                 }
@@ -1084,7 +1084,7 @@ bool FindSubBitmap(GRPBITMAP* bitmapscreen, GRPBITMAP* bitmapref, int& x, int& y
         }      
     }
  
-  delete _bitmap;
+  GEN_DELETE _bitmap;
   
   return found;  
 }

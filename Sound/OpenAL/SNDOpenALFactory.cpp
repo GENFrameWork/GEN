@@ -341,7 +341,7 @@ bool SNDOPENALFACTORY::Update()
                                                                           } 
                                                           
                                                                         soundplayitems.Delete(playitem);
-                                                                        delete playitem;
+                                                                        GEN_DELETE playitem;
 
                                                                         if(playmutex)
                                                                           {
@@ -463,7 +463,7 @@ bool SNDOPENALFACTORY::Sound_Play(SNDITEM* item, SNDPLAYCFG* playCFG, int ntimes
   SNDOPENALPLAYITEM* soundplayitem = GEN_NEW SNDOPENALPLAYITEM();
   if(!soundplayitem) 
     {
-      delete source;
+      GEN_DELETE source;
       return false;
     }
 

@@ -84,7 +84,7 @@ GRPVECTORFILEDXFTEXTBLOCK::~GRPVECTORFILEDXFTEXTBLOCK()
 
   if(entitiessection)
     {
-      delete entitiessection;
+      GEN_DELETE entitiessection;
     }
 
   Clean();

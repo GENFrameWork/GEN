@@ -181,7 +181,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
                                                             if(!bmp->CopyBuffer(buffer))
                                                               {
-                                                                delete bmp;
+                                                                GEN_DELETE bmp;
                                                                 return NULL;
                                                               }
 
@@ -242,7 +242,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
                                                             if(!CopyFrom(bitmap)) return false;
 
-                                                            delete bitmap;
+                                                            GEN_DELETE bitmap;
 
                                                             return true;
                                                           }
@@ -266,7 +266,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
                                                             if(!CopyFrom(bitmap)) return false;
 
-                                                            delete bitmap;
+                                                            GEN_DELETE bitmap;
 
                                                             return true;
                                                           }
@@ -314,7 +314,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
                                                             if(!CopyFrom(bitmap)) return false;
 
-                                                            delete bitmap;
+                                                            GEN_DELETE bitmap;
 
                                                             return true;
                                                           }
@@ -348,7 +348,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
                                                             if(!CopyFrom(bitmap)) return false;
 
-                                                            delete bitmap;
+                                                            GEN_DELETE bitmap;
 
                                                             return true;
                                                           }
@@ -361,7 +361,7 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
 
                                                             if(!CopyFrom(bitmap)) return false;
 
-                                                            delete bitmap;
+                                                            GEN_DELETE bitmap;
 
                                                             return true;
                                                           }
@@ -409,19 +409,19 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
                                                           {
                                                             if(buffer)
                                                               {
-                                                                delete [] buffer;
+                                                                GEN_DELETE_ARRAY buffer;
                                                                 buffer = NULL;
                                                               }
 
                                                             if(pixelformatbuffer)
                                                               {
-                                                                delete pixelformatbuffer;
+                                                                GEN_DELETE pixelformatbuffer;
                                                                 pixelformatbuffer = NULL;
                                                               }
 
                                                             if(renderer_base)
                                                               {
-                                                                delete renderer_base;
+                                                                GEN_DELETE renderer_base;
                                                                 renderer_base = NULL;
                                                               }
 

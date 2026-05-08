@@ -496,7 +496,7 @@ bool DB_SQL_DATABASE::Table_IsThere(XCHAR* nametable, XCHAR* constfield, bool& i
 
     }
 
-  delete query;
+  GEN_DELETE query;
 
   return status;
 }
@@ -559,7 +559,7 @@ bool DB_SQL_DATABASE::Table_Create(XCHAR* nametable, XCHAR* fields[], int nfield
 
   status = Execute(query);
 
-  delete query;
+  GEN_DELETE query;
 
   return status;
 }
@@ -601,7 +601,7 @@ bool DB_SQL_DATABASE::Table_Delete(XCHAR* nametable)
         }
     }
 
-  delete query;
+  GEN_DELETE query;
 
   return status;
 }
@@ -646,7 +646,7 @@ bool DB_SQL_DATABASE::Table_GetNRecords(XCHAR* nametable, XQWORD& nrecords)
         }
     }
 
-  delete query;
+  GEN_DELETE query;
 
   return status;
 }

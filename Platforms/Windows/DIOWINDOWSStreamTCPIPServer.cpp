@@ -399,11 +399,11 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStreamDisconnected()
             {
               if(diostream->GetConfig())
                 {
-                  delete diostream->GetConfig();
+                  GEN_DELETE diostream->GetConfig();
                 }
 
               diostream->Close();
-              delete diostream;
+              GEN_DELETE diostream;
               GetMultiSocketStreams()->Delete(diostream);    
 
               continue;
@@ -437,10 +437,10 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStream()
         {
           if(diostream->GetConfig())
             {
-              delete diostream->GetConfig();
+              GEN_DELETE diostream->GetConfig();
             }
 
-          delete diostream;
+          GEN_DELETE diostream;
           GetMultiSocketStreams()->Delete(diostream);    
 
           continue;          

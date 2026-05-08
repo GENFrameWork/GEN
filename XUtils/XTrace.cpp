@@ -882,7 +882,7 @@ XVECTOR<XTRACE_STATUS_MSG*>* XTRACE_STATUS_MSGS::StatusMsg_GetAll()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XTRACE_STATUS_MSGS::StatusMsg_DeleteAll()
-* @brief      Status msg delete all
+* @brief      Status msg GEN_DELETE all
 * @ingroup    XUTILS
 *
 * @return     bool : true if is succesful. 

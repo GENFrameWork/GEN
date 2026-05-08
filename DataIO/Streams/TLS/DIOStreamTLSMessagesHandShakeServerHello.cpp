@@ -361,7 +361,7 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_Add(DIOSTREAMTLS_MSG_EXT
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_DeleteAll()
-* @brief      extensions  delete all
+* @brief      extensions  GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 

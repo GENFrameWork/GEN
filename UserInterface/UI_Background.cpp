@@ -81,7 +81,7 @@ UI_BACKGROUND::~UI_BACKGROUND()
 {
   if(bitmap)
     {
-      delete bitmap;
+      GEN_DELETE bitmap;
     }
 
   Clean();

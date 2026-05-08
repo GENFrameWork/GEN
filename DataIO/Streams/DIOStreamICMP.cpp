@@ -86,7 +86,7 @@ DIOSTREAMICMPDATAGRAM::DIOSTREAMICMPDATAGRAM()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMICMPDATAGRAM::~DIOSTREAMICMPDATAGRAM()
 {
-  if(data) delete data;
+  if(data) GEN_DELETE data;
 
   Clean();
 }
@@ -274,7 +274,7 @@ DIOSTREAMICMP::~DIOSTREAMICMP()
 {
   DeleteAllDatagrams();
 
-  delete host;
+  GEN_DELETE host;
 
   GEN_XFACTORY.Delete_Mutex(datagramsmutex);
 
@@ -729,7 +729,7 @@ bool DIOSTREAMICMP::DeleteDatagram(int index)
   if(datagram)
     {
       datagrams.DeleteIndex(index);
-      delete datagram;
+      GEN_DELETE datagram;
     }
 
   if(datagramsmutex)  datagramsmutex->UnLock();

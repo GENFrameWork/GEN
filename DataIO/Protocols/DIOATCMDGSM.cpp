@@ -982,8 +982,8 @@ bool DIOATCMDGSM::CodecPDUFormat(XCHAR* number, XCHAR* message, bool inoctets, i
       result += string;
     }
 
-  delete [] codec7;
-  delete [] codec8;
+  GEN_DELETE_ARRAY codec7;
+  GEN_DELETE_ARRAY codec8;
 
   length.Format(__L("%d"),(result.GetSize()/2)-1);
 

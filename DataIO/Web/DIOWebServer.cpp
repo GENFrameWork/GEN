@@ -730,7 +730,7 @@ DIOWEBSERVER_REQUEST::DIOWEBSERVER_REQUEST()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_REQUEST::~DIOWEBSERVER_REQUEST()
 {
-  delete data;
+  GEN_DELETE data;
 
   Clean();
 }
@@ -2068,7 +2068,7 @@ bool DIOWEBSERVER_CONNECTION::ReadRequest()
 
         } while(size);
 
-      delete [] buffer;
+      GEN_DELETE_ARRAY buffer;
     }
 
   //----------------------------------------------------------------------------------
@@ -2161,7 +2161,7 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_CreateAcceptKey(XSTRING& key, XSTRING& r
   
   sha1->GetResult()->ConvertToBase64(result);
 
-  delete sha1;
+  GEN_DELETE sha1;
 
   return status;
 }
@@ -2952,7 +2952,7 @@ bool DIOWEBSERVER::DelAuthentication(XSTRING& guest)
 
   authentications.Delete(authentication);
 
-  delete authentication;
+  GEN_DELETE authentication;
 
   return true;
 }
@@ -3540,7 +3540,7 @@ bool DIOWEBSERVER::End()
 
   if(diostreamcfg)
     {
-      delete diostreamcfg;
+      GEN_DELETE diostreamcfg;
       diostreamcfg = NULL;
     }
 
@@ -3680,10 +3680,10 @@ bool DIOWEBSERVER::Connections_CreateNew()
             else
             {
               connection->End();
-              delete connection;
+              GEN_DELETE connection;
             }
 
-        } else delete connection;
+        } else GEN_DELETE connection;
     }
 
   if(xmutexconnections) xmutexconnections->UnLock();
@@ -3695,7 +3695,7 @@ bool DIOWEBSERVER::Connections_CreateNew()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOWEBSERVER::Connections_DeleteUsed()
-* @brief      Connections delete used
+* @brief      Connections GEN_DELETE used
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -3720,7 +3720,7 @@ bool DIOWEBSERVER::Connections_DeleteUsed()
                   // XTRACE_PRINTCOLOR(1, __L("Delete Connexion: [%08X]"), connection);
 
                   connections.Delete(connection);
-                  delete connection;
+                  GEN_DELETE connection;
 
                 } else c++;
             }
@@ -3737,7 +3737,7 @@ bool DIOWEBSERVER::Connections_DeleteUsed()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOWEBSERVER::Connections_DeleteWaiting()
-* @brief      Connections delete waiting
+* @brief      Connections GEN_DELETE waiting
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -3757,7 +3757,7 @@ bool DIOWEBSERVER::Connections_DeleteWaiting()
               if((!connection->IsRequestInProgress())  && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_GETTINGCONNECTION))
                 {
                   connections.Delete(connection);
-                  delete connection;
+                  GEN_DELETE connection;
 
                 } else c++;
             }
@@ -3774,7 +3774,7 @@ bool DIOWEBSERVER::Connections_DeleteWaiting()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOWEBSERVER::Connections_DeleteAll()
-* @brief      Connections delete all
+* @brief      Connections GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.

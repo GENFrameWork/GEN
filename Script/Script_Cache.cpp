@@ -105,7 +105,7 @@ bool SCRIPT_CACHE::DelInstance()
 {
   if(!instance) return false;
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;
@@ -174,7 +174,7 @@ bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script)
 
   if(!_script)
     {
-      delete _script;
+      GEN_DELETE _script;
       return false;
     }
   
@@ -384,7 +384,7 @@ bool SCRIPT_CACHE::Cache_AllDirectory(XPATH& xpath)
                   script->Load(xpathnamefile);                                      
                 } 
 
-               delete script;
+               GEN_DELETE script;
             }
            
         } while(xdir->NextSearch(&element));
@@ -493,7 +493,7 @@ bool SCRIPT_CACHE::Cache_AllList(XVECTOR<XSTRING*>* listscripts)
                         }
                       #endif                                          
                       
-                      delete script;
+                      GEN_DELETE script;
                       script = NULL;
 
                     }                    

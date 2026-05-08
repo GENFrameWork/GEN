@@ -237,7 +237,7 @@ bool DIOANDROIDSTREAMUSBLOCALENUMDEVICES::IsDeviceAvailable(XCHAR* resource)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOANDROIDSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
-* @brief      Search and delete equal devices
+* @brief      Search and GEN_DELETE equal devices
 * @ingroup    PLATFORM_ANDROID
 * 
 * @return     bool : true if is succesful. 
@@ -263,7 +263,7 @@ bool DIOANDROIDSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
                     {
                       if(!device1->GetName()->Compare(device2->GetName()->Get()))
                         {
-                          delete device1;
+                          GEN_DELETE device1;
                           devices.Delete(device1);
 
                           found = true;

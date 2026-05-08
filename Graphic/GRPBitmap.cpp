@@ -459,7 +459,7 @@ bool GRPBITMAP::FindSubBitmap(GRPBITMAP* bitmapref, int& x, int& y, XBYTE diffli
       y = 0;
     }
    
-  delete _bitmap;
+  GEN_DELETE _bitmap;
   
   return found;  
 }

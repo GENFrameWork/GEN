@@ -157,7 +157,7 @@ DIOMODBUSELECTRICMETER::~DIOMODBUSELECTRICMETER()
   DeRegisterEvent(DIOMODBUSELECTRICMETERXEVENT_TYPE_C_TR_AA_READVALUES);
   DeRegisterEvent(DIOMODBUSELECTRICMETERXEVENT_TYPE_C_CI_NU_2_READVALUE);
 
-  delete modbusprotocol;
+  GEN_DELETE modbusprotocol;
 
   Clean();
 }
@@ -295,7 +295,7 @@ bool DIOMODBUSELECTRICMETER::CMD_C_CI_NU_2_ReadAllValues(int TM, XDATETIME* time
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOMODBUSELECTRICMETER::CMD_C_CI_NU_2_DeleteResults(XVECTOR<DIO_C_CI_NU_2_RESULT*>* results)
-* @brief      CMDCCINU2 delete results
+* @brief      CMDCCINU2 GEN_DELETE results
 * @ingroup    DATAIO
 * 
 * @param[in]  results : 

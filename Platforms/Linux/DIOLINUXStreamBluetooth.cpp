@@ -452,7 +452,7 @@ bool DIOLINUXSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACstri
             }
         }
 
-      delete filetxt;
+      GEN_DELETE filetxt;
     }
 
   GEN_XFACTORY.Delete_Dir(xdir);

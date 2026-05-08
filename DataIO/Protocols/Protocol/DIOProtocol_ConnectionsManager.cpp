@@ -545,7 +545,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::TargetURL_Delete(int index)
 
   targetURLs.Delete(URL);
 
-  delete URL;
+  GEN_DELETE URL;
 
   return true;
 }
@@ -554,7 +554,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::TargetURL_Delete(int index)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOPROTOCOL_CONNECTIONSMANAGER::TargetURL_DeleteAll()
-* @brief      Target URL delete all
+* @brief      Target URL GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -939,7 +939,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_SendEventConnected()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_DeleteAllWaitConnections()
-* @brief      Protocol connections delete all wait connections
+* @brief      Protocol connections GEN_DELETE all wait connections
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -968,7 +968,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_DeleteAllWaitConnection
                       protocolconnection->SetDIOProtocol(NULL);
 
                       protocolconnections.Delete(protocolconnection);
-                      delete protocolconnection;
+                      GEN_DELETE protocolconnection;
 
                     } else index++;
 
@@ -987,7 +987,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_DeleteAllWaitConnection
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_DeleteDisconnected()
-* @brief      Protocol connections delete disconnected
+* @brief      Protocol connections GEN_DELETE disconnected
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -1017,7 +1017,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_DeleteDisconnected()
                   protocolconnection->SetDIOProtocol(NULL);
 
                   protocolconnections.Delete(protocolconnection);
-                  delete protocolconnection;
+                  GEN_DELETE protocolconnection;
 
                 } else index++;
 
@@ -1147,7 +1147,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_Delete(int index)
                   DIOPROTOCOL* protocol = protocolconnection->GetDIOProtocol();
 
                   protocolconnections.Delete(protocolconnection);
-                  delete protocolconnection;
+                  GEN_DELETE protocolconnection;
 
                   DeleteProtocol(protocol);
 
@@ -1166,7 +1166,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_Delete(int index)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_DeleteAll()
-* @brief      Protocol connections delete all
+* @brief      Protocol connections GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
@@ -1190,7 +1190,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::ProtocolConnections_DeleteAll()
               DIOPROTOCOL* protocol = protocolconnection->GetDIOProtocol();
 
               protocolconnections.Delete(protocolconnection);
-              delete protocolconnection;
+              GEN_DELETE protocolconnection;
 
               DeleteProtocol(protocol);
 
@@ -1437,13 +1437,13 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ManageProtocolConnectionsServer()
               DeleteProtocol(protocol);
               protocol = NULL;
 
-              delete protocolconnection;
+              GEN_DELETE protocolconnection;
               protocolconnection = NULL;
             }
         }
        else
         {
-          delete protocolconnection;
+          GEN_DELETE protocolconnection;
           protocolconnection = NULL;
         }
     }
@@ -1530,7 +1530,7 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ManageProtocolConnectionsClient()
 
                                                             url->ResolveURL();
                                                             scfg->GetRemoteURL()->Set(address);
-                                                            delete url;
+                                                            GEN_DELETE url;
 
                                                             haveservervalid = true;
                                                           }
@@ -1579,7 +1579,7 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ManageProtocolConnectionsClient()
                                   DeleteProtocol(protocol);
                                   protocol = NULL;
 
-                                  delete protocolconnection;
+                                  GEN_DELETE protocolconnection;
                                   protocolconnection = NULL;
 
                                   break;
@@ -1595,13 +1595,13 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ManageProtocolConnectionsClient()
                           DeleteProtocol(protocol);
                           protocol = NULL;
 
-                          delete protocolconnection;
+                          GEN_DELETE protocolconnection;
                           protocolconnection = NULL;
                         }
                     }
                    else
                     {
-                      delete protocolconnection;
+                      GEN_DELETE protocolconnection;
                       protocolconnection = NULL;
                     }
                 }

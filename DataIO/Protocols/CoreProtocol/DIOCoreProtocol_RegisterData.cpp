@@ -329,7 +329,7 @@ bool DIOCOREPROTOCOL_REGISTERDATA::CreateIDMachine(XUUID& ID)
 
   ID.GetToString(origin);
 
-  delete sha2;
+  GEN_DELETE sha2;
 
   return true;
 }
@@ -358,7 +358,7 @@ bool DIOCOREPROTOCOL_REGISTERDATA::ShowDebug()
 
   if(serializationmethod)
     {
-      delete serializationmethod;
+      GEN_DELETE serializationmethod;
     }     
 
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Register data:"));

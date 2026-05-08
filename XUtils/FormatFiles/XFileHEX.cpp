@@ -470,7 +470,7 @@ bool XFILEHEX::Entry_Add(XSTRING* line)
 
   if(!DecodeLine(line, (*entry)))
     {
-      delete entry;
+      GEN_DELETE entry;
       return false;
     }
 
@@ -548,7 +548,7 @@ bool XFILEHEX::Entry_Delete(XWORD address, XFILEHEX_ENTRYTYPE type)
 
   if(!entrys.Delete(entry)) return false;
 
-  delete entry;
+  GEN_DELETE entry;
 
   return true;
 }
@@ -572,7 +572,7 @@ bool XFILEHEX::Entry_Delete(int index)
 
   if(!entrys.Delete(entry)) return false;
 
-  delete entry;
+  GEN_DELETE entry;
 
   return true;
 }
@@ -581,7 +581,7 @@ bool XFILEHEX::Entry_Delete(int index)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XFILEHEX::Entry_DeleteAll()
-* @brief      Entry delete all
+* @brief      Entry GEN_DELETE all
 * @ingroup    XUTILS
 *
 * @return     bool : true if is succesful.

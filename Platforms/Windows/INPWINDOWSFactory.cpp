@@ -122,7 +122,7 @@ bool INPWINDOWSFACTORY::DeleteDevice(INPDEVICE* device)
 {
   if(!device)  return false;
 
-  delete device;
+  GEN_DELETE device;
 
   return true;
 }
@@ -166,7 +166,7 @@ bool INPWINDOWSFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)
       return false;
     }
 
-  delete inpsimulated;
+  GEN_DELETE inpsimulated;
 
   return true;
 }
@@ -211,7 +211,7 @@ bool INPWINDOWSFACTORY::DeleteCapture(INPCAPTURE* inputcapture)
       return false;
     }
 
-  delete inpcapture;
+  GEN_DELETE inpcapture;
 
   return true;
 }

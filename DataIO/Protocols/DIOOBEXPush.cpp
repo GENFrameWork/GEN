@@ -444,7 +444,7 @@ bool DIOOBEXPUSH::Ini(int timeout)
         }
     }
 
-  delete sendbuffer;
+  GEN_DELETE sendbuffer;
 
   GEN_XFACTORY.Delete_File(xfile);
   GEN_XFACTORY.DeleteTimer(xtimer);
@@ -602,7 +602,7 @@ bool DIOOBEXPUSH::SendFileList_AddFile(XPATH& xpath,XSTRING& namesend,XDWORD ID)
   XDWORD _ID = GenerateFileID(xpath);
   if(!_ID)
     {
-      delete obexpushfile;
+      GEN_DELETE obexpushfile;
       return false;
     }
 
@@ -618,7 +618,7 @@ bool DIOOBEXPUSH::SendFileList_AddFile(XPATH& xpath,XSTRING& namesend,XDWORD ID)
           }
          else
           {
-            delete obexpushfile;
+            GEN_DELETE obexpushfile;
             return false;
           }
      }
@@ -672,7 +672,7 @@ DIOOBEXPUSHFILE* DIOOBEXPUSH::SendFileList_GetActualFile()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOOBEXPUSH::SendFileList_DeleteAll()
-* @brief      Send file list delete all
+* @brief      Send file list GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 
@@ -762,7 +762,7 @@ bool DIOOBEXPUSH::End()
 
   if(sendbuffer)
     {
-      delete sendbuffer;
+      GEN_DELETE sendbuffer;
       sendbuffer = NULL;
     }
 

@@ -112,7 +112,7 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
 
   if(!filedbf->Open(xpath))
     {
-      delete filedbf;
+      GEN_DELETE filedbf;
       return false;
     }
 
@@ -120,7 +120,7 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
 
   if((!header)||(!header->Load(filedbf->GetPrimaryFile())))
     {
-      delete filedbf;
+      GEN_DELETE filedbf;
       return false;
     }
 
@@ -128,7 +128,7 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
 
   if(!nrecords)
     {
-      delete filedbf;
+      GEN_DELETE filedbf;
       return false;
     }
 
@@ -180,10 +180,10 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
           GetPrimaryFile()->Write(xbufferexchange.Get(), xbufferexchange.GetSize());
 
           
-          delete fsentence;
+          GEN_DELETE fsentence;
         }
 
-      delete record;
+      GEN_DELETE record;
     }
 
   GetPrimaryFile()->SetPosition(initablepos);
@@ -201,7 +201,7 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
     }
 
   filedbf->Close();
-  delete filedbf;
+  GEN_DELETE filedbf;
 
   CloseFile();
 
@@ -245,7 +245,7 @@ bool XFILESENTENCES::GetSentence(XDWORD index,XSTRING& sentence)
 
   sentence.Set((XWORD*)xbuffer->Get());
 
-  delete xbuffer;
+  GEN_DELETE xbuffer;
 
   return true;
 }

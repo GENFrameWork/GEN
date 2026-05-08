@@ -83,7 +83,7 @@ GRPCANVAS_VECTORFONT_CONFIG::~GRPCANVAS_VECTORFONT_CONFIG()
 {
   if(color) 
     {
-      delete color;   
+      GEN_DELETE color;   
       color = NULL;
     }      
 
@@ -434,7 +434,7 @@ bool GRPCANVAS::Buffer_Delete()
       return false;
     }
 
-  delete [] buffer;
+  GEN_DELETE_ARRAY buffer;
   buffer = NULL;
 
   buffersize = 0;

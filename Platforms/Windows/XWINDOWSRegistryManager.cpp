@@ -792,7 +792,7 @@ bool XWINDOWSREGISTRYMANAGER::DeleteKey(HKEY handlekey, XCHAR* subkeystring)
 
   RegCloseKey(operhandlekey);
 
-  // Try again to delete the key.
+  // Try again to GEN_DELETE the key.
   result = RegDeleteKey(handlekey, subkeystring);
 
  if(result == ERROR_SUCCESS)  return true;

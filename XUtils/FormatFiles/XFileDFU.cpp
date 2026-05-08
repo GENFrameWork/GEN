@@ -495,7 +495,7 @@ XFILEDFU_IMAGE* XFILEDFU::Read_Image()
 
   if(!status) 
     { 
-      delete image;
+      GEN_DELETE image;
       return NULL;
     }
 
@@ -533,7 +533,7 @@ XFILEDFU_ELEMENT* XFILEDFU::Read_Element()
 
   if(!status) 
     { 
-      delete element;
+      GEN_DELETE element;
       return NULL;
     }
 

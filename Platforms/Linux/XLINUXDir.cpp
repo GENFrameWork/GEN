@@ -261,7 +261,7 @@ bool XLINUXDIR::ChangeTo(XCHAR* path)
 * @ingroup    PLATFORM_LINUX
 *
 * @param[in]  path : directory to delete
-* @param[in]  all : delete all elements
+* @param[in]  all : GEN_DELETE all elements
 *
 * @return     bool : true if is succesful.
 *

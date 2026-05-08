@@ -334,7 +334,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
 
   if(outbuftmp)
     {
-      delete [] outbuftmp;
+      GEN_DELETE_ARRAY outbuftmp;
     }
   
   return status;
@@ -639,7 +639,7 @@ bool XWINDOWSPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& appl
                   xprocess->GetWindowRect()->IsEmpty())
                 {
                   applist.Delete(xprocess);
-                  delete xprocess;
+                  GEN_DELETE xprocess;
                 }
                else
                 {

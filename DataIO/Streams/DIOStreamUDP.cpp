@@ -85,7 +85,7 @@ DIOSTREAMUDPDATAGRAM::DIOSTREAMUDPDATAGRAM()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUDPDATAGRAM::~DIOSTREAMUDPDATAGRAM()
 {
-  if(data) delete data;
+  if(data) GEN_DELETE data;
 
   Clean();
 }
@@ -306,7 +306,7 @@ DIOSTREAMUDP::~DIOSTREAMUDP()
 {
   DeleteAllDatagrams();
 
-  delete host;
+  GEN_DELETE host;
 
   GEN_XFACTORY.Delete_Mutex(datagramsmutex);
 
@@ -701,7 +701,7 @@ bool DIOSTREAMUDP::DeleteDatagram(int index)
   if(datagram)
     {
       datagrams.DeleteIndex(index);
-      delete datagram;
+      GEN_DELETE datagram;
       datagram = NULL;
     }
 

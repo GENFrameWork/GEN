@@ -164,7 +164,7 @@ bool MYSQL_QUERY::UnbindAll()
 {
   if(result)
     {
-      delete result;
+      GEN_DELETE result;
       result = NULL;
     }
 
@@ -178,7 +178,7 @@ bool MYSQL_QUERY::UnbindAll()
             }
         }
 
-      delete[] param;
+      GEN_DELETE_ARRAY param;
 
       param = NULL;
     }
@@ -272,7 +272,7 @@ bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
 
       if(result)
         {
-          delete result;
+          GEN_DELETE result;
           result = NULL;
         }
 
@@ -392,7 +392,7 @@ bool MYSQL_QUERY::BindParametersToQuery()
 
   if(param)
     {
-      delete[] param;
+      GEN_DELETE_ARRAY param;
       param=NULL;
     }
 
@@ -531,7 +531,7 @@ bool MYSQL_QUERY::BindParametersToResult()
 
       if(!result->bindresults[e].buffer)
         {
-          delete (result->bindresults);
+          GEN_DELETE (result->bindresults);
           return false;
         }
 

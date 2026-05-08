@@ -81,7 +81,7 @@ DIOSTREAMICMPCONFIG::DIOSTREAMICMPCONFIG()  : DIOSTREAMCONFIG()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMICMPCONFIG::~DIOSTREAMICMPCONFIG()
 {
-  if(remoteURL) delete remoteURL;
+  if(remoteURL) GEN_DELETE remoteURL;
 
   Clean();
 }

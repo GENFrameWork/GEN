@@ -217,7 +217,7 @@ bool DIODYNDNS_MANAGER::AssingAll(bool* endproccess)
             {
               if((*endproccess) == true)
                 {
-                  delete dyndns;
+                  GEN_DELETE dyndns;
                   return false;  
                 }
             }
@@ -270,7 +270,7 @@ bool DIODYNDNS_MANAGER::AssingAll(bool* endproccess)
         }
     }
 
-  delete dyndns;
+  GEN_DELETE dyndns;
 
   return nerrors?false:true;
 }

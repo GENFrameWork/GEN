@@ -153,7 +153,7 @@ bool DIOFACTORY::DelInstance()
 {
   if(!instance) return false;
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;
@@ -378,7 +378,7 @@ bool DIOFACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixelws28
 {
   if(!ledneopixelws2812b) return false;
   
-  delete ledneopixelws2812b;
+  GEN_DELETE ledneopixelws2812b;
   ledneopixelws2812b = NULL;
   
   return true;

@@ -87,12 +87,12 @@ XFEEDBACK::~XFEEDBACK()
 {
   if(modulename)
     {
-      delete modulename;  
+      GEN_DELETE modulename;  
     }
 
   if(text)
     {
-      delete text;
+      GEN_DELETE text;
     }       
 
   Clean();
@@ -378,7 +378,7 @@ bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, XFEEDBACK_CODE code,int
         }
     }
 
-  delete feedback;
+  GEN_DELETE feedback;
   
   return false;
 }
@@ -446,7 +446,7 @@ bool XFEEDBACK_CONTROL::DisplayAll()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFEEDBACK_CONTROL::DeleteAllResources()
-* @brief      delete all resources
+* @brief      GEN_DELETE all resources
 * @ingroup    XUTILS
 * 
 * @return     bool : true if is succesful. 

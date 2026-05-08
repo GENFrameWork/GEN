@@ -264,7 +264,7 @@ bool SNDFILEWAV::Close()
       format_list   = NULL;
       data_list     = NULL;
 
-      delete fileRIFF;
+      GEN_DELETE fileRIFF;
 
       fileRIFF = NULL;
     }

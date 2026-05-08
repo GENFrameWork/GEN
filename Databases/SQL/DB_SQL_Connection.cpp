@@ -125,7 +125,7 @@ bool DB_SQL_CONNECTION::SetOption(XCHAR* key, XCHAR* value)
           return options.Add(newkey,newvalue);
         }
 
-      delete newkey;
+      GEN_DELETE newkey;
     }
 
   return false;

@@ -113,7 +113,7 @@ APPFLOWEXTENDED_APPLICATIONSTATUS::~APPFLOWEXTENDED_APPLICATIONSTATUS()
     {
       checkresourceshardware->End();
 
-      delete checkresourceshardware;
+      GEN_DELETE checkresourceshardware;
     }
 
   Clean();

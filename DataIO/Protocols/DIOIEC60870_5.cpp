@@ -1169,7 +1169,7 @@ bool DIOIEC60870_5::CMD_C_CI_NU_2_ReadAllValues(int TM, XDATETIME* timestart, XD
                     {
                       results->Add(result);
                     }
-                   else delete result;
+                   else GEN_DELETE result;
 
                 } else status2 = false;
 
@@ -1188,7 +1188,7 @@ bool DIOIEC60870_5::CMD_C_CI_NU_2_ReadAllValues(int TM, XDATETIME* timestart, XD
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOIEC60870_5::CMD_C_CI_NU_2_DeleteResults(XVECTOR<DIO_C_CI_NU_2_RESULT*>* results)
-* @brief      CMDCCINU2 delete results
+* @brief      CMDCCINU2 GEN_DELETE results
 * @ingroup    DATAIO
 * 
 * @param[in]  results : 

@@ -163,7 +163,7 @@ XLICENSE::~XLICENSE()
   DeRegisterEvent(XLICENSEXEVENT_TYPE_INVALID);
   DeRegisterEvent(XLICENSEXEVENT_TYPE_EXPIRED);
 
-  delete license;
+  GEN_DELETE license;
 
   Clean();
 }
@@ -233,7 +233,7 @@ bool XLICENSE::GenerateMachineID(XLICENSEID& licenseID)
 
   ID.GetToString(origin);
 
-  delete sha2;
+  GEN_DELETE sha2;
 
   licenseID.GetID()->Set(ID);
 
@@ -565,7 +565,7 @@ bool XLICENSE::LoadFromURL(DIOURL& url, int timeout, XSTRING* IPlocal, XSTRING& 
       status = LoadFromBuffer(xbuffer, applicationID, license, expirationdate);
     }
 
-  delete webclient;
+  GEN_DELETE webclient;
 
   return status;
 }

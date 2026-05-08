@@ -285,7 +285,7 @@ bool DIOESP32STREAMSPI::Open()
       hspi = GEN_NEW SPI_HandleTypeDef();
       if(!hspi)
         {
-          delete port;
+          GEN_DELETE port;
           return false;
         }
 
@@ -512,8 +512,8 @@ bool DIOESP32STREAMSPI::Close()
     {
       HAL_SPI_DeInit(DIOESP32STREAMSPI::ports[indexport]->GetHandleSPI());
 
-      delete DIOESP32STREAMSPI::ports[indexport]->GetHandleSPI();
-      delete DIOESP32STREAMSPI::ports[indexport];
+      GEN_DELETE DIOESP32STREAMSPI::ports[indexport]->GetHandleSPI();
+      GEN_DELETE DIOESP32STREAMSPI::ports[indexport];
 
       DIOESP32STREAMSPI::ports[indexport] = NULL;
     }

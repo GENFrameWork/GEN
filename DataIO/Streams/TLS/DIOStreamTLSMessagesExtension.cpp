@@ -558,7 +558,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Add(DIOSTREAMTLS_MSG_EXTENSION_SNI_SER
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_DeleteAll()
-* @brief      list  delete all
+* @brief      list  GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 
@@ -970,7 +970,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_DeleteAll()
-* @brief      list  delete all
+* @brief      list  GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 
@@ -1650,7 +1650,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Add(DIOSTREAMTLS_MSG_EXTENSION_KE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_DeleteAll()
-* @brief      list  delete all
+* @brief      list  GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 

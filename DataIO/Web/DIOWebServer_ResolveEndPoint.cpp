@@ -126,7 +126,7 @@ bool DIOWEBSERVER_RESOLVEENDPOINT::CreateResponse(XSTRING* response)
       status = true;
     }
 
-  delete serializationmethod;
+  GEN_DELETE serializationmethod;
     
   return status;
 }

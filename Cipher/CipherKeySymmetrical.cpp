@@ -81,7 +81,7 @@ CIPHERKEYSYMMETRICAL::CIPHERKEYSYMMETRICAL() : CIPHERKEY()
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEYSYMMETRICAL::~CIPHERKEYSYMMETRICAL()
 {
-  if(xbufferkey)  delete xbufferkey;
+  if(xbufferkey)  GEN_DELETE xbufferkey;
 
   Clean();
 }

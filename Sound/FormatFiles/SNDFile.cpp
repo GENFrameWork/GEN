@@ -83,12 +83,12 @@ SNDFILE::~SNDFILE()
 {  
   if(xbuffer)             
     {
-      delete xbuffer;
+      GEN_DELETE xbuffer;
     }
 
   if(xbufferdecodeddata)  
     {
-      delete xbufferdecodeddata;
+      GEN_DELETE xbufferdecodeddata;
     }
 
   Clean();
@@ -140,7 +140,7 @@ SNDFILE* SNDFILE::Create(XCHAR* path)
 
           if(!exist)
             {
-              delete sndfile;  
+              GEN_DELETE sndfile;  
               return NULL;
             }
         }
@@ -149,7 +149,7 @@ SNDFILE* SNDFILE::Create(XCHAR* path)
 
       if(!sndfile->LoadFile())
         {
-          delete sndfile;  
+          GEN_DELETE sndfile;  
           return NULL;
         }
 

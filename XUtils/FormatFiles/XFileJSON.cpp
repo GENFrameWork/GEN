@@ -789,7 +789,7 @@ bool XFILEJSONVALUE::Delete()
 {
   if(name)
     {
-      delete name;
+      GEN_DELETE name;
       name = NULL;
     }
 
@@ -809,21 +809,21 @@ bool XFILEJSONVALUE::Delete()
 
       case XFILEJSONVALUETYPE_STRING          : { //void* pointer = value;
                                                   //XSTRING* string = (XSTRING*)pointer;
-                                                  //delete string;
+                                                  //GEN_DELETE string;
                                                   value.Destroy();
                                                 }                                                
                                                 break;
 
       case XFILEJSONVALUETYPE_OBJECT          : { void* pointer = value;
                                                   XFILEJSONOBJECT* object = (XFILEJSONOBJECT*)pointer;
-                                                  delete object;
+                                                  GEN_DELETE object;
                                                   value.Destroy();
                                                 }
                                                 break;
 
       case XFILEJSONVALUETYPE_ARRAY           : { void* pointer = value;
                                                   XFILEJSONARRAY* array = (XFILEJSONARRAY*)pointer;
-                                                  delete array;
+                                                  GEN_DELETE array;
                                                   value.Destroy();
                                                 }
                                                 break;
@@ -1364,7 +1364,7 @@ bool XFILEJSON::DecodeAllLines()
 {
   if(root) 
     {
-      delete root;
+      GEN_DELETE root;
       root = NULL;
     }
 
@@ -1393,7 +1393,7 @@ bool XFILEJSON::DecodeAllLines()
 
   if(!status)
     {
-      delete root;
+      GEN_DELETE root;
       root = NULL;
     }
 
@@ -1501,7 +1501,7 @@ bool XFILEJSON::DeleteAllObjects()
 {
   if(!root) return false;
 
-  delete root;
+  GEN_DELETE root;
   root = NULL;
 
   return true;
@@ -1818,7 +1818,7 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
               ctrlchar = SearchNextControlCharacter(position);
               if(ctrlchar == XFILEJSONCONTROLCHAR_NOTCONTROL)
                 {
-                  delete value;
+                  GEN_DELETE value;
                   return false;
                 }
 
@@ -1838,7 +1838,7 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
 
                                                       if(!DecodeObject(position, true, newobject))
                                                         {
-                                                          delete value;
+                                                          GEN_DELETE value;
                                                           return false;
                                                         }
 
@@ -1855,7 +1855,7 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
 
                                                       if(!DecodeObject(position,false,(XFILEJSONOBJECT*)newarray))
                                                         {
-                                                          delete value;
+                                                          GEN_DELETE value;
                                                           return false;
                                                         }
 
@@ -1930,11 +1930,11 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
                                                     break;
 
           case XFILEJSONCONTROLCHAR_CLOSEBRACE    :
-          case XFILEJSONCONTROLCHAR_CLOSEBRACKET  : delete value;
+          case XFILEJSONCONTROLCHAR_CLOSEBRACKET  : GEN_DELETE value;
                                                     break;
 
           case XFILEJSONCONTROLCHAR_NOTCONTROL    :
-                                        default   : delete value;
+                                        default   : GEN_DELETE value;
                                                     return false;
 
         }

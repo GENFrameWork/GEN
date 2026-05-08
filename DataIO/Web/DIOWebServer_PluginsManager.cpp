@@ -153,7 +153,7 @@ bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_Delete(DIOWEBSERVER_PLUGIN* plugin)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_DeleteAll()
-* @brief      Plugins delete all
+* @brief      Plugins GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.

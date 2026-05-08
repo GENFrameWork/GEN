@@ -151,13 +151,13 @@ bool XFILEHASH::Open(XPATH& pathname, bool readonly, bool checkhash, bool checkv
 
           if(!file->Read((XBYTE*)IDstr, sizeof(XWORD)*sizeIDstring))
             {
-              delete [] IDstr;
+              GEN_DELETE_ARRAY IDstr;
               return false;
             }
 
           IDstring.Set((XWORD*)IDstr);
 
-          delete [] IDstr;
+          GEN_DELETE_ARRAY IDstr;
         }
     }
 

@@ -636,7 +636,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteEntity(XCHAR* nameentity, XDWORD
   if(entity)
     { 
       entities.Delete(entity);
-      delete entity;
+      GEN_DELETE entity;
 
       SubtractEntityEnum(entity->GetName()->Get());
 
@@ -875,7 +875,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILE
 
   if(part && part->iniline == -1)
     {
-      delete part;
+      GEN_DELETE part;
       part = NULL;    
     }
 
@@ -1154,7 +1154,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::SetZeroEntityEnum(XCHAR* nameentity)
       if(name)
         {
           enumentities.Delete(name);
-          delete name;
+          GEN_DELETE name;
 
           status = true;
         }   

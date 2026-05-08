@@ -199,7 +199,7 @@ UI_ELEMENT_OPTION* UI_ELEMENT_MENU::Option_AddText(UI_ELEMENT_MENU_OPTION_CFG& o
           return element_option;
         }
 
-      delete element_option;
+      GEN_DELETE element_option;
     }
 
   return NULL;

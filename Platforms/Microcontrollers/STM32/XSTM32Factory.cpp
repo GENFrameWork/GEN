@@ -118,7 +118,7 @@ bool XSTM32FACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
   if(!xthread) return false;
 
   XSTM32THREAD* _xthread = (XSTM32THREAD*)xthread;
-  delete _xthread;
+  GEN_DELETE _xthread;
 
   return true;
 };

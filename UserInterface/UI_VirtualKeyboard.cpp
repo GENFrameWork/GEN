@@ -561,7 +561,7 @@ UI_ANIMATION* UI_VIRTUALKEYBOARD::AddImageCache(XCHAR* name, XCHAR* resource)
       return animation;
     }
   
-  delete animation;
+  GEN_DELETE animation;
 
   return NULL;  
 }
@@ -693,8 +693,8 @@ bool UI_VIRTUALKEYBOARD::AddKeyButton(XCHAR* leyend, XCHAR* text, XCHAR* xpathbi
                 }
                else
                 {
-                  delete element_image;    
-                  delete element_animation;    
+                  GEN_DELETE element_image;    
+                  GEN_DELETE element_animation;    
                 } 
             }
         }
@@ -772,7 +772,7 @@ bool UI_VIRTUALKEYBOARD::CreateAllKeys(double x, double y)
       key_normal_width  = keyimage->GetWidth();
       key_normal_height = keyimage->GetHeight();  
 
-      //delete keyimage;
+      //GEN_DELETE keyimage;
     }
 
   keyinfo.color     = __L("black,255");
@@ -835,7 +835,7 @@ bool UI_VIRTUALKEYBOARD::CreateAllKeys(double x, double y)
       keyinfo.xpos    = (main_form->GetBoundaryLine()->width - keyinfo.width)/2;
       AddKeyButton(__L("SPACE"), NULL, __L("virtualkbd/space_key.png"), keyinfo);
       
-      //delete spaceimage;
+      //GEN_DELETE spaceimage;
     }  
  
   keyinfo.width     = key_normal_width;

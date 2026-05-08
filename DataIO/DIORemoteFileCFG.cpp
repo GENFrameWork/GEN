@@ -86,7 +86,7 @@ DIOREMOTEFILECFG::DIOREMOTEFILECFG(XCHAR* namefile): XFILECFG(namefile)
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOREMOTEFILECFG::~DIOREMOTEFILECFG()
 {
-  if(webclient) delete webclient;
+  if(webclient) GEN_DELETE webclient;
 
   Clean();
 }

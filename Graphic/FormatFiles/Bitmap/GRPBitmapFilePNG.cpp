@@ -192,10 +192,10 @@ GRPBITMAP* GRPBITMAPFILEPNG::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE 
 
                           for(int y=0; y<(int)height; y++)
                             {
-                              delete [] databuffer[y];
+                              GEN_DELETE_ARRAY databuffer[y];
                             }
 
-                          delete [] databuffer;
+                          GEN_DELETE_ARRAY databuffer;
                         }
                     }
                 }
@@ -327,10 +327,10 @@ GRPBITMAP* GRPBITMAPFILEPNG::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, 
 
                       for(int y=0; y<(int)height; y++)
                         {
-                          delete [] databuffer[y];
+                          GEN_DELETE_ARRAY databuffer[y];
                         }
 
-                      delete [] databuffer;
+                      GEN_DELETE_ARRAY databuffer;
                     }
                 }
             }
@@ -435,10 +435,10 @@ bool GRPBITMAPFILEPNG::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int
 
                   for(int y=0; y<(int)height; y++)
                     {
-                      delete [] databuffer[y];
+                      GEN_DELETE_ARRAY databuffer[y];
                     }
 
-                  delete [] databuffer;
+                  GEN_DELETE_ARRAY databuffer;
 
                 }
             }

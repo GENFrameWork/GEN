@@ -154,7 +154,7 @@ bool GRPFACTORY::DelInstance()
 {
   if(!instance) return false;
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;
@@ -304,7 +304,7 @@ bool GRPFACTORY::DeleteCanvas(GRPCANVAS* canvas)
 
   canvas->Buffer_Delete();
 
-  delete canvas;
+  GEN_DELETE canvas;
 
   return true;
 }
@@ -364,7 +364,7 @@ bool GRPFACTORY::DeleteBitmap(GRPBITMAP* bitmap)
 {
   if(!bitmap) return false;
 
-  delete bitmap;
+  GEN_DELETE bitmap;
 
   return false;
 }

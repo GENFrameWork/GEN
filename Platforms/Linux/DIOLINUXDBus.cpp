@@ -936,7 +936,7 @@ bool DIOLINUXDBUS::Signal_IsTypeAdd(XCHAR* type)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXDBUS::Signal_DeleteAll()
-* @brief      Signal delete all
+* @brief      Signal GEN_DELETE all
 * @ingroup    PLATFORM_LINUX
 *
 * @return     bool : true if is succesful. 

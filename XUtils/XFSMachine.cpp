@@ -83,7 +83,7 @@ XFSMACHINESTATE::XFSMACHINESTATE(int stateID, int ntransitions)
   outputstates = GEN_NEW int[this->maxtransitions];
   if(!outputstates)
     {
-      delete[] inputs;
+      GEN_DELETE_ARRAY inputs;
       return;
     }
 
@@ -105,8 +105,8 @@ XFSMACHINESTATE::XFSMACHINESTATE(int stateID, int ntransitions)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFSMACHINESTATE::~XFSMACHINESTATE()
 {
-  delete[] inputs;
-  delete[] outputstates;
+  GEN_DELETE_ARRAY inputs;
+  GEN_DELETE_ARRAY outputstates;
 
   Clean();
 }
@@ -449,7 +449,7 @@ bool XFSMACHINE::AddState(int state, int event, int tostate,...)
 
   if(!AddState(_state))
     {
-      delete _state;
+      GEN_DELETE _state;
       return false;
     }
 
@@ -483,7 +483,7 @@ bool XFSMACHINE::AddSecuencialStates(int state, int maxsecuencialtransitions)
 
   if(!AddState(_state))
     {
-      delete _state;
+      GEN_DELETE _state;
       return false;
     }
 
@@ -510,7 +510,7 @@ bool XFSMACHINE::DeleteState(int stateID)
 
   map.Delete(stateID);
 
-  delete state;
+  GEN_DELETE state;
 
   return true;
 }

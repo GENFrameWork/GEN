@@ -203,7 +203,7 @@ bool DIOWEBSERVER_PLUGIN::PageExtension_IsContent(XSTRING& ext)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOWEBSERVER_PLUGIN::PageExtension_DeleteAll()
-* @brief      Page extension delete all
+* @brief      Page extension GEN_DELETE all
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.

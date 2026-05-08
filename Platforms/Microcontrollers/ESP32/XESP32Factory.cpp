@@ -125,7 +125,7 @@ bool XESP32FACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
   if(!xthread) return false;
 
   XESP32THREAD* _xthread = (XESP32THREAD*)xthread;
-  delete _xthread;
+  GEN_DELETE _xthread;
 
   return true;
 };

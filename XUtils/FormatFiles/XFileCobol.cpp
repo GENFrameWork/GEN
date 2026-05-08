@@ -1763,7 +1763,7 @@ bool XFILECOBOL::Open(int nfiles, XCHAR* xpathcpyfiles, XCHAR* xpathdatfiles, ..
               file_fd->Close();
             }
 
-          delete file_fd;
+          GEN_DELETE file_fd;
         }
     }
 
@@ -2150,8 +2150,8 @@ bool XFILECOBOL::CapabilitiesFile_Load(XPATH& xpathcapabilitiesfile)
                     }
                 }
 
-              delete IDfile;
-              delete xpathfile;
+              GEN_DELETE IDfile;
+              GEN_DELETE xpathfile;
             }
         }
 
@@ -2159,7 +2159,7 @@ bool XFILECOBOL::CapabilitiesFile_Load(XPATH& xpathcapabilitiesfile)
       status = true;
     }
 
-  delete filetxt;
+  GEN_DELETE filetxt;
 
   return status;
 }
@@ -2422,7 +2422,7 @@ bool XFILECOBOL::Eliminate_EmptyLines(XVECTOR<XSTRING*>* lines)
           line->DeleteCharacter(__C(' '), XSTRINGCONTEXT_TO_END);
           if(line->IsEmpty())
             {
-              delete line;
+              GEN_DELETE line;
               lines->Delete(line);
 
             } else c++;
@@ -2499,7 +2499,7 @@ bool XFILECOBOL::CreateUniqueLines(XVECTOR<XSTRING*>* lines)
               line->Add(__C(' '));
               line->Add(linenext->Get());
 
-              delete linenext;
+              GEN_DELETE linenext;
 
               lines->Delete(linenext);
 
@@ -2785,7 +2785,7 @@ bool XFILECOBOL::TraslateTextToHandle(XVECTOR<XSTRING*>* lines, XFILECOBOL_HANDL
                                                     XFILECOBOL_FD_TREENODE* rootfieldnode = GEN_NEW XFILECOBOL_FD_TREENODE(rootfielddata);
                                                     if(!rootfieldnode)
                                                       {
-                                                        delete rootfielddata;
+                                                        GEN_DELETE rootfielddata;
                                                         return false;
                                                       }
 

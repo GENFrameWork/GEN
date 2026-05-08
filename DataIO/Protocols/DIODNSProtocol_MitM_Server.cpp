@@ -232,7 +232,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::Update()
       nameURLstr.Set((char*)nameURL);
       question    = (DIODNSPROTOCOL_QUESTION*)receivedbuffer[0].Get() + sizeof(DIODNSPROTOCOL_HEADER) + nameURLstr.GetSize() + 1;
   
-      delete nameURL;
+      GEN_DELETE nameURL;
       nameURL = NULL;
 
       DIODNSPROTOCOL_MITM_SERVER_XEVENT xevent(this, DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS);

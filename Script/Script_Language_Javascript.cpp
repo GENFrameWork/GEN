@@ -491,7 +491,7 @@ void SCRIPT_LNG_JAVASCRIPT::Clean()
 * @return     double : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-#if !defined(COMPILER_CLANG_CL) && !defined(COMPILER_CLANG)
+#if !defined(COMPILER_CLANG_CL) && !defined(COMPILER_CLANG) && !defined(COMPILER_GCC)
 double __builtin_inf(void)
 {
   return (double)0xFFFFFFFFFFFFFFFF;  

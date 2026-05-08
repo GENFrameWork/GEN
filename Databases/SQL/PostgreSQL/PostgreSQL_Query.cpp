@@ -97,19 +97,19 @@ POSTGRESQL_QUERY::~POSTGRESQL_QUERY()
 
   if(paramformats)
     {
-      delete[] paramformats;
+      GEN_DELETE_ARRAY paramformats;
       paramformats = NULL;
     }
 
   if(paramvalues)
     {
-      delete[] paramvalues;
+      GEN_DELETE_ARRAY paramvalues;
       paramvalues = NULL;
     }
 
   if(paramlengths)
     {
-      delete[] paramlengths;
+      GEN_DELETE_ARRAY paramlengths;
       paramlengths = NULL;
     }
 

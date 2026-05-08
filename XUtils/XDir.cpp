@@ -281,7 +281,7 @@ bool XDIRELEMENT::DeleteFindFileData()
 {
   if(!findfiledata) return false;
 
-  delete [] (XBYTE*)findfiledata;
+  GEN_DELETE_ARRAY (XBYTE*)findfiledata;
 
   findfiledata = NULL;
 
@@ -506,7 +506,7 @@ bool XDIR::Copy(XPATH& xpathsource,XPATH& xpathtarget)
 
                      } while(rsize == COPYFILE_MAXBUFFER);
 
-                  delete[] buffer;
+                  GEN_DELETE_ARRAY buffer;
                 }
 
               ftarget->Close();

@@ -186,7 +186,7 @@ bool CIPHERKEYSFILEPEM::Key_Del(CIPHERKEY* key)
     }
 
   keys.Delete(key);
-  delete key;
+  GEN_DELETE key;
  
   return true;
 }
@@ -270,7 +270,7 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
                     }
                    else
                     {
-                      delete entrybuffer;
+                      GEN_DELETE entrybuffer;
                       entrybuffer = NULL;
                     }
                 }
@@ -301,13 +301,13 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
                     }
                    else
                     {
-                      delete entrybuffer;
+                      GEN_DELETE entrybuffer;
                       entrybuffer = NULL;
                     }                                          
                 }
                else
                 {
-                  delete entrybuffer;
+                  GEN_DELETE entrybuffer;
                   entrybuffer = NULL;
                 }         
             }  
@@ -365,7 +365,7 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
                     }                 
                    else                
                     {
-                      delete (CIPHERCERTIFICATEX509*)decodeobj;
+                      GEN_DELETE (CIPHERCERTIFICATEX509*)decodeobj;
                     }                   
                 } 
             }         

@@ -150,10 +150,10 @@ class XAVLTREE
 
     virtual                              ~XAVLTREE                                      ()
                                           {
-                                            //delete root;
+                                            //GEN_DELETE root;
                                             DeleteNodes(root);
 
-                                            // need to make function to recursively delete the tree
+                                            // need to make function to recursively GEN_DELETE the tree
 
                                             Clean();
                                           }
@@ -534,12 +534,12 @@ class XITERATOR
                                                 if(p->parent->left == p)
                                                   {
                                                     p->parent->left = NULL;
-                                                    delete p;
+                                                    GEN_DELETE p;
                                                   }
                                                 else if(p->parent->right == p)
                                                   {
                                                     p->parent->right == NULL;
-                                                    delete p;
+                                                    GEN_DELETE p;
                                                   }
                                               }
 
@@ -699,7 +699,7 @@ class XITERATOR
                                             DeleteNodes(n->left);
                                             DeleteNodes(n->right);
 
-                                            delete n;
+                                            GEN_DELETE n;
                                           }
 
     XAVLNODE<K>*                          root;

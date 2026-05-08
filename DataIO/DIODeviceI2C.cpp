@@ -240,7 +240,7 @@ bool DIODEVICEI2C::End()
 
   if(diostreamcfg) 
     {
-      delete diostreamcfg;
+      GEN_DELETE diostreamcfg;
       diostreamcfg = NULL;
     }
 

@@ -107,7 +107,7 @@ bool INPMANAGER::DelInstance()
       return false;
     }
 
-  delete instance;
+  GEN_DELETE instance;
   instance = NULL;
 
   return true;
@@ -182,7 +182,7 @@ bool INPMANAGER::DelDevice(INPDEVICE* device)
     }
   
   devicemap.Delete(device->GetType(), device);
-  delete device;
+  GEN_DELETE device;
 
   if(devicemap_xmutex)
     {

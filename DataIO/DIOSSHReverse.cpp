@@ -105,7 +105,7 @@ bool DIOSSHREVERSE::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -311,7 +311,7 @@ bool DIOSSHREVERSE::DownloadCFG(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
                                         }
                                     }
 
-                                  delete urlorigin;
+                                  GEN_DELETE urlorigin;
                                 }
                             }
                         }
@@ -321,11 +321,11 @@ bool DIOSSHREVERSE::DownloadCFG(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
                 }
             }
 
-          delete fileini;
+          GEN_DELETE fileini;
         }
     }
 
-  delete webclient;
+  GEN_DELETE webclient;
 
   return result;
 }
@@ -473,7 +473,7 @@ bool DIOSSHREVERSE::IsRunning()
           URLpublic->Set(URLtarget.Get());
           URLpublic->ResolveURL(publicIPtarget);
 
-          delete URLpublic;
+          GEN_DELETE URLpublic;
         }
 
       if(!publicIPtarget.IsEmpty())
@@ -521,7 +521,7 @@ bool DIOSSHREVERSE::IsRunning()
 
                   xfiletxt->GetPrimaryFile()->Erase(xpath);
 
-                  delete xfiletxt;
+                  GEN_DELETE xfiletxt;
                 }
             }
         }

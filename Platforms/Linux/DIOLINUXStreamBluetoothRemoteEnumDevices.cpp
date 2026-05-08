@@ -266,7 +266,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::GetAddrFromLocalDevice(int locald
   int error = hci_devinfo(localdeviceindex, di);
   if(error>=0) ba2str(&di->bdaddr, btaddr);
 
-  delete di;
+  GEN_DELETE di;
 
   if(error<0) return false;
 
@@ -375,7 +375,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevices(XVECTOR<DIOSTREAMDEVI
       status = true;
     }
 
-  delete [] info;
+  GEN_DELETE_ARRAY info;
 
   return status;
 }
@@ -425,7 +425,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesName(DIOSTREAMDEVICEBL
       close(handlesocket);
     }
 
-  delete [] name;
+  GEN_DELETE_ARRAY name;
 
   return status;
 }
@@ -575,7 +575,7 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDeviceServices(DIOSTREAMDEVIC
               SDP_lastservice = NULL;
               if(service->GetID())
                     device->Service_Add(service);
-                else delete service;
+                else GEN_DELETE service;
             }
 
           if(sdp_get_group_id(rec, &sub_context.group) != -1)

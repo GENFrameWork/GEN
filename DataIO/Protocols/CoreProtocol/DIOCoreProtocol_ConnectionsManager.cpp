@@ -332,8 +332,8 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_Delete(DIOSTREAMCONFIG* diost
 
   diostreams.Delete(diostreamCFG);
 
-  delete diostreamCFG;
-  delete diostream;
+  GEN_DELETE diostreamCFG;
+  GEN_DELETE diostream;
 
   return true;
 }
@@ -342,7 +342,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_Delete(DIOSTREAMCONFIG* diost
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_DeleteAll()
-* @brief      DIO stream delete all
+* @brief      DIO stream GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 
@@ -460,7 +460,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Serialize(DIOCOREPROTOCOL_M
       message->GetContent()->Add(contentbinary);
     } 
                 
-  delete serializationmethod;
+  GEN_DELETE serializationmethod;
                       
   return status;
 }
@@ -501,7 +501,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Deserialize(DIOCOREPROTOCOL
 
   status = classcontent->Deserialize();
 
-  delete serializationmethod;
+  GEN_DELETE serializationmethod;
                       
   return status;
 }
@@ -690,7 +690,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Delete(DIOCOREPROTOCOL_CONN
     }
 
   connections.Delete(connection);
-  delete connection;
+  GEN_DELETE connection;
 
   if(connections_delete_xmutex)
     {
@@ -704,7 +704,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Delete(DIOCOREPROTOCOL_CONN
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAllDisconnected()
-* @brief      Connections delete all disconnected
+* @brief      Connections GEN_DELETE all disconnected
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 
@@ -732,7 +732,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAllDisconnected()
               if(connection->GetXTimerStatus()->GetMeasureSeconds() >= connection->GetCoreProtocol()->GetProtocolCFG()->GetTimeToEliminateConnectionDisconnect())
                 {                                                       
                   connections.Delete(connection);
-                  delete connection;
+                  GEN_DELETE connection;
 
                   continue;
                 }
@@ -756,7 +756,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAllDisconnected()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAll()
-* @brief      Connections delete all
+* @brief      Connections GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 
@@ -862,7 +862,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateIDMachine(XUUID& ID)
 
   ID.GetToString(origin);
 
-  delete sha2;
+  GEN_DELETE sha2;
 
   return true;
 }
@@ -1249,7 +1249,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllUpdateClassMessages(DIOCORE
                   updateclass->GetClassPtr()->SetSerializationMethod(serializationmethod);                            
                   updateclass->GetClassPtr()->Deserialize();
                         
-                  delete serializationmethod;
+                  GEN_DELETE serializationmethod;
 
                   GenerateResponseUpdateClass(content, true);
                      
@@ -1387,7 +1387,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllAskUpdateClassMessages(DIOC
 
               if(serializationmethod)
                 {
-                  delete serializationmethod;
+                  GEN_DELETE serializationmethod;
                 }    
    
               status = connection->UpdateClass_Do(message->GetHeader()->GetIDMessage(), message->GetHeader()->GetOperationParam()->Get(), &content);
@@ -1950,7 +1950,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
                         }
                        else 
                         {                   
-                          delete message;
+                          GEN_DELETE message;
                         }                       
                     }  
                 } 

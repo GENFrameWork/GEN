@@ -164,7 +164,7 @@ bool DIOSPITFTDISPLAYILI9341::Clear(XWORD color)
 
   bool status = Update((XBYTE*)buffer);
 
-  delete [] buffer;
+  GEN_DELETE_ARRAY buffer;
 
   return status;
 }

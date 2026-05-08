@@ -143,8 +143,8 @@ bool DIOWINDOWSSTREAMUARTLOCALENUMDEVICES::Search()
             } while(status==ERROR_SUCCESS);
         }
 
-      delete [] value;
-      delete [] name;
+      GEN_DELETE_ARRAY value;
+      GEN_DELETE_ARRAY name;
 
       RegCloseKey(hkey);
     }

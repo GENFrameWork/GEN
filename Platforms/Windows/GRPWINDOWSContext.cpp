@@ -156,13 +156,13 @@ bool GRPWINDOWSCONTEXT::Create(void* handle)
 
   windowsscreen->SetPixelFormat(nPixelFormat);
 
-  // delete old window
+  // GEN_DELETE old window
   windowsscreen->Delete();
 
   // make real window
   windowsscreen->Create(handle);
 
-  // delete old context
+  // GEN_DELETE old context
   Destroy();
 
   // make real context

@@ -508,7 +508,7 @@ DIOCOREPROTOCOL::DIOCOREPROTOCOL(DIOCOREPROTOCOL_CFG* protocolCFG, DIOSTREAM* di
 	    compressor = compressmanager->Create(COMPRESSBASE_TYPE_GZ);
       if(!compressor)
         {
-          delete compressmanager;          
+          GEN_DELETE compressmanager;          
         }
     }  
 
@@ -542,12 +542,12 @@ DIOCOREPROTOCOL::~DIOCOREPROTOCOL()
 
   if(compressmanager)
     {
-      delete compressmanager;
+      GEN_DELETE compressmanager;
     }
 
   if(compressor)
     {
-      delete compressor;
+      GEN_DELETE compressor;
     }
 
   Clean();
@@ -1518,7 +1518,7 @@ DIOCOREPROTOCOL_COMMAND* DIOCOREPROTOCOL::Commands_GetCoreProtocol(XDWORD type)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL::Commands_DeleteAll()
-* @brief      Commands delete all
+* @brief      Commands GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 
@@ -1594,7 +1594,7 @@ bool DIOCOREPROTOCOL::UpdateClass_Add(XCHAR* classname, XSERIALIZABLE* classptr,
   updateclass->GetClassName()->Set(classname);
   if(updateclass->GetClassName()->IsEmpty())
     {
-      delete updateclass;
+      GEN_DELETE updateclass;
       return false;
     }
 
@@ -1646,7 +1646,7 @@ DIOCOREPROTOCOL_UPDATECLASS* DIOCOREPROTOCOL::UpdateClass_Get(XCHAR* classname)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL::UpdateClass_DeleteAll()
-* @brief      Update class delete all
+* @brief      Update class GEN_DELETE all
 * @ingroup    DATAIO
 * 
 * @return     bool : true if is succesful. 

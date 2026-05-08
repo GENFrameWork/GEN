@@ -97,7 +97,7 @@ DIOSTREAMUDPACKNOWLEDGE::~DIOSTREAMUDPACKNOWLEDGE()
   Close();
 
   if(diostream) GEN_DIOFACTORY.DeleteStreamIO(diostream);
-  if(URLremote) delete URLremote;
+  if(URLremote) GEN_DELETE URLremote;
 
   Clean();
 }

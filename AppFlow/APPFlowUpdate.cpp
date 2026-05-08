@@ -342,7 +342,7 @@ bool APPFLOWUPDATE::DelInstance()
 {
   if(instance)
     {
-      delete instance;
+      GEN_DELETE instance;
       instance = NULL;
 
       return true;
@@ -706,7 +706,7 @@ bool APPFLOWUPDATE::End()
       UnSubscribeEvent(XEVENT_TYPE_SCHEDULER, xscheduler);
 
       xscheduler->End();
-      delete xscheduler;
+      GEN_DELETE xscheduler;
       xscheduler = NULL;
     }
 
@@ -714,7 +714,7 @@ bool APPFLOWUPDATE::End()
 
   if(dioappupdate)
     {
-      delete dioappupdate;
+      GEN_DELETE dioappupdate;
       dioappupdate = NULL;
     }
 
@@ -957,7 +957,7 @@ bool APPFLOWUPDATE::CreateTaskUpdate(bool doajust)
 
       xscheduler->Task_Add(xtask);
     }
-   else delete xtask;
+   else GEN_DELETE xtask;
 
   GEN_XFACTORY.DeleteDateTime(start);
   GEN_XFACTORY.DeleteDateTime(end);
