@@ -74,6 +74,7 @@ class XWINDOWSACCESSCONTROLLISTS
 
     bool                    SetFileOnlyPermissionForAdmin         (XCHAR* filename);
     bool                    SetFileOnlyPermissionForSystemUser    (XCHAR* filename);
+    bool                    SetFileOnlyPermissionForAdminUser     (XCHAR* filename);
     bool                    SetFilePermissionForEveryone          (XCHAR* filename);
 
   private:

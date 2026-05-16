@@ -183,19 +183,17 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForSystemUser(XCHAR* filen
 {
   #define EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER  1
 
-  PSID                      systemSID     = NULL;
+  PSID                      SID           = NULL;
   PACL                      ACL           = NULL;
   EXPLICIT_ACCESS           ea[EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER];
-//SID_IDENTIFIER_AUTHORITY  SIDauthworld  = SECURITY_WORLD_SID_AUTHORITY;
   SID_IDENTIFIER_AUTHORITY  SIDsystem     = SECURITY_NT_AUTHORITY;
 
-
+  
   AllocateAndInitializeSid(&SIDsystem     , 1
                                           , SECURITY_LOCAL_SYSTEM_RID
                                           , 0, 0, 0, 0, 0, 0, 0
-                                          , &systemSID);
-
-
+                                          , &SID);
+    
   // Initialize an EXPLICIT_ACCESS structure for an ACE.
   ZeroMemory(&ea, EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER * sizeof(EXPLICIT_ACCESS));
 
@@ -205,7 +203,7 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForSystemUser(XCHAR* filen
   ea[0].grfInheritance          = NO_INHERITANCE;
   ea[0].Trustee.TrusteeForm     = TRUSTEE_IS_SID;
   ea[0].Trustee.TrusteeType     = TRUSTEE_IS_GROUP;
-  ea[0].Trustee.ptstrName       = (LPTSTR)systemSID;
+  ea[0].Trustee.ptstrName       = (LPTSTR)SID;
 
   // Create a GEN_NEW ACL that contains the GEN_NEW ACEs.
   SetEntriesInAcl(EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER, ea, NULL, &ACL);
@@ -224,12 +222,76 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForSystemUser(XCHAR* filen
   // Change the security attributes
   BOOL status = SetFileSecurity(filename, DACL_SECURITY_INFORMATION, SD);
 
-  if(systemSID)   FreeSid(systemSID);
+  if(SID)         FreeSid(SID);
   if(ACL)         LocalFree(ACL);
   if(SD)          LocalFree(SD);
 
   return status?true:false;
 }
+
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForAdminUser(XCHAR* filename)
+* @brief      set file only permission for admin user
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  filename : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForAdminUser(XCHAR* filename)
+{
+  #define EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER  1
+
+  PSID                      SID           = NULL;
+  PACL                      ACL           = NULL;
+  EXPLICIT_ACCESS           ea[EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER];
+  SID_IDENTIFIER_AUTHORITY  SIDsystem     = SECURITY_NT_AUTHORITY;
+
+  AllocateAndInitializeSid(&SIDsystem   , 2                        // 2 sub-authorities
+                                        , SECURITY_BUILTIN_DOMAIN_RID
+                                        , DOMAIN_ALIAS_RID_ADMINS
+                                        , 0, 0, 0, 0, 0, 0
+                                        , &SID);
+
+  // Initialize an EXPLICIT_ACCESS structure for an ACE.
+  ZeroMemory(&ea, EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER * sizeof(EXPLICIT_ACCESS));
+
+  // Set full control for Administrators.
+  ea[0].grfAccessPermissions    = GENERIC_ALL;
+  ea[0].grfAccessMode           = SET_ACCESS;
+  ea[0].grfInheritance          = NO_INHERITANCE;
+  ea[0].Trustee.TrusteeForm     = TRUSTEE_IS_SID;
+  ea[0].Trustee.TrusteeType     = TRUSTEE_IS_GROUP;
+  ea[0].Trustee.ptstrName       = (LPTSTR)SID;
+
+  // Create a GEN_NEW ACL that contains the GEN_NEW ACEs.
+  SetEntriesInAcl(EXPLICIT_ACCESS_MAXNUM_SYSTEMUSER, ea, NULL, &ACL);
+
+  // Initialize a security descriptor.
+  PSECURITY_DESCRIPTOR SD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH);
+
+  InitializeSecurityDescriptor(SD, SECURITY_DESCRIPTOR_REVISION);
+
+  // Add the ACL to the security descriptor.
+  SetSecurityDescriptorDacl(SD, TRUE      // bDaclPresent flag
+                              , ACL
+                              , FALSE);   // not a default DACL
+
+
+  // Change the security attributes
+  BOOL status = SetFileSecurity(filename, DACL_SECURITY_INFORMATION, SD);
+
+  if(SID)         FreeSid(SID);
+  if(ACL)         LocalFree(ACL);
+  if(SD)          LocalFree(SD);
+
+  return status?true:false;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------

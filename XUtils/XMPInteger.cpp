@@ -500,7 +500,7 @@ int XMPINTEGER::GetMSB()
 
   if(i < 0)
     {
-      return 0; // El número es 0, no tiene bits significativos
+      return 0; // El nÃºmero es 0, no tiene bits significativos
     }
 
   for(j = XMPINTEGER_BITSINLIMB; j > 0; j--)
