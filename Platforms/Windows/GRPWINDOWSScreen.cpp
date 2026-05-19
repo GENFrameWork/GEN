@@ -160,14 +160,20 @@ bool GRPWINDOWSSCREEN::Create(bool show)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Update()
 {
-  #ifdef GRP_OPENGL_ACTIVE
+  #ifndef GRP_OPENGL_ACTIVE
 
-  if(!hdc) return false;
+  if(!hdc) 
+    {
+      return false;
+    }
 
   SwapBuffers(hdc);
 
-  #endif
+  #else
 
+  return false;
+
+  #endif
 
   return true;
 }
