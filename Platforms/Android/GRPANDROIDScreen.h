@@ -35,6 +35,11 @@
 #include "GRPScreen.h"
 
 
+#ifdef GRP_OPENGL_ACTIVE
+class GRPANDROIDBLITGLES;
+#endif
+
+
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
@@ -65,11 +70,19 @@ class GRPANDROIDSCREEN : public GRPSCREEN
     ANativeWindow*                        GetAndroidHandle            ();
     void                                  SetAndroidHandle            (ANativeWindow* anativehandle);
 
+    #ifdef GRP_OPENGL_ACTIVE
+    GRPANDROIDBLITGLES*                   GetBlitGLES                 ();
+    #endif
+
   private:
 
     void                                  Clean                       ();
 
     ANativeWindow*                        anativehandle;
+
+    #ifdef GRP_OPENGL_ACTIVE
+    GRPANDROIDBLITGLES*                   blitgles;
+    #endif
 };
 
 

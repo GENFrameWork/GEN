@@ -39,9 +39,7 @@
 #include "XFactoryMacros.h"
 
 #include "GRPWINDOWSScreen.h"
-#ifdef GRP_OPENGL_ACTIVE
-#include "GRPWINDOWSContext.h"
-#endif
+
 #ifdef GRP_DESKTOPMANAGER_ACTIVE
 #include "GRPWINDOWSDesktopManager.h"
 #endif
@@ -64,12 +62,6 @@
 
 CREATEFUNC(GRPWINDOWSFACTORY, GRPSCREEN             , GRPWINDOWSSCREEN            , CreateScreen)
 DELETEFUNC(GRPWINDOWSFACTORY, GRPSCREEN             , GRPWINDOWSSCREEN            , DeleteScreen)
-
-
-#ifdef GRP_OPENGL_ACTIVE
-CREATEFUNC(GRPWINDOWSFACTORY, GRPCONTEXT            , GRPWINDOWSCONTEXT           , CreateContext)
-DELETEFUNC(GRPWINDOWSFACTORY, GRPCONTEXT            , GRPWINDOWSCONTEXT           , DeleteContext)
-#endif
 
 
 #ifdef GRP_DESKTOPMANAGER_ACTIVE

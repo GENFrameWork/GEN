@@ -45,6 +45,11 @@
 #include "GRPScreen.h"
 
 
+#ifdef GRP_OPENGL_ACTIVE
+class GRPLINUXBLITGLES;
+#endif
+
+
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
@@ -105,6 +110,10 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
     Window*                               GetWindowRoot                     ();
     XVisualInfo*                          GetVisualInfo                     ();
 
+    #ifdef GRP_OPENGL_ACTIVE
+    GRPLINUXBLITGLES*                     GetBlitGLES                       ();
+    #endif
+
   protected:
 
     Display*                              display;
@@ -113,6 +122,10 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
     XVisualInfo                           vinfo;
 
     bool                                  isdesktop;
+
+    #ifdef GRP_OPENGL_ACTIVE
+    GRPLINUXBLITGLES*                     blitgles;
+    #endif
 
   private:
 

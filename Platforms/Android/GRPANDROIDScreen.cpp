@@ -36,7 +36,15 @@
 
 #include "GRPANDROIDScreen.h"
 
+#include "XTrace.h"
+
 #include "GRPCanvas.h"
+
+
+
+#ifdef GRP_OPENGL_ACTIVE
+#include "GRPANDROIDBlitGLES.h"
+#endif
 
 
 
@@ -140,6 +148,8 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
   if(!canvas)        return false;
   if(!anativehandle) return false;
 
+  #ifndef GRP_OPENGL_ACTIVE
+
   ANativeWindow_Buffer abuffer;
 
   if(IsEqualSizeTo(canvas) == ISEQUAL)
@@ -172,6 +182,29 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
     }
 
   return true;
+
+  #else
+
+  // On Android the native window handle arrives via SetAndroidHandle() AFTER
+  // the activity is in the foreground; so blitter creation is deferred to the
+  // first Update() call.
+  if(!blitgles)
+    {
+      blitgles = GEN_NEW GRPANDROIDBLITGLES();
+      if(!blitgles) return false;
+
+      if(!blitgles->Create(this))
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen Android] BlitGLES create failed"));
+          GEN_DELETE blitgles;
+          blitgles = NULL;
+          return false;
+        }
+    }
+
+  return blitgles->Update(canvas);
+
+  #endif
 }
 
 
@@ -186,6 +219,14 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Delete()
 {
+  #ifdef GRP_OPENGL_ACTIVE
+  if(blitgles)
+    {
+      blitgles->Destroy();
+      GEN_DELETE blitgles;
+      blitgles = NULL;
+    }
+  #endif
 
   isactive = false;
 
@@ -256,6 +297,23 @@ void GRPANDROIDSCREEN::SetAndroidHandle(ANativeWindow* anativehandle)
 }
 
 
+#ifdef GRP_OPENGL_ACTIVE
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPANDROIDBLITGLES* GRPANDROIDSCREEN::GetBlitGLES()
+* @brief      Get OpenGL ES blitter (only present when GRP_OPENGL_ACTIVE is defined)
+* @ingroup    PLATFORM_ANDROID
+*
+* @return     GRPANDROIDBLITGLES* :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPANDROIDBLITGLES* GRPANDROIDSCREEN::GetBlitGLES()
+{
+  return blitgles;
+}
+#endif
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void GRPANDROIDSCREEN::Clean()
@@ -267,6 +325,10 @@ void GRPANDROIDSCREEN::SetAndroidHandle(ANativeWindow* anativehandle)
 void GRPANDROIDSCREEN::Clean()
 {
   anativehandle  = NULL;
+
+  #ifdef GRP_OPENGL_ACTIVE
+  blitgles       = NULL;
+  #endif
 }
 
 

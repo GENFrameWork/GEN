@@ -193,42 +193,6 @@ bool GRPFACTORY::DeleteScreen(GRPSCREEN* screen)
 }
 
 
-#ifdef GRP_OPENGL_ACTIVE
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRPCONTEXT* GRPFACTORY::CreateContext()
-* @brief      Create context
-* @ingroup    GRAPHIC
-*
-* @return     GRPCONTEXT* :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-GRPCONTEXT* GRPFACTORY::CreateContext()
-{
-  return NULL;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPFACTORY::DeleteContext(GRPCONTEXT* context)
-* @brief      Delete context
-* @ingroup    GRAPHIC
-*
-* @param[in]  context :
-*
-* @return     bool : true if is succesful.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-bool GRPFACTORY::DeleteContext(GRPCONTEXT* context)
-{
-  return NULL;
-}
-
-#endif
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         GRPCANVAS* GRPFACTORY::CreateCanvas(GRPSCREEN* screen)

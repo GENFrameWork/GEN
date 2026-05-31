@@ -50,7 +50,7 @@
 #include "GRPXEvent.h"
 #include "GRPScreen.h"
 
-#ifdef GRP_OPENGL_ACTIVE
+#ifdef GRP_3D_FEATURE
 #include "GRP3DContext.h"
 #endif
 
@@ -227,7 +227,7 @@ bool APPFLOWGRAPHICS::CreateMainScreenProcess(bool show)
       return false;
     }
 
-  #ifdef GRP_OPENGL_ACTIVE
+  #ifdef GRP_3D_FEATURE
   maincontext = GRPFACTORY::GetInstance().CreateContext();
   if(!maincontext)
     {

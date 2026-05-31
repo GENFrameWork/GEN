@@ -54,11 +54,6 @@ class GRPANDROIDFACTORY : public GRPFACTORY
     GRPSCREEN*              CreateScreen            ();
     bool                    DeleteScreen            (GRPSCREEN* screen);
 
-    #ifdef GRP_OPENGL_ACTIVE
-    GRPCONTEXT*             CreateContext           ();
-    bool                    DeleteContext           (GRPCONTEXT* context);
-    #endif
-
 };
 
 

@@ -839,11 +839,6 @@ bool GRPSCREEN::CreateViewport(XCHAR* ID, float posx, float posy, float width, f
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::UpdateViewports()
 {
-  #ifdef GRP_OPENGL_ACTIVE
-
-
-  #else
-   
   if(!screencanvas)
     {   
       return false;
@@ -862,8 +857,6 @@ bool GRPSCREEN::UpdateViewports()
     {
       Update(screencanvas);      
     }    
-
-  #endif  
 
   if(framerate) framerate->AddNFrames();
 

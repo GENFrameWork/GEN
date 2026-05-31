@@ -761,6 +761,8 @@ void MAINPROCANDROID::OnCreateWindow()
   ANativeActivity_setWindowFlags(androidapplication->activity, AWINDOW_FLAG_FULLSCREEN, 0);
 
   
+  #ifndef GRP_OPENGL_ACTIVE
+  // Software path: lock/unlock to query the real buffer geometry (stride).
   ANativeWindow_Buffer abuffer;
   if(ANativeWindow_lock(androidapplication->window, &abuffer, NULL) >= 0)
     {
@@ -773,10 +775,16 @@ void MAINPROCANDROID::OnCreateWindow()
   if(w > h)  
          w = abuffer.stride; 
     else h = abuffer.stride;           
-  
+  #else
+  // OpenGL/EGL path: NEVER call ANativeWindow_lock here. lock() connects the
+  // window to the CPU buffer API (native_window_api_connect) and that bond is
+  // NOT released by unlockAndPost, so a later eglCreateWindowSurface would fail
+  // with EGL_BAD_ALLOC ("already connected to another API"). Query the size
+  // without touching the producer side.
+  int32_t w         = ANativeWindow_getWidth(androidapplication->window);
+  int32_t h         = ANativeWindow_getHeight(androidapplication->window);
+  #endif
 
-  //int32_t w         = ANativeWindow_getWidth(androidapplication->window);            
-  //int32_t h         = ANativeWindow_getHeight(androidapplication->window);                   
   int32_t maxwidth  = 0;
   int32_t maxheight = 0;
 
@@ -810,6 +818,7 @@ void MAINPROCANDROID::OnCreateWindow()
           grpevent.SetScreen(mainscreen);
           applicationgrp->PostEvent(&grpevent);
 
+          #ifndef GRP_OPENGL_ACTIVE
           ANativeWindow_setBuffersGeometry(androidapplication->window, mainscreen->GetWidth(), mainscreen->GetHeight(), WINDOW_FORMAT_RGBA_8888);
 
           ANativeWindow_Buffer abuffer;
@@ -829,6 +838,17 @@ void MAINPROCANDROID::OnCreateWindow()
           mainscreen->SetMaxSize(w, h);
 
           ANativeWindow_setBuffersGeometry(androidapplication->window, mainscreen->GetWidth(), mainscreen->GetHeight(), WINDOW_FORMAT_RGBA_8888);
+          #else
+          // OpenGL/EGL path: the application's SCREEN_CREATING handler (above) has
+          // already set the desired canvas/screen size (e.g. 1024x768 in Canvas2D).
+          // Do NOT overwrite it with the native window size: the canvas must keep the
+          // design resolution. The full device/window resolution (e.g. 2712x1220) is
+          // only used for the EGL surface + viewport, which the blitter handles via
+          // eglQuerySurface and letterbox scaling. We also must NOT lock the window
+          // (that bonds it to the CPU API and breaks eglCreateWindowSurface) nor set
+          // its buffer geometry here (the blitter does it in PostCreateHook with the
+          // EGL native visual id). So: leave the screen size exactly as the app set it.
+          #endif
 
           GRPVIEWPORT*  viewport = mainscreen->GetViewport(0);
           if(!viewport)

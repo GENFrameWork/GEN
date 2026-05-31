@@ -49,7 +49,6 @@
 
 
 class GRPSCREEN;
-class GRPCONTEXT;
 class GRPCANVAS;
 class GRPBITMAP;
 class GRPDESKTOPMANAGER;
@@ -67,11 +66,6 @@ class GRPFACTORY
 
     virtual GRPSCREEN*                CreateScreen              ();
     virtual bool                      DeleteScreen              (GRPSCREEN* screen);
-
-    #ifdef GRP_OPENGL_ACTIVE
-    virtual GRPCONTEXT*               CreateContext             ();
-    virtual bool                      DeleteContext             (GRPCONTEXT* context);
-    #endif
 
     GRPCANVAS*                        CreateCanvas              (GRPPROPERTIES* properties);
     bool                              DeleteCanvas              (GRPCANVAS* canvas);

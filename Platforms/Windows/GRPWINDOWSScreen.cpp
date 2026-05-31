@@ -50,6 +50,11 @@
 #include "GRPBitmap.h"
 
 
+#ifdef GRP_OPENGL_ACTIVE
+#include "GRPWINDOWSBlitGLES.h"
+#endif
+
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -171,7 +176,8 @@ bool GRPWINDOWSSCREEN::Update()
 
   #else
 
-  return false;
+  if(!blitgles) return false;
+  return blitgles->SwapBuffers();
 
   #endif
 
@@ -217,7 +223,9 @@ bool GRPWINDOWSSCREEN::Update(GRPCANVAS* canvas)
 
   #else
 
-  return false;
+  if(!canvas)   return false;
+  if(!blitgles) return false;
+  return blitgles->Update(canvas);
 
   #endif
 }
@@ -236,8 +244,13 @@ bool GRPWINDOWSSCREEN::Update(GRPCANVAS* canvas)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::UpdateTransparent(GRPCANVAS* canvas)
 {
-  #ifndef GRP_OPENGL_ACTIVE
-
+  // A transparent screen is a WS_EX_LAYERED window composited with
+  // UpdateLayeredWindow (per-pixel alpha). This path MUST run even when
+  // GRP_OPENGL_ACTIVE is defined: an EGL/ANGLE swap to the HWND is never shown
+  // on a layered window, so OpenGL cannot present a transparent popup. We
+  // therefore always composite the CPU canvas (BGRA + alpha) here via GDI.
+  // The GL blitter is neither created nor used for transparent screens (see
+  // CreateWindow). hdc and hinfo are valid in the GL build too.
   if(!hdc) 
     {
       return false;
@@ -284,12 +297,6 @@ bool GRPWINDOWSSCREEN::UpdateTransparent(GRPCANVAS* canvas)
   ReleaseDC(NULL, hdcscreen);
 
   return true;
-
-  #else
-
-  return false;
-
-  #endif
 }
 
 
@@ -304,6 +311,15 @@ bool GRPWINDOWSSCREEN::UpdateTransparent(GRPCANVAS* canvas)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Delete()
 {
+  #ifdef GRP_OPENGL_ACTIVE
+  if(blitgles)
+    {
+      blitgles->Destroy();
+      GEN_DELETE blitgles;
+      blitgles = NULL;
+    }
+  #endif
+
   if(Style_Is(GRPSCREENSTYLE_FULLSCREEN)) 
     {
       ChangeDisplaySettings(NULL,0);
@@ -747,6 +763,23 @@ BITMAPINFO* GRPWINDOWSSCREEN::GetHInfo()
 }
 
 
+#ifdef GRP_OPENGL_ACTIVE
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPWINDOWSBLITGLES* GRPWINDOWSSCREEN::GetBlitGLES()
+* @brief      Get OpenGL ES blitter (only present when GRP_OPENGL_ACTIVE is defined)
+* @ingroup    PLATFORM_WINDOWS
+*
+* @return     GRPWINDOWSBLITGLES* :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPWINDOWSBLITGLES* GRPWINDOWSSCREEN::GetBlitGLES()
+{
+  return blitgles;
+}
+#endif
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         int GRPWINDOWSSCREEN::GetTaskbarHeight()
@@ -1050,6 +1083,33 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
   hinfo.bmiHeader.biSizeImage     = (XDWORD)(hinfo.bmiHeader.biWidth*hinfo.bmiHeader.biHeight*hinfo.bmiHeader.biBitCount)/8;
   #endif
 
+  #ifdef GRP_OPENGL_ACTIVE
+  // Transparent screens are composited with UpdateLayeredWindow (see
+  // UpdateTransparent); an EGL/ANGLE surface on a WS_EX_LAYERED window is never
+  // displayed and may fail to create. So only set up the GL blitter for
+  // normal (non-layered) windows.
+  if(!Style_Is(GRPSCREENSTYLE_TRANSPARENT))
+    {
+      if(!blitgles)
+        {
+          blitgles = GEN_NEW GRPWINDOWSBLITGLES();
+          if(!blitgles)
+            {
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen Windows] Could not allocate GRPWINDOWSBLITGLES"));
+              return false;
+            }
+
+          if(!blitgles->Create(this))
+            {
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen Windows] BlitGLES create failed"));
+              GEN_DELETE blitgles;
+              blitgles = NULL;
+              return false;
+            }
+        }
+    }
+  #endif
+
   return true;
 }
 
@@ -1179,6 +1239,10 @@ void GRPWINDOWSSCREEN::Clean()
   hinstance       = NULL;
   hwnd            = NULL;
   hdc             = NULL;
+
+  #ifdef GRP_OPENGL_ACTIVE
+  blitgles        = NULL;
+  #endif
 }
 
 

@@ -46,10 +46,6 @@
 #include "GRPLINUXScreenFrameBuffer.h"
 #endif
 
-#ifdef GRP_OPENGL_ACTIVE
-#include "GRP3DContext.h"
-#endif
-
 #ifdef GRP_DESKTOPMANAGER_ACTIVE
 #include "GRPLINUXDesktopManager.h"
 #endif
@@ -112,49 +108,6 @@ bool GRPLINUXFACTORY::DeleteScreen(GRPSCREEN* screen)
 
   return true;
 }
-
-
-#ifdef GRP_OPENGL_ACTIVE
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRPCONTEXT* GRPLINUXFACTORY::CreateContext()
-* @brief      Create context
-* @ingroup    PLATFORM_LINUX
-*
-* @return     GRPCONTEXT* :
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-GRPCONTEXT* GRPLINUXFACTORY::CreateContext()
-{
-  GRPCONTEXT* context = NULL;
-
-  return context;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPLINUXFACTORY::DeleteContext(GRPCONTEXT* context)
-* @brief      Delete context
-* @ingroup    PLATFORM_LINUX
-*
-* @param[in]  context :
-*
-* @return     bool : true if is succesful.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-bool GRPLINUXFACTORY::DeleteContext(GRPCONTEXT* context)
-{
-  if(!context) return false;
-
-  GEN_DELETE context;
-
-  return true;
-}
-
-#endif
 
 
 #ifdef GRP_DESKTOPMANAGER_ACTIVE

@@ -51,11 +51,6 @@ class GRPWINDOWSFACTORY : public GRPFACTORY
     GRPSCREEN*                  CreateScreen              ();
     bool                        DeleteScreen              (GRPSCREEN* screen);
 
-    #ifdef GRP_OPENGL_ACTIVE
-    GRPCONTEXT*                 CreateContext             ();
-    bool                        DeleteContext             (GRPCONTEXT* context);
-    #endif
-
     #ifdef GRP_DESKTOPMANAGER_ACTIVE
     GRPDESKTOPMANAGER*          CreateDesktopManager      ();
     bool                        DeleteDesktopManager      (GRPDESKTOPMANAGER* desktopmanager);

@@ -39,6 +39,11 @@
 #include "GRPScreen.h"
 
 
+#ifdef GRP_OPENGL_ACTIVE
+class GRPWINDOWSBLITGLES;
+#endif
+
+
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
@@ -89,6 +94,10 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
     void                                  SetHDC                              (HDC hdc);
 
     BITMAPINFO*                           GetHInfo                            ();
+
+    #ifdef GRP_OPENGL_ACTIVE
+    GRPWINDOWSBLITGLES*                   GetBlitGLES                         ();
+    #endif
     
   private:
 
@@ -111,6 +120,10 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
     DEVMODE                               devmode;
 
     BITMAPINFO                            hinfo;
+
+    #ifdef GRP_OPENGL_ACTIVE
+    GRPWINDOWSBLITGLES*                   blitgles;
+    #endif
 };
 
 

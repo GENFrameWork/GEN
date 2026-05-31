@@ -47,6 +47,39 @@
 #include "GRPDesktopManager.h"
 
 
+#ifdef GRP_OPENGL_ACTIVE
+#include "GRPLINUXBlitGLES.h"
+#include <stdio.h>
+#include <string.h>
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool IsRunningOnWSL()
+* @brief      Detect WSL/WSLg at runtime by reading /proc/version.
+*
+*             On WSLg the X server (Xwayland) runs in a separate mount namespace from the
+*             user distro, so MIT-SHM cannot be shared and EGL→X11 presentation fails
+*             ("MESA: error: Failed to attach to x11 shm"). There is also no real GPU for
+*             GLES (only llvmpipe software). OpenGL therefore brings no benefit on WSL and
+*             cannot present — so we skip it and use the X11 (XPutImage) software path,
+*             which works perfectly. On real Linux / Raspberry Pi this returns false and
+*             the normal hardware OpenGL ES path is used.
+* @ingroup    PLATFORM_LINUX
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool IsRunningOnWSL()
+{
+  FILE* f = fopen("/proc/version", "r");
+  if(!f) return false;
+  char buf[512];
+  size_t n = fread(buf, 1, sizeof(buf)-1, f);
+  fclose(f);
+  buf[n] = '\0';
+  return (strstr(buf, "microsoft") != NULL || strstr(buf, "Microsoft") != NULL || strstr(buf, "WSL") != NULL);
+}
+#endif
+
+
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
@@ -186,6 +219,12 @@ bool GRPLINUXSCREENX11::Update(GRPCANVAS* canvas)
       return false;
     }
   
+  #ifdef GRP_OPENGL_ACTIVE
+  if(blitgles) return blitgles->Update(canvas);
+  #endif
+
+  // X11 software path — always compiled, used as fallback when blitgles is NULL
+  // (WSL, EGL init failure, or GRP_OPENGL_ACTIVE not defined)
   GC gc = XCreateGC(display, window, 0, NULL);
   if(gc)
     {
@@ -237,6 +276,15 @@ bool GRPLINUXSCREENX11::UpdateTransparent(GRPCANVAS* canvas)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Delete()
 {
+  #ifdef GRP_OPENGL_ACTIVE
+  if(blitgles)
+    {
+      blitgles->Destroy();
+      GEN_DELETE blitgles;
+      blitgles = NULL;
+    }
+  #endif
+
   if(!display) return false;
   if(!window)  return false;
 
@@ -453,6 +501,23 @@ XVisualInfo* GRPLINUXSCREENX11::GetVisualInfo()
 }
 
 
+#ifdef GRP_OPENGL_ACTIVE
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPLINUXBLITGLES* GRPLINUXSCREENX11::GetBlitGLES()
+* @brief      Get OpenGL ES blitter (only present when GRP_OPENGL_ACTIVE is defined)
+* @ingroup    PLATFORM_LINUX
+*
+* @return     GRPLINUXBLITGLES* :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPLINUXBLITGLES* GRPLINUXSCREENX11::GetBlitGLES()
+{
+  return blitgles;
+}
+#endif
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPLINUXSCREENX11::Create_Window(bool show)
@@ -562,19 +627,104 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
     } 
   
   
+  #ifndef GRP_OPENGL_ACTIVE
+
   XMatchVisualInfo(display, DefaultScreen(display), 32, TrueColor, &vinfo);
+
+  #else
+
+  // Try EGL visual. On WSL we skip OpenGL entirely (no GPU + EGL→X11 presentation
+  // is broken there); everywhere else we try EGL and fall back if anything fails.
+  bool opengl_visual_ok = false;
+
+  if(IsRunningOnWSL())
+    {
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] WSL detected; using X11 software path (no GPU / EGL->X11 SHM unsupported)"));
+    }
+   else
+    {
+      if(!blitgles)
+        {
+          blitgles = GEN_NEW GRPLINUXBLITGLES();
+        }
+
+      if(blitgles)
+        {
+          EGLint visid = 0;
+          if(blitgles->ChooseVisualID((EGLNativeDisplayType)display, visid))
+            {
+              XVisualInfo vtempl;
+              memset(&vtempl, 0, sizeof(vtempl));
+              vtempl.visualid = (VisualID)visid;
+              int nvis = 0;
+              XVisualInfo* vis = XGetVisualInfo(display, VisualIDMask, &vtempl, &nvis);
+              if(vis && nvis > 0)
+                {
+                  vinfo = vis[0];
+                  XFree(vis);
+                  opengl_visual_ok = true;
+                }
+            }
+
+          if(!opengl_visual_ok)
+            {
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] EGL visual failed; falling back to X11 software path"));
+              GEN_DELETE blitgles;
+              blitgles = NULL;
+            }
+        }
+    }
+
+  if(!opengl_visual_ok)
+    {
+      XMatchVisualInfo(display, DefaultScreen(display), 32, TrueColor, &vinfo);
+    }
+
+  #endif
 
   attr.colormap         = XCreateColormap(display, root, vinfo.visual, AllocNone);
   attr.border_pixel     = 0;
-  attr.background_pixel = Style_Is(GRPSCREENSTYLE_TRANSPARENT)?0x00000000:0xFFFFFFFF;
 
-  window = XCreateWindow(display, root, posx, posy, width, height, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixel, &attr);        
+  #ifdef GRP_OPENGL_ACTIVE
+  if(blitgles)
+    {
+      // OpenGL path: do NOT set CWBackPixel. The X server would repaint the window
+      // white on every expose event, overwriting the EGL/GL-rendered content.
+      // CWBackPixmap=None tells X "don't paint any background, GL handles it".
+      attr.background_pixmap = None;
+      window = XCreateWindow(display, root, posx, posy, width, height, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixmap, &attr);
+    }
+   else
+  #endif
+    {
+      attr.background_pixel = Style_Is(GRPSCREENSTYLE_TRANSPARENT)?0x00000000:0xFFFFFFFF;
+      window = XCreateWindow(display, root, posx, posy, width, height, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixel, &attr);        
+    }
   
   //window =  XCreateSimpleWindow(display, root, posx, posy, width, height, 0,  BlackPixel(display, 0), WhitePixel(display, 0));          
   if(!window) 
     {
       return false;
     }      
+
+  // Transparent popups: ask the compositor not to draw a drop shadow around the
+  // window. The window is already undecorated (_MOTIF_WM_HINTS decorations=0),
+  // so window managers that tie shadows to decorations (Mutter, KWin) won't
+  // shadow it; but standalone compositors (picom/compton, common on Openbox /
+  // Raspberry Pi / lightweight desktops) shadow undecorated windows by their own
+  // rules. picom/compton honor the per-window property _COMPTON_SHADOW (CARDINAL):
+  // a value of 0 disables the shadow for this window. Harmless where it is not
+  // read. (If your compositor ignores it, see the README for alternatives.)
+  if(Style_Is(GRPSCREENSTYLE_TRANSPARENT))
+    {
+      Atom comptonshadow = XInternAtom(display, "_COMPTON_SHADOW", False);  // create if absent so we can set it
+      if(comptonshadow != None)
+        {
+          long shadowoff = 0;
+          XChangeProperty(display, window, comptonshadow, XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&shadowoff, 1);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] _COMPTON_SHADOW=0 set (no compositor shadow on transparent window)"));
+        }
+    }
 
   /*
   if(Style_Is(GRPSCREENSTYLE_FULLSCREEN))
@@ -722,6 +872,17 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
   
   XMapWindow(display , window);
   XMoveWindow(display, window, posx, posy);    
+
+  #ifdef GRP_OPENGL_ACTIVE
+  // EGL context is created now that the X window exists.
+  // If it fails, we silently fall back to the X11 software path.
+  if(blitgles && !blitgles->Create(this))
+    {
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] BlitGLES create failed; falling back to X11 software path"));
+      GEN_DELETE blitgles;
+      blitgles = NULL;
+    }
+  #endif
 
   return true;
 }
@@ -1051,6 +1212,10 @@ void GRPLINUXSCREENX11::Clean()
   window    = 0;
 
   isdesktop = false;
+
+  #ifdef GRP_OPENGL_ACTIVE
+  blitgles  = NULL;
+  #endif
 }
 
 

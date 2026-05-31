@@ -88,12 +88,7 @@ class GRPVIEWPORT
     bool                          SetCanvasPosition                   (float  x, float  y);
 
 
-
-    #ifdef GRP_OPENGL_ACTIVE
-
-    #else
     GRPCANVAS*                    GetCanvas                           ();
-    #endif
 
   protected:
 
@@ -106,15 +101,11 @@ class GRPVIEWPORT
     float                         width;
     float                         height;
 
-    #ifdef GRP_OPENGL_ACTIVE
-
-
-    #else
+    
     float                         canvas_x;
     float                         canvas_y;
     GRPCANVAS*                    canvas;
-    #endif
-
+    
   private:
 
     void                          Clean                               ();
