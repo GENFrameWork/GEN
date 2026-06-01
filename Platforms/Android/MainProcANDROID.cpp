@@ -814,6 +814,7 @@ void MAINPROCANDROID::OnCreateWindow()
 
           if(!mainscreen->GetWidth() || !mainscreen->GetHeight()) mainscreen->SetSize(maxwidth, maxheight);
 
+          // Step 1 — SCREEN_CREATING: let the app configure screen size, style, etc.
           GRPXEVENT grpevent(this, GRPXEVENT_TYPE_SCREEN_CREATING);
           grpevent.SetScreen(mainscreen);
           applicationgrp->PostEvent(&grpevent);
@@ -850,40 +851,47 @@ void MAINPROCANDROID::OnCreateWindow()
           // EGL native visual id). So: leave the screen size exactly as the app set it.
           #endif
 
-          GRPVIEWPORT*  viewport = mainscreen->GetViewport(0);
-          if(!viewport)
+          // Step 2 — Create the screen (allocates screencanvas).  Must happen BEFORE
+          // SCREEN_CANVASCREATING so that CreateViewport() has a fully-initialised screen.
+          if(!mainscreen->Create(true))
             {
-              if(!mainscreen->CreateViewport(GRPVIEWPORT_ID_MAIN , 0.0f, 0.0f, (float)mainscreen->GetWidth()   , (float)mainscreen->GetHeight(), 0,  0, (float)mainscreen->GetWidth(), (float)mainscreen->GetHeight()))
-                {
-                  return;
-                }                  
-             }
+              return;
+            }
 
-          if(mainscreen->Create(true))
-            {
-              mainscreen->SetAndroidHandle(androidapplication->window);
+          mainscreen->SetAndroidHandle(androidapplication->window);
 
-              GRPVIEWPORT*  viewport = NULL;
+          // Step 3 — SCREEN_CANVASCREATING: let the app create its own named viewport
+          // (e.g. "message_viewport" in UI_Message, "canvas2d_viewport" in Canvas2D).
+          // On Linux/Windows this event is fired inside APPFlowGraphics::CreateMainScreenProcess()
+          // (the #ifndef ANDROID block).  On Android that block is skipped, so we fire it here.
+          // IMPORTANT: this must come BEFORE the fallback viewport creation below, so that
+          // the app viewport (if any) is found by GetViewport(0) and the fallback is skipped.
+          {
+            GRPXEVENT grpeventcanvas(this, GRPXEVENT_TYPE_SCREEN_CANVASCREATING);
+            grpeventcanvas.SetScreen(mainscreen);
+            applicationgrp->PostEvent(&grpeventcanvas);
+          }
 
-              GRPCANVAS*    canvas   = NULL;
-              GRPRECTINT*   rect     = NULL;
+          // Step 4 — Fallback: if the app did not create any viewport, create the default one.
+          // This ensures headless/simple apps still have a viewport to render into.
+          {
+            GRPVIEWPORT* viewport = mainscreen->GetViewport(0);
+            if(!viewport)
+              {
+                if(!mainscreen->CreateViewport(GRPVIEWPORT_ID_MAIN , 0.0f, 0.0f, (float)mainscreen->GetWidth()   , (float)mainscreen->GetHeight(), 0,  0, (float)mainscreen->GetWidth(), (float)mainscreen->GetHeight()))
+                  {
+                    return;
+                  }                  
+              }
+          }
 
-              viewport = mainscreen->GetViewport(0);
-              canvas   = NULL;
-              
-              if(viewport) canvas = viewport->GetCanvas();
-              if(canvas) 
-                {
-                  // viewport->GetCanvas()->GetScreenZone()->Set(0, 0, mainscreen->GetWidth(), mainscreen->GetHeight());
-                }
-
+          {
               #ifdef INP_ACTIVE
               if(!CreateInputDevices(&INPMANAGER::GetInstance(), (GRPANDROIDSCREEN*)mainscreen)) return;
               #endif
 
               screenactived = true;
-
-            }
+          }
         }
     }
 }

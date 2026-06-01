@@ -724,6 +724,23 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
           XChangeProperty(display, window, comptonshadow, XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&shadowoff, 1);
           XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] _COMPTON_SHADOW=0 set (no compositor shadow on transparent window)"));
         }
+
+      // WSLg / generic overlay: under WSLg there is NO X11 compositor (no picom),
+      // so _COMPTON_SHADOW is ignored; the shadow is drawn by the WSLg/Windows
+      // window-integration (RAIL) layer around each managed Linux window. To stop
+      // that (and any X11 compositor frame shadow on a real desktop), mark the
+      // transparent popup override-redirect: it bypasses the window manager and
+      // the WSLg integration decoration entirely (no border, no shadow, no
+      // taskbar entry). Must be set BEFORE the window is mapped (Show() maps it).
+      // Trade-off: the WM no longer manages focus for this window; mouse input
+      // still works (events go to the window under the pointer); keyboard focus
+      // may need XSetInputFocus if the popup uses the keyboard.
+      {
+        XSetWindowAttributes swa;
+        swa.override_redirect = True;
+        XChangeWindowAttributes(display, window, CWOverrideRedirect, &swa);
+        XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] override_redirect set on transparent window (no WM/WSLg frame shadow)"));
+      }
     }
 
   /*

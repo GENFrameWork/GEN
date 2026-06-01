@@ -29,6 +29,9 @@
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
+#if defined(__ANDROID__)
+#include <android/log.h>
+#endif
 
 
 
@@ -839,6 +842,9 @@ bool GRPSCREEN::CreateViewport(XCHAR* ID, float posx, float posy, float width, f
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::UpdateViewports()
 {
+  #if defined(__ANDROID__)
+  __android_log_print(ANDROID_LOG_INFO, "GEN_BLIT", "PATH UpdateViewports ENTER screencanvas=%p transparent=%d nviewports=%d", (void*)screencanvas, (int)Style_Is(GRPSCREENSTYLE_TRANSPARENT), (int)viewports.GetSize());
+  #endif
   if(!screencanvas)
     {   
       return false;

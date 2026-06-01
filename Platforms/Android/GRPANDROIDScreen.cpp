@@ -52,6 +52,9 @@
 
 #include "GEN_Control.h"
 
+#include <android/log.h>
+#define GENBLITLOG(...) __android_log_print(ANDROID_LOG_INFO, "GEN_BLIT", __VA_ARGS__)
+
 
 
 
@@ -128,6 +131,7 @@ bool GRPANDROIDSCREEN::Create(bool show)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Update()
 {
+  GENBLITLOG("PATH Update() no-arg (does nothing)");
   return true;
 }
 
@@ -145,8 +149,9 @@ bool GRPANDROIDSCREEN::Update()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
 {
-  if(!canvas)        return false;
-  if(!anativehandle) return false;
+  GENBLITLOG("PATH Update(canvas) ENTER canvas=%p handle=%p", (void*)canvas, (void*)anativehandle);
+  if(!canvas)        { GENBLITLOG("Update(canvas): canvas NULL -> false"); return false; }
+  if(!anativehandle) { GENBLITLOG("Update(canvas): anativehandle NULL -> false"); return false; }
 
   #ifndef GRP_OPENGL_ACTIVE
 
@@ -193,8 +198,21 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
       blitgles = GEN_NEW GRPANDROIDBLITGLES();
       if(!blitgles) return false;
 
+      // FIX: propagate the screen's TRANSPARENT style to the blitter BEFORE
+      // Create() is called.  Create() drives EGL config selection (ChooseConfig)
+      // which requests EGL_ALPHA_SIZE only when usealpha==true.  If we skip
+      // this call the EGL surface is created without an alpha channel and the
+      // Android compositor treats the window as fully opaque (black background).
+      // This mirrors what the Linux X11 blitter does via ChooseVisualID().
+      blitgles->SetUseAlpha(Style_Is(GRPSCREENSTYLE_TRANSPARENT));
+      GENBLITLOG("Update(canvas): usealpha=%d (screen style TRANSPARENT=%d)",
+                 (int)Style_Is(GRPSCREENSTYLE_TRANSPARENT),
+                 (int)Style_Is(GRPSCREENSTYLE_TRANSPARENT));
+
+      GENBLITLOG("Update(canvas): creating blitgles...");
       if(!blitgles->Create(this))
         {
+          GENBLITLOG("Update(canvas): blitgles->Create FAILED");
           XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen Android] BlitGLES create failed"));
           GEN_DELETE blitgles;
           blitgles = NULL;
@@ -202,9 +220,70 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
         }
     }
 
-  return blitgles->Update(canvas);
+  GENBLITLOG("Update(canvas): GL branch, blitgles=%p, calling blit", (void*)blitgles);
+  {
+    bool br = blitgles->Update(canvas);
+    GENBLITLOG("Update(canvas): GL blit result=%d", (int)br);
+    return br;
+  }
 
   #endif
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPANDROIDSCREEN::UpdateTransparent(GRPCANVAS* canvas)
+* @brief      Present a transparent-style screen.
+*
+*             GRPSCREEN::UpdateViewports() routes transparent screens (the style
+*             GRPSCREENSTYLE_TRANSPARENT, used e.g. by UI_Message) to
+*             UpdateTransparent() instead of Update(). The base class
+*             GRPSCREEN::UpdateTransparent() returns false (does nothing), so
+*             without this override an Android transparent screen presented
+*             NOTHING — most visibly with GRP_OPENGL_ACTIVE, where the popup
+*             never appeared.
+*
+*             On Android there is no desktop window/compositor to composite a
+*             layered window against (unlike Windows' UpdateLayeredWindow): the
+*             activity owns a single surface and the canvas (RGBA, with the dialog
+*             opaque and the rest alpha=0) is simply presented onto it. So we
+*             present it through the normal path — exactly as the Linux X11 screen
+*             does. In the software build this posts the canvas via
+*             ANativeWindow_lock/unlockAndPost; in the OpenGL build it goes through
+*             the blitter. The dialog becomes visible either way.
+*
+*             NOTE: for the see-through-to-launcher effect (truly transparent
+*             background) the activity must additionally be translucent and the
+*             GL path must use an alpha surface; see the delivery notes. Making the
+*             popup VISIBLE (the reported bug) only needs this override.
+* @ingroup    PLATFORM_ANDROID
+*
+* @param[in]  canvas : canvas to present.
+*
+* @return     bool : true if is succesful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPANDROIDSCREEN::UpdateTransparent(GRPCANVAS* canvas)
+{
+  GENBLITLOG("PATH UpdateTransparent ENTER canvas=%p handle=%p style_transp=%d w=%d h=%d", (void*)canvas, (void*)anativehandle, (int)Style_Is(GRPSCREENSTYLE_TRANSPARENT), (int)width, (int)height);
+  // Sample canvas pixels BEFORE blitting to see if the UI system drew the dialog.
+  // If ALL pixels are 0x00000000 (transparent black), the canvas is empty and the
+  // problem is NOT the blitter — it is GEN_USERINTERFACE.Update() not rendering.
+  if(canvas && canvas->Buffer_Get())
+    {
+      auto* buf  = (unsigned int*)canvas->Buffer_Get();
+      int   cx   = (int)width / 2;
+      int   cy   = (int)height / 2;
+      unsigned int p0     = buf[0];
+      unsigned int pcenter= buf[cx + cy * (int)width];
+      unsigned int p10_30 = ((int)width > 10 && (int)height > 30) ? buf[10 + 30 * (int)width] : 0;
+      GENBLITLOG("CANVAS PIXELS top-left=0x%08X center(%d,%d)=0x%08X pos(10,30)=0x%08X", p0, cx, cy, pcenter, p10_30);
+      GENBLITLOG("CANVAS EMPTY=%s  (0x00000000 = transparent/nothing drawn)", (p0==0 && pcenter==0 && p10_30==0) ? "YES -> UI not drawing" : "NO -> blitter issue");
+    }
+  bool r = Update(canvas);
+  GENBLITLOG("PATH UpdateTransparent EXIT result=%d", (int)r);
+  return r;
 }
 
 

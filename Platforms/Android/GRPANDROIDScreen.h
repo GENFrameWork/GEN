@@ -60,6 +60,7 @@ class GRPANDROIDSCREEN : public GRPSCREEN
 
     bool                                  Update                      ();
     bool                                  Update                      (GRPCANVAS* canvas);
+    bool                                  UpdateTransparent           (GRPCANVAS* canvas);
 
     bool                                  Delete                      ();
 
