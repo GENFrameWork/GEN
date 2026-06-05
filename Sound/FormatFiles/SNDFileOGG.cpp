@@ -108,7 +108,7 @@ bool SNDFILEOGG::LoadFile()
 
   bool  status = false;
 
-  GEN_XFACTORY_CREATE(xfile, Create_File())
+  xfile=GEN_XFACTORY.Create_File();
   if(!xfile)
     {
       xbuffer->Delete();

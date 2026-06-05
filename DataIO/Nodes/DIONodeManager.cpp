@@ -96,7 +96,7 @@ DIONODEMANAGER::~DIONODEMANAGER()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEMANAGER::Ini()
 {
-  GEN_XFACTORY_CREATE(xmutexnodes, Create_Mutex())
+  xmutexnodes=GEN_XFACTORY.Create_Mutex();
   if(!xmutexnodes) return false;
   
   xthreadnodes = CREATEXTHREAD(XTHREADGROUPID_SCHEDULER, __L("DIONODEMANAGER::Ini"), ThreadNodes, (void*)this);

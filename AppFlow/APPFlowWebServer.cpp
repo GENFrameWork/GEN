@@ -349,7 +349,7 @@ bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHE
   XBUFFER xbuffer;
   bool    status = false;
 
-  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+  XFILE* xfile=GEN_XFACTORY.Create_File();
   if(!xfile) return false;
 
   if(xfile->Open(xpathfile))

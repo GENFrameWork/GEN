@@ -76,11 +76,11 @@ DIOLIGHTSENSORLDRANALOG::DIOLIGHTSENSORLDRANALOG( DIOGPIO* diogpio, int pindata,
   this->diogpio = diogpio;
   this->pindata     = pindata;
 
-  GEN_XFACTORY_CREATE(xtimer, CreateTimer())
+  xtimer=GEN_XFACTORY.CreateTimer();
   
   if(activatecache)
     {
-      GEN_XFACTORY_CREATE(xmutexread, Create_Mutex())
+      xmutexread=GEN_XFACTORY.Create_Mutex();
       if(xmutexread)
         {
           threadcache  = CREATEXTHREAD(XTHREADGROUPID_DIOSTREAM, __L("DIOLIGHTSENSORLDRANALOG::DIOLIGHTSENSORLDRANALOG"), ThreadRunFunction, (void*)this);

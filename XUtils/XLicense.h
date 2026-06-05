@@ -91,7 +91,7 @@
                                                                                                 if(status)  status = xlicense->LoadFromFile(xpath, appID, &license, &expireddate);  \
                                                                                                 if(status)  status = license.Compare(xlicense->Get());                              \
                                                                                                 if(!status) xlicense->SetEvent(XLICENSEXEVENT_TYPE_INVALID);                        \
-                                                                                                GEN_XFACTORY_CREATE(xtimeactual, CreateDateTime())                                  \
+                                                                                                xtimeactual=GEN_XFACTORY.CreateDateTime();                                  \
                                                                                                 if(xtimeactual)                                                                     \
                                                                                                   {                                                                                 \
                                                                                                     xtimeexpired.GetDateTimeFromString(expireddate, XDATETIME_FORMAT_STANDARD);     \

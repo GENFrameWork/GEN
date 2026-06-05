@@ -32,9 +32,6 @@
 
 #include "XString.h"
 
-#include "FactoryBase.h"
-
-
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
@@ -75,7 +72,7 @@ enum XCONSOLE_SYMBOLSUSED
 
 class XFACTORY;
 
-class XCONSOLE : public FACTORYBASE
+class XCONSOLE 
 {
   public:
 

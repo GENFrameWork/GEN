@@ -255,7 +255,7 @@ bool XLINUXPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* pa
     }
 
 
-  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+  XFILE* xfile=GEN_XFACTORY.Create_File();
   if(xfile)
     {
       exist = xfile->Open(applicationpath);

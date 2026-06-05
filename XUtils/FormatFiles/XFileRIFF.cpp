@@ -282,7 +282,7 @@ XFILERIFF::XFILERIFF()
 { 
   Clean();     
 
-  GEN_XFACTORY_CREATE(xfilebase, Create_File())
+  xfilebase=GEN_XFACTORY.Create_File();
 }
 
 

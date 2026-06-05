@@ -611,7 +611,7 @@ bool XUUID::GenerateRandom()
       return false;
     }
       
-  XDATETIME* GEN_XFACTORY_CREATE(datetime, CreateDateTime())
+  XDATETIME* datetime=GEN_XFACTORY.CreateDateTime();
   if(!datetime)
     {
       return false;

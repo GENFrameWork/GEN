@@ -225,7 +225,7 @@ bool DIOSMTPATTACHMENT::FileExists(XQWORD* size)
 {  
   bool   status = false;
   
-  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+  XFILE* xfile=GEN_XFACTORY.Create_File();
   if(xfile)
     {
       if(xfile->Open(xpath))
@@ -1183,7 +1183,7 @@ bool DIOSMTP::Send()
                       return false;
                     }
 
-                  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+                  XFILE* xfile=GEN_XFACTORY.Create_File();
                   if(xfile)
                     {
                       XQWORD br  = filesize;

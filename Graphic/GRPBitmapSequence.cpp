@@ -209,7 +209,7 @@ GRPBITMAPSEQUENCE::GRPBITMAPSEQUENCE()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(timer, CreateTimer())
+  timer=GEN_XFACTORY.CreateTimer();
   
   AjustTime(GRPBITMAPSEQUENCE_FRAMESSECOND);  
 }

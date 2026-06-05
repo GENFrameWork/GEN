@@ -376,7 +376,7 @@ DIOPROTOCOL_FILE::DIOPROTOCOL_FILE()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(xfile, Create_File())
+  xfile=GEN_XFACTORY.Create_File();
 }
 
 
@@ -883,11 +883,11 @@ DIOPROTOCOL::DIOPROTOCOL(DIOSTREAM* diostream)
   RegisterEvent(DIOPROTOCOL_XEVENT_TYPE_FILEBLOCK);
   RegisterEvent(DIOPROTOCOL_XEVENT_TYPE_ADDALERT);
 
-  GEN_XFACTORY_CREATE(xdatetime         , CreateDateTime())
-  GEN_XFACTORY_CREATE(xtimer            , CreateTimer())
-  GEN_XFACTORY_CREATE(watchdog          , CreateTimer())
-  GEN_XFACTORY_CREATE(xdir              , Create_Dir())
-  GEN_XFACTORY_CREATE(timerfileprogress , CreateTimer())
+  xdatetime=GEN_XFACTORY.CreateDateTime();
+  xtimer=GEN_XFACTORY.CreateTimer();
+  watchdog=GEN_XFACTORY.CreateTimer();
+  xdir=GEN_XFACTORY.Create_Dir();
+  timerfileprogress=GEN_XFACTORY.CreateTimer();
 
   AddCommand(DIOPROTOCOL_CMDTYPE_SENDISINITSERVERPROTOCOL   , __L("O")                , __L("O")            , RCV_SendIsInitServerProtocol      , __L("SendIsInitServerProtocol")   );
   AddCommand(DIOPROTOCOL_CMDTYPE_GETPROTOCOLVERSION         , __L("")                 , __L("WWW")          , RCV_GetProtocolVersion            , __L("GetProtocolVersion")         );
@@ -911,22 +911,22 @@ DIOPROTOCOL::DIOPROTOCOL(DIOSTREAM* diostream)
   fileprogress = GEN_NEW DIOPROTOCOL_FILE();
   if(!fileprogress) return;
 
-  GEN_XFACTORY_CREATE(xmutexanswers, Create_Mutex())
+  xmutexanswers=GEN_XFACTORY.Create_Mutex();
   if(!xmutexanswers) return;
 
-  GEN_XFACTORY_CREATE(xmutexasks, Create_Mutex())
+  xmutexasks=GEN_XFACTORY.Create_Mutex();
   if(!xmutexasks) return;
 
-  GEN_XFACTORY_CREATE(xmutexcommands, Create_Mutex())
+  xmutexcommands=GEN_XFACTORY.Create_Mutex();
   if(!xmutexcommands) return;
 
-  GEN_XFACTORY_CREATE(xmutexreads,Create_Mutex())
+  xmutexreads=GEN_XFACTORY.Create_Mutex();
   if(!xmutexreads) return;
 
-  GEN_XFACTORY_CREATE(xmutexwrites, Create_Mutex())
+  xmutexwrites=GEN_XFACTORY.Create_Mutex();
   if(!xmutexwrites) return;
 
-  GEN_XFACTORY_CREATE(xmutexfilesprogress, Create_Mutex())
+  xmutexfilesprogress=GEN_XFACTORY.Create_Mutex();
   if(!xmutexfilesprogress) return;
 
   xthreadreceived = CREATEXTHREAD(XTHREADGROUPID_DIOPROTOCOL, __L("DIOPROTOCOL::DIOPROTOCOL received"),ThreadReceived,(void*)this);
@@ -2886,7 +2886,7 @@ int DIOPROTOCOL::RCV_DeleteFile(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd,
 
   xbuffer.GetWithMask(cmd->GetSINMask(), 0, &path, &overwrite);
 
-  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+  XFILE* xfile=GEN_XFACTORY.Create_File();
   if(xfile)
     {
       result = xfile->Erase(path,overwrite?true:false)?true:false;
@@ -3186,7 +3186,7 @@ XDWORD DIOPROTOCOL::CRC32OfFile(XPATH& xpath)
   HASHCRC32* crc32 = GEN_NEW HASHCRC32();
   if(!crc32) return false;
 
-  XFILE* GEN_XFACTORY_CREATE(file, Create_File());
+  XFILE* file=GEN_XFACTORY.Create_File();
   if(file)
     {
       if(file->Open(xpath))

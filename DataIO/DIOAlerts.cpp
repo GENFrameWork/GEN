@@ -87,7 +87,7 @@ DIOALERT_CONDITION::DIOALERT_CONDITION()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(lasttimersend, CreateTimer())
+  lasttimersend=GEN_XFACTORY.CreateTimer();
 }
           
 
@@ -276,7 +276,7 @@ DIOALERT::DIOALERT()
 {
   Clean();
   
-  GEN_XFACTORY_CREATE(xdatetime, CreateDateTime())
+  xdatetime=GEN_XFACTORY.CreateDateTime();
 }
 
 
@@ -430,7 +430,7 @@ XDWORD DIOALERT::CalculateID(bool withdatetime)
   levelstring.Format(__L("%s %d"), applicationID.Get(), level);
   IDstring += levelstring;
 
-  XRAND* GEN_XFACTORY_CREATE(xrand, CreateRand())
+  XRAND* xrand=GEN_XFACTORY.CreateRand();
   if(xrand)
     {
       levelstring.Format(__L(" %d "), xrand->Between(1000, 10000000) * xrand->Between(1000, 10000000));
@@ -652,7 +652,7 @@ bool DIOALERTS::Ini()
 
   //-------------------------
 
-  GEN_XFACTORY_CREATE(xmutexsending, Create_Mutex())
+  xmutexsending=GEN_XFACTORY.Create_Mutex();
   if(!xmutexsending) return false;
 
   //-------------------------

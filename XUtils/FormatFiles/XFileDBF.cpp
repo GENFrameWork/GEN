@@ -644,7 +644,7 @@ bool XFILEDBF_HEADER::Create(XFILE* fileb)
 
   headerdata[0] = 0x03;
 
-  XDATETIME* GEN_XFACTORY_CREATE(xdatetime, CreateDateTime())
+  XDATETIME* xdatetime=GEN_XFACTORY.CreateDateTime();
   if(xdatetime)
     {
       xdatetime->Read();
@@ -1563,7 +1563,7 @@ bool XFILEDBF::Pack()
   Close();
 
 
-  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+  XFILE* xfile=GEN_XFACTORY.Create_File();
   if(!xfile) return false;
 
   bool status = true;

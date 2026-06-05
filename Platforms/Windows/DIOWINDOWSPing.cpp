@@ -143,7 +143,7 @@ bool DIOWINDOWSPING::Do(XDWORD nretries, XDWORD timebetweenchecks, bool exitfirs
       XSTRING   address;
       XBUFFER   xbuffer;
       
-      XRAND* GEN_XFACTORY_CREATE(xrand, CreateRand())
+      XRAND* xrand=GEN_XFACTORY.CreateRand();
       if(!xrand) break;
 
       memset((XBYTE*)&echorequest, 0, sizeof(DIOWINDOWSPING_ECHODATA));

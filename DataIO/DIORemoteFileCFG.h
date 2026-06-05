@@ -157,7 +157,7 @@ class DIOREMOTEFILECFG : public XFILECFG
      
                                                       if(status[0])
                                                         {                                                                                                                      
-                                                          XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+                                                          XFILE* xfile=GEN_XFACTORY.Create_File();
                                                           if(xfile)
                                                             {
                                                               xfile->Erase(xpathremotefile, true);

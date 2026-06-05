@@ -71,7 +71,7 @@ SCRIPT_LIB_CONSOLE::SCRIPT_LIB_CONSOLE() : SCRIPT_LIB(SCRIPT_LIB_NAME_CONSOLE)
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(console, CreateConsole())
+  console=GEN_XFACTORY.CreateConsole();
 }
 
 
@@ -129,7 +129,7 @@ XCONSOLE* SCRIPT_LIB_CONSOLE::GetConsole()
 {
   if(!console) 
     {
-      GEN_XFACTORY_CREATE(console, CreateConsole())
+      console=GEN_XFACTORY.CreateConsole();
     }
     
   if(!console) return NULL;

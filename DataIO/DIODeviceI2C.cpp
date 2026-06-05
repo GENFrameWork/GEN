@@ -69,7 +69,7 @@ DIODEVICEI2C::DIODEVICEI2C()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(xtimerout, CreateTimer());  
+  xtimerout=GEN_XFACTORY.CreateTimer();  
 }
 
 

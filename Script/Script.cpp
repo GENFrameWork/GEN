@@ -108,7 +108,7 @@ SCRIPT::SCRIPT()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(xtimer, CreateTimer())
+  xtimer=GEN_XFACTORY.CreateTimer();
   if(!xtimer) return;
 
   xfiletxt = GEN_NEW XFILETXT();

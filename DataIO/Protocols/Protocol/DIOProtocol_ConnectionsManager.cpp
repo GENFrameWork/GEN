@@ -85,7 +85,7 @@ DIOPROTOCOL_CONNECTION::DIOPROTOCOL_CONNECTION(DIOSTREAMCONFIG* diostreamcfg)
 
   this->diostreamcfg  = diostreamcfg;
 
-  GEN_XFACTORY_CREATE(xmutexinuseID, Create_Mutex())
+  xmutexinuseID=GEN_XFACTORY.Create_Mutex();
 
   inuseID.SetIsMulti(true);
 }
@@ -354,13 +354,13 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::Ini(bool isserver, DIOSTREAMCONFIG* diostre
 
   this->diostreamcfg->SetMode(isserver?DIOSTREAMMODE_SERVER:DIOSTREAMMODE_CLIENT);
 
-  GEN_XFACTORY_CREATE(xtimerout, CreateTimer())
+  xtimerout=GEN_XFACTORY.CreateTimer();
   if(!xtimerout)  return false;
   
-  GEN_XFACTORY_CREATE(xmutexprotocolconnections, Create_Mutex())
+  xmutexprotocolconnections=GEN_XFACTORY.Create_Mutex();
   if(!xmutexprotocolconnections) return false;
 
-  GEN_XFACTORY_CREATE(xtimerconnections, CreateTimer())
+  xtimerconnections=GEN_XFACTORY.CreateTimer();
   if(xtimerconnections)
     {      
       xthreadconnections = CREATEXTHREAD(XTHREADGROUPID_DIOPROTOCOL_CONNECTIONMANAGER, __L("DIOPROTOCOL_CONNECTIONSMANAGER::Ini"), ThreadProtocolConnections, (void*)this);
@@ -370,7 +370,7 @@ bool DIOPROTOCOL_CONNECTIONSMANAGER::Ini(bool isserver, DIOSTREAMCONFIG* diostre
         }
     }
 
-  GEN_XFACTORY_CREATE(xtimerclienttry, CreateTimer())
+  xtimerclienttry=GEN_XFACTORY.CreateTimer();
   if(!xtimerclienttry) return false;
   
   xtimerclienttry->AddSeconds(DIOPROTOCOL_CONNECTIONS_DEFAULTIMETRYCONNECTIONS+1);
@@ -1661,7 +1661,7 @@ void DIOPROTOCOL_CONNECTIONSMANAGER::ThreadProtocolConnections(void* param)
                         }
                        else
                         {
-                          XTIMER* GEN_XFACTORY_CREATE(timerout, CreateTimer())
+                          XTIMER* timerout=GEN_XFACTORY.CreateTimer();
                           
                           while(1)
                             {

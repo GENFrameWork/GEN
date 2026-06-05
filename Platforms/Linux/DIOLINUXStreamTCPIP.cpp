@@ -198,7 +198,7 @@ bool DIOLINUXSTREAMTCPIP::Open()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIP::Disconnect()
 {
-  XTIMER* GEN_XFACTORY_CREATE(timerout, CreateTimer())
+  XTIMER* timerout=GEN_XFACTORY.CreateTimer();
   if(!timerout) return false;
 
   if((GetStatus() == DIOSTREAMSTATUS_CONNECTED)           ||

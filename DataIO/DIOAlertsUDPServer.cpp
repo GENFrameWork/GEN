@@ -119,7 +119,7 @@ bool DIOALERTSUDPSERVER::Ini(XCHAR* URL, int port)
       status = UDPdiostream->Open();
       if(status)
         {
-          GEN_XFACTORY_CREATE(xmutexalert, Create_Mutex())
+          xmutexalert=GEN_XFACTORY.Create_Mutex();
           if(xmutexalert)
             {
               threadread = CREATEXTHREAD(XTHREADGROUPID_DIOALERTS, __L("DIOALERTSUDPSERVER::Ini"), ThreadReadFunction, (void*)this);

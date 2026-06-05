@@ -1049,7 +1049,7 @@ bool DIOPCAP::Ini()
 {
   if(!CreateListNetInterfaces()) return false;
 
-  GEN_XFACTORY_CREATE(xmutexframes, Create_Mutex())
+  xmutexframes=GEN_XFACTORY.Create_Mutex();
 
   return netinterfaces.GetSize()?true:false;
 }

@@ -183,7 +183,7 @@ CIPHERRSA::CIPHERRSA() : CIPHER()
 
   type = CIPHERTYPE_RSA;
 
-  GEN_XFACTORY_CREATE(xrand, CreateRand())
+  xrand=GEN_XFACTORY.CreateRand())
 
   CIPHERRSA::instance = this;
 }

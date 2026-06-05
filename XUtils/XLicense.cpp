@@ -507,7 +507,7 @@ bool XLICENSE::LoadFromFile(XPATH& xpath, XSTRING& applicationID, XBUFFER* licen
   XBUFFER   xbuffer;
   bool      status  = false;
 
-  GEN_XFACTORY_CREATE(xfile, Create_File())
+  xfile=GEN_XFACTORY.Create_File();
   if(!xfile) 
     {
       return false;
@@ -676,7 +676,7 @@ bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING&
 
       licensestring.ConvertHexStringFromBuffer(licencia);
 
-      GEN_XFACTORY_CREATE(expirationdatetime, CreateDateTime())
+      expirationdatetime=GEN_XFACTORY.CreateDateTime();
       if(!expirationdatetime) 
         {
           return false;

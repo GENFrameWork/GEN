@@ -81,7 +81,7 @@ XBUFFER::XBUFFER(bool threadsafe)
 
   if(threadsafe) 
     {
-      GEN_XFACTORY_CREATE(xmutex, Create_Mutex())
+      xmutex=GEN_XFACTORY.Create_Mutex();
     }
 }
 
@@ -104,7 +104,7 @@ XBUFFER::XBUFFER(XDWORD size, bool threadsafe)
 
   if(threadsafe) 
     {
-      GEN_XFACTORY_CREATE(xmutex, Create_Mutex())
+      xmutex=GEN_XFACTORY.Create_Mutex();
     }
 
   Resize(size);
@@ -127,7 +127,7 @@ XBUFFER::XBUFFER(const XBUFFER& xbuffer)
 
   localhardwareuselittleendian = globalhardwareuselittleendian;
 
-  GEN_XFACTORY_CREATE(xmutex, Create_Mutex())
+  xmutex=GEN_XFACTORY.Create_Mutex();
 
   CopyFrom((XBUFFER&)xbuffer);
 }
@@ -2640,7 +2640,7 @@ bool XBUFFER::Padding_Add(XBYTE bitsadjust, XBUFFER_PADDINGTYPE type)
                                               Add((XBYTE)paddingsize);
                                               break;
 
-      case XBUFFER_PADDINGTYPE_ISO10126     : { XRAND* GEN_XFACTORY_CREATE(xrand, CreateRand())
+      case XBUFFER_PADDINGTYPE_ISO10126     : { XRAND* xrand=GEN_XFACTORY.CreateRand();
                                                 if(!xrand) return false;
 
                                                 for(int c=0;c<paddingsize-1;c++)

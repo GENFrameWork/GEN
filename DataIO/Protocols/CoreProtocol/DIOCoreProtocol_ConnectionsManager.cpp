@@ -151,13 +151,13 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Ini()
         }
     }
 
-  GEN_XFACTORY_CREATE(updateclass_xmutex, Create_Mutex())
+  updateclass_xmutex=GEN_XFACTORY.Create_Mutex();
   if(!updateclass_xmutex) 
     {
       return false;
     }
 
-  GEN_XFACTORY_CREATE(connections_delete_xmutex, Create_Mutex())
+  connections_delete_xmutex=GEN_XFACTORY.Create_Mutex();
   if(connections_delete_xmutex) 
     {
       connections_xthread = CREATEXTHREAD(XTHREADGROUPID_DIOPROTOCOL_CONNECTIONMANAGER, __L("DIOPROTOCOL_CONNECTIONSMANAGER::Ini"), ThreadConnections, (void*)this);

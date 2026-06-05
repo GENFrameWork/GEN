@@ -194,7 +194,7 @@ bool DIOWINDOWSSTREAMUDP::Disconnect()
     {
       SetEvent(DIOWINDOWSUDPFSMEVENT_DISCONNECTING);
 
-      XTIMER* GEN_XFACTORY_CREATE(timerout, CreateTimer())
+      XTIMER* timerout=GEN_XFACTORY.CreateTimer();
       if(timerout)
         {            
           while(GetStatus()!=DIOSTREAMSTATUS_DISCONNECTED)

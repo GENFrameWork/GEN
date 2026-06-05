@@ -257,7 +257,7 @@ DIOSTREAMICMP::DIOSTREAMICMP() : DIOSTREAM()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(datagramsmutex, Create_Mutex())
+  datagramsmutex=GEN_XFACTORY.Create_Mutex();
   host           = GEN_NEW DIOURL();
 }
 

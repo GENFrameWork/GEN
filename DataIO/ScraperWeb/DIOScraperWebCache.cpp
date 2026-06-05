@@ -132,7 +132,7 @@ DIOSCRAPERWEBCACHE::DIOSCRAPERWEBCACHE()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(xmutexlist, Create_Mutex())
+  xmutexlist=GEN_XFACTORY.Create_Mutex();
 }
 
 

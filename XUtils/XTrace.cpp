@@ -388,7 +388,7 @@ XTRACE_STATUS_MSG::XTRACE_STATUS_MSG()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(xtimerlastupdate, CreateTimer())
+  xtimerlastupdate=GEN_XFACTORY.CreateTimer();
 }
 
 

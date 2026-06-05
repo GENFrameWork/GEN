@@ -73,7 +73,7 @@ UI_ELEMENT::UI_ELEMENT()
   isvisible      = true;  
   isactive       = true;
 
-  GEN_XFACTORY_CREATE(blink_xtimer, CreateTimer())
+  blink_xtimer=GEN_XFACTORY.CreateTimer();
   blink_state    = true; 
   
   z_level        = 1; 

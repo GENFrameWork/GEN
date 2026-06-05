@@ -72,7 +72,7 @@ DIOSPITOUCHSCREENSTMPE610::DIOSPITOUCHSCREENSTMPE610(): DIODEVICE()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(xtimer, CreateTimer())
+  xtimer=GEN_XFACTORY.CreateTimer();
   
   databuffer = GEN_NEW XBUFFER();
 }

@@ -405,7 +405,7 @@ bool VERSIONFRAMEWORK::SetAppVersion(XCHAR* app_name, XCHAR* app_execname, XDWOR
 
   XSTRING string2; 
 
-  XDATETIME* GEN_XFACTORY_CREATE(xdatetime, CreateDateTime())
+  XDATETIME* xdatetime=GEN_XFACTORY.CreateDateTime();
   if(!xdatetime) return false;
 
   xdatetime->Read();
@@ -446,7 +446,7 @@ bool VERSIONFRAMEWORK::UpdateYearAppVersion()
 
   XSTRING string2; 
 
-  XDATETIME* GEN_XFACTORY_CREATE(xdatetime, CreateDateTime())
+  XDATETIME* xdatetime=GEN_XFACTORY.CreateDateTime();
   if(!xdatetime) return false;
 
   xdatetime->Read();

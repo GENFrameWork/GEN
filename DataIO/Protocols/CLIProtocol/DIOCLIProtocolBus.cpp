@@ -113,10 +113,10 @@ bool DIOCLIPROTOCOLBUS::Ini(DIOSTREAM* diostream, XCHAR* ID, int timeout)
 {	
 	this->ID = ID;
 
-  GEN_XFACTORY_CREATE(xmutexsendcommand, Create_Mutex());
+  xmutexsendcommand=GEN_XFACTORY.Create_Mutex();
   if(!xmutexsendcommand) return false;
 
-  GEN_XFACTORY_CREATE(enum_mutex, Create_Mutex());
+  enum_mutex=GEN_XFACTORY.Create_Mutex();
   if(!enum_mutex) return false;
 
   threadsendenumrequest	= CREATEXTHREAD(XTHREADGROUPID_DIOPROTOCOL_CLI_BUS, __L("DIOCLIPROTOCOLBUS::Ini2"), ThreadSendEnumRequest, (void*)this);

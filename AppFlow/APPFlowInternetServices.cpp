@@ -89,16 +89,16 @@ APPFLOWINTERNETSERVICES::APPFLOWINTERNETSERVICES()
   RegisterEvent(APPFLOWINTERNETSERVICES_XEVENT_TYPE_CHANGEIP);  
   RegisterEvent(APPFLOWINTERNETSERVICES_XEVENT_TYPE_ADJUSTDATETIME);
   
-  GEN_XFACTORY_CREATE(xmutex_datetime_local, Create_Mutex())
+  xmutex_datetime_local=GEN_XFACTORY.Create_Mutex();
   if(!xmutex_datetime_local) return;
 
-  GEN_XFACTORY_CREATE(xmutex_datetime_UTC, Create_Mutex())
+  xmutex_datetime_UTC=GEN_XFACTORY.Create_Mutex();
   if(!xmutex_datetime_UTC) return;
 
-  GEN_XFACTORY_CREATE(xdatetime_local, CreateDateTime())
+  xdatetime_local=GEN_XFACTORY.CreateDateTime();
   if(xdatetime_local) xdatetime_local->Read();
 
-  GEN_XFACTORY_CREATE(xdatetime_UTC, CreateDateTime())
+  xdatetime_UTC=GEN_XFACTORY.CreateDateTime();
   if(xdatetime_UTC) xdatetime_UTC->Read();
 
   #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE
@@ -296,7 +296,7 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
         {
           if(cfg->InternetServices_GetCheckIPsChangeCadence() > 0)
             {
-              XTIMER* GEN_XFACTORY_CREATE(timeout, CreateTimer())
+              XTIMER* timeout=GEN_XFACTORY.CreateTimer();
               if(timeout)
                 {              
                   do{ if(!publicIP.IsEmpty()) 

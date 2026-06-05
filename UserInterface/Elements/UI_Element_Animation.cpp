@@ -70,7 +70,7 @@ UI_ELEMENT_ANIMATION::UI_ELEMENT_ANIMATION()
 { 
   Clean();   
 
-  GEN_XFACTORY_CREATE(xtimerplay, CreateTimer())
+  xtimerplay=GEN_XFACTORY.CreateTimer();
   
   SetMilliSecondsDelay();
 

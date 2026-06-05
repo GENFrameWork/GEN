@@ -288,7 +288,7 @@ bool DIOWEBSERVER_HEADER::Create(XSTRING* resource, int version, int subversion,
     }
 
   XSTRING date;
-  XDATETIME* GEN_XFACTORY_CREATE(datetime, CreateDateTime())
+  XDATETIME* datetime=GEN_XFACTORY.CreateDateTime();
   if(datetime)
     {
       XSTRING day;
@@ -1375,10 +1375,10 @@ bool DIOWEBSERVER_CONNECTION::Ini(DIOWEBSERVER* webserver, DIOSTREAMTCPIPCONFIG*
 
   SetMode(DIOWEBSERVER_CONNECTION_MODE_UNKNOWN);
 
-  GEN_XFACTORY_CREATE(xtimerconnection, CreateTimer())
+  xtimerconnection=GEN_XFACTORY.CreateTimer();
   if(!xtimerconnection)      return false;
   
-  GEN_XFACTORY_CREATE(xtimerdisconnection, CreateTimer())
+  xtimerdisconnection=GEN_XFACTORY.CreateTimer();
   if(!xtimerdisconnection)   return false;
     
   nresourcesprocessed = 0;
@@ -1537,7 +1537,7 @@ bool DIOWEBSERVER_CONNECTION::Receiver(XBYTE* buffer, XDWORD& size, int timeout)
 
   XDWORD br;
 
-  XTIMER* GEN_XFACTORY_CREATE(xtimerout, CreateTimer())
+  XTIMER* xtimerout=GEN_XFACTORY.CreateTimer();
   if(!xtimerout)  return false;
   
   bool status = true;
@@ -2690,7 +2690,7 @@ bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutse
   RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_PONG);
   RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_DISCONNECTED);
 
-  GEN_XFACTORY_CREATE(xtimercontrol, CreateTimer())
+  xtimercontrol=GEN_XFACTORY.CreateTimer();
   if(!xtimercontrol) return false;
   
   diostreamcfg->SetMode(DIOSTREAMMODE_SERVER);
@@ -2699,7 +2699,7 @@ bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutse
 
   isactive = true;
 
-  GEN_XFACTORY_CREATE(xmutexconnections, Create_Mutex())
+  xmutexconnections=GEN_XFACTORY.Create_Mutex();
   if(!xmutexconnections) return false;
 
   bool status = true;

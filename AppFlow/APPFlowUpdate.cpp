@@ -897,8 +897,8 @@ bool APPFLOWUPDATE::CreateTaskUpdate(bool doajust)
 
   bool toactive = false;
 
-  XDATETIME* GEN_XFACTORY_CREATE(start, CreateDateTime())
-  XDATETIME* GEN_XFACTORY_CREATE(end, CreateDateTime())
+  XDATETIME* start=GEN_XFACTORY.CreateDateTime();
+  XDATETIME* end=GEN_XFACTORY.CreateDateTime();
   if(start && end)
     {
       if(!cfg->ApplicationUpdate_GetCheckTime()->IsEmpty())

@@ -310,10 +310,10 @@ bool DIOCLIPROTOCOL::Ini(DIOSTREAM* diostream, XCHAR* ID, int timeout)
   this->diostream = diostream;
   if(!diostream) return false;
 
-  GEN_XFACTORY_CREATE(xtimerout, CreateTimer())
+  xtimerout=GEN_XFACTORY.CreateTimer();
   if(!xtimerout) return false;
 
-  GEN_XFACTORY_CREATE(xmutexanswers, Create_Mutex())
+  xmutexanswers=GEN_XFACTORY.Create_Mutex();
   if(!xmutexanswers) return false;
 
   if(!diostream)         return false;

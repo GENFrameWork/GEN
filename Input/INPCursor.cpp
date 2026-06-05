@@ -68,7 +68,7 @@ INPCURSOR::INPCURSOR(): INPCURSORMOTIONPOINT()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(timer, CreateTimer())
+  timer=GEN_XFACTORY.CreateTimer();
 }
 
 

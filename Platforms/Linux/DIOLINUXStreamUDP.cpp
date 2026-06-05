@@ -222,7 +222,7 @@ bool DIOLINUXSTREAMUDP::Disconnect()
     {
       SetEvent(DIOLINUXUDPFSMEVENT_DISCONNECTING);
 
-      XTIMER* GEN_XFACTORY_CREATE(timerout, CreateTimer())
+      XTIMER* timerout=GEN_XFACTORY.CreateTimer();
       if(timerout)
         {            
           while(GetStatus()!=DIOSTREAMSTATUS_DISCONNECTED)

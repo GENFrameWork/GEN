@@ -114,7 +114,7 @@ bool APPFLOWBASE::Ini(XVECTOR<XSTRING*>* execparams)
 {
   this->execparams  = execparams;
 
-  GEN_XFACTORY_CREATE(xtimerglobal, CreateTimer())
+  xtimerglobal=GEN_XFACTORY.CreateTimer();
   if(!xtimerglobal) return false;
     
   xtimerglobal->Reset();

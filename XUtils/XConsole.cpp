@@ -552,7 +552,7 @@ bool XCONSOLE::PrintMessage(XCHAR* message, XDWORD margin, bool prelude, bool re
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::WaitKey(XCHAR* text, XDWORD margin, bool prelude, XDWORD timeout)
 {
-  XTIMER* GEN_XFACTORY_CREATE(xtimer, CreateTimer())
+  XTIMER* xtimer=GEN_XFACTORY.CreateTimer();
   if(!xtimer) return false;
   
   xtimer->Reset();

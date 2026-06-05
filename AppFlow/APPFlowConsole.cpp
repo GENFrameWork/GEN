@@ -104,7 +104,7 @@ APPFLOWCONSOLE::~APPFLOWCONSOLE()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::Ini(XVECTOR<XSTRING*>* execparams)
 {
-  GEN_XFACTORY_CREATE(console, CreateConsole())
+  console=GEN_XFACTORY.CreateConsole();
   if(!console) return false;
 
   //console->Clear();

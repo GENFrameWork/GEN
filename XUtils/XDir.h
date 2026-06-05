@@ -35,9 +35,6 @@
 #include "XPath.h"
 #include "XDateTime.h"
 
-#include "FactoryBase.h"
-
-
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
@@ -95,7 +92,7 @@ class XDIRELEMENT
 };
 
 
-class XDIR : public FACTORYBASE
+class XDIR 
 {
   public:
                             XDIR                    ();

@@ -490,7 +490,7 @@ DIOAPPLICATIONUPDATE::DIOAPPLICATIONUPDATE(XDWORD applicationversion, XDWORD app
   DeleteFilesRenamed(xpathrootapp);
   #endif
 
-  GEN_XFACTORY_CREATE(xdir, Create_Dir())
+  xdir=GEN_XFACTORY.Create_Dir();
   webclient = GEN_NEW DIOWEBCLIENT;
 
   RegisterEvent(DIOAPPLICATIONUPDATE_XEVENT_TYPE_GETVERSIONAVAILABLE);
@@ -653,7 +653,7 @@ bool DIOAPPLICATIONUPDATE::GetVersionAvailable(DIOURL& url, int port, DIOAPPLICA
   PostEvent(&xevent);
   //----------------------------------------------------------------------------------------
 
-  XFILE* GEN_XFACTORY_CREATE(file, Create_File())
+  XFILE* file=GEN_XFACTORY.Create_File();
   if(file)
     {
       file->Erase(xpath);
@@ -844,7 +844,7 @@ bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XCHAR* addtargetpath,
 
                   unzip->Close();
 
-                  XFILE* GEN_XFACTORY_CREATE(file, Create_File())
+                  XFILE* file=GEN_XFACTORY.Create_File();
                   if(file)
                     {
                       file->Erase(xpathfile);
@@ -926,7 +926,7 @@ bool DIOAPPLICATIONUPDATE::CopyOriginalFilesToBackup(XPATH& xpathbackup, DIOAPPL
       xpathrootappadd.Slash_Add();
       xpathrootappadd += filestoupdate.Get(c)->GetXPathFile()->Get();
 
-      XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+      XFILE* xfile=GEN_XFACTORY.Create_File();
       if(xfile)
         {
           if(xfile->Open(xpathrootappadd))
@@ -942,7 +942,7 @@ bool DIOAPPLICATIONUPDATE::CopyOriginalFilesToBackup(XPATH& xpathbackup, DIOAPPL
         {
           xpathbackupadd.GetDriveAndPath(drivepath);
 
-          XDIR* GEN_XFACTORY_CREATE(xdir, Create_Dir())
+          XDIR* xdir=GEN_XFACTORY.Create_Dir();
           if(xdir)
             {
               xdir->Make(drivepath.Get());
@@ -1015,7 +1015,7 @@ bool DIOAPPLICATIONUPDATE::CopyUpdateFilesToOriginal(XPATH& xpathupdate, DIOAPPL
 
       xpathrootappadd.GetDriveAndPath(drivepath);
 
-      XDIR* GEN_XFACTORY_CREATE(xdir, Create_Dir())
+      XDIR* xdir=GEN_XFACTORY.Create_Dir();
       if(xdir)
         {
           xdir->Make(drivepath.Get());
@@ -1046,7 +1046,7 @@ bool DIOAPPLICATIONUPDATE::CopyUpdateFilesToOriginal(XPATH& xpathupdate, DIOAPPL
                xpathrootappaddrename += DIOAPPLICATIONUPDATE_BACKUPPREFIX;
                xpathrootappaddrename += originfilename.Get();
 
-               XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+               XFILE* xfile=GEN_XFACTORY.Create_File();
                if(xfile)
                  {
                    status = xfile->Rename(xpathrootappadd, xpathrootappaddrename);
@@ -1069,7 +1069,7 @@ bool DIOAPPLICATIONUPDATE::CopyUpdateFilesToOriginal(XPATH& xpathupdate, DIOAPPL
                  {
                    // Try to erase. In windows probably fails.
 
-                   XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+                   XFILE* xfile=GEN_XFACTORY.Create_File();
                    if(xfile)
                      {
                        xfile->Erase(xpathrootappaddrename);
@@ -1115,7 +1115,7 @@ bool DIOAPPLICATIONUPDATE::DeleteFilesRenamed(XPATH& xpathtocheck)
   XDIR*       xdir;
   bool        status = true;
 
-  GEN_XFACTORY_CREATE(xdir, Create_Dir())
+  xdir=GEN_XFACTORY.Create_Dir();
   if(!xdir) return false;
 
   if(xdir->FirstSearch(xpathtocheck, __L("*") , &xdirelement))
@@ -1139,7 +1139,7 @@ bool DIOAPPLICATIONUPDATE::DeleteFilesRenamed(XPATH& xpathtocheck)
               int ifound = xdirelement.GetNameFile()->Find(DIOAPPLICATIONUPDATE_BACKUPPREFIX, false);
               if(ifound!= XSTRING_NOTFOUND)
                 {
-                  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+                  XFILE* xfile=GEN_XFACTORY.Create_File();
                   if(xfile)
                     {
                       xfile->Erase(xpathadd);
@@ -1256,7 +1256,7 @@ bool DIOAPPLICATIONUPDATE::GetListOfVersionsToRestore(XVECTOR<DIOAPPLICATIONUPDA
   XSTRING     dir_mask;
   bool        status = true;
 
-  GEN_XFACTORY_CREATE(xdir, Create_Dir())
+  xdir=GEN_XFACTORY.Create_Dir();
   if(!xdir) 
     {
       return false;
@@ -1548,7 +1548,7 @@ bool DIOAPPLICATIONUPDATE::EliminateOldRestorations(int maxrestorations)
 
               xpath.AddFormat(dir_mask.Get(), versiondata->GetVersion(), versiondata->GetSubVersion(), versiondata->GetSubVersionError());
 
-              XDIR* GEN_XFACTORY_CREATE(xdir, Create_Dir());
+              XDIR* xdir=GEN_XFACTORY.Create_Dir();
               if(xdir)
                 {
                   status = xdir->Delete(xpath.Get(), true);
@@ -1664,7 +1664,7 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_CreateList(XPATH& xpathupdate)
   XDIR*       xdir;
   bool        status = true;
 
-  GEN_XFACTORY_CREATE(xdir, Create_Dir())
+  xdir=GEN_XFACTORY.Create_Dir();
   if(!xdir) return false;
 
   if(xdir->FirstSearch(xpathupdate, __L("*") , &xdirelement))
@@ -1682,7 +1682,7 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_CreateList(XPATH& xpathupdate)
 
               CRC32file.Do(xpathadd);
 
-              XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+              XFILE* xfile=GEN_XFACTORY.Create_File();
               if(xfile)
                 {
                   if(xfile->Open(xpathadd))
@@ -1843,8 +1843,8 @@ bool DIOAPPLICATIONUPDATE::CopyFile(XPATH& origin, XPATH& target)
   XFILE* xfile[2] = { NULL, NULL };
   bool   status   = false;
 
-  GEN_XFACTORY_CREATE(xfile[0], Create_File())
-  GEN_XFACTORY_CREATE(xfile[1], Create_File())
+  xfile[0]=GEN_XFACTORY.Create_File();
+  xfile[1]=GEN_XFACTORY.Create_File();
 
   if(xfile[0] && xfile[1])
     {

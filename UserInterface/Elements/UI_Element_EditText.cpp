@@ -69,7 +69,7 @@ UI_ELEMENT_EDITTEXT::UI_ELEMENT_EDITTEXT()
   SetType(UI_ELEMENT_TYPE_EDITTEXT);
   GetTypeString()->Set(__L("edittext"));  
 
-  GEN_XFACTORY_CREATE(cursor_xtimerblink, CreateTimer())
+  cursor_xtimerblink=GEN_XFACTORY.CreateTimer();
   cursor_timeblink   = UI_ELEMENT_EDITTEXT_DEFAULTCUSORTIMEBLINK;
 }
 

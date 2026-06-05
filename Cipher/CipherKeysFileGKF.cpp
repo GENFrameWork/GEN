@@ -565,7 +565,7 @@ bool CIPHERKEYSFILEGKF::ExportToPEMFile(CIPHERKEY* key, XPATH& xpath)
 
   if(!ExportToPEMFile(key, publicPEM)) return false;
 
-  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+  XFILE* xfile=GEN_XFACTORY.Create_File();
   if(xfile)
     {
       if(xfile->Create(xpath))

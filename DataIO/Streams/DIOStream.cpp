@@ -74,10 +74,10 @@ DIOSTREAM::DIOSTREAM()
   inbuffer  = GEN_NEW XBUFFER();
   outbuffer = GEN_NEW XBUFFER();
 
-  GEN_XFACTORY_CREATE(xmutextimerout    , Create_Mutex())
-  GEN_XFACTORY_CREATE(xtimerconnection  , CreateTimer())
-  GEN_XFACTORY_CREATE(xtimernotactivity , CreateTimer())
-  GEN_XFACTORY_CREATE(xtimerout         , CreateTimer())
+  xmutextimerout=GEN_XFACTORY.Create_Mutex();
+  xtimerconnection=GEN_XFACTORY.CreateTimer();
+  xtimernotactivity=GEN_XFACTORY.CreateTimer();
+  xtimerout=GEN_XFACTORY.CreateTimer();
   
   RegisterEvent(DIOSTREAM_XEVENT_TYPE_GETTINGCONNECTION);
   RegisterEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED);

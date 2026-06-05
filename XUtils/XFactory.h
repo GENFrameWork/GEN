@@ -32,28 +32,20 @@
 
 #include "XThread.h"
 
-
-
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
-
-
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-
 
 class XTIMER;
 class XDATETIME;
 class XRAND;
 class XFILE;
 class XDIR;
-class XSYSTEM;
 #ifdef XCONSOLE_ACTIVE
 class XCONSOLE;
 #endif
-class XMUTEX;
-class XTHREAD;
-class XDRIVEIMAGE;
+
 
 
 class XFACTORY

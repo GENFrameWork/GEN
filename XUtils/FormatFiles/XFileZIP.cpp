@@ -557,7 +557,7 @@ XFILEZIP::XFILEZIP(XDWORD maxsizebuffer)
 
   this->maxsizebuffer = maxsizebuffer;
 
-  GEN_XFACTORY_CREATE(xdatetime, CreateDateTime())
+  xdatetime=GEN_XFACTORY.CreateDateTime();
 }
 
 
@@ -730,7 +730,7 @@ bool XFILEZIP::AddFile(XPATH& xpath, XPATH& xpathnew, XCHAR* password)
   XFILE*       xfile;
   bool         status    = false;
 
-  GEN_XFACTORY_CREATE(xfile, Create_File())
+  xfile=GEN_XFACTORY.Create_File();
   if(!xfile) return status;
 
   if(xfile->Open(xpath))
@@ -1117,7 +1117,7 @@ bool XFILEUNZIP::DelFile(int index, XCHAR* password)
   XPATH     xpathtarget;
   bool      status = true;
 
-  XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+  XFILE* xfile=GEN_XFACTORY.Create_File();
   if(!xfile) return false;
 
   XFILEZIP* filezip  = GEN_NEW XFILEZIP();
@@ -1328,7 +1328,7 @@ bool XFILEUNZIP::DecompressFile(XFILECMPZIP* filecmp, XPATH& xpathtarget, XCHAR*
 
   if(filecmp->Open(_password))
     {
-      XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+      XFILE* xfile=GEN_XFACTORY.Create_File();
       if(xfile)
         {
           if(xfile->Create(xpath))

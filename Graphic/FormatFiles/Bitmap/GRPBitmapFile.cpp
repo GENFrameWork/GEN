@@ -86,7 +86,7 @@ GRPBITMAPFILEBASE::GRPBITMAPFILEBASE(): XFILECONTAINER()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(file, Create_File())
+  file=GEN_XFACTORY.Create_File();
 }
 
 
@@ -656,7 +656,7 @@ GRPBITMAPSEQUENCE* GRPBITMAPFILE::LoadSequence(XCHAR* namemask, int inisequence,
       namefile.Format(namemask, nfiles);
       xpathtemp.Create(2, xpath.Get(), namefile.Get());
 
-      XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())
+      XFILE* xfile=GEN_XFACTORY.Create_File();
       if(xfile)
         {
           existfile = xfile->Exist(xpathtemp);

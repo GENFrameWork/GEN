@@ -34,9 +34,6 @@
 #include "XPath.h"
 #include "XBuffer.h"
 
-#include "FactoryBase.h"
-
-
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
@@ -57,7 +54,7 @@ enum
 
 
 #define XFILE_GETFILESIZE(xpathfile, size)    { size = -1;                                        \
-                                                XFILE* GEN_XFACTORY_CREATE(xfile, Create_File())  \
+                                                XFILE* xfile=GEN_XFACTORY.Create_File();  \
                                                 if(xfile)                                         \
                                                   {                                               \
                                                     if(xfile->Open(xpathfile))                    \
@@ -77,7 +74,7 @@ enum
 class CIPHER;
 
 
-class XFILE : public FACTORYBASE
+class XFILE 
 {
   public:
                             XFILE                   ();

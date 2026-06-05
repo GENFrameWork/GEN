@@ -36,8 +36,6 @@
 #include "XString.h"
 #include "XPath.h"
 
-#include "FactoryBase.h"
-
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
@@ -81,7 +79,7 @@ class XTIMERCLOCK
 #endif
 
 
-class XTIMER : public FACTORYBASE
+class XTIMER 
 {
   public:
 

@@ -84,7 +84,7 @@ XTIMERCLOCK::XTIMERCLOCK()
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(xmutexclock, CreateMutex())
+  xmutexclock=GEN_XFACTORY.CreateMutex();
   if(xmutexclock)
     {
       threadclock = CREATEXTHREAD(XTHREADGROUPID_XTIMERCLOCK, __L("XTIMERCLOCK::XTIMERCLOCK"),ThreadClockFunction,(void*)this);

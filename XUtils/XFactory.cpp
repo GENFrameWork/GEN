@@ -36,6 +36,16 @@
 
 #include "XFactory.h"
 
+#include "XTimer.h"
+#include "XDateTime.h"
+#include "XRand.h"
+#include "XFile.h"
+#include "XDir.h"
+#include "XSystem.h"
+#ifdef XCONSOLE_ACTIVE
+#include "XConsole.h"
+#endif
+#include "XThread.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/

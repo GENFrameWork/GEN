@@ -83,8 +83,8 @@ DIOSTREAMCIPHER::DIOSTREAMCIPHER(DIOSTREAMCONFIG* config, CIPHER* cipher): DIOST
     {
       diostream = (DIOSTREAM*)GEN_DIOFACTORY.CreateStreamIO(config);
 
-      GEN_XFACTORY_CREATE(mutexread   , Create_Mutex())
-      GEN_XFACTORY_CREATE(mutexwrite  , Create_Mutex())
+      mutexread=GEN_XFACTORY.Create_Mutex();
+      mutexwrite=GEN_XFACTORY.Create_Mutex();
 
       if(diostream && mutexread && mutexwrite)
         {

@@ -69,7 +69,7 @@ SCRIPT_LIB_RAND::SCRIPT_LIB_RAND() : SCRIPT_LIB(SCRIPT_LIB_NAME_RANDOM)
 {
   Clean();
 
-  GEN_XFACTORY_CREATE(xrand, CreateRand())
+  xrand=GEN_XFACTORY.CreateRand();
   if(!xrand) return;
 }
 

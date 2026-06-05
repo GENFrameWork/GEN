@@ -76,7 +76,7 @@ DIOBUSPIRATE::DIOBUSPIRATE(DIOSTREAM* diostream)
 
   this->diostream     = diostream;
 
-  GEN_XFACTORY_CREATE(xtimerout, CreateTimer())  
+  xtimerout=GEN_XFACTORY.CreateTimer();  
 }
 
 

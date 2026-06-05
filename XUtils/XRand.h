@@ -32,10 +32,6 @@
 
 #include <stdlib.h>
 
-#include "FactoryBase.h"
-
-
-
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 #define GETRANDOM(min,max)  ((rand()%(int)(((max)+1)-(min)))+(min))
@@ -45,7 +41,7 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class XRAND : public FACTORYBASE
+class XRAND 
 {
   public:
                           XRAND               ();

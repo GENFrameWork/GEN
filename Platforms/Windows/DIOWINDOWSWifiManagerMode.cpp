@@ -221,7 +221,7 @@ bool DIOWINDOWSWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, boo
   
   if(result == ERROR_SUCCESS) 
     {
-      XTIMER* GEN_XFACTORY_CREATE(xtimer, CreateTimer())
+      XTIMER* xtimer=GEN_XFACTORY.CreateTimer();
       if(xtimer)
         {       
           while(!IsConnected())
