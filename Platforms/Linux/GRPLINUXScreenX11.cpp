@@ -51,7 +51,25 @@
 #include "GRPLINUXBlitGLES.h"
 #include <stdio.h>
 #include <string.h>
+#endif
 
+
+
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+
+#include "GEN_Control.h"
+
+
+
+
+/*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+
+
+
+/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+
+#ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         static bool IsRunningOnWSL()
@@ -77,22 +95,8 @@ static bool IsRunningOnWSL()
   buf[n] = '\0';
   return (strstr(buf, "microsoft") != NULL || strstr(buf, "Microsoft") != NULL || strstr(buf, "WSL") != NULL);
 }
+
 #endif
-
-
-
-/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-
-#include "GEN_Control.h"
-
-
-
-
-/*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
-
-
-/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -220,7 +224,10 @@ bool GRPLINUXSCREENX11::Update(GRPCANVAS* canvas)
     }
   
   #ifdef GRP_OPENGL_ACTIVE
-  if(blitgles) return blitgles->Update(canvas);
+  if(blitgles) 
+    {
+      return blitgles->Update(canvas);
+    }
   #endif
 
   // X11 software path — always compiled, used as fallback when blitgles is NULL
@@ -898,6 +905,30 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
       XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] BlitGLES create failed; falling back to X11 software path"));
       GEN_DELETE blitgles;
       blitgles = NULL;
+    }
+
+  // VERTICAL FLIP CORRECTION (Linux/Mesa + EGL-to-X11 only)
+  //
+  // Root cause: glTexImage2D places row 0 of the canvas buffer at UV.y = 0
+  // (the OpenGL "bottom" of the texture). The quad vertex layout maps
+  // NDC bottom (y=-1) → UV.y=0 and NDC top (y=+1) → UV.y=1. So the canvas
+  // renders upside down: row 0 (top of canvas) appears at the bottom of the
+  // window.
+  //
+  // On Windows, ANGLE/D3D11 internally converts the GL bottom-left coordinate
+  // convention to D3D11's top-left convention, which incidentally flips the
+  // presentation and cancels the texture inversion.
+  // On Android, SurfaceFlinger's compositor does the same.
+  // On Linux + Mesa + EGL/X11, neither correction applies → inverted image.
+  //
+  // Fix: SetFlipY(true) negates the model-matrix Y scale (sy = -1.0f in
+  // BuildModelMatrix), which flips the rendered quad vertically and restores
+  // the correct orientation. Letterboxing (lboxsy) is applied on top of sy,
+  // so aspect-ratio correction is unaffected.
+  if(blitgles)
+    {
+      blitgles->SetFlipY(true);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] BlitGLES SetFlipY(true) — correcting Mesa EGL-to-X11 vertical flip"));
     }
   #endif
 

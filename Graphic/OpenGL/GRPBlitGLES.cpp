@@ -101,23 +101,62 @@ GRPBLITGLES::~GRPBLITGLES()
 }
 
 
-bool GRPBLITGLES::PreCreateHook()                          { return true; }
-bool GRPBLITGLES::PostCreateHook(EGLint /*visid*/)         { return true; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPBLITGLES::PreCreateHook()
+* @brief      pre create hook
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::PreCreateHook()
+{ 
+  return true; 
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPBLITGLES::ChooseVisualID(EGLNativeDisplayType, EGLint&)
-* @brief      Pick an EGL config for the platform native display and return the matching
-*             EGL_NATIVE_VISUAL_ID. Used by Linux X11 BEFORE the X window is created so the
-*             window can be created with the proper Visual.
+* 
+* @fn         bool GRPBLITGLES::PostCreateHook(EGLint visid)
+* @brief      post create hook
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  visid : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::PostCreateHook(EGLint visid)
+{ 
+  return true; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPBLITGLES::ChooseVisualID(EGLNativeDisplayType native_display, EGLint& out_native_visual_id)
+* @brief      choose visual Id
+* @ingroup    GRAPHIC
+* 
+* @param[in]  native_display : 
+* @param[in]  out_native_visual_id : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::ChooseVisualID(EGLNativeDisplayType native_display, EGLint& out_native_visual_id)
 {
-  if(!eglctx) eglctx = GEN_NEW GRPEGLCONTEXT();
-  if(!eglctx) return false;
+  if(!eglctx) 
+    {
+      eglctx = GEN_NEW GRPEGLCONTEXT();
+    }
+
+  if(!eglctx) 
+    {
+      return false;
+    }
+
   return eglctx->ChooseConfig(native_display, usealpha, out_native_visual_id);
 }
 
@@ -135,13 +174,27 @@ bool GRPBLITGLES::ChooseVisualID(EGLNativeDisplayType native_display, EGLint& ou
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::Create(GRPSCREEN* screen)
 {
-  if(!screen) return false;
+  if(!screen) 
+    {
+      return false;
+    }
+
   this->screen = screen;
 
-  if(!PreCreateHook()) return false;
+  if(!PreCreateHook()) 
+    {
+      return false;
+    }
 
-  if(!eglctx) eglctx = GEN_NEW GRPEGLCONTEXT();
-  if(!eglctx) return false;
+  if(!eglctx) 
+    {
+      eglctx = GEN_NEW GRPEGLCONTEXT();
+    }
+
+  if(!eglctx) 
+    {
+      return false;
+    }
 
   EGLNativeDisplayType ndisp = GetNativeDisplay();
   EGLNativeWindowType  nwin  = GetNativeWindow();
@@ -175,13 +228,18 @@ bool GRPBLITGLES::Create(GRPSCREEN* screen)
       return false;
     }
 
-  if(usevsync) eglctx->SetSwapInterval(1);
-                                   else eglctx->SetSwapInterval(0);
+  if(usevsync) 
+    {
+      eglctx->SetSwapInterval(1);
+    }
+   else 
+    {
+      eglctx->SetSwapInterval(0);
+    }
 
   // Cache GL caps (informational only — we always RGBA-store + shader-swizzle for portability)
   DetectBGRAExtension();
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[BlitGLES] BGRA ext detected: %s; using RGBA storage + shader swizzle (portable)"),
-                    hasbgraext ? __L("YES") : __L("NO"));
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[BlitGLES] BGRA ext detected: %s; using RGBA storage + shader swizzle (portable)"), hasbgraext ? __L("YES") : __L("NO"));
 
   // Log the actual GL driver (hardware vs software). Crucial on WSLg to know
   // whether we're on the d3d12 GPU driver or the llvmpipe software rasterizer.
@@ -199,77 +257,132 @@ bool GRPBLITGLES::Create(GRPSCREEN* screen)
   }
 
   // GL resources
-  if(!CompileShaders()) return false;
-  if(!BuildQuad())      return false;
+  if(!CompileShaders()) 
+    {
+      return false;
+    }
+
+  if(!BuildQuad())      
+    {
+      return false;
+    }
 
   // Texture
   if(screen->GetWidth() > 0 && screen->GetHeight() > 0)
     {
-      if(!AllocTexture((int)screen->GetWidth(), (int)screen->GetHeight())) return false;
+      if(!AllocTexture((int)screen->GetWidth(), (int)screen->GetHeight())) 
+        {
+          return false;
+        }
+
       if(usepbo && IsES3())
         {
-          if(!AllocPBOs((int)screen->GetWidth(), (int)screen->GetHeight())) return false;
+          if(!AllocPBOs((int)screen->GetWidth(), (int)screen->GetHeight())) 
+            {
+              return false;
+            }
         }
     }
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
+
   if(usealpha)
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     }
+
   glClearColor(0.0f, 0.0f, 0.0f, usealpha ? 0.0f : 1.0f);
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[BlitGLES] Created (ES %d.0, PBO=%s, VSync=%s)"),
-                    (int)IsES3()?3:2,
-                    (usepbo && IsES3())?__L("ON"):__L("OFF"),
-                    usevsync?__L("ON"):__L("OFF"));
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[BlitGLES] Created (ES %d.0, PBO=%s, VSync=%s)"), (int)IsES3()?3:2, (usepbo && IsES3())?__L("ON"):__L("OFF"), usevsync?__L("ON"):__L("OFF"));
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPBLITGLES::Resize(int, int)
-* @brief      Recreate the texture and PBOs to the new canvas size.
+* 
+* @fn         bool GRPBLITGLES::Resize(int width, int height)
+* @brief      resize
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  width : 
+* @param[in]  height : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::Resize(int width, int height)
 {
-  if(width <= 0 || height <= 0) return false;
-  if(width == texw && height == texh) return true;
+  if(width <= 0 || height <= 0) 
+    {
+      return false;
+    }
 
-  if(!eglctx || !eglctx->MakeCurrent()) return false;
+  if(width == texw && height == texh) 
+    {
+      return true;
+    }
 
-  if(!AllocTexture(width, height)) return false;
+  if(!eglctx || !eglctx->MakeCurrent()) 
+    {
+      return false;
+    }
+
+  if(!AllocTexture(width, height)) 
+    {
+      return false;
+    }
+
   if(usepbo && IsES3())
     {
-      if(!AllocPBOs(width, height)) return false;
+      if(!AllocPBOs(width, height)) 
+        {
+          return false;
+        }
     }
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPBLITGLES::Update(GRPCANVAS*)
-* @brief      Upload canvas pixel buffer to the texture and render the fullscreen quad.
+* 
+* @fn         bool GRPBLITGLES::Update(GRPCANVAS* canvas)
+* @brief      update
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  canvas : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::Update(GRPCANVAS* canvas)
 {
-  if(!canvas || !screen || !eglctx) return false;
-  if(!eglctx->MakeCurrent())        return false;
+  if(!canvas || !screen || !eglctx) 
+    {
+      return false;
+    }
+
+  if(!eglctx->MakeCurrent())        
+    {
+      return false;
+    }
 
   const int w = (int)canvas->GetWidth();
   const int h = (int)canvas->GetHeight();
-  if(w <= 0 || h <= 0) return false;
+  if(w <= 0 || h <= 0) 
+    {
+      return false;
+    }
+
   if(w != texw || h != texh)
     {
-      if(!Resize(w, h)) return false;
+      if(!Resize(w, h)) 
+        {
+          return false;
+        }
     }
 
   // Diagnostic: emit every size that matters (canvas / screen / EGL surface /
@@ -284,22 +397,20 @@ bool GRPBLITGLES::Update(GRPCANVAS* canvas)
         eglQuerySurface(eglctx->GetEGLDisplay(), eglctx->GetEGLSurface(), EGL_WIDTH,  &sfw);
         eglQuerySurface(eglctx->GetEGLDisplay(), eglctx->GetEGLSurface(), EGL_HEIGHT, &sfh);
       }
+
     const int scrw = (int)screen->GetWidth();
     const int scrh = (int)screen->GetHeight();
 
     static int last_cw = -1, last_ch = -1, last_sw = -1, last_sh = -1, last_fw = -1, last_fh = -1;
-    if(w != last_cw || h != last_ch || scrw != last_sw || scrh != last_sh ||
-       (int)sfw != last_fw || (int)sfh != last_fh)
+    if(w != last_cw || h != last_ch || scrw != last_sw || scrh != last_sh ||(int)sfw != last_fw || (int)sfh != last_fh)
       {
         last_cw = w; last_ch = h; last_sw = scrw; last_sh = scrh; last_fw = (int)sfw; last_fh = (int)sfh;
-#if defined(__ANDROID__)
-        __android_log_print(ANDROID_LOG_INFO, "GEN_BLIT",
-          "SIZES canvas=%dx%d screen=%dx%d surface=%dx%d texture=%dx%d",
-          w, h, scrw, scrh, (int)sfw, (int)sfh, texw, texh);
-#endif
-        XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE,
-          __L("[BlitGLES] SIZES canvas=%dx%d screen=%dx%d surface=%dx%d texture=%dx%d"),
-          w, h, scrw, scrh, (int)sfw, (int)sfh, texw, texh);
+        
+        #if defined(__ANDROID__)
+        __android_log_print(ANDROID_LOG_INFO, "GEN_BLIT",  "SIZES canvas=%dx%d screen=%dx%d surface=%dx%d texture=%dx%d", w, h, scrw, scrh, (int)sfw, (int)sfh, texw, texh);
+        #endif
+
+        XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[BlitGLES] SIZES canvas=%dx%d screen=%dx%d surface=%dx%d texture=%dx%d"), w, h, scrw, scrh, (int)sfw, (int)sfh, texw, texh);
       }
   }
 
@@ -309,7 +420,10 @@ bool GRPBLITGLES::Update(GRPCANVAS* canvas)
   // on ES 3.0 (see AllocTexture). GL_RGBA upload of BGRA bytes + shader swizzle is universal.
   const GLenum upload_fmt = GL_RGBA;
   XBYTE*       src        = canvas->Buffer_Get();
-  if(!src) return false;
+  if(!src) 
+    {
+      return false;
+    }
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texid);
@@ -326,13 +440,14 @@ bool GRPBLITGLES::Update(GRPCANVAS* canvas)
       // Map the next PBO and write the new frame
       glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[next]);
       glBufferData(GL_PIXEL_UNPACK_BUFFER, (GLsizeiptr)pbo_size, NULL, GL_STREAM_DRAW); // orphan
-      void* dst = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, (GLsizeiptr)pbo_size,
-                                   GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+
+      void* dst = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, (GLsizeiptr)pbo_size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
       if(dst)
         {
           memcpy(dst, src, pbo_size);
           glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
         }
+
       glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
       pbo_index = next;
     }
@@ -395,14 +510,20 @@ bool GRPBLITGLES::Update(GRPCANVAS* canvas)
       float surface_aspect = (float)vpw / (float)vph;
       float canvas_aspect  = (float)texw / (float)texh;
       float ratio          = canvas_aspect / surface_aspect;
-      if(ratio >= 1.0f) { lboxsx = 1.0f;  lboxsy = 1.0f / ratio; } // canvas wider  -> bars top/bottom
-      else              { lboxsx = ratio; lboxsy = 1.0f;         } // canvas taller -> bars left/right
+      if(ratio >= 1.0f) 
+        { lboxsx = 1.0f;  
+          lboxsy = 1.0f / ratio; 
+        } // canvas wider  -> bars top/bottom
+      else              
+        { 
+          lboxsx = ratio; 
+          lboxsy = 1.0f;         
+        } // canvas taller -> bars left/right
     }
 
   glViewport(0, 0, vpw, vph);
   glClear(GL_COLOR_BUFFER_BIT);
   glUseProgram(program);
-
 
   float mv[16];
   BuildModelMatrix(mv);
@@ -430,10 +551,13 @@ bool GRPBLITGLES::Update(GRPCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBLITGLES::Destroy()
+* @brief      destroy
 * @ingroup    GRAPHIC
-*
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::Destroy()
 {
@@ -441,17 +565,43 @@ bool GRPBLITGLES::Destroy()
     {
       eglctx->MakeCurrent();
 
-      if(texid)    { glDeleteTextures(1, &texid);    texid = 0; }
-      if(vbo)      { glDeleteBuffers(1, &vbo);       vbo   = 0; }
-      if(IsES3() && vao) { glDeleteVertexArrays(1, &vao); vao = 0; }
-      if(pbo[0])   { glDeleteBuffers(2, pbo);        pbo[0] = pbo[1] = 0; }
-      if(program)  { glDeleteProgram(program);       program = 0; }
+      if(texid)    
+        { 
+          glDeleteTextures(1, &texid);    
+          texid = 0; 
+        }
+
+      if(vbo)      
+        { 
+          glDeleteBuffers(1, &vbo);       
+          vbo   = 0; 
+        }
+
+      if(IsES3() && vao) 
+        { 
+          glDeleteVertexArrays(1, &vao); 
+          vao = 0; 
+        }
+
+      if(pbo[0])   
+        { 
+          glDeleteBuffers(2, pbo);        
+          pbo[0] = pbo[1] = 0; 
+        }
+
+      if(program)  
+        {
+          glDeleteProgram(program);       
+          program = 0; 
+        }
 
       eglctx->Destroy();
       GEN_DELETE eglctx;
       eglctx = NULL;
     }
+
   texw = texh = 0;
+
   return true;
 }
 
@@ -468,89 +618,354 @@ bool GRPBLITGLES::Destroy()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::SwapBuffers()
 {
-  if(!eglctx) return false;
+  if(!eglctx) 
+    {
+      return false;
+    }
+
   return eglctx->SwapBuffers();
 }
 
 
-/*---- RUNTIME CONFIG ------------------------------------------------------------------------------------------------*/
-
-void GRPBLITGLES::SetUseVSync(bool a)              { usevsync = a; if(eglctx) eglctx->SetSwapInterval(a ? 1 : 0); }
-bool GRPBLITGLES::GetUseVSync()                    { return usevsync;  }
-
-/* Default: no native window-size reporting (Windows/Linux have no rotation/resize concern here). */
-bool GRPBLITGLES::GetNativeWindowSize(int& width, int& height) { width = 0; height = 0; return false; }
-
-void GRPBLITGLES::SetUsePBO(bool a)                { usepbo   = a;     }
-bool GRPBLITGLES::GetUsePBO()                      { return usepbo;    }
-void GRPBLITGLES::SetFlipY(bool a)                 { flipy    = a;     }
-bool GRPBLITGLES::GetFlipY()                       { return flipy;     }
-void GRPBLITGLES::SetFlipX(bool a)                 { flipx    = a;     }
-bool GRPBLITGLES::GetFlipX()                       { return flipx;     }
-void GRPBLITGLES::SetRotation(GRPSCREENROTATION r) { rotation = r;     }
-GRPSCREENROTATION GRPBLITGLES::GetRotation()       { return rotation;  }
-void GRPBLITGLES::SetUseAlpha(bool a)              { usealpha = a;     }
-bool GRPBLITGLES::GetUseAlpha()                    { return usealpha;  }
-
-
-bool           GRPBLITGLES::IsES3()                { return eglctx && (eglctx->GetClientVersion() >= 3); }
-bool           GRPBLITGLES::HasBGRAExtension()     { return hasbgraext; }
-GRPEGLCONTEXT* GRPBLITGLES::GetEGLContext()        { return eglctx; }
-
-
-/*---- INTERNAL ------------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPBLITGLES::DetectBGRAExtension()
+* 
+* @fn         void GRPBLITGLES::SetUseVSync(bool a)
+* @brief      set use Vsync
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  a : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPBLITGLES::SetUseVSync(bool a)
+{ 
+  usevsync = a; 
+  if(eglctx) eglctx->SetSwapInterval(a ? 1 : 0); 
+
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPBLITGLES::GetUseVSync()
+* @brief      get use Vsync
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::GetUseVSync()
+{ 
+  return usevsync;  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPBLITGLES::GetNativeWindowSize(int& width, int& height)
+* @brief      get native window size (Default: no native window-size reporting (Windows/Linux have no rotation/resize concern here)
+* @ingroup    GRAPHIC
+* 
+* @param[in]  width : 
+* @param[in]  height : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::GetNativeWindowSize(int& width, int& height) 
+{ 
+  width = 0; 
+  height = 0; 
+
+  return false; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPBLITGLES::SetUsePBO(bool a)
+* @brief      set use PBo
+* @ingroup    GRAPHIC
+* 
+* @param[in]  a : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPBLITGLES::SetUsePBO(bool a)
+{ 
+  usepbo   = a;     
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPBLITGLES::GetUsePBO()
+* @brief      get use PBo
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::GetUsePBO()
+{ 
+  return usepbo;    
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPBLITGLES::SetFlipY(bool a)
+* @brief      set flip y
+* @ingroup    GRAPHIC
+* 
+* @param[in]  a : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPBLITGLES::SetFlipY(bool a)
+{ 
+  flipy    = a;     
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPBLITGLES::GetFlipY()
+* @brief      get flip y
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::GetFlipY()
+{ 
+  return flipy;     
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPBLITGLES::SetFlipX(bool a)
+* @brief      set flip x
+* @ingroup    GRAPHIC
+* 
+* @param[in]  a : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPBLITGLES::SetFlipX(bool a)
+{ 
+  flipx    = a;     
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPBLITGLES::GetFlipX()
+* @brief      get flip x
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::GetFlipX()
+{
+  return flipx;     
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+
+@fn         void GRPBLITGLES::SetRotation(GRPSCREENROTATION r)
+@brief      set rotation
+@ingroup    GRAPHIC
+
+@param[in]  r : 
+
+--------------------------------------------------------------------------------------------------------------------*/
+void GRPBLITGLES::SetRotation(GRPSCREENROTATION r) 
+{ 
+  rotation = r;     
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+
+@fn         GRPSCREENROTATION GRPBLITGLES::GetRotation()
+@brief      get rotation
+@ingroup    GRAPHIC
+
+@return     GRPSCREENROTATION : 
+
+--------------------------------------------------------------------------------------------------------------------*/
+GRPSCREENROTATION GRPBLITGLES::GetRotation()       
+{
+  return rotation;  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+
+@fn         void GRPBLITGLES::SetUseAlpha(bool a)
+@brief      set use alpha
+@ingroup    GRAPHIC
+
+@param[in]  a : 
+
+--------------------------------------------------------------------------------------------------------------------*/
+void GRPBLITGLES::SetUseAlpha(bool a)              
+{ 
+  usealpha = a;     
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+
+@fn         bool GRPBLITGLES::GetUseAlpha()
+@brief      get use alpha
+@ingroup    GRAPHIC
+
+@return     bool : true if is succesful. 
+
+--------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::GetUseAlpha()                    
+{ 
+  return usealpha;  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+
+@fn         bool GRPBLITGLES::IsES3()
+@brief      is Es3
+@ingroup    GRAPHIC
+
+@return     bool : true if is succesful. 
+
+--------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::IsES3()                
+{ 
+  return eglctx && (eglctx->GetClientVersion() >= 3); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+
+@fn         bool GRPBLITGLES::HasBGRAExtension()
+@brief      has BGRAextension
+@ingroup    GRAPHIC
+
+@return     bool : true if is succesful. 
+
+--------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::HasBGRAExtension()     
+{ 
+  return hasbgraext; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+
+@fn         GRPEGLCONTEXT* GRPBLITGLES::GetEGLContext()
+@brief      get EGLcontext
+@ingroup    GRAPHIC
+
+@return     GRPEGLCONTEXT* : 
+
+--------------------------------------------------------------------------------------------------------------------*/
+GRPEGLCONTEXT* GRPBLITGLES::GetEGLContext()        
+{ 
+  return eglctx; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPBLITGLES::DetectBGRAExtension()
+* @brief      detect BGRAextension
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::DetectBGRAExtension()
 {
   hasbgraext = false;
+
   const GLubyte* exts = glGetString(GL_EXTENSIONS);
-  if(!exts) return false;
-  if(strstr((const char*)exts, "GL_EXT_texture_format_BGRA8888"))    hasbgraext = true;
-  if(strstr((const char*)exts, "GL_APPLE_texture_format_BGRA8888"))  hasbgraext = true;
-  if(strstr((const char*)exts, "GL_IMG_texture_format_BGRA8888"))    hasbgraext = true;
+
+  if(!exts) 
+    {
+      return false;
+    }
+
+  if(strstr((const char*)exts, "GL_EXT_texture_format_BGRA8888"))    
+    {
+      hasbgraext = true;
+    }
+
+  if(strstr((const char*)exts, "GL_APPLE_texture_format_BGRA8888"))  
+    {
+      hasbgraext = true;
+    }
+
+  if(strstr((const char*)exts, "GL_IMG_texture_format_BGRA8888"))    
+    {
+      hasbgraext = true;
+    }
+
   return hasbgraext;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GLuint GRPBLITGLES::CompileShader(GLenum, const char*)
+* 
+* @fn         GLuint GRPBLITGLES::CompileShader(GLenum stage, const char* source)
+* @brief      compile shader
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  stage : 
+* @param[in]  char* source : 
+* 
+* @return     GLuint : 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GLuint GRPBLITGLES::CompileShader(GLenum stage, const char* source)
 {
   GLuint sh = glCreateShader(stage);
-  if(!sh) return 0;
+  if(!sh) 
+    {
+      return 0;
+    }
+
   glShaderSource(sh, 1, &source, NULL);
   glCompileShader(sh);
+
   GLint ok = 0;
   glGetShaderiv(sh, GL_COMPILE_STATUS, &ok);
   if(!ok)
     {
       char log[1024]; GLsizei n = 0;
       glGetShaderInfoLog(sh, sizeof(log), &n, log);
+
       XSTRING xlog; xlog = log;
       XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[BlitGLES] Shader compile error: %s"), xlog.Get());
+
       glDeleteShader(sh);
+
       return 0;
     }
+
   return sh;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBLITGLES::CompileShaders()
+* @brief      compile shaders
 * @ingroup    GRAPHIC
-*
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::CompileShaders()
 {
@@ -609,12 +1024,13 @@ bool GRPBLITGLES::CompileShaders()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBLITGLES::BuildQuad()
-* @brief      Build the unit quad geometry in clip space [-1, +1]. UVs are [0,1] in standard
-*             orientation (V flip is handled in the model matrix).
+* @brief      build quad
 * @ingroup    GRAPHIC
-*
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::BuildQuad()
 {
@@ -622,12 +1038,12 @@ bool GRPBLITGLES::BuildQuad()
   // Any flip (horizontal/vertical) is applied via the model matrix, NOT via UVs.
   // TRIANGLE_STRIP: bl, br, tl, tr
   const float verts[] = {
-    //  x      y      u     v
-    -1.0f, -1.0f,    0.0f, 0.0f,
-     1.0f, -1.0f,    1.0f, 0.0f,
-    -1.0f,  1.0f,    0.0f, 1.0f,
-     1.0f,  1.0f,    1.0f, 1.0f,
-  };
+                          //  x      y      u     v
+                          -1.0f, -1.0f,    0.0f, 0.0f,
+                           1.0f, -1.0f,    1.0f, 0.0f,
+                          -1.0f,  1.0f,    0.0f, 1.0f,
+                           1.0f,  1.0f,    1.0f, 1.0f,
+                        };
 
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -643,22 +1059,35 @@ bool GRPBLITGLES::BuildQuad()
       glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void*)(sizeof(float)*2));
       glBindVertexArray(0);
     }
+
   glBindBuffer(GL_ARRAY_BUFFER, 0);
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPBLITGLES::AllocTexture(int, int)
+* 
+* @fn         bool GRPBLITGLES::AllocTexture(int width, int height)
+* @brief      alloc texture
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  width : 
+* @param[in]  height : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::AllocTexture(int width, int height)
 {
-  if(texid) { glDeleteTextures(1, &texid); texid = 0; }
+  if(texid) 
+    { 
+      glDeleteTextures(1, &texid); texid = 0; 
+    }
+
   glGenTextures(1, &texid);
   glBindTexture(GL_TEXTURE_2D, texid);
+
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,     GL_CLAMP_TO_EDGE);
@@ -690,43 +1119,65 @@ bool GRPBLITGLES::AllocTexture(int width, int height)
   texh = height;
 
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[BlitGLES] AllocTexture %d x %d (RGBA8)"), width, height);
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPBLITGLES::AllocPBOs(int, int)
+* 
+* @fn         bool GRPBLITGLES::AllocPBOs(int width, int height)
+* @brief      alloc PBos
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  width : 
+* @param[in]  height : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::AllocPBOs(int width, int height)
 {
-  if(pbo[0]) { glDeleteBuffers(2, pbo); pbo[0] = pbo[1] = 0; }
+  if(pbo[0]) 
+    { 
+      glDeleteBuffers(2, pbo); 
+      pbo[0] = pbo[1] = 0; 
+    }
+
   glGenBuffers(2, pbo);
+
   pbo_size = (XDWORD)(width * height * 4);
+
   for(int i=0; i<2; i++)
     {
       glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[i]);
       glBufferData(GL_PIXEL_UNPACK_BUFFER, (GLsizeiptr)pbo_size, NULL, GL_STREAM_DRAW);
     }
+
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
   pbo_index = 0;
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void GRPBLITGLES::BuildModelMatrix(float*)
-* @brief      Compose flipY + rotation. Result is a 4x4 column-major matrix.
+* 
+* @fn         void GRPBLITGLES::BuildModelMatrix(float* m)
+* @brief      build model matrix
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  m : 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::BuildModelMatrix(float* m)
 {
   // Identity
-  for(int i=0; i<16; i++) m[i] = 0.0f;
+  for(int i=0; i<16; i++) 
+    {
+      m[i] = 0.0f;
+    }
+
   m[0] = m[5] = m[10] = m[15] = 1.0f;
 
   float sx = flipx ? -1.0f : 1.0f;
@@ -757,10 +1208,12 @@ void GRPBLITGLES::BuildModelMatrix(float* m)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBLITGLES::Clean()
+* @brief      Clean the attributes of the class: Default initialize
 * @ingroup    GRAPHIC
-*
+* @note       INTERNAL
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::Clean()
 {
