@@ -135,6 +135,12 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 
     GRPSCREENROTATION                     GetRotation                   ();
     void                                  SetRotation                   (GRPSCREENROTATION screenrotation);
+
+    bool                                  Rotate                        (int degrees);
+
+    bool                                  IsRotationOrthogonal          ();
+    XDWORD                                GetPresentationWidth          ();
+    XDWORD                                GetPresentationHeight         ();
     
     virtual bool                          Create                        (bool show);
 
@@ -210,8 +216,6 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     bool                                  canclose;  
 
     XSTRING                               title; 
-
-    bool                                  Rotate                        (XBYTE* target, GRPCANVAS* screencanvas);
 
   private:
 

@@ -941,9 +941,15 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
     }
    else
     {          
+      // The native window is created in the (possibly rotated) PRESENTATION size, while the screen
+      // width/height keep the CONTENT size used by the canvas/viewport pipeline. On 0/180 these are
+      // identical; on 90/270 they are swapped (see GRPSCREEN::Rotate / GetPresentationWidth/Height).
+      int winw = (int)GetPresentationWidth();
+      int winh = (int)GetPresentationHeight();
+
       if(positionx == GRPPROPERTYMODE_SCREEN_CENTER) 
         {
-          posx = (alldesktoprect->GetWidth() - width)/2;
+          posx = (alldesktoprect->GetWidth() - winw)/2;
         }
        else 
         {
@@ -952,7 +958,7 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
 
       if(positiony == GRPPROPERTYMODE_SCREEN_CENTER) 
         {
-          posy = (alldesktoprect->GetHeight() - height)/2;
+          posy = (alldesktoprect->GetHeight() - winh)/2;
         }
        else 
         {
@@ -999,7 +1005,7 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
                             _style            ,
                             posx              , 
                             posy              ,
-                            width ,height     ,
+                            winw ,winh        ,
                             NULL              ,
                             NULL              ,
                             hinstance         ,
@@ -1016,8 +1022,8 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
 
       GetClientRect(hwnd, &rect);
 
-      rect.right  = rect.left + width;    //+ 16;
-      rect.bottom = rect.top  + height;   //+ 16;
+      rect.right  = rect.left + winw;    //+ 16;
+      rect.bottom = rect.top  + winh;   //+ 16;
 
       AdjustWindowRect(&rect, GetWindowLong(hwnd, GWL_STYLE), false);
     
@@ -1038,6 +1044,7 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
       SetPosition(point.x,  point.y);
       Set_Position(point.x,  point.y);
 
+      // NOTE: the screen size members stay at the CONTENT size (width/height), not the window size.
       SetSize(width ,height);
       SetMaxSize(width ,height);
     }

@@ -579,6 +579,12 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
       return false;          
     }            
             
+   // The native window is created in the (possibly rotated) PRESENTATION size, while the screen
+   // width/height keep the CONTENT size used by the canvas/viewport pipeline. On 0/180 these are
+   // identical; on 90/270 they are swapped (see GRPSCREEN::Rotate / GetPresentationWidth/Height).
+   int winw = (int)GetPresentationWidth();
+   int winh = (int)GetPresentationHeight();
+
    if(Styles_IsFullScreen())          
     {
       posx   = alldesktoprect->x1;
@@ -608,12 +614,16 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
               height -= GetTaskBarHeight();
             }
         }                      
+
+      // Fullscreen always covers the physical screen; the window size follows width/height as-is.
+      winw = (int)width;
+      winh = (int)height;
     }
    else
     {         
       if(positionx == GRPPROPERTYMODE_SCREEN_CENTER) 
         {
-          posx = (alldesktoprect->GetWidth() - width)/2;
+          posx = (alldesktoprect->GetWidth() - winw)/2;
         }
        else 
         {
@@ -622,7 +632,7 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
 
       if(positiony == GRPPROPERTYMODE_SCREEN_CENTER) 
         {
-          posy = (alldesktoprect->GetHeight() - height)/2;
+          posy = (alldesktoprect->GetHeight() - winh)/2;
         }
        else 
         {
@@ -699,13 +709,13 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
       // white on every expose event, overwriting the EGL/GL-rendered content.
       // CWBackPixmap=None tells X "don't paint any background, GL handles it".
       attr.background_pixmap = None;
-      window = XCreateWindow(display, root, posx, posy, width, height, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixmap, &attr);
+      window = XCreateWindow(display, root, posx, posy, winw, winh, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixmap, &attr);
     }
    else
   #endif
     {
       attr.background_pixel = Style_Is(GRPSCREENSTYLE_TRANSPARENT)?0x00000000:0xFFFFFFFF;
-      window = XCreateWindow(display, root, posx, posy, width, height, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixel, &attr);        
+      window = XCreateWindow(display, root, posx, posy, winw, winh, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixel, &attr);        
     }
   
   //window =  XCreateSimpleWindow(display, root, posx, posy, width, height, 0,  BlackPixel(display, 0), WhitePixel(display, 0));          

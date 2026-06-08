@@ -365,6 +365,11 @@ bool GRPBLITGLES::Update(GRPCANVAS* canvas)
       return false;
     }
 
+  // The screen is the source of truth for the presentation rotation (set via
+  // GRPSCREEN::Rotate()/SetRotation(), possibly before this blitter even existed).
+  // Pull it every frame: cheap, and robust to Rotate() being called at any time.
+  rotation = screen->GetRotation();
+
   if(!eglctx->MakeCurrent())        
     {
       return false;
@@ -508,7 +513,20 @@ bool GRPBLITGLES::Update(GRPCANVAS* canvas)
   if(vpw > 0 && vph > 0 && texw > 0 && texh > 0)
     {
       float surface_aspect = (float)vpw / (float)vph;
-      float canvas_aspect  = (float)texw / (float)texh;
+
+      // The canvas is texw x texh, but at 90/270 degrees it is PRESENTED rotated, so its
+      // effective (on-screen) aspect ratio is the inverse (texh/texw). Account for that here,
+      // otherwise a rotated canvas would be letterboxed against the wrong axis and look squashed.
+      float canvas_aspect;
+      if(rotation == GRPSCREENROTATION_90_CLOCKWISE || rotation == GRPSCREENROTATION_90_ANTICLOCKWISE)
+        {
+          canvas_aspect = (float)texh / (float)texw;   // width/height swapped by the 90/270 rotation
+        }
+       else
+        {
+          canvas_aspect = (float)texw / (float)texh;   // 0 / 180 degrees: aspect unchanged
+        }
+
       float ratio          = canvas_aspect / surface_aspect;
       if(ratio >= 1.0f) 
         { lboxsx = 1.0f;  

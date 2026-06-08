@@ -205,14 +205,7 @@ bool GRPLINUXSCREENFRAMEBUFFER::Update(GRPCANVAS* canvas)
       return false;
     }
   
-  if(rotation != GRPSCREENROTATION_NONE)
-    {
-      Rotate(fbp, canvas);
-    }
-   else
-    {
-      memcpy(fbp, (XBYTE*)canvas->Buffer_Get(), canvas->Buffer_GetSize());
-    }
+  memcpy(fbp, (XBYTE*)canvas->Buffer_Get(), canvas->Buffer_GetSize());
  
   munmap((XBYTE*)fbp, canvas->Buffer_GetSize());
 

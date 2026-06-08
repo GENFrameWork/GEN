@@ -337,6 +337,108 @@ void GRPSCREEN::SetRotation(GRPSCREENROTATION rotation)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::Rotate(int degrees)
+* @brief      Configures the screen presentation rotation, expressed in degrees, CLOCKWISE.
+* 
+*             This is a screen-level configuration (it may be set before Create(), exactly like the
+*             resolution via SetWidth()/SetHeight()). The rotation is ONLY honoured by the OpenGL ES
+*             presentation path (GRPBLITGLES), which applies it on the GPU as part of the fullscreen
+*             quad model matrix — costing nothing per frame and working identically on Windows
+*             (ANGLE/D3D11), Linux/X11 (Mesa) and Android (NDK).
+* 
+*             Only the four axis-aligned orientations are supported (0, 90, 180, 270). Any other angle
+*             is snapped to the nearest one. Restricting to multiples of 90 keeps the transform a pure
+*             axis-aligned remap of the quad (no bilinear resampling, no fractional letterbox), which is
+*             both faster and pixel-exact.
+* 
+*             Width/height handling (this is the key point): the SCREEN width/height keep representing
+*             the CONTENT the application draws (canvas / viewport / UI), so SetWidth()/SetHeight() and
+*             every layout that relies on them are left untouched -> no resampling, no broken layouts.
+*             What changes is the NATIVE WINDOW: it is created in the rotated orientation through
+*             GetPresentationWidth()/GetPresentationHeight() (width and height swapped on 90/270), so the
+*             rotated content fills the window edge to edge with no letterbox.
+* 
+* @ingroup    GRAPHIC
+* 
+* @param[in]  degrees : clockwise rotation in degrees (snapped to 0, 90, 180 or 270).
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::Rotate(int degrees)
+{
+  // Normalize to [0, 360)
+  int normalized = degrees % 360;
+  if(normalized < 0)
+    {
+      normalized += 360;
+    }
+
+  // Snap to the nearest 90 degree step: 0, 1, 2, 3  ->  0, 90, 180, 270
+  int step = ((normalized + 45) / 90) % 4;
+
+  switch(step)
+    {
+      case 1  : rotation = GRPSCREENROTATION_90_CLOCKWISE;     break;   //  90 clockwise
+      case 2  : rotation = GRPSCREENROTATION_180;              break;   // 180
+      case 3  : rotation = GRPSCREENROTATION_90_ANTICLOCKWISE; break;   // 270 clockwise == 90 anti-clockwise
+      case 0  :
+      default : rotation = GRPSCREENROTATION_NONE;             break;   //   0 (no rotation)
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::IsRotationOrthogonal()
+* @brief      true when the current rotation swaps the screen axes (90 / 270 degrees)
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the rotation is 90 or 270 degrees. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::IsRotationOrthogonal()
+{
+  return (rotation == GRPSCREENROTATION_90_CLOCKWISE || rotation == GRPSCREENROTATION_90_ANTICLOCKWISE);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD GRPSCREEN::GetPresentationWidth()
+* @brief      Width of the NATIVE WINDOW (presentation surface). On a 90/270 rotation the content is
+*             presented with its axes swapped, so the window width is the content HEIGHT. The content
+*             itself (canvas / viewport / UI, sized by GetWidth()/GetHeight()) is never changed.
+* @ingroup    GRAPHIC
+* 
+* @return     XDWORD : window width in pixels. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD GRPSCREEN::GetPresentationWidth()
+{
+  return IsRotationOrthogonal() ? GetHeight() : GetWidth();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD GRPSCREEN::GetPresentationHeight()
+* @brief      Height of the NATIVE WINDOW (presentation surface). See GetPresentationWidth().
+* @ingroup    GRAPHIC
+* 
+* @return     XDWORD : window height in pixels. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD GRPSCREEN::GetPresentationHeight()
+{
+  return IsRotationOrthogonal() ? GetWidth() : GetHeight();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool GRPSCREEN::Create(void* handle)
 * @brief      Create
@@ -353,6 +455,8 @@ bool GRPSCREEN::Create(bool show)
       return false;
     }
 
+  // The screen width/height ARE the content size (the rotation only affects the native window,
+  // see GRPSCREEN::Rotate / GetPresentationWidth/Height), so the canvas keeps the screen size.
   screencanvas->SetWidth(this->GetWidth());
   screencanvas->SetHeight(this->GetHeight());
 
@@ -1021,62 +1125,6 @@ GRPCANVAS* GRPSCREEN::GetScreenCanvas()
 bool GRPSCREEN::SetScreenCanvas(GRPCANVAS* screencanvas)
 {
   this->screencanvas = screencanvas;
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool GRPSCREEN::Rotate(XBYTE* target, GRPCANVAS* screencanvas)
-* @brief      Rotate
-* @ingroup    GRAPHIC
-* 
-* @param[in]  target : 
-* @param[in]  screencanvas : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREEN::Rotate(XBYTE* target, GRPCANVAS* screencanvas) 
-{
-  XDWORD pixelsize  = screencanvas->GetBytesperPixel();  
-  XBYTE* source     = screencanvas->Buffer_Get();
-
-  if(!source || !target)
-    {
-      return false;
-    }
-
-  switch(rotation)
-    {
-      case GRPSCREENROTATION_NONE               : break;
-
-      case GRPSCREENROTATION_90_CLOCKWISE       : { int target_offset = 0;  //((x * height) + (height - y - 1)) * pixelsize;
-                                                    int source_offset = 0;  //(y * width + x) * pixelsize;                     
-
-                                                    for(XDWORD y=0; y<10 /*height*/; y++) 
-                                                      {
-                                                        for(XDWORD x=0; x<width; x++) 
-                                                          {                                                                                                                                                                                 
-                                                            //target_offset = (y * width  + x) * pixelsize;
-                                                            //source_offset = (y * height + (width - x - 1)) * pixelsize;            
-
-                                                            target_offset += pixelsize;
-                                                            source_offset += pixelsize;            
-
-                                                            memcpy(target + target_offset, source + source_offset, pixelsize);
-                                                          }
-                                                      }
-                                                   }
-                                                   break;
-
-      case GRPSCREENROTATION_90_ANTICLOCKWISE   :  
-                                                   break;
-
-      case GRPSCREENROTATION_180                :  
-                                                   break;
-    }
 
   return true;
 }
