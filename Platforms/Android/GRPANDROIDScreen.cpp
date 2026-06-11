@@ -376,6 +376,100 @@ void GRPANDROIDSCREEN::SetAndroidHandle(ANativeWindow* anativehandle)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPANDROIDSCREEN::MapWindowToCanvas(float windowx, float windowy, float& canvasx, float& canvasy)
+* @brief      Convert a touch/pointer position expressed in NATIVE-WINDOW pixels (the space Android reports
+*             in AMotionEvent_getX/getY) into CANVAS pixels (the design-resolution space the UI works in).
+*
+*             On Android the EGL surface is the full device window (e.g. 2712x1220) while the canvas keeps the
+*             application design resolution (e.g. 1024x768). The blitter (GRPBLITGLES) draws the canvas centered
+*             inside the surface with letterbox/pillarbox bars, so a raw touch coordinate does NOT match the
+*             canvas coordinate. This inverts exactly that mapping (and the presentation rotation) so the cursor
+*             lands where the user actually pressed. Returns canvasx/canvasy with TOP-LEFT origin (the caller is
+*             responsible for the bottom-left flip, like every other platform).
+*
+*             Note: on Windows/Linux the window equals the canvas, so this path is never used there.
+*
+* @ingroup    PLATFORM_ANDROID
+*
+* @param[in]  windowx  : pointer X in native-window pixels.
+* @param[in]  windowy  : pointer Y in native-window pixels.
+* @param[out] canvasx  : resulting X in canvas pixels (top-left origin).
+* @param[out] canvasy  : resulting Y in canvas pixels (top-left origin).
+*
+* @return     bool : true if the mapping could be computed (false -> caller should keep the raw value).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPANDROIDSCREEN::MapWindowToCanvas(float windowx, float windowy, float& canvasx, float& canvasy)
+{
+  if(!anativehandle) return false;
+
+  float surfacew = (float)ANativeWindow_getWidth(anativehandle);
+  float surfaceh = (float)ANativeWindow_getHeight(anativehandle);
+  if(surfacew <= 0.0f || surfaceh <= 0.0f) return false;
+
+  float canvasw  = (float)GetWidth();
+  float canvash  = (float)GetHeight();
+  if(canvasw <= 0.0f || canvash <= 0.0f) return false;
+
+  // Presentation (on-screen) logical size: for a 90/270 rotation the axes are swapped. This is exactly the
+  // aspect the blitter letterboxes against (canvas_aspect in GRPBLITGLES::Update).
+  float presentw = (float)GetPresentationWidth();
+  float presenth = (float)GetPresentationHeight();
+  if(presentw <= 0.0f || presenth <= 0.0f) return false;
+
+  // --- Reproduce the blitter letterbox (same math as GRPBLITGLES::Update) ----------------------------------
+  float canvas_aspect  = presentw / presenth;
+  float surface_aspect = surfacew / surfaceh;
+  float ratio          = canvas_aspect / surface_aspect;
+
+  float lboxsx;
+  float lboxsy;
+  if(ratio >= 1.0f) { lboxsx = 1.0f;  lboxsy = 1.0f / ratio; }   // bars top/bottom
+  else              { lboxsx = ratio; lboxsy = 1.0f;         }   // bars left/right
+
+  float draww = surfacew * lboxsx;
+  float drawh = surfaceh * lboxsy;
+  if(draww <= 0.0f || drawh <= 0.0f) return false;
+
+  float offx  = (surfacew - draww) * 0.5f;
+  float offy  = (surfaceh - drawh) * 0.5f;
+
+  // Normalized position inside the presented (on-screen) content, top-left origin.
+  float nx = (windowx - offx) / draww;
+  float ny = (windowy - offy) / drawh;
+
+  // A touch on the black bars is clamped to the nearest content edge.
+  if(nx < 0.0f) nx = 0.0f; else if(nx > 1.0f) nx = 1.0f;
+  if(ny < 0.0f) ny = 0.0f; else if(ny > 1.0f) ny = 1.0f;
+
+  // Un-rotate from the presented orientation back into canvas space (top-left origin). For the common
+  // non-rotated case this is a direct scale; the 90/270 branches undo the presentation axis swap.
+  switch(GetRotation())
+    {
+      case GRPSCREENROTATION_90_CLOCKWISE      : canvasx = ny * canvasw;
+                                                 canvasy = (1.0f - nx) * canvash;
+                                                 break;
+
+      case GRPSCREENROTATION_90_ANTICLOCKWISE  : canvasx = (1.0f - ny) * canvasw;
+                                                 canvasy = nx * canvash;
+                                                 break;
+
+      case GRPSCREENROTATION_180               : canvasx = (1.0f - nx) * canvasw;
+                                                 canvasy = (1.0f - ny) * canvash;
+                                                 break;
+
+      case GRPSCREENROTATION_NONE              :
+      default                                  : canvasx = nx * canvasw;
+                                                 canvasy = ny * canvash;
+                                                 break;
+    }
+
+  return true;
+}
+
+
 #ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
 *

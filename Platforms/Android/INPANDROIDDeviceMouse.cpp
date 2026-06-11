@@ -163,16 +163,24 @@ bool INPANDROIDDEVICEMOUSE::AddPosition(int index, float x, float y, bool ispres
   INPCURSOR* cursor = GetCursor(index);
   if(!cursor) return false;
 
+  GRPANDROIDSCREEN* _grpscreen = (GRPANDROIDSCREEN*)grpscreen;
+
+  // The touch arrives in NATIVE-WINDOW pixels. The canvas/UI works in design-resolution pixels and the
+  // blitter letterboxes the canvas inside the (usually larger, different-aspect) window, so the raw window
+  // coordinate does not match the canvas. Convert it here; if the mapping is unavailable (no native window
+  // yet) keep the raw value so behaviour never gets worse than before.
+  float canvasx = x;
+  float canvasy = y;
+  _grpscreen->MapWindowToCanvas(x, y, canvasx, canvasy);
+
+  // to place the origin coordinates top left instead of bottom left
+  canvasy = (float)_grpscreen->GetHeight() - canvasy;
+
   cursor->SetIsChanged(false);
 
-  if((cursor->GetX() != x) || (cursor->GetY() != y))
+  if((cursor->GetX() != canvasx) || (cursor->GetY() != canvasy))
     {
-      GRPANDROIDSCREEN* _grpscreen = (GRPANDROIDSCREEN*)grpscreen;
-
-      // to place the origin coordinates top left instead of bottom left
-      y = (_grpscreen->GetHeight()) - y;
-
-      cursor->Set(x,y);
+      cursor->Set(canvasx, canvasy);
       cursor->SetIsChanged(true);
     }
 

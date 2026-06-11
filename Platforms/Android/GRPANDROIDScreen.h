@@ -71,6 +71,8 @@ class GRPANDROIDSCREEN : public GRPSCREEN
     ANativeWindow*                        GetAndroidHandle            ();
     void                                  SetAndroidHandle            (ANativeWindow* anativehandle);
 
+    bool                                  MapWindowToCanvas           (float windowx, float windowy, float& canvasx, float& canvasy);
+
     #ifdef GRP_OPENGL_ACTIVE
     GRPANDROIDBLITGLES*                   GetBlitGLES                 ();
     #endif
