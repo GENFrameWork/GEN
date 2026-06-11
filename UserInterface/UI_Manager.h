@@ -68,6 +68,7 @@ class UI_ANIMATION;
 class UI_ELEMENT_TEXT;
 class UI_ELEMENT_FORM;
 class UI_VIRTUALKEYBOARD;
+class UI_STYLE;
 
 
 class UI_MANAGER : public XOBSERVER, public XSUBJECT
@@ -169,6 +170,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            GetParentSizeFont                         (XFILEXMLELEMENT* node, double& sizefont);
 
     bool                            GetLayoutElement_Base                     (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent = false);
+    bool                            GetLayoutElement_Base                     (UI_STYLE& style, XSTRING& fathertagname, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent = false);
     UI_ELEMENT*                     GetLayoutElement_Text                     (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_TextBox                  (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_Image                    (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);

@@ -487,6 +487,66 @@ void UI_ELEMENT::SetBoundaryLine(UI_BOUNDARYLINE& boundaryline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetLeftX()
+* @brief      Resolved left screen edge from the stored position (single coordinate conversion point).
+* @ingroup    USERINTERFACE
+*
+* @return     double :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetLeftX()
+{
+  return UI_BOUNDARYLINE_EdgeLeft(GetXPosition(), GetBoundaryLine()->width);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetRightX()
+* @brief      Resolved right screen edge from the stored position (single coordinate conversion point).
+* @ingroup    USERINTERFACE
+*
+* @return     double :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetRightX()
+{
+  return UI_BOUNDARYLINE_EdgeRight(GetXPosition(), GetBoundaryLine()->width);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetTopY()
+* @brief      Resolved top screen edge from the stored position (single coordinate conversion point).
+* @ingroup    USERINTERFACE
+*
+* @return     double :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetTopY()
+{
+  return UI_BOUNDARYLINE_EdgeTop(GetYPosition(), GetBoundaryLine()->height);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetBottomY()
+* @brief      Resolved bottom screen edge from the stored position (single coordinate conversion point).
+* @ingroup    USERINTERFACE
+*
+* @return     double :
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetBottomY()
+{
+  return UI_BOUNDARYLINE_EdgeBottom(GetYPosition(), GetBoundaryLine()->height);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         double UI_ELEMENT::GetMargin(UI_ELEMENT_TYPE_ALIGN position)
 * @brief      Get margin
@@ -746,14 +806,14 @@ bool UI_ELEMENT::GetStateBlink()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_ELEMENT::SwicthStateBlink()
+* @fn         bool UI_ELEMENT::SwitchStateBlink()
 * @brief      Swicth state blink
 * @ingroup    USERINTERFACE
 *
 * @return     bool : true if is succesful. 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UI_ELEMENT::SwicthStateBlink()
+bool UI_ELEMENT::SwitchStateBlink()
 {
   if(!blink_nchanges)
     {

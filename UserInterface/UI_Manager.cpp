@@ -59,6 +59,7 @@
 #include "APPFlowBase.h"
 
 #include "UI_XEvent.h"
+#include "UI_Style.h"
 #include "UI_Color.h"
 #include "UI_Colors.h"
 #include "UI_Text.h"
@@ -2625,63 +2626,86 @@ bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
 {
+  UI_STYLE style;
+  style.FillFromXMLElement(node);
+
+  XSTRING fathertagname;
+  if(node && node->GetFather()) fathertagname = node->GetFather()->GetName();
+
+  return GetLayoutElement_Base(style, fathertagname, layout, element, adjusttoparent);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
+* @brief      Get layout element base from a neutral style bag (source-format independent).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  style :
+* @param[in]  fathertagname :
+* @param[in]  layout :
+* @param[in]  element :
+* @param[in]  adjusttoparent :
+*
+* @return     bool : true if is succesful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
+{
   double xpos   = 0.0f;
-  double ypos   = 0.0f;    
+  double ypos   = 0.0f;
   double width  = 0.0f;
-  double height = 0.0f; 
-  
+  double height = 0.0f;
+
   if(!element) return false;
-    
+
   element->SetIsDetached(false);
 
-  XFILEXMLELEMENT* XML_father = node->GetFather();
-  if(XML_father)
-    {
-      if(!XML_father->GetName().Compare(__L("layout"), true)) element->SetIsDetached(true);        
-    }
+  if(!fathertagname.Compare(__L("layout"), true)) element->SetIsDetached(true);
 
   XSTRING name;
-  GetLayoutElementValue(node, __L("name"), name); 
+  style.Get(__L("name"), name);
   element->GetName()->Set(name);
 
   XSTRING position;
-  if(GetLayoutElementValue(node, __L("xpos"), position))
+  if(style.Get(__L("xpos"), position))
     {
       if(!position.Compare(__L("left"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_LEFT;
         else if(!position.Compare(__L("right"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_RIGHT;
           else if(!position.Compare(__L("center"), true)) xpos = UI_ELEMENT_TYPE_ALIGN_CENTER;
-            else GetLayoutElementValue(node, __L("xpos"), xpos); 
+            else style.Get(__L("xpos"), xpos);
     }
-    
-  if(GetLayoutElementValue(node, __L("ypos"), position))
+
+  if(style.Get(__L("ypos"), position))
     {
       if(!position.Compare(__L("up"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_UP;
         else if(!position.Compare(__L("down"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_DOWN;
           else if(!position.Compare(__L("center"), true)) ypos = UI_ELEMENT_TYPE_ALIGN_CENTER;
-            else GetLayoutElementValue(node, __L("ypos"), ypos); 
-    } 
+            else style.Get(__L("ypos"), ypos);
+    }
 
 
   XSTRING size;
-  if(GetLayoutElementValue(node, __L("width"), size))
+  if(style.Get(__L("width"), size))
     {
       if(!size.Compare(__L("max"), true))  width = UI_ELEMENT_TYPE_ALIGN_MAX;
-        else if(!size.Compare(__L("auto"), true))  width = UI_ELEMENT_TYPE_ALIGN_AUTO;          
-            else GetLayoutElementValue(node, __L("width"), width); 
+        else if(!size.Compare(__L("auto"), true))  width = UI_ELEMENT_TYPE_ALIGN_AUTO;
+            else style.Get(__L("width"), width);
     }
-   else 
-    {      
+   else
+    {
       if(element->GetFather() && adjusttoparent)
         {
           width = element->GetFather()->GetBoundaryLine()->width;
         }
     }
 
-  if(GetLayoutElementValue(node, __L("height") , size))
+  if(style.Get(__L("height"), size))
     {
       if(!size.Compare(__L("max"), true))  height = UI_ELEMENT_TYPE_ALIGN_MAX;
-        else if(!size.Compare(__L("auto"), true))  height = UI_ELEMENT_TYPE_ALIGN_AUTO;          
-            else GetLayoutElementValue(node, __L("height"), height); 
+        else if(!size.Compare(__L("auto"), true))  height = UI_ELEMENT_TYPE_ALIGN_AUTO;
+            else style.Get(__L("height"), height);
     }
    else
     {
@@ -2690,64 +2714,64 @@ bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout,
           height = element->GetFather()->GetBoundaryLine()->height;
         }
     }
-   
-  element->GetBoundaryLine()->x       = xpos;  
-  element->GetBoundaryLine()->y       = ypos;  
+
+  element->GetBoundaryLine()->x       = xpos;
+  element->GetBoundaryLine()->y       = ypos;
   element->GetBoundaryLine()->width   = width;
   element->GetBoundaryLine()->height  = height;
 
   XSTRING directionstr;
-  if(GetLayoutElementValue(node, __L("direction"), directionstr)) 
+  if(style.Get(__L("direction"), directionstr))
     {
-      if(!directionstr.Compare(__L("horizotal"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_HORIZONTAL);
-        else if(!directionstr.Compare(__L("vertical"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_VERTICAL);                  
+      if(!directionstr.Compare(__L("horizontal"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_HORIZONTAL);
+        else if(!directionstr.Compare(__L("vertical"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_VERTICAL);
     }
 
   XSTRING color;
-  GetLayoutElementValue(node, __L("color"), color);    
+  style.Get(__L("color"), color);
   if(!color.IsEmpty()) element->GetColor()->SetFromString(color);
 
   XSTRING bckgrdcolor;
-  GetLayoutElementValue(node, __L("bckgrdcolor"), bckgrdcolor);    
-  if(!bckgrdcolor.IsEmpty()) element->GetBackgroundColor()->SetFromString(bckgrdcolor);  
-    
+  style.Get(__L("bckgrdcolor"), bckgrdcolor);
+  if(!bckgrdcolor.IsEmpty()) element->GetBackgroundColor()->SetFromString(bckgrdcolor);
+
   XSTRING visible;
-  if(GetLayoutElementValue(node, __L("visible"), visible))
+  if(style.Get(__L("visible"), visible))
     {
       element->SetVisible(visible.ConvertToBoolean());
     }
-    
-  XSTRING hasscroll;  
-  if(GetLayoutElementValue(node, __L("scroll"), hasscroll))
+
+  XSTRING hasscroll;
+  if(style.Get(__L("scroll"), hasscroll))
     {
       element->SetHasScroll(hasscroll.ConvertToBoolean());
     }
 
   double roundrect = 0.0f;
-  GetLayoutElementValue(node, __L("roundrect"), roundrect); 
+  style.Get(__L("roundrect"), roundrect);
   element->SetRoundRect((XDWORD)roundrect);
-  
+
   double blinktime;
-  if(GetLayoutElementValue(node, __L("blink"), blinktime)) element->SetBlink((XDWORD)blinktime);        
+  if(style.Get(__L("blink"), blinktime)) element->SetBlink((XDWORD)blinktime);
 
   XSTRING extra;
-  GetLayoutElementValue(node, __L("extra"), extra);
+  style.Get(__L("extra"), extra);
   element->GetExtra()->Set(extra);
-      
+
   XSTRING marginstr;
-  if(GetLayoutElementValue(node, __L("margin"), marginstr))
+  if(style.Get(__L("margin"), marginstr))
     {
       int margin[UI_ELEMENT_MARGIN_MAX] = { 0, 0, 0, 0 };
 
       marginstr.UnFormat(__L("%d,%d,%d,%d") , &margin[0]
                                             , &margin[1]
                                             , &margin[2]
-                                            , &margin[3]); 
+                                            , &margin[3]);
 
-      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT   , (double)margin[0]); 
+      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT   , (double)margin[0]);
       element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT  , (double)margin[1]);
-      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP     , (double)margin[2]); 
-      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN   , (double)margin[3]);            
+      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP     , (double)margin[2]);
+      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN   , (double)margin[3]);
     }
 
   return true;

@@ -625,7 +625,7 @@ bool UI_VIRTUALKEYBOARD::AddKeyButton(XCHAR* leyend, XCHAR* text, XCHAR* xpathbi
               element_text->GetName()->Add(leyend);
               element_text->GetText()->Set(text);
       
-              element_text->GetBoundaryLine()->width  = skin->GetWithString(leyend, keyinfo.sizefont);
+              element_text->GetBoundaryLine()->width  = skin->GetWidthString(leyend, keyinfo.sizefont);
               element_text->GetBoundaryLine()->height = skin->GetHeightString(leyend, keyinfo.sizefont);
               element_text->GetBoundaryLine()->x      = ((keyinfo.width  - element_text->GetBoundaryLine()->width)  / 2);
               element_text->GetBoundaryLine()->y      = ((keyinfo.height - element_text->GetBoundaryLine()->height) / 2);         

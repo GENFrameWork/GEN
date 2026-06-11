@@ -114,7 +114,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		bool															AddPositionSubElements							(UI_ELEMENT* element);
 		bool															CalculePosition											(UI_ELEMENT* element, double fatherwidth, double fatherheight, bool adjustsizemargin = false);
 
-    double														GetWithString                       (XCHAR* string, XDWORD sizefont = 12);  
+    double														GetWidthString                       (XCHAR* string, XDWORD sizefont = 12);  
     double														GetHeightString                     (XCHAR* string, XDWORD sizefont = 12);  
 				
 	  virtual bool                      CalculateBoundaryLine_Scroll        (UI_ELEMENT* element, bool adjustsizemargin = false);

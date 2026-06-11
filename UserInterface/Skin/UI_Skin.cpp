@@ -446,7 +446,7 @@ bool UI_SKIN::LoadFonts()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         double UI_SKIN::GetWithString(XCHAR* string, XDWORD sizefont)
+* @fn         double UI_SKIN::GetWidthString(XCHAR* string, XDWORD sizefont)
 * @brief      Get with string
 * @ingroup    USERINTERFACE
 *
@@ -456,7 +456,7 @@ bool UI_SKIN::LoadFonts()
 * @return     double : 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-double UI_SKIN::GetWithString(XCHAR* string, XDWORD sizefont)
+double UI_SKIN::GetWidthString(XCHAR* string, XDWORD sizefont)
 {
   return 0;
 }
@@ -464,7 +464,7 @@ double UI_SKIN::GetWithString(XCHAR* string, XDWORD sizefont)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         double UI_SKIN::GetWithString(XSTRING& string, XDWORD sizefont)
+* @fn         double UI_SKIN::GetWidthString(XSTRING& string, XDWORD sizefont)
 * @brief      Get with string
 * @ingroup    USERINTERFACE
 *
@@ -474,9 +474,9 @@ double UI_SKIN::GetWithString(XCHAR* string, XDWORD sizefont)
 * @return     double : 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-double UI_SKIN::GetWithString(XSTRING& string, XDWORD sizefont)
+double UI_SKIN::GetWidthString(XSTRING& string, XDWORD sizefont)
 {
-  return GetWithString(string.Get(), sizefont);
+  return GetWidthString(string.Get(), sizefont);
 }
 
   
@@ -940,7 +940,7 @@ bool UI_SKIN::Draw(UI_ELEMENT* element)
     {
       if(element->GetTimerBlink()->GetMeasureMilliSeconds() > element->IsBlinking()) 
         {
-          element->SwicthStateBlink();                  
+          element->SwitchStateBlink();                  
           Elements_SetToRedraw(element);
         }
        

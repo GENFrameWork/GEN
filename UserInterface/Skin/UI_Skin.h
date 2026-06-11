@@ -120,8 +120,8 @@ class UI_SKIN
     XSTRING*                          GetVectorFont                       ();   
     virtual bool                      LoadFonts                           ();
 
-    virtual double                    GetWithString                       (XCHAR* string, XDWORD sizefont = 12);  
-    virtual double                    GetWithString                       (XSTRING& string, XDWORD sizefont = 12);  
+    virtual double                    GetWidthString                       (XCHAR* string, XDWORD sizefont = 12);  
+    virtual double                    GetWidthString                       (XSTRING& string, XDWORD sizefont = 12);  
     virtual double                    GetHeightString                     (XCHAR* string, XDWORD sizefont = 12);  
     virtual double                    GetHeightString                     (XSTRING& string, XDWORD sizefont = 12);   
 	

@@ -144,6 +144,11 @@ class UI_ELEMENT : public XSUBJECT
 
 		UI_BOUNDARYLINE*											GetBoundaryLine							();
 		void																	SetBoundaryLine							(UI_BOUNDARYLINE& boundaryline);
+
+		double																GetLeftX										();
+		double																GetRightX										();
+		double																GetTopY											();
+		double																GetBottomY									();
 		
 		double																GetMargin                   (UI_ELEMENT_TYPE_ALIGN position);
 		void																	SetMargin                   (UI_ELEMENT_TYPE_ALIGN position, double value);
@@ -166,7 +171,7 @@ class UI_ELEMENT : public XSUBJECT
 		XDWORD																IsBlinking									();
 		bool																	SetBlink										(XDWORD timeblink);
 		bool																	GetStateBlink								();
-		bool																	SwicthStateBlink					  ();
+		bool																	SwitchStateBlink					  ();
 		XTIMER*																GetTimerBlink								();	
 
 		UI_ELEMENT_TRANSITION_STATE_SHOW			GetTransitionStateShow			();
