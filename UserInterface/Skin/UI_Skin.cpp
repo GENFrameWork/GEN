@@ -269,6 +269,36 @@ XSTRING* UI_SKIN_TEXTBOX_PART::GetText()
   return &text;
 }
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPBITMAP* UI_SKIN_TEXTBOX_PART::GetImage()
+* @brief      Get inline image (non-NULL means this part is an image, not text)
+* @ingroup    USERINTERFACE
+*
+* @return     GRPBITMAP* :
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+GRPBITMAP* UI_SKIN_TEXTBOX_PART::GetImage()
+{
+  return image;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_SKIN_TEXTBOX_PART::SetImage(GRPBITMAP* image)
+* @brief      Set inline image. The bitmap is owned by the manager's animation cache, so it is NOT freed by this part.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  image :
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+void UI_SKIN_TEXTBOX_PART::SetImage(GRPBITMAP* image)
+{
+  this->image = image;
+}
+
 	
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -287,6 +317,8 @@ void UI_SKIN_TEXTBOX_PART::Clean()
 
   width       = 0;
   height      = 0;    
+
+  image       = NULL;     // cache-owned bitmap; never freed here
 }
 
 

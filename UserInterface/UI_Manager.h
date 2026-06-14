@@ -205,6 +205,9 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            UseMotionInElement                        (UI_ELEMENT* element, INPCURSORMOTION* cursormotion);
     bool                            UseMotion                                 (INPCURSORMOTION* cursormotion);
 
+    bool                            SelectScrollBar                           (int x, int y);
+    bool                            SelectScrollBarInElement                  (UI_ELEMENT* element, int x, int y);
+
     void                            HandleEvent_UI                            (UI_XEVENT* event);
     void                            HandleEvent                               (XEVENT* xevent);
     

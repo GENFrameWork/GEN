@@ -68,6 +68,7 @@ class GRPVIEWPORT;
 class GRPCANVAS;
 class UI_LAYOUT;
 class UI_ELEMENT_TEXTBOX;
+class UI_PROPERTY_SCROLLEABLE;
 
 
 class UI_SKINCANVAS_REBUILDAREAS : public GRP2DREBUILDAREAS
@@ -102,6 +103,8 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
   public:
 																		  UI_SKINCANVAS												(GRPSCREEN* screen, int viewportindex = 0);
     virtual													 ~UI_SKINCANVAS												();
+
+		static void												GetScrollViewportSize								(UI_ELEMENT* element, double& width, double& height);   // Form -> visiblerect window; else boundaryline
 
 		GRPSCREEN*                        GetScreen														(); 
 		GRPCANVAS*                        GetCanvas														(); 
@@ -158,6 +161,9 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 
 		bool															PreDrawFunction											(UI_ELEMENT* element, GRPCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge = 5);
 		bool															PostDrawFunction										(UI_ELEMENT* element, GRPCANVAS* canvas, XRECT& clip_rect, double  x_position, double  y_position);
+
+		bool															DrawScrollBars											(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRPCANVAS* canvas, double x_position, double y_position);
+		bool															ResolveScrollPolicy										(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable);
 			
 		double														TextBox_SizeLine										(UI_ELEMENT_TEXTBOX* element_textbox, GRPCANVAS* canvas, double x_position, double y_position, int nline, XSTRING& characterstr, XDWORD index_char, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts);
 		bool															TextBox_GenerateLines								(UI_ELEMENT_TEXTBOX* element, GRPCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts); 

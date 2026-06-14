@@ -38,6 +38,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 #define UI_ELEMENT_TEXTBOX_DEFAULTLINESPACING     4
+#define UI_ELEMENT_TEXTBOX_DEFAULTIMAGESEPARATION  5
 
 
 
@@ -56,6 +57,9 @@ class UI_ELEMENT_TEXTBOX : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
     XDWORD                            GetLineSpacing              ();
     void                              SetLineSpacing              (XDWORD linespacing = UI_ELEMENT_TEXTBOX_DEFAULTLINESPACING);
 
+    XDWORD                            GetImageSeparation          ();                                                                      // gap (px) kept between an inline ![IMAGE] and the surrounding text, on every edge
+    void                              SetImageSeparation          (XDWORD imageseparation = UI_ELEMENT_TEXTBOX_DEFAULTIMAGESEPARATION);
+
     UI_ELEMENT_TYPE_ALIGN             GetTextAlignment            ();     
     void                              SetTextAlignment            (UI_ELEMENT_TYPE_ALIGN textalignment);     
 
@@ -64,6 +68,9 @@ class UI_ELEMENT_TEXTBOX : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
 
     XSTRING*                          GetText                     (); 
     XSTRING*                          GetMaskText                 (); 
+
+    double                            GetContentHeight            ();                          // total laid-out text height (set by the skin at draw)
+    void                              SetContentHeight            (double contentheight);
 	  
   private:
 
@@ -71,10 +78,12 @@ class UI_ELEMENT_TEXTBOX : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
       
     XDWORD                            sizefont;   
     XDWORD                            linespacing;
+    XDWORD                            imageseparation;
     UI_ELEMENT_TYPE_ALIGN             textalignment;
     bool                              iswordclipping;
     XSTRING                           text;         
     XSTRING                           masktext;         
+    double                            contentheight;
 };
 
 

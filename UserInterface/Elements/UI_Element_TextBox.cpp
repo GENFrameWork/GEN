@@ -126,6 +126,36 @@ XDWORD UI_ELEMENT_TEXTBOX::GetLineSpacing()
 {
   return linespacing;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT_TEXTBOX::GetContentHeight()
+* @brief      Gets the total laid-out text height (set by the skin during draw). Used as the vertical scroll extent.
+* @ingroup    USERINTERFACE
+*
+* @return     double : total text height in pixels.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT_TEXTBOX::GetContentHeight()
+{
+  return contentheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT_TEXTBOX::SetContentHeight(double contentheight)
+* @brief      Sets the total laid-out text height (called by the skin after generating the lines).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  contentheight : total text height in pixels.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_TEXTBOX::SetContentHeight(double contentheight)
+{
+  this->contentheight = contentheight;
+}
   
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -140,6 +170,37 @@ XDWORD UI_ELEMENT_TEXTBOX::GetLineSpacing()
 void UI_ELEMENT_TEXTBOX::SetLineSpacing(XDWORD linespacing)
 {
   this->linespacing = linespacing;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD UI_ELEMENT_TEXTBOX::GetImageSeparation()
+* @brief      Get the separation (in pixels) kept between an inline ![IMAGE] graphic and the text around it (all edges).
+* @ingroup    USERINTERFACE
+*
+* @return     XDWORD :
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+XDWORD UI_ELEMENT_TEXTBOX::GetImageSeparation()
+{
+  return imageseparation;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT_TEXTBOX::SetImageSeparation(XDWORD imageseparation)
+* @brief      Set the separation (in pixels) kept between an inline ![IMAGE] graphic and the text around it (all edges).
+* @note       Defaults to UI_ELEMENT_TEXTBOX_DEFAULTIMAGESEPARATION (5 px).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  imageseparation : gap in pixels.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_TEXTBOX::SetImageSeparation(XDWORD imageseparation)
+{
+  this->imageseparation = imageseparation;
 }
 
 
@@ -245,8 +306,10 @@ void UI_ELEMENT_TEXTBOX::Clean()
 {
   sizefont        = 0;
   linespacing     = 0;
+  imageseparation = UI_ELEMENT_TEXTBOX_DEFAULTIMAGESEPARATION;
   textalignment   = UI_ELEMENT_TYPE_ALIGN_NOTDETERMINED;
   iswordclipping  = false;
+  contentheight   = 0.0f;
 }
 
 

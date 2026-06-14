@@ -35,6 +35,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "UI_Manager.h"
+#include "UI_Property_Scrolleable.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1437,6 +1438,31 @@ bool UI_MANAGER::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
       if(layout)
         {     
           status = layout->Elements_SetToRedraw(element, recursive);         
+        }
+    }
+
+  // A scrolleable ancestor paints its scrollbar as an overlay and (now) owns the single rebuild area covering its whole
+  // content. If a descendant repaints, that overlay/content must be repainted by the area owner. The owner is the
+  // OUTERMOST clipping scrolleable ancestor (an inner one — e.g. a MultiOption — owns no area, since it is itself inside
+  // the outer container). So walk the whole chain, keep the outermost, and mark it (recursively) once.
+  if(element)
+    {
+      UI_ELEMENT* father = element->GetFather();
+      UI_ELEMENT* owner  = NULL;
+      while(father)
+        {
+          UI_PROPERTY_SCROLLEABLE* sc = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(father);
+          if(sc && sc->Scroll_NeedClip()) owner = father;      // keep the outermost clipping scrolleable
+          father = father->GetFather();
+        }
+
+      if(owner)
+        {
+          for(XDWORD c=0; c<layouts.GetSize(); c++)
+            {
+              UI_LAYOUT* layout = layouts.Get(c);
+              if(layout) layout->Elements_SetToRedraw(owner, true);   // mark container + content as one unit (no ghosts:
+            }                                                         // descendants own no areas, see PreDrawFunction)
         }
     }
   
@@ -4408,6 +4434,56 @@ UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_ELEMENT* element, int x, int y)
                 }
             }
 
+          // A partially-hidden option (clipped by a scrollable ancestor's viewport) must NOT be selectable. Require the
+          // option box to be fully inside the viewport on every axis the ancestor clips (a VISIBLE axis is never clipped,
+          // so it is not restricted there).
+          if(preselect)
+            {
+              UI_ELEMENT* anc = element->GetFather();
+              while(anc)
+                {
+                  UI_PROPERTY_SCROLLEABLE* asc = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(anc);
+                  if(asc && asc->Scroll_NeedClip())
+                    {
+                      double vp_w = 0.0f;
+                      double vp_h = 0.0f;
+                      UI_ELEMENT_FORM* af = dynamic_cast<UI_ELEMENT_FORM*>(anc);
+                      if(af && af->GetVisibleRect()->width > 0 && af->GetVisibleRect()->height > 0)
+                        { vp_w = af->GetVisibleRect()->width;     vp_h = af->GetVisibleRect()->height; }
+                       else
+                        { vp_w = anc->GetBoundaryLine()->width;   vp_h = anc->GetBoundaryLine()->height; }
+
+                      double vp_x      = anc->GetXPositionWithScroll();
+                      double vp_y      = anc->GetYPositionWithScroll();
+                      double vp_left   = vp_x;
+                      double vp_right  = vp_x + vp_w;
+                      double vp_top    = vp_y - vp_h;
+                      double vp_bottom = vp_y;
+
+                      double o_left   = bline.x;
+                      double o_right  = bline.x + bline.width;
+                      double o_top    = bline.y - bline.height;
+                      double o_bottom = bline.y;
+                      double eps      = 1.0f;
+
+                      bool clip_h = (asc->Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) != UI_OVERFLOW_VISIBLE);
+                      bool clip_v = (asc->Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL)   != UI_OVERFLOW_VISIBLE);
+
+                      double o_w = o_right  - o_left;
+                      double o_h = o_bottom - o_top;
+
+                      // Reject only when the option COULD fit the viewport on that axis but is cut by the scroll edge
+                      // (a partially scrolled-out item). If the option is larger than the viewport on that axis, the
+                      // "cut" is just normal content overflow (e.g. text wider than the menu) and must stay selectable.
+                      if(clip_h && (o_w <= (vp_w + eps)) && ((o_left < vp_left - eps) || (o_right  > vp_right  + eps))) preselect = false;
+                      if(clip_v && (o_h <= (vp_h + eps)) && ((o_top  < vp_top  - eps) || (o_bottom > vp_bottom + eps))) preselect = false;
+
+                      break;   // only the nearest clipping scrollable ancestor defines the visible viewport
+                    }
+                  anc = anc->GetFather();
+                }
+            }
+
           element->SetPreSelect(preselect);                                                                           
           if(preselect) 
             {
@@ -4790,6 +4866,128 @@ bool UI_MANAGER::UseMotion(INPCURSORMOTION* cursormotion)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::SelectScrollBarInElement(UI_ELEMENT* element, int x, int y)
+* @brief      Hit-tests the overlay scrollbar(s) of a scrollable container (and its children) against a pointer.
+* @note       Interactive scrollbar: a SELECCTION/touch on the bar track sets the scroll position proportionally to
+*             the pointer (absolute). On touch the per-frame SELECCTION stream makes the thumb follow the finger
+*             (drag); on mouse it is a click-to-position. The track is hit-tested in the same screen space and box
+*             convention as PreSelectElement (GetXPositionWithScroll / GetYPositionWithScroll + IsWithin).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element :
+* @param[in]  x :
+* @param[in]  y :
+*
+* @return     bool : true if the pointer was consumed by a scrollbar.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::SelectScrollBarInElement(UI_ELEMENT* element, int x, int y)
+{
+  if(!element) return false;
+
+  UI_PROPERTY_SCROLLEABLE* scrolleable = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(element);
+  if(scrolleable && element->IsActive() && element->IsVisible())
+    {
+      double box_w      = 0.0f;
+      double box_h      = 0.0f;
+      UI_SKINCANVAS::GetScrollViewportSize(element, box_w, box_h);
+      double box_left   = element->GetXPositionWithScroll();
+      double box_bottom = element->GetYPositionWithScroll();
+      double box_right  = box_left   + box_w;
+      double box_top    = box_bottom - box_h;
+      double radius     = (double)element->GetRoundRect();
+
+      double tl;
+      double tt;
+      double tr;
+      double tb;
+
+      // vertical bar : right gutter
+      if(scrolleable->Scroll_GetTrackRect(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL, box_left, box_top, box_right, box_bottom, radius, tl, tt, tr, tb))
+        {
+          UI_BOUNDARYLINE track;
+          track.x      = tl;
+          track.width  = tr - tl;
+          track.y      = tb;
+          track.height = tb - tt;
+
+          if(track.IsWithin(x, y))
+            {
+              double tracklen = tb - tt;
+              double fraction = (tracklen != 0.0f) ? (((double)y - tt) / tracklen) : 0.0f;
+
+              scrolleable->Scroll_SetFraction(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL, fraction);
+              Elements_SetToRedraw(element);
+
+              return true;
+            }
+        }
+
+      // horizontal bar : bottom gutter
+      if(scrolleable->Scroll_GetTrackRect(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, box_left, box_top, box_right, box_bottom, radius, tl, tt, tr, tb))
+        {
+          UI_BOUNDARYLINE track;
+          track.x      = tl;
+          track.width  = tr - tl;
+          track.y      = tb;
+          track.height = tb - tt;
+
+          if(track.IsWithin(x, y))
+            {
+              double tracklen = tr - tl;
+              double fraction = (tracklen != 0.0f) ? (((double)x - tl) / tracklen) : 0.0f;
+
+              scrolleable->Scroll_SetFraction(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, fraction);
+              Elements_SetToRedraw(element);
+
+              return true;
+            }
+        }
+    }
+
+  for(XDWORD c=0; c<element->GetComposeElements()->GetSize(); c++)
+    {
+      UI_ELEMENT* subelement = element->GetComposeElements()->Get(c);
+      if(subelement && SelectScrollBarInElement(subelement, x, y)) return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::SelectScrollBar(int x, int y)
+* @brief      Hit-tests all layouts' scrollbars against a pointer; applies proportional scroll if hit.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  x :
+* @param[in]  y :
+*
+* @return     bool : true if the pointer was consumed by a scrollbar.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::SelectScrollBar(int x, int y)
+{
+  for(int d=0; d<layouts.GetSize(); d++)
+    {
+      UI_LAYOUT* layout = layouts.Get(d);
+      if(layout)
+        {
+          for(XDWORD c=0; c<layout->Elements_Get()->GetSize(); c++)
+            {
+              UI_ELEMENT* element = layout->Elements_Get()->Get(c);
+              if(element && SelectScrollBarInElement(element, x, y)) return true;
+            }
+        }
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
 * @brief      Handle event UI
@@ -4865,7 +5063,11 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
                                                       }
                                                       break;
 
-      case UI_XEVENT_TYPE_INPUT_SELECCTION          : { if(element_modal)
+      case UI_XEVENT_TYPE_INPUT_SELECCTION          : { int scrollbar_x = event->GetXPos();
+                                                        int scrollbar_y = event->GetYPos();
+                                                        if(SelectScrollBar(scrollbar_x, scrollbar_y)) break;   // consumed by an interactive scrollbar
+
+                                                        if(element_modal)
                                                           { 
                                                             if(xmutex_modal) 
                                                               {

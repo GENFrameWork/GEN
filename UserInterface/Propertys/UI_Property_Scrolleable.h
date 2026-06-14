@@ -32,9 +32,9 @@
 
 #include "UI_BoundaryLine.h"
 
-
-
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
+
+class UI_COLOR;
 
 enum UI_PROPERTY_SCROLLEABLE_TYPE
 {
@@ -43,6 +43,26 @@ enum UI_PROPERTY_SCROLLEABLE_TYPE
   UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL             ,
   UI_PROPERTY_SCROLLEABLE_TYPE_ALL                  ,
 };
+
+
+enum UI_OVERFLOW_MODE
+{
+  UI_OVERFLOW_VISIBLE                           = 0 ,   // no clip, no scrollbar
+  UI_OVERFLOW_HIDDEN                                ,   // clip,    no scrollbar
+  UI_OVERFLOW_SCROLL                               ,   // clip,    scrollbar always
+  UI_OVERFLOW_AUTO                                 ,   // clip,    scrollbar only if content exceeds viewport
+};
+
+
+enum UI_PROPERTY_SCROLLEABLE_ACTIVATE
+{
+  UI_PROPERTY_SCROLLEABLE_ACTIVATE_AUTO         = 0 ,   // activation follows the overflow policy (default)
+  UI_PROPERTY_SCROLLEABLE_ACTIVATE_ON               ,   // user forces the axis active   (scroll mechanics enabled)
+  UI_PROPERTY_SCROLLEABLE_ACTIVATE_OFF              ,   // user forces the axis inactive (no scroll, no bar)
+};
+
+
+#define UI_PROPERTY_SCROLLEABLE_BARWIDTH        6        // overlay scrollbar thickness (px). Single source for draw + hit-test.
 
 
 
@@ -59,9 +79,17 @@ class UI_PROPERTY_SCROLLEABLE_STATUS
 
     bool                                      active;
     bool                                      visible;
+    UI_PROPERTY_SCROLLEABLE_ACTIVATE          activateoverride;   // user intent: AUTO (policy) / forced ON / forced OFF
     double                                    limit;        
     double                                    displacement;    
     double                                    step;                     
+    UI_OVERFLOW_MODE                          overflow;
+    double                                    barwidth;        // bar thickness (vertical: width, horizontal: height)
+    bool                                      showbar;         // draw + interact; if false scroll still works (active)
+    int                                       thumbcolor[4];   // RGBA 0..255
+    int                                       trackcolor[4];   // RGBA 0..255
+    double                                    sepedge;         // gap from the frame edge the bar docks to (px)
+    double                                    sepalong;        // inset at the two ends of the bar, along its length   (px)
 
   private:
 
@@ -76,7 +104,9 @@ class UI_PROPERTY_SCROLLEABLE
     virtual											         	   ~UI_PROPERTY_SCROLLEABLE	  	            ();
         
     bool                                      Scroll_GetActive                        (UI_PROPERTY_SCROLLEABLE_TYPE type);
-    bool                                      Scroll_SetActivate                      (UI_PROPERTY_SCROLLEABLE_TYPE type, bool on);
+    bool                                      Scroll_SetActivate                      (UI_PROPERTY_SCROLLEABLE_TYPE type, bool on);   // user override: forces ON/OFF (persists across ResolvePolicy)
+    bool                                      Scroll_SetActivateAuto                  (UI_PROPERTY_SCROLLEABLE_TYPE type);             // clears the override: activation follows the overflow policy
+    UI_PROPERTY_SCROLLEABLE_ACTIVATE          Scroll_GetActivateMode                  (UI_PROPERTY_SCROLLEABLE_TYPE type);             // queries the user override (not the resolved state)
 
     bool                                      Scroll_GetVisible                       (UI_PROPERTY_SCROLLEABLE_TYPE type);
     bool                                      Scroll_SetVisible                       (UI_PROPERTY_SCROLLEABLE_TYPE type, bool on);
@@ -89,7 +119,42 @@ class UI_PROPERTY_SCROLLEABLE
     double                                    Scroll_GetStep                          (UI_PROPERTY_SCROLLEABLE_TYPE type);
     void                                      Scroll_SetStep                          (UI_PROPERTY_SCROLLEABLE_TYPE type, double h_step);
 
+    // Absolute back-channel for interactive scrollbars: sets displacement to fraction*limit (fraction clamped 0..1).
+    void                                      Scroll_SetFraction                      (UI_PROPERTY_SCROLLEABLE_TYPE type, double fraction);
+
+    // --- Scrollbar style/config (maps to CSS scrollbar-width / scrollbar-color) ----------------------------------
+    void                                      Scroll_SetBarWidth                      (UI_PROPERTY_SCROLLEABLE_TYPE type, double width);
+    double                                    Scroll_GetBarWidth                      (UI_PROPERTY_SCROLLEABLE_TYPE type);
+
+    void                                      Scroll_SetBarShown                      (UI_PROPERTY_SCROLLEABLE_TYPE type, bool shown);  // false: scroll still works, no bar
+    bool                                      Scroll_GetBarShown                      (UI_PROPERTY_SCROLLEABLE_TYPE type);
+
+    void                                      Scroll_SetBarColors                     (UI_PROPERTY_SCROLLEABLE_TYPE type, UI_COLOR& thumbcolor, UI_COLOR& trackcolor);
+    void                                      Scroll_GetBarThumbColor                 (UI_PROPERTY_SCROLLEABLE_TYPE type, int& r, int& g, int& b, int& a);
+    void                                      Scroll_GetBarTrackColor                 (UI_PROPERTY_SCROLLEABLE_TYPE type, int& r, int& g, int& b, int& a);
+
+    void                                      Scroll_SetBarSeparation                 (UI_PROPERTY_SCROLLEABLE_TYPE type, double separationedge, double separationalong);   // edge gap + end inset
+    void                                      Scroll_GetBarSeparation                 (UI_PROPERTY_SCROLLEABLE_TYPE type, double& separationedge, double& separationalong);
+
+    // Inset track (gutter) rectangle for an axis, in screen coords, shortened by the container corner radius so the
+    // bar clears rounded corners. Single source for draw + hit-test. Returns false if no bar must be shown.
+    bool                                      Scroll_GetTrackRect                     (UI_PROPERTY_SCROLLEABLE_TYPE type, double box_left, double box_top, double box_right, double box_bottom, double radius, double& track_left, double& track_top, double& track_right, double& track_bottom);
+
     void                                      Scroll_ResetStep                        (UI_PROPERTY_SCROLLEABLE_TYPE type = UI_PROPERTY_SCROLLEABLE_TYPE_ALL);
+
+    // --- Overflow policy (CSS overflow): governs clip + scrollbar -------------------------------------------------
+    UI_OVERFLOW_MODE                          Scroll_GetOverflow                      (UI_PROPERTY_SCROLLEABLE_TYPE type);
+    void                                      Scroll_SetOverflow                      (UI_PROPERTY_SCROLLEABLE_TYPE type, UI_OVERFLOW_MODE mode);
+
+    bool                                      Scroll_NeedClip                         ();   // true if any axis overflow != visible
+
+    // Resolves active/visible/limit from overflow + content vs viewport. Returns whether clip is needed.
+    // (Implemented now; the per-container call site is wired in the next layer, where limit/active are consumed.)
+    bool                                      Scroll_ResolvePolicy                    (UI_PROPERTY_SCROLLEABLE_TYPE type, double viewport, double contentextent);
+
+    // Single seam overlay-vs-classic. Overlay (default): returns the full viewport. Classic (future): subtracts
+    // the perpendicular scrollbar width / reserves the gutter. Read by clip, GetFatherSize and ResolvePolicy.
+    double                                    Scroll_GetContentViewport               (UI_PROPERTY_SCROLLEABLE_TYPE type, double fullviewport);
       	
   private:
 

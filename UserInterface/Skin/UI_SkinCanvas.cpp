@@ -48,6 +48,7 @@
 
 #include "UI_Animation.h"
 #include "UI_Element.h"
+#include "UI_Property_Scrolleable.h"
 #include "UI_Element_Scroll.h"
 #include "UI_Element_Text.h"
 #include "UI_Element_TextBox.h"
@@ -77,6 +78,19 @@
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+
+#define UI_SKINCANVAS_SCROLLBAR_WIDTH       UI_PROPERTY_SCROLLEABLE_BARWIDTH    // overlay scrollbar thickness (px)
+#define UI_SKINCANVAS_SCROLLBAR_MINTHUMB    16       // minimum thumb length (px)
+
+#define UI_SKINCANVAS_SCROLLBAR_TRACK_R     0        // track color (faint)
+#define UI_SKINCANVAS_SCROLLBAR_TRACK_G     0
+#define UI_SKINCANVAS_SCROLLBAR_TRACK_B     0
+#define UI_SKINCANVAS_SCROLLBAR_TRACK_A     30
+
+#define UI_SKINCANVAS_SCROLLBAR_THUMB_R     80       // thumb color (semi-transparent)
+#define UI_SKINCANVAS_SCROLLBAR_THUMB_G     80
+#define UI_SKINCANVAS_SCROLLBAR_THUMB_B     80
+#define UI_SKINCANVAS_SCROLLBAR_THUMB_A     160
 
 
 
@@ -1809,29 +1823,39 @@ bool UI_SKINCANVAS::Draw_TextBox(UI_ELEMENT* element)
           UI_SKIN_TEXTBOX_PART* textbox_part = parts.Get(c);
           if(textbox_part)
             {
-              GRP2DCOLOR_RGBA8 color_part(textbox_part->GetColor()->GetRed(),
-                                          textbox_part->GetColor()->GetGreen(),
-                                          textbox_part->GetColor()->GetBlue(),
-                                          textbox_part->GetColor()->GetAlpha());
+              if(textbox_part->GetImage())
+                {
+                  // inline image: bottom on the text baseline (drawn at ypos - height)
+                  canvas->PutBitmapAlpha((double)textbox_part->GetXPos(),
+                                         (double)textbox_part->GetYPos() - (double)textbox_part->GetHeight(),
+                                         textbox_part->GetImage(), 100.0f);
+                }
+               else
+                {
+                  GRP2DCOLOR_RGBA8 color_part(textbox_part->GetColor()->GetRed(),
+                                              textbox_part->GetColor()->GetGreen(),
+                                              textbox_part->GetColor()->GetBlue(),
+                                              textbox_part->GetColor()->GetAlpha());
 
-              canvas->Vectorfont_GetConfig()->SetColor(&color_part);
+                  canvas->Vectorfont_GetConfig()->SetColor(&color_part);
 
-              canvas->VectorFont_Printf(textbox_part->GetXPos(), textbox_part->GetYPos(), textbox_part->GetText()->Get());   
+                  canvas->VectorFont_Printf(textbox_part->GetXPos(), textbox_part->GetYPos(), textbox_part->GetText()->Get());   
 
 
-              #ifdef USERINTERFACE_DEBUG 
-              GRP2DCOLOR_RGBA8  color_debug(255, 0, 255);
+                  #ifdef USERINTERFACE_DEBUG 
+                  GRP2DCOLOR_RGBA8  color_debug(255, 0, 255);
 
-              int width   = (int)canvas->VectorFont_GetWidth(textbox_part->GetText()->Get());
-              int height  = (int)canvas->VectorFont_GetHeight(__L("A"));
+                  int width   = (int)canvas->VectorFont_GetWidth(textbox_part->GetText()->Get());
+                  int height  = (int)canvas->VectorFont_GetHeight(__L("A"));
 
-              canvas->SetLineWidth(1.0f);
-              canvas->SetLineColor(&color_debug);
-              canvas->Rectangle(textbox_part->GetXPos() ,  
-                                textbox_part->GetYPos() ,
-                                textbox_part->GetXPos() + width , 
-                                textbox_part->GetYPos() - height);             
-              #endif  
+                  canvas->SetLineWidth(1.0f);
+                  canvas->SetLineColor(&color_debug);
+                  canvas->Rectangle(textbox_part->GetXPos() ,  
+                                    textbox_part->GetYPos() ,
+                                    textbox_part->GetXPos() + width , 
+                                    textbox_part->GetYPos() - height);             
+                  #endif  
+                }
             }
         }     
    
@@ -1946,7 +1970,25 @@ bool UI_SKINCANVAS::Draw_Animation(UI_ELEMENT* element)
 
   PostDrawFunction(element, canvas, clip_rect, x_position, y_position);
   
-  if(redraw) Elements_SetToRedraw(element_animation);  
+  if(redraw) 
+    {
+      Elements_SetToRedraw(element_animation);  
+
+      // If this animation lives inside a clipping scrollable container, it no longer owns a rebuild area. The rebuild
+      // area belongs to the OUTERMOST clipping scrollable ancestor (an inner one — e.g. a MultiOption — also skips its
+      // area because IT is inside the outer container). So walk the whole chain and mark that outermost owner: its area
+      // (stretched to cover the VISIBLE-axis overflow in PreDrawFunction) is what erases the previous sprite. Marking an
+      // inner scrollable that owns no area would do nothing, which is why the sprite was piling up.
+      UI_ELEMENT* ancestor = element_animation->GetFather();
+      UI_ELEMENT* owner    = NULL;
+      while(ancestor)
+        {
+          UI_PROPERTY_SCROLLEABLE* sc = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(ancestor);
+          if(sc && sc->Scroll_NeedClip()) owner = ancestor;   // keep the outermost
+          ancestor = ancestor->GetFather();
+        }
+      if(owner) Elements_SetToRedraw(owner, true);
+    }
 
   return true;
 }
@@ -2792,6 +2834,51 @@ bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRPCANVAS* canvas, 
 * @return     bool : true if is succesful. 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
+
+// Accumulate the screen bounding box of an element's descendants, but only on the axes flagged (vx/vy). Used to size a
+// scrollable container's rebuild area so it covers content that overflows on a non-clipped (VISIBLE) axis. Descendants
+// no longer own rebuild areas, so without this their overflowing pixels (e.g. an animated icon sticking out of the bar)
+// would never be erased and would pile up. Positions are absolute (scroll is applied at draw time, not stored), and a
+// VISIBLE axis is never scrolled, so the stored positions are the right ones to measure on that axis.
+static void UI_SkinCanvas_ContentExtent(UI_ELEMENT* element, bool vx, bool vy, double margin,
+                                        double& minx, double& maxx, double& miny, double& maxy)
+{
+  if(!element) return;
+
+  XVECTOR<UI_ELEMENT*>* childs = element->GetComposeElements();
+  if(!childs) return;
+
+  for(XDWORD c=0; c<childs->GetSize(); c++)
+    {
+      UI_ELEMENT* child = childs->Get(c);
+      if(!child)                   continue;
+      if(!child->IsVisible())      continue;
+      if(!child->GetBoundaryLine()) continue;
+
+      double cx = child->GetXPosition();
+      double cy = child->GetYPosition();
+      double cw = child->GetBoundaryLine()->width;
+      double ch = child->GetBoundaryLine()->height;
+
+      if(vx) { minx = __MIN(minx, UI_BOUNDARYLINE_EdgeLeft(cx, cw) - margin); maxx = __MAX(maxx, UI_BOUNDARYLINE_EdgeRight (cx, cw) + margin); }
+      if(vy) { miny = __MIN(miny, UI_BOUNDARYLINE_EdgeTop (cy, ch) - margin); maxy = __MAX(maxy, UI_BOUNDARYLINE_EdgeBottom(cy, ch) + margin); }
+
+      // Recurse to reach deeper content (e.g. an animated sprite inside a MultiOption). A nested clipping scrollable
+      // bounds its content only on the axes IT clips; on a VISIBLE axis its content still overflows, so keep measuring
+      // that axis and drop the ones it clips.
+      bool child_vx = vx;
+      bool child_vy = vy;
+      UI_PROPERTY_SCROLLEABLE* csc = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(child);
+      if(csc)
+        {
+          if(csc->Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) != UI_OVERFLOW_VISIBLE) child_vx = false;
+          if(csc->Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL)   != UI_OVERFLOW_VISIBLE) child_vy = false;
+        }
+
+      if(child_vx || child_vy) UI_SkinCanvas_ContentExtent(child, child_vx, child_vy, margin, minx, maxx, miny, maxy);
+    }
+}
+
 bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge)
 {
   if(!canvas) return false;
@@ -2809,34 +2896,86 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XREC
     {
       createarea = true;
       if(GetRebuildAreaByElement(element)) createarea = false;          
+
+      // A descendant of a clipping scrollable container must NOT own a rebuild area: it moves with the container's
+      // scroll, and the area's save/restore (a fixed screen rectangle) would repaint ghosts at stale/scrolled
+      // positions. The container's single rebuild area (its viewport) covers all its content and redraws it as a unit.
+      UI_ELEMENT* ancestor = element->GetFather();
+      while(ancestor)
+        {
+          UI_PROPERTY_SCROLLEABLE* sc = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(ancestor);
+          if(sc && sc->Scroll_NeedClip()) { createarea = false; break; }
+          ancestor = ancestor->GetFather();
+        }
     }
 
   if(createarea)
     {     
       //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Add area: level [%d] [%s] "), element->GetZLevel(), element->GetName()->Get());
 
-      double area_top = UI_BOUNDARYLINE_EdgeTop(y_position, element->GetBoundaryLine()->height);
+      double area_left   = UI_BOUNDARYLINE_EdgeLeft  (x_position, element->GetBoundaryLine()->width);
+      double area_right  = UI_BOUNDARYLINE_EdgeRight  (x_position, element->GetBoundaryLine()->width);
+      double area_top    = UI_BOUNDARYLINE_EdgeTop    (y_position, element->GetBoundaryLine()->height);
+      double area_bottom = UI_BOUNDARYLINE_EdgeBottom  (y_position, element->GetBoundaryLine()->height);
 
-      CreateRebuildArea(x_position - edge, 
-                        area_top - edge, 
-                        element->GetBoundaryLine()->width   + (edge * 2),
-                        element->GetBoundaryLine()->height  + (edge * 2), element);                    
+      // A scrollable container with a non-clipped (VISIBLE) axis lets its content overflow the viewport on that axis.
+      // Those descendants no longer own rebuild areas, so the container's area must stretch to cover their overflow,
+      // otherwise the overflowing pixels are never erased (animated icons pile up). The clipped axis stays at the
+      // viewport (content there is clipped, so it never overflows).
+      UI_PROPERTY_SCROLLEABLE* sc_self = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(element);
+      if(sc_self)
+        {
+          bool vx = (sc_self->Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) == UI_OVERFLOW_VISIBLE);
+          bool vy = (sc_self->Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL)   == UI_OVERFLOW_VISIBLE);
+          if(vx || vy) UI_SkinCanvas_ContentExtent(element, vx, vy, (double)UI_SKINCANVAS_PRESELECT_MAXEDGE,
+                                                    area_left, area_right, area_top, area_bottom);
+        }
+
+      CreateRebuildArea(area_left - edge, 
+                        area_top  - edge, 
+                        (area_right  - area_left) + (edge * 2),
+                        (area_bottom - area_top ) + (edge * 2), element);                    
     }
 
-  if(!element->GetFather())
+  UI_PROPERTY_SCROLLEABLE* scrolleable = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(element);
+  if(scrolleable && scrolleable->Scroll_NeedClip())
     {
-      //if(dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(element))
-        {
-          double clip_top    = UI_BOUNDARYLINE_EdgeTop   (y_position, element->GetBoundaryLine()->height);
-          double clip_bottom = UI_BOUNDARYLINE_EdgeBottom (y_position, element->GetBoundaryLine()->height);
-          double clip_right  = UI_BOUNDARYLINE_EdgeRight  (x_position, element->GetBoundaryLine()->width);
+      double vp_width    = 0.0f;
+      double vp_height   = 0.0f;
+      GetScrollViewportSize(element, vp_width, vp_height);
+      vp_width  = scrolleable->Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, vp_width);
+      vp_height = scrolleable->Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL  , vp_height);
 
-          canvas->GetClipBox(clip_rect);      
-          canvas->SetClipBox(x_position - 1 , 
-                             clip_bottom     ,
-                             clip_right      , 
-                             clip_top - 1);       
-        }
+      double clip_top    = UI_BOUNDARYLINE_EdgeTop    (y_position, vp_height);
+      double clip_bottom = UI_BOUNDARYLINE_EdgeBottom (y_position, vp_height);
+      double clip_right  = UI_BOUNDARYLINE_EdgeRight  (x_position, vp_width);
+      double clip_left   = x_position - 1;
+
+      canvas->GetClipBox(clip_rect);                                       // save the parent clip
+
+      // Per-axis clipping (CSS overflow-x / overflow-y are independent): an axis whose overflow is VISIBLE is NOT
+      // clipped (it inherits the parent bounds, so content may overflow on that axis). A clipped axis is INTERSECTED
+      // with the parent clip, so a nested scrolleable is bounded by its ancestors instead of replacing their clip.
+      bool clip_h = (scrolleable->Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) != UI_OVERFLOW_VISIBLE);
+      bool clip_v = (scrolleable->Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL)   != UI_OVERFLOW_VISIBLE);
+
+      // element box and parent box, normalized to [min,max] (the stored clip can use either Y order)
+      double e_minx = clip_left;
+      double e_maxx = clip_right;
+      double e_miny = clip_top - 1;
+      double e_maxy = clip_bottom;
+
+      double p_minx = __MIN(clip_rect.x1, clip_rect.x2);
+      double p_maxx = __MAX(clip_rect.x1, clip_rect.x2);
+      double p_miny = __MIN(clip_rect.y1, clip_rect.y2);
+      double p_maxy = __MAX(clip_rect.y1, clip_rect.y2);
+
+      double r_minx = clip_h ? __MAX(e_minx, p_minx) : p_minx;
+      double r_maxx = clip_h ? __MIN(e_maxx, p_maxx) : p_maxx;
+      double r_miny = clip_v ? __MAX(e_miny, p_miny) : p_miny;
+      double r_maxy = clip_v ? __MIN(e_maxy, p_maxy) : p_maxy;
+
+      canvas->SetClipBox(r_minx, r_maxy, r_maxx, r_miny);                  // (left, bottom, right, top): same order as before
     }
   
   return true;
@@ -2860,19 +2999,297 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XREC
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XRECT& clip_rect, double x_position, double y_position)
 {  
+  bool redrew = element->MustReDraw();           // capture before clearing: true only when the area was just repainted
   element->SetMustReDraw(false);
 
-  if(!element->GetFather())
-    {  
-      //if(dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(element))
-        {
-          canvas->SetClipBox(clip_rect);
-        }
+  UI_PROPERTY_SCROLLEABLE* scrolleable = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(element);
+  if(scrolleable && scrolleable->Scroll_NeedClip())
+    {
+      canvas->SetClipBox(clip_rect);
+    }
+
+  if(scrolleable)
+    {
+      ResolveScrollPolicy(element, scrolleable);                                       // state only (no drawing): always
+      if(redrew) DrawScrollBars(element, scrolleable, canvas, x_position, y_position); // draw only when the gutter was just
+                                                                                       // cleared, else the translucent bar
+                                                                                       // would be painted over itself every
+                                                                                       // frame and the alpha would accumulate
     }
   
   #ifdef USERINTERFACE_DEBUG 
 	Debug_Draw(element, x_position, y_position);			
   #endif
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_SKINCANVAS::GetScrollViewportSize(UI_ELEMENT* element, double& width, double& height)
+* @brief      Returns the scroll viewport SIZE for an element. For a Form (or Menu) with a defined visiblerect this is
+*             the visible window; otherwise (and for non-Form scrolleables) it is the element boundary line. The box
+*             POSITION is left to each call site (it already tracks scroll), so only the size needs to change.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : 
+* @param[out] width : 
+* @param[out] height : 
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS::GetScrollViewportSize(UI_ELEMENT* element, double& width, double& height)
+{
+  width  = 0.0f;
+  height = 0.0f;
+  if(!element) return;
+
+  UI_ELEMENT_FORM* element_form = dynamic_cast<UI_ELEMENT_FORM*>(element);
+  if(element_form && element_form->GetVisibleRect()->width > 0 && element_form->GetVisibleRect()->height > 0)
+    {
+      width  = element_form->GetVisibleRect()->width;
+      height = element_form->GetVisibleRect()->height;
+    }
+   else
+    {
+      width  = element->GetBoundaryLine()->width;
+      height = element->GetBoundaryLine()->height;
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::ResolveScrollPolicy(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable)
+* @brief      Measures the content extent of a scrollable container and resolves its scroll policy (active/visible/limit).
+* @note       Called at draw time (not only at layout) because children can be added after the layout pass (e.g. menu
+*             options created from code). The content extent is the bounding SPAN of the children rectangles
+*             (max far edge - min near edge), which is robust to the per-element y/x convention (a constant offset
+*             cancels out) and to whether children stack upward or downward.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element :
+* @param[in]  scrolleable :
+*
+* @return     bool : true if is succesful.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::ResolveScrollPolicy(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable)
+{
+  if(!element || !scrolleable) return false;
+
+  UI_ELEMENT_TEXTBOX* element_textbox = dynamic_cast<UI_ELEMENT_TEXTBOX*>(element);
+  if(element_textbox)
+    {
+      // TextBox content is text, not compose elements: the scroll extent is the total laid-out text height (set by
+      // TextBox_GenerateLines during draw). Text wraps to the box width, so there is no horizontal scroll.
+      double tb_w = 0.0f;
+      double tb_h = 0.0f;
+      GetScrollViewportSize(element, tb_w, tb_h);
+
+      double vp_w = scrolleable->Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, tb_w);
+      double vp_h = scrolleable->Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL,   tb_h);
+
+      scrolleable->Scroll_ResolvePolicy(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, vp_w, vp_w);
+      scrolleable->Scroll_ResolvePolicy(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL,   vp_h, element_textbox->GetContentHeight());
+      return true;
+    }
+
+  bool   has  = false;
+  double minx = 0.0f;
+  double maxx = 0.0f;
+  double miny = 0.0f;
+  double maxy = 0.0f;
+
+  for(XDWORD c=0; c<element->GetComposeElements()->GetSize(); c++)
+    {
+      UI_ELEMENT* subelement = element->GetComposeElements()->Get(c);
+      if(!subelement) continue;
+
+      double sx = GetPositionWithoutDefine(subelement->GetBoundaryLine()->x);
+      double sy = GetPositionWithoutDefine(subelement->GetBoundaryLine()->y);
+      double sw = subelement->GetBoundaryLine()->width;
+      double sh = subelement->GetBoundaryLine()->height;
+
+      if(!has)
+        {
+          minx = sx;   maxx = sx + sw;
+          miny = sy;   maxy = sy + sh;
+          has  = true;
+        }
+       else
+        {
+          if(sx      < minx) minx = sx;
+          if(sx + sw > maxx) maxx = sx + sw;
+          if(sy      < miny) miny = sy;
+          if(sy + sh > maxy) maxy = sy + sh;
+        }
+    }
+
+  double box_w = 0.0f;
+  double box_h = 0.0f;
+  GetScrollViewportSize(element, box_w, box_h);
+
+  double vp_w = scrolleable->Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, box_w);
+  double vp_h = scrolleable->Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL,   box_h);
+
+  // Content extent vs viewport [0 .. viewport]. When the content overflows, the scroll range is the overflow PLUS the
+  // content's natural leading margin mirrored at the trailing edge, so the first and last items are framed the same
+  // way (symmetric margins). When the content fits, extent == viewport (no scroll). Convention-robust: a constant
+  // offset cancels in min/max.
+  double content_w = vp_w;
+  double content_h = vp_h;
+
+  if(has)
+    {
+      double over_left   = (minx < 0.0f) ? (-minx)        : 0.0f;   // content past the near edge (overflow)
+      double over_right  = (maxx > vp_w) ? (maxx - vp_w)  : 0.0f;   // content past the far edge
+      double lead_margin = (vp_w > maxx) ? (vp_w - maxx)  : 0.0f;   // natural gap before content, mirrored after it
+      if(over_left > 0.0f || over_right > 0.0f) content_w = vp_w + over_left + over_right + lead_margin;
+
+      double over_below  = (miny < 0.0f) ? (-miny)        : 0.0f;
+      double over_above  = (maxy > vp_h) ? (maxy - vp_h)  : 0.0f;
+      double top_margin  = (vp_h > maxy) ? (vp_h - maxy)  : 0.0f;
+      if(over_below > 0.0f || over_above > 0.0f) content_h = vp_h + over_below + over_above + top_margin;
+    }
+
+  scrolleable->Scroll_ResolvePolicy(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, vp_w, content_w);
+  scrolleable->Scroll_ResolvePolicy(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL,   vp_h, content_h);
+
+  return true;
+}
+
+
+static void DrawScrollPill(GRPCANVAS* canvas, double a, double b, double c, double d, double formradius)
+{
+  // Normalize coords (the edge/clip convention can give either order). The bar follows the form: it is rounded only
+  // when the form has rounded corners, with the corner radius clamped to half the shorter side so a wide-thin or
+  // tall-thin bar stays a valid pill (agg::rounded_rect can misround a wide reversed-Y rect).
+  double x1   = __MIN(a, c);
+  double x2   = __MAX(a, c);
+  double y1   = __MIN(b, d);
+  double y2   = __MAX(b, d);
+  double half = __MIN((x2 - x1), (y2 - y1)) / 2.0f;
+  double r    = (formradius > 0.0f) ? __MIN(formradius, half) : 0.0f;
+
+  canvas->RoundRect(x1, y1, x2, y2, r, true);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRPCANVAS* canvas, double x_position, double y_position)
+* @brief      Draws the overlay scrollbars (track + proportional thumb) of a scrollable container.
+* @note       Overlay model: drawn after the content clip is restored and pinned to the container viewport (it does
+*             NOT receive the container's own scroll displacement). The thumb length is the visible fraction of the
+*             content (viewport / contentextent) and its position is displacement / limit. Read-only for now;
+*             interaction (drag/paging) is added in the next layer without changing this geometry.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element :
+* @param[in]  scrolleable :
+* @param[in]  canvas :
+* @param[in]  x_position :
+* @param[in]  y_position :
+*
+* @return     bool : true if is succesful.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRPCANVAS* canvas, double x_position, double y_position)
+{
+  if(!element || !scrolleable || !canvas) return false;
+
+  double box_w      = 0.0f;
+  double box_h      = 0.0f;
+  GetScrollViewportSize(element, box_w, box_h);
+  double box_left   = x_position;
+  double box_right  = x_position + box_w;
+  double box_bottom = y_position;                                       // larger screen-y
+  double box_top    = UI_BOUNDARYLINE_EdgeTop(y_position, box_h);       // smaller screen-y
+  double radius     = (double)element->GetRoundRect();                  // shorten the bar to clear rounded corners
+
+  double track_left;
+  double track_top;
+  double track_right;
+  double track_bottom;
+  int    tr_r;
+  int    tr_g;
+  int    tr_b;
+  int    tr_a;
+  int    th_r;
+  int    th_g;
+  int    th_b;
+  int    th_a;
+
+  // ---- vertical bar (right gutter) ----
+  if(scrolleable->Scroll_GetTrackRect(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL, box_left, box_top, box_right, box_bottom, radius, track_left, track_top, track_right, track_bottom))
+    {
+      double tracklen  = track_bottom - track_top;
+      double viewport  = scrolleable->Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL, box_h);
+      double limit     = scrolleable->Scroll_GetLimit(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL);            // <= 0
+      double disp      = scrolleable->Scroll_GetDisplacement(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL);
+      double content   = viewport - limit;                                                              // >= viewport
+      double fraction  = (limit != 0.0f) ? (disp / limit) : 0.0f;
+
+      if(fraction < 0.0f) fraction = 0.0f;
+      if(fraction > 1.0f) fraction = 1.0f;
+
+      double thumb     = (content > 0.0f) ? (tracklen * (viewport / content)) : tracklen;
+      if(thumb < UI_SKINCANVAS_SCROLLBAR_MINTHUMB) thumb = UI_SKINCANVAS_SCROLLBAR_MINTHUMB;
+      if(thumb > tracklen)                         thumb = tracklen;
+
+      double thumb_top = track_top + (fraction * (tracklen - thumb));
+
+      scrolleable->Scroll_GetBarTrackColor(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL, tr_r, tr_g, tr_b, tr_a);
+      scrolleable->Scroll_GetBarThumbColor(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL, th_r, th_g, th_b, th_a);
+
+      GRP2DCOLOR_RGBA8 trackcolor(tr_r, tr_g, tr_b, tr_a);
+      GRP2DCOLOR_RGBA8 thumbcolor(th_r, th_g, th_b, th_a);
+
+      canvas->SetLineWidth(0.0f);
+      canvas->SetLineColor(&trackcolor);
+      canvas->SetFillColor(&trackcolor);
+      DrawScrollPill(canvas, track_left, track_bottom, track_right, track_top, radius);
+
+      canvas->SetLineColor(&thumbcolor);
+      canvas->SetFillColor(&thumbcolor);
+      DrawScrollPill(canvas, track_left, thumb_top + thumb, track_right, thumb_top, radius);
+    }
+
+  // ---- horizontal bar (bottom gutter) ----
+  if(scrolleable->Scroll_GetTrackRect(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, box_left, box_top, box_right, box_bottom, radius, track_left, track_top, track_right, track_bottom))
+    {
+      double tracklen  = track_right - track_left;
+      double viewport  = scrolleable->Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, box_w);
+      double limit     = scrolleable->Scroll_GetLimit(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL);
+      double disp      = scrolleable->Scroll_GetDisplacement(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL);
+      double content   = viewport - limit;
+      double fraction  = (limit != 0.0f) ? (disp / limit) : 0.0f;
+
+      if(fraction < 0.0f) fraction = 0.0f;
+      if(fraction > 1.0f) fraction = 1.0f;
+
+      double thumb     = (content > 0.0f) ? (tracklen * (viewport / content)) : tracklen;
+      if(thumb < UI_SKINCANVAS_SCROLLBAR_MINTHUMB) thumb = UI_SKINCANVAS_SCROLLBAR_MINTHUMB;
+      if(thumb > tracklen)                         thumb = tracklen;
+
+      double thumb_left = track_left + (fraction * (tracklen - thumb));
+
+      scrolleable->Scroll_GetBarTrackColor(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, tr_r, tr_g, tr_b, tr_a);
+      scrolleable->Scroll_GetBarThumbColor(UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL, th_r, th_g, th_b, th_a);
+
+      GRP2DCOLOR_RGBA8 trackcolor(tr_r, tr_g, tr_b, tr_a);
+      GRP2DCOLOR_RGBA8 thumbcolor(th_r, th_g, th_b, th_a);
+
+      canvas->SetLineWidth(0.0f);
+      canvas->SetLineColor(&trackcolor);
+      canvas->SetFillColor(&trackcolor);
+      DrawScrollPill(canvas, track_left, track_bottom, track_right, track_top, radius);
+
+      canvas->SetLineColor(&thumbcolor);
+      canvas->SetFillColor(&thumbcolor);
+      DrawScrollPill(canvas, thumb_left, track_bottom, thumb_left + thumb, track_top, radius);
+    }
 
   return true;
 }
@@ -2921,6 +3338,44 @@ double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRPC
 }
 
 
+#define UI_SKINCANVAS_TEXTBOX_MAXINLINEIMAGES   32
+
+// Inline-image obstacle resolver for the text box. Active images are rectangles the running text must flow around.
+// For a line whose vertical band [ltop,lbot] overlaps an image, this advances the cursor past any image it currently
+// sits inside (jumpx), and reports the nearest image edge still ahead on that line (aheadleft/aheadright) so a word is
+// never laid down on top of the picture. With no active images the outputs leave the cursor untouched (aheadleft < 0),
+// so the layout is byte-for-byte the original behaviour.
+static void UI_SkinCanvas_TextObstacle(double x, double ltop, double lbot,
+                                       const double* ol, const double* orr, const double* ot, const double* ob, int n,
+                                       double& jumpx, double& aheadleft, double& aheadright)
+{
+  jumpx = x;
+
+  bool changed = true;
+  while(changed)
+    {
+      changed = false;
+      for(int i=0; i<n; i++)
+        {
+          if((lbot > ot[i]) && (ltop < ob[i]) && (jumpx >= ol[i]) && (jumpx < orr[i])) { jumpx = orr[i]; changed = true; }
+        }
+    }
+
+  aheadleft  = -1.0f;
+  aheadright = -1.0f;
+
+  bool   has  = false;
+  double best = 0.0f;
+  for(int i=0; i<n; i++)
+    {
+      if((lbot > ot[i]) && (ltop < ob[i]) && (ol[i] > jumpx))
+        {
+          if(!has || (ol[i] < best)) { best = ol[i]; aheadleft = ol[i]; aheadright = orr[i]; has = true; }
+        }
+    }
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, GRPCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
@@ -2939,7 +3394,7 @@ double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRPC
 bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, GRPCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
 {
   double                  x_text_position = x_position;
-  double                  y_text_position = UI_BOUNDARYLINE_EdgeTop(y_position, element_textbox->GetBoundaryLine()->height) + (double)canvas->VectorFont_GetHeight(__L("A"));  
+  double                  y_text_position = UI_BOUNDARYLINE_EdgeTop(y_position, element_textbox->GetBoundaryLine()->height) + (double)canvas->VectorFont_GetHeight(__L("A")) + element_textbox->Scroll_GetDisplacement(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL);  
   XDWORD                  index_char      = 0;  
   UI_COLOR                actual_color;
   XDWORD                  nline           = 1;
@@ -2949,8 +3404,19 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
   bool                    outlimit        = false;
   bool                    newpart         = false;  
 
+  double                  fontheight      = (double)canvas->VectorFont_GetHeight(__L("A"));
+  double                  box_right       = (double)element_textbox->GetXPosition() + (double)element_textbox->GetBoundaryLine()->width;
+
+  double                  obs_l[UI_SKINCANVAS_TEXTBOX_MAXINLINEIMAGES];   // active inline-image rectangles (text flows around them)
+  double                  obs_r[UI_SKINCANVAS_TEXTBOX_MAXINLINEIMAGES];
+  double                  obs_t[UI_SKINCANVAS_TEXTBOX_MAXINLINEIMAGES];
+  double                  obs_b[UI_SKINCANVAS_TEXTBOX_MAXINLINEIMAGES];
+  int                     n_obs           = 0;
+  double                  max_obs_bottom  = 0.0f;
+  double                  firstline_top   = y_text_position - fontheight;   // top of line 1 (scroll-independent reference for image content height)
+
   text = element_textbox->GetText()->Get();
-  if(text.IsEmpty()) return false;
+  if(text.IsEmpty()) { element_textbox->SetContentHeight(0.0f); return false; }
 
   actual_color.CopyFrom(element_textbox->GetColor());
 
@@ -2964,6 +3430,32 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
   
   while(index_char < text.GetSize() && (!outlimit))  
     {
+      // flow the text around active inline images: if the cursor lands inside an image band on this line, jump past it
+      if(n_obs)
+        {
+          double jumpx       = x_text_position;
+          double aheadleft   = -1.0f;
+          double aheadright  = -1.0f;
+          UI_SkinCanvas_TextObstacle(x_text_position, y_text_position - fontheight, y_text_position,
+                                     obs_l, obs_r, obs_t, obs_b, n_obs, jumpx, aheadleft, aheadright);
+          if(jumpx > x_text_position)
+            {
+              if(!textbox_part->GetText()->IsEmpty())
+                {
+                  textbox_part->SetWidth((XDWORD)canvas->VectorFont_GetWidth(textbox_part->GetText()->Get()));
+                  textbox_part->SetHeight((XDWORD)canvas->VectorFont_GetHeight(__L("A")));
+                  parts.Add(textbox_part);
+                  textbox_part = GEN_NEW UI_SKIN_TEXTBOX_PART();
+                  if(!textbox_part) return false;
+                }
+              x_text_position = jumpx;
+              textbox_part->SetLineNumber(nline);
+              textbox_part->SetXPos((XDWORD)x_text_position);
+              textbox_part->SetYPos((XDWORD)y_text_position);
+              textbox_part->GetColor()->CopyFrom(&actual_color);
+            }
+        }
+
       XCHAR character = text.Get()[index_char];
 
       switch(character)
@@ -2986,6 +3478,7 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
                                     {                                                                      
                                       XCHAR*    keywords[] = {  __L("COLOR") ,                                                              
                                                                 __L("END") ,
+                                                                __L("IMAGE") ,
                                                              };
                                       XSTRING   keyword;
                                       bool      found_keyword = false;  
@@ -3025,10 +3518,88 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
                                                                                   break;
 
                                                                         case  1 : break;  
+
+                                                                        case  2 : break;   // "END IMAGE" -> no-op (images are single inline insertions)
                                                                       }                                                                    
                                                                   }
                                                               }
                                                             break;                                                          
+
+                                                  case  2 : { // IMAGE <file> : insert an inline image; following text flows after it (wrapping to the next line)
+                                                              GRPBITMAP*    bitmap = NULL;
+                                                              UI_ANIMATION* anim   = GEN_USERINTERFACE.GetOrAddAnimationCache(UI_SKIN_DRAWMODE_CANVAS, canvas->GetMode(), __L(""), keyword_params.Get());
+                                                              if(anim) bitmap = anim->GetBitmap();
+
+                                                              if(bitmap)
+                                                                {
+                                                                  double imgwidth  = (double)bitmap->GetWidth();
+                                                                  double imgheight = (double)bitmap->GetHeight();
+                                                                  double sep       = (double)element_textbox->GetImageSeparation();   // gap kept around the graphic (all edges)
+
+                                                                  // close the current text run (the text that precedes the image)
+                                                                  if(!textbox_part->GetText()->IsEmpty())
+                                                                    {
+                                                                      textbox_part->SetWidth((XDWORD)canvas->VectorFont_GetWidth(textbox_part->GetText()->Get()));
+                                                                      textbox_part->SetHeight((XDWORD)canvas->VectorFont_GetHeight(__L("A")));
+                                                                      parts.Add(textbox_part);
+                                                                      textbox_part = GEN_NEW UI_SKIN_TEXTBOX_PART();
+                                                                    }
+
+                                                                  // wrap to a new line if the image (plus its side margins) does not fit on the current one
+                                                                  if((x_text_position > x_position) && ((x_text_position + sep + imgwidth + sep) > box_right))
+                                                                    {
+                                                                      x_text_position  = x_position;
+                                                                      y_text_position += lineheight;
+                                                                      nline++;
+                                                                    }
+
+                                                                  // The image grows DOWNWARD from the top of the current line (so it never paints over the line above).
+                                                                  // It is drawn at its real rectangle, but the obstacle the text flows around is inflated by 'sep' on every
+                                                                  // edge, so a configurable gap is kept between the graphic and the text on all four sides.
+                                                                  double img_left = x_text_position + sep;
+                                                                  double img_top  = y_text_position - fontheight;
+                                                                  double img_bot  = img_top + imgheight;
+
+                                                                  if(textbox_part)
+                                                                    {
+                                                                      UI_SKIN_TEXTBOX_PART* imagepart = GEN_NEW UI_SKIN_TEXTBOX_PART();
+                                                                      if(imagepart)
+                                                                        {
+                                                                          imagepart->SetImage(bitmap);
+                                                                          imagepart->SetLineNumber(nline);
+                                                                          imagepart->SetXPos((XDWORD)img_left);
+                                                                          imagepart->SetYPos((XDWORD)img_bot);     // drawn at ypos - height = img_top (downward from the line)
+                                                                          imagepart->SetWidth((XDWORD)imgwidth);
+                                                                          imagepart->SetHeight((XDWORD)imgheight);
+                                                                          parts.Add(imagepart);
+                                                                        }
+                                                                    }
+
+                                                                  if(n_obs < UI_SKINCANVAS_TEXTBOX_MAXINLINEIMAGES)
+                                                                    {
+                                                                      obs_l[n_obs] = img_left - sep;             // left margin   (= x_text_position)
+                                                                      obs_r[n_obs] = img_left + imgwidth + sep;  // right margin
+                                                                      obs_t[n_obs] = img_top;                   // top aligns with the line (image grows downward; the line above stays free)
+                                                                      obs_b[n_obs] = img_bot + sep;             // bottom margin (keeps the line below clear)
+                                                                      n_obs++;
+                                                                    }
+                                                                  if((img_bot + sep) > max_obs_bottom) max_obs_bottom = img_bot + sep;
+
+                                                                  x_text_position = img_left + imgwidth;     // following text re-flows past the image (the right margin is applied by the obstacle jump)
+
+                                                                  // re-anchor the (empty) current part for the text that follows the image on this line
+                                                                  if(textbox_part)
+                                                                    {
+                                                                      textbox_part->SetLineNumber(nline);
+                                                                      textbox_part->SetXPos((XDWORD)x_text_position);
+                                                                      textbox_part->SetYPos((XDWORD)y_text_position);
+                                                                      textbox_part->GetColor()->CopyFrom(&actual_color);
+                                                                    }
+
+                                                                  newpart = false;
+                                                                }
+                                                            }
+                                                            break;
                                                 }
                                               
                                               break;
@@ -3059,12 +3630,12 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
                   default : { XSTRING characterstr;                              
                               characterstr.Add(character);
                               
-                              x_text_position += (canvas->VectorFont_GetWidth(characterstr.Get())); 
+                              double            charwidth = (double)canvas->VectorFont_GetWidth(characterstr.Get());
+                              double            xbefore   = x_text_position;
+                              x_text_position += charwidth; 
 
                               UI_BOUNDARYLINE   boundaryline;
                               bool              isinbox    = false;
-                              bool              isinimage  = false;  
-                              double            imagewidth = 0.0f;
                                 
                               boundaryline.x      = element_textbox->GetXPosition();
                               boundaryline.y      = element_textbox->GetYPosition();
@@ -3072,31 +3643,50 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
                               boundaryline.height = element_textbox->GetBoundaryLine()->height;
 
                               isinbox = boundaryline.IsWithin((XDWORD)(x_text_position), (XDWORD)(y_text_position));                                                                                        
-                              if(isinbox)
-                                {      
-                                  if(isinimage)
-                                    {
-                                      if(element_textbox->IsWordClipping())
-                                        {
-                                          if(character != __C(' '))
-                                            {
-                                              while(!textbox_part->GetText()->IsEmpty())
-                                                {  
-                                                  if(textbox_part->GetText()->Get()[textbox_part->GetText()->GetSize()-1] == __C(' ')) break;
-                                                  textbox_part->GetText()->DeleteLastCharacter();
-                                                  index_char--;
-                                                }                                                 
-                                            }
-                                        }
 
-                                      x_text_position += imagewidth;    
-                                      newpart          = true;                                          
+                              // would this character paint on top of an inline image ahead? jump past it (or wrap if the image reaches the margin)
+                              bool jumpedimage = false;
+                              if(isinbox && n_obs)
+                                {
+                                  double jx         = xbefore;
+                                  double aheadleft  = -1.0f;
+                                  double aheadright = -1.0f;
+                                  UI_SkinCanvas_TextObstacle(xbefore, y_text_position - fontheight, y_text_position,
+                                                             obs_l, obs_r, obs_t, obs_b, n_obs, jx, aheadleft, aheadright);
+                                  if((aheadleft >= 0.0f) && (x_text_position > aheadleft))
+                                    {
+                                      if(aheadright < box_right)
+                                        {
+                                          if(!textbox_part->GetText()->IsEmpty())
+                                            {
+                                              textbox_part->SetWidth((XDWORD)canvas->VectorFont_GetWidth(textbox_part->GetText()->Get()));
+                                              textbox_part->SetHeight((XDWORD)canvas->VectorFont_GetHeight(__L("A")));
+                                              parts.Add(textbox_part);
+                                              textbox_part = GEN_NEW UI_SKIN_TEXTBOX_PART();
+                                              if(!textbox_part) return false;
+                                            }
+                                          x_text_position = aheadright;
+                                          textbox_part->SetLineNumber(nline);
+                                          textbox_part->SetXPos((XDWORD)x_text_position);
+                                          textbox_part->SetYPos((XDWORD)y_text_position);
+                                          textbox_part->GetColor()->CopyFrom(&actual_color);
+                                          jumpedimage = true;       // reprocess this character after the image (do not consume it)
+                                        }
+                                       else
+                                        {
+                                          isinbox = false;          // image runs to the right margin -> wrap to the next line
+                                        }
                                     }
-                                   else     
-                                    {                                        
-                                      textbox_part->GetText()->Add(characterstr);
-                                      index_char++;
-                                    }
+                                }
+
+                              if(jumpedimage)
+                                {
+                                  // character intentionally not consumed; it will be laid down after the image on the next pass
+                                }
+                               else if(isinbox)
+                                {                                        
+                                  textbox_part->GetText()->Add(characterstr);
+                                  index_char++;
                                 }
                                else
                                 {  
@@ -3112,12 +3702,6 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
                                     
                                   x_text_position  = x_position;      
                                   y_text_position += lineheight; 
-                                  if(y_text_position > (y_position + lineheight)) 
-                                    {
-                                      outlimit = true;
-                                      break;
-                                    }  
-               
                                   nline++;
 
                                   if(!textbox_part->GetText()->IsEmpty()) 
@@ -3197,20 +3781,39 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
 
               case UI_ELEMENT_TYPE_ALIGN_RIGHT	:	break;																				                  
 
-              case UI_ELEMENT_TYPE_ALIGN_CENTER	: { XDWORD sizealltext = 0;
-                                                    for(XDWORD p=0; p<checkparts.GetSize(); p++)
-                                                      {          
-                                                        UI_SKIN_TEXTBOX_PART* textbox_part = checkparts.Get(p);        
-                                                        if(textbox_part) sizealltext += textbox_part->GetWidth();
+              case UI_ELEMENT_TYPE_ALIGN_CENTER	: { // a line that flows around an inline image is kept left-aligned, so the wrap stays aligned to the picture
+                                                    bool constrained = false;
+                                                    if(n_obs)
+                                                      {
+                                                        for(XDWORD p=0; p<checkparts.GetSize() && (!constrained); p++)
+                                                          {
+                                                            UI_SKIN_TEXTBOX_PART* cp = checkparts.Get(p);
+                                                            if(!cp) continue;
+                                                            double ly = (double)cp->GetYPos();
+                                                            for(int i=0; i<n_obs; i++)
+                                                              {
+                                                                if((ly > obs_t[i]) && ((ly - fontheight) < obs_b[i])) { constrained = true; break; }
+                                                              }
+                                                          }
                                                       }
-                                          
-                                                    XDWORD shift = (XDWORD)(element_textbox->GetBoundaryLine()->width - sizealltext)/2;    
 
-                                                    for(XDWORD p=0; p<checkparts.GetSize(); p++)
-                                                      {          
-                                                        UI_SKIN_TEXTBOX_PART* textbox_part = checkparts.Get(p);        
-                                                        if(textbox_part) textbox_part->SetXPos(textbox_part->GetXPos()+shift); 
-                                                      }                                                             
+                                                    if(!constrained)
+                                                      {
+                                                        XDWORD sizealltext = 0;
+                                                        for(XDWORD p=0; p<checkparts.GetSize(); p++)
+                                                          {          
+                                                            UI_SKIN_TEXTBOX_PART* textbox_part = checkparts.Get(p);        
+                                                            if(textbox_part) sizealltext += textbox_part->GetWidth();
+                                                          }
+                                          
+                                                        XDWORD shift = (XDWORD)(element_textbox->GetBoundaryLine()->width - sizealltext)/2;    
+
+                                                        for(XDWORD p=0; p<checkparts.GetSize(); p++)
+                                                          {          
+                                                            UI_SKIN_TEXTBOX_PART* textbox_part = checkparts.Get(p);        
+                                                            if(textbox_part) textbox_part->SetXPos(textbox_part->GetXPos()+shift); 
+                                                          }
+                                                      }
                                                   }       
                                                   break;										           
             }              
@@ -3218,7 +3821,13 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
 
       checkparts.DeleteAll();                 
     }
-  
+
+  {
+    double textheight  = (double)maxnlines * lineheight;
+    double imageextent = max_obs_bottom - firstline_top;                  // image bottom relative to the top of line 1 (scroll cancels out)
+    element_textbox->SetContentHeight(__MAX(textheight, imageextent));    // make sure scrolling can reach the bottom of an image too
+  }
+
   return true;
 }
 
