@@ -45,6 +45,10 @@
 #include "GRPVectorFileDXF.h"
 #endif
 
+#ifdef GRP_VECTOR_FILE_SVG_ACTIVE
+#include "GRPVectorFileSVG.h"
+#endif
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -167,7 +171,8 @@ GRPVECTORFILE* GRPVECTORFILE::CreateInstance(XPATH& pathfile)
     }
 
   GRPVECTORFILE*    vectorFile = NULL;
-  GRPVECTORFILETYPE list[]     = { GRPVECTORFILETYPE_DXF                                 
+  GRPVECTORFILETYPE list[]     = { GRPVECTORFILETYPE_DXF ,
+                                   GRPVECTORFILETYPE_SVG                                 
                                  };
 
   for(int c=0; c < (sizeof(list)/sizeof(GRPVECTORFILETYPE)); c++)
@@ -217,6 +222,11 @@ GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type)
       case GRPVECTORFILETYPE_DXF      : vectorFile = GEN_NEW GRPVECTORFILEDXF();
                                         break; 
       #endif      
+
+      #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
+      case GRPVECTORFILETYPE_SVG      : vectorFile = GEN_NEW GRPVECTORFILESVG();
+                                        break; 
+      #endif      
    }
 
   if(vectorFile) 
@@ -251,6 +261,11 @@ XCHAR* GRPVECTORFILE::GetTypeText(GRPVECTORFILETYPE type)
 
       #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
       case GRPVECTORFILETYPE_DXF     :  typeTXT = __L("DXF");
+                                        break; 
+      #endif     
+
+      #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
+      case GRPVECTORFILETYPE_SVG     :  typeTXT = __L("SVG");
                                         break; 
       #endif     
     }

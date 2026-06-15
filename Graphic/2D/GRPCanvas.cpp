@@ -809,6 +809,22 @@ void GRPCANVAS::Polygon(GRP2DVERTEXS& vertexs, bool isfill)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPCANVAS::Path(GRP2DPATH& path, bool isfill)
+* @brief      Path
+* @ingroup    GRAPHIC
+*
+* @param[in]  path : path with the segments
+* @param[in]  isfill : is fill
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPCANVAS::Path(GRP2DPATH& path, bool isfill)
+{
+
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void GRPCANVAS::RoundRect(double x1, double y1, double x2, double y2, double radius, bool isfill)
 * @brief      Round rect

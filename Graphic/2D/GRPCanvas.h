@@ -37,6 +37,7 @@
 
 #include "GRP2DColor.h"
 #include "GRP2DVertexs.h"
+#include "GRP2DPath.h"
 #include "GRP2DRebuildAreas.h"
 #include "GRPProperties.h"
 #include "GRPRect.h"
@@ -146,6 +147,8 @@ class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
     virtual void                  Ellipse                             (double x, double y, double rx, double ry, bool isfill = false);
 
     virtual void                  Polygon                             (GRP2DVERTEXS& vertexs, bool isfill);
+
+    virtual void                  Path                                (GRP2DPATH& path, bool isfill = false);
 
     virtual void                  RoundRect                           (double x1, double y1, double x2, double y2, double radius, bool isfill = false);
 

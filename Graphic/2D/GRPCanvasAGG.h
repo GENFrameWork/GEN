@@ -52,6 +52,7 @@
 #include "agg_conv_stroke.h"
 #include "agg_conv_dash.h"
 #include "agg_conv_curve.h"
+#include "agg_path_storage.h"
 #include "agg_conv_contour.h"
 #include "agg_gamma_lut.h"
 #include "agg_ellipse.h"
@@ -613,7 +614,77 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                    AGG_OUTLINE_END
                                                                                 }
 
+    void                                                                        Path                              (GRP2DPATH& path, bool isfill)
+                                                                                {
+                                                                                  if(path.IsEmpty()) return;
 
+                                                                                  agg::path_storage ps;
+
+                                                                                  for(XDWORD c=0; c<path.GetSize(); c++)
+                                                                                    {
+                                                                                      GRP2DPATHSEGMENT* segment = path.Get(c);
+                                                                                      if(!segment) continue;
+
+                                                                                      switch(segment->type)
+                                                                                        {
+                                                                                          case GRP2DPATHSEGMENTTYPE_UNKNOWN  :
+                                                                                                                  default      : break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_MOVETO   : ps.move_to(segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_LINETO   : ps.line_to(segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_CURVETO  : ps.curve4(segment->c1x, segment->c1y, segment->c2x, segment->c2y, segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_QUADTO   : ps.curve3(segment->c1x, segment->c1y, segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_ARCTO    : ps.arc_to(segment->rx, segment->ry, agg::deg2rad(segment->xrot), segment->largearc, segment->sweep, segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_CLOSE    : ps.close_polygon();
+                                                                                                                               break;
+                                                                                        }
+                                                                                    }
+
+                                                                                  if(isfill)
+                                                                                    {
+                                                                                      AGG_SOLIDFILL_INI
+
+                                                                                      ren.color(renderer_primitives->fill_color());
+
+                                                                                      ras.filling_rule((path.GetFillRule() == GRP2DPATHFILLRULE_EVENODD)?agg::fill_even_odd:agg::fill_non_zero);
+
+                                                                                      agg::conv_curve<agg::path_storage> curve(ps);
+
+                                                                                      ras.add_path(curve);
+
+                                                                                      AGG_SOLIDFILL_END
+                                                                                    }
+
+                                                                                  if(linewidth > 0.0)
+                                                                                    {
+                                                                                      AGG_SOLIDFILL_INI
+
+                                                                                      ren.color(renderer_primitives->line_color());
+
+                                                                                      agg::conv_curve<agg::path_storage>                       curve(ps);
+                                                                                      agg::conv_stroke<agg::conv_curve<agg::path_storage> >   stroke(curve);
+
+                                                                                      stroke.width(linewidth);
+                                                                                      stroke.line_cap(agg::round_cap);
+                                                                                      stroke.line_join(agg::round_join);
+
+                                                                                      ras.add_path(stroke);
+
+                                                                                      AGG_SOLIDFILL_END
+                                                                                    }
+                                                                                }
+                                                                                  
+                                                                                  
     void                                                                        RoundRect                         (double x1, double y1, double x2, double y2, double radius, bool isfill = false)
                                                                                 {
                                                                                   if(isfill)

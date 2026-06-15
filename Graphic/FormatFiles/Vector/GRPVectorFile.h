@@ -56,6 +56,7 @@ enum GRPVECTORFILETYPE
 {
   GRPVECTORFILETYPE_UNKNOWN                        = 0 ,
   GRPVECTORFILETYPE_DXF                                ,   
+  GRPVECTORFILETYPE_SVG                                ,
 };
 
 
