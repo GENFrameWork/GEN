@@ -62,6 +62,14 @@
 #include "agg_pixfmt_rgb.h"
 #include "agg_font_freetype.h"
 
+#include "agg_span_gradient.h"
+#include "agg_gradient_lut.h"
+#include "agg_span_interpolator_linear.h"
+#include "agg_span_allocator.h"
+#include "agg_trans_affine.h"
+
+#include "GRP2DGradientStop.h"
+
 #include "XBase.h"
 #include "XString.h"
 #include "XPath.h"
@@ -685,6 +693,153 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                 }
                                                                                   
                                                                                   
+    void                                                                        PathGradientBuildStorage          (GRP2DPATH& path, agg::path_storage& ps)
+                                                                                {
+                                                                                  for(XDWORD c=0; c<path.GetSize(); c++)
+                                                                                    {
+                                                                                      GRP2DPATHSEGMENT* segment = path.Get(c);
+                                                                                      if(!segment) continue;
+
+                                                                                      switch(segment->type)
+                                                                                        {
+                                                                                          case GRP2DPATHSEGMENTTYPE_UNKNOWN  :
+                                                                                                                  default      : break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_MOVETO   : ps.move_to(segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_LINETO   : ps.line_to(segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_CURVETO  : ps.curve4(segment->c1x, segment->c1y, segment->c2x, segment->c2y, segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_QUADTO   : ps.curve3(segment->c1x, segment->c1y, segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_ARCTO    : ps.arc_to(segment->rx, segment->ry, agg::deg2rad(segment->xrot), segment->largearc, segment->sweep, segment->x, segment->y);
+                                                                                                                               break;
+
+                                                                                          case GRP2DPATHSEGMENTTYPE_CLOSE    : ps.close_polygon();
+                                                                                                                               break;
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+
+    void                                                                        PathGradientLinear                (GRP2DPATH& path, bool evenodd, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops)
+                                                                                {
+                                                                                  if(!renderer_base)  return;
+                                                                                  if(path.IsEmpty())  return;
+                                                                                  if(nstops < 1)      return;
+
+                                                                                  agg::path_storage ps;
+                                                                                  PathGradientBuildStorage(path, ps);
+
+                                                                                  agg::conv_curve<agg::path_storage> curve(ps);
+
+                                                                                  agg::rasterizer_scanline_aa<> ras;
+                                                                                  agg::scanline_u8              sl;
+
+                                                                                  ras.filling_rule(evenodd?agg::fill_even_odd:agg::fill_non_zero);
+                                                                                  ras.add_path(curve);
+
+                                                                                  typedef agg::gradient_lut<agg::color_interpolator<COLORTYPE>, 256>  gradient_lut_type;
+
+                                                                                  gradient_lut_type colorlut;
+                                                                                  colorlut.remove_all();
+
+                                                                                  if(nstops == 1)
+                                                                                    {
+                                                                                      colorlut.add_color(0.0, stops[0].color);
+                                                                                      colorlut.add_color(1.0, stops[0].color);
+                                                                                    }
+                                                                                   else
+                                                                                    {
+                                                                                      for(int i=0; i<nstops; i++)  colorlut.add_color(stops[i].offset, stops[i].color);
+                                                                                    }
+
+                                                                                  colorlut.build_lut();
+
+                                                                                  double dx     = (x2 - x1);
+                                                                                  double dy     = (y2 - y1);
+                                                                                  double length = std::sqrt((dx * dx) + (dy * dy));
+                                                                                  if(length < 0.000001)  length = 0.000001;
+
+                                                                                  double angle  = std::atan2(dy, dx);
+
+                                                                                  agg::trans_affine gmtx;
+                                                                                  gmtx.reset();
+                                                                                  gmtx *= agg::trans_affine_rotation(angle);
+                                                                                  gmtx *= agg::trans_affine_translation(x1, y1);
+                                                                                  gmtx.invert();
+
+                                                                                  typedef agg::span_interpolator_linear<agg::trans_affine>                                          interpolator_type;
+                                                                                  typedef agg::span_gradient<COLORTYPE, interpolator_type, agg::gradient_x, gradient_lut_type>      span_gradient_type;
+                                                                                  typedef agg::span_allocator<COLORTYPE>                                                            span_allocator_type;
+
+                                                                                  interpolator_type   interpolator(gmtx);
+                                                                                  agg::gradient_x     gradientfunc;
+                                                                                  span_gradient_type  spangradient(interpolator, gradientfunc, colorlut, 0.0, length);
+                                                                                  span_allocator_type spanallocator;
+
+                                                                                  agg::render_scanlines_aa(ras, sl, *renderer_base, spanallocator, spangradient);
+                                                                                }
+
+
+    void                                                                        PathGradientRadial                (GRP2DPATH& path, bool evenodd, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops)
+                                                                                {
+                                                                                  if(!renderer_base)  return;
+                                                                                  if(path.IsEmpty())  return;
+                                                                                  if(nstops < 1)      return;
+                                                                                  if(r < 0.000001)    r = 0.000001;
+
+                                                                                  agg::path_storage ps;
+                                                                                  PathGradientBuildStorage(path, ps);
+
+                                                                                  agg::conv_curve<agg::path_storage> curve(ps);
+
+                                                                                  agg::rasterizer_scanline_aa<> ras;
+                                                                                  agg::scanline_u8              sl;
+
+                                                                                  ras.filling_rule(evenodd?agg::fill_even_odd:agg::fill_non_zero);
+                                                                                  ras.add_path(curve);
+
+                                                                                  typedef agg::gradient_lut<agg::color_interpolator<COLORTYPE>, 256>  gradient_lut_type;
+
+                                                                                  gradient_lut_type colorlut;
+                                                                                  colorlut.remove_all();
+
+                                                                                  if(nstops == 1)
+                                                                                    {
+                                                                                      colorlut.add_color(0.0, stops[0].color);
+                                                                                      colorlut.add_color(1.0, stops[0].color);
+                                                                                    }
+                                                                                   else
+                                                                                    {
+                                                                                      for(int i=0; i<nstops; i++)  colorlut.add_color(stops[i].offset, stops[i].color);
+                                                                                    }
+
+                                                                                  colorlut.build_lut();
+
+                                                                                  agg::trans_affine gmtx;
+                                                                                  gmtx.reset();
+                                                                                  gmtx *= agg::trans_affine_translation(cx, cy);
+                                                                                  gmtx.invert();
+
+                                                                                  typedef agg::span_interpolator_linear<agg::trans_affine>                                             interpolator_type;
+                                                                                  typedef agg::span_gradient<COLORTYPE, interpolator_type, agg::gradient_radial, gradient_lut_type>    span_gradient_type;
+                                                                                  typedef agg::span_allocator<COLORTYPE>                                                               span_allocator_type;
+
+                                                                                  interpolator_type    interpolator(gmtx);
+                                                                                  agg::gradient_radial gradientfunc;
+                                                                                  span_gradient_type   spangradient(interpolator, gradientfunc, colorlut, 0.0, r);
+                                                                                  span_allocator_type  spanallocator;
+
+                                                                                  agg::render_scanlines_aa(ras, sl, *renderer_base, spanallocator, spangradient);
+                                                                                }
+
+
     void                                                                        RoundRect                         (double x1, double y1, double x2, double y2, double radius, bool isfill = false)
                                                                                 {
                                                                                   if(isfill)

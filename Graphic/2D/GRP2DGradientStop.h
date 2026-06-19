@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPVectorFileSVG.h
+* @file       GRP2DGradientStop.h
 * 
-* @class      GRPVECTORFILESVG
-* @brief      Graphic Vector File SVG class
+* @struct     GRP2DGRADIENTSTOP
+* @brief      Graphic 2D Gradient Stop (offset + color), shared between the canvas and the SVG render
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -30,55 +30,28 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "XString.h"
-
-#include "GRPVectorFileSVGConfig.h"
-
-#include "GRPVectorFile.h"
+#include "GRP2DColor.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define GRPVECTORFILESVG_EXTENSION      __L(".svg")
+#define GRP2DGRADIENT_MAXSTOPS    32
 
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class XFILETXT;
-class GRPVECTORFILECONFIG;
-class GRPVECTORFILESVGOBJ;
+struct GRP2DGRADIENTSTOP
+{
+  double                offset;                                                 // 0.0 .. 1.0
+  GRP2DCOLOR_RGBA8      color;                                                  // color with alpha already resolved
+};
+
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-class GRPVECTORFILESVG : public GRPVECTORFILE
-{
-  public:
-                                    GRPVECTORFILESVG           ();
-    virtual                        ~GRPVECTORFILESVG           ();
-
-    GRPVECTORFILERESULT             DetectType                 ();
-    GRPVECTORFILERESULT             Load                       ();
-
-    GRPVECTORFILECONFIG*            GetConfig                  ();
-
-    GRPVECTORFILESVGOBJ*            GetRoot                    ();
-
-    GRPVECTORFILESVGOBJ*            FindObjByID                (XCHAR* id);
-
-  private:
-
-    bool                            DetectIsSVG                (XFILETXT* file, int nlinesmax = 200);
-
-    void                            Clean                      ();
-
-    GRPVECTORFILESVGOBJ*            root;
-    GRPVECTORFILESVGCONFIG          config;
-};
 
 
 

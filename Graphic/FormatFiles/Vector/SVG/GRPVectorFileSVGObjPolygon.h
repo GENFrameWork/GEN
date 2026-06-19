@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPVectorFileSVG.h
+* @file       GRPVectorFileSVGObjPolygon.h
 * 
-* @class      GRPVECTORFILESVG
-* @brief      Graphic Vector File SVG class
+* @class      GRPVECTORFILESVGOBJPOLYGON
+* @brief      Graphic Vector File SVG Object Polygon class
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -30,56 +30,26 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "XString.h"
-
-#include "GRPVectorFileSVGConfig.h"
-
-#include "GRPVectorFile.h"
-
-
-
-/*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-
-#define GRPVECTORFILESVG_EXTENSION      __L(".svg")
+#include "GRPVectorFileSVGObjPolyLine.h"
 
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class XFILETXT;
-class GRPVECTORFILECONFIG;
-class GRPVECTORFILESVGOBJ;
 
-
-
-/*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-class GRPVECTORFILESVG : public GRPVECTORFILE
+class GRPVECTORFILESVGOBJPOLYGON : public GRPVECTORFILESVGOBJPOLYLINE
 {
   public:
-                                    GRPVECTORFILESVG           ();
-    virtual                        ~GRPVECTORFILESVG           ();
+                                    GRPVECTORFILESVGOBJPOLYGON  ();
+    virtual                        ~GRPVECTORFILESVGOBJPOLYGON  ();
 
-    GRPVECTORFILERESULT             DetectType                 ();
-    GRPVECTORFILERESULT             Load                       ();
+  protected:
 
-    GRPVECTORFILECONFIG*            GetConfig                  ();
-
-    GRPVECTORFILESVGOBJ*            GetRoot                    ();
-
-    GRPVECTORFILESVGOBJ*            FindObjByID                (XCHAR* id);
+    bool                            IsClosed                   ();
 
   private:
 
-    bool                            DetectIsSVG                (XFILETXT* file, int nlinesmax = 200);
-
     void                            Clean                      ();
-
-    GRPVECTORFILESVGOBJ*            root;
-    GRPVECTORFILESVGCONFIG          config;
 };
-
-
 
 

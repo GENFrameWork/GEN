@@ -251,50 +251,42 @@ bool UI_VIRTUALKEYBOARD::Show(bool on, UI_ELEMENT* element_editable)
 {
   if(!main_form)  return false;
 
-  double x = 0;
+  double x = 0; 
   double y = 0;
 
   if(on)
-    {
-      contentchanged = false;
-
+    { 
+      contentchanged = false;      
+      
       if(!element_editable)  return false;
 
-      this->element_editable = element_editable;
+      this->element_editable = element_editable; 
 
-      x = (screen->GetWidth() - main_form->GetBoundaryLine()->width)/2;
+      x = (screen->GetWidth() - main_form->GetBoundaryLine()->width)/2; 
       y = element_editable->GetYPosition() + height + 12;
 
-      // Do not rebuild only the pending dirty areas here.
-      // The virtual keyboard is a modal layer and it changes the global composition of the frame.  Some existing
-      // controls in the layout are semi-transparent and may not have a valid saved rebuild area at this exact moment.
-      // If they are redrawn over the already-composited frame, their alpha is accumulated and artifacts appear
-      // outside the keyboard area (for example in the lower horizontal menu of UI_Options).
-      //
-      // The safe transition is: rebuild the complete frame from the layout background and then redraw every element
-      // once with the keyboard already visible.
+      GEN_USERINTERFACE.Elements_RebuildDrawAreas(layout);
       GEN_USERINTERFACE.SetPreselectElement();
-
       DeleteAllKeys();
-      CreateAllKeys(x, y);
+      CreateAllKeys(x, y);            
 
-      main_form->SetVisible(true);
-      GEN_USERINTERFACE.Element_SetModal(main_form);
+      GEN_USERINTERFACE.Element_SetModal(main_form);     
 
       if(element_editable->GetType() == UI_ELEMENT_TYPE_EDITTEXT)
         {
           UI_ELEMENT_EDITTEXT* element_edittext = (UI_ELEMENT_EDITTEXT*)element_editable;
           if(element_edittext)
             {
-              XDWORD maxsizetext = element_edittext->GetMaxSizeText();
-              XDWORD sizetext    = element_edittext->GetText()->GetSize();
+              XDWORD maxsizetext = element_edittext->GetMaxSizeText();                                                    
+              XDWORD sizetext    = element_edittext->GetText()->GetSize();            
 
               if(!maxsizetext)  maxsizetext = sizetext;
 
-              if(sizetext > maxsizetext)
+              if(sizetext > maxsizetext) 
                 {
                   sizetext = maxsizetext;
                   element_edittext->GetText()->AdjustSize(sizetext);
+
                 }
 
               element_edittext->Cursor_SetVisible(true);
@@ -304,39 +296,25 @@ bool UI_VIRTUALKEYBOARD::Show(bool on, UI_ELEMENT* element_editable)
 
       isshow = true;
     }
-   else
-    {
-      if(this->element_editable)
+   else 
+    { 
+      if(this->element_editable->GetType() == UI_ELEMENT_TYPE_EDITTEXT)
         {
-          if(this->element_editable->GetType() == UI_ELEMENT_TYPE_EDITTEXT)
-            {
-              UI_ELEMENT_EDITTEXT* element_edittext = (UI_ELEMENT_EDITTEXT*)this->element_editable;
-              if(element_edittext) element_edittext->Cursor_SetVisible(false);
-            }
+          UI_ELEMENT_EDITTEXT* element_edittext = (UI_ELEMENT_EDITTEXT*)this->element_editable;
+          if(element_edittext) element_edittext->Cursor_SetVisible(false);           
         }
 
       actualset         = UI_VIRTUALKEYBOARD_SET_UPPERCASE;
       element_editable  = NULL;
 
-      GEN_USERINTERFACE.Element_SetModal(NULL);
-      main_form->SetVisible(false);
+      GEN_USERINTERFACE.Element_SetModal(NULL);   
+
+      GEN_USERINTERFACE.Elements_SetToRedraw();
 
       isshow = false;
-    }
+    } 
 
-  // Force a full repaint for the layout that owns the keyboard. This clears the already-composited screen with the
-  // layout background before the next Update() draws the transparent controls again. It also invalidates every element
-  // so no stale dirty rectangle is reused after the modal visibility transition.
-  if(layout)
-    {
-      GEN_USERINTERFACE.Layout_PutBackground(layout->GetNameID()->Get());
-    }
-   else
-    {
-      GEN_USERINTERFACE.Layout_PutBackground();
-    }
-
-  GEN_USERINTERFACE.Elements_SetToRedraw();
+  main_form->SetVisible(on);
 
   return true;
 }

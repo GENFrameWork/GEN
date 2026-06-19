@@ -38,6 +38,7 @@
 #include "GRP2DColor.h"
 #include "GRP2DVertexs.h"
 #include "GRP2DPath.h"
+#include "GRP2DGradientStop.h"
 #include "GRP2DRebuildAreas.h"
 #include "GRPProperties.h"
 #include "GRPRect.h"
@@ -149,6 +150,8 @@ class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
     virtual void                  Polygon                             (GRP2DVERTEXS& vertexs, bool isfill);
 
     virtual void                  Path                                (GRP2DPATH& path, bool isfill = false);
+    virtual void                  PathGradientLinear                  (GRP2DPATH& path, bool evenodd, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops);
+    virtual void                  PathGradientRadial                  (GRP2DPATH& path, bool evenodd, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops);
 
     virtual void                  RoundRect                           (double x1, double y1, double x2, double y2, double radius, bool isfill = false);
 

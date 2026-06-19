@@ -51,23 +51,15 @@
 
 #include "GEN_Control.h"
 
+
+
+
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 
-/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         static long long XFILEJSON_ConvertStringToLongLong(XSTRING& string)
-* @brief      ong long  XFILEJSON convert string to long long
-* @ingroup    XUTILS
-* 
-* @param[in]  string : 
-* 
-* @return     static : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
+
 static long long XFILEJSON_ConvertStringToLongLong(XSTRING& string)
 {
   const XCHAR* text = string.Get();
@@ -97,6 +89,10 @@ static long long XFILEJSON_ConvertStringToLongLong(XSTRING& string)
 
   return negative? -value : value;
 }
+
+/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------

@@ -51,52 +51,16 @@
 
 #include "GEN_Control.h"
 
+
+
+
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         static long long XFILEJSON_ConvertStringToLongLong(XSTRING& string)
-* @brief      ong long  XFILEJSON convert string to long long
-* @ingroup    XUTILS
-* 
-* @param[in]  string : 
-* 
-* @return     static : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-static long long XFILEJSON_ConvertStringToLongLong(XSTRING& string)
-{
-  const XCHAR* text = string.Get();
-  if(!text) return 0;
-
-  long long value    = 0;
-  bool      negative = false;
-  int       c        = 0;
-
-  if(text[c] == __C('-'))
-    {
-      negative = true;
-      c++;
-    }
-   else
-    {
-      if(text[c] == __C('+')) c++;
-    }
-
-  for(; text[c]; c++)
-    {
-      if((text[c] < __C('0')) || (text[c] > __C('9'))) break;
-
-      value *= 10;
-      value += (long long)(text[c] - __C('0'));
-    }
-
-  return negative? -value : value;
-}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1839,10 +1803,9 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
           ctrlchar = SearchNextControlCharacter(checkposition);
           if(ctrlchar == XFILEJSONCONTROLCHAR_QUOTE)         
             {
-              if(!GetString(checkposition, name))
+              if(GetString(checkposition, name))
                 {
-                  GEN_DELETE value;
-                  return false;
+
                 }
 
               position = checkposition;
@@ -1850,10 +1813,10 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
 
           value->SetName(name);
 
-          if(ctrlchar == XFILEJSONCONTROLCHAR_QUOTE)
+          if(!name.IsEmpty())
             {
               ctrlchar = SearchNextControlCharacter(position);
-              if(ctrlchar != XFILEJSONCONTROLCHAR_COLON)
+              if(ctrlchar == XFILEJSONCONTROLCHAR_NOTCONTROL)
                 {
                   GEN_DELETE value;
                   return false;
@@ -1907,22 +1870,18 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
 
                                                       if(!special)
                                                         {
-                                                          long long integer = XFILEJSON_ConvertStringToLongLong(valuestring);
+                                                          int integer = 0;
 
-                                                          if((integer >= -2147483647LL - 1LL) && (integer <= 2147483647LL))
-                                                            {
-                                                              value->Set((int)integer);
-                                                            }
-                                                           else
-                                                            {
-                                                              value->Set(integer);
-                                                            }
+                                                          valuestring.UnFormat(__L("%d"),&integer);
+                                                          value->Set(integer);
                                                         }
                                                        else
                                                         {
-                                                          double floating = valuestring.ConvertToDouble(0, NULL, false);
+                                                          double floating = 0.0f;
 
-                                                          value->Set(floating);
+                                                          valuestring.UnFormat(__L("%f"), &floating);
+
+                                                          value->Set((float)floating);
                                                         }
 
                                                       object->GetValues()->Add(value);
@@ -2339,9 +2298,6 @@ bool XFILEJSON::GetString(int& position, XSTRING& string)
 {
   string.Empty();
 
-  if(position < 0) return false;
-  if(position >= (int)all.GetSize()) return false;
-
   XFILEJSONCONTROLCHAR ctrlchar;
 
   //----------------------------------
@@ -2352,32 +2308,51 @@ bool XFILEJSON::GetString(int& position, XSTRING& string)
   position++;
 
   bool slashcontrol = false;
+  bool exit         = false;
 
   for(int c=position;c<(int)all.GetSize();c++)
     {
       ctrlchar = CheckControlCharacter(all.Get()[c]);
 
-      if((ctrlchar == XFILEJSONCONTROLCHAR_QUOTE) && !slashcontrol)
+      switch(ctrlchar)
+        {
+          case XFILEJSONCONTROLCHAR_NOTCONTROL    :
+          case XFILEJSONCONTROLCHAR_OPENBRACE     :
+          case XFILEJSONCONTROLCHAR_CLOSEBRACE    :
+          case XFILEJSONCONTROLCHAR_OPENBRACKET   :
+          case XFILEJSONCONTROLCHAR_CLOSEBRACKET  :
+          case XFILEJSONCONTROLCHAR_COMMA         :
+          case XFILEJSONCONTROLCHAR_COLON         :
+          case XFILEJSONCONTROLCHAR_NUMBER        :
+          case XFILEJSONCONTROLCHAR_NUMBERSPECIAL :
+          case XFILEJSONCONTROLCHAR_TEXT          : string += all.Get()[c];
+                                                    slashcontrol = false;
+                                                    break;
+
+          case XFILEJSONCONTROLCHAR_QUOTE         : if(slashcontrol)
+                                                      {
+                                                        string += all.Get()[c];
+                                                        slashcontrol = false;
+
+                                                      }
+                                                     else exit = true;
+                                                    break;
+
+          case XFILEJSONCONTROLCHAR_BLACKSLASH    : slashcontrol = true;
+                                                    string += all.Get()[c];
+                                                    break;
+
+                                     default      : break; 
+        }
+
+      if(exit)
         {
           position = (c + 1);
-          return true;
-        }
-
-      string += all.Get()[c];
-
-      if((ctrlchar == XFILEJSONCONTROLCHAR_BLACKSLASH) && !slashcontrol)
-        {
-          slashcontrol = true;
-        }
-       else
-        {
-          slashcontrol = false;
+          break;
         }
     }
 
-  position = XSTRING_NOTFOUND;
-
-  return false;
+  return string.IsEmpty()?false:true;
 }
 
 
@@ -2448,12 +2423,15 @@ bool XFILEJSON::EncodeObject(bool isobject, XFILEJSONOBJECT* object, bool istabu
           AddTabs(encodelevel, XFILEJSON_SPACETABS, line);
 
           XSTRING* name = value->GetName();
-          if(isobject && name)
+          if(name)
             {
-              XSTRING line2;
+              if(!name->IsEmpty())
+                {
+                  XSTRING line2;
 
-              line2.Format(__L("%c%s%c : "), GetControlCharacter(XFILEJSONCONTROLCHAR_QUOTE), name->Get() , GetControlCharacter(XFILEJSONCONTROLCHAR_QUOTE));
-              line += line2;
+                  line2.Format(__L("%c%s%c : "), GetControlCharacter(XFILEJSONCONTROLCHAR_QUOTE), name->Get() , GetControlCharacter(XFILEJSONCONTROLCHAR_QUOTE));
+                  line+=line2;
+                }
             }
     
           switch(value->GetType())

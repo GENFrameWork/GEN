@@ -36,6 +36,17 @@
 
 #include "GRPVectorFileSVGObj.h"
 
+#include "GRPVectorFileSVGObjRect.h"
+#include "GRPVectorFileSVGObjCircle.h"
+#include "GRPVectorFileSVGObjEllipse.h"
+#include "GRPVectorFileSVGObjLine.h"
+#include "GRPVectorFileSVGObjPolyLine.h"
+#include "GRPVectorFileSVGObjPolygon.h"
+#include "GRPVectorFileSVGObjPath.h"
+#include "GRPVectorFileSVGObjUse.h"
+#include "GRPVectorFileSVGObjGradient.h"
+#include "GRPVectorFileSVGObjText.h"
+
 #include "XFileXML.h"
 #include "XTrace.h"
 
@@ -104,9 +115,27 @@ GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* elemen
 
   GRPVECTORFILESVGOBJTYPE type = GetObjType(element->GetName());
 
-  //  Phase 0 : every element is materialized as the base object carrying its type.
-  //  Phase 1 will switch here to the concrete geometry sub classes (Rect, Circle, Path ...).
-  GRPVECTORFILESVGOBJ* obj = GEN_NEW GRPVECTORFILESVGOBJ();
+  //  The factory instantiates the concrete geometry sub class for the shapes,
+  //  and the base object for containers / not yet supported elements.
+  GRPVECTORFILESVGOBJ* obj = NULL;
+
+  switch(type)
+    {
+      case GRPVECTORFILESVGOBJTYPE_RECT     :  obj = GEN_NEW GRPVECTORFILESVGOBJRECT();      break;
+      case GRPVECTORFILESVGOBJTYPE_CIRCLE   :  obj = GEN_NEW GRPVECTORFILESVGOBJCIRCLE();    break;
+      case GRPVECTORFILESVGOBJTYPE_ELLIPSE  :  obj = GEN_NEW GRPVECTORFILESVGOBJELLIPSE();   break;
+      case GRPVECTORFILESVGOBJTYPE_LINE     :  obj = GEN_NEW GRPVECTORFILESVGOBJLINE();      break;
+      case GRPVECTORFILESVGOBJTYPE_POLYLINE :  obj = GEN_NEW GRPVECTORFILESVGOBJPOLYLINE();  break;
+      case GRPVECTORFILESVGOBJTYPE_POLYGON  :  obj = GEN_NEW GRPVECTORFILESVGOBJPOLYGON();   break;
+      case GRPVECTORFILESVGOBJTYPE_PATH     :  obj = GEN_NEW GRPVECTORFILESVGOBJPATH();      break;
+      case GRPVECTORFILESVGOBJTYPE_USE      :  obj = GEN_NEW GRPVECTORFILESVGOBJUSE();       break;
+      case GRPVECTORFILESVGOBJTYPE_TEXT     :  obj = GEN_NEW GRPVECTORFILESVGOBJTEXT();      break;
+      case GRPVECTORFILESVGOBJTYPE_LINEARGRADIENT :
+      case GRPVECTORFILESVGOBJTYPE_RADIALGRADIENT :  obj = GEN_NEW GRPVECTORFILESVGOBJGRADIENT();  break;
+
+      default                               :  obj = GEN_NEW GRPVECTORFILESVGOBJ();          break;
+    }
+
   if(!obj) return NULL;
 
   obj->SetObjType(type);
@@ -146,6 +175,8 @@ GRPVECTORFILESVGOBJTYPE GRPVECTORFILESVGOBJ::GetObjType(XSTRING& name)
   if(!name.Compare(__L("tspan")   , true))  return GRPVECTORFILESVGOBJTYPE_TEXT;
   if(!name.Compare(__L("image")   , true))  return GRPVECTORFILESVGOBJTYPE_IMAGE;
   if(!name.Compare(__L("use")     , true))  return GRPVECTORFILESVGOBJTYPE_USE;
+  if(!name.Compare(__L("linearGradient"), true))  return GRPVECTORFILESVGOBJTYPE_LINEARGRADIENT;
+  if(!name.Compare(__L("radialGradient"), true))  return GRPVECTORFILESVGOBJTYPE_RADIALGRADIENT;
 
   return GRPVECTORFILESVGOBJTYPE_UNKNOWN;
 }
@@ -213,6 +244,24 @@ bool GRPVECTORFILESVGOBJ::ApplyData(XFILEXMLELEMENT* element)
   BuildChilds(element);
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPVECTORFILESVGOBJ::BuildPath(GRP2DPATH& path)
+* @brief      Build path : emit the geometry of the object into a path (base does nothing)
+* @note       VIRTUAL
+* @ingroup    GRAPHIC
+*
+* @param[in]  path : output path
+*
+* @return     bool : true if any geometry was emitted.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGOBJ::BuildPath(GRP2DPATH& path)
+{
+  return false;
 }
 
 
@@ -382,6 +431,37 @@ XDWORD GRPVECTORFILESVGOBJ::GetNChilds()
 GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::GetChild(int index)
 {
   return childs.Get(index);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::FindByID(XCHAR* id)
+* @brief      Find by id : recursive search of a node by its id (this node and its descendants)
+* @ingroup    GRAPHIC
+*
+* @param[in]  id : id to find (without the leading '#')
+*
+* @return     GRPVECTORFILESVGOBJ* : found node or NULL
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::FindByID(XCHAR* id)
+{
+  if(!id) return NULL;
+
+  if(!this->id.IsEmpty() && !this->id.Compare(id))  return this;
+
+  for(XDWORD c=0; c<GetNChilds(); c++)
+    {
+      GRPVECTORFILESVGOBJ* child = GetChild(c);
+      if(child)
+        {
+          GRPVECTORFILESVGOBJ* found = child->FindByID(id);
+          if(found)  return found;
+        }
+    }
+
+  return NULL;
 }
 
 

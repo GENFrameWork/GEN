@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPVectorFileSVG.h
+* @file       GRPVectorFileSVGObjRect.h
 * 
-* @class      GRPVECTORFILESVG
-* @brief      Graphic Vector File SVG class
+* @class      GRPVECTORFILESVGOBJRECT
+* @brief      Graphic Vector File SVG Object Rect class
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -30,56 +30,51 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "XString.h"
-
-#include "GRPVectorFileSVGConfig.h"
-
-#include "GRPVectorFile.h"
+#include "GRPVectorFileSVGObj.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define GRPVECTORFILESVG_EXTENSION      __L(".svg")
-
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class XFILETXT;
-class GRPVECTORFILECONFIG;
-class GRPVECTORFILESVGOBJ;
+class XFILEXMLELEMENT;
+class GRP2DPATH;
+
+
+class GRPVECTORFILESVGOBJRECT : public GRPVECTORFILESVGOBJ
+{
+  public:
+                                    GRPVECTORFILESVGOBJRECT     ();
+    virtual                        ~GRPVECTORFILESVGOBJRECT     ();
+
+    bool                            ApplyData                  (XFILEXMLELEMENT* element);
+    bool                            BuildPath                  (GRP2DPATH& path);
+
+    double                          GetX                       ();
+    double                          GetY                       ();
+    double                          GetWidth                   ();
+    double                          GetHeight                  ();
+    double                          GetRX                      ();
+    double                          GetRY                      ();
+
+  private:
+
+    void                            Clean                      ();
+
+    double                          x;
+    double                          y;
+    double                          width;
+    double                          height;
+    double                          rx;
+    double                          ry;
+};
+
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-class GRPVECTORFILESVG : public GRPVECTORFILE
-{
-  public:
-                                    GRPVECTORFILESVG           ();
-    virtual                        ~GRPVECTORFILESVG           ();
-
-    GRPVECTORFILERESULT             DetectType                 ();
-    GRPVECTORFILERESULT             Load                       ();
-
-    GRPVECTORFILECONFIG*            GetConfig                  ();
-
-    GRPVECTORFILESVGOBJ*            GetRoot                    ();
-
-    GRPVECTORFILESVGOBJ*            FindObjByID                (XCHAR* id);
-
-  private:
-
-    bool                            DetectIsSVG                (XFILETXT* file, int nlinesmax = 200);
-
-    void                            Clean                      ();
-
-    GRPVECTORFILESVGOBJ*            root;
-    GRPVECTORFILESVGCONFIG          config;
-};
-
-
 
 

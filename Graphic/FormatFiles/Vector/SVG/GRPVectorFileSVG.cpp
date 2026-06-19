@@ -209,16 +209,6 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::Load()
 
               root = GRPVECTORFILESVGOBJ::CreateInstance(xmlroot);
 
-              #ifdef XTRACE_ACTIVE
-              if(root)
-                {
-                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("SVG loaded: width=%f height=%f viewBox=%d"), config.GetWidth(),
-                                                                                                        config.GetHeight(),
-                                                                                                        config.HasViewBox()?1:0);
-                  root->Trace(0);
-                }
-              #endif
-
               result = root ? GRPVECTORFILERESULT_OK : GRPVECTORFILERESULT_ERRORNOTMEMORY;
             }
            else
@@ -271,6 +261,25 @@ GRPVECTORFILECONFIG* GRPVECTORFILESVG::GetConfig()
 GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::GetRoot()
 {
   return root;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::FindObjByID(XCHAR* id)
+* @brief      Find obj by id : search the object tree (including the <defs> content) for a node with the given id
+* @ingroup    GRAPHIC
+*
+* @param[in]  id : id to find (without the leading '#')
+*
+* @return     GRPVECTORFILESVGOBJ* : found node or NULL
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::FindObjByID(XCHAR* id)
+{
+  if(!root) return NULL;
+
+  return root->FindByID(id);
 }
 
 

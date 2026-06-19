@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPVectorFileSVG.h
+* @file       GRPVectorFileSVGObjPath.h
 * 
-* @class      GRPVECTORFILESVG
-* @brief      Graphic Vector File SVG class
+* @class      GRPVECTORFILESVGOBJPATH
+* @brief      Graphic Vector File SVG Object Path class (parses the 'd' attribute)
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -32,53 +32,50 @@
 
 #include "XString.h"
 
-#include "GRPVectorFileSVGConfig.h"
+#include "GRP2DPath.h"
 
-#include "GRPVectorFile.h"
+#include "GRPVectorFileSVGObj.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define GRPVECTORFILESVG_EXTENSION      __L(".svg")
-
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class XFILETXT;
-class GRPVECTORFILECONFIG;
-class GRPVECTORFILESVGOBJ;
+class XFILEXMLELEMENT;
+
+
+class GRPVECTORFILESVGOBJPATH : public GRPVECTORFILESVGOBJ
+{
+  public:
+                                    GRPVECTORFILESVGOBJPATH     ();
+    virtual                        ~GRPVECTORFILESVGOBJPATH     ();
+
+    bool                            ApplyData                  (XFILEXMLELEMENT* element);
+    bool                            BuildPath                  (GRP2DPATH& path);
+
+    GRP2DPATH*                      GetPathData                ();
+
+  private:
+
+    bool                            ParsePathData              (XCHAR* d);
+
+    bool                            ReadNumber                 (XSTRING& source, int& pos, double& value);
+    bool                            ReadFlag                   (XSTRING& source, int& pos, bool& flag);
+    bool                            IsSeparator                (XCHAR character);
+    bool                            IsCommand                  (XCHAR character);
+
+    void                            Clean                      ();
+
+    GRP2DPATH                       pathdata;
+};
+
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-class GRPVECTORFILESVG : public GRPVECTORFILE
-{
-  public:
-                                    GRPVECTORFILESVG           ();
-    virtual                        ~GRPVECTORFILESVG           ();
-
-    GRPVECTORFILERESULT             DetectType                 ();
-    GRPVECTORFILERESULT             Load                       ();
-
-    GRPVECTORFILECONFIG*            GetConfig                  ();
-
-    GRPVECTORFILESVGOBJ*            GetRoot                    ();
-
-    GRPVECTORFILESVGOBJ*            FindObjByID                (XCHAR* id);
-
-  private:
-
-    bool                            DetectIsSVG                (XFILETXT* file, int nlinesmax = 200);
-
-    void                            Clean                      ();
-
-    GRPVECTORFILESVGOBJ*            root;
-    GRPVECTORFILESVGCONFIG          config;
-};
 
 
 

@@ -287,11 +287,11 @@ bool GRPVECTORFILESVGTRANSFORM::ParseFromString(XCHAR* string)
 
       XSTRING name;
       source.Copy(index, open, name);
-      name.DeleteCharacter(__L(' '));
-      name.DeleteCharacter(__L(','));
-      name.DeleteCharacter(__L('\t'));
-      name.DeleteCharacter(__L('\n'));
-      name.DeleteCharacter(__L('\r'));
+      name.DeleteCharacter(__C(' '));
+      name.DeleteCharacter(__C(','));
+      name.DeleteCharacter(__C('\t'));
+      name.DeleteCharacter(__C('\n'));
+      name.DeleteCharacter(__C('\r'));
 
       int close = source.Find(__L(")"), false, open);
       if(close < 0) break;
@@ -416,7 +416,7 @@ bool GRPVECTORFILESVGTRANSFORM::ExtractNumbers(XSTRING& args, double* values, in
   source.Replace(__L(","), __L(" "));
 
   XVECTOR<XSTRING*> tokens;
-  source.Split(__L(' '), tokens, false);
+  source.Split(__C(' '), tokens, false);
 
   for(XDWORD c=0; c<tokens.GetSize(); c++)
     {

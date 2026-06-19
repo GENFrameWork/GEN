@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPVectorFileSVG.h
+* @file       GRPVectorFileSVGObjUse.h
 * 
-* @class      GRPVECTORFILESVG
-* @brief      Graphic Vector File SVG class
+* @class      GRPVECTORFILESVGOBJUSE
+* @brief      Graphic Vector File SVG Object Use class (references another element by id)
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -32,53 +32,45 @@
 
 #include "XString.h"
 
-#include "GRPVectorFileSVGConfig.h"
-
-#include "GRPVectorFile.h"
+#include "GRPVectorFileSVGObj.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define GRPVECTORFILESVG_EXTENSION      __L(".svg")
-
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class XFILETXT;
-class GRPVECTORFILECONFIG;
-class GRPVECTORFILESVGOBJ;
+class XFILEXMLELEMENT;
+
+
+class GRPVECTORFILESVGOBJUSE : public GRPVECTORFILESVGOBJ
+{
+  public:
+                                    GRPVECTORFILESVGOBJUSE      ();
+    virtual                        ~GRPVECTORFILESVGOBJUSE      ();
+
+    bool                            ApplyData                  (XFILEXMLELEMENT* element);
+
+    XSTRING*                        GetHRef                    ();                          // referenced id (without the leading '#')
+
+    double                          GetX                       ();
+    double                          GetY                       ();
+
+  private:
+
+    void                            Clean                      ();
+
+    XSTRING                         href;
+    double                          x;
+    double                          y;
+};
+
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-class GRPVECTORFILESVG : public GRPVECTORFILE
-{
-  public:
-                                    GRPVECTORFILESVG           ();
-    virtual                        ~GRPVECTORFILESVG           ();
-
-    GRPVECTORFILERESULT             DetectType                 ();
-    GRPVECTORFILERESULT             Load                       ();
-
-    GRPVECTORFILECONFIG*            GetConfig                  ();
-
-    GRPVECTORFILESVGOBJ*            GetRoot                    ();
-
-    GRPVECTORFILESVGOBJ*            FindObjByID                (XCHAR* id);
-
-  private:
-
-    bool                            DetectIsSVG                (XFILETXT* file, int nlinesmax = 200);
-
-    void                            Clean                      ();
-
-    GRPVECTORFILESVGOBJ*            root;
-    GRPVECTORFILESVGCONFIG          config;
-};
 
 
 

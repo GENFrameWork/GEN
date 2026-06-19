@@ -57,6 +57,8 @@ enum GRPVECTORFILESVGOBJTYPE
   GRPVECTORFILESVGOBJTYPE_TEXT          ,                                       // <text> , <tspan>
   GRPVECTORFILESVGOBJTYPE_IMAGE         ,                                       // <image>
   GRPVECTORFILESVGOBJTYPE_USE           ,                                       // <use>
+  GRPVECTORFILESVGOBJTYPE_LINEARGRADIENT,                                       // <linearGradient>  (paint server, not rendered directly)
+  GRPVECTORFILESVGOBJTYPE_RADIALGRADIENT,                                       // <radialGradient>  (paint server, not rendered directly)
 };
 
 
@@ -79,6 +81,8 @@ class GRPVECTORFILESVGOBJ
 
     virtual bool                    ApplyData                  (XFILEXMLELEMENT* element);
 
+    virtual bool                    BuildPath                  (GRP2DPATH& path);           // emit geometry into a path (overriden by shapes)
+
     GRPVECTORFILESVGOBJTYPE         GetObjType                 ();
     void                            SetObjType                 (GRPVECTORFILESVGOBJTYPE type);
 
@@ -95,6 +99,8 @@ class GRPVECTORFILESVGOBJ
     XVECTOR<GRPVECTORFILESVGOBJ*>*  GetChilds                  ();
     XDWORD                          GetNChilds                 ();
     GRPVECTORFILESVGOBJ*            GetChild                   (int index);
+
+    GRPVECTORFILESVGOBJ*            FindByID                   (XCHAR* id);                 // recursive search by id (this + descendants)
 
     #ifdef XTRACE_ACTIVE
     void                            Trace                      (int level = 0);

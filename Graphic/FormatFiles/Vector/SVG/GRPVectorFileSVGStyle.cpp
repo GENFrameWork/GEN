@@ -145,16 +145,20 @@ void GRPVECTORFILESVGSTYLE::InheritFrom(GRPVECTORFILESVGSTYLE& parent)
 {
   if(!fillspecified)
     {
-      fillspecified = parent.IsFillSpecified();
-      fillnone      = !parent.HasFill();
-      fillcolor     = parent.GetFillColor();
+      fillspecified     = parent.IsFillSpecified();
+      fillnone          = !parent.HasFill();
+      fillcolor         = parent.GetFillColor();
+      fillispaintserver = parent.IsFillPaintServer();
+      if(fillispaintserver)  fillpaintid = (*parent.GetFillPaintID());
     }
 
   if(!strokespecified)
     {
-      strokespecified = parent.IsStrokeSpecified();
-      strokenone      = !parent.HasStroke();
-      strokecolor     = parent.GetStrokeColor();
+      strokespecified     = parent.IsStrokeSpecified();
+      strokenone          = !parent.HasStroke();
+      strokecolor         = parent.GetStrokeColor();
+      strokeispaintserver = parent.IsStrokePaintServer();
+      if(strokeispaintserver)  strokepaintid = (*parent.GetStrokePaintID());
     }
 
   if(!strokewidthspecified)
@@ -221,6 +225,67 @@ bool GRPVECTORFILESVGSTYLE::IsStrokeSpecified()             { return strokespeci
 * @return     GRP2DCOLOR_RGBA8& : stroke color
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR_RGBA8& GRPVECTORFILESVGSTYLE::GetStrokeColor()   { return strokecolor; }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         bool GRPVECTORFILESVGSTYLE::IsFillPaintServer()
+* @brief      Is fill paint server : the fill is a url(#id) reference (gradient / pattern)
+* @ingroup    GRAPHIC
+* @return     bool : true if the fill is a paint server reference.
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGSTYLE::IsFillPaintServer()             { return fillispaintserver; }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         XSTRING* GRPVECTORFILESVGSTYLE::GetFillPaintID()
+* @brief      Get fill paint id : the referenced id (without '#')
+* @ingroup    GRAPHIC
+* @return     XSTRING* : paint server id
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* GRPVECTORFILESVGSTYLE::GetFillPaintID()            { return &fillpaintid; }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         bool GRPVECTORFILESVGSTYLE::IsStrokePaintServer()
+* @brief      Is stroke paint server : the stroke is a url(#id) reference
+* @ingroup    GRAPHIC
+* @return     bool : true if the stroke is a paint server reference.
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGSTYLE::IsStrokePaintServer()           { return strokeispaintserver; }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         XSTRING* GRPVECTORFILESVGSTYLE::GetStrokePaintID()
+* @brief      Get stroke paint id : the referenced id (without '#')
+* @ingroup    GRAPHIC
+* @return     XSTRING* : paint server id
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* GRPVECTORFILESVGSTYLE::GetStrokePaintID()          { return &strokepaintid; }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         void GRPVECTORFILESVGSTYLE::ExtractPaintServerID(XSTRING& value, XSTRING& id)
+* @brief      Extract paint server id : parse the id from a "url(#id)" / "url(id)" value
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* @param[in]  value : the url(...) value
+* @param[out] id : extracted id (without '#')
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPVECTORFILESVGSTYLE::ExtractPaintServerID(XSTRING& value, XSTRING& id)
+{
+  id.Empty();
+
+  int open  = value.Find(__L("("), false, 0);
+  int close = value.Find(__L(")"), false, 0);
+
+  if((open < 0) || (close <= open)) return;
+
+  int start = open + 1;
+
+  if(value[start] == __C('#'))  start++;
+
+  value.Copy(start, close, id);
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -293,30 +358,52 @@ GRP2DPATHFILLRULE GRPVECTORFILESVGSTYLE::GetFillRule()      { return fillrule; }
 bool GRPVECTORFILESVGSTYLE::ApplyProperty(XSTRING& name, XSTRING& value)
 {
   XSTRING propname(name);
-  propname.DeleteCharacter(__L(' '));
+  propname.DeleteCharacter(__C(' '));
   propname.ToLowerCase();
 
   XSTRING propvalue(value);
-  propvalue.DeleteCharacter(__L(' '));
+  propvalue.DeleteCharacter(__C(' '));
 
   if(propvalue.IsEmpty()) return false;
 
   if(!propname.Compare(__L("fill"), true))
     {
-      bool isnone = false;
-      if(ParseColor(propvalue, fillcolor, isnone))
+      if(propvalue.Find(__L("url("), true, 0) == 0)
         {
-          fillnone      = isnone;
-          fillspecified = true;
+          ExtractPaintServerID(propvalue, fillpaintid);
+          fillispaintserver = true;
+          fillnone          = false;
+          fillspecified     = true;
+        }
+       else
+        {
+          bool isnone = false;
+          if(ParseColor(propvalue, fillcolor, isnone))
+            {
+              fillnone          = isnone;
+              fillispaintserver = false;
+              fillspecified     = true;
+            }
         }
     }
    else if(!propname.Compare(__L("stroke"), true))
     {
-      bool isnone = false;
-      if(ParseColor(propvalue, strokecolor, isnone))
+      if(propvalue.Find(__L("url("), true, 0) == 0)
         {
-          strokenone      = isnone;
-          strokespecified = true;
+          ExtractPaintServerID(propvalue, strokepaintid);
+          strokeispaintserver = true;
+          strokenone          = false;
+          strokespecified     = true;
+        }
+       else
+        {
+          bool isnone = false;
+          if(ParseColor(propvalue, strokecolor, isnone))
+            {
+              strokenone          = isnone;
+              strokeispaintserver = false;
+              strokespecified     = true;
+            }
         }
     }
    else if(!propname.Compare(__L("stroke-width"), true))
@@ -365,7 +452,7 @@ bool GRPVECTORFILESVGSTYLE::ApplyProperty(XSTRING& name, XSTRING& value)
 bool GRPVECTORFILESVGSTYLE::ParseStyleAttribute(XSTRING& style)
 {
   XVECTOR<XSTRING*> declarations;
-  style.Split(__L(';'), declarations, false);
+  style.Split(__C(';'), declarations, false);
 
   for(XDWORD c=0; c<declarations.GetSize(); c++)
     {
@@ -412,7 +499,7 @@ bool GRPVECTORFILESVGSTYLE::ParseColor(XSTRING& value, GRP2DCOLOR_RGBA8& color, 
   isnone = false;
 
   XSTRING str(value);
-  str.DeleteCharacter(__L(' '));
+  str.DeleteCharacter(__C(' '));
 
   if(str.IsEmpty()) return false;
 
@@ -422,7 +509,7 @@ bool GRPVECTORFILESVGSTYLE::ParseColor(XSTRING& value, GRP2DCOLOR_RGBA8& color, 
       return true;
     }
 
-  if(str[0] == __L('#'))
+  if(str[0] == __C('#'))
     {
       int len = (int)str.GetSize() - 1;
 
@@ -460,7 +547,7 @@ bool GRPVECTORFILESVGSTYLE::ParseColor(XSTRING& value, GRP2DCOLOR_RGBA8& color, 
           inside.Replace(__L(","), __L(" "));
 
           XVECTOR<XSTRING*> tokens;
-          inside.Split(__L(' '), tokens, false);
+          inside.Split(__C(' '), tokens, false);
 
           int comp[3] = { 0, 0, 0 };
           int n       = 0;
@@ -540,9 +627,9 @@ bool GRPVECTORFILESVGSTYLE::ParseColor(XSTRING& value, GRP2DCOLOR_RGBA8& color, 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILESVGSTYLE::HexValue(XCHAR character)
 {
-  if((character >= __L('0')) && (character <= __L('9')))  return (int)(character - __L('0'));
-  if((character >= __L('a')) && (character <= __L('f')))  return (int)(character - __L('a')) + 10;
-  if((character >= __L('A')) && (character <= __L('F')))  return (int)(character - __L('A')) + 10;
+  if((character >= __C('0')) && (character <= __C('9')))  return (int)(character - __C('0'));
+  if((character >= __C('a')) && (character <= __C('f')))  return (int)(character - __C('a')) + 10;
+  if((character >= __C('A')) && (character <= __C('F')))  return (int)(character - __C('A')) + 10;
 
   return 0;
 }
@@ -561,10 +648,14 @@ void GRPVECTORFILESVGSTYLE::Clean()
   fillspecified        = false;
   fillnone             = false;
   fillcolor            = GRP2DCOLOR_RGBA8(0, 0, 0);                            // SVG default fill is black
+  fillispaintserver    = false;
+  fillpaintid.Empty();
 
   strokespecified      = false;
   strokenone           = true;                                               // SVG default stroke is none
   strokecolor          = GRP2DCOLOR_RGBA8(0, 0, 0);
+  strokeispaintserver  = false;
+  strokepaintid.Empty();
 
   strokewidthspecified = false;
   strokewidth          = 1.0;                                               // SVG default stroke-width is 1

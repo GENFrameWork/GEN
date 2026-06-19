@@ -224,11 +224,14 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
 bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_LAYOUT* layout)
 { 
   if(!layout) return false;
+    
+  for(XDWORD c=0; c<layout->Elements_Get()->GetSize(); c++)
+    {
+      UI_ELEMENT* element = layout->Elements_Get()->Get(c);
+      if(element) RebuildAllAreas(element);
+    }
 
-  // The stored rebuild areas belong to the canvas, not to the XML layout order.
-  // Restoring them by walking the layout tree can restore overlapping translucent
-  // elements in the wrong order.  Use the global Z-level aware restoration instead.
-  return RebuildAllAreas();
+  return true;
 }
 
 
@@ -270,9 +273,9 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_ELEMENT* element)
     {
       nareas = areas.GetSize();  
 
-      for(int index = (int)nareas - 1; index >= 0; index--)                
+      for(XDWORD index = nareas-1; index>0; index--)                
         {
-          GRP2DREBUILDAREA* area = areas.Get((XDWORD)index);
+          GRP2DREBUILDAREA* area = areas.Get(index);
           if(area)
             {
               UI_ELEMENT* _element = (UI_ELEMENT*)area->GetExtraData();
@@ -282,10 +285,9 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_ELEMENT* element)
                     {
                       if(_element->GetZLevel() == level)
                         {  
-                          if(_element->MustReDraw() || (!_element->IsVisible())) 
+                          if(_element->MustReDraw()) 
                             {                              
-                              GRPBITMAP* bitmap = area->GetBitmap();
-                              if(bitmap) PutBitmapNoAlpha(area->GetXPos(), area->GetYPos(), bitmap);
+                              PutBitmapNoAlpha(area->GetXPos(), area->GetYPos(), area->GetBitmap());
 
                               areas.Delete(area);                
                               GEN_DELETE area;  
@@ -2895,18 +2897,12 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XREC
       createarea = true;
       if(GetRebuildAreaByElement(element)) createarea = false;          
 
-      // A descendant of an element that is already going to be redrawn must NOT own another rebuild area.
-      // Otherwise nested transparent elements (button -> animation -> image) store overlapping copies of the same
-      // background and those copies can be restored/repainted more than once, accumulating alpha.
-      //
-      // A descendant of a clipping scrollable container must NOT own a rebuild area either: it moves with the
-      // container's scroll, and the area's save/restore (a fixed screen rectangle) would repaint ghosts at
-      // stale/scrolled positions. The container's single rebuild area covers all its content and redraws it as a unit.
+      // A descendant of a clipping scrollable container must NOT own a rebuild area: it moves with the container's
+      // scroll, and the area's save/restore (a fixed screen rectangle) would repaint ghosts at stale/scrolled
+      // positions. The container's single rebuild area (its viewport) covers all its content and redraws it as a unit.
       UI_ELEMENT* ancestor = element->GetFather();
       while(ancestor)
         {
-          if(ancestor->MustReDraw()) { createarea = false; break; }
-
           UI_PROPERTY_SCROLLEABLE* sc = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(ancestor);
           if(sc && sc->Scroll_NeedClip()) { createarea = false; break; }
           ancestor = ancestor->GetFather();

@@ -60,9 +60,15 @@ class GRPVECTORFILESVGSTYLE
     bool                            IsFillSpecified            ();
     GRP2DCOLOR_RGBA8&               GetFillColor               ();
 
+    bool                            IsFillPaintServer          ();                                           // fill is a url(#id) reference (gradient...)
+    XSTRING*                        GetFillPaintID             ();
+
     bool                            HasStroke                  ();                                           // there is a stroke (not 'none')
     bool                            IsStrokeSpecified          ();
     GRP2DCOLOR_RGBA8&               GetStrokeColor             ();
+
+    bool                            IsStrokePaintServer        ();
+    XSTRING*                        GetStrokePaintID           ();
 
     double                          GetStrokeWidth             ();
     bool                            IsStrokeWidthSpecified     ();
@@ -73,22 +79,29 @@ class GRPVECTORFILESVGSTYLE
 
     GRP2DPATHFILLRULE               GetFillRule                ();
 
+    static bool                     ParseColor                 (XSTRING& value, GRP2DCOLOR_RGBA8& color, bool& isnone);
+    static int                      HexValue                   (XCHAR character);
+
   private:
 
     bool                            ApplyProperty              (XSTRING& name, XSTRING& value);
     bool                            ParseStyleAttribute        (XSTRING& style);
-    bool                            ParseColor                 (XSTRING& value, GRP2DCOLOR_RGBA8& color, bool& isnone);
-    int                             HexValue                   (XCHAR character);
+
+    static void                     ExtractPaintServerID       (XSTRING& value, XSTRING& id);
 
     void                            Clean                      ();
 
     bool                            fillspecified;
     bool                            fillnone;
     GRP2DCOLOR_RGBA8                fillcolor;
+    bool                            fillispaintserver;
+    XSTRING                         fillpaintid;
 
     bool                            strokespecified;
     bool                            strokenone;
     GRP2DCOLOR_RGBA8                strokecolor;
+    bool                            strokeispaintserver;
+    XSTRING                         strokepaintid;
 
     bool                            strokewidthspecified;
     double                          strokewidth;

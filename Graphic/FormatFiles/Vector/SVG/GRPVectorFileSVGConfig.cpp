@@ -121,7 +121,7 @@ bool GRPVECTORFILESVGCONFIG::ApplyData(XFILEXMLELEMENT* elementsvg)
       strviewbox.Replace(__L(","), __L(" "));
 
       XVECTOR<XSTRING*> tokens;
-      strviewbox.Split(__L(' '), tokens, false);
+      strviewbox.Split(__C(' '), tokens, false);
 
       if(tokens.GetSize() >= 4)
         {
