@@ -64,17 +64,29 @@ class GRPVECTORFILESVGOBJTEXT : public GRPVECTORFILESVGOBJ
 
     double                          GetX                       ();
     double                          GetY                       ();
+    bool                            HasX                       ();
+    bool                            HasY                       ();
+    double                          GetDX                      ();
+    double                          GetDY                      ();
     double                          GetFontSize                ();
+    bool                            HasFontSize                ();
     GRPVECTORFILESVGTEXTANCHOR      GetTextAnchor              ();
 
   private:
+
+    static bool                     GetProperty                (XFILEXMLELEMENT* element, XCHAR* name, XSTRING& outvalue);
 
     void                            Clean                      ();
 
     XSTRING                         text;
     double                          x;
     double                          y;
+    bool                            hasx;
+    bool                            hasy;
+    double                          dx;
+    double                          dy;
     double                          fontsize;
+    bool                            hasfontsize;
     GRPVECTORFILESVGTEXTANCHOR      textanchor;
 };
 

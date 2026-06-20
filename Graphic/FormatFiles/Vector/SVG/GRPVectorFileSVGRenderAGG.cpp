@@ -402,9 +402,11 @@ bool GRPVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORF
 
   double opacity = style.GetOpacity();
 
+  bool evenodd = (style.GetFillRule() == GRP2DPATHFILLRULE_EVENODD);
+
   if(style.IsFillPaintServer())
     {
-      RenderGradientFill(path, style, transform, bbx, bby, bbw, bbh, canvas);
+      RenderGradient(path, style.GetFillPaintID(), opacity * style.GetFillOpacity(), false, 0.0, evenodd, transform, bbx, bby, bbw, bbh, canvas);
     }
    else if(style.HasFill())
     {
@@ -415,7 +417,11 @@ bool GRPVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORF
       canvas->Path(path, true);
     }
 
-  if(style.HasStroke() && !style.IsStrokePaintServer())
+  if(style.IsStrokePaintServer())
+    {
+      RenderGradient(path, style.GetStrokePaintID(), opacity * style.GetStrokeOpacity(), true, style.GetStrokeWidth() * GetScaleFactor(transform), evenodd, transform, bbx, bby, bbw, bbh, canvas);
+    }
+   else if(style.HasStroke())
     {
       GRP2DCOLOR_RGBA8 strokecolor = style.GetStrokeColor();
       strokecolor.a = (XBYTE)(255.0 * opacity * style.GetStrokeOpacity());
@@ -445,38 +451,97 @@ bool GRPVECTORFILESVGRENDERAGG::RenderText(GRPVECTORFILESVGOBJ* obj, GRPVECTORFI
 {
   GRPVECTORFILESVGOBJTEXT* textobj = (GRPVECTORFILESVGOBJTEXT*)obj;
 
-  XSTRING* text = textobj->GetText();
-  if(!text || text->IsEmpty()) return false;
+  if(!canvas->Vectorfont_GetConfig()) return false;
 
-  if(!style.HasFill()) return false;                                           // nothing to paint (fill:none)
+  double scale      = GetScaleFactor(transform);
+  double parentsize = textobj->GetFontSize();
 
+  double penx = textobj->GetX();
+  double peny = textobj->GetY();
+
+  bool haschildren = (textobj->GetNChilds() > 0);
+
+  //  The <text> own text (the chunk the parser kept). With <tspan> runs the anchor is start (left to right).
+  if(!textobj->GetText()->IsEmpty())
+    {
+      GRPVECTORFILESVGTEXTANCHOR anchor = haschildren ? GRPVECTORFILESVGTEXTANCHOR_START : textobj->GetTextAnchor();
+      penx = DrawTextRun(textobj->GetText(), style, parentsize, penx, peny, anchor, transform, scale, canvas);
+    }
+
+  //  <tspan> runs.
+  for(XDWORD c=0; c<textobj->GetNChilds(); c++)
+    {
+      GRPVECTORFILESVGOBJ* child = textobj->GetChild(c);
+      if(!child) continue;
+      if(child->GetObjType() != GRPVECTORFILESVGOBJTYPE_TEXT) continue;
+
+      GRPVECTORFILESVGOBJTEXT* tspan = (GRPVECTORFILESVGOBJTEXT*)child;
+      if(tspan->GetText()->IsEmpty()) continue;
+
+      GRPVECTORFILESVGSTYLE tspanstyle = (*tspan->GetStyle());
+      tspanstyle.InheritFrom(style);
+
+      double tspansize = tspan->HasFontSize() ? tspan->GetFontSize() : parentsize;
+
+      if(tspan->HasX())  penx = tspan->GetX();
+      if(tspan->HasY())  peny = tspan->GetY();
+
+      penx += tspan->GetDX();
+      peny += tspan->GetDY();
+
+      penx = DrawTextRun(tspan->GetText(), tspanstyle, tspansize, penx, peny, GRPVECTORFILESVGTEXTANCHOR_START, transform, scale, canvas);
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         double GRPVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRPCANVAS* canvas)
+* @brief      Draw text run : draw one text run at the (user space) pen and return the advanced pen x (user space)
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* @param[in]  text : run text
+* @param[in]  style : effective style for the run
+* @param[in]  sizeuser : font size in user units
+* @param[in]  penx : pen x (user space)
+* @param[in]  peny : pen y (user space, baseline)
+* @param[in]  anchor : text anchor
+* @param[in]  transform : accumulated transform (user -> device)
+* @param[in]  scale : transform scale factor
+* @param[in]  canvas : target canvas
+* @return     double : advanced pen x (user space)
+* --------------------------------------------------------------------------------------------------------------------*/
+double GRPVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRPCANVAS* canvas)
+{
   GRPCANVAS_VECTORFONT_CONFIG* config = canvas->Vectorfont_GetConfig();
-  if(!config) return false;
 
-  double px = textobj->GetX();
-  double py = textobj->GetY();
-  transform.ApplyToPoint(px, py);                                             // anchor -> device (baseline)
-
-  double devicesize = textobj->GetFontSize() * GetScaleFactor(transform);
+  double devicesize = sizeuser * scale;
   if(devicesize < 1.0)  devicesize = 1.0;
 
   config->SetSize(devicesize);
 
-  GRP2DCOLOR_RGBA8 color = style.GetFillColor();
-  color.a = (XBYTE)(255.0 * style.GetOpacity() * style.GetFillOpacity());
-  config->SetColor(&color);
+  double width = canvas->VectorFont_GetWidth(text->Get());
 
-  if(textobj->GetTextAnchor() != GRPVECTORFILESVGTEXTANCHOR_START)
+  if(style.HasFill())
     {
-      double width = canvas->VectorFont_GetWidth(text->Get());
+      GRP2DCOLOR_RGBA8 color = style.GetFillColor();
+      color.a = (XBYTE)(255.0 * style.GetOpacity() * style.GetFillOpacity());
+      config->SetColor(&color);
 
-      if(textobj->GetTextAnchor() == GRPVECTORFILESVGTEXTANCHOR_MIDDLE)  px -= (width / 2.0);
-       else                                                             px -= width;
+      double dx = penx;
+      double dy = peny;
+      transform.ApplyToPoint(dx, dy);
+
+      if(anchor == GRPVECTORFILESVGTEXTANCHOR_MIDDLE)   dx -= (width / 2.0);
+       else if(anchor == GRPVECTORFILESVGTEXTANCHOR_END)  dx -= width;
+
+      canvas->VectorFont_Print(dx, dy, text->Get());
     }
 
-  canvas->VectorFont_Print(px, py, text->Get());
+  if(scale > 0.0)  penx += (width / scale);                                    // advance pen in user units
 
-  return true;
+  return penx;
 }
 
 
@@ -536,25 +601,29 @@ void GRPVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx, d
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::RenderGradientFill(GRP2DPATH& devicepath, GRPVECTORFILESVGSTYLE& style, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas)
-* @brief      Render gradient fill : resolve the paint server gradient and fill the path with it
+* @fn         bool GRPVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas)
+* @brief      Render gradient : resolve the paint server gradient and fill (or stroke) the path with it
 * @note       INTERNAL
 * @ingroup    GRAPHIC
 * @param[in]  devicepath : path already transformed to device space
-* @param[in]  style : effective style (its fill is a paint server)
+* @param[in]  paintid : referenced gradient id (fill or stroke paint server)
+* @param[in]  globalalpha : opacity * (fill|stroke)-opacity to bake into the stops
+* @param[in]  isstroke : true to paint the stroke outline, false to fill
+* @param[in]  linewidth : device stroke width (only when isstroke)
+* @param[in]  evenodd : even-odd fill rule (fill only)
 * @param[in]  transform : accumulated node transform (user -> device)
 * @param[in]  bbx : path user space bounding box x
 * @param[in]  bby : path user space bounding box y
 * @param[in]  bbw : path user space bounding box width
 * @param[in]  bbh : path user space bounding box height
 * @param[in]  canvas : target canvas
-* @return     bool : true if filled with a gradient.
+* @return     bool : true if painted with a gradient.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::RenderGradientFill(GRP2DPATH& devicepath, GRPVECTORFILESVGSTYLE& style, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas)
+bool GRPVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas)
 {
   if(!contextsvg) return false;
 
-  GRPVECTORFILESVGOBJ* paintobj = contextsvg->FindObjByID(style.GetFillPaintID()->Get());
+  GRPVECTORFILESVGOBJ* paintobj = contextsvg->FindObjByID(paintid->Get());
   if(!paintobj) return false;
 
   if((paintobj->GetObjType() != GRPVECTORFILESVGOBJTYPE_LINEARGRADIENT) &&
@@ -562,13 +631,27 @@ bool GRPVECTORFILESVGRENDERAGG::RenderGradientFill(GRP2DPATH& devicepath, GRPVEC
 
   GRPVECTORFILESVGOBJGRADIENT* gradient = (GRPVECTORFILESVGOBJGRADIENT*)paintobj;
 
-  int                nstops = gradient->GetNStops();
+  //  Stops may be inherited from another gradient via xlink:href.
+  GRPVECTORFILESVGOBJGRADIENT* stopsource = gradient;
+  int                         guard      = 0;
+
+  while(stopsource && (stopsource->GetNStops() == 0) && (!stopsource->GetHRef()->IsEmpty()) && (guard < 8))
+    {
+      GRPVECTORFILESVGOBJ* ref = contextsvg->FindObjByID(stopsource->GetHRef()->Get());
+
+      if(ref && ((ref->GetObjType() == GRPVECTORFILESVGOBJTYPE_LINEARGRADIENT) ||
+                 (ref->GetObjType() == GRPVECTORFILESVGOBJTYPE_RADIALGRADIENT)))   stopsource = (GRPVECTORFILESVGOBJGRADIENT*)ref;
+       else                                                                       stopsource = NULL;
+
+      guard++;
+    }
+
+  int                nstops = stopsource ? stopsource->GetNStops() : 0;
   if(nstops < 1) return false;
 
   //  Bake the global / fill opacity into each stop alpha.
-  GRP2DGRADIENTSTOP* src = gradient->GetStops();
+  GRP2DGRADIENTSTOP* src = stopsource->GetStops();
   GRP2DGRADIENTSTOP  stops[GRP2DGRADIENT_MAXSTOPS];
-  double             globalalpha = style.GetOpacity() * style.GetFillOpacity();
 
   for(int i=0; i<nstops; i++)
     {
@@ -579,7 +662,6 @@ bool GRPVECTORFILESVGRENDERAGG::RenderGradientFill(GRP2DPATH& devicepath, GRPVEC
 
   bool                       objectbbox = (gradient->GetUnits() == GRPVECTORFILESVGGRADIENTUNITS_OBJECTBOUNDINGBOX);
   GRPVECTORFILESVGTRANSFORM* gtransform = gradient->GetGradientTransform();
-  bool                       evenodd    = (style.GetFillRule() == GRP2DPATHFILLRULE_EVENODD);
 
   if(gradient->IsRadial())
     {
@@ -610,7 +692,8 @@ bool GRPVECTORFILESVGRENDERAGG::RenderGradientFill(GRP2DPATH& devicepath, GRPVEC
 
       double deviceradius = radius * gradientscale * devicescale;
 
-      canvas->PathGradientRadial(devicepath, evenodd, centerx, centery, deviceradius, stops, nstops);
+      if(isstroke)  canvas->PathGradientRadialStroke(devicepath, linewidth, centerx, centery, deviceradius, stops, nstops);
+       else         canvas->PathGradientRadial(devicepath, evenodd, centerx, centery, deviceradius, stops, nstops);
     }
    else
     {
@@ -636,11 +719,13 @@ bool GRPVECTORFILESVGRENDERAGG::RenderGradientFill(GRP2DPATH& devicepath, GRPVEC
       transform.ApplyToPoint(ax, ay);                                          // user -> device
       transform.ApplyToPoint(bx, by);
 
-      canvas->PathGradientLinear(devicepath, evenodd, ax, ay, bx, by, stops, nstops);
+      if(isstroke)  canvas->PathGradientLinearStroke(devicepath, linewidth, ax, ay, bx, by, stops, nstops);
+       else         canvas->PathGradientLinear(devicepath, evenodd, ax, ay, bx, by, stops, nstops);
     }
 
   return true;
 }
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------

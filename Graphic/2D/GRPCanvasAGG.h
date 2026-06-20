@@ -28,6 +28,38 @@
 
 #pragma once
 
+
+/*---- AGG ANTI-ALIASING / QUALITY TUNING ----------------------------------------------------------------------------*/
+
+// Ajustes globales de calidad para AGG.
+//
+// Valores recomendados para empezar:
+//   Balanced:  curve=8.0,  gamma=1.25, min_width=0.50, smoother_width=0.50
+//   AA_MAX:    curve=32.0, gamma=1.50, min_width=1.00, smoother_width=1.00
+//
+// Nota: GRPCANVASAGG_AA_GAMMA_POWER = 1.0 es el comportamiento neutro/lineal.
+// No usar 0.0 como valor "neutro" porque gamma_power(0.0) elimina visualmente parte del AA.
+
+#ifndef GRPCANVASAGG_AA_CURVE_APPROXIMATION_SCALE
+#define GRPCANVASAGG_AA_CURVE_APPROXIMATION_SCALE             8.0
+#endif
+
+#ifndef GRPCANVASAGG_AA_GAMMA_POWER
+#define GRPCANVASAGG_AA_GAMMA_POWER                           1.25
+#endif
+
+#ifndef GRPCANVASAGG_AA_OUTLINE_MIN_WIDTH
+#define GRPCANVASAGG_AA_OUTLINE_MIN_WIDTH                     0.50
+#endif
+
+#ifndef GRPCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH
+#define GRPCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH                0.50
+#endif
+
+#define GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve)              curve.approximation_scale(GRPCANVASAGG_AA_CURVE_APPROXIMATION_SCALE);
+#define GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras)             ras.gamma(agg::gamma_power(GRPCANVASAGG_AA_GAMMA_POWER));
+
+
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -36,9 +68,7 @@
 #include "agg_basics.h"
 #include "agg_pixfmt_gray.h"
 #include "agg_pixfmt_rgb_packed.h"
-#include "agg_pixfmt_rgb.h"
 #include "agg_pixfmt_rgba.h"
-#include "agg_rasterizer_scanline_aa.h"
 #include "agg_rasterizer_outline_aa.h"
 #include "agg_rendering_buffer.h"
 #include "agg_renderer_scanline.h"
@@ -102,9 +132,9 @@
                                                               agg::renderer_outline_aa<agg::renderer_base<PIXELFORMATBUFFER> >                                 ren(*renderer_base, profile);    \
                                                               agg::rasterizer_outline_aa<agg::renderer_outline_aa<agg::renderer_base<PIXELFORMATBUFFER> > >    ras(ren);                        \
                                                               agg::line_profile_aa(width, agg::gamma_none());                                                                                   \
-                                                              profile.gamma(agg::gamma_power(0));                                                                                               \
-                                                              profile.min_width(0.5);                                                                                                           \
-                                                              profile.smoother_width(0.5);                                                                                                      \
+                                                              profile.gamma(agg::gamma_power(GRPCANVASAGG_AA_GAMMA_POWER));                                                                                               \
+                                                              profile.min_width(GRPCANVASAGG_AA_OUTLINE_MIN_WIDTH);                                                                                                           \
+                                                              profile.smoother_width(GRPCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH);                                                                                                      \
                                                               profile.width(linewidth);
 
 #define AGG_OUTLINE_END                                       ras.render(true);
@@ -490,7 +520,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                       ren.color(renderer_primitives->fill_color());
 
-                                                                                      ras.gamma(agg::gamma_power(0.0f));
+                                                                                      GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
 
                                                                                       ras.move_to_d(x1, y1);
                                                                                       ras.line_to_d(x1, y2);
@@ -542,7 +572,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                       ren.color(renderer_primitives->fill_color());
 
-                                                                                      ras.gamma(agg::gamma_power(0.0f));
+                                                                                      GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
 
                                                                                       agg::ellipse ell(x, y, rx, ry, 100);
                                                                                       ras.add_path(ell);
@@ -581,7 +611,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                       ren.color(renderer_primitives->fill_color());
 
-                                                                                      ras.gamma(agg::gamma_power(0.0f));
+                                                                                      GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
 
                                                                                       GRP2DVERTEX* vertex = vertexs.Get(0);
                                                                                       if(!vertex) return;
@@ -667,6 +697,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                       ras.filling_rule((path.GetFillRule() == GRP2DPATHFILLRULE_EVENODD)?agg::fill_even_odd:agg::fill_non_zero);
 
                                                                                       agg::conv_curve<agg::path_storage> curve(ps);
+                                                                                      GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
 
                                                                                       ras.add_path(curve);
 
@@ -680,11 +711,13 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                       ren.color(renderer_primitives->line_color());
 
                                                                                       agg::conv_curve<agg::path_storage>                       curve(ps);
+                                                                                      GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
                                                                                       agg::conv_stroke<agg::conv_curve<agg::path_storage> >   stroke(curve);
 
                                                                                       stroke.width(linewidth);
-                                                                                      stroke.line_cap(agg::round_cap);
-                                                                                      stroke.line_join(agg::round_join);
+                                                                                      stroke.line_cap(agg::butt_cap);
+                                                                                      stroke.line_join(agg::miter_join);
+                                                                                  stroke.miter_limit(4.0);
 
                                                                                       ras.add_path(stroke);
 
@@ -737,6 +770,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                   PathGradientBuildStorage(path, ps);
 
                                                                                   agg::conv_curve<agg::path_storage> curve(ps);
+                                                                                  GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
 
                                                                                   agg::rasterizer_scanline_aa<> ras;
                                                                                   agg::scanline_u8              sl;
@@ -798,12 +832,140 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                   PathGradientBuildStorage(path, ps);
 
                                                                                   agg::conv_curve<agg::path_storage> curve(ps);
+                                                                                  GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
 
                                                                                   agg::rasterizer_scanline_aa<> ras;
                                                                                   agg::scanline_u8              sl;
 
                                                                                   ras.filling_rule(evenodd?agg::fill_even_odd:agg::fill_non_zero);
                                                                                   ras.add_path(curve);
+
+                                                                                  typedef agg::gradient_lut<agg::color_interpolator<COLORTYPE>, 256>  gradient_lut_type;
+
+                                                                                  gradient_lut_type colorlut;
+                                                                                  colorlut.remove_all();
+
+                                                                                  if(nstops == 1)
+                                                                                    {
+                                                                                      colorlut.add_color(0.0, stops[0].color);
+                                                                                      colorlut.add_color(1.0, stops[0].color);
+                                                                                    }
+                                                                                   else
+                                                                                    {
+                                                                                      for(int i=0; i<nstops; i++)  colorlut.add_color(stops[i].offset, stops[i].color);
+                                                                                    }
+
+                                                                                  colorlut.build_lut();
+
+                                                                                  agg::trans_affine gmtx;
+                                                                                  gmtx.reset();
+                                                                                  gmtx *= agg::trans_affine_translation(cx, cy);
+                                                                                  gmtx.invert();
+
+                                                                                  typedef agg::span_interpolator_linear<agg::trans_affine>                                             interpolator_type;
+                                                                                  typedef agg::span_gradient<COLORTYPE, interpolator_type, agg::gradient_radial, gradient_lut_type>    span_gradient_type;
+                                                                                  typedef agg::span_allocator<COLORTYPE>                                                               span_allocator_type;
+
+                                                                                  interpolator_type    interpolator(gmtx);
+                                                                                  agg::gradient_radial gradientfunc;
+                                                                                  span_gradient_type   spangradient(interpolator, gradientfunc, colorlut, 0.0, r);
+                                                                                  span_allocator_type  spanallocator;
+
+                                                                                  agg::render_scanlines_aa(ras, sl, *renderer_base, spanallocator, spangradient);
+                                                                                }
+
+
+    void                                                                        PathGradientLinearStroke          (GRP2DPATH& path, double linewidth, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops)
+                                                                                {
+                                                                                  if(!renderer_base)  return;
+                                                                                  if(path.IsEmpty())  return;
+                                                                                  if(nstops < 1)      return;
+                                                                                  if(linewidth <= 0.0)  linewidth = 1.0;
+
+                                                                                  agg::path_storage ps;
+                                                                                  PathGradientBuildStorage(path, ps);
+
+                                                                                  agg::conv_curve<agg::path_storage>                  curve(ps);
+                                                                                  GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
+                                                                                  agg::conv_stroke<agg::conv_curve<agg::path_storage> > stroke(curve);
+                                                                                  stroke.width(linewidth);
+                                                                                  stroke.line_cap(agg::butt_cap);
+                                                                                  stroke.line_join(agg::miter_join);
+                                                                                  stroke.miter_limit(4.0);
+
+                                                                                  agg::rasterizer_scanline_aa<> ras;
+                                                                                  agg::scanline_u8              sl;
+
+                                                                                  ras.filling_rule(agg::fill_non_zero);
+                                                                                  ras.add_path(stroke);
+
+                                                                                  typedef agg::gradient_lut<agg::color_interpolator<COLORTYPE>, 256>  gradient_lut_type;
+
+                                                                                  gradient_lut_type colorlut;
+                                                                                  colorlut.remove_all();
+
+                                                                                  if(nstops == 1)
+                                                                                    {
+                                                                                      colorlut.add_color(0.0, stops[0].color);
+                                                                                      colorlut.add_color(1.0, stops[0].color);
+                                                                                    }
+                                                                                   else
+                                                                                    {
+                                                                                      for(int i=0; i<nstops; i++)  colorlut.add_color(stops[i].offset, stops[i].color);
+                                                                                    }
+
+                                                                                  colorlut.build_lut();
+
+                                                                                  double dx     = (x2 - x1);
+                                                                                  double dy     = (y2 - y1);
+                                                                                  double length = std::sqrt((dx * dx) + (dy * dy));
+                                                                                  if(length < 0.000001)  length = 0.000001;
+
+                                                                                  double angle  = std::atan2(dy, dx);
+
+                                                                                  agg::trans_affine gmtx;
+                                                                                  gmtx.reset();
+                                                                                  gmtx *= agg::trans_affine_rotation(angle);
+                                                                                  gmtx *= agg::trans_affine_translation(x1, y1);
+                                                                                  gmtx.invert();
+
+                                                                                  typedef agg::span_interpolator_linear<agg::trans_affine>                                          interpolator_type;
+                                                                                  typedef agg::span_gradient<COLORTYPE, interpolator_type, agg::gradient_x, gradient_lut_type>      span_gradient_type;
+                                                                                  typedef agg::span_allocator<COLORTYPE>                                                            span_allocator_type;
+
+                                                                                  interpolator_type   interpolator(gmtx);
+                                                                                  agg::gradient_x     gradientfunc;
+                                                                                  span_gradient_type  spangradient(interpolator, gradientfunc, colorlut, 0.0, length);
+                                                                                  span_allocator_type spanallocator;
+
+                                                                                  agg::render_scanlines_aa(ras, sl, *renderer_base, spanallocator, spangradient);
+                                                                                }
+
+
+    void                                                                        PathGradientRadialStroke          (GRP2DPATH& path, double linewidth, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops)
+                                                                                {
+                                                                                  if(!renderer_base)  return;
+                                                                                  if(path.IsEmpty())  return;
+                                                                                  if(nstops < 1)      return;
+                                                                                  if(linewidth <= 0.0)  linewidth = 1.0;
+                                                                                  if(r < 0.000001)    r = 0.000001;
+
+                                                                                  agg::path_storage ps;
+                                                                                  PathGradientBuildStorage(path, ps);
+
+                                                                                  agg::conv_curve<agg::path_storage>                  curve(ps);
+                                                                                  GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
+                                                                                  agg::conv_stroke<agg::conv_curve<agg::path_storage> > stroke(curve);
+                                                                                  stroke.width(linewidth);
+                                                                                  stroke.line_cap(agg::butt_cap);
+                                                                                  stroke.line_join(agg::miter_join);
+                                                                                  stroke.miter_limit(4.0);
+
+                                                                                  agg::rasterizer_scanline_aa<> ras;
+                                                                                  agg::scanline_u8              sl;
+
+                                                                                  ras.filling_rule(agg::fill_non_zero);
+                                                                                  ras.add_path(stroke);
 
                                                                                   typedef agg::gradient_lut<agg::color_interpolator<COLORTYPE>, 256>  gradient_lut_type;
 
@@ -848,7 +1010,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                       ren.color(renderer_primitives->fill_color());
 
-                                                                                      ras.gamma(agg::gamma_power(0.0f));
+                                                                                      GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
 
                                                                                       agg::rounded_rect roundrect(x1, y1, x2, y2, radius);
                                                                                       ras.add_path(roundrect);

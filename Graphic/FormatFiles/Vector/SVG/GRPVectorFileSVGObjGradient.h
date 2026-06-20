@@ -82,6 +82,8 @@ class GRPVECTORFILESVGOBJGRADIENT : public GRPVECTORFILESVGOBJ
     GRP2DGRADIENTSTOP*              GetStops                   ();
     int                             GetNStops                  ();
 
+    XSTRING*                        GetHRef                    ();                          // referenced gradient id for stop inheritance (without '#')
+
   private:
 
     bool                            ParseStops                 (XFILEXMLELEMENT* element);
@@ -107,6 +109,8 @@ class GRPVECTORFILESVGOBJGRADIENT : public GRPVECTORFILESVGOBJ
 
     GRP2DGRADIENTSTOP               stops[GRP2DGRADIENT_MAXSTOPS];
     int                             nstops;
+
+    XSTRING                         href;
 };
 
 

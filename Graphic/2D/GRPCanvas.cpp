@@ -869,6 +869,30 @@ void GRPCANVAS::PathGradientRadial(GRP2DPATH& path, bool evenodd, double cx, dou
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         void GRPCANVAS::PathGradientLinearStroke(GRP2DPATH& path, double linewidth, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops)
+* @brief      Path gradient linear stroke (base : nothing; implemented by the AGG canvas)
+* @ingroup    GRAPHIC
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPCANVAS::PathGradientLinearStroke(GRP2DPATH& path, double linewidth, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops)
+{
+
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPCANVAS::PathGradientRadialStroke(GRP2DPATH& path, double linewidth, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops)
+* @brief      Path gradient radial stroke (base : nothing; implemented by the AGG canvas)
+* @ingroup    GRAPHIC
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPCANVAS::PathGradientRadialStroke(GRP2DPATH& path, double linewidth, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops)
+{
+
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void GRPCANVAS::RoundRect(double x1, double y1, double x2, double y2, double radius, bool isfill)
 * @brief      Round rect
 * @ingroup    GRAPHIC

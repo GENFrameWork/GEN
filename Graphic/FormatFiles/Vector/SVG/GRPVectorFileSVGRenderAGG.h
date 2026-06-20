@@ -30,8 +30,11 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
+#include "XString.h"
+
 #include "GRPVectorFileSVGStyle.h"
 #include "GRPVectorFileSVGTransform.h"
+#include "GRPVectorFileSVGObjText.h"
 
 
 
@@ -71,8 +74,9 @@ class GRPVECTORFILESVGRENDERAGG
     bool                            RenderNode                 (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRPCANVAS* canvas);
     bool                            RenderShape                (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRPCANVAS* canvas);
     bool                            RenderText                 (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRPCANVAS* canvas);
+    double                          DrawTextRun                (XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRPCANVAS* canvas);
 
-    bool                            RenderGradientFill         (GRP2DPATH& devicepath, GRPVECTORFILESVGSTYLE& style, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas);
+    bool                            RenderGradient             (GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas);
     void                            ComputePathBBox            (GRP2DPATH& path, double& minx, double& miny, double& width, double& height);
 
     void                            TransformPath              (GRP2DPATH& path, GRPVECTORFILESVGTRANSFORM& transform);

@@ -126,6 +126,21 @@ bool GRPVECTORFILESVGOBJGRADIENT::ApplyData(XFILEXMLELEMENT* element)
 
   ParseStops(element);
 
+  XCHAR* valuehref = element->GetValueAttribute(__L("xlink:href"));
+  if(!valuehref)  valuehref = element->GetValueAttribute(__L("href"));
+
+  if(valuehref)
+    {
+      href = valuehref;
+
+      if(!href.IsEmpty() && (href[0] == __C('#')))
+        {
+          XSTRING stripped;
+          href.Copy(1, (int)href.GetSize(), stripped);
+          href = stripped;
+        }
+    }
+
   return true;
 }
 
@@ -292,6 +307,7 @@ double GRPVECTORFILESVGOBJGRADIENT::GetFY()   { return fy; }
 
 GRP2DGRADIENTSTOP* GRPVECTORFILESVGOBJGRADIENT::GetStops()   { return stops;  }
 int                GRPVECTORFILESVGOBJGRADIENT::GetNStops()  { return nstops; }
+XSTRING*           GRPVECTORFILESVGOBJGRADIENT::GetHRef()    { return &href;  }
 
 
 /**-------------------------------------------------------------------------------------------------------------------

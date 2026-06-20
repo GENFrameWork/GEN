@@ -92,24 +92,31 @@ bool GRPVECTORFILESVGOBJTEXT::ApplyData(XFILEXMLELEMENT* element)
 
   GRPVECTORFILESVGOBJ::ApplyData(element);
 
-  x = element->GetFloatValueAttribute(__L("x"));
-  y = element->GetFloatValueAttribute(__L("y"));
+  hasx = (element->GetValueAttribute(__L("x")) != NULL);
+  hasy = (element->GetValueAttribute(__L("y")) != NULL);
 
-  XCHAR* valuefontsize = element->GetValueAttribute(__L("font-size"));
-  if(valuefontsize)
+  x  = element->GetFloatValueAttribute(__L("x"));
+  y  = element->GetFloatValueAttribute(__L("y"));
+  dx = element->GetFloatValueAttribute(__L("dx"));
+  dy = element->GetFloatValueAttribute(__L("dy"));
+
+  XSTRING valuefontsize;
+  if(GetProperty(element, __L("font-size"), valuefontsize))
     {
-      XSTRING fontsizestr(valuefontsize);
-      double  parsed = fontsizestr.ConvertToDouble(0, NULL, false);            // tolerates "16px" -> 16
-      if(parsed > 0.0)  fontsize = parsed;
+      double parsed = valuefontsize.ConvertToDouble(0, NULL, false);           // tolerates "16px" -> 16
+      if(parsed > 0.0)
+        {
+          fontsize    = parsed;
+          hasfontsize = true;
+        }
     }
 
-  XCHAR* valueanchor = element->GetValueAttribute(__L("text-anchor"));
-  if(valueanchor)
+  XSTRING valueanchor;
+  if(GetProperty(element, __L("text-anchor"), valueanchor))
     {
-      XSTRING anchorstr(valueanchor);
-      if(!anchorstr.Compare(__L("middle"), true))     textanchor = GRPVECTORFILESVGTEXTANCHOR_MIDDLE;
-       else if(!anchorstr.Compare(__L("end"), true))  textanchor = GRPVECTORFILESVGTEXTANCHOR_END;
-       else                                           textanchor = GRPVECTORFILESVGTEXTANCHOR_START;
+      if(!valueanchor.Compare(__L("middle"), true))     textanchor = GRPVECTORFILESVGTEXTANCHOR_MIDDLE;
+       else if(!valueanchor.Compare(__L("end"), true))  textanchor = GRPVECTORFILESVGTEXTANCHOR_END;
+       else                                             textanchor = GRPVECTORFILESVGTEXTANCHOR_START;
     }
 
   //  Text content : trim leading / trailing whitespace.
@@ -140,8 +147,54 @@ XSTRING* GRPVECTORFILESVGOBJTEXT::GetText()   { return &text; }
 
 double                     GRPVECTORFILESVGOBJTEXT::GetX()           { return x;          }
 double                     GRPVECTORFILESVGOBJTEXT::GetY()           { return y;          }
+bool                       GRPVECTORFILESVGOBJTEXT::HasX()           { return hasx;       }
+bool                       GRPVECTORFILESVGOBJTEXT::HasY()           { return hasy;       }
+double                     GRPVECTORFILESVGOBJTEXT::GetDX()          { return dx;         }
+double                     GRPVECTORFILESVGOBJTEXT::GetDY()          { return dy;         }
 double                     GRPVECTORFILESVGOBJTEXT::GetFontSize()    { return fontsize;   }
+bool                       GRPVECTORFILESVGOBJTEXT::HasFontSize()    { return hasfontsize;}
 GRPVECTORFILESVGTEXTANCHOR GRPVECTORFILESVGOBJTEXT::GetTextAnchor()  { return textanchor; }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         bool GRPVECTORFILESVGOBJTEXT::GetProperty(XFILEXMLELEMENT* element, XCHAR* name, XSTRING& outvalue)
+* @brief      Get property : read a property from its attribute or from the inline style="" string
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* @param[in]  element : element
+* @param[in]  name : property name
+* @param[out] outvalue : property value
+* @return     bool : true if the property was found.
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGOBJTEXT::GetProperty(XFILEXMLELEMENT* element, XCHAR* name, XSTRING& outvalue)
+{
+  XCHAR* attribute = element->GetValueAttribute(name);
+  if(attribute)
+    {
+      outvalue = attribute;
+      return true;
+    }
+
+  XCHAR* style = element->GetValueAttribute(__L("style"));
+  if(!style) return false;
+
+  XSTRING stylestr(style);
+
+  XSTRING key(name);
+  key += __L(":");
+
+  int index = stylestr.Find(key.Get(), true, 0);
+  if(index < 0) return false;
+
+  int start = index + (int)key.GetSize();
+  int end   = stylestr.Find(__L(";"), false, start);
+  if(end < 0)  end = (int)stylestr.GetSize();
+
+  stylestr.Copy(start, end, outvalue);
+  outvalue.DeleteCharacter(__C(' '));
+
+  return (!outvalue.IsEmpty());
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -152,8 +205,13 @@ GRPVECTORFILESVGTEXTANCHOR GRPVECTORFILESVGOBJTEXT::GetTextAnchor()  { return te
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJTEXT::Clean()
 {
-  x          = 0.0;
-  y          = 0.0;
-  fontsize   = 16.0;                                                            // SVG medium default
-  textanchor = GRPVECTORFILESVGTEXTANCHOR_START;
+  x           = 0.0;
+  y           = 0.0;
+  hasx        = false;
+  hasy        = false;
+  dx          = 0.0;
+  dy          = 0.0;
+  fontsize    = 16.0;                                                          // SVG medium default
+  hasfontsize = false;
+  textanchor  = GRPVECTORFILESVGTEXTANCHOR_START;
 }

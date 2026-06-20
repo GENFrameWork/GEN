@@ -152,6 +152,8 @@ class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
     virtual void                  Path                                (GRP2DPATH& path, bool isfill = false);
     virtual void                  PathGradientLinear                  (GRP2DPATH& path, bool evenodd, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops);
     virtual void                  PathGradientRadial                  (GRP2DPATH& path, bool evenodd, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops);
+    virtual void                  PathGradientLinearStroke            (GRP2DPATH& path, double linewidth, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops);
+    virtual void                  PathGradientRadialStroke            (GRP2DPATH& path, double linewidth, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops);
 
     virtual void                  RoundRect                           (double x1, double y1, double x2, double y2, double radius, bool isfill = false);
 
