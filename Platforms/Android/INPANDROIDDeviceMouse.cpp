@@ -113,10 +113,48 @@ bool INPANDROIDDEVICEMOUSE::Update()
 {
   if(!IsEnabled()) return false;
 
-  for (XDWORD e=0;e<this->buttons.GetSize();e++)
+  bool anypressed         = false;
+  bool releasedthisframe  = false;
+
+  for(XDWORD e=0; e<this->buttons.GetSize(); e++)
     {
-      if (buttons.Get(e))
-      if (buttons.Get(e)->GetState() == INPBUTTON_STATE_RELEASED)  buttons.Get(e)->SetState(INPBUTTON_STATE_UP);
+      INPBUTTON* button = buttons.Get(e);
+      if(!button) continue;
+
+      if(button->IsPressed()) anypressed = true;
+
+      // A button RELEASED by OnTouchEvent (the finger-up that happened during this frame's event
+      // drain) must survive one full UI frame, so it ages to UP here and we flag the frame. The
+      // pending "click" (IsPressedWithRelease) is consumed by the UI right after this Update().
+      if(button->GetState() == INPBUTTON_STATE_RELEASED)
+        {
+          releasedthisframe = true;
+          button->SetState(INPBUTTON_STATE_UP);
+        }
+    }
+
+  // Touch input has no persistent hover: unlike a desktop mouse the pointer simply disappears when
+  // the finger is lifted. Android delivers the touch through this mouse device, so without help the
+  // cursor would stay frozen at the lift point and the UI would keep that element pre-selected
+  // (highlighted) forever. The dedicated touchscreen device (INPLINUXDEVICETOUCHSCREENDIRECT) avoids
+  // this by resetting its position to (-1,-1) every frame a finger is absent; X11 does the same when
+  // the mouse leaves the window. We replicate that here: once no button is held AND the release
+  // frame's click has already been handed to the UI, park the cursor off-canvas so the UI drops the
+  // hover/preselect highlight (a CURSOR_MOVE to -1 triggers ResetPreselect, exactly like on desktop).
+  if(!anypressed && !releasedthisframe)
+    {
+      for(XDWORD e=0; e<this->cursors.GetSize(); e++)
+        {
+          INPCURSOR* cursor = cursors.Get(e);
+          if(!cursor) continue;
+
+          if((cursor->GetX() != -1) || (cursor->GetY() != -1))
+            {
+              cursor->SetIsChanged(false);
+              cursor->Set(-1, -1);
+              cursor->SetIsChanged(true);
+            }
+        }
     }
 
   return true;

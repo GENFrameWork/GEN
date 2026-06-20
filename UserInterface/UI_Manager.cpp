@@ -5006,6 +5006,17 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
                                                         int          y                  = event->GetYPos();
 
                                                         //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("x: %d, y: %d"), x, y);
+
+                                                        // Remember where the pointer is right now (not only where it last
+                                                        // landed ON an element). UnSelectedElement() re-issues a CURSOR_MOVE at
+                                                        // last_xposition/last_yposition once a selection's highlight expires, to
+                                                        // restore the hover (preselect) under the pointer. On a mouse that point
+                                                        // is wherever the cursor sits; on touch the finger is gone after release
+                                                        // and the device parks the cursor off-canvas (-1,-1), so keeping these in
+                                                        // sync here means the lifted finger leaves NO stuck preselect, while a
+                                                        // real mouse still correctly re-preselects whatever it is hovering.
+                                                        last_xposition = x;
+                                                        last_yposition = y;
                                                   
                                                         if(element_modal)
                                                           {                                                              

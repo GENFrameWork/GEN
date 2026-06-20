@@ -444,7 +444,10 @@ bool MAINPROCANDROID::OnTouchEvent(AInputEvent* event)
                                                         break;
 
               case AMOTION_EVENT_ACTION_CANCEL        : if (mouse->GetButton(pointerIndex))
-                                                        mouse->GetButton(pointerIndex)->SetState(INPBUTTON_STATE_UP);
+                                                        {
+                                                          mouse->GetButton(pointerIndex)->SetPressed(false);
+                                                          mouse->GetButton(pointerIndex)->SetState(INPBUTTON_STATE_UP);
+                                                        }
                                                         break;
             }
         }
