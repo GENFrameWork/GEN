@@ -46,7 +46,7 @@
 #include "MainProcWINDOWS.h"
 
 #include "GRPXEvent.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPBitmap.h"
 
 
@@ -187,7 +187,7 @@ bool GRPWINDOWSSCREEN::Update()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool GRPWINDOWSSCREEN::Update(GRPCANVAS* canvas)
+* @fn         bool GRPWINDOWSSCREEN::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    PLATFORM_WINDOWS
 *
@@ -196,7 +196,7 @@ bool GRPWINDOWSSCREEN::Update()
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPWINDOWSSCREEN::Update(GRPCANVAS* canvas)
+bool GRPWINDOWSSCREEN::Update(GRP2DCANVAS* canvas)
 {
   #ifndef GRP_OPENGL_ACTIVE
 
@@ -233,7 +233,7 @@ bool GRPWINDOWSSCREEN::Update(GRPCANVAS* canvas)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPWINDOWSSCREEN::UpdateTransparent(GRPCANVAS* canvas)
+* @fn         bool GRPWINDOWSSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 * @brief      Update transparent
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -242,7 +242,7 @@ bool GRPWINDOWSSCREEN::Update(GRPCANVAS* canvas)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPWINDOWSSCREEN::UpdateTransparent(GRPCANVAS* canvas)
+bool GRPWINDOWSSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 {
   // A transparent screen is a WS_EX_LAYERED window composited with
   // UpdateLayeredWindow (per-pixel alpha). This path MUST run even when

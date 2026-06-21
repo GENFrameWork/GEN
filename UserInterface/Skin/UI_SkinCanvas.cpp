@@ -40,7 +40,7 @@
 #include "XTimer.h"
 #include "XSleep.h"
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPViewPort.h"
 #include "GRPScreen.h"
 #include "GRPBitmap.h"
@@ -480,14 +480,14 @@ GRPSCREEN* UI_SKINCANVAS::GetScreen()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPCANVAS* UI_SKINCANVAS::GetCanvas()
+* @fn         GRP2DCANVAS* UI_SKINCANVAS::GetCanvas()
 * @brief      Get canvas
 * @ingroup    USERINTERFACE
 *
-* @return     GRPCANVAS* : 
+* @return     GRP2DCANVAS* : 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-GRPCANVAS* UI_SKINCANVAS::GetCanvas()
+GRP2DCANVAS* UI_SKINCANVAS::GetCanvas()
 {
   if(!screen)                   
     {
@@ -517,7 +517,7 @@ bool UI_SKINCANVAS::LoadFonts()
   XPATH  xpath;
   bool   status = false; 
 
-  GRPCANVAS* canvas = GetCanvas();
+  GRP2DCANVAS* canvas = GetCanvas();
   if(!canvas) return false;
   
   if(!rasterfontname.IsEmpty())
@@ -589,7 +589,7 @@ bool UI_SKINCANVAS::LoadFonts()
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::GetFatherSize(UI_ELEMENT* element, double& width, double& height)
 {
-  GRPCANVAS* canvas = GetCanvas();
+  GRP2DCANVAS* canvas = GetCanvas();
   if(!canvas) return false;
 
   width  = 0.0f;
@@ -917,7 +917,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Text(UI_ELEMENT* element, bool adjusts
   if(!element) return false;
 
   UI_ELEMENT_TEXT* element_text = (UI_ELEMENT_TEXT*)element;
-  GRPCANVAS*       canvas       = GetCanvas();
+  GRP2DCANVAS*       canvas       = GetCanvas();
 
   if(!canvas) return false;
   
@@ -1361,7 +1361,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_EditText(UI_ELEMENT* element, bool adj
   if(!element) return false;
 
   UI_ELEMENT_EDITTEXT* element_edittext = (UI_ELEMENT_EDITTEXT*)element;
-  GRPCANVAS*           canvas           = GetCanvas();
+  GRP2DCANVAS*           canvas           = GetCanvas();
 
   if(!canvas) return false;
   
@@ -1506,7 +1506,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ListBox(UI_ELEMENT* element, bool adju
   if(!element) return false;
 
   UI_ELEMENT_LISTBOX* element_listbox  = (UI_ELEMENT_LISTBOX*)element;
-  GRPCANVAS*          canvas           = GetCanvas();
+  GRP2DCANVAS*          canvas           = GetCanvas();
 
   if(!canvas) return false;
   
@@ -1750,7 +1750,7 @@ bool UI_SKINCANVAS::Draw_Text(UI_ELEMENT* element)
   if(!element) return false;  
 
   UI_ELEMENT_TEXT*    element_text  = (UI_ELEMENT_TEXT*)element;
-  GRPCANVAS*          canvas        = GetCanvas();  
+  GRP2DCANVAS*          canvas        = GetCanvas();  
   double              x_position    = 0.0f;
   double              y_position    = 0.0f;  
   XRECT               clip_rect;                       
@@ -1794,7 +1794,7 @@ bool UI_SKINCANVAS::Draw_TextBox(UI_ELEMENT* element)
   if(!element) return false;  
 
   UI_ELEMENT_TEXTBOX* element_textbox = (UI_ELEMENT_TEXTBOX*)element;
-  GRPCANVAS*          canvas          = GetCanvas();  
+  GRP2DCANVAS*          canvas          = GetCanvas();  
   double              x_position      = 0.0f;
   double              y_position      = 0.0f;  
   XRECT               clip_rect;                       
@@ -1883,7 +1883,7 @@ bool UI_SKINCANVAS::Draw_Image(UI_ELEMENT* element)
   if(!element) return false;
  
   UI_ELEMENT_IMAGE*   element_image = (UI_ELEMENT_IMAGE*)element;
-  GRPCANVAS*          canvas        = GetCanvas(); 
+  GRP2DCANVAS*          canvas        = GetCanvas(); 
   double              x_position    = 0.0f;
   double              y_position    = 0.0f;
   XRECT               clip_rect;                       
@@ -1925,7 +1925,7 @@ bool UI_SKINCANVAS::Draw_Animation(UI_ELEMENT* element)
   UI_ELEMENT_IMAGE*     element_image      = (UI_ELEMENT_IMAGE*)element_animation->GetComposeElements()->Get(element_animation->IndexImage_Get());
   double                x_position         = 0.0f;
   double                y_position         = 0.0f;  
-  GRPCANVAS*            canvas             = GetCanvas();    
+  GRP2DCANVAS*            canvas             = GetCanvas();    
   XRECT                 clip_rect;          
   bool                  redraw             = false;
 
@@ -2012,7 +2012,7 @@ bool UI_SKINCANVAS::Draw_Option(UI_ELEMENT* element)
   UI_ELEMENT_TEXT*      element_text      = element_option->Get_UIText();
   double                x_position        = 0.0f;
   double                y_position        = 0.0f;
-  GRPCANVAS*            canvas            = GetCanvas();
+  GRP2DCANVAS*            canvas            = GetCanvas();
   XRECT                 clip_rect;              
 
   if(!canvas) return false;
@@ -2175,7 +2175,7 @@ bool UI_SKINCANVAS::Draw_MultiOption(UI_ELEMENT* element)
   UI_ELEMENT_MULTIOPTION* element_multioption  = (UI_ELEMENT_MULTIOPTION*)element;
   double                  x_position           = 0.0f;
   double                  y_position           = 0.0f;
-  GRPCANVAS*              canvas               = GetCanvas();
+  GRP2DCANVAS*              canvas               = GetCanvas();
   XRECT                   clip_rect;  
   
   if(!canvas) return false;
@@ -2287,7 +2287,7 @@ bool UI_SKINCANVAS::Draw_EditText(UI_ELEMENT* element)
   UI_ELEMENT_EDITTEXT*  element_edittext  = (UI_ELEMENT_EDITTEXT*)element;
   double                x_position        = 0.0f;
   double                y_position        = 0.0f;
-  GRPCANVAS*            canvas            = GetCanvas();    
+  GRP2DCANVAS*            canvas            = GetCanvas();    
   static bool           visible           = false;
   XRECT                 clip_rect;                       
   
@@ -2389,7 +2389,7 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
   UI_ELEMENT_FORM*    element_form = (UI_ELEMENT_FORM*)element;
   double              x_position   = 0.0f;
   double              y_position   = 0.0f;
-  GRPCANVAS*          canvas       = GetCanvas();
+  GRP2DCANVAS*          canvas       = GetCanvas();
   XRECT               clip_rect;  
   
   if(!canvas) return false;
@@ -2480,7 +2480,7 @@ bool UI_SKINCANVAS::Draw_ListBox(UI_ELEMENT* element)
   UI_ELEMENT_LISTBOX*   element_listbox = (UI_ELEMENT_LISTBOX*)element;
   double                x_position      = 0.0f;
   double                y_position      = 0.0f;
-  GRPCANVAS*            canvas          = GetCanvas();    
+  GRP2DCANVAS*            canvas          = GetCanvas();    
   static bool           visible         = false;
   XRECT                 clip_rect;                       
   
@@ -2555,7 +2555,7 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
   UI_ELEMENT_TEXT*        element_text          = element_progressbar->Get_UIText();
   double                  x_position            = 0.0f;
   double                  y_position            = 0.0f;
-  GRPCANVAS*              canvas                = GetCanvas();    
+  GRP2DCANVAS*              canvas                = GetCanvas();    
   static bool             visible               = false;
   XRECT                   clip_rect;                       
   
@@ -2747,7 +2747,7 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::GetFontSize(XCHAR* text, XDWORD& width, XDWORD& height)
 {
-  GRPCANVAS* canvas = GetCanvas();
+  GRP2DCANVAS* canvas = GetCanvas();
   if(!canvas) return false;
 
   width   = (XDWORD)canvas->VectorFont_GetWidth(text);
@@ -2770,7 +2770,7 @@ bool UI_SKINCANVAS::GetFontSize(XCHAR* text, XDWORD& width, XDWORD& height)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::SetFontSize(XDWORD size)
 {
-  GRPCANVAS* canvas = GetCanvas();
+  GRP2DCANVAS* canvas = GetCanvas();
   if(!canvas) return false;
 
   canvas->Vectorfont_GetConfig()->SetSize(size);
@@ -2781,7 +2781,7 @@ bool UI_SKINCANVAS::SetFontSize(XDWORD size)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRPCANVAS* canvas, double x_position, double y_position)
+* @fn         bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRP2DCANVAS* canvas, double x_position, double y_position)
 * @brief      Draw background color
 * @ingroup    USERINTERFACE
 *
@@ -2793,7 +2793,7 @@ bool UI_SKINCANVAS::SetFontSize(XDWORD size)
 * @return     bool : true if is succesful. 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRPCANVAS* canvas, double x_position, double y_position)
+bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRP2DCANVAS* canvas, double x_position, double y_position)
 {
   if(!element->GetBackgroundColor()->GetAlpha()) return false;
 
@@ -2818,7 +2818,7 @@ bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRPCANVAS* canvas, 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge)
+* @fn         bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge)
 * @brief      Pre draw function
 * @ingroup    USERINTERFACE
 *
@@ -2877,7 +2877,7 @@ static void UI_SkinCanvas_ContentExtent(UI_ELEMENT* element, bool vx, bool vy, d
     }
 }
 
-bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge)
+bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge)
 {
   if(!canvas) return false;
 
@@ -2988,7 +2988,7 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XREC
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XRECT& clip_rect, double x_position, double y_position)
+* @fn         bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double x_position, double y_position)
 * @brief      Post draw function
 * @ingroup    USERINTERFACE
 *
@@ -3001,7 +3001,7 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XREC
 * @return     bool : true if is succesful. 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRPCANVAS* canvas, XRECT& clip_rect, double x_position, double y_position)
+bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double x_position, double y_position)
 {  
   bool redrew = element->MustReDraw();           // capture before clearing: true only when the area was just repainted
   element->SetMustReDraw(false);
@@ -3164,7 +3164,7 @@ bool UI_SKINCANVAS::ResolveScrollPolicy(UI_ELEMENT* element, UI_PROPERTY_SCROLLE
 }
 
 
-static void DrawScrollPill(GRPCANVAS* canvas, double a, double b, double c, double d, double formradius)
+static void DrawScrollPill(GRP2DCANVAS* canvas, double a, double b, double c, double d, double formradius)
 {
   // Normalize coords (the edge/clip convention can give either order). The bar follows the form: it is rounded only
   // when the form has rounded corners, with the corner radius clamped to half the shorter side so a wide-thin or
@@ -3182,7 +3182,7 @@ static void DrawScrollPill(GRPCANVAS* canvas, double a, double b, double c, doub
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRPCANVAS* canvas, double x_position, double y_position)
+* @fn         bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRP2DCANVAS* canvas, double x_position, double y_position)
 * @brief      Draws the overlay scrollbars (track + proportional thumb) of a scrollable container.
 * @note       Overlay model: drawn after the content clip is restored and pinned to the container viewport (it does
 *             NOT receive the container's own scroll displacement). The thumb length is the visible fraction of the
@@ -3199,7 +3199,7 @@ static void DrawScrollPill(GRPCANVAS* canvas, double a, double b, double c, doub
 * @return     bool : true if is succesful.
 *
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRPCANVAS* canvas, double x_position, double y_position)
+bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRP2DCANVAS* canvas, double x_position, double y_position)
 {
   if(!element || !scrolleable || !canvas) return false;
 
@@ -3301,7 +3301,7 @@ bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE*
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRPCANVAS* canvas, double x_position, double y_position, int nline, XSTRING& characterstr, XDWORD index_char, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
+* @fn         double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, int nline, XSTRING& characterstr, XDWORD index_char, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
 * @brief      Text box size line
 * @ingroup    USERINTERFACE
 * 
@@ -3317,7 +3317,7 @@ bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE*
 * @return     double : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRPCANVAS* canvas, double x_position, double y_position, int nline, XSTRING& characterstr, XDWORD index_char, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
+double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, int nline, XSTRING& characterstr, XDWORD index_char, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
 {
   XSTRING _characterstr;
   XDWORD  y_pos    = 0;    
@@ -3382,7 +3382,7 @@ static void UI_SkinCanvas_TextObstacle(double x, double ltop, double lbot,
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, GRPCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
+* @fn         bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
 * @brief      Text box generate lines
 * @ingroup    USERINTERFACE
 *
@@ -3395,7 +3395,7 @@ static void UI_SkinCanvas_TextObstacle(double x, double ltop, double lbot,
 * @return     bool : true if is succesful. 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, GRPCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
+bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
 {
   double                  x_text_position = x_position;
   double                  y_text_position = UI_BOUNDARYLINE_EdgeTop(y_position, element_textbox->GetBoundaryLine()->height) + (double)canvas->VectorFont_GetHeight(__L("A")) + element_textbox->Scroll_GetDisplacement(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL);  
@@ -3853,7 +3853,7 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Debug_Draw(UI_ELEMENT* element, double x_position, double y_position)
 {  
-  GRPCANVAS* canvas = GetCanvas();
+  GRP2DCANVAS* canvas = GetCanvas();
   if(!canvas) return false;
   
   GRP2DCOLOR_RGBA8  colorred(255, 0, 0);

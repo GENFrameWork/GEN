@@ -36,7 +36,7 @@
 
 #include "GRP2DRebuildAreas.h"
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 
 
 

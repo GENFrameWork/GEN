@@ -55,7 +55,7 @@
 #include "GRPBitmapFile.h"
 
 #include "GRPViewPort.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 
 #include "Script.h"
 
@@ -1064,7 +1064,7 @@ bool FindSubBitmap(GRPBITMAP* bitmapscreen, GRPBITMAP* bitmapref, int& x, int& y
    else
     {
       GRPVIEWPORT* viewport = NULL;
-      GRPCANVAS*   canvas   = NULL;
+      GRP2DCANVAS*   canvas   = NULL;
       GRPSCREEN*   screen   = SCRIPT_LIB_WINDOW::GetAppGraphics()->GetMainScreen();
 
       if(screen) viewport = screen->GetViewport(0);
@@ -1111,7 +1111,7 @@ bool PutBitmap(int x, int y, GRPBITMAP* bitmap)
     }
                                         
   GRPVIEWPORT* viewport = NULL;
-  GRPCANVAS*   canvas   = NULL;
+  GRP2DCANVAS*   canvas   = NULL;
   GRPSCREEN*   screen   = SCRIPT_LIB_WINDOW::GetAppGraphics()->GetMainScreen();
 
   if(screen) viewport = screen->GetViewport(0);
@@ -1149,7 +1149,7 @@ GRPBITMAP* GetBitmap(int x, int y, int sizex, int sizey)
     }
                                         
   GRPVIEWPORT* viewport = NULL;
-  GRPCANVAS*   canvas   = NULL;
+  GRP2DCANVAS*   canvas   = NULL;
   GRPSCREEN*   screen   = SCRIPT_LIB_WINDOW::GetAppGraphics()->GetMainScreen();
   GRPBITMAP*   bitmap   = NULL;
 

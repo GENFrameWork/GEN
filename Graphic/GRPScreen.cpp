@@ -41,7 +41,7 @@
 
 #include "GRPFactory.h"
 #include "GRPXEvent.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPViewPort.h"
 #include "GRPFrameRate.h"
 
@@ -472,7 +472,7 @@ bool GRPSCREEN::Create(bool show)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSCREEN::Update(GRPCANVAS* canvas)
+* @fn         bool GRPSCREEN::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    GRAPHIC
 * 
@@ -481,7 +481,7 @@ bool GRPSCREEN::Create(bool show)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREEN::Update(GRPCANVAS* canvas)
+bool GRPSCREEN::Update(GRP2DCANVAS* canvas)
 {
   return false;
 }
@@ -489,7 +489,7 @@ bool GRPSCREEN::Update(GRPCANVAS* canvas)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSCREEN::UpdateTransparent(GRPCANVAS* canvas)
+* @fn         bool GRPSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 * @brief      Update transparent
 * @ingroup    GRAPHIC
 * 
@@ -498,7 +498,7 @@ bool GRPSCREEN::Update(GRPCANVAS* canvas)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREEN::UpdateTransparent(GRPCANVAS* canvas)
+bool GRPSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 {
   return false;
 }
@@ -1098,14 +1098,14 @@ XMAP<void*, GRPSCREEN*>* GRPSCREEN::GetListScreens()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPCANVAS* GRPSCREEN::GetScreenCanvas()
+* @fn         GRP2DCANVAS* GRPSCREEN::GetScreenCanvas()
 * @brief      Get screen canvas
 * @ingroup    GRAPHIC
 * 
-* @return     GRPCANVAS* : 
+* @return     GRP2DCANVAS* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPCANVAS* GRPSCREEN::GetScreenCanvas()
+GRP2DCANVAS* GRPSCREEN::GetScreenCanvas()
 {
   return screencanvas;
 }
@@ -1113,7 +1113,7 @@ GRPCANVAS* GRPSCREEN::GetScreenCanvas()
     
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSCREEN::SetScreenCanvas(GRPCANVAS* screencanvas)
+* @fn         bool GRPSCREEN::SetScreenCanvas(GRP2DCANVAS* screencanvas)
 * @brief      Set screen canvas
 * @ingroup    GRAPHIC
 * 
@@ -1122,7 +1122,7 @@ GRPCANVAS* GRPSCREEN::GetScreenCanvas()
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREEN::SetScreenCanvas(GRPCANVAS* screencanvas)
+bool GRPSCREEN::SetScreenCanvas(GRP2DCANVAS* screencanvas)
 {
   this->screencanvas = screencanvas;
 

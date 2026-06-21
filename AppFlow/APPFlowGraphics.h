@@ -55,7 +55,7 @@ enum APPFLOWGRAPHICS_INIOPTIONS
 
 
 class GRPSCREEN;
-class GRPCANVAS;
+class GRP2DCANVAS;
 class INPDEVICE;
 
 
@@ -77,7 +77,7 @@ class APPFLOWGRAPHICS : public APPFLOWCONSOLE, public XOBSERVER
     GRPSCREEN*                GetMainScreen                       ();
     void                      SetMainScreen                       (GRPSCREEN* mainscreen);
 
-    GRPCANVAS*                GetScreenCanvas                     (GRPSCREEN* screen, int viewportindex);
+    GRP2DCANVAS*                GetScreenCanvas                     (GRPSCREEN* screen, int viewportindex);
 
     #ifdef INP_ACTIVE
     INPDEVICE*                GetInputKeyboard                    ();
@@ -85,7 +85,7 @@ class APPFLOWGRAPHICS : public APPFLOWCONSOLE, public XOBSERVER
     #endif
 
     virtual bool              AppProc_BeforeCreateMainScreen      (GRPSCREEN* mainscreen);
-    virtual bool              AppProc_BeforeCreateMainCanvas      (GRPCANVAS* maincanvas);
+    virtual bool              AppProc_BeforeCreateMainCanvas      (GRP2DCANVAS* maincanvas);
 
   private:
 

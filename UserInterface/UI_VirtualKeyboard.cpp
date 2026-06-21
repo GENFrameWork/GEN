@@ -37,7 +37,7 @@
 #include "UI_VirtualKeyboard.h"
 
 #include "GRPScreen.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPBitmapFile.h"
 
 #include "UI_Animation.h"

@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPCanvasAGG.h
+* @file       GRP2DCanvasAGG.h
 * 
-* @class      GRPCANVASAGG
+* @class      GRP2DCANVASAGG
 * @brief      Graphics Canvas AGG Library class
 * @ingroup    GRAPHIC
 * 
@@ -37,27 +37,27 @@
 //   Balanced:  curve=8.0,  gamma=1.25, min_width=0.50, smoother_width=0.50
 //   AA_MAX:    curve=32.0, gamma=1.50, min_width=1.00, smoother_width=1.00
 //
-// Nota: GRPCANVASAGG_AA_GAMMA_POWER = 1.0 es el comportamiento neutro/lineal.
+// Nota: GRP2DCANVASAGG_AA_GAMMA_POWER = 1.0 es el comportamiento neutro/lineal.
 // No usar 0.0 como valor "neutro" porque gamma_power(0.0) elimina visualmente parte del AA.
 
-#ifndef GRPCANVASAGG_AA_CURVE_APPROXIMATION_SCALE
-#define GRPCANVASAGG_AA_CURVE_APPROXIMATION_SCALE             8.0
+#ifndef GRP2DCANVASAGG_AA_CURVE_APPROXIMATION_SCALE
+#define GRP2DCANVASAGG_AA_CURVE_APPROXIMATION_SCALE             8.0
 #endif
 
-#ifndef GRPCANVASAGG_AA_GAMMA_POWER
-#define GRPCANVASAGG_AA_GAMMA_POWER                           1.25
+#ifndef GRP2DCANVASAGG_AA_GAMMA_POWER
+#define GRP2DCANVASAGG_AA_GAMMA_POWER                           1.25
 #endif
 
-#ifndef GRPCANVASAGG_AA_OUTLINE_MIN_WIDTH
-#define GRPCANVASAGG_AA_OUTLINE_MIN_WIDTH                     0.50
+#ifndef GRP2DCANVASAGG_AA_OUTLINE_MIN_WIDTH
+#define GRP2DCANVASAGG_AA_OUTLINE_MIN_WIDTH                     0.50
 #endif
 
-#ifndef GRPCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH
-#define GRPCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH                0.50
+#ifndef GRP2DCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH
+#define GRP2DCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH                0.50
 #endif
 
-#define GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve)              curve.approximation_scale(GRPCANVASAGG_AA_CURVE_APPROXIMATION_SCALE);
-#define GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras)             ras.gamma(agg::gamma_power(GRPCANVASAGG_AA_GAMMA_POWER));
+#define GRP2DCANVASAGG_AA_SET_CURVE_QUALITY(curve)              curve.approximation_scale(GRP2DCANVASAGG_AA_CURVE_APPROXIMATION_SCALE);
+#define GRP2DCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras)             ras.gamma(agg::gamma_power(GRP2DCANVASAGG_AA_GAMMA_POWER));
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -112,7 +112,7 @@
 #include "GRPProperties.h"
 #include "GRPBitmap.h"
 #include "GRPBitmapSequence.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPViewPort.h"
 #include "GRPFrameRate.h"
 
@@ -132,9 +132,9 @@
                                                               agg::renderer_outline_aa<agg::renderer_base<PIXELFORMATBUFFER> >                                 ren(*renderer_base, profile);    \
                                                               agg::rasterizer_outline_aa<agg::renderer_outline_aa<agg::renderer_base<PIXELFORMATBUFFER> > >    ras(ren);                        \
                                                               agg::line_profile_aa(width, agg::gamma_none());                                                                                   \
-                                                              profile.gamma(agg::gamma_power(GRPCANVASAGG_AA_GAMMA_POWER));                                                                                               \
-                                                              profile.min_width(GRPCANVASAGG_AA_OUTLINE_MIN_WIDTH);                                                                                                           \
-                                                              profile.smoother_width(GRPCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH);                                                                                                      \
+                                                              profile.gamma(agg::gamma_power(GRP2DCANVASAGG_AA_GAMMA_POWER));                                                                                               \
+                                                              profile.min_width(GRP2DCANVASAGG_AA_OUTLINE_MIN_WIDTH);                                                                                                           \
+                                                              profile.smoother_width(GRP2DCANVASAGG_AA_OUTLINE_SMOOTHER_WIDTH);                                                                                                      \
                                                               profile.width(linewidth);
 
 #define AGG_OUTLINE_END                                       ras.render(true);
@@ -159,10 +159,10 @@ typedef agg::font_cache_manager<AGG_FONT_ENGINE>              AGG_FONT_MANAGER;
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class GRPCANVASAGG_SIMPLE_VERTEX_SOURCE
+class GRP2DCANVASAGG_SIMPLE_VERTEX_SOURCE
 {
   public:
-                                                                                GRPCANVASAGG_SIMPLE_VERTEX_SOURCE   ()
+                                                                                GRP2DCANVASAGG_SIMPLE_VERTEX_SOURCE   ()
                                                                                 {
                                                                                   m_num_vertices  = 0;
                                                                                   m_count         = 0;
@@ -173,13 +173,13 @@ class GRPCANVASAGG_SIMPLE_VERTEX_SOURCE
                                                                                 }
 
 
-                                                                                GRPCANVASAGG_SIMPLE_VERTEX_SOURCE  (double x1, double y1, double x2, double y2)
+                                                                                GRP2DCANVASAGG_SIMPLE_VERTEX_SOURCE  (double x1, double y1, double x2, double y2)
                                                                                 {
                                                                                   init(x1, y1, x2, y2);
                                                                                 }
 
 
-                                                                                GRPCANVASAGG_SIMPLE_VERTEX_SOURCE  (double x1, double y1, double x2, double y2, double x3, double y3)
+                                                                                GRP2DCANVASAGG_SIMPLE_VERTEX_SOURCE  (double x1, double y1, double x2, double y2, double x3, double y3)
                                                                                 {
                                                                                   init(x1, y1, x2, y2, x3, y3);
                                                                                 }
@@ -246,10 +246,10 @@ class GRPCANVASAGG_SIMPLE_VERTEX_SOURCE
 
 
 template<class RASTERIZERTYPE, class RENDERER, class SCANLINETYPE>
-class GRPCANVASAGG_DASHED_LINE
+class GRP2DCANVASAGG_DASHED_LINE
 {
   public:
-                                                                                GRPCANVASAGG_DASHED_LINE      (RASTERIZERTYPE& rasterizertype, RENDERER& renderer, SCANLINETYPE& scanlinetype) :
+                                                                                GRP2DCANVASAGG_DASHED_LINE      (RASTERIZERTYPE& rasterizertype, RENDERER& renderer, SCANLINETYPE& scanlinetype) :
                                                                                                                 m_ras(rasterizertype)   ,
                                                                                                                 m_ren(renderer)         ,
                                                                                                                 m_sl(scanlinetype)      ,
@@ -291,18 +291,18 @@ class GRPCANVASAGG_DASHED_LINE
     RENDERER&                                                                   m_ren;
     SCANLINETYPE&                                                               m_sl;
 
-    GRPCANVASAGG_SIMPLE_VERTEX_SOURCE                                           m_src;
-    agg::conv_dash<GRPCANVASAGG_SIMPLE_VERTEX_SOURCE>                           m_dash;
-    agg::conv_stroke<GRPCANVASAGG_SIMPLE_VERTEX_SOURCE>                         m_stroke;
-    agg::conv_stroke<agg::conv_dash<GRPCANVASAGG_SIMPLE_VERTEX_SOURCE> >        m_dash_stroke;
+    GRP2DCANVASAGG_SIMPLE_VERTEX_SOURCE                                           m_src;
+    agg::conv_dash<GRP2DCANVASAGG_SIMPLE_VERTEX_SOURCE>                           m_dash;
+    agg::conv_stroke<GRP2DCANVASAGG_SIMPLE_VERTEX_SOURCE>                         m_stroke;
+    agg::conv_stroke<agg::conv_dash<GRP2DCANVASAGG_SIMPLE_VERTEX_SOURCE> >        m_dash_stroke;
 };
 
 
 template<class PIXELFORMATBUFFER, class COLORTYPE>
-class GRPCANVASAGG: public GRPCANVAS
+class GRP2DCANVASAGG: public GRP2DCANVAS
 {
   public:
-                                                                                GRPCANVASAGG                      ()  : GRPCANVAS()
+                                                                                GRP2DCANVASAGG                      ()  : GRP2DCANVAS()
                                                                                 {
                                                                                   Clean();
 
@@ -310,7 +310,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                 }
 
 
-    virtual                                                                    ~GRPCANVASAGG                      ()
+    virtual                                                                    ~GRP2DCANVASAGG                      ()
                                                                                 {                                                                                  
                                                                                   if(vectorfont_manager) 
                                                                                     {
@@ -372,7 +372,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                       return false;
                                                                                     }
 
-                                                                                  dashline = GEN_NEW GRPCANVASAGG_DASHED_LINE<agg::rasterizer_scanline_aa<>,
+                                                                                  dashline = GEN_NEW GRP2DCANVASAGG_DASHED_LINE<agg::rasterizer_scanline_aa<>,
                                                                                                                           agg::renderer_scanline_aa_solid<agg::renderer_base<PIXELFORMATBUFFER> >,
                                                                                                                           agg::scanline_u8 > (rasterizer_type, *renderer_scanline, scanline_type);
 
@@ -470,13 +470,13 @@ class GRPCANVASAGG: public GRPCANVAS
 
     void                                                                        SetClipBox                        (double x1, double y1, double x2, double y2)
                                                                                 {
-                                                                                  GRPCANVAS::SetClipBox(x1, y1, x2, y2);                                                                                                                                                                        
+                                                                                  GRP2DCANVAS::SetClipBox(x1, y1, x2, y2);                                                                                                                                                                        
                                                                                   renderer_base->clip_box((int)x1, (int)y1, (int)x2, (int)y2);
                                                                                 }
 
     void                                                                        SetClipBox                        (XRECT& rect)
                                                                                 {
-                                                                                  GRPCANVAS::SetClipBox(rect); 
+                                                                                  GRP2DCANVAS::SetClipBox(rect); 
                                                                                   renderer_base->clip_box((int)rect.x1, (int)rect.y1, (int)rect.x2, (int)rect.y2);
                                                                                 }
 
@@ -520,7 +520,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                       ren.color(renderer_primitives->fill_color());
 
-                                                                                      GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
+                                                                                      GRP2DCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
 
                                                                                       ras.move_to_d(x1, y1);
                                                                                       ras.line_to_d(x1, y2);
@@ -572,7 +572,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                       ren.color(renderer_primitives->fill_color());
 
-                                                                                      GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
+                                                                                      GRP2DCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
 
                                                                                       agg::ellipse ell(x, y, rx, ry, 100);
                                                                                       ras.add_path(ell);
@@ -611,7 +611,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                       ren.color(renderer_primitives->fill_color());
 
-                                                                                      GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
+                                                                                      GRP2DCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
 
                                                                                       GRP2DVERTEX* vertex = vertexs.Get(0);
                                                                                       if(!vertex) return;
@@ -697,7 +697,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                       ras.filling_rule((path.GetFillRule() == GRP2DPATHFILLRULE_EVENODD)?agg::fill_even_odd:agg::fill_non_zero);
 
                                                                                       agg::conv_curve<agg::path_storage> curve(ps);
-                                                                                      GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
+                                                                                      GRP2DCANVASAGG_AA_SET_CURVE_QUALITY(curve);
 
                                                                                       ras.add_path(curve);
 
@@ -711,7 +711,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                       ren.color(renderer_primitives->line_color());
 
                                                                                       agg::conv_curve<agg::path_storage>                       curve(ps);
-                                                                                      GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
+                                                                                      GRP2DCANVASAGG_AA_SET_CURVE_QUALITY(curve);
                                                                                       agg::conv_stroke<agg::conv_curve<agg::path_storage> >   stroke(curve);
 
                                                                                       stroke.width(linewidth);
@@ -770,7 +770,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                   PathGradientBuildStorage(path, ps);
 
                                                                                   agg::conv_curve<agg::path_storage> curve(ps);
-                                                                                  GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
+                                                                                  GRP2DCANVASAGG_AA_SET_CURVE_QUALITY(curve);
 
                                                                                   agg::rasterizer_scanline_aa<> ras;
                                                                                   agg::scanline_u8              sl;
@@ -832,7 +832,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                   PathGradientBuildStorage(path, ps);
 
                                                                                   agg::conv_curve<agg::path_storage> curve(ps);
-                                                                                  GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
+                                                                                  GRP2DCANVASAGG_AA_SET_CURVE_QUALITY(curve);
 
                                                                                   agg::rasterizer_scanline_aa<> ras;
                                                                                   agg::scanline_u8              sl;
@@ -886,7 +886,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                   PathGradientBuildStorage(path, ps);
 
                                                                                   agg::conv_curve<agg::path_storage>                  curve(ps);
-                                                                                  GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
+                                                                                  GRP2DCANVASAGG_AA_SET_CURVE_QUALITY(curve);
                                                                                   agg::conv_stroke<agg::conv_curve<agg::path_storage> > stroke(curve);
                                                                                   stroke.width(linewidth);
                                                                                   stroke.line_cap(agg::butt_cap);
@@ -954,7 +954,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                   PathGradientBuildStorage(path, ps);
 
                                                                                   agg::conv_curve<agg::path_storage>                  curve(ps);
-                                                                                  GRPCANVASAGG_AA_SET_CURVE_QUALITY(curve);
+                                                                                  GRP2DCANVASAGG_AA_SET_CURVE_QUALITY(curve);
                                                                                   agg::conv_stroke<agg::conv_curve<agg::path_storage> > stroke(curve);
                                                                                   stroke.width(linewidth);
                                                                                   stroke.line_cap(agg::butt_cap);
@@ -1010,7 +1010,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
                                                                                       ren.color(renderer_primitives->fill_color());
 
-                                                                                      GRPCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
+                                                                                      GRP2DCANVASAGG_AA_SET_RASTERIZER_GAMMA(ras);
 
                                                                                       agg::rounded_rect roundrect(x1, y1, x2, y2, radius);
                                                                                       ras.add_path(roundrect);
@@ -1552,7 +1552,7 @@ class GRPCANVASAGG: public GRPCANVAS
 
     bool                                                                        CopyBufferRenderFromViewport      (GRPVIEWPORT* viewport)
                                                                                 {
-                                                                                  GRPCANVAS*              viewportcanvas        = NULL;
+                                                                                  GRP2DCANVAS*              viewportcanvas        = NULL;
                                                                                   agg::rendering_buffer   viewportcanvasbuffer;
 
                                                                                   if(!viewport) 
@@ -1621,7 +1621,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                   int width  = (int)RasterFont_GetWidth(text.Get()) + 8;
                                                                                   int height = (int)RasterFont_GetHeight();
 
-                                                                                  if(x == GRPCANVASTYPE_DRAWFRAMERATE_ADJUSTSCREEN)
+                                                                                  if(x == GRP2DCANVASTYPE_DRAWFRAMERATE_ADJUSTSCREEN)
                                                                                     {
                                                                                       framerate_x = screen->GetWidth() - width - 10;          
                                                                                     }
@@ -1637,7 +1637,7 @@ class GRPCANVASAGG: public GRPCANVAS
                                                                                         }
                                                                                     }
 
-                                                                                  if(y == GRPCANVASTYPE_DRAWFRAMERATE_ADJUSTSCREEN)
+                                                                                  if(y == GRP2DCANVASTYPE_DRAWFRAMERATE_ADJUSTSCREEN)
                                                                                     {
                                                                                       framerate_y = screen->GetHeight() - 4;          
                                                                                     }
@@ -1711,7 +1711,7 @@ class GRPCANVASAGG: public GRPCANVAS
     agg::renderer_primitives<agg::renderer_base<PIXELFORMATBUFFER> >*           renderer_primitives;
     COLORTYPE                                                                   color;
 
-    GRPCANVASAGG_DASHED_LINE<agg::rasterizer_scanline_aa<>,
+    GRP2DCANVASAGG_DASHED_LINE<agg::rasterizer_scanline_aa<>,
                              agg::renderer_scanline_aa_solid<agg::renderer_base<PIXELFORMATBUFFER> >,
                              agg::scanline_u8  >*                               dashline;
 

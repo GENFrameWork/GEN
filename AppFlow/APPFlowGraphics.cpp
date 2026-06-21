@@ -54,7 +54,7 @@
 #include "GRP3DContext.h"
 #endif
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPFactory.h"
 #include "GRPViewPort.h"
 
@@ -393,17 +393,17 @@ void APPFLOWGRAPHICS::SetMainScreen(GRPSCREEN* mainscreen)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPCANVAS* APPFLOWGRAPHICS::GetScreenCanvas(GRPSCREEN* screen, int viewportindex)
+* @fn         GRP2DCANVAS* APPFLOWGRAPHICS::GetScreenCanvas(GRPSCREEN* screen, int viewportindex)
 * @brief      Get screen canvas
 * @ingroup    GRAPHIC
 * 
 * @param[in]  screen : 
 * @param[in]  viewportindex : 
 * 
-* @return     GRPCANVAS* : 
+* @return     GRP2DCANVAS* : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPCANVAS* APPFLOWGRAPHICS::GetScreenCanvas(GRPSCREEN* screen, int viewportindex)
+GRP2DCANVAS* APPFLOWGRAPHICS::GetScreenCanvas(GRPSCREEN* screen, int viewportindex)
 {
   if(!screen)
     {
@@ -416,7 +416,7 @@ GRPCANVAS* APPFLOWGRAPHICS::GetScreenCanvas(GRPSCREEN* screen, int viewportindex
       return NULL;
     }
 
-  GRPCANVAS* canvas = viewport->GetCanvas();
+  GRP2DCANVAS* canvas = viewport->GetCanvas();
 
   return canvas;
 }
@@ -476,7 +476,7 @@ bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainScreen(GRPSCREEN* mainscreen)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainCanvas(GRPCANVAS* maincanvas)
+* @fn         bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainCanvas(GRP2DCANVAS* maincanvas)
 * @brief      App proc before create main canvas
 * @ingroup    GRAPHIC
 * 
@@ -485,7 +485,7 @@ bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainScreen(GRPSCREEN* mainscreen)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainCanvas(GRPCANVAS* maincanvas)
+bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainCanvas(GRP2DCANVAS* maincanvas)
 {
   return true;
 }

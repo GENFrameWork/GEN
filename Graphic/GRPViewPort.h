@@ -56,7 +56,7 @@ enum GRPVIEWPORT_PROJECTIONTYPE
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class GRPCANVAS;
+class GRP2DCANVAS;
 
 class GRPVIEWPORT
 {
@@ -88,7 +88,7 @@ class GRPVIEWPORT
     bool                          SetCanvasPosition                   (float  x, float  y);
 
 
-    GRPCANVAS*                    GetCanvas                           ();
+    GRP2DCANVAS*                    GetCanvas                           ();
 
   protected:
 
@@ -104,7 +104,7 @@ class GRPVIEWPORT
     
     float                         canvas_x;
     float                         canvas_y;
-    GRPCANVAS*                    canvas;
+    GRP2DCANVAS*                    canvas;
     
   private:
 

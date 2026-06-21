@@ -54,7 +54,7 @@
 
 #include "GRPProperties.h"
 #include "GRPScreen.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPBitmapFile.h"
 
 #include "APPFlowBase.h"
@@ -601,7 +601,7 @@ bool UI_MANAGER::Layout_PutBackgroundColor(XCHAR* layoutname)
       case UI_SKIN_DRAWMODE_CANVAS   :  { UI_SKINCANVAS* skin_canvas  = (UI_SKINCANVAS*)skin;
                                           if(layout->GetBackground()->GetColor()->IsValid()) 
                                             { 
-                                              GRPCANVAS* canvas = skin_canvas->GetCanvas();    
+                                              GRP2DCANVAS* canvas = skin_canvas->GetCanvas();    
                                               if(canvas) 
                                                 {
                                                   UI_COLOR color;
@@ -662,7 +662,7 @@ bool UI_MANAGER::Layout_PutBackgroundBitmap(XCHAR* layoutname)
                                           if(layout->GetBackground()->GetBitmap()) 
                                             { 
                                               GRPSCREEN* screen = skin_canvas->GetScreen();      
-                                              GRPCANVAS* canvas = skin_canvas->GetCanvas();    
+                                              GRP2DCANVAS* canvas = skin_canvas->GetCanvas();    
                                               if(canvas && screen) 
                                                 {
                                                   layout->GetBackground()->GetBitmap()->Scale(screen->GetWidth(), screen->GetHeight());          
@@ -741,7 +741,7 @@ bool UI_MANAGER::Layout_PutBackgroundColor()
               case UI_SKIN_DRAWMODE_CANVAS   :  { UI_SKINCANVAS* skin_canvas  = (UI_SKINCANVAS*)skin;
                                                   if(layout->GetBackground()->GetColor()->IsValid()) 
                                                     { 
-                                                      GRPCANVAS* canvas = skin_canvas->GetCanvas();    
+                                                      GRP2DCANVAS* canvas = skin_canvas->GetCanvas();    
                                                       if(canvas) 
                                                         {
                                                           UI_COLOR color;
@@ -804,7 +804,7 @@ bool UI_MANAGER::Layout_PutBackgroundBitmap(bool scale)
                                                   if(layout->GetBackground()->GetBitmap()) 
                                                     { 
                                                       GRPSCREEN* screen = skin_canvas->GetScreen();      
-                                                      GRPCANVAS* canvas = skin_canvas->GetCanvas();    
+                                                      GRP2DCANVAS* canvas = skin_canvas->GetCanvas();    
                                                       if(canvas && screen) 
                                                         {
                                                           if(scale)

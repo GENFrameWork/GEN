@@ -43,6 +43,10 @@
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
+#ifdef DIO_WINDOWSWFP_ACTIVE
+class DIOWINDOWSWFP;
+#endif
+
 
 class DIOWINDOWSFACTORY : public DIOFACTORY
 {
@@ -64,6 +68,11 @@ class DIOWINDOWSFACTORY : public DIOFACTORY
     #ifdef DIO_PCAP_ACTIVE
     DIOPCAP*                  CreatePCap                    ();
     bool                      DeletePCap                    (DIOPCAP* pcap);
+    #endif
+
+    #ifdef DIO_WINDOWSWFP_ACTIVE
+    DIOWINDOWSWFP*            CreateWFP                     ();
+    bool                      DeleteWFP                     (DIOWINDOWSWFP* wfp);
     #endif
 
     #ifndef BUILDER

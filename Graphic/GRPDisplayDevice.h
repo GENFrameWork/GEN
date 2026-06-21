@@ -42,7 +42,7 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class GRPCANVAS;
+class GRP2DCANVAS;
 class GRPVIEWPORT;
 
 class GRPDISPLAYDEVICE : public GRPSCREEN
@@ -53,7 +53,7 @@ class GRPDISPLAYDEVICE : public GRPSCREEN
 
     virtual bool                  Create                        (bool show);
     virtual bool                  Update                        ();
-    virtual bool                  Update                        (GRPCANVAS* canvas);
+    virtual bool                  Update                        (GRP2DCANVAS* canvas);
     virtual bool                  Delete                        ();
     virtual bool                  Resize                        (int width, int height);
     virtual bool                  IsShow                        ();

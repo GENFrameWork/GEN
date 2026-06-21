@@ -3,7 +3,7 @@
 * @file       GRPBlitGLES.h
 *
 * @class      GRPBLITGLES
-* @brief      OpenGL ES 3.0 buffer blitter. Cross-platform abstraction that takes a GRPCANVAS
+* @brief      OpenGL ES 3.0 buffer blitter. Cross-platform abstraction that takes a GRP2DCANVAS
 *             pixel buffer (BGRA8888) and renders it as a fullscreen textured quad.
 *             Platform specialisations (Windows/Linux/Android) only provide native window/display
 *             handles via virtual methods.
@@ -30,7 +30,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
-class GRPCANVAS;
+class GRP2DCANVAS;
 class GRPEGLCONTEXT;
 
 
@@ -53,7 +53,7 @@ class GRPBLITGLES
 
     bool                                  Create                            (GRPSCREEN* screen);
     bool                                  Resize                            (int width, int height);
-    bool                                  Update                            (GRPCANVAS* canvas);
+    bool                                  Update                            (GRP2DCANVAS* canvas);
     bool                                  SwapBuffers                       ();
     bool                                  Destroy                           ();
 

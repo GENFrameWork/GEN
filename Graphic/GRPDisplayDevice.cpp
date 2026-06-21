@@ -37,7 +37,7 @@
 #include "GRPDisplayDevice.h"
 
 #include "GRPXEvent.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPViewPort.h"
 
 
@@ -116,7 +116,7 @@ bool GRPDISPLAYDEVICE::Update()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPDISPLAYDEVICE::Update(GRPCANVAS* canvas)
+* @fn         bool GRPDISPLAYDEVICE::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    GRAPHIC
 * 
@@ -125,7 +125,7 @@ bool GRPDISPLAYDEVICE::Update()
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPDISPLAYDEVICE::Update(GRPCANVAS* canvas)
+bool GRPDISPLAYDEVICE::Update(GRP2DCANVAS* canvas)
 {
   return false;
 }

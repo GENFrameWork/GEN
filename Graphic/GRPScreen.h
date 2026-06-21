@@ -105,7 +105,7 @@ enum GRPSCREENROTATION
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class GRPCANVAS;
+class GRP2DCANVAS;
 class GRPVIEWPORT;
 class GRPFRAMERATE;
 class GRPBITMAP;
@@ -144,8 +144,8 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     
     virtual bool                          Create                        (bool show);
 
-    virtual bool                          Update                        (GRPCANVAS* canvas);
-    virtual bool                          UpdateTransparent             (GRPCANVAS* canvas);
+    virtual bool                          Update                        (GRP2DCANVAS* canvas);
+    virtual bool                          UpdateTransparent             (GRP2DCANVAS* canvas);
 
     virtual bool                          Delete                        ();
 
@@ -195,8 +195,8 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 
     static XMAP<void*, GRPSCREEN*>*       GetListScreens                ();
 
-    GRPCANVAS*                            GetScreenCanvas               ();   
-    bool                                  SetScreenCanvas               (GRPCANVAS* screencanvas);   
+    GRP2DCANVAS*                            GetScreenCanvas               ();   
+    bool                                  SetScreenCanvas               (GRP2DCANVAS* screencanvas);   
 
   protected:    
 
@@ -206,7 +206,7 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     XDWORD                                styles;
     GRPSCREENROTATION                     rotation;
        
-    GRPCANVAS*                            screencanvas;  
+    GRP2DCANVAS*                            screencanvas;  
     XVECTOR<GRPVIEWPORT*>                 viewports;  
     
     GRPFRAMERATE*                         framerate;

@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPVectorFileSVGRenderAGG.cpp
+* @file       GRP2DVectorFileSVGRenderAGG.cpp
 * 
-* @class      GRPVECTORFILESVGRENDERAGG
+* @class      GRP2DVECTORFILESVGRENDERAGG
 * @brief      Graphic Vector File SVG Render (AGG) class : walks the SVG object tree and paints it on a canvas
 * @ingroup    GRAPHIC
 * 
@@ -34,11 +34,11 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "GRPVectorFileSVGRenderAGG.h"
+#include "GRP2DVectorFileSVGRenderAGG.h"
 
 #include <math.h>
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRP2DColor.h"
 #include "GRP2DPath.h"
 #include "GRP2DGradientStop.h"
@@ -72,23 +72,23 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         GRPVECTORFILESVGRENDERAGG::GRPVECTORFILESVGRENDERAGG()
+* @fn         GRP2DVECTORFILESVGRENDERAGG::GRP2DVECTORFILESVGRENDERAGG()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPVECTORFILESVGRENDERAGG::GRPVECTORFILESVGRENDERAGG()
+GRP2DVECTORFILESVGRENDERAGG::GRP2DVECTORFILESVGRENDERAGG()
 {
   Clean();
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         GRPVECTORFILESVGRENDERAGG::~GRPVECTORFILESVGRENDERAGG()
+* @fn         GRP2DVECTORFILESVGRENDERAGG::~GRP2DVECTORFILESVGRENDERAGG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPVECTORFILESVGRENDERAGG::~GRPVECTORFILESVGRENDERAGG()
+GRP2DVECTORFILESVGRENDERAGG::~GRP2DVECTORFILESVGRENDERAGG()
 {
   InvalidateCache();
 
@@ -97,14 +97,14 @@ GRPVECTORFILESVGRENDERAGG::~GRPVECTORFILESVGRENDERAGG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRPCANVAS* canvas)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas)
 * @brief      Render : paint the SVG fitted into the whole canvas
 * @ingroup    GRAPHIC
 * @param[in]  svg : loaded SVG file
 * @param[in]  canvas : target canvas
 * @return     bool : true if is succesful.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRPCANVAS* canvas)
+bool GRP2DVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas)
 {
   if(!canvas) return false;
 
@@ -113,7 +113,7 @@ bool GRPVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRPCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRPCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 * @brief      Render : paint the SVG fitted into the target rectangle (uniform scale, centered)
 * @ingroup    GRAPHIC
 * @param[in]  svg : loaded SVG file
@@ -124,7 +124,7 @@ bool GRPVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRPCANVAS* canvas)
 * @param[in]  targetheight : target rectangle height
 * @return     bool : true if is succesful.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRPCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
+bool GRP2DVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 {
   if(!svg || !canvas) return false;
 
@@ -152,7 +152,7 @@ bool GRPVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRPCANVAS* canvas,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::RenderCached(GRPVECTORFILESVG* svg, GRPCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderCached(GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 * @brief      Render cached : rasterize the SVG once into a transparent offscreen bitmap and, on every frame, blit that
 *             bitmap (with per pixel alpha) over the destination canvas. The cached sprite keeps its own transparency,
 *             so it composes correctly over any (even changing) background. Call InvalidateCache() to force a rebuild.
@@ -165,7 +165,7 @@ bool GRPVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRPCANVAS* canvas,
 * @param[in]  targetheight : target rectangle height
 * @return     bool : true if is succesful.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::RenderCached(GRPVECTORFILESVG* svg, GRPCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
+bool GRP2DVECTORFILESVGRENDERAGG::RenderCached(GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 {
   if(!svg || !canvas) return false;
 
@@ -192,7 +192,7 @@ bool GRPVECTORFILESVGRENDERAGG::RenderCached(GRPVECTORFILESVG* svg, GRPCANVAS* c
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::BuildCacheBitmap(GRPVECTORFILESVG* svg, GRPCANVAS* referencecanvas, double width, double height)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::BuildCacheBitmap(GRPVECTORFILESVG* svg, GRP2DCANVAS* referencecanvas, double width, double height)
 * @brief      Build cache bitmap : rasterize the SVG into a transparent offscreen canvas and capture it (with alpha)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
@@ -202,7 +202,7 @@ bool GRPVECTORFILESVGRENDERAGG::RenderCached(GRPVECTORFILESVG* svg, GRPCANVAS* c
 * @param[in]  height : sprite height
 * @return     bool : true if the cache bitmap was built.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::BuildCacheBitmap(GRPVECTORFILESVG* svg, GRPCANVAS* referencecanvas, double width, double height)
+bool GRP2DVECTORFILESVGRENDERAGG::BuildCacheBitmap(GRPVECTORFILESVG* svg, GRP2DCANVAS* referencecanvas, double width, double height)
 {
   if((width <= 0.0) || (height <= 0.0)) return false;
 
@@ -211,7 +211,7 @@ bool GRPVECTORFILESVGRENDERAGG::BuildCacheBitmap(GRPVECTORFILESVG* svg, GRPCANVA
   properties.SetPosition(0, 0);
   properties.SetSize((XDWORD)width, (XDWORD)height);
 
-  GRPCANVAS* offscreen = GEN_GRPFACTORY.CreateCanvas(&properties);
+  GRP2DCANVAS* offscreen = GEN_GRPFACTORY.CreateCanvas(&properties);
   if(!offscreen) return false;
 
   offscreen->SetWidth((XDWORD)width);
@@ -237,11 +237,11 @@ bool GRPVECTORFILESVGRENDERAGG::BuildCacheBitmap(GRPVECTORFILESVG* svg, GRPCANVA
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         void GRPVECTORFILESVGRENDERAGG::InvalidateCache()
+* @fn         void GRP2DVECTORFILESVGRENDERAGG::InvalidateCache()
 * @brief      Invalidate cache : free the cached bitmap and force a new rasterization on the next RenderCached
 * @ingroup    GRAPHIC
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPVECTORFILESVGRENDERAGG::InvalidateCache()
+void GRP2DVECTORFILESVGRENDERAGG::InvalidateCache()
 {
   if(cachebitmap)
     {
@@ -254,7 +254,7 @@ void GRPVECTORFILESVGRENDERAGG::InvalidateCache()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::CalculateViewBoxTransform(GRPVECTORFILESVG* svg, double targetx, double targety, double targetwidth, double targetheight, GRPVECTORFILESVGTRANSFORM& transform)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::CalculateViewBoxTransform(GRPVECTORFILESVG* svg, double targetx, double targety, double targetwidth, double targetheight, GRPVECTORFILESVGTRANSFORM& transform)
 * @brief      Calculate view box transform : map the SVG viewBox into the target rectangle (uniform scale, centered)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
@@ -266,7 +266,7 @@ void GRPVECTORFILESVGRENDERAGG::InvalidateCache()
 * @param[out] transform : resulting base transform
 * @return     bool : true if is succesful.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::CalculateViewBoxTransform(GRPVECTORFILESVG* svg, double targetx, double targety, double targetwidth, double targetheight, GRPVECTORFILESVGTRANSFORM& transform)
+bool GRP2DVECTORFILESVGRENDERAGG::CalculateViewBoxTransform(GRPVECTORFILESVG* svg, double targetx, double targety, double targetwidth, double targetheight, GRPVECTORFILESVGTRANSFORM& transform)
 {
   transform.SetIdentity();
 
@@ -302,7 +302,7 @@ bool GRPVECTORFILESVGRENDERAGG::CalculateViewBoxTransform(GRPVECTORFILESVG* svg,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRPCANVAS* canvas)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRP2DCANVAS* canvas)
 * @brief      Render node : accumulate transform / style and render this node (recursing into containers)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
@@ -312,7 +312,7 @@ bool GRPVECTORFILESVGRENDERAGG::CalculateViewBoxTransform(GRPVECTORFILESVG* svg,
 * @param[in]  canvas : target canvas
 * @return     bool : true if is succesful.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRPCANVAS* canvas)
+bool GRP2DVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRP2DCANVAS* canvas)
 {
   if(!obj) return false;
 
@@ -377,7 +377,7 @@ bool GRPVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTORFI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRPCANVAS* canvas)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas)
 * @brief      Render shape : build the geometry, transform it and paint fill and/or stroke
 * @note       INTERNAL
 * @ingroup    GRAPHIC
@@ -387,7 +387,7 @@ bool GRPVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTORFI
 * @param[in]  canvas : target canvas
 * @return     bool : true if is succesful.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRPCANVAS* canvas)
+bool GRP2DVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas)
 {
   GRP2DPATH path;
 
@@ -436,7 +436,7 @@ bool GRPVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORF
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::RenderText(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRPCANVAS* canvas)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderText(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas)
 * @brief      Render text : draw the text using the canvas vector font (a vector font must be loaded on the canvas)
 * @note       INTERNAL. The anchor (x,y) is transformed to device space and the font size is scaled by the transform.
 *             Text rotation/skew from the transform is not applied (the glyphs stay upright).
@@ -447,7 +447,7 @@ bool GRPVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORF
 * @param[in]  canvas : target canvas
 * @return     bool : true if drawn.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::RenderText(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRPCANVAS* canvas)
+bool GRP2DVECTORFILESVGRENDERAGG::RenderText(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas)
 {
   GRPVECTORFILESVGOBJTEXT* textobj = (GRPVECTORFILESVGOBJTEXT*)obj;
 
@@ -497,7 +497,7 @@ bool GRPVECTORFILESVGRENDERAGG::RenderText(GRPVECTORFILESVGOBJ* obj, GRPVECTORFI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         double GRPVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRPCANVAS* canvas)
+* @fn         double GRP2DVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRP2DCANVAS* canvas)
 * @brief      Draw text run : draw one text run at the (user space) pen and return the advanced pen x (user space)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
@@ -512,9 +512,9 @@ bool GRPVECTORFILESVGRENDERAGG::RenderText(GRPVECTORFILESVGOBJ* obj, GRPVECTORFI
 * @param[in]  canvas : target canvas
 * @return     double : advanced pen x (user space)
 * --------------------------------------------------------------------------------------------------------------------*/
-double GRPVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRPCANVAS* canvas)
+double GRP2DVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRP2DCANVAS* canvas)
 {
-  GRPCANVAS_VECTORFONT_CONFIG* config = canvas->Vectorfont_GetConfig();
+  GRP2DCANVAS_VECTORFONT_CONFIG* config = canvas->Vectorfont_GetConfig();
 
   double devicesize = sizeuser * scale;
   if(devicesize < 1.0)  devicesize = 1.0;
@@ -546,7 +546,7 @@ double GRPVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         void GRPVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx, double& miny, double& width, double& height)
+* @fn         void GRP2DVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx, double& miny, double& width, double& height)
 * @brief      Compute path bbox : axis aligned bounding box of the path (approximated using endpoints + control points)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
@@ -556,7 +556,7 @@ double GRPVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTY
 * @param[out] width : bounding box width
 * @param[out] height : bounding box height
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx, double& miny, double& width, double& height)
+void GRP2DVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx, double& miny, double& width, double& height)
 {
   bool   first = true;
   double x0 = 0.0;  double y0 = 0.0;  double x1 = 0.0;  double y1 = 0.0;
@@ -601,7 +601,7 @@ void GRPVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx, d
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRPVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas)
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRP2DCANVAS* canvas)
 * @brief      Render gradient : resolve the paint server gradient and fill (or stroke) the path with it
 * @note       INTERNAL
 * @ingroup    GRAPHIC
@@ -619,7 +619,7 @@ void GRPVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx, d
 * @param[in]  canvas : target canvas
 * @return     bool : true if painted with a gradient.
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas)
+bool GRP2DVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRP2DCANVAS* canvas)
 {
   if(!contextsvg) return false;
 
@@ -735,7 +735,7 @@ bool GRPVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING* p
 * @param[in]  path : path to transform (in place)
 * @param[in]  transform : transform to apply
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPVECTORFILESVGRENDERAGG::TransformPath(GRP2DPATH& path, GRPVECTORFILESVGTRANSFORM& transform)
+void GRP2DVECTORFILESVGRENDERAGG::TransformPath(GRP2DPATH& path, GRPVECTORFILESVGTRANSFORM& transform)
 {
   for(XDWORD c=0; c<path.GetSize(); c++)
     {
@@ -758,14 +758,14 @@ void GRPVECTORFILESVGRENDERAGG::TransformPath(GRP2DPATH& path, GRPVECTORFILESVGT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         double GRPVECTORFILESVGRENDERAGG::GetScaleFactor(GRPVECTORFILESVGTRANSFORM& transform)
+* @fn         double GRP2DVECTORFILESVGRENDERAGG::GetScaleFactor(GRPVECTORFILESVGTRANSFORM& transform)
 * @brief      Get scale factor : uniform scale approximation from the transform (used to scale the stroke width)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
 * @param[in]  transform : transform
 * @return     double : scale factor
 * --------------------------------------------------------------------------------------------------------------------*/
-double GRPVECTORFILESVGRENDERAGG::GetScaleFactor(GRPVECTORFILESVGTRANSFORM& transform)
+double GRP2DVECTORFILESVGRENDERAGG::GetScaleFactor(GRPVECTORFILESVGTRANSFORM& transform)
 {
   double determinant = (transform.GetA() * transform.GetD()) - (transform.GetB() * transform.GetC());
 
@@ -778,12 +778,12 @@ double GRPVECTORFILESVGRENDERAGG::GetScaleFactor(GRPVECTORFILESVGTRANSFORM& tran
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         void GRPVECTORFILESVGRENDERAGG::Clean()
+* @fn         void GRP2DVECTORFILESVGRENDERAGG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPVECTORFILESVGRENDERAGG::Clean()
+void GRP2DVECTORFILESVGRENDERAGG::Clean()
 {
   cachebitmap = NULL;
   cachevalid  = false;

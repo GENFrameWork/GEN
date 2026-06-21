@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPVectorFileSVGRenderAGG.h
+* @file       GRP2DVectorFileSVGRenderAGG.h
 * 
-* @class      GRPVECTORFILESVGRENDERAGG
+* @class      GRP2DVECTORFILESVGRENDERAGG
 * @brief      Graphic Vector File SVG Render (AGG) class : walks the SVG object tree and paints it on a canvas
 * @ingroup    GRAPHIC
 * 
@@ -44,7 +44,7 @@
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class GRPCANVAS;
+class GRP2DCANVAS;
 class GRPBITMAP;
 class GRP2DPATH;
 class GRPVECTORFILESVG;
@@ -55,34 +55,34 @@ class GRPVECTORFILESVGOBJ;
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
 
-class GRPVECTORFILESVGRENDERAGG
+class GRP2DVECTORFILESVGRENDERAGG
 {
   public:
-                                    GRPVECTORFILESVGRENDERAGG   ();
-    virtual                        ~GRPVECTORFILESVGRENDERAGG   ();
+                                    GRP2DVECTORFILESVGRENDERAGG   ();
+    virtual                        ~GRP2DVECTORFILESVGRENDERAGG   ();
 
-    bool                            Render                     (GRPVECTORFILESVG* svg, GRPCANVAS* canvas);
-    bool                            Render                     (GRPVECTORFILESVG* svg, GRPCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
+    bool                            Render                     (GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas);
+    bool                            Render                     (GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
 
-    bool                            RenderCached               (GRPVECTORFILESVG* svg, GRPCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
+    bool                            RenderCached               (GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
     void                            InvalidateCache            ();
 
   private:
 
     bool                            CalculateViewBoxTransform  (GRPVECTORFILESVG* svg, double targetx, double targety, double targetwidth, double targetheight, GRPVECTORFILESVGTRANSFORM& transform);
 
-    bool                            RenderNode                 (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRPCANVAS* canvas);
-    bool                            RenderShape                (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRPCANVAS* canvas);
-    bool                            RenderText                 (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRPCANVAS* canvas);
-    double                          DrawTextRun                (XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRPCANVAS* canvas);
+    bool                            RenderNode                 (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRP2DCANVAS* canvas);
+    bool                            RenderShape                (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas);
+    bool                            RenderText                 (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas);
+    double                          DrawTextRun                (XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRP2DCANVAS* canvas);
 
-    bool                            RenderGradient             (GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRPCANVAS* canvas);
+    bool                            RenderGradient             (GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRP2DCANVAS* canvas);
     void                            ComputePathBBox            (GRP2DPATH& path, double& minx, double& miny, double& width, double& height);
 
     void                            TransformPath              (GRP2DPATH& path, GRPVECTORFILESVGTRANSFORM& transform);
     double                          GetScaleFactor             (GRPVECTORFILESVGTRANSFORM& transform);
 
-    bool                            BuildCacheBitmap           (GRPVECTORFILESVG* svg, GRPCANVAS* referencecanvas, double width, double height);
+    bool                            BuildCacheBitmap           (GRPVECTORFILESVG* svg, GRP2DCANVAS* referencecanvas, double width, double height);
 
     void                            Clean                      ();
 

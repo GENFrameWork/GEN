@@ -259,6 +259,8 @@ class XFILEJSON : public XFILETXT
     XFILEJSONCONTROLCHAR        SearchNextControlCharacter    (int& position);
     bool                        SearchControlCharacter        (XFILEJSONCONTROLCHAR ctrlchar,int& position);
 
+    long long                   ConvertStringToLongLong       (XSTRING& string);
+
     bool                        GetNumber                     (int& position, XSTRING& string,bool& special);
     bool                        GetText                       (int& position,XSTRING& string);
     bool                        GetString                     (int& position, XSTRING& string);

@@ -40,7 +40,7 @@
                                                           {                                         \
                                                             newcanvas->CopyPropertysFrom(screen);   \
                                                             newcanvas->CreateBuffers();             \
-                                                            canvas = (GRPCANVAS*)newcanvas;         \
+                                                            canvas = (GRP2DCANVAS*)newcanvas;         \
                                                           }
 
 
@@ -49,7 +49,7 @@
 
 
 class GRPSCREEN;
-class GRPCANVAS;
+class GRP2DCANVAS;
 class GRPBITMAP;
 class GRPDESKTOPMANAGER;
 
@@ -67,8 +67,8 @@ class GRPFACTORY
     virtual GRPSCREEN*                CreateScreen              ();
     virtual bool                      DeleteScreen              (GRPSCREEN* screen);
 
-    GRPCANVAS*                        CreateCanvas              (GRPPROPERTIES* properties);
-    bool                              DeleteCanvas              (GRPCANVAS* canvas);
+    GRP2DCANVAS*                        CreateCanvas              (GRPPROPERTIES* properties);
+    bool                              DeleteCanvas              (GRP2DCANVAS* canvas);
 
     GRPBITMAP*                        CreateBitmap              (int width, int height, GRPPROPERTYMODE mode, bool isbufferinverse = false);
     bool                              DeleteBitmap              (GRPBITMAP* bitmap);

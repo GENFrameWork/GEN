@@ -39,7 +39,7 @@
 #include "GRPXEvent.h"
 #include "GRPFactory.h"
 #include "GRPScreen.h"
-#include "GRPCanvasAGG.h"
+#include "GRP2DCanvasAGG.h"
 
 
 
@@ -372,14 +372,14 @@ bool GRPVIEWPORT::SetCanvasPosition(float x, float y)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         GRPCANVAS* GRPVIEWPORT::GetCanvas()
+* @fn         GRP2DCANVAS* GRPVIEWPORT::GetCanvas()
 * @brief      Get canvas
 * @ingroup    GRAPHIC
 *
-* @return     GRPCANVAS* :
+* @return     GRP2DCANVAS* :
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPCANVAS*  GRPVIEWPORT::GetCanvas()
+GRP2DCANVAS*  GRPVIEWPORT::GetCanvas()
 {
   return canvas;
 }

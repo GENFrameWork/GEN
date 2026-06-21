@@ -50,7 +50,7 @@
 
 #include "XTrace.h"
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 
 
 
@@ -178,7 +178,7 @@ bool GRPLINUXSCREENFRAMEBUFFER::Create(bool show)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool GRPLINUXSCREENFRAMEBUFFER::Update(GRPCANVAS* canvas)
+* @fn         bool GRPLINUXSCREENFRAMEBUFFER::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
 *
@@ -187,7 +187,7 @@ bool GRPLINUXSCREENFRAMEBUFFER::Create(bool show)
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPLINUXSCREENFRAMEBUFFER::Update(GRPCANVAS* canvas)
+bool GRPLINUXSCREENFRAMEBUFFER::Update(GRP2DCANVAS* canvas)
 {
   if(handlefb == -1) 
     {

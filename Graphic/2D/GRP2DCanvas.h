@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPCanvas.h
+* @file       GRP2DCanvas.h
 * 
-* @class      GRPCANVAS
+* @class      GRP2DCANVAS
 * @brief      Graphics Canvas class
 * @ingroup    GRAPHIC
 * 
@@ -48,14 +48,14 @@
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-enum GRPCANVASTYPE
+enum GRP2DCANVASTYPE
 {
-  GRPCANVASTYPE_UNKNOW    =0  ,
-  GRPCANVASTYPE_AGGLIB        ,
+  GRP2DCANVASTYPE_UNKNOW    =0  ,
+  GRP2DCANVASTYPE_AGGLIB        ,
 };
 
 
-#define GRPCANVASTYPE_DRAWFRAMERATE_ADJUSTSCREEN  -1.0f
+#define GRP2DCANVASTYPE_DRAWFRAMERATE_ADJUSTSCREEN  -1.0f
 
 
 
@@ -68,11 +68,11 @@ class GRPBITMAP;
 class GRPBITMAPFRAME;
 class GRP2DREBUILDAREAS;
 
-class GRPCANVAS_VECTORFONT_CONFIG
+class GRP2DCANVAS_VECTORFONT_CONFIG
 {
   public:
-                                  GRPCANVAS_VECTORFONT_CONFIG         ();    
-    virtual                      ~GRPCANVAS_VECTORFONT_CONFIG         ();
+                                  GRP2DCANVAS_VECTORFONT_CONFIG         ();    
+    virtual                      ~GRP2DCANVAS_VECTORFONT_CONFIG         ();
     
     bool                          GetSize                             (double& width, double& height);
     bool                          SetSize                             (double width, double height);
@@ -104,11 +104,11 @@ class GRPCANVAS_VECTORFONT_CONFIG
 };
 
 
-class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
+class GRP2DCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
 {
   public:
-                                  GRPCANVAS                           ();
-    virtual                      ~GRPCANVAS                           ();
+                                  GRP2DCANVAS                           ();
+    virtual                      ~GRP2DCANVAS                           ();
 
     virtual bool                  Buffer_Create                       ();   
     XBYTE*                        Buffer_Get                          ();
@@ -174,7 +174,7 @@ class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
 
     bool                          VectorFont_Load                     (XCHAR* fontnamefile);
     virtual bool                  VectorFont_Load                     (XPATH& fontnamefile);
-    GRPCANVAS_VECTORFONT_CONFIG*  Vectorfont_GetConfig                ();         
+    GRP2DCANVAS_VECTORFONT_CONFIG*  Vectorfont_GetConfig                ();         
     virtual double                VectorFont_GetWidth                 (XCHAR* string);
     virtual double                VectorFont_GetHeight                (XCHAR* string);
     virtual double                VectorFont_GetHeight                ();
@@ -198,7 +198,7 @@ class GRPCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
     double                        linewidth;
     double                        dashlength;
 
-    GRPCANVAS_VECTORFONT_CONFIG   vectorfont_config; 
+    GRP2DCANVAS_VECTORFONT_CONFIG   vectorfont_config; 
 
   private:
 

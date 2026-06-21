@@ -58,48 +58,6 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         static long long XFILEJSON_ConvertStringToLongLong(XSTRING& string)
-* @brief      ong long  XFILEJSON convert string to long long
-* @ingroup    XUTILS
-* 
-* @param[in]  string : 
-* 
-* @return     static : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-static long long XFILEJSON_ConvertStringToLongLong(XSTRING& string)
-{
-  const XCHAR* text = string.Get();
-  if(!text) return 0;
-
-  long long value    = 0;
-  bool      negative = false;
-  int       c        = 0;
-
-  if(text[c] == __C('-'))
-    {
-      negative = true;
-      c++;
-    }
-   else
-    {
-      if(text[c] == __C('+')) c++;
-    }
-
-  for(; text[c]; c++)
-    {
-      if((text[c] < __C('0')) || (text[c] > __C('9'))) break;
-
-      value *= 10;
-      value += (long long)(text[c] - __C('0'));
-    }
-
-  return negative? -value : value;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XFILEJSONVALUE::XFILEJSONVALUE()
 * @brief      Constructor of class
@@ -1907,7 +1865,7 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
 
                                                       if(!special)
                                                         {
-                                                          long long integer = XFILEJSON_ConvertStringToLongLong(valuestring);
+                                                          long long integer = ConvertStringToLongLong(valuestring);
 
                                                           if((integer >= -2147483647LL - 1LL) && (integer <= 2147483647LL))
                                                             {
@@ -2243,6 +2201,48 @@ bool XFILEJSON::SearchControlCharacter(XFILEJSONCONTROLCHAR ctrlchar, int& posit
 
   position = XSTRING_NOTFOUND;
   return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         long long XFILEJSON::ConvertStringToLongLong(XSTRING& string)
+* @brief      convert string to long long
+* @ingroup    XUTILS
+* 
+* @param[in]  string : 
+* 
+* @return     long : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+long long XFILEJSON::ConvertStringToLongLong(XSTRING& string)
+{
+  const XCHAR* text = string.Get();
+  if(!text) return 0;
+
+  long long value    = 0;
+  bool      negative = false;
+  int       c        = 0;
+
+  if(text[c] == __C('-'))
+    {
+      negative = true;
+      c++;
+    }
+   else
+    {
+      if(text[c] == __C('+')) c++;
+    }
+
+  for(; text[c]; c++)
+    {
+      if((text[c] < __C('0')) || (text[c] > __C('9'))) break;
+
+      value *= 10;
+      value += (long long)(text[c] - __C('0'));
+    }
+
+  return negative? -value : value;
 }
 
 

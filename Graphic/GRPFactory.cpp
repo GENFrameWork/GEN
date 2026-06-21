@@ -37,7 +37,7 @@
 #include "GRPFactory.h"
 
 #include "GRPScreen.h"
-#include "GRPCanvasAGG.h"
+#include "GRP2DCanvasAGG.h"
 #include "GRPBitmap.h"
 
 
@@ -195,18 +195,18 @@ bool GRPFACTORY::DeleteScreen(GRPSCREEN* screen)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         GRPCANVAS* GRPFACTORY::CreateCanvas(GRPSCREEN* screen)
+* @fn         GRP2DCANVAS* GRPFACTORY::CreateCanvas(GRPSCREEN* screen)
 * @brief      Create canvas
 * @ingroup    GRAPHIC
 *
 * @param[in]  properties : properties to generate canvas
 *
-* @return     GRPCANVAS* : canvas class
+* @return     GRP2DCANVAS* : canvas class
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
+GRP2DCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
 {
-  GRPCANVAS*      canvas = NULL;
+  GRP2DCANVAS*      canvas = NULL;
   GRPPROPERTYMODE mode   = GRPPROPERTYMODE_XX_UNKNOWN;
 
   if(!properties) 
@@ -229,13 +229,13 @@ GRPCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
     {
       case GRPPROPERTYMODE_08_INDEX     : break;
       case GRPPROPERTYMODE_16_RGBA_4444 : break;
-      case GRPPROPERTYMODE_16_RGBA_5551 : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_rgb555, agg::rgba8>();   break;
-      case GRPPROPERTYMODE_16_RGB_565   : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_rgb565, agg::rgba8>();   break;
+      case GRPPROPERTYMODE_16_RGBA_5551 : canvas =  (GRP2DCANVAS*)GEN_NEW GRP2DCANVASAGG<agg::pixfmt_rgb555, agg::rgba8>();   break;
+      case GRPPROPERTYMODE_16_RGB_565   : canvas =  (GRP2DCANVAS*)GEN_NEW GRP2DCANVASAGG<agg::pixfmt_rgb565, agg::rgba8>();   break;
       case GRPPROPERTYMODE_16_SRGB_565  : break;
-      case GRPPROPERTYMODE_24_RGB_888   : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_rgb24 , agg::rgba8>();   break;
-      case GRPPROPERTYMODE_24_BGR_888   : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_bgr24 , agg::rgba8>();   break;
-      case GRPPROPERTYMODE_32_RGBA_8888 : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_rgba32, agg::rgba8>();   break;
-      case GRPPROPERTYMODE_32_BGRA_8888 : canvas =  (GRPCANVAS*)GEN_NEW GRPCANVASAGG<agg::pixfmt_bgra32, agg::rgba8>();   break;
+      case GRPPROPERTYMODE_24_RGB_888   : canvas =  (GRP2DCANVAS*)GEN_NEW GRP2DCANVASAGG<agg::pixfmt_rgb24 , agg::rgba8>();   break;
+      case GRPPROPERTYMODE_24_BGR_888   : canvas =  (GRP2DCANVAS*)GEN_NEW GRP2DCANVASAGG<agg::pixfmt_bgr24 , agg::rgba8>();   break;
+      case GRPPROPERTYMODE_32_RGBA_8888 : canvas =  (GRP2DCANVAS*)GEN_NEW GRP2DCANVASAGG<agg::pixfmt_rgba32, agg::rgba8>();   break;
+      case GRPPROPERTYMODE_32_BGRA_8888 : canvas =  (GRP2DCANVAS*)GEN_NEW GRP2DCANVASAGG<agg::pixfmt_bgra32, agg::rgba8>();   break;
                                default  : break;
     }
 
@@ -250,7 +250,7 @@ GRPCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool GRPFACTORY::DeleteCanvas(GRPCANVAS* canvas)
+* @fn         bool GRPFACTORY::DeleteCanvas(GRP2DCANVAS* canvas)
 * @brief      Delete canvas
 * @ingroup    GRAPHIC
 *
@@ -259,7 +259,7 @@ GRPCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPFACTORY::DeleteCanvas(GRPCANVAS* canvas)
+bool GRPFACTORY::DeleteCanvas(GRP2DCANVAS* canvas)
 {
   if(!canvas) 
     {

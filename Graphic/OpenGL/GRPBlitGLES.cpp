@@ -33,7 +33,7 @@
 
 #include "GRPEGLContext.h"
 #include "GRPScreen.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -349,7 +349,7 @@ bool GRPBLITGLES::Resize(int width, int height)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPBLITGLES::Update(GRPCANVAS* canvas)
+* @fn         bool GRPBLITGLES::Update(GRP2DCANVAS* canvas)
 * @brief      update
 * @ingroup    GRAPHIC
 * 
@@ -358,7 +358,7 @@ bool GRPBLITGLES::Resize(int width, int height)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPBLITGLES::Update(GRPCANVAS* canvas)
+bool GRPBLITGLES::Update(GRP2DCANVAS* canvas)
 {
   if(!canvas || !screen || !eglctx) 
     {

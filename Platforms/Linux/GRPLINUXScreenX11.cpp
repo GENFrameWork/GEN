@@ -43,7 +43,7 @@
 #include "XTrace.h"
 #include "XBuffer.h"
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPDesktopManager.h"
 
 
@@ -196,7 +196,7 @@ bool GRPLINUXSCREENX11::Create(bool show)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool GRPLINUXSCREENX11::Update(GRPCANVAS* canvas)
+* @fn         bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
 *
@@ -205,7 +205,7 @@ bool GRPLINUXSCREENX11::Create(bool show)
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPLINUXSCREENX11::Update(GRPCANVAS* canvas)
+bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
 {
   if(!display)
     { 
@@ -256,7 +256,7 @@ bool GRPLINUXSCREENX11::Update(GRPCANVAS* canvas)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPLINUXSCREENX11::UpdateTransparent(GRPCANVAS* canvas)
+* @fn         bool GRPLINUXSCREENX11::UpdateTransparent(GRP2DCANVAS* canvas)
 * @brief      Update transparent
 * @ingroup    PLATFORM_LINUX
 * 
@@ -265,7 +265,7 @@ bool GRPLINUXSCREENX11::Update(GRPCANVAS* canvas)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPLINUXSCREENX11::UpdateTransparent(GRPCANVAS* canvas)
+bool GRPLINUXSCREENX11::UpdateTransparent(GRP2DCANVAS* canvas)
 {
   return Update(canvas);  
 }

@@ -38,7 +38,7 @@
 
 #include "XRect.h"
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPViewPort.h"
 #include "GRPScreen.h"
 
@@ -120,7 +120,7 @@ bool UI_SKINCANVAS_FLAT::Draw_Form(UI_ELEMENT* element)
   UI_ELEMENT_FORM*    element_form = (UI_ELEMENT_FORM*)element;
   double              x_position   = 0.0f;
   double              y_position   = 0.0f;
-  GRPCANVAS*          canvas       = GetCanvas();
+  GRP2DCANVAS*          canvas       = GetCanvas();
   XRECT               clip_rect;  
   
   if(!canvas) return false;

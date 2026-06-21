@@ -79,7 +79,7 @@ typedef struct
 } HITNS;
 
 
-class GRPCANVAS;
+class GRP2DCANVAS;
 
 class GRPLINUXSCREENX11 : public GRPSCREEN
 {
@@ -89,8 +89,8 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
 
     bool                                  Create                            (bool show);
 
-    bool                                  Update                            (GRPCANVAS* canvas);
-    bool                                  UpdateTransparent                 (GRPCANVAS* canvas);
+    bool                                  Update                            (GRP2DCANVAS* canvas);
+    bool                                  UpdateTransparent                 (GRP2DCANVAS* canvas);
     bool                                  Delete                            ();
 
     bool                                  Resize                            (int width, int height);

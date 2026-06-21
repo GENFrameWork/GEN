@@ -38,7 +38,7 @@
 
 #include "XTrace.h"
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 
 
 
@@ -138,7 +138,7 @@ bool GRPANDROIDSCREEN::Update()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
+* @fn         bool GRPANDROIDSCREEN::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    PLATFORM_ANDROID
 *
@@ -147,7 +147,7 @@ bool GRPANDROIDSCREEN::Update()
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
+bool GRPANDROIDSCREEN::Update(GRP2DCANVAS* canvas)
 {
   GENBLITLOG("PATH Update(canvas) ENTER canvas=%p handle=%p", (void*)canvas, (void*)anativehandle);
   if(!canvas)        { GENBLITLOG("Update(canvas): canvas NULL -> false"); return false; }
@@ -233,7 +233,7 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool GRPANDROIDSCREEN::UpdateTransparent(GRPCANVAS* canvas)
+* @fn         bool GRPANDROIDSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 * @brief      Present a transparent-style screen.
 *
 *             GRPSCREEN::UpdateViewports() routes transparent screens (the style
@@ -264,7 +264,7 @@ bool GRPANDROIDSCREEN::Update(GRPCANVAS* canvas)
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPANDROIDSCREEN::UpdateTransparent(GRPCANVAS* canvas)
+bool GRPANDROIDSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 {
   GENBLITLOG("PATH UpdateTransparent ENTER canvas=%p handle=%p style_transp=%d w=%d h=%d", (void*)canvas, (void*)anativehandle, (int)Style_Is(GRPSCREENSTYLE_TRANSPARENT), (int)width, (int)height);
   // Sample canvas pixels BEFORE blitting to see if the UI system drew the dialog.

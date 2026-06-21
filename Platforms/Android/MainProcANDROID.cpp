@@ -103,7 +103,7 @@
 
 #include "GRPXEvent.h"
 #include "GRPViewPort.h"
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 
 #include "ANDROIDJNI.h"
 
