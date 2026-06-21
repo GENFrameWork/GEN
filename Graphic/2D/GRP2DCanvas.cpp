@@ -1177,6 +1177,59 @@ GRP2DCANVAS_VECTORFONT_CONFIG* GRP2DCANVAS::Vectorfont_GetConfig()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XPATH* GRP2DCANVAS::VectorFont_GetPathFile()
+* @brief      Vector font get path file
+* @ingroup    GRAPHIC
+*
+* @return     XPATH* : 
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+XPATH* GRP2DCANVAS::VectorFont_GetPathFile()
+{
+  return &vectorfont_pathfile;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRP2DCANVAS::VectorFont_CopyFrom(GRP2DCANVAS* canvas)
+* @brief      Vector font copy from another canvas
+* @ingroup    GRAPHIC
+*
+* @param[in]  canvas : source canvas
+* 
+* @return     bool : true if is succesful. 
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool GRP2DCANVAS::VectorFont_CopyFrom(GRP2DCANVAS* canvas)
+{
+  if(!canvas) return false;
+
+  GRP2DCANVAS_VECTORFONT_CONFIG* sourceconfig = canvas->Vectorfont_GetConfig();
+  GRP2DCANVAS_VECTORFONT_CONFIG* targetconfig = Vectorfont_GetConfig();
+
+  if(sourceconfig && targetconfig)
+    {
+      double width  = 0.0;
+      double height = 0.0;
+
+      sourceconfig->GetSize(width, height);
+
+      targetconfig->SetSize(width, height);
+      targetconfig->SetColor(sourceconfig->GetColor());
+      targetconfig->SetKerning(sourceconfig->IsKerning());
+    }
+
+  XPATH* sourcepathfile = canvas->VectorFont_GetPathFile();
+  if(!sourcepathfile) return false;
+  if(sourcepathfile->IsEmpty()) return false;
+
+  return VectorFont_Load((*sourcepathfile));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRP2DCANVAS::VectorFont_GetWidth(XCHAR* string)
 * @brief      Vector font get width
 * @ingroup    GRAPHIC

@@ -35,6 +35,11 @@
 
 #include "GRP2DVectorFileRenderAGG.h"
 
+#include "GRP2DCanvas.h"
+#include "GRPProperties.h"
+#include "GRPFactory.h"
+#include "GRPBitmap.h"
+
 #include "GRPVectorFile.h"
 
 #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
@@ -79,6 +84,8 @@ GRP2DVECTORFILERENDERAGG::GRP2DVECTORFILERENDERAGG()
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVECTORFILERENDERAGG::~GRP2DVECTORFILERENDERAGG()
 {
+  InvalidateCache();
+
   Clean();
 }
 
@@ -149,8 +156,8 @@ bool GRP2DVECTORFILERENDERAGG::Render(GRPVECTORFILE* file, GRP2DCANVAS* canvas, 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * @fn         bool GRP2DVECTORFILERENDERAGG::RenderCached(GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
-* @brief      Render cached : rasterize the vector file once into an offscreen bitmap and blit it on every frame,
-*             choosing the backend by file type. Call InvalidateCache() to force a rebuild.
+* @brief      Render cached : rasterize any supported vector file once into a transparent offscreen bitmap and blit it
+*             on every frame. The cache is owned by this common front end; SVG and DXF backends only render vectors.
 * @ingroup    GRAPHIC
 * @param[in]  file : loaded vector file (any supported type)
 * @param[in]  canvas : target canvas
@@ -163,6 +170,9 @@ bool GRP2DVECTORFILERENDERAGG::Render(GRPVECTORFILE* file, GRP2DCANVAS* canvas, 
 bool GRP2DVECTORFILERENDERAGG::RenderCached(GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 {
   if(!file || !canvas) return false;
+  if((targetwidth <= 0.0) || (targetheight <= 0.0)) return false;
+
+  bool supported = false;
 
   switch(file->GetType())
     {
@@ -170,32 +180,122 @@ bool GRP2DVECTORFILERENDERAGG::RenderCached(GRPVECTORFILE* file, GRP2DCANVAS* ca
                             default    : break;
 
       #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
-      case GRPVECTORFILETYPE_DXF       : return dxfrender.RenderCached((GRPVECTORFILEDXF*)file, canvas, targetx, targety, targetwidth, targetheight);
+      case GRPVECTORFILETYPE_DXF       : supported = true; break;
       #endif
 
       #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
-      case GRPVECTORFILETYPE_SVG       : return svgrender.RenderCached((GRPVECTORFILESVG*)file, canvas, targetx, targety, targetwidth, targetheight);
+      case GRPVECTORFILETYPE_SVG       : supported = true; break;
       #endif
     }
 
-  return false;
+  if(!supported) return false;
+
+  XPATH*                         vectorfontpathfile = canvas->VectorFont_GetPathFile();
+  GRP2DCANVAS_VECTORFONT_CONFIG* vectorfontconfig   = canvas->Vectorfont_GetConfig();
+  bool                           vectorkerning      = vectorfontconfig ? vectorfontconfig->IsKerning() : false;
+
+  bool samefontpath = vectorfontpathfile ? (!cachevectorfontpathfile.Compare((*vectorfontpathfile))) : cachevectorfontpathfile.IsEmpty();
+
+  bool samecache = cachevalid && cachebitmap &&
+                   (cachefile     == file) &&
+                   (cachefiletype == (int)file->GetType()) &&
+                   (cachewidth    == targetwidth) &&
+                   (cacheheight   == targetheight) &&
+                   samefontpath &&
+                   (cachevectorkerning == vectorkerning);
+
+  if(!samecache)
+    {
+      InvalidateCache();
+
+      if(!BuildCacheBitmap(file, canvas, targetwidth, targetheight)) return false;
+
+      cachefile     = file;
+      cachefiletype = (int)file->GetType();
+      cachewidth    = targetwidth;
+      cacheheight   = targetheight;
+
+      if(vectorfontpathfile) cachevectorfontpathfile = (*vectorfontpathfile);
+        else                 cachevectorfontpathfile.Empty();
+
+      cachevectorkerning = vectorkerning;
+      cachevalid         = (cachebitmap != NULL);
+    }
+
+  if(cachebitmap) canvas->PutBitmap(targetx, targety, cachebitmap);           // blit the cached sprite (per pixel alpha)
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         bool GRP2DVECTORFILERENDERAGG::BuildCacheBitmap(GRPVECTORFILE* file, GRP2DCANVAS* referencecanvas, double width, double height)
+* @brief      Build cache bitmap : rasterize the vector file into a transparent offscreen canvas and capture it
+* @note       INTERNAL. Common CANVAS cache path shared by SVG and DXF.
+* @ingroup    GRAPHIC
+* @param[in]  file : loaded vector file
+* @param[in]  referencecanvas : destination canvas (its pixel format is reused for the offscreen)
+* @param[in]  width : sprite width
+* @param[in]  height : sprite height
+* @return     bool : true if the cache bitmap was built.
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRP2DVECTORFILERENDERAGG::BuildCacheBitmap(GRPVECTORFILE* file, GRP2DCANVAS* referencecanvas, double width, double height)
+{
+  if(!file || !referencecanvas) return false;
+  if((width <= 0.0) || (height <= 0.0)) return false;
+
+  GRPPROPERTIES properties;
+  properties.CopyPropertysFrom(referencecanvas);                              // same pixel format as the destination
+  properties.SetPosition(0, 0);
+  properties.SetSize((XDWORD)width, (XDWORD)height);
+
+  GRP2DCANVAS* offscreen = GEN_GRPFACTORY.CreateCanvas(&properties);
+  if(!offscreen) return false;
+
+  offscreen->SetWidth((XDWORD)width);
+  offscreen->SetHeight((XDWORD)height);
+
+  if(!offscreen->Buffer_Create())
+    {
+      GEN_GRPFACTORY.DeleteCanvas(offscreen);
+      return false;
+    }
+
+  offscreen->VectorFont_CopyFrom(referencecanvas);                            // SVG text needs the same loaded vector font as the real canvas
+
+  GRP2DCOLOR_RGBA8 transparent(0, 0, 0, 0);
+  offscreen->Clear(&transparent);                                             // transparent background
+
+  bool status = Render(file, offscreen, 0.0, 0.0, width, height);             // rasterize into the offscreen
+
+  if(status) cachebitmap = offscreen->GetBitmap(0.0, 0.0, width, height);     // capture with its own alpha
+
+  GEN_GRPFACTORY.DeleteCanvas(offscreen);
+
+  return (status && (cachebitmap != NULL));
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * @fn         void GRP2DVECTORFILERENDERAGG::InvalidateCache()
-* @brief      Invalidate cache : drop the cached bitmap of every backend, forcing a new rasterization
+* @brief      Invalidate cache : free the common cached bitmap and force a new rasterization on the next RenderCached
 * @ingroup    GRAPHIC
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILERENDERAGG::InvalidateCache()
 {
-  #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
-  svgrender.InvalidateCache();
-  #endif
+  if(cachebitmap)
+    {
+      GEN_GRPFACTORY.DeleteBitmap(cachebitmap);
+      cachebitmap = NULL;
+    }
 
-  #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
-  dxfrender.InvalidateCache();
-  #endif
+  cachevalid    = false;
+  cachefile     = NULL;
+  cachefiletype = GRPVECTORFILETYPE_UNKNOWN;
+  cachewidth    = 0.0;
+  cacheheight   = 0.0;
+  cachevectorfontpathfile.Empty();
+  cachevectorkerning = false;
 }
 
 
@@ -224,7 +324,11 @@ bool GRP2DVECTORFILERENDERAGG::GetBackgroundIsDark()
 void GRP2DVECTORFILERENDERAGG::SetBackgroundIsDark(bool isdark)
 {
   #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
+  bool oldisdark = dxfrender.GetBackgroundIsDark();
+
   dxfrender.SetBackgroundIsDark(isdark);
+
+  if(oldisdark != dxfrender.GetBackgroundIsDark()) InvalidateCache();
   #else
   (void)isdark;
   #endif
@@ -257,7 +361,11 @@ bool GRP2DVECTORFILERENDERAGG::GetForceColorActive()
 void GRP2DVECTORFILERENDERAGG::SetForceColor(bool active, GRP2DCOLOR_RGBA8 color)
 {
   #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
+  bool oldactive = dxfrender.GetForceColorActive();
+
   dxfrender.SetForceColor(active, color);
+
+  if((oldactive != dxfrender.GetForceColorActive()) || active) InvalidateCache();
   #else
   (void)active;
   (void)color;
@@ -290,7 +398,11 @@ double GRP2DVECTORFILERENDERAGG::GetLineWidth()
 void GRP2DVECTORFILERENDERAGG::SetLineWidth(double linewidth)
 {
   #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
+  double oldlinewidth = dxfrender.GetLineWidth();
+
   dxfrender.SetLineWidth(linewidth);
+
+  if(oldlinewidth != dxfrender.GetLineWidth()) InvalidateCache();
   #else
   (void)linewidth;
   #endif
@@ -322,7 +434,11 @@ bool GRP2DVECTORFILERENDERAGG::GetDrawText()
 void GRP2DVECTORFILERENDERAGG::SetDrawText(bool drawtext)
 {
   #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
+  bool olddrawtext = dxfrender.GetDrawText();
+
   dxfrender.SetDrawText(drawtext);
+
+  if(olddrawtext != dxfrender.GetDrawText()) InvalidateCache();
   #else
   (void)drawtext;
   #endif
@@ -365,5 +481,12 @@ GRP2DVECTORFILEDXFRENDERAGG* GRP2DVECTORFILERENDERAGG::GetDXFRender()
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILERENDERAGG::Clean()
 {
-
+  cachebitmap  = NULL;
+  cachevalid   = false;
+  cachefile    = NULL;
+  cachefiletype = GRPVECTORFILETYPE_UNKNOWN;
+  cachewidth   = 0.0;
+  cacheheight  = 0.0;
+  cachevectorfontpathfile.Empty();
+  cachevectorkerning = false;
 }

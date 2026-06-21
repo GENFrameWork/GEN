@@ -31,6 +31,8 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
+#include "XPath.h"
+
 #include "GRP2DColor.h"
 
 #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
@@ -50,6 +52,7 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 class GRP2DCANVAS;
+class GRPBITMAP;
 class GRPVECTORFILE;
 
 
@@ -94,7 +97,17 @@ class GRP2DVECTORFILERENDERAGG
 
   private:
 
+    bool                            BuildCacheBitmap           (GRPVECTORFILE* file, GRP2DCANVAS* referencecanvas, double width, double height);
     void                            Clean                      ();
+
+    GRPBITMAP*                      cachebitmap;
+    bool                            cachevalid;
+    GRPVECTORFILE*                  cachefile;
+    int                             cachefiletype;
+    double                          cachewidth;
+    double                          cacheheight;
+    XPATH                           cachevectorfontpathfile;
+    bool                            cachevectorkerning;
 
     #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
     GRP2DVECTORFILESVGRENDERAGG       svgrender;

@@ -1342,6 +1342,8 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                   
                                                                                   fontnamefile.ConvertToASCII(charstr);                                                                                 
                                                                                   status = vectorfont_engine.load_font(charstr.GetPtrChar(), 0, gren);
+
+                                                                                  if(status) vectorfont_pathfile = fontnamefile;
                                                                                   
                                                                                   return status;    
                                                                                 }        

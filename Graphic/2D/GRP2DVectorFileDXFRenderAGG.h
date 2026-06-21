@@ -54,7 +54,6 @@
 
 class GRP2DCANVAS;
 class GRP2DPATH;
-class GRPBITMAP;
 class GRPVECTORFILEDXF;
 class GRPVECTORFILEDXFENTITY;
 class GRPVECTORFILEDXFTEXTSECTIONENTITIES;
@@ -72,9 +71,6 @@ class GRP2DVECTORFILEDXFRENDERAGG
 
     bool                            Render                     (GRPVECTORFILEDXF* dxf, GRP2DCANVAS* canvas);
     bool                            Render                     (GRPVECTORFILEDXF* dxf, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
-
-    bool                            RenderCached               (GRPVECTORFILEDXF* dxf, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
-    void                            InvalidateCache            ();
 
     bool                            GetBackgroundIsDark        ();
     void                            SetBackgroundIsDark        (bool isdark);                                          // controls how ACI 7 (black/white) is mapped
@@ -130,16 +126,7 @@ class GRP2DVECTORFILEDXFRENDERAGG
     GRP2DCOLOR_RGBA8                ResolveColor               (GRPVECTORFILEDXFENTITY* entity);
     GRP2DCOLOR_RGBA8                ColorFromACI               (int aci);
 
-    bool                            BuildCacheBitmap           (GRPVECTORFILEDXF* dxf, GRP2DCANVAS* referencecanvas, double width, double height);
-
     void                            Clean                      ();
-
-    GRPBITMAP*                      cachebitmap;
-    bool                            cachevalid;
-    double                          cachex;
-    double                          cachey;
-    double                          cachewidth;
-    double                          cacheheight;
 
     GRP2DCANVAS*                    contextcanvas;                               // canvas being rendered (handlers paint on it)
     GRPVECTORFILEDXF*               contextdxf;                                  // file being rendered (to reach the BLOCKS section for INSERT)

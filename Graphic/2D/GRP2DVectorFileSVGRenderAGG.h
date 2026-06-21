@@ -45,7 +45,6 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 class GRP2DCANVAS;
-class GRPBITMAP;
 class GRP2DPATH;
 class GRPVECTORFILESVG;
 class GRPVECTORFILESVGOBJ;
@@ -64,9 +63,6 @@ class GRP2DVECTORFILESVGRENDERAGG
     bool                            Render                     (GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas);
     bool                            Render                     (GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
 
-    bool                            RenderCached               (GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
-    void                            InvalidateCache            ();
-
   private:
 
     bool                            CalculateViewBoxTransform  (GRPVECTORFILESVG* svg, double targetx, double targety, double targetwidth, double targetheight, GRPVECTORFILESVGTRANSFORM& transform);
@@ -82,16 +78,7 @@ class GRP2DVECTORFILESVGRENDERAGG
     void                            TransformPath              (GRP2DPATH& path, GRPVECTORFILESVGTRANSFORM& transform);
     double                          GetScaleFactor             (GRPVECTORFILESVGTRANSFORM& transform);
 
-    bool                            BuildCacheBitmap           (GRPVECTORFILESVG* svg, GRP2DCANVAS* referencecanvas, double width, double height);
-
     void                            Clean                      ();
-
-    GRPBITMAP*                      cachebitmap;
-    bool                            cachevalid;
-    double                          cachex;
-    double                          cachey;
-    double                          cachewidth;
-    double                          cacheheight;
 
     GRPVECTORFILESVG*               contextsvg;                                  // current SVG being rendered (to resolve <use> references)
     int                             usedepth;                                    // recursion guard for <use>

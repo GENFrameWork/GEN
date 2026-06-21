@@ -106,103 +106,106 @@ class GRP2DCANVAS_VECTORFONT_CONFIG
 
 class GRP2DCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
 {
-  public:
-                                  GRP2DCANVAS                           ();
-    virtual                      ~GRP2DCANVAS                           ();
-
-    virtual bool                  Buffer_Create                       ();   
-    XBYTE*                        Buffer_Get                          ();
-    XDWORD                        Buffer_GetSize                      ();
-    virtual bool                  Buffer_SetToZero                    (); 
-    virtual bool                  Buffer_Delete                       ();
+  public:                            
+                                      GRP2DCANVAS                         ();
+    virtual                          ~GRP2DCANVAS                         ();
+                                     
+    virtual bool                      Buffer_Create                       ();   
+    XBYTE*                            Buffer_Get                          ();
+    XDWORD                            Buffer_GetSize                      ();
+    virtual bool                      Buffer_SetToZero                    (); 
+    virtual bool                      Buffer_Delete                       ();
   
-    virtual void                  Clear                               (const GRP2DCOLOR* color);
+    virtual void                      Clear                               (const GRP2DCOLOR* color);
 
-    virtual void                  GetClipBox                          (double& x1, double& y1, double& x2, double& y2);
-    virtual void                  GetClipBox                          (XRECT& rect);
-    virtual XRECT&                GetClipBox                          ();
-    virtual void                  SetClipBox                          (double  x1, double  y1, double  x2, double y2);
-    virtual void                  SetClipBox                          (XRECT& rect);
+    virtual void                      GetClipBox                          (double& x1, double& y1, double& x2, double& y2);
+    virtual void                      GetClipBox                          (XRECT& rect);
+    virtual XRECT&                    GetClipBox                          ();
+    virtual void                      SetClipBox                          (double  x1, double  y1, double  x2, double y2);
+    virtual void                      SetClipBox                          (XRECT& rect);
 
-    virtual GRP2DCOLOR*           GetPixel                            (double x, double  y);
-    virtual void                  PutPixel                            (double x, double  y, const GRP2DCOLOR* color);
-    virtual void                  PutBlendPixel                       (double x, double  y, const GRP2DCOLOR* color, double alpha);
+    virtual GRP2DCOLOR*               GetPixel                            (double x, double  y);
+    virtual void                      PutPixel                            (double x, double  y, const GRP2DCOLOR* color);
+    virtual void                      PutBlendPixel                       (double x, double  y, const GRP2DCOLOR* color, double alpha);
 
-    virtual GRP2DCOLOR*           GetFillColor                        ();
-    virtual void                  SetFillColor                        (const GRP2DCOLOR* color);
+    virtual GRP2DCOLOR*               GetFillColor                        ();
+    virtual void                      SetFillColor                        (const GRP2DCOLOR* color);
 
-    virtual GRP2DCOLOR*           GetLineColor                        ();
-    virtual void                  SetLineColor                        (const GRP2DCOLOR* color);
+    virtual GRP2DCOLOR*               GetLineColor                        ();
+    virtual void                      SetLineColor                        (const GRP2DCOLOR* color);
 
-    virtual double                GetLineWidth                        ();
-    virtual void                  SetLineWidth                        (double linewidth);
+    virtual double                    GetLineWidth                        ();
+    virtual void                      SetLineWidth                        (double linewidth);
 
-    virtual double                GetDashLength                       ();
-    virtual void                  SetDashLenght                       (double dashlength);
+    virtual double                    GetDashLength                       ();
+    virtual void                      SetDashLenght                       (double dashlength);
 
-    virtual void                  Line                                (double x1, double y1, double x2, double y2);
+    virtual void                      Line                                (double x1, double y1, double x2, double y2);
 
-    virtual void                  Rectangle                           (double x1, double y1, double x2, double y2, bool isfill = false);
+    virtual void                      Rectangle                           (double x1, double y1, double x2, double y2, bool isfill = false);
 
-    void                          Circle                              (double x, double y, double radius, bool isfill = false);
-    virtual void                  Ellipse                             (double x, double y, double rx, double ry, bool isfill = false);
+    void                              Circle                              (double x, double y, double radius, bool isfill = false);
+    virtual void                      Ellipse                             (double x, double y, double rx, double ry, bool isfill = false);
 
-    virtual void                  Polygon                             (GRP2DVERTEXS& vertexs, bool isfill);
+    virtual void                      Polygon                             (GRP2DVERTEXS& vertexs, bool isfill);
 
-    virtual void                  Path                                (GRP2DPATH& path, bool isfill = false);
-    virtual void                  PathGradientLinear                  (GRP2DPATH& path, bool evenodd, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops);
-    virtual void                  PathGradientRadial                  (GRP2DPATH& path, bool evenodd, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops);
-    virtual void                  PathGradientLinearStroke            (GRP2DPATH& path, double linewidth, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops);
-    virtual void                  PathGradientRadialStroke            (GRP2DPATH& path, double linewidth, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops);
+    virtual void                      Path                                (GRP2DPATH& path, bool isfill = false);
+    virtual void                      PathGradientLinear                  (GRP2DPATH& path, bool evenodd, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops);
+    virtual void                      PathGradientRadial                  (GRP2DPATH& path, bool evenodd, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops);
+    virtual void                      PathGradientLinearStroke            (GRP2DPATH& path, double linewidth, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops);
+    virtual void                      PathGradientRadialStroke            (GRP2DPATH& path, double linewidth, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops);
 
-    virtual void                  RoundRect                           (double x1, double y1, double x2, double y2, double radius, bool isfill = false);
+    virtual void                      RoundRect                           (double x1, double y1, double x2, double y2, double radius, bool isfill = false);
 
-    virtual GRPBITMAP*            GetBitmap                           (double x, double y, double width, double height);
+    virtual GRPBITMAP*                GetBitmap                           (double x, double y, double width, double height);
 
-    virtual void                  PutBitmapNoAlpha                    (double x, double y, GRPBITMAP* bitmap);
-    virtual void                  PutBitmap                           (double x, double y, GRPBITMAP* bitmap);
-    virtual void                  PutBitmapAlpha                      (double x, double y, GRPBITMAP* bitmap, double alpha = 100.0f);
-    void                          PutBitmapFrame                      (double x, double y, GRPBITMAPFRAME* bitmapframe, double alpha = 100.0f);
+    virtual void                      PutBitmapNoAlpha                    (double x, double y, GRPBITMAP* bitmap);
+    virtual void                      PutBitmap                           (double x, double y, GRPBITMAP* bitmap);
+    virtual void                      PutBitmapAlpha                      (double x, double y, GRPBITMAP* bitmap, double alpha = 100.0f);
+    void                              PutBitmapFrame                      (double x, double y, GRPBITMAPFRAME* bitmapframe, double alpha = 100.0f);
 
-    virtual bool                  RasterFont_Select                   (XCHAR* fontname);
-    bool                          RasterFont_Select                   (XSTRING* fontname);
-    virtual GRP2DCOLOR*           RasterFont_GetColor                 ();
-    virtual void                  RasterFont_SetColor                 (const GRP2DCOLOR* c);
-    virtual double                RasterFont_GetWidth                 (XCHAR* string);
-    virtual double                RasterFont_GetHeight                ();
-    virtual bool                  RasterFont_Printf                   (double x, double y, XCHAR* mask, ...);
+    virtual bool                      RasterFont_Select                   (XCHAR* fontname);
+    bool                              RasterFont_Select                   (XSTRING* fontname);
+    virtual GRP2DCOLOR*               RasterFont_GetColor                 ();
+    virtual void                      RasterFont_SetColor                 (const GRP2DCOLOR* c);
+    virtual double                    RasterFont_GetWidth                 (XCHAR* string);
+    virtual double                    RasterFont_GetHeight                ();
+    virtual bool                      RasterFont_Printf                   (double x, double y, XCHAR* mask, ...);
 
-    bool                          VectorFont_Load                     (XCHAR* fontnamefile);
-    virtual bool                  VectorFont_Load                     (XPATH& fontnamefile);
-    GRP2DCANVAS_VECTORFONT_CONFIG*  Vectorfont_GetConfig                ();         
-    virtual double                VectorFont_GetWidth                 (XCHAR* string);
-    virtual double                VectorFont_GetHeight                (XCHAR* string);
-    virtual double                VectorFont_GetHeight                ();
-    virtual bool                  VectorFont_Print                    (double x, double y, XCHAR* outstring);
-    virtual bool                  VectorFont_Printf                   (double x, double y, XCHAR* mask, ...);
+    bool                              VectorFont_Load                     (XCHAR* fontnamefile);
+    virtual bool                      VectorFont_Load                     (XPATH& fontnamefile);
+    GRP2DCANVAS_VECTORFONT_CONFIG*    Vectorfont_GetConfig                ();
+    XPATH*                            VectorFont_GetPathFile              ();
+    bool                              VectorFont_CopyFrom                 (GRP2DCANVAS* canvas);
+    virtual double                    VectorFont_GetWidth                 (XCHAR* string);
+    virtual double                    VectorFont_GetHeight                (XCHAR* string);
+    virtual double                    VectorFont_GetHeight                ();
+    virtual bool                      VectorFont_Print                    (double x, double y, XCHAR* outstring);
+    virtual bool                      VectorFont_Printf                   (double x, double y, XCHAR* mask, ...);
 
-    virtual bool                  CopyBufferRenderToScreen            (GRPSCREEN* screen);
-    virtual bool                  CopyBufferRenderToBufferScreen      (XBYTE* buffer, XDWORD width, XDWORD height, bool isinverse);
-    virtual bool                  CopyBufferRenderFromViewport        (GRPVIEWPORT* viewport);
+    virtual bool                      CopyBufferRenderToScreen            (GRPSCREEN* screen);
+    virtual bool                      CopyBufferRenderToBufferScreen      (XBYTE* buffer, XDWORD width, XDWORD height, bool isinverse);
+    virtual bool                      CopyBufferRenderFromViewport        (GRPVIEWPORT* viewport);
 
-    virtual bool                  ReleaseDrawFramerate                ();
-    virtual bool                  DrawFramerate                       (GRPSCREEN* screen, double  x, double  y);
+    virtual bool                      ReleaseDrawFramerate                ();
+    virtual bool                      DrawFramerate                       (GRPSCREEN* screen, double  x, double  y);
 
   protected:
 
-    XBYTE*                        buffer;
-    XDWORD                        buffersize;
+    XBYTE*                            buffer;
+    XDWORD                            buffersize;
 
-    XRECT                         lastcliprect;
+    XRECT                             lastcliprect;
 
-    double                        linewidth;
-    double                        dashlength;
+    double                            linewidth;
+    double                            dashlength;
 
-    GRP2DCANVAS_VECTORFONT_CONFIG   vectorfont_config; 
+    GRP2DCANVAS_VECTORFONT_CONFIG     vectorfont_config;
+    XPATH                             vectorfont_pathfile;
 
   private:
 
-    void                          Clean                               ();
+    void                              Clean                               ();
 };
 
 

@@ -42,9 +42,6 @@
 #include "GRP2DColor.h"
 #include "GRP2DPath.h"
 #include "GRP2DGradientStop.h"
-#include "GRPProperties.h"
-#include "GRPFactory.h"
-#include "GRPBitmap.h"
 
 #include "GRPVectorFileSVG.h"
 #include "GRPVectorFileSVGConfig.h"
@@ -90,8 +87,6 @@ GRP2DVECTORFILESVGRENDERAGG::GRP2DVECTORFILESVGRENDERAGG()
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVECTORFILESVGRENDERAGG::~GRP2DVECTORFILESVGRENDERAGG()
 {
-  InvalidateCache();
-
   Clean();
 }
 
@@ -148,108 +143,6 @@ bool GRP2DVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRP2DCANVAS* can
   canvas->SetLineWidth(savedlinewidth);                                        // restore canvas state
 
   return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderCached(GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
-* @brief      Render cached : rasterize the SVG once into a transparent offscreen bitmap and, on every frame, blit that
-*             bitmap (with per pixel alpha) over the destination canvas. The cached sprite keeps its own transparency,
-*             so it composes correctly over any (even changing) background. Call InvalidateCache() to force a rebuild.
-* @ingroup    GRAPHIC
-* @param[in]  svg : loaded SVG file
-* @param[in]  canvas : target canvas
-* @param[in]  targetx : target rectangle x
-* @param[in]  targety : target rectangle y
-* @param[in]  targetwidth : target rectangle width
-* @param[in]  targetheight : target rectangle height
-* @return     bool : true if is succesful.
-* --------------------------------------------------------------------------------------------------------------------*/
-bool GRP2DVECTORFILESVGRENDERAGG::RenderCached(GRPVECTORFILESVG* svg, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
-{
-  if(!svg || !canvas) return false;
-
-  bool samerect = (cachex     == targetx)     && (cachey      == targety) &&
-                  (cachewidth == targetwidth) && (cacheheight == targetheight);
-
-  if(!cachevalid || !cachebitmap || !samerect)
-    {
-      InvalidateCache();
-
-      if(!BuildCacheBitmap(svg, canvas, targetwidth, targetheight)) return false;
-
-      cachex      = targetx;
-      cachey      = targety;
-      cachewidth  = targetwidth;
-      cacheheight = targetheight;
-      cachevalid  = (cachebitmap != NULL);
-    }
-
-  if(cachebitmap)  canvas->PutBitmap(cachex, cachey, cachebitmap);             // blit the cached sprite (per pixel alpha)
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRP2DVECTORFILESVGRENDERAGG::BuildCacheBitmap(GRPVECTORFILESVG* svg, GRP2DCANVAS* referencecanvas, double width, double height)
-* @brief      Build cache bitmap : rasterize the SVG into a transparent offscreen canvas and capture it (with alpha)
-* @note       INTERNAL
-* @ingroup    GRAPHIC
-* @param[in]  svg : loaded SVG file
-* @param[in]  referencecanvas : destination canvas (its pixel format is reused for the offscreen)
-* @param[in]  width : sprite width
-* @param[in]  height : sprite height
-* @return     bool : true if the cache bitmap was built.
-* --------------------------------------------------------------------------------------------------------------------*/
-bool GRP2DVECTORFILESVGRENDERAGG::BuildCacheBitmap(GRPVECTORFILESVG* svg, GRP2DCANVAS* referencecanvas, double width, double height)
-{
-  if((width <= 0.0) || (height <= 0.0)) return false;
-
-  GRPPROPERTIES properties;
-  properties.CopyPropertysFrom(referencecanvas);                              // same pixel format as the destination
-  properties.SetPosition(0, 0);
-  properties.SetSize((XDWORD)width, (XDWORD)height);
-
-  GRP2DCANVAS* offscreen = GEN_GRPFACTORY.CreateCanvas(&properties);
-  if(!offscreen) return false;
-
-  offscreen->SetWidth((XDWORD)width);
-  offscreen->SetHeight((XDWORD)height);
-
-  if(!offscreen->Buffer_Create())
-    {
-      GEN_GRPFACTORY.DeleteCanvas(offscreen);
-      return false;
-    }
-
-  GRP2DCOLOR_RGBA8 transparent(0, 0, 0, 0);
-  offscreen->Clear(&transparent);                                             // transparent background
-
-  Render(svg, offscreen, 0.0, 0.0, width, height);                           // rasterize the SVG into the offscreen
-
-  cachebitmap = offscreen->GetBitmap(0.0, 0.0, width, height);               // capture with its own alpha
-
-  GEN_GRPFACTORY.DeleteCanvas(offscreen);
-
-  return (cachebitmap != NULL);
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* @fn         void GRP2DVECTORFILESVGRENDERAGG::InvalidateCache()
-* @brief      Invalidate cache : free the cached bitmap and force a new rasterization on the next RenderCached
-* @ingroup    GRAPHIC
-* --------------------------------------------------------------------------------------------------------------------*/
-void GRP2DVECTORFILESVGRENDERAGG::InvalidateCache()
-{
-  if(cachebitmap)
-    {
-      GEN_GRPFACTORY.DeleteBitmap(cachebitmap);
-      cachebitmap = NULL;
-    }
-
-  cachevalid = false;
 }
 
 
@@ -785,13 +678,6 @@ double GRP2DVECTORFILESVGRENDERAGG::GetScaleFactor(GRPVECTORFILESVGTRANSFORM& tr
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILESVGRENDERAGG::Clean()
 {
-  cachebitmap = NULL;
-  cachevalid  = false;
-  cachex      = 0.0;
-  cachey      = 0.0;
-  cachewidth  = 0.0;
-  cacheheight = 0.0;
-
   contextsvg  = NULL;
   usedepth    = 0;
 }
