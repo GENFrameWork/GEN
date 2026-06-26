@@ -82,6 +82,8 @@
 #include "UI_Element_ListBox.h"
 #include "UI_Element_ProgressBar.h"
 #include "UI_Element_Scroll.h"
+#include "UI_Element_GaugeRadial.h"
+
 #include "UI_VirtualKeyboard.h"
 
 #include "UI_Skin.h"
@@ -2013,14 +2015,14 @@ bool UI_MANAGER::ChangeAutomaticTextElementValue(UI_ELEMENT* element, XSTRING* m
   UI_ELEMENT* father = element->GetFather();
   if(father)
     {
-      if(father->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR)
+      if(father->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR || father->GetType() == UI_ELEMENT_TYPE_GAUGE_RADIAL)
         {
           if(!maskvalue->Compare(__L("PROGRESSBAR_PERCENT"), true))
             {
               UI_ELEMENT_PROGRESSBAR* element_progressbar = (UI_ELEMENT_PROGRESSBAR*)father;
               static float last_level = -10;
         
-              if(last_level != element_progressbar->GetLevel())                
+              //if(last_level != element_progressbar->GetLevel())                
                 {              
                   maskresolved->Format(__L("%d"), (int)element_progressbar->GetLevel());
                   maskresolved->Add(__L("\x25"));
@@ -3829,6 +3831,9 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
   GetLayoutElementValue(node, __L("linecolor"), linecolor);    
   if(!linecolor.IsEmpty()) element_progressbar->GetLineColor()->SetFromString(linecolor);  
 
+  double levelvalue = 0.0f;
+  if(GetLayoutElementValue(node, __L("level"), levelvalue)) element_progressbar->SetLevel((float)levelvalue);
+
   for(int c=0; c<node->GetNElements(); c++)
     {
       XFILEXMLELEMENT* nodeelement =  node->GetElement(c);
@@ -3857,6 +3862,14 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
                 }              
             }
         }  
+    }
+
+  XSTRING roundcapstr;
+  if(GetLayoutElementValue(node, __L("roundcap"), roundcapstr))
+    {
+      if(!roundcapstr.Compare(__L("yes"),  true) ||
+         !roundcapstr.Compare(__L("true"), true) ||
+         !roundcapstr.Compare(__L("1"),    true))   element_progressbar->SetRoundCap(true);
     }
 
   XSTRING continuouscyclestr;
@@ -3928,6 +3941,107 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
   GetLayoutElement_CalculateBoundaryLine(layout, element_progressbar);
 
   return element_progressbar;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_GaugeRadial(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+* @brief      Get layout element radial gauge
+* @ingroup    USERINTERFACE
+*
+* @param[in]  node :
+* @param[in]  layout :
+* @param[in]  father :
+* @param[in]  element_legacy :
+*
+* @return     UI_ELEMENT* : the created (or reused) element, NULL on error.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT* UI_MANAGER::GetLayoutElement_GaugeRadial(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+{
+  double                    value         = 0.0f;
+  UI_ELEMENT_GAUGE_RADIAL*  element_gauge = NULL;
+
+  if(element_legacy)
+    {
+      element_gauge = (UI_ELEMENT_GAUGE_RADIAL*)element_legacy;
+    }
+   else
+    {
+      element_gauge = GEN_NEW UI_ELEMENT_GAUGE_RADIAL();
+      if(!element_gauge) return NULL;
+    }
+
+  element_gauge->SetFather(father);
+
+  if(!GetLayoutElement_Base(node, layout, element_gauge))
+    {
+      GEN_DELETE element_gauge;
+      return NULL;
+    }
+
+  SetLevelAuto(element_gauge, father);
+
+  element_gauge->SetActive(true);
+
+  // Value arc gradient END color (gradient START is the base "color"; track ring is "bckgrdcolor").
+  XSTRING linecolor;
+  GetLayoutElementValue(node, __L("linecolor"), linecolor);
+  if(!linecolor.IsEmpty()) element_gauge->GetLineColor()->SetFromString(linecolor);
+
+  // Level [0..100].
+  value = 0.0f;
+  if(GetLayoutElementValue(node, __L("level"), value))      element_gauge->SetLevel((float)value);
+
+  // Geometry.
+  value = 0.0f;
+  if(GetLayoutElementValue(node, __L("startangle"), value)) element_gauge->SetStartAngle(value);
+
+  value = 0.0f;
+  if(GetLayoutElementValue(node, __L("sweepangle"), value)) element_gauge->SetSweepAngle(value);
+
+  value = 0.0f;
+  if(GetLayoutElementValue(node, __L("thickness"), value))  element_gauge->SetThickness(value);
+
+  XSTRING roundcapstr;
+  if(GetLayoutElementValue(node, __L("roundcap"), roundcapstr))
+    {
+      if(!roundcapstr.Compare(__L("yes"),  true) ||
+         !roundcapstr.Compare(__L("true"), true) ||
+         !roundcapstr.Compare(__L("1"),    true))   element_gauge->SetRoundCap(true);
+    }
+
+  // Child <text> => centered caption.
+  for(int c=0; c<node->GetNElements(); c++)
+    {
+      XFILEXMLELEMENT* nodeelement = node->GetElement(c);
+      if(nodeelement)
+        {
+          XSTRING type;
+          if(GetLayoutElementValue(nodeelement, __L("type"), type))
+            {
+              UI_ELEMENT* element = CreatePartialLayout(nodeelement, layout, element_gauge);
+              if(element)
+                {
+                  element->SetFather(element_gauge);
+
+                  switch(element->GetType())
+                    {
+                      case UI_ELEMENT_TYPE_TEXT : element_gauge->Set_UIText((UI_ELEMENT_TEXT*)element);
+                                                  element_gauge->GetComposeElements()->Add(element);
+                                                  break;
+
+                                      default   : break;
+                    }
+                }
+            }
+        }
+    }
+
+  GetLayoutElement_CalculateBoundaryLine(layout, element_gauge);
+
+  return element_gauge;
 }
 
 
@@ -4014,6 +4128,11 @@ UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAY
       if(!value.Compare(__L("progressbar")    , true))  
         {
           element = GetLayoutElement_ProgressBar(nodeelement, layout, father);      
+        }
+        
+      if(!value.Compare(__L("gaugeradial")   , true))
+        {
+          element = GetLayoutElement_GaugeRadial(nodeelement, layout, father);
         }
     }
 

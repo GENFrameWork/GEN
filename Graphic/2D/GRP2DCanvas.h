@@ -180,7 +180,13 @@ class GRP2DCANVAS : public GRPPROPERTIES, public GRP2DREBUILDAREAS
     virtual double                    VectorFont_GetWidth                 (XCHAR* string);
     virtual double                    VectorFont_GetHeight                (XCHAR* string);
     virtual double                    VectorFont_GetHeight                ();
+    
     virtual bool                      VectorFont_Print                    (double x, double y, XCHAR* outstring);
+    virtual bool                      VectorFont_PrintAngle               (double x, double y, double angle, XCHAR* outstring)                                                                      
+                                      { 
+                                        return VectorFont_Print(x, y, outstring); 
+                                      }   // default : ignore angle (non-AGG canvases)
+
     virtual bool                      VectorFont_Printf                   (double x, double y, XCHAR* mask, ...);
 
     virtual bool                      CopyBufferRenderToScreen            (GRPSCREEN* screen);

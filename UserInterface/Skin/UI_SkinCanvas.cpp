@@ -63,6 +63,7 @@
 #include "UI_Element_Menu.h"
 #include "UI_Element_ListBox.h"
 #include "UI_Element_ProgressBar.h"
+#include "UI_Element_GaugeRadial.h"
 #include "UI_Layout.h"
 #include "UI_Manager.h"
 
@@ -97,6 +98,108 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void UI_SkinCanvas_GaugeRadial_AppendArc(GRP2DPATH& path, double cx, double cy, double r, double startdeg, double spandeg, bool& firstpoint)
+* @brief      Append a circular arc to a path as a short-segment polyline (~2 deg per step). Uses only MoveTo/LineTo,
+*             which are fully exercised by the canvas stroke pipeline; this deliberately avoids GRP2DPATH::ArcTo
+*             (the SVG elliptical-arc command), whose AGG arc_to conversion is not used anywhere else and produces
+*             no geometry here. Angles are degrees; a positive span advances clockwise in this y-down canvas.
+* @note       INTERNAL / FILE LOCAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]      path       : destination path.
+* @param[in]      cx, cy     : ring center.
+* @param[in]      r          : ring radius (to the stroke centerline).
+* @param[in]      startdeg   : start angle in degrees.
+* @param[in]      spandeg    : signed span in degrees.
+* @param[in,out]  firstpoint : true on the first append (emits a MoveTo); set to false afterwards.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+static void UI_SkinCanvas_GaugeRadial_AppendArc(GRP2DPATH& path, double cx, double cy, double r, double startdeg, double spandeg, bool& firstpoint)
+{
+  if(r <= 0.0) return;
+
+  int nseg = (int)ceil(fabs(spandeg) / 2.0);                          // ~2 deg per segment
+  if(nseg < 1) nseg = 1;
+
+  double step = spandeg / nseg;
+
+  for(int c=0; c<=nseg; c++)
+    {
+      double deg = startdeg + (step * c);
+      double rad = deg * (PI / 180.0);
+
+      double px  = cx + (r * cos(rad));
+      double py  = cy + (r * sin(rad));
+
+      if(firstpoint)
+        {
+          path.MoveTo(px, py);
+          firstpoint = false;
+        }
+       else
+        {
+          path.LineTo(px, py);
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius)
+* @brief      Draw a filled rect, rounded when radius > 0. The radius is clamped to half the smaller side so a
+*             capsule (roundcap) stays valid even when the progress fill is narrower than the bar thickness
+*             (agg::rounded_rect does not self-normalize the radius).
+* @note       INTERNAL / FILE LOCAL
+* @ingroup    USERINTERFACE
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius)
+{
+  if(!canvas) return;
+
+  double w    = (x2 > x1) ? (x2 - x1) : (x1 - x2);
+  double h    = (y1 > y2) ? (y1 - y2) : (y2 - y1);
+  double maxr = ((w < h) ? w : h) / 2.0;
+
+  if(radius > maxr) radius = maxr;
+
+  if(radius > 0.0) canvas->RoundRect(x1, y1, x2, y2, radius, true);
+  else             canvas->Rectangle(x1, y1, x2, y2, true);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static GRP2DCOLOR_RGBA8 UI_SkinCanvas_GaugeRadial_GradientAt(double px, double py, double x1, double y1, double x2, double y2, UI_COLOR* c0, UI_COLOR* c1)
+* @brief      Sample a linear gradient (c0 at (x1,y1) -> c1 at (x2,y2)) at point (px,py), matching the AGG span
+*             gradient used to stroke the value arc. Returns the interpolated color so a round cap blends seamlessly
+*             with the arc at that exact position.
+* @note       INTERNAL / FILE LOCAL
+* @ingroup    USERINTERFACE
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+static GRP2DCOLOR_RGBA8 UI_SkinCanvas_GaugeRadial_GradientAt(double px, double py, double x1, double y1, double x2, double y2, UI_COLOR* c0, UI_COLOR* c1)
+{
+  double dx   = (x2 - x1);
+  double dy   = (y2 - y1);
+  double len2 = (dx * dx) + (dy * dy);
+  double t    = 0.0;
+
+  if(len2 > 0.000001) t = (((px - x1) * dx) + ((py - y1) * dy)) / len2;     // projection parameter along the axis
+
+  if(t < 0.0) t = 0.0;
+  if(t > 1.0) t = 1.0;
+
+  int r = (int)c0->GetRed()   + (int)(((int)c1->GetRed()   - (int)c0->GetRed())   * t);
+  int g = (int)c0->GetGreen() + (int)(((int)c1->GetGreen() - (int)c0->GetGreen()) * t);
+  int b = (int)c0->GetBlue()  + (int)(((int)c1->GetBlue()  - (int)c0->GetBlue())  * t);
+  int a = (int)c0->GetAlpha() + (int)(((int)c1->GetAlpha() - (int)c0->GetAlpha()) * t);
+
+  return GRP2DCOLOR_RGBA8(r, g, b, a);
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1684,6 +1787,55 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::CalculateBoundaryLine_GaugeRadial(UI_ELEMENT* element, bool adjustsizemargin)
+* @brief      Calculate boundary line radial gauge
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element :
+* @param[in]  adjustsizemargin :
+*
+* @return     bool : true if is succesful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::CalculateBoundaryLine_GaugeRadial(UI_ELEMENT* element, bool adjustsizemargin)
+{
+  UI_ELEMENT_GAUGE_RADIAL* element_gauge = (UI_ELEMENT_GAUGE_RADIAL*)element;
+  if(!element_gauge) return false;
+
+  double fatherwidth  = 0.0f;
+  double fatherheight = 0.0f;
+
+  GetFatherSize(element, fatherwidth, fatherheight);
+
+  UI_ELEMENT_TEXT* element_text = (UI_ELEMENT_TEXT*)element_gauge->Get_UIText();
+
+  // A gauge has no intrinsic content size. AUTO/0 falls back to a square using the resolved opposite side
+  // (or the father size when both are unset). MAX resolves to the father size on that axis.
+  switch((int)element->GetBoundaryLine()->width)
+    {
+      case UI_ELEMENT_TYPE_ALIGN_AUTO   :
+      case                           0  : element->GetBoundaryLine()->width  = (element->GetBoundaryLine()->height > 0) ? element->GetBoundaryLine()->height : fatherwidth;    break;
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width  = fatherwidth;                                                                                    break;
+    }
+
+  switch((int)element->GetBoundaryLine()->height)
+    {
+      case UI_ELEMENT_TYPE_ALIGN_AUTO   :
+      case                           0  : element->GetBoundaryLine()->height = (element->GetBoundaryLine()->width > 0) ? element->GetBoundaryLine()->width : fatherheight;     break;
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height = fatherheight;                                                                                   break;
+    }
+
+  CalculePosition(element_gauge, fatherwidth, fatherheight, adjustsizemargin);
+
+  // Center the caption inside the gauge box (the child <text> is expected to use xpos="center" ypos="center").
+  if(element_text) CalculePosition(element_text, element_gauge->GetBoundaryLine()->width, element_gauge->GetBoundaryLine()->height, adjustsizemargin);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_SKINCANVAS::SetElementPosition(UI_ELEMENT* element, double x_position, double y_position)
 * @brief      Set element position
@@ -2574,20 +2726,21 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
           canvas->SetLineColor(&linecolor);
           canvas->SetFillColor(&bkgcolor);
 
-          if(element->GetRoundRect())
+          double roundradius = element->GetRoundRect();                               // existing rounded-corner radius
+
+          if(element_progressbar->GetRoundCap())                                      // capsule ends: radius = half the bar thickness
             {
-              canvas->RoundRect(element_progressrect->GetXPosition(), 
-                                element_progressrect->GetYPosition(),
-                                element_progressrect->GetXPosition() + element_progressrect->GetBoundaryLine()->width  , 
-                                element_progressrect->GetTopY() , element->GetRoundRect(), true);
+              if(element_progressbar->GetDirection() == UI_ELEMENT_TYPE_DIRECTION_VERTICAL)
+                   roundradius = element_progressrect->GetBoundaryLine()->width  / 2.0;
+              else roundradius = element_progressrect->GetBoundaryLine()->height / 2.0;
             }
-           else
-            { 
-              canvas->Rectangle(element_progressrect->GetXPosition(), 
-                                element_progressrect->GetYPosition(),
-                                element_progressrect->GetXPosition() + element_progressrect->GetBoundaryLine()->width  , 
-                                element_progressrect->GetTopY() , true);
-            }
+
+          UI_SkinCanvas_ProgressBar_DrawRect(canvas,
+                                             element_progressrect->GetXPosition(),
+                                             element_progressrect->GetYPosition(),
+                                             element_progressrect->GetXPosition() + element_progressrect->GetBoundaryLine()->width,
+                                             element_progressrect->GetTopY(),
+                                             roundradius);
 
           double widthpercent   = element_progressrect->GetBoundaryLine()->width;
           double heightpercent  = element_progressrect->GetBoundaryLine()->height;  
@@ -2666,21 +2819,13 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
 
               canvas->SetFillColor(&color);
 
-              if(element->GetRoundRect())
-                {
-                  canvas->RoundRect(element_progressrect->GetXPosition() + xpos_segment, 
-                                    element_progressrect->GetYPosition() + ypos_segment,
-                                    element_progressrect->GetXPosition() + xpos_segment + widthpercent    , 
-                                    element_progressrect->GetYPosition() - (ypos_segment + heightpercent) , element->GetRoundRect(), true);                   
-
-                }
-               else
-                {
-                  canvas->Rectangle(element_progressrect->GetXPosition() + xpos_segment, 
-                                    element_progressrect->GetYPosition() + ypos_segment,
-                                    element_progressrect->GetXPosition() + xpos_segment + widthpercent    , 
-                                    element_progressrect->GetYPosition() - (ypos_segment + heightpercent) , true);                   
-                }
+              UI_SkinCanvas_ProgressBar_DrawRect(canvas,
+                                                 element_progressrect->GetXPosition() + xpos_segment,
+                                                 element_progressrect->GetYPosition() + ypos_segment,
+                                                 element_progressrect->GetXPosition() + xpos_segment + widthpercent,
+                                                 element_progressrect->GetYPosition() - (ypos_segment + heightpercent),
+                                                 roundradius);
+              
             }
            else
             {                
@@ -2693,20 +2838,12 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
                
               canvas->SetFillColor(&color);
 
-              if(element->GetRoundRect())
-                {
-                  canvas->RoundRect(element_progressrect->GetXPosition(), 
-                                    element_progressrect->GetYPosition(),
-                                    element_progressrect->GetXPosition() + widthpercent   , 
-                                    element_progressrect->GetYPosition() - heightpercent  , element->GetRoundRect(), true);   
-                }
-               else
-                {
-                  canvas->Rectangle(element_progressrect->GetXPosition(), 
-                                    element_progressrect->GetYPosition(),
-                                    element_progressrect->GetXPosition() + widthpercent   , 
-                                    element_progressrect->GetYPosition() - heightpercent  , true);          
-                }             
+              UI_SkinCanvas_ProgressBar_DrawRect(canvas,
+                                                 element_progressrect->GetXPosition(),
+                                                 element_progressrect->GetYPosition(),
+                                                 element_progressrect->GetXPosition() + widthpercent,
+                                                 element_progressrect->GetYPosition() - heightpercent,
+                                                 roundradius);
             } 
 
           if(element_text) Draw(element_text);  
@@ -2728,6 +2865,165 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
         }
     }
   
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::Draw_GaugeRadial(UI_ELEMENT* element)
+* @brief      Draw radial gauge (track ring + gradient value arc + centered caption)
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element :
+*
+* @return     bool : true if is succesful.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::Draw_GaugeRadial(UI_ELEMENT* element)
+{
+  if(!element) return false;
+
+  UI_ELEMENT_GAUGE_RADIAL* element_gauge = (UI_ELEMENT_GAUGE_RADIAL*)element;
+  UI_ELEMENT_TEXT*         element_text  = (UI_ELEMENT_TEXT*)element_gauge->Get_UIText();
+  GRP2DCANVAS*             canvas        = GetCanvas();
+  double                   x_position    = 0.0f;
+  double                   y_position    = 0.0f;
+  XRECT                    clip_rect;
+
+  if(!canvas) return false;
+
+  PreDrawFunction(element, canvas, clip_rect, x_position, y_position, 1);
+
+  if(element->MustReDraw())
+    {
+      double width  = element->GetBoundaryLine()->width;
+      double height = element->GetBoundaryLine()->height;
+
+      double cx     = x_position + (width  / 2.0);
+      double cy     = y_position - (height / 2.0);                       // y_position is the BOTTOM edge
+
+      double outer  = __MIN(width, height) / 2.0;
+
+      double thick  = element_gauge->GetThickness();
+      if(thick <= 0.0)    thick = outer * UI_ELEMENT_GAUGE_RADIAL_AUTOTHICKNESS_FACTOR;
+      if(thick > outer)   thick = outer;
+
+      double r      = outer - (thick / 2.0) - 1.0;                       // radius to the ring centerline
+      if(r < 1.0) r = 1.0;
+
+      double start  = element_gauge->GetStartAngle();
+      double sweep  = element_gauge->GetSweepAngle();
+
+      // ---- 1) track ring (full sweep, flat background color) ---------------------------------------------------------
+      if(element->GetBackgroundColor()->GetAlpha())
+        {
+          GRP2DCOLOR_RGBA8 trackcolor(element->GetBackgroundColor()->GetRed(),
+                                      element->GetBackgroundColor()->GetGreen(),
+                                      element->GetBackgroundColor()->GetBlue(),
+                                      element->GetBackgroundColor()->GetAlpha());
+
+          GRP2DPATH trackpath;
+          bool      firstpoint = true;
+
+          UI_SkinCanvas_GaugeRadial_AppendArc(trackpath, cx, cy, r, start, sweep, firstpoint);
+
+          canvas->SetLineWidth(thick);
+          canvas->SetLineColor(&trackcolor);
+          canvas->Path(trackpath, false);
+        }
+
+      // ---- 2) value arc (gradient color -> linecolor, scaled by level) -----------------------------------------------
+      double valuesweep = sweep * (element_gauge->GetLevel() / 100.0);
+
+      if(fabs(valuesweep) > 0.01)
+        {
+          GRP2DPATH valuepath;
+          bool      firstpoint = true;
+
+          UI_SkinCanvas_GaugeRadial_AppendArc(valuepath, cx, cy, r, start, valuesweep, firstpoint);
+
+          if(element_gauge->GetLineColor()->GetAlpha())                  // gradient: color -> linecolor
+            {
+              GRP2DGRADIENTSTOP stops[2];
+
+              stops[0].offset = 0.0;
+              stops[0].color  = GRP2DCOLOR_RGBA8(element->GetColor()->GetRed(),
+                                                 element->GetColor()->GetGreen(),
+                                                 element->GetColor()->GetBlue(),
+                                                 element->GetColor()->GetAlpha());
+
+              stops[1].offset = 1.0;
+              stops[1].color  = GRP2DCOLOR_RGBA8(element_gauge->GetLineColor()->GetRed(),
+                                                 element_gauge->GetLineColor()->GetGreen(),
+                                                 element_gauge->GetLineColor()->GetBlue(),
+                                                 element_gauge->GetLineColor()->GetAlpha());
+
+              // gradient axis: bottom-left -> top-right of the ring bounding box (matches the dashboard look)
+              double gx1 = cx - r;
+              double gy1 = cy + r;
+              double gx2 = cx + r;
+              double gy2 = cy - r;
+
+              canvas->PathGradientLinearStroke(valuepath, thick, gx1, gy1, gx2, gy2, stops, 2);
+            }
+           else                                                          // flat stroke with the element color
+            {
+              GRP2DCOLOR_RGBA8 arccolor(element->GetColor()->GetRed(),
+                                        element->GetColor()->GetGreen(),
+                                        element->GetColor()->GetBlue(),
+                                        element->GetColor()->GetAlpha());
+
+              canvas->SetLineWidth(thick);
+              canvas->SetLineColor(&arccolor);
+              canvas->Path(valuepath, false);
+            }
+        }
+
+      // ---- 2b) rounded caps (optional): filled circles sampling the gradient at each endpoint ------------------------
+      if(element_gauge->GetRoundCap() && (fabs(valuesweep) > 0.01))
+        {
+          double cap_r   = thick / 2.0;
+          double a_start = start                 * (PI / 180.0);
+          double a_end   = (start + valuesweep)  * (PI / 180.0);
+
+          double sx = cx + (r * cos(a_start));
+          double sy = cy + (r * sin(a_start));
+          double ex = cx + (r * cos(a_end));
+          double ey = cy + (r * sin(a_end));
+
+          GRP2DCOLOR_RGBA8 capstart;
+          GRP2DCOLOR_RGBA8 capend;
+
+          if(element_gauge->GetLineColor()->GetAlpha())                   // gradient: sample the same axis at each cap
+            {
+              double gx1 = cx - r, gy1 = cy + r;
+              double gx2 = cx + r, gy2 = cy - r;
+
+              capstart = UI_SkinCanvas_GaugeRadial_GradientAt(sx, sy, gx1, gy1, gx2, gy2, element->GetColor(), element_gauge->GetLineColor());
+              capend   = UI_SkinCanvas_GaugeRadial_GradientAt(ex, ey, gx1, gy1, gx2, gy2, element->GetColor(), element_gauge->GetLineColor());
+            }
+           else                                                          // flat color
+            {
+              capstart = GRP2DCOLOR_RGBA8(element->GetColor()->GetRed(), element->GetColor()->GetGreen(), element->GetColor()->GetBlue(), element->GetColor()->GetAlpha());
+              capend   = capstart;
+            }
+
+          canvas->SetLineWidth(0.0);                                       // fill only, no outline
+
+          canvas->SetFillColor(&capstart);
+          canvas->Circle(sx, sy, cap_r, true);
+
+          canvas->SetFillColor(&capend);
+          canvas->Circle(ex, ey, cap_r, true);
+        }
+
+      // ---- 3) centered caption (e.g. "37%") --------------------------------------------------------------------------
+      if(element_text) Draw(element_text);
+    }
+
+  PostDrawFunction(element, canvas, clip_rect, x_position, y_position);
+
   return true;
 }
 

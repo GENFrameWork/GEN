@@ -890,56 +890,58 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILE
 
   part = GEN_NEW GRPVECTORFILEDXFTEXTPART();
 
-  do{ line = fileTXT->GetLine(indexline);
+  do{ line = fileTXT->GetLine(indexline);                                       // code line of the (group code, value) DXF pair
       if(line) 
         {                       
           GRPVECTORFILEDXF::ParserTextFilePrepareLine(line);
 
-          if(line && !line->Compare(__L("0"),true))
+          if(!line->Compare(__L("0"),true))                                     // an entity starts at group code 0 : tested only at a code position (we step by pairs), so a *value* of "0" can never be mistaken for a delimiter
             {
-              indexline++;
-              line = fileTXT->GetLine(indexline);
-              GRPVECTORFILEDXF::ParserTextFilePrepareLine(line);
-
-              if(!line->IsNumber())
+              line = fileTXT->GetLine(indexline + 1);                           // value line of the same pair : the entity type name
+              if(line)
                 {
-                  if(IsKnownEntity(*line))
+                  GRPVECTORFILEDXF::ParserTextFilePrepareLine(line);
+
+                  if(!line->IsNumber())
                     {
-                      if(part && (part->iniline != -1))
-                        {               
-                          part->endline = indexline-2; 
-                                
-                          parts.Add(part); 
-                          part = NULL;
-                  
-                          part = GEN_NEW GRPVECTORFILEDXFTEXTPART ();
+                      if(IsKnownEntity(*line))
+                        {
+                          if(part && (part->iniline != -1))
+                            {               
+                              part->endline = indexline-1;                      // previous entity ends just before this "0"
+                                    
+                              parts.Add(part); 
+                              part = NULL;
+                      
+                              part = GEN_NEW GRPVECTORFILEDXFTEXTPART ();
+                            }
+
+                          if(part && (part->iniline == -1))
+                            {                     
+                              part->name    = line->Get();
+                              part->iniline = indexline + 2;                    // entity body starts after the "0" / type pair
+                            }                             
+                        }    
+                       else
+                        {
+                          XSTRING message;
+
+                          message.Format(__L("entity %s Unknown"), line->Get());
+                                   
+                          GRPVECTORFILE_XEVENT vfevent(GetGrpVectorFile(), GRPVECTORFILE_XEVENTTYPE_PARTUNKNOWN);
+
+                          vfevent.SetType(GRPVECTORFILETYPE_DXF);
+                          vfevent.GetPath()->Set(fileTXT->GetPrimaryFile()->GetPathNameFile());
+                          vfevent.GetMsg()->Set(message);
+
+                          PostEvent(&vfevent, GetGrpVectorFile());                   
                         }
-
-                      if(part && (part->iniline == -1))
-                        {                     
-                          part->name    = line->Get();
-                          part->iniline = indexline + 1;              
-                        }                             
-                    }    
-                   else
-                    {
-                      XSTRING message;
-
-                      message.Format(__L("entity %s Unknown"), line->Get());
-                               
-                      GRPVECTORFILE_XEVENT vfevent(GetGrpVectorFile(), GRPVECTORFILE_XEVENTTYPE_PARTUNKNOWN);
-
-                      vfevent.SetType(GRPVECTORFILETYPE_DXF);
-                      vfevent.GetPath()->Set(fileTXT->GetPrimaryFile()->GetPathNameFile());
-                      vfevent.GetMsg()->Set(message);
-
-                      PostEvent(&vfevent, GetGrpVectorFile());                   
                     }
                 }
             } 
         }
                            
-      indexline++;
+      indexline += 2;                                                           // advance a full (group code, value) pair : value lines are never scanned as delimiters
 
     } while(indexline < endline);
 

@@ -107,7 +107,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		static void												GetScrollViewportSize								(UI_ELEMENT* element, double& width, double& height);   // Form -> visiblerect window; else boundaryline
 
 		GRPSCREEN*                        GetScreen														(); 
-		GRP2DCANVAS*                        GetCanvas														(); 
+		GRP2DCANVAS*                      GetCanvas														(); 
 		
 		bool															LoadFonts														();
 
@@ -119,7 +119,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 
     double														GetWidthString                       (XCHAR* string, XDWORD sizefont = 12);  
     double														GetHeightString                     (XCHAR* string, XDWORD sizefont = 12);  
-				
+				           
 	  virtual bool                      CalculateBoundaryLine_Scroll        (UI_ELEMENT* element, bool adjustsizemargin = false);
 	  virtual bool                      CalculateBoundaryLine_Text		      (UI_ELEMENT* element, bool adjustsizemargin = false);
 	  virtual bool                      CalculateBoundaryLine_TextBox				(UI_ELEMENT* element, bool adjustsizemargin = false);
@@ -134,6 +134,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		virtual bool                      CalculateBoundaryLine_Menu				  (UI_ELEMENT* element, bool adjustsizemargin = false);
 		virtual bool                      CalculateBoundaryLine_ListBox			  (UI_ELEMENT* element, bool adjustsizemargin = false);
 		virtual bool                      CalculateBoundaryLine_ProgressBar	  (UI_ELEMENT* element, bool adjustsizemargin = false);
+    virtual bool                      CalculateBoundaryLine_GaugeRadial   (UI_ELEMENT* element, bool adjustsizemargin = false);
 
 		virtual bool                      SetElementPosition                  (UI_ELEMENT* element, double x_position, double y_position);
 		        
@@ -151,6 +152,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		virtual bool											Draw_Menu														(UI_ELEMENT* element);
 		virtual bool											Draw_ListBox												(UI_ELEMENT* element);
 		virtual bool											Draw_ProgressBar										(UI_ELEMENT* element);
+    virtual bool                      Draw_GaugeRadial                    (UI_ELEMENT* element);
 
   protected: 
 

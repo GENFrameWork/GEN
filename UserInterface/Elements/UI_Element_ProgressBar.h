@@ -56,6 +56,9 @@ class UI_ELEMENT_PROGRESSBAR : public UI_ELEMENT_OPTION
 
     UI_COLOR*						    GetLineColor								      ();
 
+    bool                    GetRoundCap                       ();
+    void                    SetRoundCap                       (bool roundcap);
+
     UI_ELEMENT*             GetProgressRect                   ();
     void                    SetProgressRect                   (UI_ELEMENT* progressrect);
 
@@ -70,13 +73,16 @@ class UI_ELEMENT_PROGRESSBAR : public UI_ELEMENT_OPTION
            	
     float                   GetLevel                          ();
     void                    SetLevel                          (float level);
-
+   
   private:
 
 		void								    Clean												      ();
 
     float                   level;
+
     UI_COLOR                linecolor;
+    bool                    roundcap;
+
     UI_ELEMENT*             progressrect; 
 
     bool                    continuouscycle_is;

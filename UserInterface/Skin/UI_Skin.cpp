@@ -580,7 +580,8 @@ bool UI_SKIN::CalculateBoundaryLine(UI_ELEMENT* element, bool adjustsizemargin)
       case UI_ELEMENT_TYPE_FORM						: return CalculateBoundaryLine_Form(element, adjustsizemargin);                       break; 
       case UI_ELEMENT_TYPE_MENU           : return CalculateBoundaryLine_Menu(element, adjustsizemargin);                       break;                  
       case UI_ELEMENT_TYPE_LISTBOX        : return CalculateBoundaryLine_ListBox(element, adjustsizemargin);                    break;                  
-      case UI_ELEMENT_TYPE_PROGRESSBAR	  : return CalculateBoundaryLine_ProgressBar(element, adjustsizemargin);                break;                  
+      case UI_ELEMENT_TYPE_PROGRESSBAR	  : return CalculateBoundaryLine_ProgressBar(element, adjustsizemargin);                break;  
+      case UI_ELEMENT_TYPE_GAUGE_RADIAL   : return CalculateBoundaryLine_GaugeRadial(element, adjustsizemargin);             break;      
     }
 
   return false;
@@ -840,6 +841,24 @@ bool UI_SKIN::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool adjust
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKIN::CalculateBoundaryLine_GaugeRadial(UI_ELEMENT* element, bool adjustsizemargin)
+* @brief      Calculate boundary line radial gauge
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element :
+* @param[in]  adjustsizemargin :
+*
+* @return     bool : true if is succesful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKIN::CalculateBoundaryLine_GaugeRadial(UI_ELEMENT* element, bool adjustsizemargin)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_SKIN::CalculeBoundaryLine_AllElements(UI_ELEMENT* element, bool recursive)
 * @brief      Calcule boundary line all elements
@@ -998,7 +1017,8 @@ bool UI_SKIN::Draw(UI_ELEMENT* element)
       case UI_ELEMENT_TYPE_FORM						: status = Draw_Form(element);              break;
       case UI_ELEMENT_TYPE_MENU           : status = Draw_Menu(element);              break;             
       case UI_ELEMENT_TYPE_LISTBOX        : status = Draw_ListBox(element);           break;             
-      case UI_ELEMENT_TYPE_PROGRESSBAR    : status = Draw_ProgressBar(element);       break;                       
+      case UI_ELEMENT_TYPE_PROGRESSBAR    : status = Draw_ProgressBar(element);       break;
+      case UI_ELEMENT_TYPE_GAUGE_RADIAL   : status = Draw_GaugeRadial(element);        break;      
     }
 
   return status;
@@ -1238,6 +1258,23 @@ bool UI_SKIN::Draw_ListBox(UI_ELEMENT* element)
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_ProgressBar(UI_ELEMENT* element)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKIN::Draw_GaugeRadial(UI_ELEMENT* element)
+* @brief      Draw radial gauge
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element :
+*
+* @return     bool : true if is succesful.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKIN::Draw_GaugeRadial(UI_ELEMENT* element)
 {
   return false;
 }

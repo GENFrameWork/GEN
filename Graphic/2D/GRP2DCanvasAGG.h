@@ -1340,7 +1340,11 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
 
                                                                                   XBUFFER charstr;
                                                                                   
-                                                                                  fontnamefile.ConvertToASCII(charstr);                                                                                 
+                                                                                  fontnamefile.ConvertToASCII(charstr);       
+                                                                                  
+                                                                                  vectorfont_namefile = charstr;     
+
+                                                                                  status = vectorfont_engine.load_font(charstr.GetPtrChar(), 0, gren);                                                                          
                                                                                   status = vectorfont_engine.load_font(charstr.GetPtrChar(), 0, gren);
 
                                                                                   if(status) vectorfont_pathfile = fontnamefile;
@@ -1532,6 +1536,79 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
 
                                                                                   AGG_SOLIDFILL_END                                                                                  
                                                                               
+                                                                                  return true;
+                                                                                }
+
+    bool                                                                        VectorFont_PrintAngle             (double _x, double _y, double _angle, XCHAR* _outstring)
+                                                                                {
+                                                                                  if(_angle == 0.0)                       return VectorFont_Print(_x, _y, _outstring);   // fast path : identical to the non-rotated method
+                                                                                  if(vectorfont_namefile.GetSize() == 0)  return VectorFont_Print(_x, _y, _outstring);   // no stored path : safe upright fallback
+
+                                                                                  vectorfont_engine.load_font(vectorfont_namefile.GetPtrChar(), 0, agg::glyph_ren_agg_gray8);   // AGG ignores transform() in native modes; agg_gray8 honours it (reuses cached face, no TTF reload)
+
+                                                                                  XSTRING outstring;
+
+                                                                                  outstring = _outstring;
+
+                                                                                  XDWORD  num_glyphs = 0;
+
+                                                                                  AGG_SOLIDFILL_INI
+
+                                                                                  vectorfont_engine.hinting(true);
+                                                                                  vectorfont_engine.height(vectorfont_config.GetHeight());
+                                                                                  vectorfont_engine.width(vectorfont_config.GetWidth());
+                                                                                  vectorfont_engine.flip_y(true);
+                                                                                  vectorfont_engine.transform(agg::trans_affine_rotation(_angle));   // rotate glyph outlines + advances
+
+                                                                                  double x      = _x;
+                                                                                  double y      = _y+1;
+
+                                                                                  for(XDWORD c=0; c<outstring.GetSize(); c++)
+                                                                                    {
+                                                                                      XCHAR character = outstring.Get()[c];
+
+                                                                                      const agg::glyph_cache* glyph = vectorfont_manager->glyph(character);
+
+                                                                                      if(glyph)
+                                                                                        {
+                                                                                          if(vectorfont_config.IsKerning())
+                                                                                            {
+                                                                                              vectorfont_manager->add_kerning(&x, &y);
+                                                                                            }
+
+                                                                                          vectorfont_manager->init_embedded_adaptors(glyph, x, y);
+
+                                                                                          switch(glyph->data_type)
+                                                                                            {
+                                                                                                                  default     : break;
+
+                                                                                              case agg::glyph_data_mono       : ren_bin.color((*vectorfont_config.GetColor()));
+                                                                                                                                agg::render_scanlines(vectorfont_manager->mono_adaptor(), vectorfont_manager->mono_scanline(), ren_bin);
+                                                                                                                                break;
+
+                                                                                              case agg::glyph_data_gray8      : ren.color((*vectorfont_config.GetColor()));
+                                                                                                                                agg::render_scanlines(vectorfont_manager->gray8_adaptor(), vectorfont_manager->gray8_scanline(), ren);
+                                                                                                                                break;
+
+                                                                                              case agg::glyph_data_outline    : ras.reset();
+                                                                                                                                renderer_scanline->color((*vectorfont_config.GetColor()));
+                                                                                                                                agg::render_scanlines(ras, sl, ren);
+                                                                                                                                break;
+                                                                                              }
+
+                                                                                            x += glyph->advance_x;
+                                                                                            y += glyph->advance_y;
+
+                                                                                            ++num_glyphs;
+                                                                                          }
+                                                                                    }
+
+                                                                                  vectorfont_engine.transform(agg::trans_affine());   // reset the transform
+
+                                                                                  AGG_SOLIDFILL_END
+
+                                                                                  vectorfont_engine.load_font(vectorfont_namefile.GetPtrChar(), 0, agg::glyph_ren_native_gray8);   // restore the original native mode (UI text unchanged)
+
                                                                                   return true;
                                                                                 }
 
@@ -1730,6 +1807,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
 
     AGG_FONT_ENGINE                                                             vectorfont_engine;
     AGG_FONT_MANAGER*                                                           vectorfont_manager; 
+    XBUFFER                                                                     vectorfont_namefile;
 
     double                                                                      framerate_x;
     double                                                                      framerate_y;

@@ -54,6 +54,7 @@
 #include "GRPVectorFileDXFTextBlock.h"
 #include "GRPVectorFileDXFEntity.h"
 #include "GRPVectorFileDXFValue.h"
+#include "XFileTXT.h"
 
 
 
@@ -68,6 +69,14 @@
 #define GRP2DVECTORFILEDXFRENDERAGG_PI          3.14159265358979323846
 #define GRP2DVECTORFILEDXFRENDERAGG_2PI         6.28318530717958647692
 #define GRP2DVECTORFILEDXFRENDERAGG_DEG2RAD     0.01745329251994329577
+#define GRP2DVECTORFILEDXFRENDERAGG_MTEXT_LINEFACTOR  1.66666666666666666667   // MTEXT single line spacing ~ 5/3 of the text height (tunable)
+
+
+
+/*---- FORWARD DECLARATIONS ------------------------------------------------------------------------------------------*/
+
+
+static void MTextDecode(XCHAR* raw, XVECTOR<XSTRING*>& lines);                 // defined below; declared here so ComputeExtents (above its definition) can size MTEXT
 
 
 
@@ -147,6 +156,8 @@ bool GRP2DVECTORFILEDXFRENDERAGG::Render(GRPVECTORFILEDXF* dxf, GRP2DCANVAS* can
   insertdepth   = 0;
 
   blocka = 1.0;   blockb = 0.0;   blockc = 0.0;   blockd = 1.0;   blocke = 0.0;   blockf = 0.0;   // identity block transform
+
+  BuildLayerTable(dxf);                                                        // resolve ByLayer colors (parsed from the TABLES/LAYER records)
 
   RenderEntityList(entities);
 
@@ -308,10 +319,110 @@ bool GRP2DVECTORFILEDXFRENDERAGG::ComputeExtents(GRPVECTORFILEDXFTEXTSECTIONENTI
               isradial = true;
             }
         }
-       else if(!name->Compare(__L("POINT"), true) || !name->Compare(__L("TEXT"), true) || !name->Compare(__L("MTEXT"), true) || !name->Compare(__L("VERTEX"), true))
+       else if(!name->Compare(__L("POINT"), true) || !name->Compare(__L("VERTEX"), true))
         {
           double x0; double y0;
           if(GetValueDouble(entity, 10, x0) && GetValueDouble(entity, 20, y0)) { px[npoints]=x0; py[npoints]=y0; npoints++; }
+        }
+       else if(!name->Compare(__L("TEXT"), true) || !name->Compare(__L("MTEXT"), true))
+        {
+          // TEXT / MTEXT contribute more than their insertion point : the glyph block extends to the right (and
+          // downward) from the insertion and may be rotated (code 50). Ignoring that width made text anchored at the
+          // drawing edge fall outside the computed extents and get clipped by the fit transform. Here we estimate the
+          // un-rotated block rectangle (relative to the insertion, placed per the attachment 71), rotate its 4 corners
+          // by the entity rotation and feed them into the bounding box so the fit always leaves room for the glyphs.
+          double ix; double iy;
+          if(GetValueDouble(entity, 10, ix) && GetValueDouble(entity, 20, iy))
+            {
+              double th = 1.0;   if(!GetValueDouble(entity, 40, th) || (th <= 0.0)) th = 1.0;   // text height (code 40)
+
+              double textw = 0.0;                                                   // block width  (world units)
+              double texth = th;                                                    // block height (world units)
+              int    nlines = 1;
+              int    attach = 1;
+
+              if(!name->Compare(__L("MTEXT"), true))
+                {
+                  XSTRING raw;                                                       // assemble the full string (continuation 3* + final 1) exactly like RenderMText
+                  XVECTOR<GRPVECTORFILEDXFVALUE*>* mvalues = entity->GetValues();
+                  for(XDWORD v=0; (mvalues) && (v < mvalues->GetSize()); v++)
+                    {
+                      GRPVECTORFILEDXFVALUE* mv = mvalues->Get(v);
+                      if(mv && (mv->GetType() == 3)) raw.Add((XCHAR*)(*mv->GetData()));
+                    }
+                  XCHAR* m1 = GetValueString(entity, 1);
+                  if(m1) raw.Add(m1);
+
+                  XVECTOR<XSTRING*> mlines;
+                  if(!raw.IsEmpty()) MTextDecode(raw.Get(), mlines);
+
+                  nlines = (int)mlines.GetSize();   if(nlines < 1) nlines = 1;
+
+                  XDWORD longest = 0;                                                // longest decoded line (chars) for the width estimate
+                  for(XDWORD l=0; l<mlines.GetSize(); l++)
+                    {
+                      XSTRING* s = mlines.Get(l);
+                      if(s && (s->GetSize() > longest)) longest = s->GetSize();
+                    }
+                  for(XDWORD l=0; l<mlines.GetSize(); l++)                           // free the decoded lines
+                    {
+                      XSTRING* s = mlines.Get(l);
+                      if(s) GEN_DELETE s;
+                    }
+
+                  double linefactor = 1.0;   double dls = 0.0;
+                  if(GetValueDouble(entity, 44, dls) && (dls > 0.0)) linefactor = dls;
+
+                  double refw = 0.0;   GetValueDouble(entity, 41, refw);             // MTEXT reference (wrap) width, when present
+
+                  textw = (double)longest * 0.6 * th;                               // ~0.6*height per glyph advance (generous, avoids clipping)
+                  if(refw > textw) textw = refw;
+                  texth = (double)nlines * th * GRP2DVECTORFILEDXFRENDERAGG_MTEXT_LINEFACTOR * linefactor;
+
+                  double dattach = 1.0;   GetValueDouble(entity, 71, dattach);   attach = (int)dattach;
+                  if((attach < 1) || (attach > 9)) attach = 1;
+                }
+               else                                                                 // TEXT : single line, code 1 string, left/baseline anchored
+                {
+                  XCHAR* t1 = GetValueString(entity, 1);
+                  XDWORD len = t1 ? XSTRING::GetSize(t1) : 0;
+                  textw = (double)len * 0.6 * th;
+                  texth = th;
+                  attach = 1;                                                        // top-left equivalent box (block grows right and up from the baseline)
+                }
+
+              int vert  = (attach <= 3) ? 0 : ((attach <= 6) ? 1 : 2);              // 0 top, 1 middle, 2 bottom
+              int horiz = (attach - 1) % 3;                                         // 0 left, 1 centre, 2 right
+
+              double rx0; double rx1; double ry0; double ry1;                       // un-rotated block rectangle relative to the insertion point
+              if     (horiz == 0) { rx0 = 0.0;          rx1 = textw;       }         // left   : grows to the right
+              else if(horiz == 1) { rx0 = -textw / 2.0; rx1 = textw / 2.0; }         // centre
+              else                { rx0 = -textw;       rx1 = 0.0;         }         // right  : grows to the left
+              if     (vert == 0)  { ry0 = -texth;       ry1 = th;          }         // top    : grows downward (+ one line of ascent margin)
+              else if(vert == 1)  { ry0 = -texth / 2.0; ry1 = texth / 2.0; }         // middle
+              else                { ry0 = 0.0;          ry1 = texth;       }         // bottom : grows upward
+
+              double rot = 0.0;   GetValueDouble(entity, 50, rot);                   // rotation (code 50, degrees CCW in world space)
+              double a   = rot * GRP2DVECTORFILEDXFRENDERAGG_DEG2RAD;
+              double ca  = cos(a);
+              double sa  = sin(a);
+
+              double cornerx[4] = { rx0, rx1, rx1, rx0 };
+              double cornery[4] = { ry1, ry1, ry0, ry0 };
+
+              for(int k=0; k<4; k++)
+                {
+                  double wx = ix + ((cornerx[k] * ca) - (cornery[k] * sa));         // rotate about the insertion, translate to world
+                  double wy = iy + ((cornerx[k] * sa) + (cornery[k] * ca));
+
+                  if(!found) { lminx = lmaxx = wx;  lminy = lmaxy = wy;  found = true; }
+                   else
+                    {
+                      if(wx < lminx) lminx = wx;   if(wx > lmaxx) lmaxx = wx;
+                      if(wy < lminy) lminy = wy;   if(wy > lmaxy) lmaxy = wy;
+                    }
+                }
+            }
         }
        else if(!name->Compare(__L("LWPOLYLINE"), true) || !name->Compare(__L("SPLINE"), true))
         {
@@ -636,7 +747,7 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderEntity(GRPVECTORFILEDXFENTITY* entity, G
   else if(!name->Compare(__L("POLYLINE")  , true))  return RenderPolyLine  (entity, entities, index, color, contextcanvas);
   else if(!name->Compare(__L("POINT")     , true))  return RenderPoint     (entity, color, contextcanvas);
   else if(!name->Compare(__L("TEXT")      , true))  return drawtext ? RenderText(entity, color, contextcanvas) : true;
-  else if(!name->Compare(__L("MTEXT")     , true))  return drawtext ? RenderText(entity, color, contextcanvas) : true;
+  else if(!name->Compare(__L("MTEXT")     , true))  return drawtext ? RenderMText(entity, color, contextcanvas) : true;
   else if(!name->Compare(__L("3DFACE")    , true))  return Render3DFace    (entity, color, contextcanvas);
   else if(!name->Compare(__L("SPLINE")    , true))  return RenderSpline    (entity, color, contextcanvas);
   else if(!name->Compare(__L("INSERT")    , true))  return RenderInsert    (entity);
@@ -1056,6 +1167,213 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderText(GRPVECTORFILEDXFENTITY* entity, GRP
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool MTextIsArgCode(XCHAR d)
+* @brief      MTEXT inline format code that carries an argument terminated by ';' (font, height, colour, width, ...).
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool MTextIsArgCode(XCHAR d)
+{
+  return (d == __C('f')) || (d == __C('F')) || (d == __C('c')) || (d == __C('C')) || (d == __C('H')) ||
+         (d == __C('W')) || (d == __C('Q')) || (d == __C('A')) || (d == __C('T')) || (d == __C('p'));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool MTextIsToggle(XCHAR d)
+* @brief      MTEXT inline format toggle with no argument (underline / overline / strikethrough on-off).
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool MTextIsToggle(XCHAR d)
+{
+  return (d == __C('L')) || (d == __C('l')) || (d == __C('O')) || (d == __C('o')) || (d == __C('K')) || (d == __C('k'));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void MTextDecode(XCHAR* raw, XVECTOR<XSTRING*>& lines)
+* @brief      MTEXT decode : turn the MTEXT inline mini-language into plain text lines. Handles paragraph breaks (\P),
+*             escapes (\~ \\ \{ \}), grouping braces, formatting codes with an argument (\f \H \C \W \Q \A \T \p),
+*             on-off toggles (\L \O \K), and stacked text (\S num ^|/|# den ;) flattened to "num/den". The actual
+*             font / height / colour changes are not applied (single style per entity); the codes are stripped so the
+*             text reads cleanly. The caller owns the XSTRING* in the vector.
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* @param[in]  raw : assembled MTEXT string (codes 3* + 1)
+* @param[out] lines : decoded lines (one XSTRING per line)
+* --------------------------------------------------------------------------------------------------------------------*/
+static void MTextDecode(XCHAR* raw, XVECTOR<XSTRING*>& lines)
+{
+  if(!raw) return;
+
+  XSTRING* cur = GEN_NEW XSTRING();
+  if(!cur) return;
+
+  XDWORD i = 0;
+  XDWORD n = XSTRING::GetSize(raw);
+
+  while(i < n)
+    {
+      XCHAR c = raw[i];
+
+      if((c == __C('\\')) && ((i + 1) < n))
+        {
+          XCHAR d = raw[i + 1];
+
+          if     (d == __C('P')) { lines.Add(cur);  cur = GEN_NEW XSTRING();  if(!cur) return;  i += 2; }   // paragraph break -> new line
+          else if(d == __C('~')) { cur->Add(__C(' '));   i += 2; }                                          // non-breaking space
+          else if(d == __C('\\')){ cur->Add(__C('\\'));  i += 2; }                                          // literal backslash
+          else if(d == __C('{')) { cur->Add(__C('{'));   i += 2; }                                          // literal brace
+          else if(d == __C('}')) { cur->Add(__C('}'));   i += 2; }
+          else if(MTextIsArgCode(d))                                                                        // \f \H \C ... ; -> drop up to ';'
+            {
+              i += 2;
+              while((i < n) && (raw[i] != __C(';'))) i++;
+              if(i < n) i++;
+            }
+          else if(MTextIsToggle(d)) { i += 2; }                                                             // \L \O \K -> drop
+          else if(d == __C('S'))                                                                            // \S num (^|/|#) den ; -> "num/den"
+            {
+              i += 2;
+              while((i < n) && (raw[i] != __C(';')))
+                {
+                  XCHAR s = raw[i];
+                  cur->Add(((s == __C('^')) || (s == __C('/')) || (s == __C('#'))) ? __C('/') : s);
+                  i++;
+                }
+              if(i < n) i++;
+            }
+          else { cur->Add(d);  i += 2; }                                                                    // unknown control -> drop the backslash, keep the char
+        }
+       else if(c == __C('{')) { i++; }                                                                      // grouping brace -> strip
+       else if(c == __C('}')) { i++; }
+       else                   { cur->Add(c);  i++; }
+    }
+
+  lines.Add(cur);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderMText(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
+* @brief      Render mtext : multi-line MTEXT entity. Assembles the text (code 3 fragments + code 1), decodes the
+*             inline mini-language (see MTextDecode), and lays the lines out from the insertion point (10/20) using the
+*             text height (40), the line-spacing factor (44) and the attachment point (71) for vertical
+*             (top/middle/bottom) and horizontal (left/centre/right) anchoring (line widths measured with
+*             VectorFont_GetWidth).
+* @note       INTERNAL. A vector font must be loaded on the canvas. Rotation (code 50) is applied via
+*             VectorFont_PrintAngle. Approximations: no word wrap by the reference width (41), and a single
+*             colour / height per entity (per-span formatting is stripped).
+* @ingroup    GRAPHIC
+* @param[in]  entity : raw MTEXT entity
+* @param[in]  color : resolved color
+* @param[in]  canvas : target canvas
+* @return     bool : true if painted.
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRP2DVECTORFILEDXFRENDERAGG::RenderMText(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
+{
+  GRP2DCANVAS_VECTORFONT_CONFIG* config = canvas->Vectorfont_GetConfig();
+  if(!config) return false;
+
+  XSTRING raw;                                                                  // assemble the text : code 3 fragments (in order) then the final code 1
+
+  XVECTOR<GRPVECTORFILEDXFVALUE*>* values = entity->GetValues();
+  for(XDWORD c=0; c<values->GetSize(); c++)
+    {
+      GRPVECTORFILEDXFVALUE* value = values->Get(c);
+      if(value && (value->GetType() == 3)) raw.Add((XCHAR*)(*value->GetData()));
+    }
+
+  XCHAR* t1 = GetValueString(entity, 1);
+  if(t1) raw.Add(t1);
+
+  if(raw.IsEmpty()) return false;
+
+  XVECTOR<XSTRING*> lines;                                                       // decode the inline mini-language into plain lines
+  MTextDecode(raw.Get(), lines);
+  if(lines.IsEmpty()) return false;
+
+  double x; double y; double height;
+  if(GetValueDouble(entity, 10, x) && GetValueDouble(entity, 20, y))             // insertion point + height + attachment + line spacing
+    {
+      if(!GetValueDouble(entity, 40, height) || (height <= 0.0)) height = 1.0;
+
+      double dattach = 1.0;   GetValueDouble(entity, 71, dattach);   int attach = (int)dattach;
+      if((attach < 1) || (attach > 9)) attach = 1;
+
+      double linefactor = 1.0;   double dls = 0.0;
+      if(GetValueDouble(entity, 44, dls) && (dls > 0.0)) linefactor = dls;
+
+      double worldline = height * GRP2DVECTORFILEDXFRENDERAGG_MTEXT_LINEFACTOR * linefactor;
+
+      double deviceheight = height * scale;
+      if(deviceheight < 1.0) deviceheight = 1.0;
+
+      config->SetSize(deviceheight);
+      config->SetColor(&color);
+
+      int    nlines = (int)lines.GetSize();
+      int    vert   = (attach <= 3) ? 0 : ((attach <= 6) ? 1 : 2);              // 0 top, 1 middle, 2 bottom
+      int    horiz  = (attach - 1) % 3;                                         // 0 left, 1 centre, 2 right
+
+      double firstbaseline;                                                     // world Y of the first line's baseline (lines flow downward)
+      if     (vert == 0) firstbaseline = y - height;                                                       // top    : top edge of the block at the insertion point
+      else if(vert == 1) firstbaseline = y - (height / 2.0) + (((double)(nlines - 1) * worldline) / 2.0);  // middle : block centred on the insertion point
+      else               firstbaseline = y + ((double)(nlines - 1) * worldline);                           // bottom : bottom edge of the block at the insertion point
+
+      double worldangle = 0.0;   double drot = 0.0;                             // rotation (code 50, CCW degrees in world space)
+      if(GetValueDouble(entity, 50, drot)) worldangle = drot * GRP2DVECTORFILEDXFRENDERAGG_DEG2RAD;
+
+      double deviceangle = -worldangle;                                         // device Y is flipped versus world Y, so the screen rotation is the opposite sign
+      double dcos = cos(deviceangle);
+      double dsin = sin(deviceangle);
+      double wcos = cos(worldangle);
+      double wsin = sin(worldangle);
+
+      for(int l=0; l<nlines; l++)
+        {
+          XSTRING* line = lines.Get(l);
+          XCHAR*   text = line ? line->Get() : NULL;
+          if(!text) continue;
+
+          double worldx = x;                                                    // left-aligned line start (world); rotation pivots on the insertion point
+          double worldy = firstbaseline - ((double)l * worldline);
+
+          if(worldangle != 0.0)                                                 // rotate the line start about the insertion point (world, CCW)
+            {
+              double ox = worldx - x;
+              double oy = worldy - y;
+              worldx = x + ((ox * wcos) - (oy * wsin));
+              worldy = y + ((ox * wsin) + (oy * wcos));
+            }
+
+          double dx; double dy;
+          MapPoint(worldx, worldy, dx, dy);
+
+          if(horiz != 0)                                                        // horizontal anchoring : shift along the (rotated) baseline direction
+            {
+              double w = canvas->VectorFont_GetWidth(text);
+              double f = (horiz == 1) ? 0.5 : 1.0;
+              dx -= (w * f * dcos);
+              dy -= (w * f * dsin);
+            }
+
+          canvas->VectorFont_PrintAngle(dx, dy, deviceangle, text);            // angle == 0 delegates to VectorFont_Print (identical to the previous behaviour)
+        }
+    }
+
+  for(XDWORD l=0; l<lines.GetSize(); l++)                                        // free the decoded lines
+    {
+      XSTRING* line = lines.Get(l);
+      if(line) GEN_DELETE line;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::Render3DFace(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 * @brief      Render 3D face : 3DFACE entity (corners 10/20, 11/21, 12/22, 13/23) painted as a closed wire quad
 *             projected onto the XY plane
@@ -1457,7 +1775,15 @@ static bool HatchReadValue(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD& i, X
   GRPVECTORFILEDXFVALUE* value = values->Get(i);
   if(!value || (value->GetType() != code)) return false;
 
-  out = (double)(*value->GetData());
+  XVARIANT* data = value->GetData();                                           // the XVARIANT cast operators reinterpret the raw bytes (they do not convert),
+                                                                               // so read it according to its stored type : flags/counts (70..79, 90..99) are
+  switch(data->GetType())                                                      // stored as INTEGER and must NOT be read as a double.
+    {
+      case XVARIANT_TYPE_DOUBLE  : out = (double)(*data);              break;
+      case XVARIANT_TYPE_FLOAT   : out = (double)(float)(*data);       break;
+                       default    : out = (double)(int)(*data);        break;   // integer family (boolean/short/word/integer/dword)
+    }
+
   i++;
   return true;
 }
@@ -2019,7 +2345,13 @@ bool GRP2DVECTORFILEDXFRENDERAGG::GetValueDouble(GRPVECTORFILEDXFENTITY* entity,
       GRPVECTORFILEDXFVALUE* value = values->Get(c);
       if(value && (value->GetType() == groupcode))
         {
-          out = (double)(*value->GetData());
+          XVARIANT* data = value->GetData();                                   // the XVARIANT cast operators reinterpret the raw bytes, so convert by the stored type
+          switch(data->GetType())
+            {
+              case XVARIANT_TYPE_DOUBLE : out = (double)(*data);              break;
+              case XVARIANT_TYPE_FLOAT  : out = (double)(float)(*data);       break;
+                               default   : out = (double)(int)(*data);        break;   // integer family (flags / counts such as code 71)
+            }
           return true;
         }
     }
@@ -2098,7 +2430,8 @@ GRP2DCOLOR_RGBA8 GRP2DVECTORFILEDXFRENDERAGG::ResolveColor(GRPVECTORFILEDXFENTIT
 {
   if(forcecoloractive) return forcecolor;
 
-  int aci = 256;                                                              // default : ByLayer -> foreground
+  int  aci          = 256;                                                     // default : ByLayer -> resolve via the layer table
+  bool haveexplicit = false;
 
   XVECTOR<GRPVECTORFILEDXFVALUE*>* values = entity->GetValues();
 
@@ -2107,12 +2440,181 @@ GRP2DCOLOR_RGBA8 GRP2DVECTORFILEDXFRENDERAGG::ResolveColor(GRPVECTORFILEDXFENTIT
       GRPVECTORFILEDXFVALUE* value = values->Get(c);
       if(!value) continue;
 
-      if(value->GetType() == 62)  { aci = (int)(*value->GetData());  break; }
+      if(value->GetType() == 62)  { aci = (int)(*value->GetData());  haveexplicit = true;  break; }
 
-      if(!value->GetName()->Compare(__L("G_COLOR_NUMBER"), true))  { aci = (int)(*value->GetData());  break; }
+      if(!value->GetName()->Compare(__L("G_COLOR_NUMBER"), true))  { aci = (int)(*value->GetData());  haveexplicit = true;  break; }
+    }
+
+  if(!haveexplicit || (aci == 256) || (aci == 0))                              // no explicit color, or ByLayer (256) / ByBlock (0) -> use the entity's layer color
+    {
+      int layeraci = LayerColorACI(GetLayerName(entity));
+      if((layeraci > 0) && (layeraci < 256)) aci = layeraci;
     }
 
   return ColorFromACI(aci);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRP2DVECTORFILEDXFRENDERAGG::BuildLayerTable(GRPVECTORFILEDXF* dxf)
+* @brief      Build layer table : parse the LAYER records of the TABLES section directly from the file (the interpreter
+*             does not parse TABLES), so entities coloured ByLayer can resolve their colour. Each LAYER record carries
+*             its name (code 2) and its ACI colour (code 62; negative means the layer is off, the absolute value is the
+*             colour). The table is cached per file and only rebuilt when the file changes.
+* @note       INTERNAL. "0 / LAYER" only appears in the LAYER table, so scanning the whole file is safe.
+* @ingroup    GRAPHIC
+* @param[in]  dxf : loaded DXF file
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRP2DVECTORFILEDXFRENDERAGG::BuildLayerTable(GRPVECTORFILEDXF* dxf)
+{
+  if(dxf == layertabledxf) return;                                             // already built for this file
+
+  CleanLayerTable();
+  layertabledxf = dxf;
+
+  if(!dxf) return;
+
+  XPATH* path = dxf->GetPathFile();
+  if(!path) return;
+
+  XFILETXT* file = GEN_NEW XFILETXT();
+  if(!file) return;
+
+  if(file->Open(*path))
+    {
+      file->ReadAllFile();
+
+      int     nlines   = file->GetNLines();
+
+      bool    inlayer  = false;                                                // inside a "0 / LAYER" record
+      bool    havename = false;
+      int     aci      = 7;
+      XSTRING name;
+
+      for(int l=0; (l + 1) < nlines; l += 2)                                   // DXF is a strict (group code, value) pair stream
+        {
+          XSTRING* codeline = file->GetLine(l);
+          XSTRING* valline  = file->GetLine(l + 1);
+          if(!codeline || !valline) continue;
+
+          GRPVECTORFILEDXF::ParserTextFilePrepareLine(codeline);               // trim exactly as the interpreter does (so layer names match the entities')
+          GRPVECTORFILEDXF::ParserTextFilePrepareLine(valline);
+
+          int code = codeline->ConvertToInt();
+
+          if(code == 0)
+            {
+              if(inlayer && havename)                                          // flush the record that just ended
+                {
+                  XSTRING* nm = GEN_NEW XSTRING();
+                  if(nm)
+                    {
+                      nm->Set(name);
+                      layernames.Add(nm);
+                      layeracis.Add(aci);
+                    }
+                }
+
+              inlayer  = (valline->Compare(__L("LAYER"), true) == 0);
+              havename = false;
+              aci      = 7;
+              name.Empty();
+            }
+           else if(inlayer)
+            {
+              if(code == 2)        { name.Set(*valline);  havename = true; }
+               else if(code == 62) { int n = valline->ConvertToInt();  aci = (n < 0) ? -n : n; }
+            }
+        }
+
+      if(inlayer && havename)                                                  // flush the last record if the file ends inside it
+        {
+          XSTRING* nm = GEN_NEW XSTRING();
+          if(nm)
+            {
+              nm->Set(name);
+              layernames.Add(nm);
+              layeracis.Add(aci);
+            }
+        }
+    }
+
+  GEN_DELETE file;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int GRP2DVECTORFILEDXFRENDERAGG::LayerColorACI(XCHAR* layername)
+* @brief      Layer color ACI : ACI colour of a layer by name (case-insensitive)
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* @param[in]  layername : layer name
+* @return     int : ACI colour, or 256 if the layer is unknown.
+* --------------------------------------------------------------------------------------------------------------------*/
+int GRP2DVECTORFILEDXFRENDERAGG::LayerColorACI(XCHAR* layername)
+{
+  if(!layername) return 256;
+
+  for(XDWORD c=0; c<layernames.GetSize(); c++)
+    {
+      XSTRING* nm = layernames.Get(c);
+      if(nm && (nm->Compare(layername, true) == 0)) return layeracis.Get(c);
+    }
+
+  return 256;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XCHAR* GRP2DVECTORFILEDXFRENDERAGG::GetLayerName(GRPVECTORFILEDXFENTITY* entity)
+* @brief      Get layer name : the entity's layer (group code 8 / G_LAYER_NAME)
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* @param[in]  entity : raw entity
+* @return     XCHAR* : layer name or NULL.
+* --------------------------------------------------------------------------------------------------------------------*/
+XCHAR* GRP2DVECTORFILEDXFRENDERAGG::GetLayerName(GRPVECTORFILEDXFENTITY* entity)
+{
+  if(!entity) return NULL;
+
+  XVECTOR<GRPVECTORFILEDXFVALUE*>* values = entity->GetValues();
+
+  for(XDWORD c=0; c<values->GetSize(); c++)
+    {
+      GRPVECTORFILEDXFVALUE* value = values->Get(c);
+      if(!value) continue;
+
+      if(value->GetType() == 8)  return (XCHAR*)(*value->GetData());
+
+      if(value->GetName() && !value->GetName()->Compare(__L("G_LAYER_NAME"), true))  return (XCHAR*)(*value->GetData());
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRP2DVECTORFILEDXFRENDERAGG::CleanLayerTable()
+* @brief      Clean layer table : free the cached LAYER table
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRP2DVECTORFILEDXFRENDERAGG::CleanLayerTable()
+{
+  for(XDWORD c=0; c<layernames.GetSize(); c++)
+    {
+      XSTRING* nm = layernames.Get(c);
+      if(nm) GEN_DELETE nm;
+    }
+
+  layernames.DeleteAll();
+  layeracis.DeleteAll();
+
+  layertabledxf = NULL;
 }
 
 
@@ -2227,4 +2729,6 @@ void GRP2DVECTORFILEDXFRENDERAGG::Clean()
 
   forcecoloractive = false;
   forcecolor       = GRP2DCOLOR_RGBA8(0, 0, 0, 255);
+
+  CleanLayerTable();                                                           // frees the cached LAYER table and resets layertabledxf
 }

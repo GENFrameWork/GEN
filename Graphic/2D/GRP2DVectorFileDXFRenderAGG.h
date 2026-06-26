@@ -102,6 +102,7 @@ class GRP2DVECTORFILEDXFRENDERAGG
     bool                            RenderPolyLine             (GRPVECTORFILEDXFENTITY* entity, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, XDWORD& index, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas);
     bool                            RenderPoint                (GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas);
     bool                            RenderText                 (GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas);
+    bool                            RenderMText                (GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas);
     bool                            Render3DFace               (GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas);
     bool                            RenderSpline               (GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas);
     bool                            RenderSolid                (GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas);
@@ -124,6 +125,11 @@ class GRP2DVECTORFILEDXFRENDERAGG
     XCHAR*                          GetValueString             (GRPVECTORFILEDXFENTITY* entity, int groupcode);
 
     GRP2DCOLOR_RGBA8                ResolveColor               (GRPVECTORFILEDXFENTITY* entity);
+
+    void                            BuildLayerTable            (GRPVECTORFILEDXF* dxf);                       // parse the LAYER table (name code 2, color code 62) from the file
+    int                             LayerColorACI              (XCHAR* layername);                            // ACI color for a layer name (256 = not found / ByLayer)
+    XCHAR*                          GetLayerName               (GRPVECTORFILEDXFENTITY* entity);              // entity layer name (code 8 / G_LAYER_NAME)
+    void                            CleanLayerTable            ();                                            // free the layer table
     GRP2DCOLOR_RGBA8                ColorFromACI               (int aci);
 
     void                            Clean                      ();
@@ -149,4 +155,8 @@ class GRP2DVECTORFILEDXFRENDERAGG
 
     bool                            forcecoloractive;                            // ignore ACI, use forcecolor
     GRP2DCOLOR_RGBA8                forcecolor;                                  // single override color
+
+    GRPVECTORFILEDXF*               layertabledxf;                               // file the LAYER table was built for (rebuild only when the file changes)
+    XVECTOR<XSTRING*>               layernames;                                  // LAYER table : layer names (parallel to layeracis)
+    XVECTOR<int>                    layeracis;                                   // LAYER table : ACI color per layer (parallel to layernames)
 };

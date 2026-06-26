@@ -58,7 +58,8 @@ enum UI_ELEMENT_TYPE
 	UI_ELEMENT_TYPE_MENU															,				
 	UI_ELEMENT_TYPE_LISTBOX														,		
 	UI_ELEMENT_TYPE_PROGRESSBAR												,	
-	UI_ELEMENT_TYPE_SCROLL															
+	UI_ELEMENT_TYPE_SCROLL														,
+  UI_ELEMENT_TYPE_GAUGE_RADIAL             
 };				
 
 

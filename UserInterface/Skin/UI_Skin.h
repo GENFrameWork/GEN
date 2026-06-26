@@ -130,7 +130,7 @@ class UI_SKIN
     virtual double                    GetHeightString                     (XSTRING& string, XDWORD sizefont = 12);   
 	
     bool                              CalculateBoundaryLine               (UI_ELEMENT* element, bool adjustsizemargin = false);
-
+        
     virtual bool                      CalculateBoundaryLine_Scroll        (UI_ELEMENT* element, bool adjustsizemargin = false);    
 	  virtual bool                      CalculateBoundaryLine_Text		      (UI_ELEMENT* element, bool adjustsizemargin = false);
     virtual bool                      CalculateBoundaryLine_TextBox	      (UI_ELEMENT* element, bool adjustsizemargin = false);	  
@@ -145,6 +145,7 @@ class UI_SKIN
     virtual bool                      CalculateBoundaryLine_Menu				  (UI_ELEMENT* element, bool adjustsizemargin = false); 
     virtual bool                      CalculateBoundaryLine_ListBox 		  (UI_ELEMENT* element, bool adjustsizemargin = false);  
     virtual bool                      CalculateBoundaryLine_ProgressBar	  (UI_ELEMENT* element, bool adjustsizemargin = false);  
+    virtual bool                      CalculateBoundaryLine_GaugeRadial   (UI_ELEMENT* element, bool adjustsizemargin = false);
 
     bool											        CalculeBoundaryLine_AllElements			(UI_ELEMENT* element, bool recursive = true);
       
@@ -168,7 +169,8 @@ class UI_SKIN
     virtual bool                      Draw_Form                           (UI_ELEMENT* element);
     virtual bool                      Draw_Menu				                    (UI_ELEMENT* element);
     virtual bool                      Draw_ListBox                        (UI_ELEMENT* element);  
-    virtual bool                      Draw_ProgressBar                    (UI_ELEMENT* element);     
+    virtual bool                      Draw_ProgressBar                    (UI_ELEMENT* element);  
+    virtual bool                      Draw_GaugeRadial                    (UI_ELEMENT* element);    
 
   protected:
 

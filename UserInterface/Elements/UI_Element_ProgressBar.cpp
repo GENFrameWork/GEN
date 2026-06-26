@@ -145,6 +145,36 @@ UI_COLOR* UI_ELEMENT_PROGRESSBAR::GetLineColor()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool UI_ELEMENT_PROGRESSBAR::GetRoundCap()
+* @brief      get round cap
+* @ingroup    USERINTERFACE
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT_PROGRESSBAR::GetRoundCap()
+{ 
+  return roundcap; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void UI_ELEMENT_PROGRESSBAR::SetRoundCap(bool roundcap)
+* @brief      set round cap
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  roundcap : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_PROGRESSBAR::SetRoundCap(bool roundcap)
+{ 
+  this->roundcap = roundcap; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         UI_ELEMENT* UI_ELEMENT_PROGRESSBAR::GetProgressRect()
 * @brief      Get progress rect
 * @ingroup    USERINTERFACE
@@ -310,6 +340,8 @@ XDWORD UI_ELEMENT_PROGRESSBAR::ContinuousCycle_GetTimeStep()
 void UI_ELEMENT_PROGRESSBAR::Clean()
 {  
   level                         = 0.0f;
+
+  roundcap                      = false;
 
   progressrect                  = NULL;
 

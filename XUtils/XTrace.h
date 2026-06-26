@@ -90,8 +90,8 @@ enum XTRACE_TYPE_STATUS_MSG
   #define XTRACE_MAXNETBUFFER               512
 #else
   #define XTRACE_SIZELIMITDEFAULT           64*1024   // Bytes
-  #define XTRACE_MINNTARGETS                3
-  #define XTRACE_MAXNTARGETS                5
+  #define XTRACE_MINNTARGETS                4
+  #define XTRACE_MAXNTARGETS                6
   #define XTRACE_MAXSIZEDATABLOCK           10240
   #define XTRACE_MAXNETBUFFER               512
 #endif
