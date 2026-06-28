@@ -3959,7 +3959,10 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
     }
 
 
-  ChangeTextElementValue(layout, element_progressbar);                               
+  ChangeTextElementValue(layout, element_progressbar);                                // FIX1: resolve the percent text to its real value BEFORE measuring the boundary
+
+  GetLayoutElement_CalculateBoundaryLine(layout, element_progressbar);                // calculate the boundary / rebuild area. This call was accidentally overwritten by FIX1; for bars WITH text the boundary
+                                                                                      // was re-derived inside ChangeTextElementValue (FIX2), masking the loss, but a textless continuous bar was never measured -> not drawn.
 
   return element_progressbar;
 }
