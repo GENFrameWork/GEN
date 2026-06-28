@@ -74,104 +74,107 @@ class UI_PROPERTY_SCROLLEABLE;
 class UI_SKINCANVAS_REBUILDAREAS : public GRP2DREBUILDAREAS
 {
 	public:
-																		  UI_SKINCANVAS_REBUILDAREAS					(GRPSCREEN* screen, int viewportindex = 0);
-    virtual													 ~UI_SKINCANVAS_REBUILDAREAS					();
+																		  UI_SKINCANVAS_REBUILDAREAS							(GRPSCREEN* screen, int viewportindex = 0);
+    virtual													 ~UI_SKINCANVAS_REBUILDAREAS							();
 
-		bool															RebuildAllAreas											();    
-		bool															RebuildAllAreas											(UI_LAYOUT* layout);
-		bool															RebuildAllAreas											(UI_ELEMENT* element);
+		bool															RebuildAllAreas													();    
+		bool															RebuildAllAreas													(UI_LAYOUT* layout);
+		bool															RebuildAllAreas													(UI_ELEMENT* element);
 
-    bool                              CreateRebuildArea										(double x, double y, double width, double height, UI_ELEMENT* element);
+    bool                              CreateRebuildArea												(double x, double y, double width, double height, UI_ELEMENT* element);
 
-    GRPBITMAP*												GetBitmap														(double x, double y, double width, double height);
-    void															PutBitmapNoAlpha										(double x, double y, GRPBITMAP* bitmap);
+    GRPBITMAP*												GetBitmap																(double x, double y, double width, double height);
+    void															PutBitmapNoAlpha												(double x, double y, GRPBITMAP* bitmap);
   
-		GRP2DREBUILDAREA*									GetRebuildAreaByElement							(UI_ELEMENT* element);					
+		GRP2DREBUILDAREA*									GetRebuildAreaByElement									(UI_ELEMENT* element);					
 
 	private:
 
-		void															Clean																();		
+		void															Clean																		();		
 
 		GRPSCREEN*												screen;
 		int																viewportindex;
-		GRP2DCANVAS*												canvas; 		
+		GRP2DCANVAS*											canvas; 		
 };
 
 
 class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 {
   public:
-																		  UI_SKINCANVAS												(GRPSCREEN* screen, int viewportindex = 0);
-    virtual													 ~UI_SKINCANVAS												();
+																		  UI_SKINCANVAS														(GRPSCREEN* screen, int viewportindex = 0);
+    virtual													 ~UI_SKINCANVAS														();
 
-		static void												GetScrollViewportSize								(UI_ELEMENT* element, double& width, double& height);   // Form -> visiblerect window; else boundaryline
+		static void												GetScrollViewportSize										(UI_ELEMENT* element, double& width, double& height);   // Form -> visiblerect window; else boundaryline
 
-		GRPSCREEN*                        GetScreen														(); 
-		GRP2DCANVAS*                      GetCanvas														(); 
+		GRPSCREEN*                        GetScreen																(); 
+		GRP2DCANVAS*                      GetCanvas																(); 
 		
-		bool															LoadFonts														();
+		bool															LoadFonts																();
 
-		bool															GetFatherSize												(UI_ELEMENT* element, double& width, double& height);
-		double														GetPositionWithoutDefine						(double position);
-		bool															SetAroundFromSubElements						(UI_ELEMENT* element);
-		bool															AddPositionSubElements							(UI_ELEMENT* element);
-		bool															CalculePosition											(UI_ELEMENT* element, double fatherwidth, double fatherheight, bool adjustsizemargin = false);
+		bool															GetFatherSize														(UI_ELEMENT* element, double& width, double& height);
+		double														GetPositionWithoutDefine								(double position);
+		bool															SetAroundFromSubElements								(UI_ELEMENT* element);
+		bool															AddPositionSubElements									(UI_ELEMENT* element);
+		bool															CalculePosition													(UI_ELEMENT* element, double fatherwidth, double fatherheight, bool adjustsizemargin = false);
 
-    double														GetWidthString                       (XCHAR* string, XDWORD sizefont = 12);  
-    double														GetHeightString                     (XCHAR* string, XDWORD sizefont = 12);  
+    double														GetWidthString													(XCHAR* string, XDWORD sizefont = 12);  
+    double														GetHeightString													(XCHAR* string, XDWORD sizefont = 12);  
 				           
-	  virtual bool                      CalculateBoundaryLine_Scroll        (UI_ELEMENT* element, bool adjustsizemargin = false);
-	  virtual bool                      CalculateBoundaryLine_Text		      (UI_ELEMENT* element, bool adjustsizemargin = false);
-	  virtual bool                      CalculateBoundaryLine_TextBox				(UI_ELEMENT* element, bool adjustsizemargin = false);
-	  virtual bool                      CalculateBoundaryLine_Image   	    (UI_ELEMENT* element, bool adjustsizemargin = false);
-		virtual bool                      CalculateBoundaryLine_Animation	    (UI_ELEMENT* element, bool adjustsizemargin = false);
-		virtual bool                      CalculateBoundaryLine_Option		    (UI_ELEMENT* element, bool adjustsizemargin = false);
-		virtual bool                      CalculateBoundaryLine_MultiOption	  (UI_ELEMENT* element, bool adjustsizemargin = false);
-	  virtual bool                      CalculateBoundaryLine_Button		    (UI_ELEMENT* element, bool adjustsizemargin = false);
-		virtual bool                      CalculateBoundaryLine_CheckBox		  (UI_ELEMENT* element, bool adjustsizemargin = false);
-		virtual bool                      CalculateBoundaryLine_EditText		  (UI_ELEMENT* element, bool adjustsizemargin = false);	  
-	  virtual bool                      CalculateBoundaryLine_Form          (UI_ELEMENT* element, bool adjustsizemargin = false);
-		virtual bool                      CalculateBoundaryLine_Menu				  (UI_ELEMENT* element, bool adjustsizemargin = false);
-		virtual bool                      CalculateBoundaryLine_ListBox			  (UI_ELEMENT* element, bool adjustsizemargin = false);
-		virtual bool                      CalculateBoundaryLine_ProgressBar	  (UI_ELEMENT* element, bool adjustsizemargin = false);
-    virtual bool                      CalculateBoundaryLine_GaugeRadial   (UI_ELEMENT* element, bool adjustsizemargin = false);
+	  virtual bool                      CalculateBoundaryLine_Scroll						(UI_ELEMENT* element, bool adjustsizemargin = false);
+	  virtual bool                      CalculateBoundaryLine_Text							(UI_ELEMENT* element, bool adjustsizemargin = false);
+	  virtual bool                      CalculateBoundaryLine_TextBox						(UI_ELEMENT* element, bool adjustsizemargin = false);
+	  virtual bool                      CalculateBoundaryLine_Image   					(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_Animation					(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_Option						(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_MultiOption				(UI_ELEMENT* element, bool adjustsizemargin = false);
+	  virtual bool                      CalculateBoundaryLine_Button						(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_CheckBox					(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_EditText					(UI_ELEMENT* element, bool adjustsizemargin = false);	  
+	  virtual bool                      CalculateBoundaryLine_Form							(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_Menu							(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_ListBox						(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_ProgressBar				(UI_ELEMENT* element, bool adjustsizemargin = false);
+    virtual bool                      CalculateBoundaryLine_ProgressRadial		(UI_ELEMENT* element, bool adjustsizemargin = false);
+		virtual bool                      CalculateBoundaryLine_ProgressImage			(UI_ELEMENT* element, bool adjustsizemargin = false);
+    
 
-		virtual bool                      SetElementPosition                  (UI_ELEMENT* element, double x_position, double y_position);
+		virtual bool                      SetElementPosition											(UI_ELEMENT* element, double x_position, double y_position);
 		        
-	  virtual bool                      Draw_Scroll													(UI_ELEMENT* element);
-	  virtual bool                      Draw_Text														(UI_ELEMENT* element);
-		virtual bool											Draw_TextBox												(UI_ELEMENT* element);
-	  virtual bool                      Draw_Image  												(UI_ELEMENT* element);
-		virtual bool                      Draw_Animation											(UI_ELEMENT* element);
-		virtual bool                      Draw_Option													(UI_ELEMENT* element);
-		virtual bool                      Draw_MultiOption										(UI_ELEMENT* element);
-	  virtual bool                      Draw_Button													(UI_ELEMENT* element);
-		virtual bool											Draw_CheckBox												(UI_ELEMENT* element);
-		virtual bool											Draw_EditText												(UI_ELEMENT* element);		
-	  virtual bool                      Draw_Form														(UI_ELEMENT* element);
-		virtual bool											Draw_Menu														(UI_ELEMENT* element);
-		virtual bool											Draw_ListBox												(UI_ELEMENT* element);
-		virtual bool											Draw_ProgressBar										(UI_ELEMENT* element);
-    virtual bool                      Draw_GaugeRadial                    (UI_ELEMENT* element);
+	  virtual bool                      Draw_Scroll															(UI_ELEMENT* element);
+	  virtual bool                      Draw_Text																(UI_ELEMENT* element);
+		virtual bool											Draw_TextBox														(UI_ELEMENT* element);
+	  virtual bool                      Draw_Image  														(UI_ELEMENT* element);
+		virtual bool                      Draw_Animation													(UI_ELEMENT* element);
+		virtual bool                      Draw_Option															(UI_ELEMENT* element);
+		virtual bool                      Draw_MultiOption												(UI_ELEMENT* element);
+	  virtual bool                      Draw_Button															(UI_ELEMENT* element);
+		virtual bool											Draw_CheckBox														(UI_ELEMENT* element);
+		virtual bool											Draw_EditText														(UI_ELEMENT* element);		
+	  virtual bool                      Draw_Form																(UI_ELEMENT* element);
+		virtual bool											Draw_Menu																(UI_ELEMENT* element);
+		virtual bool											Draw_ListBox														(UI_ELEMENT* element);
+		virtual bool											Draw_ProgressBar												(UI_ELEMENT* element);
+    virtual bool                      Draw_ProgressRadial											(UI_ELEMENT* element);
+    virtual bool                      Draw_ProgressImage											(UI_ELEMENT* element);
 
   protected: 
 
-		bool															GetFontSize													(XCHAR* text, XDWORD& width, XDWORD& height);
-		bool															SetFontSize													(XDWORD size);
+		bool															GetFontSize															(XCHAR* text, XDWORD& width, XDWORD& height);
+		bool															SetFontSize															(XDWORD size);
 
-		bool															DrawBackgroundColor									(UI_ELEMENT* element, GRP2DCANVAS* canvas, double x_position, double y_position);
+		bool															DrawBackgroundColor											(UI_ELEMENT* element, GRP2DCANVAS* canvas, double x_position, double y_position);
 
-		bool															PreDrawFunction											(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge = 5);
-		bool															PostDrawFunction										(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double  x_position, double  y_position);
+		bool															PreDrawFunction													(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge = 5);
+		bool															PostDrawFunction												(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double  x_position, double  y_position);
 
-		bool															DrawScrollBars											(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRP2DCANVAS* canvas, double x_position, double y_position);
-		bool															ResolveScrollPolicy										(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable);
+		bool															DrawScrollBars													(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRP2DCANVAS* canvas, double x_position, double y_position);
+		bool															ResolveScrollPolicy											(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable);
 			
-		double														TextBox_SizeLine										(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, int nline, XSTRING& characterstr, XDWORD index_char, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts);
-		bool															TextBox_GenerateLines								(UI_ELEMENT_TEXTBOX* element, GRP2DCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts); 
+		double														TextBox_SizeLine												(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, int nline, XSTRING& characterstr, XDWORD index_char, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts);
+		bool															TextBox_GenerateLines										(UI_ELEMENT_TEXTBOX* element, GRP2DCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts); 
 
 		#ifdef USERINTERFACE_DEBUG
-		bool															Debug_Draw													(UI_ELEMENT* element, double x_position, double y_position);	
+		bool															Debug_Draw															(UI_ELEMENT* element, double x_position, double y_position);	
 		#endif
 
 		XDWORD														fontsize;
@@ -181,7 +184,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 
 	private:
 
-		void															Clean																();		
+		void															Clean																		();		
 };
 
 

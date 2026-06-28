@@ -82,7 +82,8 @@
 #include "UI_Element_ListBox.h"
 #include "UI_Element_ProgressBar.h"
 #include "UI_Element_Scroll.h"
-#include "UI_Element_GaugeRadial.h"
+#include "UI_Element_ProgressRadial.h"
+#include "UI_Element_ProgressImage.h"
 
 #include "UI_VirtualKeyboard.h"
 
@@ -2015,22 +2016,26 @@ bool UI_MANAGER::ChangeAutomaticTextElementValue(UI_ELEMENT* element, XSTRING* m
   UI_ELEMENT* father = element->GetFather();
   if(father)
     {
-      if(father->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR || father->GetType() == UI_ELEMENT_TYPE_GAUGE_RADIAL)
+      if(father->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR     || 
+         father->GetType() == UI_ELEMENT_TYPE_PROGRESSRADIAL  ||
+         father->GetType() == UI_ELEMENT_TYPE_PROGRESSIMAGE)
         {
           if(!maskvalue->Compare(__L("PROGRESSBAR_PERCENT"), true))
             {
-              UI_ELEMENT_PROGRESSBAR* element_progressbar = (UI_ELEMENT_PROGRESSBAR*)father;
-              static float last_level = -10;
-        
-              //if(last_level != element_progressbar->GetLevel())                
-                {              
-                  maskresolved->Format(__L("%d"), (int)element_progressbar->GetLevel());
-                  maskresolved->Add(__L("\x25"));
+              float level = 0.0f;
 
-                  last_level = element_progressbar->GetLevel();                                  
+              switch(father->GetType())                                                          // read the level from the ACTUAL father type: each progress class owns its
+                {                                                                                // own non-virtual GetLevel()/level member at a different offset, so a blind
+                  case UI_ELEMENT_TYPE_PROGRESSBAR    : level = ((UI_ELEMENT_PROGRESSBAR*)father)->GetLevel();    break;   // (PROGRESSBAR*) cast read the wrong memory for IMAGE -> always 0%.
+                  case UI_ELEMENT_TYPE_PROGRESSRADIAL : level = ((UI_ELEMENT_PROGRESS_RADIAL*)father)->GetLevel(); break;
+                  case UI_ELEMENT_TYPE_PROGRESSIMAGE  : level = ((UI_ELEMENT_PROGRESS_IMAGE*)father)->GetLevel();  break;
+                  default                             : break;
+                }
 
-                  return true;
-                }              
+              maskresolved->Format(__L("%d"), (int)level);
+              maskresolved->Add(__L("\x25"));
+
+              return true;
             }
         }
     }
@@ -2176,7 +2181,12 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
                                                                                           element_text->GetText()->Set(resolve);   
                                                                                               
                                                                                           ui_skincanvas->CalculeBoundaryLine_AllElements(element, false);
-                                                                                          ui_skincanvas->CalculePosition(element, width, height);                                                                                              
+                                                                                          ui_skincanvas->CalculePosition(element, width, height);
+
+                                                                                          if(father && ((father->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR) || (father->GetType() == UI_ELEMENT_TYPE_PROGRESSRADIAL) || (father->GetType() == UI_ELEMENT_TYPE_PROGRESSIMAGE)))
+                                                                                            {
+                                                                                              ui_skincanvas->CalculateBoundaryLine(father, false);   // re-apply progress allocationtext/boundary with the new text size (don't leave the text mis-placed by the plain CalculePosition above)
+                                                                                            }                                                                                              
 
                                                                                           Elements_SetToRedraw(element);    
                                                                                         }
@@ -3829,7 +3839,18 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
 
   XSTRING linecolor;
   GetLayoutElementValue(node, __L("linecolor"), linecolor);    
-  if(!linecolor.IsEmpty()) element_progressbar->GetLineColor()->SetFromString(linecolor);  
+  if(!linecolor.IsEmpty()) element_progressbar->GetLineColor()->SetFromString(linecolor);
+
+  XSTRING gradientcolor;
+  GetLayoutElementValue(node, __L("gradientcolor"), gradientcolor);
+  if(!gradientcolor.IsEmpty()) element_progressbar->GetGradientColor()->SetFromString(gradientcolor);
+
+  XSTRING gradientmode;
+  if(GetLayoutElementValue(node, __L("gradientmode"), gradientmode))
+    {
+      if(!gradientmode.Compare(__L("track"), true)) element_progressbar->SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_TRACK);
+      if(!gradientmode.Compare(__L("fill") , true)) element_progressbar->SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL);
+    }  
 
   double levelvalue = 0.0f;
   if(GetLayoutElementValue(node, __L("level"), levelvalue)) element_progressbar->SetLevel((float)levelvalue);
@@ -3938,7 +3959,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
     }
 
 
-  GetLayoutElement_CalculateBoundaryLine(layout, element_progressbar);
+  ChangeTextElementValue(layout, element_progressbar);                               
 
   return element_progressbar;
 }
@@ -3946,8 +3967,8 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_GaugeRadial(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
-* @brief      Get layout element radial gauge
+* @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressRadial(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+* @brief      Get layout element radial progress
 * @ingroup    USERINTERFACE
 *
 * @param[in]  node :
@@ -3958,58 +3979,69 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
 * @return     UI_ELEMENT* : the created (or reused) element, NULL on error.
 *
 * ---------------------------------------------------------------------------------------------------------------------*/
-UI_ELEMENT* UI_MANAGER::GetLayoutElement_GaugeRadial(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressRadial(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {
   double                    value         = 0.0f;
-  UI_ELEMENT_GAUGE_RADIAL*  element_gauge = NULL;
+  UI_ELEMENT_PROGRESS_RADIAL*  element_progress = NULL;
 
   if(element_legacy)
     {
-      element_gauge = (UI_ELEMENT_GAUGE_RADIAL*)element_legacy;
+      element_progress = (UI_ELEMENT_PROGRESS_RADIAL*)element_legacy;
     }
    else
     {
-      element_gauge = GEN_NEW UI_ELEMENT_GAUGE_RADIAL();
-      if(!element_gauge) return NULL;
+      element_progress = GEN_NEW UI_ELEMENT_PROGRESS_RADIAL();
+      if(!element_progress) return NULL;
     }
 
-  element_gauge->SetFather(father);
+  element_progress->SetFather(father);
 
-  if(!GetLayoutElement_Base(node, layout, element_gauge))
+  if(!GetLayoutElement_Base(node, layout, element_progress))
     {
-      GEN_DELETE element_gauge;
+      GEN_DELETE element_progress;
       return NULL;
     }
 
-  SetLevelAuto(element_gauge, father);
+  SetLevelAuto(element_progress, father);
 
-  element_gauge->SetActive(true);
+  element_progress->SetActive(true);
 
   // Value arc gradient END color (gradient START is the base "color"; track ring is "bckgrdcolor").
   XSTRING linecolor;
   GetLayoutElementValue(node, __L("linecolor"), linecolor);
-  if(!linecolor.IsEmpty()) element_gauge->GetLineColor()->SetFromString(linecolor);
+  if(!linecolor.IsEmpty()) element_progress->GetLineColor()->SetFromString(linecolor);
+
+  XSTRING gradientcolor;
+  GetLayoutElementValue(node, __L("gradientcolor"), gradientcolor);
+  if(!gradientcolor.IsEmpty()) element_progress->GetGradientColor()->SetFromString(gradientcolor);
+
+  XSTRING gradientmode;
+  if(GetLayoutElementValue(node, __L("gradientmode"), gradientmode))
+    {
+      if(!gradientmode.Compare(__L("track"), true)) element_progress->SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_TRACK);
+      if(!gradientmode.Compare(__L("fill") , true)) element_progress->SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL);
+    }
 
   // Level [0..100].
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("level"), value))      element_gauge->SetLevel((float)value);
+  if(GetLayoutElementValue(node, __L("level"), value))      element_progress->SetLevel((float)value);
 
   // Geometry.
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("startangle"), value)) element_gauge->SetStartAngle(value);
+  if(GetLayoutElementValue(node, __L("startangle"), value)) element_progress->SetStartAngle(value);
 
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("sweepangle"), value)) element_gauge->SetSweepAngle(value);
+  if(GetLayoutElementValue(node, __L("sweepangle"), value)) element_progress->SetSweepAngle(value);
 
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("thickness"), value))  element_gauge->SetThickness(value);
+  if(GetLayoutElementValue(node, __L("thickness"), value))  element_progress->SetThickness(value);
 
   XSTRING roundcapstr;
   if(GetLayoutElementValue(node, __L("roundcap"), roundcapstr))
     {
       if(!roundcapstr.Compare(__L("yes"),  true) ||
          !roundcapstr.Compare(__L("true"), true) ||
-         !roundcapstr.Compare(__L("1"),    true))   element_gauge->SetRoundCap(true);
+         !roundcapstr.Compare(__L("1"),    true))   element_progress->SetRoundCap(true);
     }
 
   // Child <text> => centered caption.
@@ -4021,15 +4053,15 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_GaugeRadial(XFILEXMLELEMENT* node, UI_L
           XSTRING type;
           if(GetLayoutElementValue(nodeelement, __L("type"), type))
             {
-              UI_ELEMENT* element = CreatePartialLayout(nodeelement, layout, element_gauge);
+              UI_ELEMENT* element = CreatePartialLayout(nodeelement, layout, element_progress);
               if(element)
                 {
-                  element->SetFather(element_gauge);
+                  element->SetFather(element_progress);
 
                   switch(element->GetType())
                     {
-                      case UI_ELEMENT_TYPE_TEXT : element_gauge->Set_UIText((UI_ELEMENT_TEXT*)element);
-                                                  element_gauge->GetComposeElements()->Add(element);
+                      case UI_ELEMENT_TYPE_TEXT : element_progress->Set_UIText((UI_ELEMENT_TEXT*)element);
+                                                  element_progress->GetComposeElements()->Add(element);
                                                   break;
 
                                       default   : break;
@@ -4039,9 +4071,143 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_GaugeRadial(XFILEXMLELEMENT* node, UI_L
         }
     }
 
-  GetLayoutElement_CalculateBoundaryLine(layout, element_gauge);
+  GetLayoutElement_CalculateBoundaryLine(layout, element_progress);
 
-  return element_gauge;
+  return element_progress;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+* @brief      Get layout element progress image
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ELEMENT* : the created (or reused) element, NULL on error.
+*
+* ---------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+{
+  double                      value                 = 0.0f;
+  UI_ELEMENT_PROGRESS_IMAGE*  element_progressimage  = NULL;
+
+  if(element_legacy)
+    {
+      element_progressimage = (UI_ELEMENT_PROGRESS_IMAGE*)element_legacy;
+    }
+   else
+    {
+      element_progressimage = GEN_NEW UI_ELEMENT_PROGRESS_IMAGE();
+      if(!element_progressimage) return NULL;
+    }
+
+  element_progressimage->SetFather(father);
+
+  if(!GetLayoutElement_Base(node, layout, element_progressimage))
+    {
+      GEN_DELETE element_progressimage;
+      return NULL;
+    }
+
+  SetLevelAuto(element_progressimage, father);
+
+  element_progressimage->SetActive(true);
+
+  XSTRING allocationtextstr;
+  if(GetLayoutElementValue(node, __L("allocationtext"), allocationtextstr))
+    {
+      if(!allocationtextstr.Compare(__L("none")     , true)) element_progressimage->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_NONE);
+      if(!allocationtextstr.Compare(__L("up")       , true)) element_progressimage->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_UP);
+      if(!allocationtextstr.Compare(__L("down")     , true)) element_progressimage->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_DOWN);
+      if(!allocationtextstr.Compare(__L("right")    , true)) element_progressimage->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_RIGHT);
+      if(!allocationtextstr.Compare(__L("left")     , true)) element_progressimage->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_LEFT);
+      if(!allocationtextstr.Compare(__L("center")   , true)) element_progressimage->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_CENTER);
+    }
+
+  // alpha [0..100]
+  value = 0.0f;
+  if(GetLayoutElementValue(node, __L("alpha"), value)) element_progressimage->SetAlpha((XBYTE)value);
+
+  // level [0..100]
+  value = 0.0f;
+  if(GetLayoutElementValue(node, __L("level"), value)) element_progressimage->SetLevel((float)value);
+
+  value = 0.0f;
+  if(GetLayoutElementValue(node, __L("offsetstart"), value)) element_progressimage->SetOffsetStart(value);
+
+  value = 0.0f;
+  if(GetLayoutElementValue(node, __L("offsetend"),   value)) element_progressimage->SetOffsetEnd(value);
+
+  // resolve the draw mode once (same as GetLayoutElement_Image)
+  GRPPROPERTYMODE   grppropertymode = GRPPROPERTYMODE_XX_UNKNOWN;
+  UI_SKIN_DRAWMODE  drawmode        = UI_SKIN_DRAWMODE_UNKNOWN;
+
+  if(layout->GetSkin())
+    {
+      drawmode = layout->GetSkin()->GetDrawMode();
+
+      switch(drawmode)
+        {
+          case UI_SKIN_DRAWMODE_UNKNOWN   : break;
+
+          case UI_SKIN_DRAWMODE_CANVAS    : { UI_SKINCANVAS* skincanvas = (UI_SKINCANVAS*)layout->GetSkin();
+                                              if(skincanvas) grppropertymode = skincanvas->GetCanvas()->GetMode();
+                                            }
+                                            break;
+
+          case UI_SKIN_DRAWMODE_CONTEXT   : break;
+        }
+    }
+
+  // empty (0%) graphic
+  XSTRING fileempty;
+  GetLayoutElementValue(node, __L("imageempty"), fileempty);
+  if(!fileempty.IsEmpty())
+    {
+      UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), fileempty.Get());
+      if(animation && animation->GetBitmap()) element_progressimage->SetImageEmpty(animation->GetBitmap());
+    }
+
+  // full (100%) graphic
+  XSTRING filefull;
+  GetLayoutElementValue(node, __L("imagefull"), filefull);
+  if(!filefull.IsEmpty())
+    {
+      UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), filefull.Get());
+      if(animation && animation->GetBitmap()) element_progressimage->SetImageFull(animation->GetBitmap());
+    }
+
+  // child <text> => centered caption
+  for(int c=0; c<node->GetNElements(); c++)
+    {
+      XFILEXMLELEMENT* nodeelement = node->GetElement(c);
+      if(nodeelement)
+        {
+          XSTRING type;
+          if(GetLayoutElementValue(nodeelement, __L("type"), type))
+            {
+              UI_ELEMENT* element = CreatePartialLayout(nodeelement, layout, element_progressimage);
+              if(element)
+                {
+                  element->SetFather(element_progressimage);
+
+                  switch(element->GetType())
+                    {
+                      case UI_ELEMENT_TYPE_TEXT : element_progressimage->Set_UIText((UI_ELEMENT_TEXT*)element);
+                                                  element_progressimage->GetComposeElements()->Add(element);
+                                                  break;
+
+                                      default   : break;
+                    }
+                }
+            }
+        }
+    }
+
+  ChangeTextElementValue(layout, element_progressimage);                            
+  GetLayoutElement_CalculateBoundaryLine(layout, element_progressimage);
+
+  return element_progressimage;
 }
 
 
@@ -4130,10 +4296,16 @@ UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAY
           element = GetLayoutElement_ProgressBar(nodeelement, layout, father);      
         }
         
-      if(!value.Compare(__L("gaugeradial")   , true))
+      if(!value.Compare(__L("progressradial") , true))
         {
-          element = GetLayoutElement_GaugeRadial(nodeelement, layout, father);
+          element = GetLayoutElement_ProgressRadial(nodeelement, layout, father);
         }
+  
+      if(!value.Compare(__L("progressimage")   , true))
+        {
+          element = GetLayoutElement_ProgressImage(nodeelement, layout, father);
+        }
+
     }
 
   return element;

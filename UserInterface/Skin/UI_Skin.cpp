@@ -566,22 +566,23 @@ bool UI_SKIN::CalculateBoundaryLine(UI_ELEMENT* element, bool adjustsizemargin)
 
   switch(element->GetType())
     {
-      case UI_ELEMENT_TYPE_UNKNOWN				: return false;                                                                       break;	    
-	    case UI_ELEMENT_TYPE_SCROLL				  : return CalculateBoundaryLine_Scroll(element, adjustsizemargin);                     break;
-	    case UI_ELEMENT_TYPE_TEXT					  : return CalculateBoundaryLine_Text(element, adjustsizemargin);                       break; 	
-      case UI_ELEMENT_TYPE_TEXTBOX			  : return CalculateBoundaryLine_TextBox(element, adjustsizemargin);                    break;    
-	    case UI_ELEMENT_TYPE_IMAGE     			: return CalculateBoundaryLine_Image(element, adjustsizemargin);	                    break;
-      case UI_ELEMENT_TYPE_ANIMATION 			: return CalculateBoundaryLine_Animation(element, adjustsizemargin);	                break;
-      case UI_ELEMENT_TYPE_OPTION					: return CalculateBoundaryLine_Option(element, adjustsizemargin);                     break;
-      case UI_ELEMENT_TYPE_MULTIOPTION		: return CalculateBoundaryLine_MultiOption(element, adjustsizemargin);                break;
-	    case UI_ELEMENT_TYPE_BUTTON					: return CalculateBoundaryLine_Button(element, adjustsizemargin);                     break;	    	    
-      case UI_ELEMENT_TYPE_CHECKBOX 			: return CalculateBoundaryLine_CheckBox(element, adjustsizemargin);                   break;	    	    
-      case UI_ELEMENT_TYPE_EDITTEXT   		: return CalculateBoundaryLine_EditText(element, adjustsizemargin);                   break;	      
-      case UI_ELEMENT_TYPE_FORM						: return CalculateBoundaryLine_Form(element, adjustsizemargin);                       break; 
-      case UI_ELEMENT_TYPE_MENU           : return CalculateBoundaryLine_Menu(element, adjustsizemargin);                       break;                  
-      case UI_ELEMENT_TYPE_LISTBOX        : return CalculateBoundaryLine_ListBox(element, adjustsizemargin);                    break;                  
-      case UI_ELEMENT_TYPE_PROGRESSBAR	  : return CalculateBoundaryLine_ProgressBar(element, adjustsizemargin);                break;  
-      case UI_ELEMENT_TYPE_GAUGE_RADIAL   : return CalculateBoundaryLine_GaugeRadial(element, adjustsizemargin);             break;      
+      case UI_ELEMENT_TYPE_UNKNOWN				  : return false;                                                               break;	    
+	    case UI_ELEMENT_TYPE_SCROLL				    : return CalculateBoundaryLine_Scroll(element, adjustsizemargin);             break;
+	    case UI_ELEMENT_TYPE_TEXT					    : return CalculateBoundaryLine_Text(element, adjustsizemargin);               break; 	
+      case UI_ELEMENT_TYPE_TEXTBOX			    : return CalculateBoundaryLine_TextBox(element, adjustsizemargin);            break;    
+	    case UI_ELEMENT_TYPE_IMAGE     			  : return CalculateBoundaryLine_Image(element, adjustsizemargin);	            break;
+      case UI_ELEMENT_TYPE_ANIMATION 			  : return CalculateBoundaryLine_Animation(element, adjustsizemargin);	        break;
+      case UI_ELEMENT_TYPE_OPTION					  : return CalculateBoundaryLine_Option(element, adjustsizemargin);             break;
+      case UI_ELEMENT_TYPE_MULTIOPTION		  : return CalculateBoundaryLine_MultiOption(element, adjustsizemargin);        break;
+	    case UI_ELEMENT_TYPE_BUTTON					  : return CalculateBoundaryLine_Button(element, adjustsizemargin);             break;	    	    
+      case UI_ELEMENT_TYPE_CHECKBOX 			  : return CalculateBoundaryLine_CheckBox(element, adjustsizemargin);           break;	    	    
+      case UI_ELEMENT_TYPE_EDITTEXT   		  : return CalculateBoundaryLine_EditText(element, adjustsizemargin);           break;	      
+      case UI_ELEMENT_TYPE_FORM						  : return CalculateBoundaryLine_Form(element, adjustsizemargin);               break; 
+      case UI_ELEMENT_TYPE_MENU             : return CalculateBoundaryLine_Menu(element, adjustsizemargin);               break;                  
+      case UI_ELEMENT_TYPE_LISTBOX          : return CalculateBoundaryLine_ListBox(element, adjustsizemargin);            break;                  
+      case UI_ELEMENT_TYPE_PROGRESSBAR	    : return CalculateBoundaryLine_ProgressBar(element, adjustsizemargin);        break;  
+      case UI_ELEMENT_TYPE_PROGRESSRADIAL  : return CalculateBoundaryLine_ProgressRadial(element, adjustsizemargin);     break;
+      case UI_ELEMENT_TYPE_PROGRESSIMAGE   : return CalculateBoundaryLine_ProgressImage(element, adjustsizemargin);      break;
     }
 
   return false;
@@ -842,8 +843,8 @@ bool UI_SKIN::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool adjust
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UI_SKIN::CalculateBoundaryLine_GaugeRadial(UI_ELEMENT* element, bool adjustsizemargin)
-* @brief      Calculate boundary line radial gauge
+* @fn         bool UI_SKIN::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bool adjustsizemargin)
+* @brief      Calculate boundary line radial progress
 * @ingroup    USERINTERFACE
 *
 * @param[in]  element :
@@ -852,7 +853,25 @@ bool UI_SKIN::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool adjust
 * @return     bool : true if is succesful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_SKIN::CalculateBoundaryLine_GaugeRadial(UI_ELEMENT* element, bool adjustsizemargin)
+bool UI_SKIN::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bool adjustsizemargin)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_SKIN::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, bool adjustsizemargin)
+* @brief      calculate boundary line  progress image
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : 
+* @param[in]  adjustsizemargin : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKIN::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, bool adjustsizemargin)
 {
   return false;
 }
@@ -1002,23 +1021,25 @@ bool UI_SKIN::Draw(UI_ELEMENT* element)
 
   switch(element->GetType())
     {
-      case UI_ELEMENT_TYPE_UNKNOWN				: break;  
-                             default      : break;
-      case UI_ELEMENT_TYPE_SCROLL				  : status = Draw_Scroll(element);            break;
-	    case UI_ELEMENT_TYPE_TEXT					  : status = Draw_Text(element);              break; 
-      case UI_ELEMENT_TYPE_TEXTBOX  			: status = Draw_TextBox(element);           break;	    
-	    case UI_ELEMENT_TYPE_IMAGE     			: status = Draw_Image(element);             break;
-      case UI_ELEMENT_TYPE_ANIMATION 			: status = Draw_Animation(element);	        break;
-      case UI_ELEMENT_TYPE_OPTION					: status = Draw_Option(element);            break;
-      case UI_ELEMENT_TYPE_MULTIOPTION		: status = Draw_MultiOption(element);       break;
-	    case UI_ELEMENT_TYPE_BUTTON					: status = Draw_Button(element);            break;	    	    
-      case UI_ELEMENT_TYPE_CHECKBOX 			: status = Draw_CheckBox(element);          break;	    	    
-      case UI_ELEMENT_TYPE_EDITTEXT       : status = Draw_EditText(element);          break;	      
-      case UI_ELEMENT_TYPE_FORM						: status = Draw_Form(element);              break;
-      case UI_ELEMENT_TYPE_MENU           : status = Draw_Menu(element);              break;             
-      case UI_ELEMENT_TYPE_LISTBOX        : status = Draw_ListBox(element);           break;             
-      case UI_ELEMENT_TYPE_PROGRESSBAR    : status = Draw_ProgressBar(element);       break;
-      case UI_ELEMENT_TYPE_GAUGE_RADIAL   : status = Draw_GaugeRadial(element);        break;      
+      case UI_ELEMENT_TYPE_UNKNOWN				  : break;  
+                             default        : break;
+      case UI_ELEMENT_TYPE_SCROLL				    : status = Draw_Scroll(element);           break;
+	    case UI_ELEMENT_TYPE_TEXT					    : status = Draw_Text(element);             break; 
+      case UI_ELEMENT_TYPE_TEXTBOX  			  : status = Draw_TextBox(element);          break;	    
+	    case UI_ELEMENT_TYPE_IMAGE     			  : status = Draw_Image(element);            break;
+      case UI_ELEMENT_TYPE_ANIMATION 			  : status = Draw_Animation(element);	       break;
+      case UI_ELEMENT_TYPE_OPTION					  : status = Draw_Option(element);           break;
+      case UI_ELEMENT_TYPE_MULTIOPTION		  : status = Draw_MultiOption(element);      break;
+	    case UI_ELEMENT_TYPE_BUTTON					  : status = Draw_Button(element);           break;	    	    
+      case UI_ELEMENT_TYPE_CHECKBOX 			  : status = Draw_CheckBox(element);         break;	    	    
+      case UI_ELEMENT_TYPE_EDITTEXT         : status = Draw_EditText(element);         break;	      
+      case UI_ELEMENT_TYPE_FORM						  : status = Draw_Form(element);             break;
+      case UI_ELEMENT_TYPE_MENU             : status = Draw_Menu(element);             break;             
+      case UI_ELEMENT_TYPE_LISTBOX          : status = Draw_ListBox(element);          break;             
+      case UI_ELEMENT_TYPE_PROGRESSBAR      : status = Draw_ProgressBar(element);      break;
+      case UI_ELEMENT_TYPE_PROGRESSRADIAL  : status = Draw_ProgressRadial(element);   break;
+      case UI_ELEMENT_TYPE_PROGRESSIMAGE   : status = Draw_ProgressImage(element);    break;
+
     }
 
   return status;
@@ -1265,8 +1286,8 @@ bool UI_SKIN::Draw_ProgressBar(UI_ELEMENT* element)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UI_SKIN::Draw_GaugeRadial(UI_ELEMENT* element)
-* @brief      Draw radial gauge
+* @fn         bool UI_SKIN::Draw_ProgressRadial(UI_ELEMENT* element)
+* @brief      Draw radial progress
 * @ingroup    USERINTERFACE
 *
 * @param[in]  element :
@@ -1274,7 +1295,24 @@ bool UI_SKIN::Draw_ProgressBar(UI_ELEMENT* element)
 * @return     bool : true if is succesful.
 *
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UI_SKIN::Draw_GaugeRadial(UI_ELEMENT* element)
+bool UI_SKIN::Draw_ProgressRadial(UI_ELEMENT* element)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_SKIN::Draw_ProgressImage(UI_ELEMENT* element)
+* @brief      draw  progress image
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKIN::Draw_ProgressImage(UI_ELEMENT* element)
 {
   return false;
 }

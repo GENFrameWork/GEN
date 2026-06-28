@@ -144,6 +144,42 @@ UI_COLOR* UI_ELEMENT_PROGRESSBAR::GetLineColor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* @fn         UI_COLOR* UI_ELEMENT_PROGRESSBAR::GetGradientColor()
+* @brief      Get the value-fill gradient END color (no gradient is drawn when its alpha is 0)
+* @ingroup    USERINTERFACE
+* @return     UI_COLOR* :
+* ---------------------------------------------------------------------------------------------------------------------*/
+UI_COLOR* UI_ELEMENT_PROGRESSBAR::GetGradientColor()
+{
+  return &gradientcolor;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         int UI_ELEMENT_PROGRESSBAR::GetGradientMode()
+* @brief      Get the gradient mode (FILL / TRACK)
+* @ingroup    USERINTERFACE
+* @return     int :
+* ---------------------------------------------------------------------------------------------------------------------*/
+int UI_ELEMENT_PROGRESSBAR::GetGradientMode()
+{
+  return gradientmode;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         void UI_ELEMENT_PROGRESSBAR::SetGradientMode(int gradientmode)
+* @brief      Set the gradient mode (FILL / TRACK)
+* @ingroup    USERINTERFACE
+* @param[in]  gradientmode :
+* ---------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_PROGRESSBAR::SetGradientMode(int gradientmode)
+{
+  this->gradientmode = gradientmode;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_ELEMENT_PROGRESSBAR::GetRoundCap()
 * @brief      get round cap
@@ -342,6 +378,8 @@ void UI_ELEMENT_PROGRESSBAR::Clean()
   level                         = 0.0f;
 
   roundcap                      = false;
+
+  gradientmode                  = UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL;
 
   progressrect                  = NULL;
 

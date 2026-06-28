@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UI_Element_GaugeRadial.cpp
+* @file       UI_Element_ProgressImage.cpp
 * 
-* @class      UI_ELEMENT_GAUGE_RADIAL
-* @brief      User Interface Element Radial Gauge class (circular / ring progress indicator)
+* @class      UI_ELEMENT_PROGRESS_IMAGE
+* @brief      User Interface Element Progress Image class (two-graphic clip-reveal progress indicator)
 * @ingroup    USERINTERFACE
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -34,7 +34,7 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "UI_Element_GaugeRadial.h"
+#include "UI_Element_ProgressImage.h"
 
 
 
@@ -54,44 +54,167 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_ELEMENT_GAUGE_RADIAL::UI_ELEMENT_GAUGE_RADIAL()
+* @fn         UI_ELEMENT_PROGRESS_IMAGE::UI_ELEMENT_PROGRESS_IMAGE()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
 *
 * ---------------------------------------------------------------------------------------------------------------------*/
-UI_ELEMENT_GAUGE_RADIAL::UI_ELEMENT_GAUGE_RADIAL()
+UI_ELEMENT_PROGRESS_IMAGE::UI_ELEMENT_PROGRESS_IMAGE()
 {
   Clean();
 
-  SetType(UI_ELEMENT_TYPE_GAUGE_RADIAL);
-  GetTypeString()->Set(__L("gaugeradial"));
+  SetType(UI_ELEMENT_TYPE_PROGRESSIMAGE);
+  GetTypeString()->Set(__L("progressimage"));
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_ELEMENT_GAUGE_RADIAL::~UI_ELEMENT_GAUGE_RADIAL()
+* @fn         UI_ELEMENT_PROGRESS_IMAGE::~UI_ELEMENT_PROGRESS_IMAGE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
 *
 * ---------------------------------------------------------------------------------------------------------------------*/
-UI_ELEMENT_GAUGE_RADIAL::~UI_ELEMENT_GAUGE_RADIAL()
+UI_ELEMENT_PROGRESS_IMAGE::~UI_ELEMENT_PROGRESS_IMAGE()
 {
+  // imageempty / imagefull are owned by the animation/bitmap cache, not by this element: do not delete.
+
   Clean();
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         float UI_ELEMENT_GAUGE_RADIAL::GetLevel()
+* @fn         GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageEmpty()
+* @brief      Get the empty (0%) graphic
+* @ingroup    USERINTERFACE
+*
+* @return     GRPBITMAP* : the empty graphic (cache-owned), or NULL
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageEmpty()
+{
+  return imageempty;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetImageEmpty(GRPBITMAP* image)
+* @brief      Set the empty (0%) graphic (pointer is cache-owned, not copied nor deleted by this element)
+* @ingroup    USERINTERFACE
+*
+* @param[in]  image : the empty graphic
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_PROGRESS_IMAGE::SetImageEmpty(GRPBITMAP* image)
+{
+  this->imageempty = image;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageFull()
+* @brief      Get the full (100%) graphic
+* @ingroup    USERINTERFACE
+*
+* @return     GRPBITMAP* : the full graphic (cache-owned), or NULL
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageFull()
+{
+  return imagefull;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetImageFull(GRPBITMAP* image)
+* @brief      Set the full (100%) graphic (pointer is cache-owned, not copied nor deleted by this element)
+* @ingroup    USERINTERFACE
+*
+* @param[in]  image : the full graphic
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_PROGRESS_IMAGE::SetImageFull(GRPBITMAP* image)
+{
+  this->imagefull = image;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double UI_ELEMENT_PROGRESS_IMAGE::GetOffsetStart()
+* @brief      get offset start
+* @ingroup    USERINTERFACE
+* 
+* @return     double : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT_PROGRESS_IMAGE::GetOffsetStart()
+{ 
+  return offsetstart; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetOffsetStart(double offsetstart)
+* @brief      set offset start
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  offsetstart : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_PROGRESS_IMAGE::SetOffsetStart(double offsetstart)  
+{ 
+  if(offsetstart < 0.0) offsetstart = 0.0; 
+  this->offsetstart = offsetstart; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double UI_ELEMENT_PROGRESS_IMAGE::GetOffsetEnd()
+* @brief      get offset end
+* @ingroup    USERINTERFACE
+* 
+* @return     double : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT_PROGRESS_IMAGE::GetOffsetEnd()
+{ 
+  return offsetend; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetOffsetEnd(double offsetend)
+* @brief      set offset end
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  offsetend : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_PROGRESS_IMAGE::SetOffsetEnd(double offsetend)
+{ 
+  if(offsetend < 0.0) offsetend = 0.0; this->offsetend = offsetend; 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         float UI_ELEMENT_PROGRESS_IMAGE::GetLevel()
 * @brief      Get level
 * @ingroup    USERINTERFACE
 *
 * @return     float : current level in the range [0 .. 100]
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-float UI_ELEMENT_GAUGE_RADIAL::GetLevel()
+float UI_ELEMENT_PROGRESS_IMAGE::GetLevel()
 {
   return level;
 }
@@ -99,14 +222,14 @@ float UI_ELEMENT_GAUGE_RADIAL::GetLevel()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void UI_ELEMENT_GAUGE_RADIAL::SetLevel(float level)
+* @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetLevel(float level)
 * @brief      Set level (clamped to [0 .. 100])
 * @ingroup    USERINTERFACE
 *
 * @param[in]  level : new level
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-void UI_ELEMENT_GAUGE_RADIAL::SetLevel(float level)
+void UI_ELEMENT_PROGRESS_IMAGE::SetLevel(float level)
 {
   if(level < 0)   level = 0;
   if(level > 100) level = 100;
@@ -117,156 +240,50 @@ void UI_ELEMENT_GAUGE_RADIAL::SetLevel(float level)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         double UI_ELEMENT_GAUGE_RADIAL::GetStartAngle()
-* @brief      Get start angle (degrees)
+* @fn         XBYTE UI_ELEMENT_PROGRESS_IMAGE::GetAlpha()
+* @brief      Get alpha (0 .. 100)
 * @ingroup    USERINTERFACE
 *
-* @return     double : start angle, in degrees (-90 = top / 12 o'clock)
+* @return     XBYTE : alpha
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-double UI_ELEMENT_GAUGE_RADIAL::GetStartAngle()
+XBYTE UI_ELEMENT_PROGRESS_IMAGE::GetAlpha()
 {
-  return startangle;
+  return alpha;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void UI_ELEMENT_GAUGE_RADIAL::SetStartAngle(double startangle)
-* @brief      Set start angle (degrees)
+* @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetAlpha(XBYTE alpha)
+* @brief      Set alpha (0 .. 100)
 * @ingroup    USERINTERFACE
 *
-* @param[in]  startangle : start angle in degrees
+* @param[in]  alpha : alpha
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-void UI_ELEMENT_GAUGE_RADIAL::SetStartAngle(double startangle)
+void UI_ELEMENT_PROGRESS_IMAGE::SetAlpha(XBYTE alpha)
 {
-  this->startangle = startangle;
+  if(alpha > 100) alpha = 100;
+
+  this->alpha = alpha;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         double UI_ELEMENT_GAUGE_RADIAL::GetSweepAngle()
-* @brief      Get sweep angle (degrees)
-* @ingroup    USERINTERFACE
-*
-* @return     double : sweep angle in degrees (positive = clockwise; 360 = full ring)
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-double UI_ELEMENT_GAUGE_RADIAL::GetSweepAngle()
-{
-  return sweepangle;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void UI_ELEMENT_GAUGE_RADIAL::SetSweepAngle(double sweepangle)
-* @brief      Set sweep angle (degrees)
-* @ingroup    USERINTERFACE
-*
-* @param[in]  sweepangle : sweep angle in degrees
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-void UI_ELEMENT_GAUGE_RADIAL::SetSweepAngle(double sweepangle)
-{
-  this->sweepangle = sweepangle;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         double UI_ELEMENT_GAUGE_RADIAL::GetThickness()
-* @brief      Get ring thickness (px). 0 means auto (a fraction of the radius)
-* @ingroup    USERINTERFACE
-*
-* @return     double : ring thickness in pixels
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-double UI_ELEMENT_GAUGE_RADIAL::GetThickness()
-{
-  return thickness;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void UI_ELEMENT_GAUGE_RADIAL::SetThickness(double thickness)
-* @brief      Set ring thickness (px). 0 means auto
-* @ingroup    USERINTERFACE
-*
-* @param[in]  thickness : ring thickness in pixels (0 = auto)
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-void UI_ELEMENT_GAUGE_RADIAL::SetThickness(double thickness)
-{
-  if(thickness < 0) thickness = 0;
-
-  this->thickness = thickness;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool UI_ELEMENT_GAUGE_RADIAL::GetRoundCap()
-* @brief      get round cap
-* @ingroup    USERINTERFACE
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool UI_ELEMENT_GAUGE_RADIAL::GetRoundCap()
-{ 
-  return roundcap; 
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-
-@fn         void UI_ELEMENT_GAUGE_RADIAL::SetRoundCap(bool roundcap)
-@brief      set round cap
-@ingroup    USERINTERFACE
-
-@param[in]  roundcap : 
-
---------------------------------------------------------------------------------------------------------------------*/
-void UI_ELEMENT_GAUGE_RADIAL::SetRoundCap(bool roundcap)    
-{ 
-  this->roundcap = roundcap; 
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         UI_COLOR* UI_ELEMENT_GAUGE_RADIAL::GetLineColor()
-* @brief      Get the value arc gradient END color (gradient START is GetColor())
-* @ingroup    USERINTERFACE
-*
-* @return     UI_COLOR* : the line (gradient end) color
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-UI_COLOR* UI_ELEMENT_GAUGE_RADIAL::GetLineColor()
-{
-  return &linecolor;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void UI_ELEMENT_GAUGE_RADIAL::Clean()
+* @fn         void UI_ELEMENT_PROGRESS_IMAGE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
 *
 * ---------------------------------------------------------------------------------------------------------------------*/
-void UI_ELEMENT_GAUGE_RADIAL::Clean()
+void UI_ELEMENT_PROGRESS_IMAGE::Clean()
 {
+  imageempty  = NULL;
+  imagefull   = NULL;
+  offsetstart = 0.0;
+  offsetend   = 0.0;
   level       = 0.0f;
-
-  startangle  = UI_ELEMENT_GAUGE_RADIAL_DEFAULT_STARTANGLE;
-  sweepangle  = UI_ELEMENT_GAUGE_RADIAL_DEFAULT_SWEEPANGLE;
-  thickness   = UI_ELEMENT_GAUGE_RADIAL_DEFAULT_THICKNESS;
-
-  roundcap    = false;
+  alpha       = 100;
 }

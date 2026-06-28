@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UI_Element_GaugeRadial.h
+* @file       UI_Element_ProgressRadial.h
 * 
-* @class      UI_ELEMENT_GAUGE_RADIAL
-* @brief      User Interface Element Radial Gauge class (circular / ring progress indicator)
+* @class      UI_ELEMENT_PROGRESS_RADIAL
+* @brief      User Interface Element Radial Progress class (circular / ring progress indicator)
 * @ingroup    USERINTERFACE
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -39,10 +39,10 @@
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define UI_ELEMENT_GAUGE_RADIAL_DEFAULT_STARTANGLE      (-90.0)     // 12 o'clock (top of the ring)
-#define UI_ELEMENT_GAUGE_RADIAL_DEFAULT_SWEEPANGLE      (360.0)     // full ring; use e.g. 270 for an open gauge
-#define UI_ELEMENT_GAUGE_RADIAL_DEFAULT_THICKNESS       (0.0)       // 0 => auto (a fraction of the radius)
-#define UI_ELEMENT_GAUGE_RADIAL_AUTOTHICKNESS_FACTOR    (0.16)      // ring width when thickness is auto (fraction of radius)
+#define UI_ELEMENT_PROGRESS_RADIAL_DEFAULT_STARTANGLE      (-90.0)     // 12 o'clock (top of the ring)
+#define UI_ELEMENT_PROGRESS_RADIAL_DEFAULT_SWEEPANGLE      (360.0)     // full ring; use e.g. 270 for an open ring
+#define UI_ELEMENT_PROGRESS_RADIAL_DEFAULT_THICKNESS       (0.0)       // 0 => auto (a fraction of the radius)
+#define UI_ELEMENT_PROGRESS_RADIAL_AUTOTHICKNESS_FACTOR    (0.16)      // ring width when thickness is auto (fraction of radius)
 
 
 
@@ -50,8 +50,8 @@
 
 
 /**
-* @class   UI_ELEMENT_GAUGE_RADIAL
-* @brief   Circular ring progress indicator (donut gauge).
+* @class   UI_ELEMENT_PROGRESS_RADIAL
+* @brief   Circular ring progress indicator (donut ring).
 *
 * COLOR MAPPING (reuses the base element color slots so the XML stays uniform):
 *   - track ring (full sweep)          : GetBackgroundColor()  (XML attribute "bckgrdcolor")
@@ -61,15 +61,21 @@
 *   - centered caption (e.g. "37%")    : the composed UI_ELEMENT_TEXT (Get_UIText(), set from a child <text>)
 *
 * GEOMETRY:
-*   The gauge occupies its boundary box. The ring is centered in that box; its radius is derived from the
+*   The progress ring occupies its boundary box. The ring is centered in that box; its radius is derived from the
 *   smaller side. The arc starts at GetStartAngle() and sweeps GetSweepAngle() degrees clockwise; the value
 *   arc covers that sweep scaled by GetLevel()/100.
 */
-class UI_ELEMENT_GAUGE_RADIAL : public UI_ELEMENT_OPTION
+#ifndef UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL
+#define UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL    0                                   // gradient maps to the current value arc (leading edge = end color)
+#define UI_ELEMENT_PROGRESS_GRADIENTMODE_TRACK   1                                   // gradient maps to the full sweep; the value arc reveals part of it
+#endif
+
+
+class UI_ELEMENT_PROGRESS_RADIAL : public UI_ELEMENT_OPTION
 {
   public:
-                            UI_ELEMENT_GAUGE_RADIAL     ();
-    virtual                ~UI_ELEMENT_GAUGE_RADIAL     ();
+                            UI_ELEMENT_PROGRESS_RADIAL  ();
+    virtual                ~UI_ELEMENT_PROGRESS_RADIAL  ();
 
     float                   GetLevel                    ();
     void                    SetLevel                    (float level);              // clamped to [0 .. 100]
@@ -87,6 +93,9 @@ class UI_ELEMENT_GAUGE_RADIAL : public UI_ELEMENT_OPTION
     void                    SetRoundCap                 (bool roundcap);
 
     UI_COLOR*               GetLineColor                ();                         // value arc gradient END color
+    UI_COLOR*               GetGradientColor            ();                         // value arc gradient END color (no gradient when its alpha == 0)
+    int                     GetGradientMode             ();
+    void                    SetGradientMode             (int gradientmode);
 
   private:
 
@@ -98,6 +107,8 @@ class UI_ELEMENT_GAUGE_RADIAL : public UI_ELEMENT_OPTION
     double                  thickness;
     bool                    roundcap;
     UI_COLOR                linecolor;
+    UI_COLOR                gradientcolor;
+    int                     gradientmode;
 };
 
 

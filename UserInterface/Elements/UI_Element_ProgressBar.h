@@ -48,6 +48,12 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
+#ifndef UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL
+#define UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL    0                                   // gradient maps to the current fill (leading edge = end color)
+#define UI_ELEMENT_PROGRESS_GRADIENTMODE_TRACK   1                                   // gradient maps to the full bar; the fill reveals part of it
+#endif
+
+
 class UI_ELEMENT_PROGRESSBAR : public UI_ELEMENT_OPTION
 {
   public:
@@ -55,6 +61,10 @@ class UI_ELEMENT_PROGRESSBAR : public UI_ELEMENT_OPTION
     virtual							 	 ~UI_ELEMENT_PROGRESSBAR			      ();
 
     UI_COLOR*						    GetLineColor								      ();
+
+    UI_COLOR*               GetGradientColor                  ();                         // value-fill gradient END color (no gradient when its alpha == 0)
+    int                     GetGradientMode                   ();
+    void                    SetGradientMode                   (int gradientmode);
 
     bool                    GetRoundCap                       ();
     void                    SetRoundCap                       (bool roundcap);
@@ -81,6 +91,8 @@ class UI_ELEMENT_PROGRESSBAR : public UI_ELEMENT_OPTION
     float                   level;
 
     UI_COLOR                linecolor;
+    UI_COLOR                gradientcolor;
+    int                     gradientmode;
     bool                    roundcap;
 
     UI_ELEMENT*             progressrect; 
