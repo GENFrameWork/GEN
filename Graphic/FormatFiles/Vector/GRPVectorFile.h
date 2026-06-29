@@ -42,7 +42,8 @@
 enum GRPVECTORFILERESULT
 {
   GRPVECTORFILERESULT_OK                        = 0 ,  
-  GRPVECTORFILERESULT_WARNINGTYPEFILEUNKNOWN        , 
+  GRPVECTORFILERESULT_WARNINGTYPEFILEUNKNOWN        ,
+  GRPVECTORFILERESULT_ERRORNOTSUPPORTED             ,           
   GRPVECTORFILERESULT_ERRORUNKNOWN                  , 
   GRPVECTORFILERESULT_ERRORNOTMEMORY                , 
   GRPVECTORFILERESULT_ERRORNOTFILE                  , 
@@ -64,43 +65,50 @@ enum GRPVECTORFILETYPE
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
+class XFILETXT;
+
+
 class GRPVECTORFILE : public XSUBJECT
 {
   public:
 
-                                      GRPVECTORFILE             ();    
-    virtual                          ~GRPVECTORFILE             ();
+                                      GRPVECTORFILE                 ();    
+    virtual                          ~GRPVECTORFILE                 ();
 
-    static GRPVECTORFILE*             CreateInstance            (XPATH& pathfile);   
-    static GRPVECTORFILE*             CreateInstance            (GRPVECTORFILETYPE type);
+    static GRPVECTORFILE*             CreateInstance                (XPATH& pathfile);   
+    static GRPVECTORFILE*             CreateInstance                (GRPVECTORFILETYPE type);
+    static GRPVECTORFILE*             CreateInstance                (GRPVECTORFILETYPE type, XSTRING& content);
      
-    XPATH*                            GetPathFile               ();
+    XPATH*                            GetPathFile                   ();
 
-    GRPVECTORFILETYPE                 GetType                   ();
-    void                              SetType                   (GRPVECTORFILETYPE type);
-    static XCHAR*                     GetTypeText               (GRPVECTORFILETYPE type);
+    GRPVECTORFILETYPE                 GetType                       ();
+    void                              SetType                       (GRPVECTORFILETYPE type);
+    static XCHAR*                     GetTypeText                   (GRPVECTORFILETYPE type);
 
     
-    virtual GRPVECTORFILERESULT       DetectType                ();
+    virtual GRPVECTORFILERESULT       DetectType                    ();
 
-    virtual GRPVECTORFILERESULT       Load                      ();
+    virtual GRPVECTORFILERESULT       Load                          ();
+    virtual GRPVECTORFILERESULT       Load                          (XSTRING& content);
           
-    virtual GRPVECTORFILECONFIG*      GetConfig                 ();
+    virtual GRPVECTORFILECONFIG*      GetConfig                     ();
 
   protected:
     
-    bool                              DetectFileFormatText      (XPATH& pathfile);
+    bool                              DetectFileFormatText          (XPATH& pathfile);
+
+    static bool                       PopulateTextFileFromString    (XFILETXT* file, XSTRING& content);
     
     XPATH                             pathfile;
     GRPVECTORFILETYPE                 type;
       
   private:
 
-    static bool                       DetectFile                (XPATH& pathfile); 
-    bool                              IsConversionFile          ();
-    void                              SetIsConversionFile       (bool isconversionfile);
+    static bool                       DetectFile                    (XPATH& pathfile); 
+    bool                              IsConversionFile              ();
+    void                              SetIsConversionFile           (bool isconversionfile);
     
-    void                              Clean                     ();
+    void                              Clean                         ();
 
     bool                              isconversionfile;
 };

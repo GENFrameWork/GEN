@@ -47,6 +47,7 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 class XFILETXT;
+class XFILEXML;
 class GRPVECTORFILECONFIG;
 class GRPVECTORFILESVGOBJ;
 
@@ -63,6 +64,7 @@ class GRPVECTORFILESVG : public GRPVECTORFILE
 
     GRPVECTORFILERESULT             DetectType                 ();
     GRPVECTORFILERESULT             Load                       ();
+    GRPVECTORFILERESULT             Load                       (XSTRING& content);
 
     GRPVECTORFILECONFIG*            GetConfig                  ();
 
@@ -71,6 +73,8 @@ class GRPVECTORFILESVG : public GRPVECTORFILE
     GRPVECTORFILESVGOBJ*            FindObjByID                (XCHAR* id);
 
   private:
+
+    GRPVECTORFILERESULT             BuildFromXML               (XFILEXML* file);
 
     bool                            DetectIsSVG                (XFILETXT* file, int nlinesmax = 200);
 

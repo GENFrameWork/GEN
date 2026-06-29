@@ -196,25 +196,7 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::Load()
     {
       if(file->ReadAndDecodeAllLines())
         {
-          XFILEXMLELEMENT* xmlroot = file->GetRoot();
-          if(xmlroot && !xmlroot->GetName().Compare(__L("svg"), true))
-            {
-              config.ApplyData(xmlroot);
-
-              if(root)
-                {
-                  GEN_DELETE root;
-                  root = NULL;
-                }
-
-              root = GRPVECTORFILESVGOBJ::CreateInstance(xmlroot);
-
-              result = root ? GRPVECTORFILERESULT_OK : GRPVECTORFILERESULT_ERRORNOTMEMORY;
-            }
-           else
-            {
-              result = GRPVECTORFILERESULT_ERRORINVALIDFORMAT;
-            }
+          result = BuildFromXML(file);
         }
        else
         {
@@ -229,6 +211,90 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::Load()
     }
 
   GEN_DELETE file;
+
+  return result;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPVECTORFILERESULT GRPVECTORFILESVG::Load(XSTRING& content)
+* @brief      Load : parse the XML from an in memory text buffer and build the SVG object tree (same path as the disk
+*             load, only the source of the text lines changes)
+* @ingroup    GRAPHIC
+*
+* @param[in]  content : SVG source as a string
+*
+* @return     GRPVECTORFILERESULT : result
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILERESULT GRPVECTORFILESVG::Load(XSTRING& content)
+{
+  GRPVECTORFILERESULT result = GRPVECTORFILERESULT_ERRORNOTMEMORY;
+
+  XFILEXML* file = GEN_NEW XFILEXML();
+  if(!file)
+    {
+      return GRPVECTORFILERESULT_ERRORNOTMEMORY;
+    }
+
+  if(GRPVECTORFILE::PopulateTextFileFromString(file, content))
+    {
+      if(file->DecodeAllLines())
+        {
+          result = BuildFromXML(file);
+        }
+       else
+        {
+          result = GRPVECTORFILERESULT_ERRORINVALIDFORMAT;
+        }
+    }
+   else
+    {
+      result = GRPVECTORFILERESULT_ERRORINVALIDFORMAT;
+    }
+
+  GEN_DELETE file;
+
+  return result;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPVECTORFILERESULT GRPVECTORFILESVG::BuildFromXML(XFILEXML* file)
+* @brief      Build the SVG object tree from an already decoded XML file (shared by the disk and the in memory loads)
+* @ingroup    GRAPHIC
+*
+* @param[in]  file : decoded XML file (root must be the <svg> element)
+*
+* @return     GRPVECTORFILERESULT : result
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILERESULT GRPVECTORFILESVG::BuildFromXML(XFILEXML* file)
+{
+  GRPVECTORFILERESULT result = GRPVECTORFILERESULT_ERRORINVALIDFORMAT;
+
+  if(!file)
+    {
+      return GRPVECTORFILERESULT_ERRORNOTMEMORY;
+    }
+
+  XFILEXMLELEMENT* xmlroot = file->GetRoot();
+  if(xmlroot && !xmlroot->GetName().Compare(__L("svg"), true))
+    {
+      config.ApplyData(xmlroot);
+
+      if(root)
+        {
+          GEN_DELETE root;
+          root = NULL;
+        }
+
+      root = GRPVECTORFILESVGOBJ::CreateInstance(xmlroot);
+
+      result = root ? GRPVECTORFILERESULT_OK : GRPVECTORFILERESULT_ERRORNOTMEMORY;
+    }
 
   return result;
 }

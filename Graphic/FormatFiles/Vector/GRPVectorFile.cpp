@@ -40,6 +40,7 @@
 
 #include "XFactory.h"
 #include "XFileTXT.h"
+#include "XBuffer.h"
 
 #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
 #include "GRPVectorFileDXF.h"
@@ -240,6 +241,37 @@ GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type, XSTRING& content)
+* @brief      Create instance : build the vector file of the given type and load it from an in memory text buffer.
+*             The content is handled exactly as if it had been read from disk in text mode.
+* @ingroup    GRAPHIC
+* 
+* @param[in]  type    : vector file type (SVG, DXF, ...).
+* @param[in]  content : text content of the vector file (SVG / DXF source as a string).
+* 
+* @return     GRPVECTORFILE* : vector file ready to render, or NULL on error.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type, XSTRING& content)
+{
+  GRPVECTORFILE* vectorFile = GRPVECTORFILE::CreateInstance(type);
+  if(!vectorFile) 
+    {
+      return NULL;
+    }
+
+  if(vectorFile->Load(content) != GRPVECTORFILERESULT_OK) 
+    {
+      GEN_DELETE vectorFile;
+      return NULL;
+    }
+
+  return vectorFile;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XCHAR* GRPVECTORFILE::GetTypeText(GRPVECTORFILETYPE type)
 * @brief      Get type text
 * @ingroup    GRAPHIC
@@ -315,7 +347,57 @@ GRPVECTORFILERESULT GRPVECTORFILE::DetectType()
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILE::Load()
 {
-  return GRPVECTORFILERESULT_ERRORUNKNOWN;
+  return GRPVECTORFILERESULT_ERRORNOTSUPPORTED;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPVECTORFILERESULT GRPVECTORFILE::Load(XSTRING& content)
+* @brief      Load the vector file from an in memory text buffer (base : not implemented, each format overrides it).
+* @ingroup    GRAPHIC
+* 
+* @param[in]  content : text content of the vector file.
+* 
+* @return     GRPVECTORFILERESULT : result.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILERESULT GRPVECTORFILE::Load(XSTRING& content)
+{
+  return GRPVECTORFILERESULT_ERRORNOTSUPPORTED;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPVECTORFILE::PopulateTextFileFromString(XFILETXT* file, XSTRING& content)
+* @brief      Fill a text file object with the lines of a string, as if the file had been read from disk in text mode.
+*             Shared by every format backend so the in memory load reuses the same parsers as the disk load.
+* @ingroup    GRAPHIC
+* 
+* @param[in]  file    : text file object to fill (will be cleared first).
+* @param[in]  content : text content to load.
+* 
+* @return     bool : true if is succesful.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILE::PopulateTextFileFromString(XFILETXT* file, XSTRING& content)
+{
+  if(!file) 
+    {
+      return false;
+    }
+
+  XBUFFER buffer;
+
+  if(!content.ConvertToUTF8(buffer, false)) 
+    {
+      return false;
+    }
+
+  file->DeleteAllLines();
+
+  return file->AddBufferLines(XFILETXTFORMATCHAR_UTF8, buffer);
 }
 
 
