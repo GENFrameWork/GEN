@@ -66,39 +66,37 @@ class GRP2DVECTORFILERENDERAGG
                                     GRP2DVECTORFILERENDERAGG     ();
     virtual                        ~GRP2DVECTORFILERENDERAGG     ();
 
-    bool                            Render                     (GRPVECTORFILE* file, GRP2DCANVAS* canvas);
-    bool                            Render                     (GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
+    bool                            Render                       (GRPVECTORFILE* file, GRP2DCANVAS* canvas);
+    bool                            Render                       (GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
 
-    bool                            RenderCached               (GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
-    void                            InvalidateCache            ();
+    bool                            RenderCached                 (GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
+    void                            InvalidateCache              ();
 
-    // Presentation options. They only affect the DXF backend (SVG carries its own colors and line widths); they are
-    // accepted and ignored when the file is SVG, so the same calling code works for both formats.
-    bool                            GetBackgroundIsDark        ();
-    void                            SetBackgroundIsDark        (bool isdark);
+    bool                            GetBackgroundIsDark          ();
+    void                            SetBackgroundIsDark          (bool isdark);
 
-    bool                            GetForceColorActive        ();
-    void                            SetForceColor              (bool active, GRP2DCOLOR_RGBA8 color);
+    bool                            GetForceColorActive          ();
+    void                            SetForceColor                (bool active, GRP2DCOLOR_RGBA8 color);
 
-    double                          GetLineWidth               ();
-    void                            SetLineWidth               (double linewidth);
+    double                          GetLineWidth                 ();
+    void                            SetLineWidth                 (double linewidth);
 
-    bool                            GetDrawText                ();
-    void                            SetDrawText                (bool drawtext);
+    bool                            GetDrawText                  ();
+    void                            SetDrawText                  (bool drawtext);
 
-    // Direct access to the underlying backends (advanced use; available only when the matching feature is compiled).
+
     #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
-    GRP2DVECTORFILESVGRENDERAGG*       GetSVGRender               ();
+    GRP2DVECTORFILESVGRENDERAGG*    GetSVGRender                 ();
     #endif
 
     #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
-    GRP2DVECTORFILEDXFRENDERAGG*       GetDXFRender               ();
+    GRP2DVECTORFILEDXFRENDERAGG*    GetDXFRender                 ();
     #endif
 
   private:
 
-    bool                            BuildCacheBitmap           (GRPVECTORFILE* file, GRP2DCANVAS* referencecanvas, double width, double height);
-    void                            Clean                      ();
+    bool                            BuildCacheBitmap             (GRPVECTORFILE* file, GRP2DCANVAS* referencecanvas, double width, double height);
+    void                            Clean                        ();
 
     GRPBITMAP*                      cachebitmap;
     bool                            cachevalid;
@@ -110,10 +108,10 @@ class GRP2DVECTORFILERENDERAGG
     bool                            cachevectorkerning;
 
     #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
-    GRP2DVECTORFILESVGRENDERAGG       svgrender;
+    GRP2DVECTORFILESVGRENDERAGG     svgrender;
     #endif
 
     #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
-    GRP2DVECTORFILEDXFRENDERAGG       dxfrender;
+    GRP2DVECTORFILEDXFRENDERAGG     dxfrender;
     #endif
 };

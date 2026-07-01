@@ -2059,6 +2059,7 @@ bool XSTRING::DeleteLastCharacter()
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
+/*
 bool XSTRING::DeleteLastZeros()
 {
   int  index  = GetSize()-1;
@@ -2070,6 +2071,36 @@ bool XSTRING::DeleteLastZeros()
     }
 
   while(Character_GetLast () == __C('0'))
+    {
+      DeleteLastCharacter();
+      status = true;
+    }
+
+  return status;
+}
+*/
+bool XSTRING::DeleteLastZeros()
+{
+  int  index  = GetSize() - 1;
+  bool status = false;
+
+  if(index <= 0)
+    {
+      return false;
+    }
+
+  if(FindCharacter(__C('.')) < 0)  
+    {
+      return false;                                // integer: no fractional zeros to trim
+    }
+
+  while(Character_GetLast() == __C('0'))
+    {
+      DeleteLastCharacter();
+      status = true;
+    }
+
+  if(Character_GetLast() == __C('.'))             // drop a dangling decimal point
     {
       DeleteLastCharacter();
       status = true;
