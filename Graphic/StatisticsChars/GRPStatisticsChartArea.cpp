@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPStatisticsChartColumns.cpp
+* @file       GRPStatisticsChartArea.cpp
 * 
-* @class      GRPSTATISTICSCHARTCOLUMNS
-* @brief      Graphic Chart : columns chart implementation
+* @class      GRPSTATISTICSCHARTAREA
+* @brief      Graphic Chart : area chart implementation
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -33,7 +33,7 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "GRPStatisticsChartColumns.h"
+#include "GRPStatisticsChartArea.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -50,12 +50,12 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPSTATISTICSCHARTCOLUMNS::GRPSTATISTICSCHARTCOLUMNS()
+* @fn         GRPSTATISTICSCHARTAREA::GRPSTATISTICSCHARTAREA()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPSTATISTICSCHARTCOLUMNS::GRPSTATISTICSCHARTCOLUMNS()
+GRPSTATISTICSCHARTAREA::GRPSTATISTICSCHARTAREA()
 {
 
 }
@@ -63,12 +63,12 @@ GRPSTATISTICSCHARTCOLUMNS::GRPSTATISTICSCHARTCOLUMNS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPSTATISTICSCHARTCOLUMNS::~GRPSTATISTICSCHARTCOLUMNS()
+* @fn         GRPSTATISTICSCHARTAREA::~GRPSTATISTICSCHARTAREA()
 * @brief      Destructor of class
 * @ingroup    GRAPHIC
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPSTATISTICSCHARTCOLUMNS::~GRPSTATISTICSCHARTCOLUMNS()
+GRPSTATISTICSCHARTAREA::~GRPSTATISTICSCHARTAREA()
 {
 
 }
@@ -76,8 +76,8 @@ GRPSTATISTICSCHARTCOLUMNS::~GRPSTATISTICSCHARTCOLUMNS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
-* @brief      Draw plot : grid, axes, grouped columns and labels
+* @fn         bool GRPSTATISTICSCHARTAREA::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
+* @brief      Draw plot : grid, axes, one translucent filled area (with top line) per series and labels
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
@@ -89,7 +89,7 @@ GRPSTATISTICSCHARTCOLUMNS::~GRPSTATISTICSCHARTCOLUMNS()
 * @return     bool : true if is succesful.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
+bool GRPSTATISTICSCHARTAREA::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
 {
   XDWORD ncats   = data.GetNCategories();
   XDWORD nseries = data.GetNSeries();
@@ -104,7 +104,6 @@ bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, dou
 
   if(nicemax <= 0.0) return false;
 
-  double fontsize     = config.GetFontSize();
   double axisfontsize = config.GetAxisFontSize();
 
   // value grid + value labels (Y axis)
@@ -144,57 +143,109 @@ bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, dou
   builder.DrawLine(x, y + height, x + width, y + height, axisstyle);            // X axis
   builder.DrawLine(x, y,          x,         y + height, axisstyle);            // Y axis
 
-  // grouped columns
+  // per series : translucent filled area (piecewise trapezoids) + opaque top line
 
-  double slotwidth  = width / (double)ncats;
-  double grouppad   = slotwidth * 0.15;
-  double groupwidth = slotwidth - (grouppad * 2.0);
-  double colwidth   = groupwidth / (double)nseries;
+  double slotwidth = width / (double)ncats;
+  double baseline  = y + height;                                               // value 0 line
 
-  GRPSTATISTICSCHARTTEXTSTYLE catstyle;
-  catstyle.color  = config.GetTextColor();
-  catstyle.size   = axisfontsize;
-  catstyle.anchor = GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE;
-
-  for(XDWORD c=0; c<ncats; c++)
+  for(XDWORD s=0; s<nseries; s++)
     {
-      double slotx = x + (slotwidth * (double)c);
+      GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(s);
+      if(!serie) continue;
 
-      for(XDWORD s=0; s<nseries; s++)
+      GRPSTATISTICSCHARTCOLOR color = serie->HasColor() ? serie->GetColor() : config.GetPaletteColor(s);
+
+      GRPSTATISTICSCHARTCOLOR fillcolor = color;
+      fillcolor.a = 100;                                                        // translucent so overlapping areas show
+
+      GRPSTATISTICSCHARTSTYLE areastyle;
+      areastyle.SetFill(fillcolor);
+
+      GRPSTATISTICSCHARTSTYLE linestyle;
+      linestyle.SetStroke(color, 2.0);
+
+      //  one filled polygon per series (top points left to right, then down to the baseline) : no internal seams
+
+      XVECTOR<double> points;
+
+      for(XDWORD c=0; c<ncats; c++)
         {
-          GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(s);
-          if(!serie) continue;
-
           double value = serie->GetValue(c);
-          double colh  = (value / nicemax) * height;
-          double colx  = slotx + grouppad + (colwidth * (double)s);
-          double coly  = y + height - colh;
+          double px    = x + (slotwidth * ((double)c + 0.5));
+          double py    = baseline - ((value / nicemax) * height);
 
-          GRPSTATISTICSCHARTCOLOR color = serie->HasColor() ? serie->GetColor() : config.GetPaletteColor(s);
+          points.Add(px);
+          points.Add(py);
+        }
 
-          GRPSTATISTICSCHARTSTYLE colstyle;
-          colstyle.SetFill(color);
+      double firstx = x + (slotwidth * 0.5);
+      double lastx  = x + (slotwidth * ((double)(ncats - 1) + 0.5));
 
-          builder.DrawRect(colx, coly, colwidth, colh, colstyle);
+      points.Add(lastx);   points.Add(baseline);                               // close down at the right
+      points.Add(firstx);  points.Add(baseline);                               // and back along the baseline
 
-          if(config.GetShowValues())
+      builder.DrawPolygon(points.GetPointer(0), points.GetSize() / 2, areastyle);
+
+      points.DeleteAll();
+
+      //  opaque top line over the fill
+
+      double prevx = 0.0;
+      double prevy = 0.0;
+
+      for(XDWORD c=0; c<ncats; c++)
+        {
+          double value = serie->GetValue(c);
+          double px    = x + (slotwidth * ((double)c + 0.5));
+          double py    = baseline - ((value / nicemax) * height);
+
+          if(c > 0)
             {
+              builder.DrawLine(prevx, prevy, px, py, linestyle);
+            }
+
+          prevx = px;
+          prevy = py;
+        }
+
+      if(config.GetShowValues())
+        {
+          GRPSTATISTICSCHARTTEXTSTYLE vstyle;
+          vstyle.color  = config.GetTextColor();
+          vstyle.size   = config.GetFontSize() * 0.9;
+          vstyle.anchor = GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE;
+
+          for(XDWORD c=0; c<ncats; c++)
+            {
+              double value = serie->GetValue(c);
+              double px    = x + (slotwidth * ((double)c + 0.5));
+              double py    = baseline - ((value / nicemax) * height);
+
               XSTRING vlabel;
               vlabel.Format(__L("%g"), value);
 
-              GRPSTATISTICSCHARTTEXTSTYLE vstyle;
-              vstyle.color  = config.GetTextColor();
-              vstyle.size   = fontsize * 0.9;
-              vstyle.anchor = GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE;
-
-              builder.DrawText(colx + (colwidth * 0.5), coly - 3.0, vlabel.Get(), vstyle);
+              builder.DrawText(px, py - 4.0, vlabel.Get(), vstyle);
             }
         }
+    }
 
-      XSTRING* category = data.GetCategory(c);
-      if(category && config.GetShowAxisLabels())
+  // category labels (X axis)
+
+  if(config.GetShowAxisLabels())
+    {
+      GRPSTATISTICSCHARTTEXTSTYLE catstyle;
+      catstyle.color  = config.GetTextColor();
+      catstyle.size   = axisfontsize;
+      catstyle.anchor = GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE;
+
+      for(XDWORD c=0; c<ncats; c++)
         {
-          builder.DrawText(slotx + (slotwidth * 0.5), y + height + (axisfontsize * 1.3), category->Get(), catstyle);
+          XSTRING* category = data.GetCategory(c);
+          if(!category) continue;
+
+          double px = x + (slotwidth * ((double)c + 0.5));
+
+          builder.DrawText(px, y + height + (axisfontsize * 1.3), category->Get(), catstyle);
         }
     }
 

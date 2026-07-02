@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       GRPStatisticsChartColumns.cpp
+* @file       GRPStatisticsChartLines.cpp
 * 
-* @class      GRPSTATISTICSCHARTCOLUMNS
-* @brief      Graphic Chart : columns chart implementation
+* @class      GRPSTATISTICSCHARTLINES
+* @brief      Graphic Chart : line chart implementation
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -33,7 +33,7 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "GRPStatisticsChartColumns.h"
+#include "GRPStatisticsChartLines.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -50,12 +50,12 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPSTATISTICSCHARTCOLUMNS::GRPSTATISTICSCHARTCOLUMNS()
+* @fn         GRPSTATISTICSCHARTLINES::GRPSTATISTICSCHARTLINES()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPSTATISTICSCHARTCOLUMNS::GRPSTATISTICSCHARTCOLUMNS()
+GRPSTATISTICSCHARTLINES::GRPSTATISTICSCHARTLINES()
 {
 
 }
@@ -63,12 +63,12 @@ GRPSTATISTICSCHARTCOLUMNS::GRPSTATISTICSCHARTCOLUMNS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPSTATISTICSCHARTCOLUMNS::~GRPSTATISTICSCHARTCOLUMNS()
+* @fn         GRPSTATISTICSCHARTLINES::~GRPSTATISTICSCHARTLINES()
 * @brief      Destructor of class
 * @ingroup    GRAPHIC
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPSTATISTICSCHARTCOLUMNS::~GRPSTATISTICSCHARTCOLUMNS()
+GRPSTATISTICSCHARTLINES::~GRPSTATISTICSCHARTLINES()
 {
 
 }
@@ -76,8 +76,8 @@ GRPSTATISTICSCHARTCOLUMNS::~GRPSTATISTICSCHARTCOLUMNS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
-* @brief      Draw plot : grid, axes, grouped columns and labels
+* @fn         bool GRPSTATISTICSCHARTLINES::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
+* @brief      Draw plot : grid, axes, one polyline (with point markers) per series and labels
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
@@ -89,7 +89,7 @@ GRPSTATISTICSCHARTCOLUMNS::~GRPSTATISTICSCHARTCOLUMNS()
 * @return     bool : true if is succesful.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
+bool GRPSTATISTICSCHARTLINES::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
 {
   XDWORD ncats   = data.GetNCategories();
   XDWORD nseries = data.GetNSeries();
@@ -104,7 +104,6 @@ bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, dou
 
   if(nicemax <= 0.0) return false;
 
-  double fontsize     = config.GetFontSize();
   double axisfontsize = config.GetAxisFontSize();
 
   // value grid + value labels (Y axis)
@@ -144,38 +143,39 @@ bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, dou
   builder.DrawLine(x, y + height, x + width, y + height, axisstyle);            // X axis
   builder.DrawLine(x, y,          x,         y + height, axisstyle);            // Y axis
 
-  // grouped columns
+  // series polylines + point markers
 
-  double slotwidth  = width / (double)ncats;
-  double grouppad   = slotwidth * 0.15;
-  double groupwidth = slotwidth - (grouppad * 2.0);
-  double colwidth   = groupwidth / (double)nseries;
+  double slotwidth = width / (double)ncats;
+  double marker    = axisfontsize * 0.5;
 
-  GRPSTATISTICSCHARTTEXTSTYLE catstyle;
-  catstyle.color  = config.GetTextColor();
-  catstyle.size   = axisfontsize;
-  catstyle.anchor = GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE;
-
-  for(XDWORD c=0; c<ncats; c++)
+  for(XDWORD s=0; s<nseries; s++)
     {
-      double slotx = x + (slotwidth * (double)c);
+      GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(s);
+      if(!serie) continue;
 
-      for(XDWORD s=0; s<nseries; s++)
+      GRPSTATISTICSCHARTCOLOR color = serie->HasColor() ? serie->GetColor() : config.GetPaletteColor(s);
+
+      GRPSTATISTICSCHARTSTYLE linestyle;
+      linestyle.SetStroke(color, 2.0);
+
+      GRPSTATISTICSCHARTSTYLE markstyle;
+      markstyle.SetFill(color);
+
+      double prevx = 0.0;
+      double prevy = 0.0;
+
+      for(XDWORD c=0; c<ncats; c++)
         {
-          GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(s);
-          if(!serie) continue;
-
           double value = serie->GetValue(c);
-          double colh  = (value / nicemax) * height;
-          double colx  = slotx + grouppad + (colwidth * (double)s);
-          double coly  = y + height - colh;
+          double px    = x + (slotwidth * ((double)c + 0.5));
+          double py    = y + height - ((value / nicemax) * height);
 
-          GRPSTATISTICSCHARTCOLOR color = serie->HasColor() ? serie->GetColor() : config.GetPaletteColor(s);
+          if(c > 0)
+            {
+              builder.DrawLine(prevx, prevy, px, py, linestyle);
+            }
 
-          GRPSTATISTICSCHARTSTYLE colstyle;
-          colstyle.SetFill(color);
-
-          builder.DrawRect(colx, coly, colwidth, colh, colstyle);
+          builder.DrawRect(px - (marker * 0.5), py - (marker * 0.5), marker, marker, markstyle);
 
           if(config.GetShowValues())
             {
@@ -184,17 +184,34 @@ bool GRPSTATISTICSCHARTCOLUMNS::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, dou
 
               GRPSTATISTICSCHARTTEXTSTYLE vstyle;
               vstyle.color  = config.GetTextColor();
-              vstyle.size   = fontsize * 0.9;
+              vstyle.size   = config.GetFontSize() * 0.9;
               vstyle.anchor = GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE;
 
-              builder.DrawText(colx + (colwidth * 0.5), coly - 3.0, vlabel.Get(), vstyle);
+              builder.DrawText(px, py - (marker * 0.5) - 3.0, vlabel.Get(), vstyle);
             }
-        }
 
-      XSTRING* category = data.GetCategory(c);
-      if(category && config.GetShowAxisLabels())
+          prevx = px;
+          prevy = py;
+        }
+    }
+
+  // category labels (X axis)
+
+  if(config.GetShowAxisLabels())
+    {
+      GRPSTATISTICSCHARTTEXTSTYLE catstyle;
+      catstyle.color  = config.GetTextColor();
+      catstyle.size   = axisfontsize;
+      catstyle.anchor = GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE;
+
+      for(XDWORD c=0; c<ncats; c++)
         {
-          builder.DrawText(slotx + (slotwidth * 0.5), y + height + (axisfontsize * 1.3), category->Get(), catstyle);
+          XSTRING* category = data.GetCategory(c);
+          if(!category) continue;
+
+          double px = x + (slotwidth * ((double)c + 0.5));
+
+          builder.DrawText(px, y + height + (axisfontsize * 1.3), category->Get(), catstyle);
         }
     }
 

@@ -44,6 +44,15 @@ enum GRPSTATISTICSCHARTTEXTANCHOR
 };
 
 
+enum GRPSTATISTICSCHARTLEGENDPOSITION
+{
+  GRPSTATISTICSCHARTLEGENDPOSITION_TOP             = 0 ,                      // legend band above the plot
+  GRPSTATISTICSCHARTLEGENDPOSITION_BOTTOM         ,                          // legend band below the plot
+  GRPSTATISTICSCHARTLEGENDPOSITION_LEFT           ,                          // legend column at the left of the plot
+  GRPSTATISTICSCHARTLEGENDPOSITION_RIGHT          ,                          // legend column at the right of the plot
+};
+
+
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 

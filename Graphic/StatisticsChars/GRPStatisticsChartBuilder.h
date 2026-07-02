@@ -66,6 +66,7 @@ class GRPSTATISTICSCHARTBUILDER
     virtual bool                            DrawRect                      (double x, double y, double width, double height, GRPSTATISTICSCHARTSTYLE& style) = 0;
     virtual bool                            DrawLine                      (double x1, double y1, double x2, double y2, GRPSTATISTICSCHARTSTYLE& style) = 0;
     virtual bool                            DrawText                      (double x, double y, XCHAR* text, GRPSTATISTICSCHARTTEXTSTYLE& style) = 0;
+    virtual bool                            DrawPolygon                   (const double* xy, XDWORD npoints, GRPSTATISTICSCHARTSTYLE& style) = 0;
 
     virtual bool                            GetResult                     (XSTRING& result) = 0;
 };

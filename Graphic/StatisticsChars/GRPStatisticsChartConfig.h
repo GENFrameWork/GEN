@@ -48,61 +48,83 @@
 class GRPSTATISTICSCHARTCONFIG
 {
   public:
-                                    GRPSTATISTICSCHARTCONFIG              ()                                              { SetDefault();                                         }
-    virtual                         ~GRPSTATISTICSCHARTCONFIG             ()                                              {                                                       }
+                                      GRPSTATISTICSCHARTCONFIG              ()                                              { SetDefault();                                         }
+    virtual                          ~GRPSTATISTICSCHARTCONFIG              ()                                              {                                                       }
 
-    XSTRING&                        GetTitle                              ()                                              { return title;                                         }
-    void                            SetTitle                              (XCHAR* xtitle)                                 { title.Set(xtitle);                                    }
+    XSTRING&                          GetTitle                              ()                                              { return title;                                         }
+    void                              SetTitle                              (XCHAR* xtitle)                                 { title.Set(xtitle);                                    }
 
-    bool                            HasBackground                         ()                                              { return hasbackground;                                 }
-    void                            SetHasBackground                      (bool has)                                      { hasbackground = has;                                  }
-    GRPSTATISTICSCHARTCOLOR&        GetBackgroundColor                    ()                                              { return backgroundcolor;                               }
-    void                            SetBackgroundColor                    (GRPSTATISTICSCHARTCOLOR& color)                { backgroundcolor = color; hasbackground = true;        }
+    bool                              HasBackground                         ()                                              { return hasbackground;                                 }
+    void                              SetHasBackground                      (bool has)                                      { hasbackground = has;                                  }
+    GRPSTATISTICSCHARTCOLOR&          GetBackgroundColor                    ()                                              { return backgroundcolor;                               }
+    void                              SetBackgroundColor                    (GRPSTATISTICSCHARTCOLOR& color)                { backgroundcolor = color; hasbackground = true;        }
 
-    GRPSTATISTICSCHARTCOLOR&        GetAxisColor                          ()                                              { return axiscolor;                                     }
-    GRPSTATISTICSCHARTCOLOR&        GetGridColor                          ()                                              { return gridcolor;                                     }
-    GRPSTATISTICSCHARTCOLOR&        GetTextColor                          ()                                              { return textcolor;                                     }
+    GRPSTATISTICSCHARTCOLOR&          GetAxisColor                          ()                                              { return axiscolor;                                     }
+    GRPSTATISTICSCHARTCOLOR&          GetGridColor                          ()                                              { return gridcolor;                                     }
+    GRPSTATISTICSCHARTCOLOR&          GetTextColor                          ()                                              { return textcolor;                                     }
 
-    double                          GetFontSize                           ()                                              { return fontsize;                                      }
-    void                            SetFontSize                           (double size)                                   { fontsize = size;                                      }
-    double                          GetTitleFontSize                      ()                                              { return titlefontsize;                                 }
-    void                            SetTitleFontSize                      (double size)                                   { titlefontsize = size;                                 }
+    double                            GetFontSize                           ()                                              { return fontsize;                                      }
+    void                              SetFontSize                           (double size)                                   { fontsize = size;                                      }
+    double                            GetTitleFontSize                      ()                                              { return titlefontsize;                                 }
+    void                              SetTitleFontSize                      (double size)                                   { titlefontsize = size;                                 }
 
-    bool                            GetShowGrid                           ()                                              { return showgrid;                                      }
-    void                            SetShowGrid                           (bool show)                                     { showgrid = show;                                      }
-    bool                            GetShowValues                         ()                                              { return showvalues;                                    }
-    void                            SetShowValues                         (bool show)                                     { showvalues = show;                                    }
+    bool                              GetShowGrid                           ()                                              { return showgrid;                                      }
+    void                              SetShowGrid                           (bool show)                                     { showgrid = show;                                      }
+    bool                              GetShowValues                         ()                                              { return showvalues;                                    }
+    void                              SetShowValues                         (bool show)                                     { showvalues = show;                                    }
 
-    double                          GetMargin                             ()                                              { return margin;                                        }
-    void                            SetMargin                             (double value)                                  { margin = value;                                       }
+    bool                              GetShowAxisLabels                     ()                                              { return showaxislabels;                                }
+    void                              SetShowAxisLabels                     (bool show)                                     { showaxislabels = show;                                }
+    double                            GetAxisFontSize                       ()                                              { return axisfontsize;                                  }
+    void                              SetAxisFontSize                       (double size)                                   { axisfontsize = size;                                  }
 
-    GRPSTATISTICSCHARTCOLOR&        GetPaletteColor                       (XDWORD index)                                  { return palette[index % GRPSTATISTICSCHARTCONFIG_PALETTESIZE];  }
+    bool                              GetShowLegend                         ()                                              { return showlegend;                                    }
+    void                              SetShowLegend                         (bool show)                                     { showlegend = show;                                    }
+    GRPSTATISTICSCHARTLEGENDPOSITION  GetLegendPosition                     ()                                              { return legendposition;                                }
+    void                              SetLegendPosition                     (GRPSTATISTICSCHARTLEGENDPOSITION position)     { legendposition = position;                            }
+    double                            GetLegendFontSize                     ()                                              { return legendfontsize;                                }
+    void                              SetLegendFontSize                     (double size)                                   { legendfontsize = size;                                }
+
+    XSTRING&                          GetFontFileName                       ()                                              { return fontfilename;                                  }
+    void                              SetFontFileName                       (XCHAR* xname)                                  { fontfilename.Set(xname);                              }
+
+    double                            GetMargin                             ()                                              { return margin;                                        }
+    void                              SetMargin                             (double value)                                  { margin = value;                                       }
+
+    GRPSTATISTICSCHARTCOLOR&          GetPaletteColor                       (XDWORD index)                                  { return palette[index % GRPSTATISTICSCHARTCONFIG_PALETTESIZE];  }
 
   private:
 
-    void                            SetDefault                            ()
-                                    {
-                                      fontsize        = 12.0;
-                                      titlefontsize   = 18.0;
-                                      margin          = 16.0;
-                                      showgrid        = true;
-                                      showvalues      = false;
+    void                              SetDefault                            ()
+                                      {
+                                        fontsize        = 12.0;
+                                        titlefontsize   = 18.0;
+                                        margin          = 16.0;
+                                        showgrid        = true;
+                                        showvalues      = false;
 
-                                      hasbackground   = true;
-                                      backgroundcolor.Set(255, 255, 255);
-                                      axiscolor.Set      ( 60,  60,  60);
-                                      gridcolor.Set      (220, 220, 220);
-                                      textcolor.Set      ( 40,  40,  40);
+                                        showaxislabels  = true;
+                                        axisfontsize    = 12.0;
 
-                                      palette[0].Set( 79, 129, 189);      // blue
-                                      palette[1].Set(192,  80,  77);      // red
-                                      palette[2].Set(155, 187,  89);      // green
-                                      palette[3].Set(128, 100, 162);      // purple
-                                      palette[4].Set( 75, 172, 198);      // cyan
-                                      palette[5].Set(247, 150,  70);      // orange
-                                      palette[6].Set(119, 119, 119);      // gray
-                                      palette[7].Set(193, 165,  90);      // gold
-                                    }
+                                        showlegend      = true;
+                                        legendposition  = GRPSTATISTICSCHARTLEGENDPOSITION_BOTTOM;
+                                        legendfontsize  = 12.0;
+
+                                        hasbackground   = true;
+                                        backgroundcolor.Set(255, 255, 255);
+                                        axiscolor.Set      ( 60,  60,  60);
+                                        gridcolor.Set      (220, 220, 220);
+                                        textcolor.Set      ( 40,  40,  40);
+
+                                        palette[0].Set( 79, 129, 189);      // blue
+                                        palette[1].Set(192,  80,  77);      // red
+                                        palette[2].Set(155, 187,  89);      // green
+                                        palette[3].Set(128, 100, 162);      // purple
+                                        palette[4].Set( 75, 172, 198);      // cyan
+                                        palette[5].Set(247, 150,  70);      // orange
+                                        palette[6].Set(119, 119, 119);      // gray
+                                        palette[7].Set(193, 165,  90);      // gold
+                                      }
 
     XSTRING                         title;                                // chart title (empty = no title)
 
@@ -118,6 +140,15 @@ class GRPSTATISTICSCHARTCONFIG
 
     bool                            showgrid;                             // draw the value grid
     bool                            showvalues;                           // draw the value of each data point
+
+    bool                            showaxislabels;                       // draw the X/Y scale (tick) labels
+    double                          axisfontsize;                         // font size for the X/Y scale labels
+
+    bool                            showlegend;                           // draw the series legend
+    GRPSTATISTICSCHARTLEGENDPOSITION legendposition;                      // legend placement (top/bottom/left/right)
+    double                          legendfontsize;                       // font size for the legend entries
+
+    XSTRING                         fontfilename;                         // optional vector-font file the app should load
 
     double                          margin;                               // outer margin around the plot
 

@@ -53,6 +53,7 @@ class GRPSTATISTICSCHARTBUILDERSVG : public GRPSTATISTICSCHARTBUILDER
     bool                            DrawRect                              (double x, double y, double width, double height, GRPSTATISTICSCHARTSTYLE& style);
     bool                            DrawLine                              (double x1, double y1, double x2, double y2, GRPSTATISTICSCHARTSTYLE& style);
     bool                            DrawText                              (double x, double y, XCHAR* text, GRPSTATISTICSCHARTTEXTSTYLE& style);
+    bool                            DrawPolygon                           (const double* xy, XDWORD npoints, GRPSTATISTICSCHARTSTYLE& style);
 
     bool                            GetResult                             (XSTRING& result);
 

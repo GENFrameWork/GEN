@@ -289,6 +289,44 @@ bool GRPSTATISTICSCHARTBUILDERSVG::DrawText(double x, double y, XCHAR* text, GRP
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool GRPSTATISTICSCHARTBUILDERSVG::DrawPolygon(const double* xy, XDWORD npoints, GRPSTATISTICSCHARTSTYLE& style)
+* @brief      Draw polygon : a closed filled / stroked shape from an interleaved point array
+* @ingroup    GRAPHIC
+* 
+* @param[in]  xy      : interleaved point coordinates [x0, y0, x1, y1, ...] (2 * npoints values)
+* @param[in]  npoints : number of points
+* @param[in]  style   : fill / stroke style
+* 
+* @return     bool : true if is succesful.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSTATISTICSCHARTBUILDERSVG::DrawPolygon(const double* xy, XDWORD npoints, GRPSTATISTICSCHARTSTYLE& style)
+{
+  if(!xy || (npoints < 2)) return false;
+
+  content.Add(__L("  <polygon points=\""));
+
+  for(XDWORD p=0; p<npoints; p++)
+    {
+      if(p) content.Add(__C(' '));
+
+      AppendNumber(content, xy[(p * 2) + 0]);
+      content.Add(__C(','));
+      AppendNumber(content, xy[(p * 2) + 1]);
+    }
+
+  content.Add(__C('"'));
+
+  AppendFillAndStroke(content, style);
+
+  content.Add(__L("/>\n"));
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPSTATISTICSCHARTBUILDERSVG::GetResult(XSTRING& result)
 * @brief      Get result : the serialized SVG XML
 * @ingroup    GRAPHIC

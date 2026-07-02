@@ -59,6 +59,8 @@ class GRPSTATISTICSCHART
 
     void                            DrawBackground                        (GRPSTATISTICSCHARTBUILDER& builder, double width, double height);
     void                            DrawTitle                             (GRPSTATISTICSCHARTBUILDER& builder, double width, double baseline);
+    void                            DrawLegend                            (GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height, bool horizontal);
+    double                          MeasureLegendThickness                (bool horizontal);
 
     void                            ComputeNiceMax                        (double rawmax, double& nicemax, int& ndivisions);
 
