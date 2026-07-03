@@ -62,6 +62,9 @@ class GRPSTATISTICSCHART
     void                            DrawLegend                            (GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height, bool horizontal);
     double                          MeasureLegendThickness                (bool horizontal);
 
+    virtual XDWORD                  GetLegendCount                        ();
+    virtual bool                    GetLegendEntry                        (XDWORD index, XSTRING** name, GRPSTATISTICSCHARTCOLOR& color);
+
     void                            ComputeNiceMax                        (double rawmax, double& nicemax, int& ndivisions);
 
     GRPSTATISTICSCHARTDATA          data;                                 // chart data model

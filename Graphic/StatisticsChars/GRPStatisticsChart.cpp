@@ -263,15 +263,17 @@ double GRPSTATISTICSCHART::MeasureLegendThickness(bool horizontal)
       return lf * 2.2;                                                          // one row : swatch + vertical padding
     }
 
-  XDWORD nseries = data.GetNSeries();
-  XDWORD maxlen  = 0;
+  XDWORD count  = GetLegendCount();
+  XDWORD maxlen = 0;
 
-  for(XDWORD s=0; s<nseries; s++)
+  for(XDWORD i=0; i<count; i++)
     {
-      GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(s);
-      if(!serie) continue;
+      XSTRING*                name  = NULL;
+      GRPSTATISTICSCHARTCOLOR color;
 
-      XDWORD len = serie->GetName().GetSize();
+      if(!GetLegendEntry(i, &name, color) || !name) continue;
+
+      XDWORD len = name->GetSize();
       if(len > maxlen) maxlen = len;
     }
 
@@ -299,9 +301,9 @@ double GRPSTATISTICSCHART::MeasureLegendThickness(bool horizontal)
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHART::DrawLegend(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height, bool horizontal)
 {
-  XDWORD nseries = data.GetNSeries();
+  XDWORD count = GetLegendCount();
 
-  if(!nseries) return;
+  if(!count) return;
 
   double lf     = config.GetLegendFontSize();
   double swatch = lf;
@@ -316,12 +318,14 @@ void GRPSTATISTICSCHART::DrawLegend(GRPSTATISTICSCHARTBUILDER& builder, double x
     {
       double total = 0.0;                                                       // total row width (to center it)
 
-      for(XDWORD s=0; s<nseries; s++)
+      for(XDWORD i=0; i<count; i++)
         {
-          GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(s);
-          if(!serie) continue;
+          XSTRING*                name  = NULL;
+          GRPSTATISTICSCHARTCOLOR color;
 
-          double text = (double)serie->GetName().GetSize() * lf * 0.6;
+          if(!GetLegendEntry(i, &name, color) || !name) continue;
+
+          double text = (double)name->GetSize() * lf * 0.6;
           total += swatch + gap + text + lf;                                    // entry width + inter-entry gap
         }
 
@@ -330,20 +334,20 @@ void GRPSTATISTICSCHART::DrawLegend(GRPSTATISTICSCHARTBUILDER& builder, double x
 
       if(curx < x) curx = x;
 
-      for(XDWORD s=0; s<nseries; s++)
+      for(XDWORD i=0; i<count; i++)
         {
-          GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(s);
-          if(!serie) continue;
+          XSTRING*                name  = NULL;
+          GRPSTATISTICSCHARTCOLOR color;
 
-          GRPSTATISTICSCHARTCOLOR color = serie->HasColor() ? serie->GetColor() : config.GetPaletteColor(s);
+          if(!GetLegendEntry(i, &name, color) || !name) continue;
 
           GRPSTATISTICSCHARTSTYLE box;
           box.SetFill(color);
 
           builder.DrawRect(curx, cy - (swatch * 0.5), swatch, swatch, box);
-          builder.DrawText(curx + swatch + gap, cy + (lf * 0.35), serie->GetName().Get(), textstyle);
+          builder.DrawText(curx + swatch + gap, cy + (lf * 0.35), name->Get(), textstyle);
 
-          double text = (double)serie->GetName().GetSize() * lf * 0.6;
+          double text = (double)name->GetSize() * lf * 0.6;
           curx += swatch + gap + text + lf;
         }
 
@@ -353,26 +357,67 @@ void GRPSTATISTICSCHART::DrawLegend(GRPSTATISTICSCHARTBUILDER& builder, double x
   //  vertical (left / right column)
 
   double rowh   = lf * 1.6;
-  double totalh = (double)nseries * rowh;
+  double totalh = (double)count * rowh;
   double cury   = y + ((height - totalh) * 0.5);
 
   if(cury < y) cury = y;
 
-  for(XDWORD s=0; s<nseries; s++)
+  for(XDWORD i=0; i<count; i++)
     {
-      GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(s);
-      if(!serie) continue;
+      XSTRING*                name  = NULL;
+      GRPSTATISTICSCHARTCOLOR color;
 
-      GRPSTATISTICSCHARTCOLOR color = serie->HasColor() ? serie->GetColor() : config.GetPaletteColor(s);
+      if(!GetLegendEntry(i, &name, color) || !name) continue;
 
       GRPSTATISTICSCHARTSTYLE box;
       box.SetFill(color);
 
       builder.DrawRect(x, cury, swatch, swatch, box);
-      builder.DrawText(x + swatch + gap, cury + (swatch * 0.8), serie->GetName().Get(), textstyle);
+      builder.DrawText(x + swatch + gap, cury + (swatch * 0.8), name->Get(), textstyle);
 
       cury += rowh;
     }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD GRPSTATISTICSCHART::GetLegendCount()
+* @brief      Get legend count : number of legend entries (default : one per serie)
+* @ingroup    GRAPHIC
+* 
+* @return     XDWORD : number of legend entries
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD GRPSTATISTICSCHART::GetLegendCount()
+{
+  return data.GetNSeries();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSTATISTICSCHART::GetLegendEntry(XDWORD index, XSTRING** name, GRPSTATISTICSCHARTCOLOR& color)
+* @brief      Get legend entry : name + swatch color for one entry (default : the serie name / color)
+* @ingroup    GRAPHIC
+* 
+* @param[in]  index : entry index
+* @param[out] name  : entry name (not owned)
+* @param[out] color : entry swatch color
+* 
+* @return     bool : true if the entry exists
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSTATISTICSCHART::GetLegendEntry(XDWORD index, XSTRING** name, GRPSTATISTICSCHARTCOLOR& color)
+{
+  GRPSTATISTICSCHARTSERIE* serie = data.GetSerie(index);
+
+  if(!serie) return false;
+
+  *name = &serie->GetName();
+  color = serie->HasColor() ? serie->GetColor() : config.GetPaletteColor(index);
+
+  return true;
 }
 
 
