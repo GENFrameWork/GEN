@@ -38,15 +38,15 @@
 
 enum GRPSTATISTICSCHARTTEXTANCHOR
 {
-  GRPSTATISTICSCHARTTEXTANCHOR_START               = 0 ,                      // anchor at the left of the text
-  GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE              ,                          // anchor at the center of the text
-  GRPSTATISTICSCHARTTEXTANCHOR_END                 ,                          // anchor at the right of the text
+  GRPSTATISTICSCHARTTEXTANCHOR_START               = 0 ,                     // anchor at the left of the text
+  GRPSTATISTICSCHARTTEXTANCHOR_MIDDLE              ,                         // anchor at the center of the text
+  GRPSTATISTICSCHARTTEXTANCHOR_END                 ,                         // anchor at the right of the text
 };
 
 
 enum GRPSTATISTICSCHARTLEGENDPOSITION
 {
-  GRPSTATISTICSCHARTLEGENDPOSITION_TOP             = 0 ,                      // legend band above the plot
+  GRPSTATISTICSCHARTLEGENDPOSITION_TOP             = 0 ,                     // legend band above the plot
   GRPSTATISTICSCHARTLEGENDPOSITION_BOTTOM         ,                          // legend band below the plot
   GRPSTATISTICSCHARTLEGENDPOSITION_LEFT           ,                          // legend column at the left of the plot
   GRPSTATISTICSCHARTLEGENDPOSITION_RIGHT          ,                          // legend column at the right of the plot
