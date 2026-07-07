@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEIP::DIOSTREAMDEVICEIP()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEIP::DIOSTREAMDEVICEIP()
 {
@@ -90,7 +90,7 @@ DIOSTREAMDEVICEIP::~DIOSTREAMDEVICEIP()
 * @brief      Is active
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEIP::IsActive()
@@ -105,7 +105,7 @@ bool DIOSTREAMDEVICEIP::IsActive()
 * @brief      Set is active
 * @ingroup    DATAIO
 * 
-* @param[in]  isactive : 
+* @param[in]  isactive : Isactive value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEIP::SetIsActive(bool isactive)
@@ -115,13 +115,13 @@ void DIOSTREAMDEVICEIP::SetIsActive(bool isactive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOIP* DIOSTREAMDEVICEIP::GetIP()
 * @brief      Get IP
 * @ingroup    DATAIO
-*
-* @return     DIOIP* :
-*
+* 
+* @return     DIOIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIOSTREAMDEVICEIP::GetIP()
 {
@@ -130,13 +130,13 @@ DIOIP* DIOSTREAMDEVICEIP::GetIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMAC* DIOSTREAMDEVICEIP::GetMAC()
 * @brief      Get MAC
 * @ingroup    DATAIO
-*
-* @return     DIOMAC* :
-*
+* 
+* @return     DIOMAC* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMAC* DIOSTREAMDEVICEIP::GetMAC()
 {
@@ -145,13 +145,13 @@ DIOMAC* DIOSTREAMDEVICEIP::GetMAC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMIPDEVICE_TYPE DIOSTREAMDEVICEIP::GetIPType()
 * @brief      Get IP type
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMIPDEVICE_TYPE :
-*
+* 
+* @return     DIOSTREAMIPDEVICE_TYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMIPDEVICE_TYPE DIOSTREAMDEVICEIP::GetIPType()
 {
@@ -160,15 +160,15 @@ DIOSTREAMIPDEVICE_TYPE DIOSTREAMDEVICEIP::GetIPType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEIP::SetIPType(DIOSTREAMIPDEVICE_TYPE iptype)
 * @brief      Set IP type
 * @ingroup    DATAIO
-*
-* @param[in]  iptype :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  iptype : Iptype value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEIP::SetIPType(DIOSTREAMIPDEVICE_TYPE iptype)
 {
@@ -184,7 +184,7 @@ bool DIOSTREAMDEVICEIP::SetIPType(DIOSTREAMIPDEVICE_TYPE iptype)
 * @brief      Get DN sservers
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* DIOSTREAMDEVICEIP::GetDNSservers()
@@ -194,13 +194,13 @@ XVECTOR<XSTRING*>* DIOSTREAMDEVICEIP::GetDNSservers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEIP::DebugPrintInfo()
 * @brief      Debug print info
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEIP::DebugPrintInfo()
 {
@@ -234,12 +234,12 @@ bool DIOSTREAMDEVICEIP::DebugPrintInfo()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEIP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEIP::Clean()
 {

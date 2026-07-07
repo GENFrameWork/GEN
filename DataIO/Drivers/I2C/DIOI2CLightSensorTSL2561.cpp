@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOI2CLIGHTSENSORTSL2561::DIOI2CLIGHTSENSORTSL2561()
+* 
+* @fn         DIOI2CLIGHTSENSORTSL2561::DIOI2CLIGHTSENSORTSL2561(): DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CLIGHTSENSORTSL2561::DIOI2CLIGHTSENSORTSL2561(): DIODEVICEI2C()
 {
@@ -74,12 +74,12 @@ DIOI2CLIGHTSENSORTSL2561::DIOI2CLIGHTSENSORTSL2561(): DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CLIGHTSENSORTSL2561::~DIOI2CLIGHTSENSORTSL2561()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CLIGHTSENSORTSL2561::~DIOI2CLIGHTSENSORTSL2561()
 {
@@ -90,15 +90,15 @@ DIOI2CLIGHTSENSORTSL2561::~DIOI2CLIGHTSENSORTSL2561()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::SetIntegrationTime(DIOI2CLIGHTSENSORTSL2561INTEGRATIONTIME integrationtime)
 * @brief      Set integration time
 * @ingroup    DATAIO
-*
-* @param[in]  integrationtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  integrationtime : Integrationtime value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::SetIntegrationTime(DIOI2CLIGHTSENSORTSL2561INTEGRATIONTIME integrationtime)
 {
@@ -118,15 +118,15 @@ bool DIOI2CLIGHTSENSORTSL2561::SetIntegrationTime(DIOI2CLIGHTSENSORTSL2561INTEGR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::SetGain(DIOI2CLIGHTSENSORTSL2561GAIN gain)
 * @brief      Set gain
 * @ingroup    DATAIO
-*
-* @param[in]  gain :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  gain : Gain value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::SetGain(DIOI2CLIGHTSENSORTSL2561GAIN gain)
 {
@@ -146,18 +146,18 @@ bool DIOI2CLIGHTSENSORTSL2561::SetGain(DIOI2CLIGHTSENSORTSL2561GAIN gain)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::Get(XWORD& fullspectrum, XWORD& infrared, XDWORD& lux, bool autogain)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  fullspectrum :
-* @param[in]  infrared :
-* @param[in]  lux :
-* @param[in]  autogain :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  fullspectrum : Fullspectrum value.
+* @param[in]  infrared : Infrared value.
+* @param[in]  lux : Lux value.
+* @param[in]  autogain : Autogain value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::Get(XWORD& fullspectrum, XWORD& infrared, XDWORD& lux, bool autogain)
 {
@@ -252,13 +252,13 @@ bool DIOI2CLIGHTSENSORTSL2561::Get(XWORD& fullspectrum, XWORD& infrared, XDWORD&
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::End()
 {
@@ -269,13 +269,13 @@ bool DIOI2CLIGHTSENSORTSL2561::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::IniDevice()
 {
@@ -302,17 +302,17 @@ bool DIOI2CLIGHTSENSORTSL2561::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::WriteReg(XBYTE reg, XBYTE value, int timeout)
 * @brief      Write reg
 * @ingroup    DATAIO
-*
-* @param[in]  reg :
-* @param[in]  value :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  value : Value value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::WriteReg(XBYTE reg, XBYTE value, int timeout)
 {
@@ -331,17 +331,17 @@ bool DIOI2CLIGHTSENSORTSL2561::WriteReg(XBYTE reg, XBYTE value, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::ReadData16(XBYTE reg, XWORD& value, int timeout)
 * @brief      Read data16
 * @ingroup    DATAIO
-*
-* @param[in]  reg :
-* @param[in]  value :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  value : Value value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::ReadData16(XBYTE reg, XWORD& value, int timeout)
 {
@@ -367,16 +367,16 @@ bool DIOI2CLIGHTSENSORTSL2561::ReadData16(XBYTE reg, XWORD& value, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::GetData(XWORD& fullspectrum, XWORD& infrared)
 * @brief      Get data
 * @ingroup    DATAIO
-*
-* @param[in]  fullspectrum :
-* @param[in]  infrared :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  fullspectrum : Fullspectrum value.
+* @param[in]  infrared : Infrared value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::GetData(XWORD& fullspectrum, XWORD& infrared)
 {
@@ -405,13 +405,13 @@ bool DIOI2CLIGHTSENSORTSL2561::GetData(XWORD& fullspectrum, XWORD& infrared)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::Activate()
 * @brief      Activate
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::Activate()
 {
@@ -420,13 +420,13 @@ bool DIOI2CLIGHTSENSORTSL2561::Activate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLIGHTSENSORTSL2561::Deactivate()
 * @brief      Deactivate
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLIGHTSENSORTSL2561::Deactivate()
 {
@@ -435,16 +435,16 @@ bool DIOI2CLIGHTSENSORTSL2561::Deactivate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOI2CLIGHTSENSORTSL2561::CalculateLux(XWORD broadband, XWORD inflared)
 * @brief      Calculate lux
 * @ingroup    DATAIO
-*
-* @param[in]  broadband :
-* @param[in]  inflared :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  broadband : Broadband value.
+* @param[in]  inflared : Inflared value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOI2CLIGHTSENSORTSL2561::CalculateLux(XWORD broadband, XWORD inflared)
 {
@@ -546,12 +546,12 @@ XDWORD DIOI2CLIGHTSENSORTSL2561::CalculateLux(XWORD broadband, XWORD inflared)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CLIGHTSENSORTSL2561::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CLIGHTSENSORTSL2561::Clean()
 {

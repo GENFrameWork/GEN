@@ -70,11 +70,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSCRAPERWEB::DIOSCRAPERWEB()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEB::DIOSCRAPERWEB()
 {
@@ -97,12 +97,12 @@ DIOSCRAPERWEB::DIOSCRAPERWEB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSCRAPERWEB::~DIOSCRAPERWEB()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEB::~DIOSCRAPERWEB()
 {
@@ -134,15 +134,15 @@ DIOSCRAPERWEB::~DIOSCRAPERWEB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::Load(XCHAR* namefile)
 * @brief      Load
 * @ingroup    DATAIO
-*
-* @param[in]  namefile :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namefile : Namefile pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::Load(XCHAR* namefile)
 {
@@ -181,15 +181,15 @@ bool DIOSCRAPERWEB::Load(XCHAR* namefile)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::Load(XPATH& namefile)
 * @brief      Load
 * @ingroup    DATAIO
-*
-* @param[in]  namefile :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namefile : Namefile value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::Load(XPATH& namefile)
 {
@@ -198,13 +198,13 @@ bool DIOSCRAPERWEB::Load(XPATH& namefile)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOURL* DIOSCRAPERWEB::GetURLDownload()
 * @brief      Get URL download
 * @ingroup    DATAIO
-*
-* @return     DIOURL* :
-*
+* 
+* @return     DIOURL* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOSCRAPERWEB::GetURLDownload()
 {
@@ -213,16 +213,16 @@ DIOURL* DIOSCRAPERWEB::GetURLDownload()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::Download(DIOURL& URL, XPATH& xpath)
 * @brief      Download
 * @ingroup    DATAIO
-*
-* @param[in]  URL :
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  URL : URL to use.
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::Download(DIOURL& URL, XPATH& xpath)
 {
@@ -247,17 +247,17 @@ bool DIOSCRAPERWEB::Download(DIOURL& URL, XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::Do(XCHAR* namewebservice, int timeoutforurl, XSTRING* localIP)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    DATAIO
-*
-* @param[in]  namewebservice :
-* @param[in]  timeoutforurl :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namewebservice : Namewebservice pointer to use.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::Do(XCHAR* namewebservice, int timeoutforurl, XSTRING* localIP)
 {
@@ -457,17 +457,17 @@ bool DIOSCRAPERWEB::Do(XCHAR* namewebservice, int timeoutforurl, XSTRING* localI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::Do(XSTRING& namewebservice, int timeoutforurl, XSTRING* localIP)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    DATAIO
-*
-* @param[in]  namewebservice :
-* @param[in]  timeoutforurl :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namewebservice : Namewebservice value.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::Do(XSTRING& namewebservice, int timeoutforurl, XSTRING* localIP)
 {
@@ -476,16 +476,16 @@ bool DIOSCRAPERWEB::Do(XSTRING& namewebservice, int timeoutforurl, XSTRING* loca
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::ChangeURL(XCHAR* maskurl, DIOURL& url)
 * @brief      Change URL
 * @ingroup    DATAIO
-*
-* @param[in]  maskurl :
-* @param[in]  url :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  maskurl : Maskurl pointer to use.
+* @param[in]  url : URL to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::ChangeURL(XCHAR* maskurl, DIOURL& url)
 {
@@ -498,16 +498,16 @@ bool DIOSCRAPERWEB::ChangeURL(XCHAR* maskurl, DIOURL& url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::AddValue(XCHAR* name, XCHAR* value)
 * @brief      Add value
 * @ingroup    DATAIO
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::AddValue(XCHAR* name, XCHAR* value)
 {
@@ -532,16 +532,16 @@ bool DIOSCRAPERWEB::AddValue(XCHAR* name, XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::AddValue(XCHAR* name, XSTRING& value)
 * @brief      Add value
 * @ingroup    DATAIO
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::AddValue(XCHAR* name, XSTRING& value)
 {
@@ -550,16 +550,16 @@ bool DIOSCRAPERWEB::AddValue(XCHAR* name, XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::AddValue(XSTRING& name,XCHAR* value)
 * @brief      Add value
 * @ingroup    DATAIO
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::AddValue(XSTRING& name,XCHAR*  value)
 {
@@ -568,16 +568,16 @@ bool DIOSCRAPERWEB::AddValue(XSTRING& name,XCHAR*  value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::AddValue(XSTRING& name, XSTRING& value)
 * @brief      Add value
 * @ingroup    DATAIO
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::AddValue(XSTRING& name, XSTRING& value)
 {
@@ -591,9 +591,9 @@ bool DIOSCRAPERWEB::AddValue(XSTRING& name, XSTRING& value)
 * @brief      Get value
 * @ingroup    DATAIO
 * 
-* @param[in]  namevalue : 
+* @param[in]  namevalue : Namevalue pointer to use.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOSCRAPERWEB::GetValue(XCHAR* namevalue)
@@ -623,15 +623,15 @@ XCHAR* DIOSCRAPERWEB::GetValue(XCHAR* namevalue)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOSCRAPERWEB::GetValue(XSTRING& namevalue)
 * @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  namevalue :
-*
-* @return     XCHAR* :
-*
+* 
+* @param[in]  namevalue : Namevalue value.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOSCRAPERWEB::GetValue(XSTRING& namevalue)
 {
@@ -640,13 +640,13 @@ XCHAR* DIOSCRAPERWEB::GetValue(XSTRING& namevalue)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::DeleteAllValues()
 * @brief      Delete all values
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::DeleteAllValues()
 {
@@ -661,13 +661,13 @@ bool DIOSCRAPERWEB::DeleteAllValues()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT* DIOSCRAPERWEB::GetWebClient()
 * @brief      Get web client
 * @ingroup    DATAIO
-*
-* @return     DIOWEBCLIENT* :
-*
+* 
+* @return     DIOWEBCLIENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT* DIOSCRAPERWEB::GetWebClient()
 {
@@ -676,19 +676,19 @@ DIOWEBCLIENT* DIOSCRAPERWEB::GetWebClient()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::ExtractString(XCHAR* searchini,XCHAR* searchend,XBUFFER* xbuffer,bool usebufferpos,XSTRING& result)
 * @brief      Extract string
 * @ingroup    DATAIO
-*
-* @param[in]  searchini :
-* @param[in]  searchend :
-* @param[in]  xbuffer :
-* @param[in]  usebufferpos :
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  searchini : Searchini pointer to use.
+* @param[in]  searchend : Searchend pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  usebufferpos : Usebufferpos value.
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::ExtractString(XCHAR* searchini,XCHAR* searchend,XBUFFER* xbuffer,bool usebufferpos,XSTRING& result)
 {
@@ -705,19 +705,19 @@ bool DIOSCRAPERWEB::ExtractString(XCHAR* searchini,XCHAR* searchend,XBUFFER* xbu
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOSCRAPERWEB::ExtractString(XCHAR* searchini,XSTRING& searchend,XBUFFER* xbuffer,bool usebufferpos,XSTRING& result)
+* 
+* @fn         bool DIOSCRAPERWEB::ExtractString(XCHAR* searchini, XSTRING& searchend, XBUFFER* xbuffer, bool usebufferpos, XSTRING& result)
 * @brief      Extract string
 * @ingroup    DATAIO
-*
-* @param[in]  searchini :
-* @param[in]  searchend :
-* @param[in]  xbuffer :
-* @param[in]  usebufferpos :
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  searchini : Searchini pointer to use.
+* @param[in]  searchend : Searchend value.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  usebufferpos : Usebufferpos value.
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::ExtractString(XCHAR* searchini, XSTRING& searchend, XBUFFER* xbuffer, bool usebufferpos, XSTRING& result)
 {
@@ -732,19 +732,19 @@ bool DIOSCRAPERWEB::ExtractString(XCHAR* searchini, XSTRING& searchend, XBUFFER*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEB::ExtractString(XSTRING& searchini,XCHAR* searchend,XBUFFER* xbuffer,bool usebufferpos,XSTRING& result)
 * @brief      Extract string
 * @ingroup    DATAIO
-*
-* @param[in]  searchini :
-* @param[in]  searchend :
-* @param[in]  xbuffer :
-* @param[in]  usebufferpos :
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  searchini : Searchini value.
+* @param[in]  searchend : Searchend pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  usebufferpos : Usebufferpos value.
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::ExtractString(XSTRING& searchini,XCHAR* searchend,XBUFFER* xbuffer,bool usebufferpos,XSTRING& result)
 {
@@ -759,19 +759,19 @@ bool DIOSCRAPERWEB::ExtractString(XSTRING& searchini,XCHAR* searchend,XBUFFER* x
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOSCRAPERWEB::ExtractString(XSTRING& searchini,XSTRING& searchend,XBUFFER* xbuffer,bool usebufferpos,XSTRING& result)
+* 
+* @fn         bool DIOSCRAPERWEB::ExtractString(XSTRING& searchini, XSTRING& searchend, XBUFFER* xbuffer, bool usebufferpos, XSTRING& result)
 * @brief      Extract string
 * @ingroup    DATAIO
-*
-* @param[in]  searchini :
-* @param[in]  searchend :
-* @param[in]  xbuffer :
-* @param[in]  usebufferpos :
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  searchini : Searchini value.
+* @param[in]  searchend : Searchend value.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  usebufferpos : Usebufferpos value.
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEB::ExtractString(XSTRING& searchini, XSTRING& searchend, XBUFFER* xbuffer, bool usebufferpos, XSTRING& result)
 {
@@ -809,14 +809,14 @@ bool DIOSCRAPERWEB::ExtractString(XSTRING& searchini, XSTRING& searchend, XBUFFE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSCRAPERWEB::HandleEvent(XEVENT* xevent)
 * @brief      Handle event
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* @param[in]  xevent :
-*
+* 
+* @param[in]  xevent : Xevent pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSCRAPERWEB::HandleEvent(XEVENT* xevent)
 {
@@ -825,12 +825,12 @@ void DIOSCRAPERWEB::HandleEvent(XEVENT* xevent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSCRAPERWEB::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSCRAPERWEB::Clean()
 {

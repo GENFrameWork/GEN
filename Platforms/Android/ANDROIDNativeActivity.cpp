@@ -60,7 +60,7 @@
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  application : 
+* @param[in]  application : Application pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 ANDROIDNATIVEACTIVITY_EVENTLOOP::ANDROIDNATIVEACTIVITY_EVENTLOOP(android_app* application)
@@ -92,11 +92,11 @@ ANDROIDNATIVEACTIVITY_EVENTLOOP::~ANDROIDNATIVEACTIVITY_EVENTLOOP()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void ANDROIDNATIVEACTIVITY_EVENTLOOP::Run(ANDROIDNATIVEACTIVITY_HANDLER* activityhandler, ANDROIDNATIVEINPUT_HANDLER* inputhandler)
-* @brief      Run
+* @brief      Run operation
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  activityhandler : 
-* @param[in]  inputhandler : 
+* @param[in]  activityhandler : Activityhandler pointer to use.
+* @param[in]  inputhandler : Inputhandler pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void ANDROIDNATIVEACTIVITY_EVENTLOOP::Run(ANDROIDNATIVEACTIVITY_HANDLER* activityhandler, ANDROIDNATIVEINPUT_HANDLER* inputhandler)
@@ -184,10 +184,10 @@ void ANDROIDNATIVEACTIVITY_EVENTLOOP::Deactivate()
 * @brief      Process input event
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  event : 
-* @param[in]  application : 
+* @param[in]  event : Event to process.
+* @param[in]  application : Application pointer to use.
 * 
-* @return     int32_t : 
+* @return     int32_t : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int32_t ANDROIDNATIVEACTIVITY_EVENTLOOP::ProcessInputEvent(AInputEvent* event, android_app* application)
@@ -218,8 +218,8 @@ int32_t ANDROIDNATIVEACTIVITY_EVENTLOOP::ProcessInputEvent(AInputEvent* event, a
 * @brief      Process application event
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  command : 
-* @param[in]  application : 
+* @param[in]  command : Command value.
+* @param[in]  application : Application pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void ANDROIDNATIVEACTIVITY_EVENTLOOP::ProcessApplicationEvent(int32_t command, android_app* application)
@@ -299,10 +299,10 @@ void ANDROIDNATIVEACTIVITY_EVENTLOOP::Clean()
 * @brief      Callback input
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  application : 
-* @param[in]  event : 
+* @param[in]  application : Application pointer to use.
+* @param[in]  event : Event to process.
 * 
-* @return     int32_t : 
+* @return     int32_t : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int32_t ANDROIDNATIVEACTIVITY_EVENTLOOP::CallbackInput(android_app* application, AInputEvent* event)
@@ -319,8 +319,8 @@ int32_t ANDROIDNATIVEACTIVITY_EVENTLOOP::CallbackInput(android_app* application,
 * @brief      Callback event
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  application : 
-* @param[in]  command : 
+* @param[in]  application : Application pointer to use.
+* @param[in]  command : Command value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void ANDROIDNATIVEACTIVITY_EVENTLOOP::CallbackEvent(android_app* application, int32_t command)

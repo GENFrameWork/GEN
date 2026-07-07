@@ -63,7 +63,7 @@
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  grpscreen : 
+* @param[in]  grpscreen : Grpscreen pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPANDROIDDEVICEMOUSE::INPANDROIDDEVICEMOUSE(GRPANDROIDSCREEN* grpscreen)
@@ -81,12 +81,12 @@ INPANDROIDDEVICEMOUSE::INPANDROIDDEVICEMOUSE(GRPANDROIDSCREEN* grpscreen)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPANDROIDDEVICEMOUSE::~INPANDROIDDEVICEMOUSE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPANDROIDDEVICEMOUSE::~INPANDROIDDEVICEMOUSE()
 {
@@ -101,13 +101,13 @@ INPANDROIDDEVICEMOUSE::~INPANDROIDDEVICEMOUSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPANDROIDDEVICEMOUSE::Update()
 * @brief      Update
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPANDROIDDEVICEMOUSE::Update()
 {
@@ -162,15 +162,15 @@ bool INPANDROIDDEVICEMOUSE::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPANDROIDDEVICEMOUSE::SetScreen(void* screenpointer)
 * @brief      Set screen
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  screenpointer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  screenpointer : Screenpointer pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPANDROIDDEVICEMOUSE::SetScreen(void* screenpointer)
 {
@@ -186,12 +186,12 @@ bool INPANDROIDDEVICEMOUSE::SetScreen(void* screenpointer)
 * @brief      Add position
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  index : 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  ispressed : 
+* @param[in]  index : Index value.
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  ispressed : Ispressed value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPANDROIDDEVICEMOUSE::AddPosition(int index, float x, float y, bool ispressed)
@@ -229,12 +229,12 @@ bool INPANDROIDDEVICEMOUSE::AddPosition(int index, float x, float y, bool ispres
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPANDROIDDEVICEMOUSE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPANDROIDDEVICEMOUSE::Clean()
 {
@@ -243,13 +243,13 @@ void INPANDROIDDEVICEMOUSE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPANDROIDDEVICEMOUSE::CreateAllButtons()
 * @brief      Create all buttons
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPANDROIDDEVICEMOUSE::CreateAllButtons()
 {
@@ -269,7 +269,7 @@ bool INPANDROIDDEVICEMOUSE::CreateAllButtons()
 * @brief      Create all cursors
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPANDROIDDEVICEMOUSE::CreateAllCursors()

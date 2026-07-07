@@ -64,7 +64,7 @@
 * @brief      onsole  get symbols used
 * @ingroup    XUTILS
 * 
-* @return     XCONSOLE_SYMBOLSUSED : 
+* @return     XCONSOLE_SYMBOLSUSED : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed()
@@ -90,11 +90,11 @@ XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCONSOLE::XCONSOLE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE::XCONSOLE()
 {
@@ -103,12 +103,12 @@ XCONSOLE::XCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCONSOLE::~XCONSOLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE::~XCONSOLE()
 {
@@ -117,17 +117,17 @@ XCONSOLE::~XCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::GetSize(int& width, int& height)
 * @brief      Get size
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @param[out]  width : return width of console
-* @param[out]  height : return height of console
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : return width of console
+* @param[in]  height : return height of console
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::GetSize(int& width, int& height)
 {
@@ -139,17 +139,17 @@ bool XCONSOLE::GetSize(int& width, int& height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::SetSize(int width, int height)
 * @brief      Set size
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  width : set width of console
 * @param[in]  height : swet height of console
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::SetSize(int width, int height)
 {
@@ -158,16 +158,16 @@ bool XCONSOLE::SetSize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::GetSizeText(int& columns, int& rows)
 * @brief      Get size text
 * @ingroup    XUTILS
-*
-* @param[in]  columns :
-* @param[in]  rows :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  columns : Columns value.
+* @param[in]  rows : Rows value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::GetSizeText(int& columns, int& rows)
 {
@@ -181,7 +181,7 @@ bool XCONSOLE::GetSizeText(int& columns, int& rows)
 * @brief      get symbols used
 * @ingroup    XUTILS
 * 
-* @return     XCONSOLE_SYMBOLSUSED : 
+* @return     XCONSOLE_SYMBOLSUSED : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE_SYMBOLSUSED XCONSOLE::GetSymbolsUsed()
@@ -191,14 +191,14 @@ XCONSOLE_SYMBOLSUSED XCONSOLE::GetSymbolsUsed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::Maximize()
 * @brief      Maximize
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::Maximize()
 {
@@ -207,14 +207,14 @@ bool XCONSOLE::Maximize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::Minimize()
 * @brief      Minimize
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::Minimize()
 {
@@ -223,14 +223,14 @@ bool XCONSOLE::Minimize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::Hide()
 * @brief      Hide
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::Hide()
 {
@@ -239,14 +239,14 @@ bool XCONSOLE::Hide()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::IsHide()
 * @brief      Is hide
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::IsHide()
 {
@@ -255,14 +255,14 @@ bool XCONSOLE::IsHide()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::UnHide()
 * @brief      Un hide
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::UnHide()
 {
@@ -275,12 +275,12 @@ bool XCONSOLE::UnHide()
 * @fn         bool XCONSOLE::Clear(bool fill)
 * @brief      Clear
 * @ingroup    XUTILS
-*
-* @param[in]  fill : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  fill : Fill value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::Clear(bool fill)
 {
   return false;
@@ -288,14 +288,14 @@ bool XCONSOLE::Clear(bool fill)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::KBHit()
 * @brief      KB hit
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::KBHit()
 {
@@ -304,14 +304,14 @@ bool XCONSOLE::KBHit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XCONSOLE::GetChar()
 * @brief      Get char
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XCONSOLE::GetChar()
 {
@@ -320,15 +320,15 @@ int XCONSOLE::GetChar()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::Print(XCHAR* string)
 * @brief      Print
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  string : string to print
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::Print(XCHAR* string)
 {
@@ -339,16 +339,16 @@ bool XCONSOLE::Print(XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::Printf(XCHAR* mask,...)
 * @brief      Printf
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : mask to use
 * @param[in]  ... : variables
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::Printf(XCHAR* mask,...)
 {
@@ -371,20 +371,20 @@ bool XCONSOLE::Printf(XCHAR* mask,...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::PrintDataBlock(XBYTE* data, XDWORD size, XDWORD marginsize, XDWORD sizeline, bool showoffset, bool showtext)
 * @brief      Print data block
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : data to print
 * @param[in]  size : size of data
 * @param[in]  marginsize : size of margin
-* @param[in]  sizeline :  size for the line.
+* @param[in]  sizeline : size for the line.
 * @param[in]  showoffset : true if show offset
 * @param[in]  showtext : true if show the data in char format.
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::PrintDataBlock(XBYTE* data, XDWORD size, XDWORD marginsize, XDWORD sizeline, bool showoffset, bool showtext)
 {
@@ -458,19 +458,19 @@ bool XCONSOLE::PrintDataBlock(XBYTE* data, XDWORD size, XDWORD marginsize, XDWOR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::PrintDataBlock(XBUFFER& data, XDWORD marginsize, XDWORD sizeline, bool showoffset, bool showtext)
 * @brief      Print data block
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : buffer data to print
 * @param[in]  marginsize : size of margin
-* @param[in]  sizeline :  size of line
+* @param[in]  sizeline : size of line
 * @param[in]  showoffset : true if show offset
 * @param[in]  showtext : true if show the data in char format.
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::PrintDataBlock(XBUFFER& data, XDWORD marginsize, XDWORD sizeline, bool showoffset, bool showtext)
 {
@@ -479,19 +479,19 @@ bool XCONSOLE::PrintDataBlock(XBUFFER& data, XDWORD marginsize, XDWORD sizeline,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::Format_Message(XCHAR* message, XDWORD margin, bool prelude, bool returnline, XSTRING& string)
 * @brief      Format message
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  message : Message to format.
 * @param[in]  margin : size margin
 * @param[in]  prelude : true if has prelude
 * @param[in]  returnline : true if has return
-* @param[out] string : result string formated
-*
-* @return     bool : true if is succesful.
-*
+* @param[in]  string : result string formated
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::Format_Message(XCHAR* message, XDWORD margin, bool prelude, bool returnline, XSTRING& string)
 {
@@ -518,12 +518,12 @@ bool XCONSOLE::Format_Message(XCHAR* message, XDWORD margin, bool prelude, bool 
 * @brief      Print message
 * @ingroup    XUTILS
 * 
-* @param[in]  message : 
-* @param[in]  margin : 
-* @param[in]  prelude : 
-* @param[in]  returnline : 
+* @param[in]  message : Message text.
+* @param[in]  margin : Margin value.
+* @param[in]  prelude : Prelude value.
+* @param[in]  returnline : Returnline value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::PrintMessage(XCHAR* message, XDWORD margin, bool prelude, bool returnline)
@@ -537,18 +537,18 @@ bool XCONSOLE::PrintMessage(XCHAR* message, XDWORD margin, bool prelude, bool re
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XCONSOLE::WaitKey(XCHAR* text, XDWORD margin, bool prelude, XDWORD timeout)
 * @brief      Wait key
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  text : Text of the wait
 * @param[in]  margin : size of margin
 * @param[in]  prelude : true if has prelude
 * @param[in]  timeout : timeout of the wait
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XCONSOLE::WaitKey(XCHAR* text, XDWORD margin, bool prelude, XDWORD timeout)
 {
@@ -610,13 +610,13 @@ bool XCONSOLE::WaitKey(XCHAR* text, XDWORD margin, bool prelude, XDWORD timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XCONSOLE::EraseToEndLine(int actualpos)
 * @brief      Erase to end line
 * @ingroup    XUTILS
-*
-* @param[in]  actualpos :
-*
+* 
+* @param[in]  actualpos : Actualpos value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XCONSOLE::EraseToEndLine(int actualpos)
 {
@@ -633,12 +633,12 @@ void XCONSOLE::EraseToEndLine(int actualpos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XCONSOLE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XCONSOLE::Clean()
 {

@@ -60,16 +60,16 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPDEVICE* INPWINDOWSFACTORY::CreateDevice(XCHAR* devicename, void* param)
+* 
+* @fn         INPDEVICE* INPWINDOWSFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 * @brief      Create device
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  type : device type of the input device
 * @param[in]  param : param to create device (in windows need handle to windows)
-*
-* @return     INPDEVICE* : device input created
-*
+* 
+* @return     INPDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* INPWINDOWSFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 {
@@ -108,15 +108,15 @@ INPDEVICE* INPWINDOWSFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPWINDOWSFACTORY::DeleteDevice(INPDEVICE* device)
 * @brief      Delete device
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  device : device to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSFACTORY::DeleteDevice(INPDEVICE* device)
 {
@@ -135,7 +135,7 @@ bool INPWINDOWSFACTORY::DeleteDevice(INPDEVICE* device)
 * @brief      Create simulator
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     INPSIMULATE* : 
+* @return     INPSIMULATE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPSIMULATE* INPWINDOWSFACTORY::CreateSimulator()
@@ -152,9 +152,9 @@ INPSIMULATE* INPWINDOWSFACTORY::CreateSimulator()
 * @brief      Delete simulator
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  inputsimulated : 
+* @param[in]  inputsimulated : Inputsimulated pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)
@@ -180,7 +180,7 @@ bool INPWINDOWSFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)
 * @brief      Create capture
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     INPCAPTURE* : 
+* @return     INPCAPTURE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPCAPTURE* INPWINDOWSFACTORY::CreateCapture()
@@ -197,9 +197,9 @@ INPCAPTURE* INPWINDOWSFACTORY::CreateCapture()
 * @brief      Delete capture
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  inputcapture : 
+* @param[in]  inputcapture : Inputcapture pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSFACTORY::DeleteCapture(INPCAPTURE* inputcapture)

@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LNG_LUA::SCRIPT_LNG_LUA()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LNG_LUA::SCRIPT_LNG_LUA()
 {
@@ -81,12 +81,12 @@ SCRIPT_LNG_LUA::SCRIPT_LNG_LUA()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LNG_LUA::~SCRIPT_LNG_LUA()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LNG_LUA::~SCRIPT_LNG_LUA()
 {
@@ -97,15 +97,15 @@ SCRIPT_LNG_LUA::~SCRIPT_LNG_LUA()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_G_ERRORCODE SCRIPT_LNG_LUA::Run(int* returnval)
-* @brief      Run
+* 
+* @fn         int SCRIPT_LNG_LUA::Run(int* returnval)
+* @brief      Run operation
 * @ingroup    SCRIPT
-*
-* @param[in]  returnval :
-*
-* @return     SCRIPT_G_ERRORCODE :
-*
+* 
+* @param[in]  returnval : Returnval pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SCRIPT_LNG_LUA::Run(int* returnval)
 {
@@ -178,17 +178,17 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LNG_LUA::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY ptrfunction)
 * @brief      Add library function
 * @ingroup    SCRIPT
-*
-* @param[in]  library :
-* @param[in]  name :
-* @param[in]  ptrfunction :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  library : Library pointer to use.
+* @param[in]  name : Name to use.
+* @param[in]  ptrfunction : Ptrfunction value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_LUA::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY ptrfunction)
 {
@@ -211,10 +211,10 @@ bool SCRIPT_LNG_LUA::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUN
 * @brief      have error
 * @ingroup    SCRIPT
 * 
-* @param[in]  currenttoken : 
-* @param[in]  errorcode : 
+* @param[in]  currenttoken : Currenttoken value.
+* @param[in]  errorcode : Errorcode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_LUA::HaveError(XSTRING& currenttoken, int errorcode)
@@ -264,13 +264,13 @@ bool SCRIPT_LNG_LUA::HaveError(XSTRING& currenttoken, int errorcode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LNG_LUA::HaveMainFunction()
 * @brief      Have main function
 * @ingroup    SCRIPT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_LUA::HaveMainFunction()
 {
@@ -321,12 +321,12 @@ bool SCRIPT_LNG_LUA::HaveMainFunction()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LNG_LUA::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LNG_LUA::Clean()
 {
@@ -335,15 +335,15 @@ void SCRIPT_LNG_LUA::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int LUA_LibraryCallBack(lua_State* state)
 * @brief      LUA_LibraryCallBack
 * @ingroup    SCRIPT
-*
-* @param[in]  state :
-*
-* @return     int :
-*
+* 
+* @param[in]  state : State pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int LUA_LibraryCallBack(lua_State* state)
 {

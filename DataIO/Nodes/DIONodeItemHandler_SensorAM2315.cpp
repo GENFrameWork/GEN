@@ -54,9 +54,9 @@
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  port: 
-* @param[in]  remoteitemaddress : 
-* @param[in]  timeout : 
+* @param[in]  port : Port number to use.
+* @param[in]  remoteitemaddress : Remoteitemaddress value.
+* @param[in]  timeout : Timeout value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEMHANDLER_SENSORAM2315::DIONODEITEMHANDLER_SENSORAM2315(int port, int remoteitemaddress, int timeout)
@@ -101,7 +101,7 @@ DIONODEITEMHANDLER_SENSORAM2315::~DIONODEITEMHANDLER_SENSORAM2315()
 * @brief      Open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_SENSORAM2315::Open()
@@ -131,7 +131,7 @@ bool DIONODEITEMHANDLER_SENSORAM2315::Open()
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_SENSORAM2315::Update()
@@ -206,7 +206,7 @@ bool DIONODEITEMHANDLER_SENSORAM2315::Update()
 * @brief      Close
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_SENSORAM2315::Close()
@@ -225,9 +225,9 @@ bool DIONODEITEMHANDLER_SENSORAM2315::Close()
 * @brief      Set node item
 * @ingroup    DATAIO
 * 
-* @param[in]  nodeitem : 
+* @param[in]  nodeitem : Nodeitem pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_SENSORAM2315::SetNodeItem(DIONODEITEM* nodeitem)

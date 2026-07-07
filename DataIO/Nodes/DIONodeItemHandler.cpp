@@ -93,7 +93,7 @@ DIONODEITEMHANDLER::~DIONODEITEMHANDLER()
 * @brief      Get type
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIONODEITEMHANDLER::GetType()
@@ -108,7 +108,7 @@ XDWORD DIONODEITEMHANDLER::GetType()
 * @brief      set type
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMHANDLER::SetType(XDWORD type)
@@ -123,7 +123,7 @@ void DIONODEITEMHANDLER::SetType(XDWORD type)
 * @brief      Get name
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIONODEITEMHANDLER::GetName()
@@ -138,7 +138,7 @@ XSTRING* DIONODEITEMHANDLER::GetName()
 * @brief      Open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER::Open()
@@ -155,7 +155,7 @@ bool DIONODEITEMHANDLER::Open()
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER::Update()
@@ -170,7 +170,7 @@ bool DIONODEITEMHANDLER::Update()
 * @brief      Close
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER::Close()
@@ -187,7 +187,7 @@ bool DIONODEITEMHANDLER::Close()
 * @brief      Is open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER::IsOpen()
@@ -202,7 +202,7 @@ bool DIONODEITEMHANDLER::IsOpen()
 * @brief      Is working
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER::IsWorking()
@@ -217,7 +217,7 @@ bool DIONODEITEMHANDLER::IsWorking()
 * @brief      Get node item
 * @ingroup    DATAIO
 * 
-* @return     DIONODEITEM* : 
+* @return     DIONODEITEM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEM* DIONODEITEMHANDLER::GetNodeItem()
@@ -232,9 +232,9 @@ DIONODEITEM* DIONODEITEMHANDLER::GetNodeItem()
 * @brief      Set node item
 * @ingroup    DATAIO
 * 
-* @param[in]  nodeitem : 
+* @param[in]  nodeitem : Nodeitem pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER::SetNodeItem(DIONODEITEM* nodeitem)

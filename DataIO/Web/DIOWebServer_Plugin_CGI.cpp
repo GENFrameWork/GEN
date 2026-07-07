@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_PLUGIN_CGI::DIOWEBSERVER_PLUGIN_CGI()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_PLUGIN_CGI::DIOWEBSERVER_PLUGIN_CGI()
 {
@@ -76,12 +76,12 @@ DIOWEBSERVER_PLUGIN_CGI::DIOWEBSERVER_PLUGIN_CGI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_PLUGIN_CGI::~DIOWEBSERVER_PLUGIN_CGI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_PLUGIN_CGI::~DIOWEBSERVER_PLUGIN_CGI()
 {
@@ -95,10 +95,10 @@ DIOWEBSERVER_PLUGIN_CGI::~DIOWEBSERVER_PLUGIN_CGI()
 * @brief      Config
 * @ingroup    DATAIO
 * 
-* @param[in]  pathCGIinterpreter : 
-* @param[in]  nameexec : 
+* @param[in]  pathCGIinterpreter : Path CG Iinterpreter pointer to use.
+* @param[in]  nameexec : Nameexec pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_PLUGIN_CGI::Config(XPATH* pathCGIinterpreter, XCHAR* nameexec)
@@ -113,19 +113,19 @@ bool DIOWEBSERVER_PLUGIN_CGI::Config(XPATH* pathCGIinterpreter, XCHAR* nameexec)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result)
 * @brief      Page extension
 * @ingroup    DATAIO
-*
-* @param[in]  pathfile :
-* @param[in]  request :
-* @param[in]  querystrings :
-* @param[in]  headerresult :
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  request : Request pointer to use.
+* @param[in]  querystrings : Querystrings pointer to use.
+* @param[in]  headerresult : Output headerresult.
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result)
 {
@@ -202,12 +202,12 @@ bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUES
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_PLUGIN_CGI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_PLUGIN_CGI::Clean()
 {

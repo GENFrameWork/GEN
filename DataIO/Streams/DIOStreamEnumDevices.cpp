@@ -58,11 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMDEVICES::DIOSTREAMENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMDEVICES::DIOSTREAMENUMDEVICES()
 {
@@ -73,12 +73,12 @@ DIOSTREAMENUMDEVICES::DIOSTREAMENUMDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMDEVICES::~DIOSTREAMENUMDEVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMDEVICES::~DIOSTREAMENUMDEVICES()
 {
@@ -91,13 +91,13 @@ DIOSTREAMENUMDEVICES::~DIOSTREAMENUMDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMTYPE DIOSTREAMENUMDEVICES::GetType()
 * @brief      Get type
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMENUMTYPE :
-*
+* 
+* @return     DIOSTREAMENUMTYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMTYPE DIOSTREAMENUMDEVICES::GetType()
 {
@@ -111,9 +111,9 @@ DIOSTREAMENUMTYPE DIOSTREAMENUMDEVICES::GetType()
 * @brief      Set type
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::SetType(DIOSTREAMENUMTYPE type)
@@ -125,13 +125,13 @@ bool DIOSTREAMENUMDEVICES::SetType(DIOSTREAMENUMTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::Search()
 {
@@ -140,15 +140,15 @@ bool DIOSTREAMENUMDEVICES::Search()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMDEVICES::StopSearch(bool waitend)
 * @brief      Stop search
 * @ingroup    DATAIO
-*
-* @param[in]  waitend :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  waitend : Waitend value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::StopSearch(bool waitend)
 {
@@ -157,13 +157,13 @@ bool DIOSTREAMENUMDEVICES::StopSearch(bool waitend)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMDEVICES::IsSearching()
 * @brief      Is searching
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::IsSearching()
 {
@@ -172,15 +172,15 @@ bool DIOSTREAMENUMDEVICES::IsSearching()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMDEVICES::AddDevice(DIOSTREAMDEVICE* device)
 * @brief      Add device
 * @ingroup    DATAIO
-*
-* @param[in]  device :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  device : Device pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::AddDevice(DIOSTREAMDEVICE* device)
 {
@@ -191,13 +191,13 @@ bool DIOSTREAMENUMDEVICES::AddDevice(DIOSTREAMDEVICE* device)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<DIOSTREAMDEVICE*>* DIOSTREAMENUMDEVICES::GetDevices()
 * @brief      Get devices
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<DIOSTREAMDEVICE*>* :
-*
+* 
+* @return     XVECTOR<DIOSTREAMDEVICE*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOSTREAMDEVICE*>* DIOSTREAMENUMDEVICES::GetDevices()
 {
@@ -206,13 +206,13 @@ XVECTOR<DIOSTREAMDEVICE*>* DIOSTREAMENUMDEVICES::GetDevices()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMDEVICES::DelAllDevices()
 * @brief      Del all devices
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::DelAllDevices()
 {
@@ -226,15 +226,15 @@ bool DIOSTREAMENUMDEVICES::DelAllDevices()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMDEVICES::IsDeviceAvailable(XCHAR* string)
 * @brief      Is device available
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::IsDeviceAvailable(XCHAR* string)
 {
@@ -243,15 +243,15 @@ bool DIOSTREAMENUMDEVICES::IsDeviceAvailable(XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMDEVICES::IsDeviceAvailable(XSTRING& string)
 * @brief      Is device available
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::IsDeviceAvailable(XSTRING& string)
 {
@@ -260,13 +260,13 @@ bool DIOSTREAMENUMDEVICES::IsDeviceAvailable(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMDEVICES::AreDevicesAvailable()
 * @brief      Are devices available
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMDEVICES::AreDevicesAvailable()
 {
@@ -275,15 +275,15 @@ bool DIOSTREAMENUMDEVICES::AreDevicesAvailable()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByName(XCHAR* name)
 * @brief      Get device by name
 * @ingroup    DATAIO
-*
-* @param[in]  name :
-*
-* @return     DIOSTREAMDEVICE* :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     DIOSTREAMDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByName(XCHAR* name)
 {
@@ -303,15 +303,15 @@ DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByName(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByName(XSTRING& name)
 * @brief      Get device by name
 * @ingroup    DATAIO
-*
-* @param[in]  name :
-*
-* @return     DIOSTREAMDEVICE* :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     DIOSTREAMDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByName(XSTRING& name)
 {
@@ -320,15 +320,15 @@ DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByName(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByIndex(int index)
 * @brief      Get device by index
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     DIOSTREAMDEVICE* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     DIOSTREAMDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByIndex(int index)
 {
@@ -346,12 +346,12 @@ DIOSTREAMDEVICE* DIOSTREAMENUMDEVICES::GetDeviceByIndex(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMENUMDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMENUMDEVICES::Clean()
 {

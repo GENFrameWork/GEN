@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVG::GRPVECTORFILESVG()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVG::GRPVECTORFILESVG()
 {
@@ -74,12 +74,12 @@ GRPVECTORFILESVG::GRPVECTORFILESVG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVG::~GRPVECTORFILESVG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVG::~GRPVECTORFILESVG()
 {
@@ -94,13 +94,13 @@ GRPVECTORFILESVG::~GRPVECTORFILESVG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILERESULT GRPVECTORFILESVG::DetectType()
 * @brief      Detect type : check the extension (.svg) and that the file is a text file with a <svg> root tag
 * @ingroup    GRAPHIC
-*
-* @return     GRPVECTORFILERESULT : result
-*
+* 
+* @return     GRPVECTORFILERESULT : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILESVG::DetectType()
 {
@@ -174,13 +174,13 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::DetectType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILERESULT GRPVECTORFILESVG::Load()
 * @brief      Load : parse the XML, read the <svg> config and build the SVG object tree
 * @ingroup    GRAPHIC
-*
-* @return     GRPVECTORFILERESULT : result
-*
+* 
+* @return     GRPVECTORFILERESULT : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILESVG::Load()
 {
@@ -217,16 +217,15 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::Load()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILERESULT GRPVECTORFILESVG::Load(XSTRING& content)
-* @brief      Load : parse the XML from an in memory text buffer and build the SVG object tree (same path as the disk
-*             load, only the source of the text lines changes)
+* @brief      Load : parse the XML from an in memory text buffer and build the SVG object tree (same path as the disk load, only the source of the text lines changes)
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  content : SVG source as a string
-*
-* @return     GRPVECTORFILERESULT : result
-*
+* 
+* @return     GRPVECTORFILERESULT : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILESVG::Load(XSTRING& content)
 {
@@ -261,15 +260,15 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::Load(XSTRING& content)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILERESULT GRPVECTORFILESVG::BuildFromXML(XFILEXML* file)
 * @brief      Build the SVG object tree from an already decoded XML file (shared by the disk and the in memory loads)
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  file : decoded XML file (root must be the <svg> element)
-*
-* @return     GRPVECTORFILERESULT : result
-*
+* 
+* @return     GRPVECTORFILERESULT : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILESVG::BuildFromXML(XFILEXML* file)
 {
@@ -301,13 +300,13 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::BuildFromXML(XFILEXML* file)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILECONFIG* GRPVECTORFILESVG::GetConfig()
 * @brief      Get config
 * @ingroup    GRAPHIC
-*
-* @return     GRPVECTORFILECONFIG* : config
-*
+* 
+* @return     GRPVECTORFILECONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILECONFIG* GRPVECTORFILESVG::GetConfig()
 {
@@ -316,13 +315,13 @@ GRPVECTORFILECONFIG* GRPVECTORFILESVG::GetConfig()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::GetRoot()
 * @brief      Get root : the root SVG object (the <svg> node)
 * @ingroup    GRAPHIC
-*
-* @return     GRPVECTORFILESVGOBJ* : root object
-*
+* 
+* @return     GRPVECTORFILESVGOBJ* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::GetRoot()
 {
@@ -331,15 +330,15 @@ GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::GetRoot()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::FindObjByID(XCHAR* id)
 * @brief      Find obj by id : search the object tree (including the <defs> content) for a node with the given id
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  id : id to find (without the leading '#')
-*
-* @return     GRPVECTORFILESVGOBJ* : found node or NULL
-*
+* 
+* @return     GRPVECTORFILESVGOBJ* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::FindObjByID(XCHAR* id)
 {
@@ -350,17 +349,17 @@ GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::FindObjByID(XCHAR* id)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVG::DetectIsSVG(XFILETXT* file, int nlinesmax)
 * @brief      Detect is SVG : look for a <svg tag in the first lines of the file
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  file : text file
 * @param[in]  nlinesmax : max lines to scan
-*
-* @return     bool : true if a <svg tag is found.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVG::DetectIsSVG(XFILETXT* file, int nlinesmax)
 {
@@ -383,12 +382,12 @@ bool GRPVECTORFILESVG::DetectIsSVG(XFILETXT* file, int nlinesmax)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVG::Clean()
 {

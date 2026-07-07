@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSPITFTDISPLAYILI9341::DIOSPITFTDISPLAYILI9341()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPITFTDISPLAYILI9341::DIOSPITFTDISPLAYILI9341()
 {
@@ -72,12 +72,12 @@ DIOSPITFTDISPLAYILI9341::DIOSPITFTDISPLAYILI9341()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSPITFTDISPLAYILI9341::~DIOSPITFTDISPLAYILI9341()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPITFTDISPLAYILI9341::~DIOSPITFTDISPLAYILI9341()
 {
@@ -88,13 +88,13 @@ DIOSPITFTDISPLAYILI9341::~DIOSPITFTDISPLAYILI9341()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::IniDevice()
 {
@@ -140,15 +140,15 @@ bool DIOSPITFTDISPLAYILI9341::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::Clear(XWORD color)
 * @brief      Clear
 * @ingroup    DATAIO
-*
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::Clear(XWORD color)
 {
@@ -171,15 +171,15 @@ bool DIOSPITFTDISPLAYILI9341::Clear(XWORD color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::Update(XBYTE* buffer)
 * @brief      Update
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::Update(XBYTE* buffer)
 {
@@ -196,17 +196,17 @@ bool DIOSPITFTDISPLAYILI9341::Update(XBYTE* buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::PutPixel(XWORD x, XWORD y, XWORD color)
 * @brief      Put pixel
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::PutPixel(XWORD x, XWORD y, XWORD color)
 {
@@ -223,13 +223,13 @@ bool DIOSPITFTDISPLAYILI9341::PutPixel(XWORD x, XWORD y, XWORD color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::End()
 {
@@ -242,13 +242,13 @@ bool DIOSPITFTDISPLAYILI9341::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::TFT_Init()
 * @brief      TFT init
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::TFT_Init()
 {
@@ -336,13 +336,13 @@ bool DIOSPITFTDISPLAYILI9341::TFT_Init()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::TFT_Reset()
 * @brief      TFT reset
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::TFT_Reset()
 {
@@ -359,16 +359,16 @@ bool DIOSPITFTDISPLAYILI9341::TFT_Reset()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::TFT_RotateRGB(int rotate, XBYTE bgr)
 * @brief      TFT rotate RGB
 * @ingroup    DATAIO
-*
-* @param[in]  rotate :
-* @param[in]  bgr :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  rotate : Rotate value.
+* @param[in]  bgr : Bgr value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::TFT_RotateRGB(int rotate, XBYTE bgr)
 {
@@ -395,18 +395,18 @@ bool DIOSPITFTDISPLAYILI9341::TFT_RotateRGB(int rotate, XBYTE bgr)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::TFT_SetWindow(int xs, int ys, int xe, int ye)
 * @brief      TFT set window
 * @ingroup    DATAIO
-*
-* @param[in]  xs :
-* @param[in]  ys :
-* @param[in]  xe :
-* @param[in]  ye :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xs : Xs value.
+* @param[in]  ys : Ys value.
+* @param[in]  xe : Xe value.
+* @param[in]  ye : Ye value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::TFT_SetWindow(int xs, int ys, int xe, int ye)
 {
@@ -423,15 +423,15 @@ bool DIOSPITFTDISPLAYILI9341::TFT_SetWindow(int xs, int ys, int xe, int ye)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::SendCommand(XBYTE command)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  command :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  command : Command value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::SendCommand(XBYTE command)
 {
@@ -447,13 +447,13 @@ bool DIOSPITFTDISPLAYILI9341::SendCommand(XBYTE command)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::SendData()
 * @brief      Send data
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::SendData()
 {
@@ -471,17 +471,17 @@ bool DIOSPITFTDISPLAYILI9341::SendData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYILI9341::WriteRegister(XBYTE reg, int ndata, ...)
 * @brief      Write register
 * @ingroup    DATAIO
-*
-* @param[in]  reg :
-* @param[in]  ndata :
-* @param[in]  ... :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  ndata : Ndata value.
+* @param[in]  ... : Variable argument list.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYILI9341::WriteRegister(XBYTE reg, int ndata, ...)
 {
@@ -508,12 +508,12 @@ bool DIOSPITFTDISPLAYILI9341::WriteRegister(XBYTE reg, int ndata, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSPITFTDISPLAYILI9341::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPITFTDISPLAYILI9341::Clean()
 {

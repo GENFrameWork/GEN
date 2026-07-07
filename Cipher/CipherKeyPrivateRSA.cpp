@@ -54,7 +54,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERKEYPRIVATERSA::CIPHERKEYPRIVATERSA()
+* @fn         CIPHERKEYPRIVATERSA::CIPHERKEYPRIVATERSA() : CIPHERKEY()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -92,14 +92,14 @@ CIPHERKEYPRIVATERSA::~CIPHERKEYPRIVATERSA()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool CIPHERKEYPRIVATERSA::Get(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor, XMPINTEGER& exponent)
-* @brief      Get
+* @brief      Get value
 * @ingroup    CIPHER
 * 
-* @param[in]  prime1factor : 
-* @param[in]  prime2factor : 
-* @param[in]  exponent : 
+* @param[in]  prime1factor : Prime1factor value.
+* @param[in]  prime2factor : Prime2factor value.
+* @param[in]  exponent : Exponent value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYPRIVATERSA::Get(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor, XMPINTEGER& exponent)
@@ -115,14 +115,14 @@ bool CIPHERKEYPRIVATERSA::Get(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool CIPHERKEYPRIVATERSA::Set(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor, XMPINTEGER& exponent)
-* @brief      Set
+* @brief      Set value
 * @ingroup    CIPHER
 * 
-* @param[in]  prime1factor : 
-* @param[in]  prime2factor : 
-* @param[in]  exponent : 
+* @param[in]  prime1factor : Prime1factor value.
+* @param[in]  prime2factor : Prime2factor value.
+* @param[in]  exponent : Exponent value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYPRIVATERSA::Set(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor, XMPINTEGER& exponent)
@@ -141,7 +141,7 @@ bool CIPHERKEYPRIVATERSA::Set(XMPINTEGER& prime1factor, XMPINTEGER& prime2factor
 * @brief      Get size in bytes
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERKEYPRIVATERSA::GetSizeInBytes()
@@ -156,9 +156,9 @@ int CIPHERKEYPRIVATERSA::GetSizeInBytes()
 * @brief      Copy from
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYPRIVATERSA::CopyFrom(CIPHERKEYPRIVATERSA* key)
@@ -177,9 +177,9 @@ bool CIPHERKEYPRIVATERSA::CopyFrom(CIPHERKEYPRIVATERSA* key)
 * @brief      Check
 * @ingroup    CIPHER
 * 
-* @param[in]  publickey : 
+* @param[in]  publickey : Publickey value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYPRIVATERSA::Check(CIPHERKEYPUBLICRSA& publickey)

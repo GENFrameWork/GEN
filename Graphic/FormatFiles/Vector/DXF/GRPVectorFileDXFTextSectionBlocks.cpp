@@ -128,9 +128,9 @@ GRPVECTORFILEDXFTEXTSECTIONBLOCKS::~GRPVECTORFILEDXFTEXTSECTIONBLOCKS()
 * @brief      Is known block
 * @ingroup    GRAPHIC
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTIONBLOCKDEF* : 
+* @return     GRPVECTORFILEDXFTEXTSECTIONBLOCKDEF* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTIONBLOCKDEF* GRPVECTORFILEDXFTEXTSECTIONBLOCKS::IsKnownBlock(XSTRING& name)
@@ -157,10 +157,10 @@ GRPVECTORFILEDXFTEXTSECTIONBLOCKDEF* GRPVECTORFILEDXFTEXTSECTIONBLOCKS::IsKnownB
 * @brief      Is known type value
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
-* @param[in]  type : 
+* @param[in]  namevar : Namevar value.
+* @param[in]  type : Type value.
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTIONBLOCKDEFTYPE* : 
+* @return     GRPVECTORFILEDXFTEXTSECTIONBLOCKDEFTYPE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTIONBLOCKDEFTYPE* GRPVECTORFILEDXFTEXTSECTIONBLOCKS::IsKnownTypeValue(XSTRING& namevar, int type)
@@ -197,9 +197,9 @@ GRPVECTORFILEDXFTEXTSECTIONBLOCKDEFTYPE* GRPVECTORFILEDXFTEXTSECTIONBLOCKS::IsKn
 * @brief      Add block
 * @ingroup    GRAPHIC
 * 
-* @param[in]  block : 
+* @param[in]  block : Block pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::AddBlock(GRPVECTORFILEDXFTEXTBLOCK* block)
@@ -224,7 +224,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::AddBlock(GRPVECTORFILEDXFTEXTBLOCK* bloc
 * @brief      Get blocks
 * @ingroup    GRAPHIC
 * 
-* @return     XVECTOR<GRPVECTORFILEDXFTEXTBLOCK*>* : 
+* @return     XVECTOR<GRPVECTORFILEDXFTEXTBLOCK*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVECTORFILEDXFTEXTBLOCK*>* GRPVECTORFILEDXFTEXTSECTIONBLOCKS::GetBlocks()
@@ -239,10 +239,10 @@ XVECTOR<GRPVECTORFILEDXFTEXTBLOCK*>* GRPVECTORFILEDXFTEXTSECTIONBLOCKS::GetBlock
 * @brief      Get block
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameblock : 
-* @param[in]  index : 
+* @param[in]  nameblock : Nameblock pointer to use.
+* @param[in]  index : Index value.
 * 
-* @return     GRPVECTORFILEDXFTEXTBLOCK* : 
+* @return     GRPVECTORFILEDXFTEXTBLOCK* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTBLOCK* GRPVECTORFILEDXFTEXTSECTIONBLOCKS::GetBlock(XCHAR* nameblock, XDWORD index)
@@ -281,10 +281,10 @@ GRPVECTORFILEDXFTEXTBLOCK* GRPVECTORFILEDXFTEXTSECTIONBLOCKS::GetBlock(XCHAR* na
 * @brief      Delete block
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameblock : 
-* @param[in]  index : 
+* @param[in]  nameblock : Nameblock pointer to use.
+* @param[in]  index : Index value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::DeleteBlock(XCHAR* nameblock, XDWORD index)
@@ -313,9 +313,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::DeleteBlock(XCHAR* nameblock, XDWORD ind
 * @brief      Delete all blocks
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameblock : 
+* @param[in]  nameblock : Nameblock pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::DeleteAllBlocks(XCHAR* nameblock)
@@ -350,7 +350,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::DeleteAllBlocks(XCHAR* nameblock)
 * @brief      Delete all blocks
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::DeleteAllBlocks()
@@ -373,9 +373,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::DeleteAllBlocks()
 * @brief      Parser text section
 * @ingroup    GRAPHIC
 * 
-* @param[in]  fileTXT : 
+* @param[in]  fileTXT : File TXT pointer to use.
 * 
-* @return     GRPVECTORFILERESULT : 
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETXT* fileTXT)
@@ -654,7 +654,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ParserTextSection(XFILETX
 * @brief      Show trace all blocks
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONBLOCKS::ShowTraceAllBlocks()

@@ -57,8 +57,8 @@
 * @fn         UI_ELEMENT_TEXTBOX::UI_ELEMENT_TEXTBOX()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_TEXTBOX::UI_ELEMENT_TEXTBOX()    
 { 
   Clean();   
@@ -75,8 +75,8 @@ UI_ELEMENT_TEXTBOX::UI_ELEMENT_TEXTBOX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_TEXTBOX::~UI_ELEMENT_TEXTBOX()    
 { 
   Clean();                            
@@ -88,10 +88,10 @@ UI_ELEMENT_TEXTBOX::~UI_ELEMENT_TEXTBOX()
 * @fn         XDWORD UI_ELEMENT_TEXTBOX::GetSizeFont()
 * @brief      Get size font
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_ELEMENT_TEXTBOX::GetSizeFont()
 {
   return sizefont;
@@ -103,10 +103,10 @@ XDWORD UI_ELEMENT_TEXTBOX::GetSizeFont()
 * @fn         void UI_ELEMENT_TEXTBOX::SetSizeFont(XDWORD sizefont)
 * @brief      Set size font
 * @ingroup    USERINTERFACE
-*
-* @param[in]  sizefont : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  sizefont : Sizefont value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_TEXTBOX::SetSizeFont(XDWORD sizefont)
 {
   this->sizefont = sizefont;
@@ -118,10 +118,10 @@ void UI_ELEMENT_TEXTBOX::SetSizeFont(XDWORD sizefont)
 * @fn         XDWORD UI_ELEMENT_TEXTBOX::GetLineSpacing()
 * @brief      Get line spacing
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_ELEMENT_TEXTBOX::GetLineSpacing()
 {
   return linespacing;
@@ -129,14 +129,14 @@ XDWORD UI_ELEMENT_TEXTBOX::GetLineSpacing()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double UI_ELEMENT_TEXTBOX::GetContentHeight()
 * @brief      Gets the total laid-out text height (set by the skin during draw). Used as the vertical scroll extent.
 * @ingroup    USERINTERFACE
-*
-* @return     double : total text height in pixels.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT_TEXTBOX::GetContentHeight()
 {
   return contentheight;
@@ -144,14 +144,14 @@ double UI_ELEMENT_TEXTBOX::GetContentHeight()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_ELEMENT_TEXTBOX::SetContentHeight(double contentheight)
 * @brief      Sets the total laid-out text height (called by the skin after generating the lines).
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  contentheight : total text height in pixels.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_TEXTBOX::SetContentHeight(double contentheight)
 {
   this->contentheight = contentheight;
@@ -163,10 +163,10 @@ void UI_ELEMENT_TEXTBOX::SetContentHeight(double contentheight)
 * @fn         void UI_ELEMENT_TEXTBOX::SetLineSpacing(XDWORD linespacing)
 * @brief      Set line spacing
 * @ingroup    USERINTERFACE
-*
-* @param[in]  linespacing : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  linespacing : Linespacing value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_TEXTBOX::SetLineSpacing(XDWORD linespacing)
 {
   this->linespacing = linespacing;
@@ -174,14 +174,14 @@ void UI_ELEMENT_TEXTBOX::SetLineSpacing(XDWORD linespacing)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD UI_ELEMENT_TEXTBOX::GetImageSeparation()
 * @brief      Get the separation (in pixels) kept between an inline ![IMAGE] graphic and the text around it (all edges).
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_ELEMENT_TEXTBOX::GetImageSeparation()
 {
   return imageseparation;
@@ -189,15 +189,15 @@ XDWORD UI_ELEMENT_TEXTBOX::GetImageSeparation()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_ELEMENT_TEXTBOX::SetImageSeparation(XDWORD imageseparation)
 * @brief      Set the separation (in pixels) kept between an inline ![IMAGE] graphic and the text around it (all edges).
 * @note       Defaults to UI_ELEMENT_TEXTBOX_DEFAULTIMAGESEPARATION (5 px).
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  imageseparation : gap in pixels.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_TEXTBOX::SetImageSeparation(XDWORD imageseparation)
 {
   this->imageseparation = imageseparation;
@@ -209,10 +209,10 @@ void UI_ELEMENT_TEXTBOX::SetImageSeparation(XDWORD imageseparation)
 * @fn         UI_ELEMENT_TYPE_ALIGN UI_ELEMENT_TEXTBOX::GetTextAlignment()
 * @brief      Get text alignment
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_TYPE_ALIGN : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_TYPE_ALIGN : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_TYPE_ALIGN UI_ELEMENT_TEXTBOX::GetTextAlignment()
 {
   return textalignment;
@@ -225,7 +225,7 @@ UI_ELEMENT_TYPE_ALIGN UI_ELEMENT_TEXTBOX::GetTextAlignment()
 * @brief      Set text alignment
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  textalignment : 
+* @param[in]  textalignment : Textalignment value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_TEXTBOX::SetTextAlignment(UI_ELEMENT_TYPE_ALIGN textalignment)
@@ -239,10 +239,10 @@ void UI_ELEMENT_TEXTBOX::SetTextAlignment(UI_ELEMENT_TYPE_ALIGN textalignment)
 * @fn         bool UI_ELEMENT_TEXTBOX::IsWordClipping()
 * @brief      Is word clipping
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_TEXTBOX::IsWordClipping()
 {
   return iswordclipping;
@@ -254,10 +254,10 @@ bool UI_ELEMENT_TEXTBOX::IsWordClipping()
 * @fn         void UI_ELEMENT_TEXTBOX::SetIsWordClipping(bool iswordclipping)
 * @brief      Set is word clipping
 * @ingroup    USERINTERFACE
-*
-* @param[in]  iswordclipping : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  iswordclipping : Iswordclipping value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_TEXTBOX::SetIsWordClipping(bool iswordclipping)
 {
   this->iswordclipping = iswordclipping;
@@ -269,10 +269,10 @@ void UI_ELEMENT_TEXTBOX::SetIsWordClipping(bool iswordclipping)
 * @fn         XSTRING* UI_ELEMENT_TEXTBOX::GetText()
 * @brief      Get text
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_ELEMENT_TEXTBOX::GetText()
 {
   return &text;
@@ -284,10 +284,10 @@ XSTRING* UI_ELEMENT_TEXTBOX::GetText()
 * @fn         XSTRING* UI_ELEMENT_TEXTBOX::GetMaskText()
 * @brief      Get mask text
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_ELEMENT_TEXTBOX::GetMaskText()
 {
   return &masktext;    
@@ -300,8 +300,8 @@ XSTRING* UI_ELEMENT_TEXTBOX::GetMaskText()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_TEXTBOX::Clean()
 {
   sizefont        = 0;

@@ -63,7 +63,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES::DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES()
+* @fn         DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES::DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES() : DIOSTREAMBLUETOOTHLOCALENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -94,7 +94,7 @@ DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES::~DIOANDROIDSTREAMBLUETOOTHLOCALENUMDE
 * @brief      Search
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHLOCALENUMDEVICES::Search()

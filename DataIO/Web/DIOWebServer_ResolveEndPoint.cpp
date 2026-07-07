@@ -88,7 +88,7 @@ DIOWEBSERVER_RESOLVEENDPOINT::~DIOWEBSERVER_RESOLVEENDPOINT()
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_RESOLVEENDPOINT::Update()
@@ -103,9 +103,9 @@ bool DIOWEBSERVER_RESOLVEENDPOINT::Update()
 * @brief      Create response
 * @ingroup    DATAIO
 * 
-* @param[in]  response : 
+* @param[in]  response : Response pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_RESOLVEENDPOINT::CreateResponse(XSTRING* response)
@@ -138,7 +138,7 @@ bool DIOWEBSERVER_RESOLVEENDPOINT::CreateResponse(XSTRING* response)
 * @brief      Serialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_RESOLVEENDPOINT::Serialize()
@@ -153,7 +153,7 @@ bool DIOWEBSERVER_RESOLVEENDPOINT::Serialize()
 * @brief      Deserialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_RESOLVEENDPOINT::Deserialize()

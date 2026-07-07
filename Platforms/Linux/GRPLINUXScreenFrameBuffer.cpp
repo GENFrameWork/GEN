@@ -69,11 +69,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRPLINUXSCREENFRAMEBUFFER::GRPLINUXSCREENFRAMEBUFFER()
+* 
+* @fn         GRPLINUXSCREENFRAMEBUFFER::GRPLINUXSCREENFRAMEBUFFER(): GRPSCREEN()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPLINUXSCREENFRAMEBUFFER::GRPLINUXSCREENFRAMEBUFFER(): GRPSCREEN()
 {
@@ -115,12 +115,12 @@ GRPLINUXSCREENFRAMEBUFFER::GRPLINUXSCREENFRAMEBUFFER(): GRPSCREEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPLINUXSCREENFRAMEBUFFER::~GRPLINUXSCREENFRAMEBUFFER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPLINUXSCREENFRAMEBUFFER::~GRPLINUXSCREENFRAMEBUFFER()
 {
@@ -131,15 +131,15 @@ GRPLINUXSCREENFRAMEBUFFER::~GRPLINUXSCREENFRAMEBUFFER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENFRAMEBUFFER::Create(bool show)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  show :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  show : Show value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENFRAMEBUFFER::Create(bool show)
 {
@@ -177,15 +177,15 @@ bool GRPLINUXSCREENFRAMEBUFFER::Create(bool show)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENFRAMEBUFFER::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  canvas :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  canvas : Canvas object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENFRAMEBUFFER::Update(GRP2DCANVAS* canvas)
 {
@@ -214,13 +214,13 @@ bool GRPLINUXSCREENFRAMEBUFFER::Update(GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENFRAMEBUFFER::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENFRAMEBUFFER::Delete()
 {
@@ -236,16 +236,16 @@ bool GRPLINUXSCREENFRAMEBUFFER::Delete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENFRAMEBUFFER::Resize(int width, int height)
 * @brief      Resize
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  width : GEN_NEW width
 * @param[in]  height : GEN_NEW height
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENFRAMEBUFFER::Resize(int width, int height)
 {
@@ -254,15 +254,15 @@ bool GRPLINUXSCREENFRAMEBUFFER::Resize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENFRAMEBUFFER::Show(bool active)
 * @brief      Show
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENFRAMEBUFFER::Show(bool active)
 {
@@ -273,15 +273,15 @@ bool GRPLINUXSCREENFRAMEBUFFER::Show(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENFRAMEBUFFER::ShowCursor(bool active)
 * @brief      Show cursor
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENFRAMEBUFFER::ShowCursor(bool active)
 {
@@ -290,13 +290,13 @@ bool GRPLINUXSCREENFRAMEBUFFER::ShowCursor(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* GRPLINUXSCREENFRAMEBUFFER::GetHandle()
 * @brief      Get handle
 * @ingroup    PLATFORM_LINUX
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPLINUXSCREENFRAMEBUFFER::GetHandle()
 {
@@ -309,13 +309,13 @@ void* GRPLINUXSCREENFRAMEBUFFER::GetHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPLINUXSCREENFRAMEBUFFER::GetHandleFB()
 * @brief      Get handle FB
 * @ingroup    PLATFORM_LINUX
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPLINUXSCREENFRAMEBUFFER::GetHandleFB()
 {
@@ -324,16 +324,16 @@ int GRPLINUXSCREENFRAMEBUFFER::GetHandleFB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENFRAMEBUFFER::ScreenResolution(int width, int height)
 * @brief      Screen resolution
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENFRAMEBUFFER::ScreenResolution(int width, int height)
 {
@@ -389,14 +389,14 @@ bool GRPLINUXSCREENFRAMEBUFFER::ScreenResolution(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENFRAMEBUFFER::ClearScreen()
 * @brief      Clear screen
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENFRAMEBUFFER::ClearScreen()
 {
@@ -418,12 +418,12 @@ bool GRPLINUXSCREENFRAMEBUFFER::ClearScreen()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPLINUXSCREENFRAMEBUFFER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPLINUXSCREENFRAMEBUFFER::Clean()
 {

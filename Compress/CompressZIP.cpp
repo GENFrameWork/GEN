@@ -61,7 +61,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         COMPRESS_ZIP::COMPRESS_ZIP()
+* @fn         COMPRESS_ZIP::COMPRESS_ZIP() : COMPRESSBASE()
 * @brief      Constructor of class
 * @ingroup    COMPRESS
 * 
@@ -94,11 +94,11 @@ COMPRESS_ZIP::~COMPRESS_ZIP()
 * @brief      Compress
 * @ingroup    COMPRESS
 * 
-* @param[in]  source : 
-* @param[in]  size : 
-* @param[in]  xbuffer : 
+* @param[in]  source : Source pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  xbuffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESS_ZIP::Compress(XBYTE* source,XDWORD size,XBUFFER* xbuffer)
@@ -126,11 +126,11 @@ bool COMPRESS_ZIP::Compress(XBYTE* source,XDWORD size,XBUFFER* xbuffer)
 * @brief      Decompress
 * @ingroup    COMPRESS
 * 
-* @param[in]  source : 
-* @param[in]  size : 
-* @param[in]  xbuffer : 
+* @param[in]  source : Source pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  xbuffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESS_ZIP::Decompress(XBYTE* source,XDWORD size,XBUFFER* xbuffer)
@@ -158,12 +158,12 @@ bool COMPRESS_ZIP::Decompress(XBYTE* source,XDWORD size,XBUFFER* xbuffer)
 * @brief      Z compress
 * @ingroup    COMPRESS
 * 
-* @param[in]  target : 
-* @param[in]  targetsize : 
-* @param[in]  source : 
-* @param[in]  sourcesize : 
+* @param[in]  target : Target pointer to use.
+* @param[in]  targetsize : Targetsize pointer to use.
+* @param[in]  source : Source pointer to use.
+* @param[in]  sourcesize : Sourcesize value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int COMPRESS_ZIP::ZCompress(XBYTE* target,XDWORD* targetsize,XBYTE* source,XDWORD sourcesize)
@@ -219,12 +219,12 @@ int COMPRESS_ZIP::ZCompress(XBYTE* target,XDWORD* targetsize,XBYTE* source,XDWOR
 * @brief      Z decompress
 * @ingroup    COMPRESS
 * 
-* @param[in]  target : 
-* @param[in]  targetsize : 
-* @param[in]  source : 
-* @param[in]  sourcesize : 
+* @param[in]  target : Target pointer to use.
+* @param[in]  targetsize : Targetsize pointer to use.
+* @param[in]  source : Source pointer to use.
+* @param[in]  sourcesize : Sourcesize value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int COMPRESS_ZIP::ZDecompress(XBYTE* target,XDWORD* targetsize,XBYTE* source,XDWORD sourcesize)

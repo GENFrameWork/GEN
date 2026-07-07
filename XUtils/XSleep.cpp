@@ -55,11 +55,11 @@ XSLEEP* XSLEEP::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSLEEP::XSLEEP()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSLEEP::XSLEEP()
 {
@@ -68,12 +68,12 @@ XSLEEP::XSLEEP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSLEEP::~XSLEEP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSLEEP::~XSLEEP()
 {
@@ -82,14 +82,14 @@ XSLEEP::~XSLEEP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSLEEP::GetIsInstanced()
 * @brief      Get is instanced
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSLEEP::GetIsInstanced()
 {
@@ -98,14 +98,14 @@ bool XSLEEP::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSLEEP& XSLEEP::GetInstance()
 * @brief      Get instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     XSLEEP& :
-*
+* 
+* @return     XSLEEP& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSLEEP& XSLEEP::GetInstance()
 {
@@ -116,16 +116,16 @@ XSLEEP& XSLEEP::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSLEEP::SetInstance(XSLEEP* _instance)
 * @brief      Set instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  _instance : GEN_NEW instance
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSLEEP::SetInstance(XSLEEP* _instance)
 {
@@ -138,14 +138,14 @@ bool XSLEEP::SetInstance(XSLEEP* _instance)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSLEEP::DelInstance()
 * @brief      Del instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSLEEP::DelInstance()
 {
@@ -162,14 +162,14 @@ bool XSLEEP::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSLEEP::Seconds(int seconds)
 * @brief      Seconds
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @param[in]  seconds :
-*
+* 
+* @param[in]  seconds : Seconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSLEEP::Seconds(int seconds)
 {
@@ -178,13 +178,13 @@ void XSLEEP::Seconds(int seconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSLEEP::MilliSeconds(int milliseconds)
 * @brief      Milli seconds
 * @ingroup    XUTILS
-*
-* @param[in]  milliseconds :
-*
+* 
+* @param[in]  milliseconds : Milliseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSLEEP::MilliSeconds(int milliseconds)
 {
@@ -193,14 +193,14 @@ void XSLEEP::MilliSeconds(int milliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSLEEP::MicroSeconds(int microseconds)
 * @brief      Micro seconds
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @param[in]  microseconds :
-*
+* 
+* @param[in]  microseconds : Microseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSLEEP::MicroSeconds(int microseconds)
 {
@@ -210,14 +210,14 @@ void XSLEEP::MicroSeconds(int microseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSLEEP::NanoSeconds(int nanoseconds)
 * @brief      Nano seconds
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @param[in]  nanoseconds :
-*
+* 
+* @param[in]  nanoseconds : Nanoseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSLEEP::NanoSeconds(int nanoseconds)
 {
@@ -226,12 +226,12 @@ void XSLEEP::NanoSeconds(int nanoseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSLEEP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSLEEP::Clean()
 {

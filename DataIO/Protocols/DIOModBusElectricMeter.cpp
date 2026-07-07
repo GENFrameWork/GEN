@@ -73,8 +73,8 @@
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMODBUSELECTRICMETERXEVENT::DIOMODBUSELECTRICMETERXEVENT(XSUBJECT* subject,XDWORD type) : XEVENT(subject,type)
@@ -121,8 +121,8 @@ void DIOMODBUSELECTRICMETERXEVENT::Clean()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
-* @param[in]  mode : 
+* @param[in]  diostream : Diostream pointer to use.
+* @param[in]  mode : Mode value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMODBUSELECTRICMETER::DIOMODBUSELECTRICMETER(DIOSTREAM* diostream, DIOMODBUS_CLIENTMODE mode)
@@ -169,7 +169,7 @@ DIOMODBUSELECTRICMETER::~DIOMODBUSELECTRICMETER()
 * @brief      Get mod bus protocol
 * @ingroup    DATAIO
 * 
-* @return     DIOMODBUS_CLIENT* : 
+* @return     DIOMODBUS_CLIENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMODBUS_CLIENT* DIOMODBUSELECTRICMETER::GetModBusProtocol()
@@ -184,11 +184,11 @@ DIOMODBUS_CLIENT* DIOMODBUSELECTRICMETER::GetModBusProtocol()
 * @brief      Connect
 * @ingroup    DATAIO
 * 
-* @param[in]  unit : 
-* @param[in]  inlittleendian : 
-* @param[in]  timeout : 
+* @param[in]  unit : Unit value.
+* @param[in]  inlittleendian : Inlittleendian value.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUSELECTRICMETER::Connect(XBYTE unit, bool inlittleendian, int timeout)
@@ -215,13 +215,13 @@ bool DIOMODBUSELECTRICMETER::Connect(XBYTE unit, bool inlittleendian, int timeou
 * @brief      CMDCCINU2 read all values
 * @ingroup    DATAIO
 * 
-* @param[in]  TM : 
-* @param[in]  timestart : 
-* @param[in]  timeend : 
-* @param[in]  results : 
-* @param[in]  timeout : 
+* @param[in]  TM : TM value.
+* @param[in]  timestart : Timestart pointer to use.
+* @param[in]  timeend : Timeend pointer to use.
+* @param[in]  results : Output results.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUSELECTRICMETER::CMD_C_CI_NU_2_ReadAllValues(int TM, XDATETIME* timestart, XDATETIME* timeend, XVECTOR<DIO_C_CI_NU_2_RESULT*>* results, int timeout)
@@ -298,9 +298,9 @@ bool DIOMODBUSELECTRICMETER::CMD_C_CI_NU_2_ReadAllValues(int TM, XDATETIME* time
 * @brief      CMDCCINU2 GEN_DELETE results
 * @ingroup    DATAIO
 * 
-* @param[in]  results : 
+* @param[in]  results : Output results.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUSELECTRICMETER::CMD_C_CI_NU_2_DeleteResults(XVECTOR<DIO_C_CI_NU_2_RESULT*>* results)
@@ -322,10 +322,10 @@ bool DIOMODBUSELECTRICMETER::CMD_C_CI_NU_2_DeleteResults(XVECTOR<DIO_C_CI_NU_2_R
 * @brief      CMDCTRAA read values
 * @ingroup    DATAIO
 * 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUSELECTRICMETER::CMD_C_TR_AA_ReadValues(DIO_C_TR_AA_RESULT* result, int timeout)
@@ -383,7 +383,7 @@ bool DIOMODBUSELECTRICMETER::CMD_C_TR_AA_ReadValues(DIO_C_TR_AA_RESULT* result, 
 * @brief      Cancel operations
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUSELECTRICMETER::CancelOperations()
@@ -414,13 +414,13 @@ void DIOMODBUSELECTRICMETER::Disconnect()
 * @brief      Read register
 * @ingroup    DATAIO
 * 
-* @param[in]  registerID : 
-* @param[in]  nwords : 
-* @param[in]  divisor : 
-* @param[in]  timeout : 
-* @param[in]  result : 
+* @param[in]  registerID : Register ID value.
+* @param[in]  nwords : Nwords value.
+* @param[in]  divisor : Divisor value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  result : Output result.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUSELECTRICMETER::ReadRegister(int registerID, int nwords, int divisor, int timeout, float& result)
@@ -458,12 +458,12 @@ bool DIOMODBUSELECTRICMETER::ReadRegister(int registerID, int nwords, int diviso
 * @brief      Read register
 * @ingroup    DATAIO
 * 
-* @param[in]  registerID : 
-* @param[in]  nwords : 
-* @param[in]  timeout : 
-* @param[in]  result : 
+* @param[in]  registerID : Register ID value.
+* @param[in]  nwords : Nwords value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  result : Output result.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUSELECTRICMETER::ReadRegister(int registerID, int nwords, int timeout, int& result)

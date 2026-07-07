@@ -88,18 +88,18 @@ DELETEFUNC(XESP32FACTORY  , XMUTEX          , XESP32MUTEX            , Delete_Mu
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREAD* XESP32FACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* data)
 * @brief      Create thread
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  groupID :
-* @param[in]  ID :
-* @param[in]  function :
-* @param[in]  data :
-*
-* @return     XTHREAD* :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XTHREAD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XESP32FACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* data)
 {
@@ -109,16 +109,16 @@ XTHREAD* XESP32FACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFU
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 * @brief      Delete thread
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  groupID :
-* @param[in]  xthread :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  xthread : Xthread pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 {

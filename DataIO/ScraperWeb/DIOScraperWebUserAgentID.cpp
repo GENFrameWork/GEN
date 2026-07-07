@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOUSERAGENTID_RESULT::DIOUSERAGENTID_RESULT()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOUSERAGENTID_RESULT::DIOUSERAGENTID_RESULT()
 {
@@ -84,13 +84,13 @@ DIOUSERAGENTID_RESULT::~DIOUSERAGENTID_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOUSERAGENTID_RESULT::GetBrowser()
 * @brief      Get browser
 * @ingroup    DATAIO
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOUSERAGENTID_RESULT::GetBrowser()
 {
@@ -99,13 +99,13 @@ XSTRING* DIOUSERAGENTID_RESULT::GetBrowser()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOUSERAGENTID_RESULT::GetSO()
 * @brief      Get SO
 * @ingroup    DATAIO
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOUSERAGENTID_RESULT::GetSO()
 {
@@ -114,12 +114,12 @@ XSTRING* DIOUSERAGENTID_RESULT::GetSO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOUSERAGENTID_RESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOUSERAGENTID_RESULT::Clean()
 {
@@ -132,11 +132,11 @@ void DIOUSERAGENTID_RESULT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSCRAPERWEBUSERAGENTID::DIOSCRAPERWEBUSERAGENTID()
+* 
+* @fn         DIOSCRAPERWEBUSERAGENTID::DIOSCRAPERWEBUSERAGENTID() : DIOSCRAPERWEB()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBUSERAGENTID::DIOSCRAPERWEBUSERAGENTID() : DIOSCRAPERWEB()
 {
@@ -145,12 +145,12 @@ DIOSCRAPERWEBUSERAGENTID::DIOSCRAPERWEBUSERAGENTID() : DIOSCRAPERWEB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSCRAPERWEBUSERAGENTID::~DIOSCRAPERWEBUSERAGENTID()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBUSERAGENTID::~DIOSCRAPERWEBUSERAGENTID()
 {
@@ -159,16 +159,16 @@ DIOSCRAPERWEBUSERAGENTID::~DIOSCRAPERWEBUSERAGENTID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBUSERAGENTID::ChangeURL(XCHAR* maskurl, DIOURL& url)
 * @brief      Change URL
 * @ingroup    DATAIO
-*
-* @param[in]  maskurl : 
-* @param[in]  url : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  maskurl : Maskurl pointer to use.
+* @param[in]  url : URL to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBUSERAGENTID::ChangeURL(XCHAR* maskurl, DIOURL& url)
 {
@@ -186,20 +186,20 @@ bool DIOSCRAPERWEBUSERAGENTID::ChangeURL(XCHAR* maskurl, DIOURL& url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBUSERAGENTID::Get(XCHAR* useragent, XSTRING& browser, XSTRING& systemoperative, int timeout, XSTRING* localIP, bool usecache)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  useragent : 
-* @param[in]  browser : 
-* @param[in]  systemoperative : 
-* @param[in]  timeout : 
-* @param[in]  localIP : 
-* @param[in]  usecache : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  useragent : Useragent pointer to use.
+* @param[in]  browser : Browser value.
+* @param[in]  systemoperative : Systemoperative value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  usecache : Usecache value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBUSERAGENTID::Get(XCHAR* useragent, XSTRING& browser, XSTRING& systemoperative, int timeout, XSTRING* localIP, bool usecache)
 {
@@ -257,20 +257,20 @@ bool DIOSCRAPERWEBUSERAGENTID::Get(XCHAR* useragent, XSTRING& browser, XSTRING& 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBUSERAGENTID::Get(XSTRING& useragent, XSTRING& browser, XSTRING& systemoperative, int timeoutforurl, XSTRING* localIP, bool usecache)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  useragent : 
-* @param[in]  browser : 
-* @param[in]  systemoperative : 
-* @param[in]  timeoutforurl : 
-* @param[in]  localIP : 
-* @param[in]  usecache : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  useragent : Useragent value.
+* @param[in]  browser : Browser value.
+* @param[in]  systemoperative : Systemoperative value.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  usecache : Usecache value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBUSERAGENTID::Get(XSTRING& useragent, XSTRING& browser, XSTRING& systemoperative, int timeoutforurl, XSTRING* localIP, bool usecache)
 {
@@ -279,12 +279,12 @@ bool DIOSCRAPERWEBUSERAGENTID::Get(XSTRING& useragent, XSTRING& browser, XSTRING
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSCRAPERWEBUSERAGENTID::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSCRAPERWEBUSERAGENTID::Clean()
 {

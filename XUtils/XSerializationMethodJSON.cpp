@@ -85,13 +85,13 @@ XSERIALIZATIONMETHODJSON::~XSERIALIZATIONMETHODJSON()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(bool var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(bool var, XCHAR* name)
@@ -110,13 +110,13 @@ bool XSERIALIZATIONMETHODJSON::Add(bool var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(char var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(char var, XCHAR* name)
@@ -135,13 +135,13 @@ bool XSERIALIZATIONMETHODJSON::Add(char var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(int var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(int var, XCHAR* name)
@@ -160,13 +160,13 @@ bool XSERIALIZATIONMETHODJSON::Add(int var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(float var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(float var, XCHAR* name)  
@@ -185,13 +185,13 @@ bool XSERIALIZATIONMETHODJSON::Add(float var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(double var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(double var, XCHAR* name) 
@@ -210,13 +210,13 @@ bool XSERIALIZATIONMETHODJSON::Add(double var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(long long var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(long long var, XCHAR* name) 
@@ -235,13 +235,13 @@ bool XSERIALIZATIONMETHODJSON::Add(long long var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(XBYTE var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(XBYTE var, XCHAR* name)
@@ -260,13 +260,13 @@ bool XSERIALIZATIONMETHODJSON::Add(XBYTE var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(XWORD var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(XWORD var, XCHAR* name)
@@ -285,13 +285,13 @@ bool XSERIALIZATIONMETHODJSON::Add(XWORD var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(XDWORD var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(XDWORD var, XCHAR* name)
@@ -310,13 +310,13 @@ bool XSERIALIZATIONMETHODJSON::Add(XDWORD var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(XQWORD var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(XQWORD var, XCHAR* name)
@@ -335,13 +335,13 @@ bool XSERIALIZATIONMETHODJSON::Add(XQWORD var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(XSTRING* var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var pointer to use.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(XSTRING* var, XCHAR* name)
@@ -360,13 +360,13 @@ bool XSERIALIZATIONMETHODJSON::Add(XSTRING* var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(XBUFFER* var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var pointer to use.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(XBUFFER* var, XCHAR* name)
@@ -385,13 +385,13 @@ bool XSERIALIZATIONMETHODJSON::Add(XBUFFER* var, XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(XVARIANT* var, XCHAR* name)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var pointer to use.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(XVARIANT* var, XCHAR* name)
@@ -413,10 +413,10 @@ bool XSERIALIZATIONMETHODJSON::Add(XVARIANT* var, XCHAR* name)
 * @brief      Add struct
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
-* @param[in]  open : 
+* @param[in]  name : Name to use.
+* @param[in]  open : Open value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::AddStruct(XCHAR* name, bool open)
@@ -454,11 +454,11 @@ bool XSERIALIZATIONMETHODJSON::AddStruct(XCHAR* name, bool open)
 * @brief      Add array
 * @ingroup    XUTILS
 * 
-* @param[in]  nelements : 
-* @param[in]  name : 
-* @param[in]  open : 
+* @param[in]  nelements : Nelements value.
+* @param[in]  name : Name to use.
+* @param[in]  open : Open value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::AddArray(XDWORD nelements, XCHAR* name, bool open)
@@ -496,10 +496,10 @@ bool XSERIALIZATIONMETHODJSON::AddArray(XDWORD nelements, XCHAR* name, bool open
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(bool& var, XCHAR* name)
@@ -526,10 +526,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(bool& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(char& var, XCHAR* name)
@@ -556,10 +556,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(char& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(int& var, XCHAR* name)
@@ -586,10 +586,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(int& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(float& var, XCHAR* name)
@@ -616,10 +616,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(float& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(double& var, XCHAR* name)
@@ -646,10 +646,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(double& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(long& var, XCHAR* name)
@@ -676,10 +676,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(long& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(long long& var, XCHAR* name)
@@ -706,10 +706,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(long long& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(XBYTE& var, XCHAR* name)
@@ -736,10 +736,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(XBYTE& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(XWORD& var, XCHAR* name)
@@ -766,10 +766,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(XWORD& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(XDWORD& var, XCHAR* name)
@@ -796,10 +796,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(XDWORD& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(XQWORD& var, XCHAR* name)
@@ -826,10 +826,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(XQWORD& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(XSTRING& var, XCHAR* name)
@@ -856,10 +856,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(XSTRING& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(XBUFFER& var, XCHAR* name)
@@ -886,10 +886,10 @@ bool XSERIALIZATIONMETHODJSON::Extract(XBUFFER& var, XCHAR* name)
 * @brief      Extract
 * @ingroup    XUTILS
 * 
-* @param[in]  var : 
-* @param[in]  name : 
+* @param[in]  var : Var value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Extract(XVARIANT& var, XCHAR* name)
@@ -909,9 +909,9 @@ bool XSERIALIZATIONMETHODJSON::Extract(XVARIANT& var, XCHAR* name)
 * @brief      Extract struct
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::ExtractStruct(XCHAR* name)
@@ -931,10 +931,10 @@ bool XSERIALIZATIONMETHODJSON::ExtractStruct(XCHAR* name)
 * @brief      Extract array
 * @ingroup    XUTILS
 * 
-* @param[in]  nelements : 
-* @param[in]  name : 
+* @param[in]  nelements : Nelements value.
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::ExtractArray(XDWORD nelements, XCHAR* name)
@@ -954,7 +954,7 @@ bool XSERIALIZATIONMETHODJSON::ExtractArray(XDWORD nelements, XCHAR* name)
 * @brief      Get file JSON
 * @ingroup    XUTILS
 * 
-* @return     XFILEJSON* : 
+* @return     XFILEJSON* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSON* XSERIALIZATIONMETHODJSON::GetFileJSON()
@@ -969,7 +969,7 @@ XFILEJSON* XSERIALIZATIONMETHODJSON::GetFileJSON()
 * @brief      Set file JSON
 * @ingroup    XUTILS
 * 
-* @param[in]  fileJSON : 
+* @param[in]  fileJSON : File JSON pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSERIALIZATIONMETHODJSON::SetFileJSON(XFILEJSON* fileJSON)
@@ -984,7 +984,7 @@ void XSERIALIZATIONMETHODJSON::SetFileJSON(XFILEJSON* fileJSON)
 * @brief      Get actual object
 * @ingroup    XUTILS
 * 
-* @return     XFILEJSONOBJECT* : 
+* @return     XFILEJSONOBJECT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XSERIALIZATIONMETHODJSON::GetActualObject()
@@ -999,7 +999,7 @@ XFILEJSONOBJECT* XSERIALIZATIONMETHODJSON::GetActualObject()
 * @brief      Set actual object
 * @ingroup    XUTILS
 * 
-* @param[in]  actualobject : 
+* @param[in]  actualobject : Actualobject pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSERIALIZATIONMETHODJSON::SetActualObject(XFILEJSONOBJECT* actualobject)
@@ -1014,7 +1014,7 @@ void XSERIALIZATIONMETHODJSON::SetActualObject(XFILEJSONOBJECT* actualobject)
 * @brief      Check handle active
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::CheckHandleActive()

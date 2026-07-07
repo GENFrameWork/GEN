@@ -94,7 +94,7 @@ CIPHERECDSAX25519::~CIPHERECDSAX25519()
 * @brief      Generate random private key
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERECDSAX25519::GenerateRandomPrivateKey()
@@ -124,7 +124,7 @@ bool CIPHERECDSAX25519::GenerateRandomPrivateKey()
 * @brief      Create public key
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERECDSAX25519::CreatePublicKey()
@@ -141,9 +141,9 @@ bool CIPHERECDSAX25519::CreatePublicKey()
 * @brief      Create shared key
 * @ingroup    CIPHER
 * 
-* @param[in]  publickey : 
+* @param[in]  publickey : Publickey value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERECDSAX25519::CreateSharedKey(XBYTE publickey[CIPHERECDSAX25519_MAXKEY])
@@ -160,9 +160,9 @@ bool CIPHERECDSAX25519::CreateSharedKey(XBYTE publickey[CIPHERECDSAX25519_MAXKEY
 * @brief      Get key
 * @ingroup    CIPHER
 * 
-* @param[in]  typekey : 
+* @param[in]  typekey : Typekey value.
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* CIPHERECDSAX25519::GetKey(CIPHERECDSAX25519_TYPEKEY typekey)
@@ -179,9 +179,9 @@ XBYTE* CIPHERECDSAX25519::GetKey(CIPHERECDSAX25519_TYPEKEY typekey)
 * @brief      Is key created
 * @ingroup    CIPHER
 * 
-* @param[in]  typekey : 
+* @param[in]  typekey : Typekey value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERECDSAX25519::IsKeyCreated(CIPHERECDSAX25519_TYPEKEY typekey)
@@ -215,16 +215,11 @@ void CIPHERECDSAX25519::CleanAllKeys()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHERECDSAX25519::fsum(XQWORDSIG* output, const XQWORDSIG* in)
-* @brief      fsum
-*                     Field element representation:
-*
-*                     Field elements are written as an array of signed, 64-bit limbs, least significant first. 
-*                     The value of the field element is: x[0] + 2^26_x[1] + x^51_x[2] + 2^102_x[3] + ...
-*                     i.e. the limbs are 26, 25, 26, 25, ... bits wide.
+* @brief      fsum Field element representation:
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  in : 
+* @param[in]  output : Output output.
+* @param[in]  in : In value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fsum(XQWORDSIG* output, const XQWORDSIG* in) 
@@ -245,8 +240,8 @@ void CIPHERECDSAX25519::fsum(XQWORDSIG* output, const XQWORDSIG* in)
 * @brief      fdifference
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  in : 
+* @param[in]  output : Output output.
+* @param[in]  in : In value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fdifference(XQWORDSIG* output, const XQWORDSIG* in) 
@@ -266,9 +261,9 @@ void CIPHERECDSAX25519::fdifference(XQWORDSIG* output, const XQWORDSIG* in)
 * @brief      fscalarproduct
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  in : 
-* @param[in]  scalar : 
+* @param[in]  output : Output output.
+* @param[in]  in : In value.
+* @param[in]  scalar : Scalar value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fscalar_product(XQWORDSIG* output, const XQWORDSIG* in, const XQWORDSIG scalar) 
@@ -285,13 +280,12 @@ void CIPHERECDSAX25519::fscalar_product(XQWORDSIG* output, const XQWORDSIG* in, 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHERECDSAX25519::fproduct(XQWORDSIG* output, const XQWORDSIG* in2, const XQWORDSIG* in)
-* @brief      fproduct
-*                       The inputs are reduced coefficient form, the output is not.
+* @brief      fproduct The inputs are reduced coefficient form, the output is not.
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  in2 : 
-* @param[in]  in : 
+* @param[in]  output : Output output.
+* @param[in]  in2 : In2 value.
+* @param[in]  in : In value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fproduct(XQWORDSIG* output, const XQWORDSIG* in2, const XQWORDSIG* in) 
@@ -405,7 +399,7 @@ void CIPHERECDSAX25519::fproduct(XQWORDSIG* output, const XQWORDSIG* in2, const 
 * @brief      freducedegree
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
+* @param[in]  output : Output output.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::freduce_degree(XQWORDSIG* output) 
@@ -447,9 +441,9 @@ void CIPHERECDSAX25519::freduce_degree(XQWORDSIG* output)
 * @brief      divby226
 * @ingroup    CIPHER
 * 
-* @param[in]  v : 
+* @param[in]  v : V value.
 * 
-* @return     XQWORDSIG : 
+* @return     XQWORDSIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORDSIG CIPHERECDSAX25519::div_by_2_26(const XQWORDSIG v) 
@@ -468,9 +462,9 @@ XQWORDSIG CIPHERECDSAX25519::div_by_2_26(const XQWORDSIG v)
 * @brief      divby225
 * @ingroup    CIPHER
 * 
-* @param[in]  v : 
+* @param[in]  v : V value.
 * 
-* @return     XQWORDSIG : 
+* @return     XQWORDSIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORDSIG CIPHERECDSAX25519::div_by_2_25(const XQWORDSIG v) 
@@ -489,9 +483,9 @@ XQWORDSIG CIPHERECDSAX25519::div_by_2_25(const XQWORDSIG v)
 * @brief      divs32by225
 * @ingroup    CIPHER
 * 
-* @param[in]  v : 
+* @param[in]  v : V value.
 * 
-* @return     XDWORDSIG : 
+* @return     XDWORDSIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORDSIG CIPHERECDSAX25519::div_s32_by_2_25(const XDWORDSIG v) 
@@ -505,11 +499,10 @@ XDWORDSIG CIPHERECDSAX25519::div_s32_by_2_25(const XDWORDSIG v)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHERECDSAX25519::freduce_coefficients(XQWORDSIG* output)
-* @brief      freducecoefficients
-                                    On entry: |output[i]| < 2^62
+* @brief      freducecoefficients On entry: |output[i]| < 2^62
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
+* @param[in]  output : Output output.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::freduce_coefficients(XQWORDSIG* output) 
@@ -559,14 +552,13 @@ void CIPHERECDSAX25519::freduce_coefficients(XQWORDSIG* output)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void CIPHERECDSAX25519::fmul(XQWORDSIG*output, const XQWORDSIG* in, const XQWORDSIG* in2)
-* @brief      fmul
-                      output must be distinct to both inputs. The output is reduced degree and reduced coefficient.
+* @fn         void CIPHERECDSAX25519::fmul(XQWORDSIG* output, const XQWORDSIG* in, const XQWORDSIG* in2)
+* @brief      fmul output must be distinct to both inputs. The output is reduced degree and reduced coefficient.
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  in : 
-* @param[in]  in2 : 
+* @param[in]  output : Output output.
+* @param[in]  in : In value.
+* @param[in]  in2 : In2 value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fmul(XQWORDSIG* output, const XQWORDSIG* in, const XQWORDSIG* in2) 
@@ -587,8 +579,8 @@ void CIPHERECDSAX25519::fmul(XQWORDSIG* output, const XQWORDSIG* in, const XQWOR
 * @brief      fsquareinner
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  in : 
+* @param[in]  output : Output output.
+* @param[in]  in : In value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fsquare_inner(XQWORDSIG* output, const XQWORDSIG* in) 
@@ -657,8 +649,8 @@ void CIPHERECDSAX25519::fsquare_inner(XQWORDSIG* output, const XQWORDSIG* in)
 * @brief      fsquare
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  in : 
+* @param[in]  output : Output output.
+* @param[in]  in : In value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fsquare(XQWORDSIG* output, const XQWORDSIG* in) 
@@ -679,8 +671,8 @@ void CIPHERECDSAX25519::fsquare(XQWORDSIG* output, const XQWORDSIG* in)
 * @brief      fexpand
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  input : 
+* @param[in]  output : Output output.
+* @param[in]  input : Input value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fexpand(XQWORDSIG* output, const XBYTE* input) 
@@ -704,8 +696,8 @@ void CIPHERECDSAX25519::fexpand(XQWORDSIG* output, const XBYTE* input)
 * @brief      fcontract
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  input : 
+* @param[in]  output : Output output.
+* @param[in]  input : Input pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fcontract(XBYTE* output, XQWORDSIG* input) 
@@ -792,15 +784,15 @@ void CIPHERECDSAX25519::fcontract(XBYTE* output, XQWORDSIG* input)
 * @brief      fmonty
 * @ingroup    CIPHER
 * 
-* @param[in]  x2 : x2 z3: long form output 2Q 
-* @param[in]  z2 : output 2Q 
-* @param[in]  x3 : x3 z3: long form output Q + Q' 
+* @param[in]  x2 : x2 z3: long form output 2Q
+* @param[in]  z2 : output 2Q
+* @param[in]  x3 : x3 z3: long form output Q + Q'
 * @param[in]  z3 : output Q + Q'
-* @param[in]  x :  x z: short form, destroyed input Q 
-* @param[in]  z : input Q 
+* @param[in]  x : x z: short form, destroyed input Q
+* @param[in]  z : input Q
 * @param[in]  xprime : xprime zprime: short form, destroyed input Q'
 * @param[in]  zprime : input Q'
-* @param[in]  qmqp : qmqp: short form, preserved input Q - Q' 
+* @param[in]  qmqp : qmqp: short form, preserved input Q - Q'
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::fmonty(XQWORDSIG* x2, XQWORDSIG* z2, XQWORDSIG* x3, XQWORDSIG* z3, XQWORDSIG* x, XQWORDSIG* z, XQWORDSIG* xprime, XQWORDSIG* zprime, const XQWORDSIG* qmqp) 
@@ -860,19 +852,12 @@ void CIPHERECDSAX25519::fmonty(XQWORDSIG* x2, XQWORDSIG* z2, XQWORDSIG* x3, XQWO
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHERECDSAX25519::swap_conditional(XQWORDSIG a[19], XQWORDSIG b[19], XQWORDSIG iswap)
-* @brief      swapconditional
-*                               them unchanged if 'iswap' is 0.  Runs in data-invariant time to avoid side-channel 
-*                               attacks.
-*
-*                               NOTE that this function requires that 'iswap' be 1 or 0; other values give
-*                                    wrong results.  Also, the two XQWORDSIG arrays must be in reduced-coefficient,
-*                                    reduced-degree form: the values in a[10..19] or b[10..19] aren't swapped,
-*                                    and all all values in a[0..9],b[0..9] must have magnitude less than INT32_MAX.
+* @brief      swapconditional them unchanged if 'iswap' is 0.  Runs in data-invariant time to avoid side-channel attacks.
 * @ingroup    CIPHER
 * 
-* @param[in]  a[19] : 
-* @param[in]  b[19] : 
-* @param[in]  iswap : 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  iswap : Iswap value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::swap_conditional(XQWORDSIG a[19], XQWORDSIG b[19], XQWORDSIG iswap) 
@@ -893,16 +878,13 @@ void CIPHERECDSAX25519::swap_conditional(XQWORDSIG a[19], XQWORDSIG b[19], XQWOR
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHERECDSAX25519::cmult(XQWORDSIG* resultx, XQWORDSIG* resultz, const XBYTE* n, const XQWORDSIG* q)
-* @brief      cmult
-*                           resultx/resultz: the x coordinate of the resulting curve point (short form)
-*                           n: a little endian, 32-byte number
-*                           q: a point of the curve (short form)
+* @brief      cmult resultx/resultz: the x coordinate of the resulting curve point (short form) n: a little endian, 32-byte number q: a point of the curve (short form)
 * @ingroup    CIPHER
 * 
-* @param[in]  resultx : 
-* @param[in]  resultz : 
-* @param[in]  n : 
-* @param[in]  q : 
+* @param[in]  resultx : Output resultx.
+* @param[in]  resultz : Output resultz.
+* @param[in]  n : N value.
+* @param[in]  q : Q value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::cmult(XQWORDSIG* resultx, XQWORDSIG* resultz, const XBYTE* n, const XQWORDSIG* q) 
@@ -970,8 +952,8 @@ void CIPHERECDSAX25519::cmult(XQWORDSIG* resultx, XQWORDSIG* resultz, const XBYT
 * @brief      crecip
 * @ingroup    CIPHER
 * 
-* @param[in]  out : 
-* @param[in]  z : 
+* @param[in]  out : Output out.
+* @param[in]  z : Z coordinate.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::crecip(XQWORDSIG* out, const XQWORDSIG* z) 
@@ -1061,13 +1043,13 @@ void CIPHERECDSAX25519::crecip(XQWORDSIG* out, const XQWORDSIG* z)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void CIPHERECDSAX25519::curve25519(XBYTE*mypublic, const XBYTE* secret, const XBYTE* basepoint)
+* @fn         void CIPHERECDSAX25519::curve25519(XBYTE* mypublic, const XBYTE* secret, const XBYTE* basepoint)
 * @brief      curve25519
 * @ingroup    CIPHER
 * 
-* @param[in]  mypublic : 
-* @param[in]  secret : 
-* @param[in]  basepoint : 
+* @param[in]  mypublic : Mypublic pointer to use.
+* @param[in]  secret : Secret value.
+* @param[in]  basepoint : Basepoint value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::curve25519(XBYTE* mypublic, const XBYTE* secret, const XBYTE* basepoint) 

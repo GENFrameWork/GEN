@@ -69,16 +69,16 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPDEVICE* INPLINUXFACTORY::CreateDevice(XCHAR* devicename, void* param)
+* 
+* @fn         INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 * @brief      Create device
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  type : device type of the input device
 * @param[in]  param : param to create device (in windows need handle to windows)
-*
-* @return     INPDEVICE* : device input created
-*
+* 
+* @return     INPDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 {
@@ -163,15 +163,15 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXFACTORY::DeleteDevice(INPDEVICE* device)
 * @brief      Delete device
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  device : device to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXFACTORY::DeleteDevice(INPDEVICE* device)
 {
@@ -189,10 +189,10 @@ bool INPLINUXFACTORY::DeleteDevice(INPDEVICE* device)
 * @brief      Get device handlers
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  devicetype : 
-* @param[in]  devices : 
+* @param[in]  devicetype : Devicetype value.
+* @param[in]  devices : Devices pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXFACTORY::GetDeviceHandlers(INPDEVICE_TYPE devicetype, XVECTOR<INPLINUXDEVICEID*>& devices)
@@ -356,7 +356,7 @@ bool INPLINUXFACTORY::GetDeviceHandlers(INPDEVICE_TYPE devicetype, XVECTOR<INPLI
 * @brief      Create simulator
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     INPSIMULATE* : 
+* @return     INPSIMULATE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPSIMULATE* INPLINUXFACTORY::CreateSimulator()
@@ -373,9 +373,9 @@ INPSIMULATE* INPLINUXFACTORY::CreateSimulator()
 * @brief      Delete simulator
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  inputsimulated : 
+* @param[in]  inputsimulated : Inputsimulated pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)

@@ -57,9 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJTEXT::GRPVECTORFILESVGOBJTEXT()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJTEXT::GRPVECTORFILESVGOBJTEXT()
 {
@@ -68,10 +70,12 @@ GRPVECTORFILESVGOBJTEXT::GRPVECTORFILESVGOBJTEXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJTEXT::~GRPVECTORFILESVGOBJTEXT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJTEXT::~GRPVECTORFILESVGOBJTEXT()
 {
@@ -80,11 +84,15 @@ GRPVECTORFILESVGOBJTEXT::~GRPVECTORFILESVGOBJTEXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJTEXT::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read common attributes plus x, y, font-size, text-anchor and the text content
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJTEXT::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -137,34 +145,122 @@ bool GRPVECTORFILESVGOBJTEXT::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSTRING* GRPVECTORFILESVGOBJTEXT::GetText()
 * @brief      Get text
 * @ingroup    GRAPHIC
-* @return     XSTRING* : text content
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILESVGOBJTEXT::GetText()   { return &text; }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJTEXT::GetX()
+* @brief      Get x
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double                     GRPVECTORFILESVGOBJTEXT::GetX()           { return x;          }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJTEXT::GetY()
+* @brief      Get y
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double                     GRPVECTORFILESVGOBJTEXT::GetY()           { return y;          }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPVECTORFILESVGOBJTEXT::HasX()
+* @brief      Check whether x exists
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool                       GRPVECTORFILESVGOBJTEXT::HasX()           { return hasx;       }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPVECTORFILESVGOBJTEXT::HasY()
+* @brief      Check whether y exists
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool                       GRPVECTORFILESVGOBJTEXT::HasY()           { return hasy;       }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJTEXT::GetDX()
+* @brief      Get dx
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double                     GRPVECTORFILESVGOBJTEXT::GetDX()          { return dx;         }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJTEXT::GetDY()
+* @brief      Get dy
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double                     GRPVECTORFILESVGOBJTEXT::GetDY()          { return dy;         }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJTEXT::GetFontSize()
+* @brief      Get font size
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double                     GRPVECTORFILESVGOBJTEXT::GetFontSize()    { return fontsize;   }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPVECTORFILESVGOBJTEXT::HasFontSize()
+* @brief      Check whether font size exists
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool                       GRPVECTORFILESVGOBJTEXT::HasFontSize()    { return hasfontsize;}
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPVECTORFILESVGTEXTANCHOR GRPVECTORFILESVGOBJTEXT::GetTextAnchor()
+* @brief      Get text anchor
+* @ingroup    GRAPHIC
+* 
+* @return     GRPVECTORFILESVGTEXTANCHOR : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGTEXTANCHOR GRPVECTORFILESVGOBJTEXT::GetTextAnchor()  { return textanchor; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJTEXT::GetProperty(XFILEXMLELEMENT* element, XCHAR* name, XSTRING& outvalue)
 * @brief      Get property : read a property from its attribute or from the inline style="" string
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : element
 * @param[in]  name : property name
-* @param[out] outvalue : property value
-* @return     bool : true if the property was found.
+* @param[in]  outvalue : property value
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJTEXT::GetProperty(XFILEXMLELEMENT* element, XCHAR* name, XSTRING& outvalue)
 {
@@ -198,10 +294,12 @@ bool GRPVECTORFILESVGOBJTEXT::GetProperty(XFILEXMLELEMENT* element, XCHAR* name,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJTEXT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJTEXT::Clean()
 {

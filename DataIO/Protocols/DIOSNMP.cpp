@@ -68,8 +68,8 @@
 * @fn         DIOSNMP_XBER::DIOSNMP_XBER(): XBER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP_XBER::DIOSNMP_XBER(): XBER()
 {
 
@@ -82,8 +82,8 @@ DIOSNMP_XBER::DIOSNMP_XBER(): XBER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP_XBER::~DIOSNMP_XBER()
 {
 
@@ -95,12 +95,12 @@ DIOSNMP_XBER::~DIOSNMP_XBER()
 * @fn         bool DIOSNMP_XBER::SetIPADDRESS(XCHAR* IPstring)
 * @brief      Set IPADDRESS
 * @ingroup    DATAIO
-*
-* @param[in]  IPstring : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  IPstring : I Pstring pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP_XBER::SetIPADDRESS(XCHAR* IPstring)
 {
   if(!IPstring)     return false;
@@ -161,12 +161,12 @@ bool DIOSNMP_XBER::SetIPADDRESS(XCHAR* IPstring)
 * @fn         bool DIOSNMP_XBER::SetTIMETICKS(XDWORD ticks)
 * @brief      Set TIMETICKS
 * @ingroup    DATAIO
-*
-* @param[in]  ticks : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  ticks : Ticks value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP_XBER::SetTIMETICKS(XDWORD ticks)
 {
   bool status = SetINTEGER(ticks);
@@ -182,12 +182,12 @@ bool DIOSNMP_XBER::SetTIMETICKS(XDWORD ticks)
 * @fn         bool DIOSNMP_XBER::Sequence_AddTo(XBER& xber)
 * @brief      Sequence add to
 * @ingroup    DATAIO
-*
-* @param[in]  xber : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  xber : Xber value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP_XBER::Sequence_AddTo(XBER& xber)
 {
   bool status = XBER::Sequence_AddTo(xber);
@@ -203,12 +203,12 @@ bool DIOSNMP_XBER::Sequence_AddTo(XBER& xber)
 * @fn         bool DIOSNMP_XBER::TrapData_AddTo(XBER& xber)
 * @brief      Trap data add to
 * @ingroup    DATAIO
-*
-* @param[in]  xber : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  xber : Xber value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP_XBER::TrapData_AddTo(XBER& xber)
 {
   bool status = XBER::Sequence_AddTo(xber);
@@ -228,8 +228,8 @@ bool DIOSNMP_XBER::TrapData_AddTo(XBER& xber)
 * @fn         DIOSNMP_BASE::DIOSNMP_BASE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP_BASE::DIOSNMP_BASE()
 {
   Clean();
@@ -242,8 +242,8 @@ DIOSNMP_BASE::DIOSNMP_BASE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP_BASE::~DIOSNMP_BASE()
 {
   Clean();
@@ -255,10 +255,10 @@ DIOSNMP_BASE::~DIOSNMP_BASE()
 * @fn         DIOSTREAMUDPCONFIG* DIOSNMP_BASE::GetDIOStreamUDPCFG()
 * @brief      Get DIO stream UDPCFG
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMUDPCONFIG* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSTREAMUDPCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUDPCONFIG* DIOSNMP_BASE::GetDIOStreamUDPCFG()
 {
   return diostreamudpcfg;
@@ -270,10 +270,10 @@ DIOSTREAMUDPCONFIG* DIOSNMP_BASE::GetDIOStreamUDPCFG()
 * @fn         DIOSTREAMUDP* DIOSNMP_BASE::GetDIOStreamUDP()
 * @brief      Get DIO stream UDP
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMUDP* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSTREAMUDP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUDP* DIOSNMP_BASE::GetDIOStreamUDP()
 {
   return diostreamudp;
@@ -285,10 +285,10 @@ DIOSTREAMUDP* DIOSNMP_BASE::GetDIOStreamUDP()
 * @fn         DIOSNMP_VERSION DIOSNMP_BASE::GetVersion()
 * @brief      Get version
 * @ingroup    DATAIO
-*
-* @return     DIOSNMP_VERSION : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSNMP_VERSION : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP_VERSION DIOSNMP_BASE::GetVersion()
 {
   return version;
@@ -300,10 +300,10 @@ DIOSNMP_VERSION DIOSNMP_BASE::GetVersion()
 * @fn         void DIOSNMP_BASE::SetVersion(DIOSNMP_VERSION version)
 * @brief      Set version
 * @ingroup    DATAIO
-*
-* @param[in]  version : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  version : Version value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSNMP_BASE::SetVersion(DIOSNMP_VERSION version)
 {
   this->version = version;
@@ -316,12 +316,12 @@ void DIOSNMP_BASE::SetVersion(DIOSNMP_VERSION version)
 * @brief      Open
 * @ingroup    DATAIO
 * 
-* @param[in]  IPtarget : 
-* @param[in]  port : 
-* @param[in]  checkavailableNMS : 
-* @param[in]  localIP : 
+* @param[in]  IPtarget : I Ptarget pointer to use.
+* @param[in]  port : Port number to use.
+* @param[in]  checkavailableNMS : Checkavailable NMS value.
+* @param[in]  localIP : Local IP pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP_BASE::Open(XCHAR* IPtarget, int port, bool checkavailableNMS, XCHAR* localIP)
@@ -376,10 +376,10 @@ bool DIOSNMP_BASE::Open(XCHAR* IPtarget, int port, bool checkavailableNMS, XCHAR
 * @fn         bool DIOSNMP_BASE::Close()
 * @brief      Close
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP_BASE::Close()
 {
   diostreamudp->WaitToFlushXBuffers();
@@ -407,8 +407,8 @@ bool DIOSNMP_BASE::Close()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSNMP_BASE::Clean()
 {
   diostreamudpcfg = NULL;
@@ -427,8 +427,8 @@ void DIOSNMP_BASE::Clean()
 * @fn         DIOSNMP_TRAP::DIOSNMP_TRAP()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP_TRAP::DIOSNMP_TRAP()
 {
   Clean();
@@ -441,8 +441,8 @@ DIOSNMP_TRAP::DIOSNMP_TRAP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP_TRAP::~DIOSNMP_TRAP()
 {
   Clean();
@@ -455,16 +455,16 @@ DIOSNMP_TRAP::~DIOSNMP_TRAP()
 * @brief      Send
 * @ingroup    DATAIO
 * 
-* @param[in]  community : 
-* @param[in]  enterprise : 
-* @param[in]  agentip : 
-* @param[in]  generictrap : 
-* @param[in]  specifictrap : 
-* @param[in]  timestamp : 
-* @param[in]  nvar : 
-* @param[in]  ... : 
+* @param[in]  community : Community pointer to use.
+* @param[in]  enterprise : Enterprise pointer to use.
+* @param[in]  agentip : Agentip pointer to use.
+* @param[in]  generictrap : Generictrap value.
+* @param[in]  specifictrap : Specifictrap value.
+* @param[in]  timestamp : Timestamp value.
+* @param[in]  nvar : Nvar value.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP_TRAP::Send(XCHAR* community,XCHAR* enterprise,XCHAR* agentip,int generictrap,int specifictrap,XDWORD timestamp,int nvar,...)
@@ -571,8 +571,8 @@ bool DIOSNMP_TRAP::Send(XCHAR* community,XCHAR* enterprise,XCHAR* agentip,int ge
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSNMP_TRAP::Clean()
 {
 
@@ -588,8 +588,8 @@ void DIOSNMP_TRAP::Clean()
 * @fn         DIOSNMP::DIOSNMP()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP::DIOSNMP()
 {
   Clean();
@@ -602,8 +602,8 @@ DIOSNMP::DIOSNMP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSNMP::~DIOSNMP()
 {
   Clean();
@@ -613,17 +613,17 @@ DIOSNMP::~DIOSNMP()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSNMP::Get(DIOSNMP_OPERATION operation, XCHAR* community, XCHAR* OIDstr, DIOSNMP_XBER& xberout)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  operation : 
-* @param[in]  community : 
-* @param[in]  OIDstr : 
-* @param[in]  xberout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  operation : Operation value.
+* @param[in]  community : Community pointer to use.
+* @param[in]  OIDstr : OI Dstr pointer to use.
+* @param[in]  xberout : Xberout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP::Get(DIOSNMP_OPERATION operation, XCHAR* community, XCHAR* OIDstr, DIOSNMP_XBER& xberout)
 {
   #define MAX_READBUFFER  2048
@@ -712,19 +712,19 @@ bool DIOSNMP::Get(DIOSNMP_OPERATION operation, XCHAR* community, XCHAR* OIDstr, 
 * @fn         bool DIOSNMP::Send(XCHAR* community,XCHAR* enterprise,XCHAR* agentip,int generictrap,int specifictrap,XDWORD timestamp,int nvar,...)
 * @brief      Send
 * @ingroup    DATAIO
-*
-* @param[in]  community : 
-* @param[in]  enterprise : 
-* @param[in]  agentip : 
-* @param[in]  generictrap : 
-* @param[in]  specifictrap : 
-* @param[in]  timestamp : 
-* @param[in]  nvar : 
-* @param[in]  ... : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  community : Community pointer to use.
+* @param[in]  enterprise : Enterprise pointer to use.
+* @param[in]  agentip : Agentip pointer to use.
+* @param[in]  generictrap : Generictrap value.
+* @param[in]  specifictrap : Specifictrap value.
+* @param[in]  timestamp : Timestamp value.
+* @param[in]  nvar : Nvar value.
+* @param[in]  ... : Variable argument list.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSNMP::Send(XCHAR* community,XCHAR* enterprise,XCHAR* agentip,int generictrap,int specifictrap,XDWORD timestamp,int nvar,...)
 {
   if(!diostreamudpcfg)  return false;
@@ -829,8 +829,8 @@ bool DIOSNMP::Send(XCHAR* community,XCHAR* enterprise,XCHAR* agentip,int generic
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSNMP::Clean()
 {
 

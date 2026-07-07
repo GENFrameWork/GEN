@@ -95,10 +95,10 @@ CIPHER3DES::~CIPHER3DES()
 * @brief      Cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER3DES::Cipher(XBYTE* input, XDWORD size)
@@ -143,10 +143,10 @@ bool CIPHER3DES::Cipher(XBYTE* input, XDWORD size)
 * @brief      Uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER3DES::Uncipher(XBYTE* input, XDWORD size)
@@ -188,9 +188,9 @@ bool CIPHER3DES::Uncipher(XBYTE* input, XDWORD size)
 * @brief      DES3 set2 key
 * @ingroup    CIPHER
 * 
-* @param[in]  esk[96] : 
-* @param[in]  dsk[96] : 
-* @param[in]  key[CIPHERDES_KEYSIZE*2] : 
+* @param[in]  esk : Esk value.
+* @param[in]  dsk : Dsk value.
+* @param[in]  key : Key pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHER3DES::DES3Set2Key(XDWORD esk[96], XDWORD dsk[96], XBYTE key[CIPHERDES_KEYSIZE*2])
@@ -222,10 +222,10 @@ void CIPHER3DES::DES3Set2Key(XDWORD esk[96], XDWORD dsk[96], XBYTE key[CIPHERDES
 * @brief      DES3 set2 key cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  key[CIPHERDES_KEYSIZE*2] : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHER3DES::DES3Set2KeyCipher(CIPHER3DES_CONTEXT* ctx, XBYTE key[CIPHERDES_KEYSIZE*2])
@@ -242,14 +242,14 @@ int CIPHER3DES::DES3Set2KeyCipher(CIPHER3DES_CONTEXT* ctx, XBYTE key[CIPHERDES_K
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         int CIPHER3DES::DES3Set2KeyUncipher(CIPHER3DES_CONTEXT*ctx, XBYTE key[CIPHERDES_KEYSIZE*2])
+* @fn         int CIPHER3DES::DES3Set2KeyUncipher(CIPHER3DES_CONTEXT *ctx, XBYTE key[CIPHERDES_KEYSIZE*2])
 * @brief      DES3 set2 key uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  CIPHER3DES_CONTEXT*ctx : 
-* @param[in]  key[CIPHERDES_KEYSIZE*2] : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHER3DES::DES3Set2KeyUncipher(CIPHER3DES_CONTEXT *ctx, XBYTE key[CIPHERDES_KEYSIZE*2])
@@ -270,9 +270,9 @@ int CIPHER3DES::DES3Set2KeyUncipher(CIPHER3DES_CONTEXT *ctx, XBYTE key[CIPHERDES
 * @brief      DES3 set3 key
 * @ingroup    CIPHER
 * 
-* @param[in]  esk[96] : 
-* @param[in]  dsk[96] : 
-* @param[in]  key[24] : 
+* @param[in]  esk : Esk value.
+* @param[in]  dsk : Dsk value.
+* @param[in]  key : Key value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHER3DES::DES3Set3Key(XDWORD esk[96], XDWORD dsk[96], XBYTE key[24])
@@ -301,10 +301,10 @@ void CIPHER3DES::DES3Set3Key(XDWORD esk[96], XDWORD dsk[96], XBYTE key[24])
 * @brief      DES3 set3 key cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  key[CIPHERDES_KEYSIZE*3] : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHER3DES::DES3Set3KeyCipher(CIPHER3DES_CONTEXT* ctx, XBYTE key[CIPHERDES_KEYSIZE*3])
@@ -325,10 +325,10 @@ int CIPHER3DES::DES3Set3KeyCipher(CIPHER3DES_CONTEXT* ctx, XBYTE key[CIPHERDES_K
 * @brief      DES3 set3 key uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  key[CIPHERDES_KEYSIZE*3] : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHER3DES::DES3Set3KeyUncipher(CIPHER3DES_CONTEXT* ctx, XBYTE key[CIPHERDES_KEYSIZE*3])
@@ -349,11 +349,11 @@ int CIPHER3DES::DES3Set3KeyUncipher(CIPHER3DES_CONTEXT* ctx, XBYTE key[CIPHERDES
 * @brief      DES3 cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  input[8] : 
-* @param[in]  output[8] : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  input : Input value.
+* @param[in]  output : Output output.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHER3DES::DES3Cipher(CIPHER3DES_CONTEXT* ctx, XBYTE input[8], XBYTE output[8])
@@ -403,14 +403,14 @@ int CIPHER3DES::DES3Cipher(CIPHER3DES_CONTEXT* ctx, XBYTE input[8], XBYTE output
 * @brief      DES3 cipher ECB
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  length : 
-* @param[in]  iv[8] : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  length : Length value.
+* @param[in]  iv : Iv value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER3DES::DES3Cipher_ECB(CIPHER3DES_CONTEXT* ctx, int mode, size_t length, XBYTE iv[8], XBYTE* input, XBYTE* output)
@@ -458,14 +458,14 @@ bool CIPHER3DES::DES3Cipher_ECB(CIPHER3DES_CONTEXT* ctx, int mode, size_t length
 * @brief      DES3 cipher CBC
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  length : 
-* @param[in]  iv[8] : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  length : Length value.
+* @param[in]  iv : Iv value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER3DES::DES3Cipher_CBC(CIPHER3DES_CONTEXT* ctx, int mode, size_t length, XBYTE iv[8], XBYTE* input, XBYTE* output)

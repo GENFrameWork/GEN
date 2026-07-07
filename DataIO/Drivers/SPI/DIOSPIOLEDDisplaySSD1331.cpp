@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSPIOLEDDISPLAYSSD1331::DIOSPIOLEDDISPLAYSSD1331()
+* 
+* @fn         DIOSPIOLEDDISPLAYSSD1331::DIOSPIOLEDDISPLAYSSD1331(): DIODEVICESPI()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPIOLEDDISPLAYSSD1331::DIOSPIOLEDDISPLAYSSD1331(): DIODEVICESPI()
 {
@@ -74,12 +74,12 @@ DIOSPIOLEDDISPLAYSSD1331::DIOSPIOLEDDISPLAYSSD1331(): DIODEVICESPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSPIOLEDDISPLAYSSD1331::~DIOSPIOLEDDISPLAYSSD1331()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPIOLEDDISPLAYSSD1331::~DIOSPIOLEDDISPLAYSSD1331()
 {
@@ -90,13 +90,13 @@ DIOSPIOLEDDISPLAYSSD1331::~DIOSPIOLEDDISPLAYSSD1331()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::IniDevice()
 {
@@ -142,15 +142,15 @@ bool DIOSPIOLEDDISPLAYSSD1331::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::Clear(XWORD color)
 * @brief      Clear
 * @ingroup    DATAIO
-*
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::Clear(XWORD color)
 {
@@ -165,15 +165,15 @@ bool DIOSPIOLEDDISPLAYSSD1331::Clear(XWORD color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::Update(XBYTE* buffer)
 * @brief      Update
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::Update(XBYTE* buffer)
 {
@@ -187,17 +187,17 @@ bool DIOSPIOLEDDISPLAYSSD1331::Update(XBYTE* buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::PutPixel(XWORD x, XWORD y, XWORD color)
 * @brief      Put pixel
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::PutPixel(XWORD x, XWORD y, XWORD color)
 {
@@ -217,13 +217,13 @@ bool DIOSPIOLEDDISPLAYSSD1331::PutPixel(XWORD x, XWORD y, XWORD color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::End()
 {  
@@ -242,10 +242,10 @@ bool DIOSPIOLEDDISPLAYSSD1331::End()
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::Initializate()
 * @brief      Initializate
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::Initializate()
 {
   Reset();
@@ -283,13 +283,13 @@ bool DIOSPIOLEDDISPLAYSSD1331::Initializate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::Reset()
 * @brief      Reset
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::Reset()
 {
@@ -310,15 +310,15 @@ bool DIOSPIOLEDDISPLAYSSD1331::Reset()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::Active(bool on)
 * @brief      Active
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::Active(bool on)
 {
@@ -327,15 +327,15 @@ bool DIOSPIOLEDDISPLAYSSD1331::Active(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::EnableFillMode(bool on)
 * @brief      Enable fill mode
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::EnableFillMode(bool on)
 {
@@ -348,15 +348,15 @@ bool DIOSPIOLEDDISPLAYSSD1331::EnableFillMode(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::EnableLockMode(bool on)
 * @brief      Enable lock mode
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::EnableLockMode(bool on)
 {
@@ -369,15 +369,15 @@ bool DIOSPIOLEDDISPLAYSSD1331::EnableLockMode(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::EnableScrollMode(bool on)
 * @brief      Enable scroll mode
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::EnableScrollMode(bool on)
 {
@@ -386,16 +386,16 @@ bool DIOSPIOLEDDISPLAYSSD1331::EnableScrollMode(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::SetScrollMode(XWORD horizontal, XWORD vertical)
 * @brief      Set scroll mode
 * @ingroup    DATAIO
-*
-* @param[in]  horizontal :
-* @param[in]  vertical :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  horizontal : Horizontal value.
+* @param[in]  vertical : Vertical value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::SetScrollMode(XWORD horizontal, XWORD vertical)
 {
@@ -408,13 +408,13 @@ bool DIOSPIOLEDDISPLAYSSD1331::SetScrollMode(XWORD horizontal, XWORD vertical)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::ClearDisplay()
 * @brief      Clear display
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::ClearDisplay()
 {
@@ -430,13 +430,13 @@ bool DIOSPIOLEDDISPLAYSSD1331::ClearDisplay()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::MaxWindow()
 * @brief      Max window
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::MaxWindow()
 {
@@ -447,20 +447,20 @@ bool DIOSPIOLEDDISPLAYSSD1331::MaxWindow()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::FillRect(XBYTE x0, XBYTE y0, XBYTE x1, XBYTE y1, XWORD color, XWORD background)
 * @brief      Fill rect
 * @ingroup    DATAIO
-*
-* @param[in]  x0 :
-* @param[in]  y0 :
-* @param[in]  x1 :
-* @param[in]  y1 :
-* @param[in]  color :
-* @param[in]  background :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x0 : X0 value.
+* @param[in]  y0 : Y0 value.
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  color : Color value.
+* @param[in]  background : Background value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::FillRect(XBYTE x0, XBYTE y0, XBYTE x1, XBYTE y1, XWORD color, XWORD background)
 {
@@ -500,16 +500,16 @@ bool DIOSPIOLEDDISPLAYSSD1331::FillRect(XBYTE x0, XBYTE y0, XBYTE x1, XBYTE y1, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::SendCommand(XBYTE command, int timeout)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  command :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  command : Command value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::SendCommand(XBYTE command, int timeout)
 {
@@ -525,17 +525,17 @@ bool DIOSPIOLEDDISPLAYSSD1331::SendCommand(XBYTE command, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::SendCommand(XBYTE* command, XDWORD size, int timeout)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  command :
-* @param[in]  size :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  command : Command pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::SendCommand(XBYTE* command, XDWORD size, int timeout)
 {
@@ -551,16 +551,16 @@ bool DIOSPIOLEDDISPLAYSSD1331::SendCommand(XBYTE* command, XDWORD size, int time
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::SendData(XBYTE data, int timeout)
 * @brief      Send data
 * @ingroup    DATAIO
-*
-* @param[in]  data :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::SendData(XBYTE data, int timeout)
 {
@@ -576,17 +576,17 @@ bool DIOSPIOLEDDISPLAYSSD1331::SendData(XBYTE data, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIOLEDDISPLAYSSD1331::SendData(XBYTE* data, XDWORD size, int timeout)
 * @brief      Send data
 * @ingroup    DATAIO
-*
-* @param[in]  data :
-* @param[in]  size :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIOLEDDISPLAYSSD1331::SendData(XBYTE* data, XDWORD size, int timeout)
 {
@@ -602,12 +602,12 @@ bool DIOSPIOLEDDISPLAYSSD1331::SendData(XBYTE* data, XDWORD size, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSPIOLEDDISPLAYSSD1331::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPIOLEDDISPLAYSSD1331::Clean()
 {

@@ -79,8 +79,8 @@ XFEEDBACK::XFEEDBACK()
 * 
 * @fn         XFEEDBACK::~XFEEDBACK()
 * @brief      Destructor of class
-* @ingroup    XUTILS
 * @note       VIRTUAL
+* @ingroup    XUTILS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFEEDBACK::~XFEEDBACK()
@@ -105,7 +105,7 @@ XFEEDBACK::~XFEEDBACK()
 * @brief      get code
 * @ingroup    XUTILS
 * 
-* @return     XFEEDBACK_CODE : 
+* @return     XFEEDBACK_CODE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFEEDBACK_CODE XFEEDBACK::GetCode()
@@ -120,7 +120,7 @@ XFEEDBACK_CODE XFEEDBACK::GetCode()
 * @brief      set code
 * @ingroup    XUTILS
 * 
-* @param[in]  code : 
+* @param[in]  code : Code value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFEEDBACK::SetCode(XFEEDBACK_CODE code)
@@ -135,7 +135,7 @@ void XFEEDBACK::SetCode(XFEEDBACK_CODE code)
 * @brief      get module name
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFEEDBACK::GetModuleName()
@@ -150,7 +150,7 @@ XSTRING* XFEEDBACK::GetModuleName()
 * @brief      get module line
 * @ingroup    XUTILS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFEEDBACK::GetModuleLine()
@@ -165,7 +165,7 @@ int XFEEDBACK::GetModuleLine()
 * @brief      set module line
 * @ingroup    XUTILS
 * 
-* @param[in]  moduleline : 
+* @param[in]  moduleline : Moduleline value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFEEDBACK::SetModuleLine(int moduleline)
@@ -180,7 +180,7 @@ void XFEEDBACK::SetModuleLine(int moduleline)
 * @brief      get text
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFEEDBACK::GetText()
@@ -193,8 +193,8 @@ XSTRING* XFEEDBACK::GetText()
 * 
 * @fn         void XFEEDBACK::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    XUTILS
 * @note       INTERNAL
+* @ingroup    XUTILS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFEEDBACK::Clean()
@@ -254,7 +254,7 @@ XFEEDBACK_CONTROL::~XFEEDBACK_CONTROL()
 * @brief      Is active
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFEEDBACK_CONTROL::IsActive()
@@ -269,9 +269,9 @@ bool XFEEDBACK_CONTROL::IsActive()
 * @brief      Activate
 * @ingroup    XUTILS
 * 
-* @param[in]  isactive : 
+* @param[in]  isactive : Isactive value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFEEDBACK_CONTROL::Activate(bool isactive)
@@ -286,16 +286,16 @@ bool XFEEDBACK_CONTROL::Activate(bool isactive)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, int line, XFEEDBACK_CODE code, ...)
+* @fn         bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, XFEEDBACK_CODE code,int line, ...)
 * @brief      add feedbak
 * @ingroup    XUTILS
 * 
-* @param[in]  const* namefile : 
-* @param[in]  line : 
-* @param[in]  code : 
-* @param[in]  ... : 
+* @param[in]  namefile : Namefile value.
+* @param[in]  code : Code value.
+* @param[in]  line : Line value.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, XFEEDBACK_CODE code,int line,  ...)
@@ -390,7 +390,7 @@ bool XFEEDBACK_CONTROL::AddFeedbak(char const* namefile, XFEEDBACK_CODE code,int
 * @brief      display all
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFEEDBACK_CONTROL::DisplayAll()
@@ -449,7 +449,7 @@ bool XFEEDBACK_CONTROL::DisplayAll()
 * @brief      GEN_DELETE all resources
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFEEDBACK_CONTROL::DeleteAllResources()
@@ -470,10 +470,10 @@ bool XFEEDBACK_CONTROL::DeleteAllResources()
 * @brief      add feedbak text
 * @ingroup    XUTILS
 * 
-* @param[in]  code : 
-* @param[in]  text : 
+* @param[in]  code : Code value.
+* @param[in]  text : Text to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFEEDBACK_CONTROL::AddFeedbakText(XFEEDBACK_CODE code, XCHAR* text)
@@ -497,10 +497,10 @@ bool XFEEDBACK_CONTROL::AddFeedbakText(XFEEDBACK_CODE code, XCHAR* text)
 * @brief      get feedbak text
 * @ingroup    XUTILS
 * 
-* @param[in]  code : 
-* @param[in]  text : 
+* @param[in]  code : Code value.
+* @param[in]  text : Text to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFEEDBACK_CONTROL::GetFeedbakText(XFEEDBACK_CODE code, XSTRING& text)
@@ -523,12 +523,12 @@ bool XFEEDBACK_CONTROL::GetFeedbakText(XFEEDBACK_CODE code, XSTRING& text)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFEEDBACK_CONTROL::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFEEDBACK_CONTROL::Clean()
 {

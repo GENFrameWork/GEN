@@ -85,9 +85,9 @@ GRPVECTORFILEDXFTEXTPART::~GRPVECTORFILEDXFTEXTPART()
 * @brief      Copy to
 * @ingroup    GRAPHIC
 * 
-* @param[in]  part : 
+* @param[in]  part : Part pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTPART::CopyTo(GRPVECTORFILEDXFTEXTPART* part)

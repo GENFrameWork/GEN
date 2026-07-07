@@ -60,11 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32MUTEX::XESP32MUTEX()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32MUTEX::XESP32MUTEX()
 {
@@ -73,12 +73,12 @@ XESP32MUTEX::XESP32MUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32MUTEX::~XESP32MUTEX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32MUTEX::~XESP32MUTEX()
 {
@@ -87,13 +87,13 @@ XESP32MUTEX::~XESP32MUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32MUTEX::Lock()
 * @brief      Lock
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32MUTEX::Lock()
 {
@@ -105,13 +105,13 @@ bool XESP32MUTEX::Lock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32MUTEX::UnLock()
 * @brief      Un lock
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32MUTEX::UnLock()
 {
@@ -125,12 +125,12 @@ bool XESP32MUTEX::UnLock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32MUTEX::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32MUTEX::Clean()
 {
@@ -143,16 +143,16 @@ void XESP32MUTEX::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XESP32THREAD::XESP32THREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* data)
+* 
+* @fn         XESP32THREAD::XESP32THREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* data) : XTHREAD(groupID, ID, function, data)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  groupID :
-* @param[in]  ID :
-* @param[in]  function :
-* @param[in]  data :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  data : Data buffer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32THREAD::XESP32THREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* data) : XTHREAD(groupID, ID, function, data)
 {
@@ -161,12 +161,12 @@ XESP32THREAD::XESP32THREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION fu
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32THREAD::~XESP32THREAD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32THREAD::~XESP32THREAD()
 {
@@ -177,15 +177,15 @@ XESP32THREAD::~XESP32THREAD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32THREAD::Ini(bool run)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  run :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  run : Run value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32THREAD::Ini(bool run)
 {
@@ -200,15 +200,15 @@ bool XESP32THREAD::Ini(bool run)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32THREAD::Wait(int miliseconds)
 * @brief      Wait
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  miliseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  miliseconds : Miliseconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32THREAD::Wait(int miliseconds)
 {
@@ -219,13 +219,13 @@ bool XESP32THREAD::Wait(int miliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32THREAD::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32THREAD::End()
 {
@@ -238,12 +238,12 @@ bool XESP32THREAD::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32THREAD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32THREAD::Clean()
 {

@@ -70,11 +70,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XLINUXDIR::XLINUXDIR()
+* 
+* @fn         XLINUXDIR::XLINUXDIR(): XDIR()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXDIR::XLINUXDIR(): XDIR()
 {
@@ -83,12 +83,12 @@ XLINUXDIR::XLINUXDIR(): XDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXDIR::~XLINUXDIR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXDIR::~XLINUXDIR()
 {
@@ -97,15 +97,15 @@ XLINUXDIR::~XLINUXDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXDIR::Exist(XCHAR* path)
 * @brief      Exist
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  path : path to directory
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXDIR::Exist(XCHAR* path)
 {
@@ -151,13 +151,13 @@ bool XLINUXDIR::Exist(XCHAR* path)
 * @fn         bool XLINUXDIR::Make(XCHAR* path, bool recursive)
 * @brief      Make
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  path : 
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  path : Path to use.
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXDIR::Make(XCHAR* path, bool recursive)
 {
   if(!path)   return false;
@@ -229,15 +229,15 @@ bool XLINUXDIR::Make(XCHAR* path, bool recursive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXDIR::ChangeTo(XCHAR* path)
 * @brief      Change to
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  path : path to change
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXDIR::ChangeTo(XCHAR* path)
 {
@@ -255,16 +255,16 @@ bool XLINUXDIR::ChangeTo(XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXDIR::Delete(XCHAR* path,bool all)
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  path : directory to delete
 * @param[in]  all : GEN_DELETE all elements
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXDIR::Delete(XCHAR* path,bool all)
 {
@@ -307,15 +307,15 @@ bool XLINUXDIR::Delete(XCHAR* path,bool all)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXDIR::GetActual(XPATH& path)
 * @brief      Get actual
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXDIR::GetActual(XPATH& path)
 {
@@ -330,17 +330,17 @@ bool XLINUXDIR::GetActual(XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXDIR::FirstSearch(XCHAR* path, XCHAR* patternsearch, XDIRELEMENT* searchelement)
 * @brief      First search
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  path : path to do the search
 * @param[in]  patternsearch : pattern to search
-* @param[out] searchelement : search element
-*
-* @return     bool : true if is succesful.
-*
+* @param[in]  searchelement : search element
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXDIR::FirstSearch(XCHAR* path, XCHAR* patternsearch, XDIRELEMENT* searchelement)
 {
@@ -379,15 +379,15 @@ bool XLINUXDIR::FirstSearch(XCHAR* path, XCHAR* patternsearch, XDIRELEMENT* sear
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXDIR::NextSearch(XDIRELEMENT* searchelement)
 * @brief      Next search
 * @ingroup    PLATFORM_LINUX
-*
-* @param[out] searchelement :  search element
-*
-* @return     bool : true if have elements
-*
+* 
+* @param[in]  searchelement : search element
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXDIR::NextSearch(XDIRELEMENT* searchelement)
 {
@@ -436,16 +436,17 @@ bool XLINUXDIR::NextSearch(XDIRELEMENT* searchelement)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDIRELEMENTTYPE XLINUXDIR::TypeOfEntry(XCHAR* path)
+* 
+* @fn         XDIRELEMENTTYPE XLINUXDIR::TypeOfEntry(XCHAR* path, XDIRELEMENT* searchelement)
 * @brief      Type of entry
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  path : path of element
-*
-* @return     XDIRELEMENTTYPE : type of element
-*
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     XDIRELEMENTTYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIRELEMENTTYPE XLINUXDIR::TypeOfEntry(XCHAR* path, XDIRELEMENT* searchelement)
 {
@@ -536,12 +537,12 @@ XDIRELEMENTTYPE XLINUXDIR::TypeOfEntry(XCHAR* path, XDIRELEMENT* searchelement)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXDIR::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXDIR::Clean()
 {

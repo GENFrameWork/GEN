@@ -68,7 +68,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXSTREAMIPLOCALENUMDEVICES::DIOLINUXSTREAMIPLOCALENUMDEVICES()
+* @fn         DIOLINUXSTREAMIPLOCALENUMDEVICES::DIOLINUXSTREAMIPLOCALENUMDEVICES() : DIOSTREAMIPLOCALENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -99,7 +99,7 @@ DIOLINUXSTREAMIPLOCALENUMDEVICES::~DIOLINUXSTREAMIPLOCALENUMDEVICES()
 * @brief      Search
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMIPLOCALENUMDEVICES::Search()

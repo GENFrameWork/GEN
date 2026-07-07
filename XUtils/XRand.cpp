@@ -59,11 +59,11 @@ XRAND* XRAND::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XRAND::XRAND()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XRAND::XRAND()
 {
@@ -72,12 +72,12 @@ XRAND::XRAND()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XRAND::~XRAND()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XRAND::~XRAND()
 {
@@ -90,10 +90,10 @@ XRAND::~XRAND()
 * @fn         bool XRAND::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XRAND::GetIsInstanced()
 {
   return instance!=NULL;
@@ -101,14 +101,14 @@ bool XRAND::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XRAND& XRAND::GetInstance()
 * @brief      Get instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     XRAND& :
-*
+* 
+* @return     XRAND& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XRAND& XRAND::GetInstance()
 {
@@ -119,16 +119,16 @@ XRAND& XRAND::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XRAND::SetInstance(XRAND* _instance)
 * @brief      Set instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  _instance : GEN_NEW instance
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XRAND::SetInstance(XRAND* _instance)
 {
@@ -141,14 +141,14 @@ bool XRAND::SetInstance(XRAND* _instance)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XRAND::DelInstance()
 * @brief      Del instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XRAND::DelInstance()
 {
@@ -165,13 +165,13 @@ bool XRAND::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XRAND::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XRAND::Ini()
 {
@@ -193,15 +193,15 @@ bool XRAND::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XRAND::MaxElements(int max)
 * @brief      Max elements
 * @ingroup    XUTILS
-*
-* @param[in]  max :
-*
-* @return     int :
-*
+* 
+* @param[in]  max : Max value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XRAND::MaxElements(int max)
 {
@@ -210,15 +210,15 @@ int XRAND::MaxElements(int max)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XRAND::Max(int max)
 * @brief      Max
 * @ingroup    XUTILS
-*
-* @param[in]  max :
-*
-* @return     int :
-*
+* 
+* @param[in]  max : Max value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XRAND::Max(int max)
 {
@@ -227,16 +227,16 @@ int XRAND::Max(int max)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XRAND::Between(int min, int max)
 * @brief      Between
 * @ingroup    XUTILS
-*
-* @param[in]  min :
-* @param[in]  max :
-*
-* @return     int :
-*
+* 
+* @param[in]  min : Min value.
+* @param[in]  max : Max value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XRAND::Between(int min, int max)
 {
@@ -245,16 +245,16 @@ int XRAND::Between(int min, int max)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float XRAND::Between(float min, float max)
 * @brief      Between
 * @ingroup    XUTILS
-*
-* @param[in]  min :
-* @param[in]  max :
-*
-* @return     float :
-*
+* 
+* @param[in]  min : Min value.
+* @param[in]  max : Max value.
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XRAND::Between(float min, float max)
 {
@@ -265,15 +265,15 @@ float XRAND::Between(float min, float max)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XRAND::Percent(int percent)
 * @brief      Percent
 * @ingroup    XUTILS
-*
-* @param[in]  percent :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  percent : Percent value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XRAND::Percent(int percent)
 {
@@ -285,12 +285,12 @@ bool XRAND::Percent(int percent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XRAND::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XRAND::Clean()
 {

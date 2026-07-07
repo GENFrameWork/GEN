@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES() 
 {
@@ -66,12 +66,12 @@ DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::~DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::~DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 {
@@ -80,13 +80,13 @@ DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::~DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Search()
 { 
@@ -95,15 +95,15 @@ bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Search()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::StopSearch(bool waitend)
 * @brief      Stop search
 * @ingroup    DATAIO
-*
-* @param[in]  waitend : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  waitend : Waitend value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::StopSearch(bool waitend)                      
 { 
@@ -112,13 +112,13 @@ bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::StopSearch(bool waitend)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsSearching()
 * @brief      Is searching
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsSearching()                                  
 { 
@@ -127,15 +127,15 @@ bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsSearching()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsDeviceAvailable(XCHAR* resource)
 * @brief      Is device available
 * @ingroup    DATAIO
-*
-* @param[in]  resource : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  resource : Resource pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsDeviceAvailable(XCHAR* resource)                   
 { 
@@ -144,13 +144,13 @@ bool DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsDeviceAvailable(XCHAR* resource)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::GetSearchMode()
 * @brief      Get search mode
 * @ingroup    DATAIO
-*
-* @return     XDWORD : 
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::GetSearchMode()
 {
@@ -159,13 +159,13 @@ XDWORD DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::GetSearchMode()
 
    
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::SetSearchMode(XDWORD searchmode)
 * @brief      Set search mode
 * @ingroup    DATAIO
-*
-* @param[in]  searchmode : 
-*
+* 
+* @param[in]  searchmode : Searchmode value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::SetSearchMode(XDWORD searchmode)
 {
@@ -174,12 +174,12 @@ void DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::SetSearchMode(XDWORD searchmode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Clean()
 {

@@ -67,11 +67,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOANDROIDGPIO::DIOANDROIDGPIO()
+* 
+* @fn         DIOANDROIDGPIO::DIOANDROIDGPIO(): DIOGPIO()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOANDROIDGPIO::DIOANDROIDGPIO(): DIOGPIO()
 {
@@ -80,12 +80,12 @@ DIOANDROIDGPIO::DIOANDROIDGPIO(): DIOGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOANDROIDGPIO::~DIOANDROIDGPIO()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOANDROIDGPIO::~DIOANDROIDGPIO()
 {
@@ -94,13 +94,13 @@ DIOANDROIDGPIO::~DIOANDROIDGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOANDROIDGPIO::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDGPIO::Ini()
 {
@@ -109,16 +109,16 @@ bool DIOANDROIDGPIO::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOANDROIDGPIO::SetMode(XBYTE pin, bool isinput)
 * @brief      Set mode
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  pin :
-* @param[in]  isinput :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pin : Pin value.
+* @param[in]  isinput : Isinput value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDGPIO::SetMode(XBYTE pin, bool isinput)
 {
@@ -127,15 +127,15 @@ bool DIOANDROIDGPIO::SetMode(XBYTE pin, bool isinput)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOANDROIDGPIO::Get(XBYTE pin)
-* @brief      Get
+* @brief      Get value
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  pin :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pin : Pin value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDGPIO::Get(XBYTE pin)
 {
@@ -144,16 +144,16 @@ bool DIOANDROIDGPIO::Get(XBYTE pin)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOANDROIDGPIO::Set(XBYTE pin, bool active)
-* @brief      Set
+* @brief      Set value
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  pin :
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pin : Pin value.
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDGPIO::Set(XBYTE pin, bool active)
 {
@@ -162,13 +162,13 @@ bool DIOANDROIDGPIO::Set(XBYTE pin, bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOANDROIDGPIO::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDGPIO::End()
 {
@@ -177,12 +177,12 @@ bool DIOANDROIDGPIO::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOANDROIDGPIO::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDGPIO::Clean()
 {

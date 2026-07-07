@@ -996,9 +996,9 @@ XASN1::~XASN1()
 * @brief      Get OID property
 * @ingroup    XUTILS
 * 
-* @param[in]  OID : 
+* @param[in]  OID : OID pointer to use.
 * 
-* @return     XASN1_OID_PROPERTY* : 
+* @return     XASN1_OID_PROPERTY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XASN1_OID_PROPERTY* XASN1::GetOIDProperty(XCHAR* OID)
@@ -1023,9 +1023,9 @@ XASN1_OID_PROPERTY* XASN1::GetOIDProperty(XCHAR* OID)
 * @brief      Get OID property description
 * @ingroup    XUTILS
 * 
-* @param[in]  OID : 
+* @param[in]  OID : OID pointer to use.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XASN1::GetOIDPropertyDescription(XCHAR* OID)
@@ -1050,10 +1050,10 @@ XCHAR* XASN1::GetOIDPropertyDescription(XCHAR* OID)
 * @brief      Decode
 * @ingroup    XUTILS
 * 
-* @param[in]  databin : 
-* @param[in]  observer : 
+* @param[in]  databin : Databin value.
+* @param[in]  observer : Observer pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XASN1::Decode(XBUFFER& databin, XOBSERVER* observer)

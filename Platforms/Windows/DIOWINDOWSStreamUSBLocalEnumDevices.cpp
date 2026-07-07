@@ -70,11 +70,11 @@ DEFINE_GUID(GUID_DEVINTERFACE_USB_PRINT, 0x28D78FAD , 0x5A12, 0x11D1, 0xAE, 0x5B
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::DIOWINDOWSSTREAMUSBLOCALENUMDEVICES()
+* 
+* @fn         DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::DIOWINDOWSSTREAMUSBLOCALENUMDEVICES() : DIOSTREAMUSBLOCALENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::DIOWINDOWSSTREAMUSBLOCALENUMDEVICES() : DIOSTREAMUSBLOCALENUMDEVICES()
 {
@@ -83,12 +83,12 @@ DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::DIOWINDOWSSTREAMUSBLOCALENUMDEVICES() : DIO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::~DIOWINDOWSSTREAMUSBLOCALENUMDEVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::~DIOWINDOWSSTREAMUSBLOCALENUMDEVICES()
 {
@@ -97,13 +97,13 @@ DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::~DIOWINDOWSSTREAMUSBLOCALENUMDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::Search()
 {
@@ -119,15 +119,15 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::Search()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchGUID(const GUID* interfaceclassguid)
 * @brief      Search GUID
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  GUID* interfaceclassguid :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  interfaceclassguid : Interfaceclassguid value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchGUID(const GUID* interfaceclassguid)
 {
@@ -218,15 +218,15 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchGUID(const GUID* interfaceclassg
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetInfoFromRegistry(DIOSTREAMDEVICEUSB* device)
 * @brief      Get info from registry
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  device :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  device : Device pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetInfoFromRegistry(DIOSTREAMDEVICEUSB* device)
 {
@@ -336,17 +336,17 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetInfoFromRegistry(DIOSTREAMDEVICEUSB
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetUSBDescriptor(HDEVINFO* hdevinfo, int memberindex, DIOSTREAMDEVICEUSB* device)
+* 
+* @fn         bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetUSBDescriptor(HDEVINFO& hdevinfo, int memberindex, DIOSTREAMDEVICEUSB* device)
 * @brief      Get USB descriptor
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  hdevinfo :
-* @param[in]  memberindex :
-* @param[in]  device :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  hdevinfo : Hdevinfo value.
+* @param[in]  memberindex : Memberindex value.
+* @param[in]  device : Device pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetUSBDescriptor(HDEVINFO& hdevinfo, int memberindex, DIOSTREAMDEVICEUSB* device)
 {
@@ -439,13 +439,13 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::GetUSBDescriptor(HDEVINFO& hdevinfo, i
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
 * @brief      Search and GEN_DELETE equal devices
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
 {
@@ -489,12 +489,12 @@ bool DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMUSBLOCALENUMDEVICES::Clean()
 {

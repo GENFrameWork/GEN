@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOI2CTEMHUMSENSORAM2315::DIOI2CTEMHUMSENSORAM2315()
+* 
+* @fn         DIOI2CTEMHUMSENSORAM2315::DIOI2CTEMHUMSENSORAM2315(): DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CTEMHUMSENSORAM2315::DIOI2CTEMHUMSENSORAM2315(): DIODEVICEI2C()
 {
@@ -75,12 +75,12 @@ DIOI2CTEMHUMSENSORAM2315::DIOI2CTEMHUMSENSORAM2315(): DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CTEMHUMSENSORAM2315::~DIOI2CTEMHUMSENSORAM2315()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CTEMHUMSENSORAM2315::~DIOI2CTEMHUMSENSORAM2315()
 {
@@ -91,16 +91,16 @@ DIOI2CTEMHUMSENSORAM2315::~DIOI2CTEMHUMSENSORAM2315()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CTEMHUMSENSORAM2315::Read(float& temperature, float& humidity)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  temperature :
-* @param[in]  humidity :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  temperature : Temperature value.
+* @param[in]  humidity : Humidity value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CTEMHUMSENSORAM2315::Read(float& temperature, float& humidity)
 {
@@ -141,13 +141,13 @@ bool DIOI2CTEMHUMSENSORAM2315::Read(float& temperature, float& humidity)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CTEMHUMSENSORAM2315::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CTEMHUMSENSORAM2315::End()
 {
@@ -158,13 +158,13 @@ bool DIOI2CTEMHUMSENSORAM2315::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CTEMHUMSENSORAM2315::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CTEMHUMSENSORAM2315::IniDevice()
 {
@@ -183,16 +183,16 @@ bool DIOI2CTEMHUMSENSORAM2315::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CTEMHUMSENSORAM2315::CalculeCRC(XBYTE* buffer, XWORD& CRC)
 * @brief      Calcule CRC
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  CRC :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  CRC : CRC value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CTEMHUMSENSORAM2315::CalculeCRC(XBYTE* buffer, XWORD& CRC)
 {
@@ -221,12 +221,12 @@ bool DIOI2CTEMHUMSENSORAM2315::CalculeCRC(XBYTE* buffer, XWORD& CRC)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CTEMHUMSENSORAM2315::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CTEMHUMSENSORAM2315::Clean()
 {

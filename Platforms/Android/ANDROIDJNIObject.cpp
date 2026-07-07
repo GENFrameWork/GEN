@@ -58,9 +58,9 @@
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  classname : 
-* @param[in]  constructorsignature : 
-* @param[in]  ... : 
+* @param[in]  classname : Classname value.
+* @param[in]  constructorsignature : Constructorsignature value.
+* @param[in]  ... : Variable argument list.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 ANDROIDJNIOBJECT::ANDROIDJNIOBJECT(XSTRING classname, XSTRING constructorsignature, ...)
@@ -108,10 +108,10 @@ ANDROIDJNIOBJECT::~ANDROIDJNIOBJECT()
 * @brief      Get class method
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  method : 
-* @param[in]  signature : 
+* @param[in]  method : Method descriptor to call.
+* @param[in]  signature : Signature value.
 * 
-* @return     ANDROIDJNIMETHOD : 
+* @return     ANDROIDJNIMETHOD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 ANDROIDJNIMETHOD ANDROIDJNIOBJECT::GetClassMethod(XSTRING method, XSTRING signature)
@@ -141,9 +141,9 @@ ANDROIDJNIMETHOD ANDROIDJNIOBJECT::GetClassMethod(XSTRING method, XSTRING signat
 * @brief      Get J string
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  str : 
+* @param[in]  str : String to use.
 * 
-* @return     jstring : 
+* @return     jstring : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 jstring ANDROIDJNIOBJECT::GetJString(const XSTRING& str)
@@ -165,16 +165,8 @@ jstring ANDROIDJNIOBJECT::GetJString(const XSTRING& str)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* 
-* @brief      Call method<void>
-* @ingroup    PLATFORM_ANDROID
-* 
-* @param[in]  method : 
-* @param[in]  ... : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
+
+
 template<>
 void ANDROIDJNIOBJECT::CallMethod<void>(ANDROIDJNIMETHOD method, ...)
 {
@@ -190,18 +182,8 @@ void ANDROIDJNIOBJECT::CallMethod<void>(ANDROIDJNIMETHOD method, ...)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* 
-* @brief      Call method<bool>
-* @ingroup    PLATFORM_ANDROID
-* 
-* @param[in]  method : 
-* @param[in]  ... : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
+
+
 template<>
 bool ANDROIDJNIOBJECT::CallMethod<bool>(ANDROIDJNIMETHOD method, ...)
 {
@@ -219,18 +201,8 @@ bool ANDROIDJNIOBJECT::CallMethod<bool>(ANDROIDJNIMETHOD method, ...)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* 
-* @brief      Call method<int>
-* @ingroup    PLATFORM_ANDROID
-* 
-* @param[in]  method : 
-* @param[in]  ... : 
-* 
-* @return     int : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
+
+
 template<>
 int ANDROIDJNIOBJECT::CallMethod<int>(ANDROIDJNIMETHOD method, ...)
 {
@@ -248,18 +220,8 @@ int ANDROIDJNIOBJECT::CallMethod<int>(ANDROIDJNIMETHOD method, ...)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* 
-* @brief      Call method<jobject>
-* @ingroup    PLATFORM_ANDROID
-* 
-* @param[in]  method : 
-* @param[in]  ... : 
-* 
-* @return     jobject : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
+
+
 template<>
 jobject ANDROIDJNIOBJECT::CallMethod<jobject>(ANDROIDJNIMETHOD method, ...)
 {
@@ -281,18 +243,8 @@ jobject ANDROIDJNIOBJECT::CallMethod<jobject>(ANDROIDJNIMETHOD method, ...)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* 
-* @brief      call method<long long>
-* @ingroup    PLATFORM_ANDROID
-* 
-* @param[in]  method : 
-* @param[in]  ... : 
-* 
-* @return     emplate<> long long: 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
+
+
 template<> long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD method, ...)
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();
@@ -310,18 +262,8 @@ template<> long long ANDROIDJNIOBJECT::CallMethod<long long>(ANDROIDJNIMETHOD me
 
 
 template<>
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* 
-* @brief      Call method< XSTRING>
-* @ingroup    PLATFORM_ANDROID
-* 
-* @param[in]  method : 
-* @param[in]  ... : 
-* 
-* @return     XSTRING : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
+
+
 XSTRING ANDROIDJNIOBJECT::CallMethod<XSTRING>(ANDROIDJNIMETHOD method, ...)
 {
   JNIEnv* JEnv = ANDROIDJNI::GetJNIEnv();

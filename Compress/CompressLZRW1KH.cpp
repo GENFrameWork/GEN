@@ -87,11 +87,11 @@ COMPRESS_LZRW1KH::~COMPRESS_LZRW1KH()
 * @brief      Compress
 * @ingroup    COMPRESS
 * 
-* @param[in]  origin : 
-* @param[in]  size : 
-* @param[in]  buffer : 
+* @param[in]  origin : Origin pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESS_LZRW1KH::Compress(XBYTE* origin,XDWORD size,XBUFFER* buffer)
@@ -110,11 +110,11 @@ bool COMPRESS_LZRW1KH::Compress(XBYTE* origin,XDWORD size,XBUFFER* buffer)
 * @brief      Decompress
 * @ingroup    COMPRESS
 * 
-* @param[in]  origin : 
-* @param[in]  size : 
-* @param[in]  buffer : 
+* @param[in]  origin : Origin pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESS_LZRW1KH::Decompress(XBYTE* origin,XDWORD size,XBUFFER* buffer)
@@ -133,11 +133,11 @@ bool COMPRESS_LZRW1KH::Decompress(XBYTE* origin,XDWORD size,XBUFFER* buffer)
 * @brief      Compress
 * @ingroup    COMPRESS
 * 
-* @param[in]  origin : 
-* @param[in]  size : 
-* @param[in]  param1 : 
+* @param[in]  origin : Origin pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  param1 : Param1 pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESS_LZRW1KH::Compress(XBYTE* origin,XDWORD size,void* param1)
@@ -156,11 +156,11 @@ bool COMPRESS_LZRW1KH::Compress(XBYTE* origin,XDWORD size,void* param1)
 * @brief      Decompress
 * @ingroup    COMPRESS
 * 
-* @param[in]  origin : 
-* @param[in]  size : 
-* @param[in]  param1 : 
+* @param[in]  origin : Origin pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  param1 : Param1 pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESS_LZRW1KH::Decompress(XBYTE* origin,XDWORD size,void* param1)
@@ -179,14 +179,14 @@ bool COMPRESS_LZRW1KH::Decompress(XBYTE* origin,XDWORD size,void* param1)
 * @brief      Get match
 * @ingroup    COMPRESS
 * 
-* @param[in]  source : 
-* @param[in]  x : 
-* @param[in]  sourcesize : 
-* @param[in]  hash : 
-* @param[in]  size : 
-* @param[in]  pos : 
+* @param[in]  source : Source pointer to use.
+* @param[in]  x : X coordinate.
+* @param[in]  sourcesize : Sourcesize value.
+* @param[in]  hash : Hash pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  pos : Pos pointer to use.
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE COMPRESS_LZRW1KH::GetMatch(XBYTE* source, XDWORD x, XDWORD sourcesize, XDWORD* hash, XDWORD* size, XDWORD* pos)
@@ -217,11 +217,11 @@ XBYTE COMPRESS_LZRW1KH::GetMatch(XBYTE* source, XDWORD x, XDWORD sourcesize, XDW
 * @brief      Compression buffer
 * @ingroup    COMPRESS
 * 
-* @param[in]  source : 
-* @param[in]  target : 
-* @param[in]  sourcesize : 
+* @param[in]  source : Source pointer to use.
+* @param[in]  target : Target pointer to use.
+* @param[in]  sourcesize : Sourcesize value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD COMPRESS_LZRW1KH::CompressionBuffer(XBYTE* source, XBYTE* target, XDWORD sourcesize)
@@ -315,15 +315,15 @@ XDWORD COMPRESS_LZRW1KH::CompressionBuffer(XBYTE* source, XBYTE* target, XDWORD 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XDWORD COMPRESS_LZRW1KH::DecompressionBuffer(XBYTE*source,XBYTE*target,XDWORD sourcesize)
+* @fn         XDWORD COMPRESS_LZRW1KH::DecompressionBuffer(XBYTE *source,XBYTE *target,XDWORD sourcesize)
 * @brief      Decompression buffer
 * @ingroup    COMPRESS
 * 
-* @param[in]  XBYTE*source : 
-* @param[in]  XBYTE*target : 
-* @param[in]  sourcesize : 
+* @param[in]  source : Source pointer to use.
+* @param[in]  target : Target pointer to use.
+* @param[in]  sourcesize : Sourcesize value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD COMPRESS_LZRW1KH::DecompressionBuffer(XBYTE *source,XBYTE *target,XDWORD sourcesize)

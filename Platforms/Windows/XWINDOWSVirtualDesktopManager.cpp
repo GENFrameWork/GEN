@@ -60,11 +60,11 @@ XWINDOWSVIRTUALDESKTOPMANAGER*     XWINDOWSVIRTUALDESKTOPMANAGER::instance = NUL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSVIRTUALDESKTOP::XWINDOWSVIRTUALDESKTOP()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSVIRTUALDESKTOP::XWINDOWSVIRTUALDESKTOP()
 {
@@ -73,12 +73,12 @@ XWINDOWSVIRTUALDESKTOP::XWINDOWSVIRTUALDESKTOP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSVIRTUALDESKTOP::~XWINDOWSVIRTUALDESKTOP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSVIRTUALDESKTOP::~XWINDOWSVIRTUALDESKTOP()
 {
@@ -87,13 +87,13 @@ XWINDOWSVIRTUALDESKTOP::~XWINDOWSVIRTUALDESKTOP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XWINDOWSVIRTUALDESKTOP::GetName()
 * @brief      Get name
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XWINDOWSVIRTUALDESKTOP::GetName()
 {
@@ -102,12 +102,12 @@ XSTRING* XWINDOWSVIRTUALDESKTOP::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSVIRTUALDESKTOP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSVIRTUALDESKTOP::Clean()
 {
@@ -120,13 +120,13 @@ void XWINDOWSVIRTUALDESKTOP::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::GetIsInstanced()
 {
@@ -135,13 +135,13 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSVIRTUALDESKTOPMANAGER& XWINDOWSVIRTUALDESKTOPMANAGER::GetInstance()
 * @brief      Get instance
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     XWINDOWSVIRTUALDESKTOPMANAGER& :
-*
+* 
+* @return     XWINDOWSVIRTUALDESKTOPMANAGER& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSVIRTUALDESKTOPMANAGER& XWINDOWSVIRTUALDESKTOPMANAGER::GetInstance()
 {
@@ -152,13 +152,13 @@ XWINDOWSVIRTUALDESKTOPMANAGER& XWINDOWSVIRTUALDESKTOPMANAGER::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::DelInstance()
 * @brief      Del instance
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::DelInstance()
 {
@@ -180,7 +180,7 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::DelInstance()
 * @brief      Enum all desktops
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XVECTOR<XWINDOWSVIRTUALDESKTOP*>* : 
+* @return     XVECTOR<XWINDOWSVIRTUALDESKTOP*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XWINDOWSVIRTUALDESKTOP*>* XWINDOWSVIRTUALDESKTOPMANAGER::EnumAllDesktops()
@@ -197,15 +197,15 @@ XVECTOR<XWINDOWSVIRTUALDESKTOP*>* XWINDOWSVIRTUALDESKTOPMANAGER::EnumAllDesktops
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::AddDesktopToList(XSTRING& name)
 * @brief      Add desktop to list
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::AddDesktopToList(XSTRING& name)
 {
@@ -221,16 +221,16 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::AddDesktopToList(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XCHAR* name, bool addexplorer)
 * @brief      Create GEN_NEW desktop
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-* @param[in]  addexplorer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  addexplorer : Addexplorer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XCHAR* name, bool addexplorer)
 {
@@ -275,16 +275,16 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XCHAR* name, bool addexplor
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XSTRING& name, bool addexplorer)
 * @brief      Create GEN_NEW desktop
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-* @param[in]  addexplorer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  addexplorer : Addexplorer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XSTRING& name, bool addexplorer)
 {
@@ -293,16 +293,16 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::CreateNewDesktop(XSTRING& name, bool addexpl
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchDesktop(XCHAR* desktopname, bool inherit)
 * @brief      Switch desktop
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktopname : 
-* @param[in]  inherit : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  desktopname : Desktopname pointer to use.
+* @param[in]  inherit : Inherit value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchDesktop(XCHAR* desktopname, bool inherit)
 {
@@ -326,16 +326,16 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchDesktop(XCHAR* desktopname, bool inher
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchDesktop(XSTRING& desktopname, bool inherit)
 * @brief      Switch desktop
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktopname : 
-* @param[in]  inherit : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  desktopname : Desktopname value.
+* @param[in]  inherit : Inherit value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchDesktop(XSTRING& desktopname, bool inherit)
 {
@@ -343,15 +343,15 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchDesktop(XSTRING& desktopname, bool inh
 }
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::IsCurrentDesktop(XCHAR* desktopname)
 * @brief      Is current desktop
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktopname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  desktopname : Desktopname pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::IsCurrentDesktop(XCHAR* desktopname)
 {
@@ -368,15 +368,15 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::IsCurrentDesktop(XCHAR* desktopname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::IsCurrentDesktop(XSTRING& desktopname)
 * @brief      Is current desktop
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktopname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  desktopname : Desktopname value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::IsCurrentDesktop(XSTRING& desktopname)
 {
@@ -385,15 +385,15 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::IsCurrentDesktop(XSTRING& desktopname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::IsDesktopCreated(XCHAR* desktopname)
 * @brief      Is desktop created
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktopname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  desktopname : Desktopname pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::IsDesktopCreated(XCHAR* desktopname)
 {
@@ -412,15 +412,15 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::IsDesktopCreated(XCHAR* desktopname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::IsDesktopCreated(XSTRING& desktopname)
 * @brief      Is desktop created
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktopname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  desktopname : Desktopname value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::IsDesktopCreated(XSTRING& desktopname)
 {
@@ -429,15 +429,15 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::IsDesktopCreated(XSTRING& desktopname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchProcessSpecifiedDesktop(XCHAR* desktopname)
 * @brief      Switch process specified desktop
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktopname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  desktopname : Desktopname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchProcessSpecifiedDesktop(XCHAR* desktopname)
 {
@@ -469,15 +469,15 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchProcessSpecifiedDesktop(XCHAR* desktop
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchProcessSpecifiedDesktop(XSTRING& desktopname)
 * @brief      Switch process specified desktop
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktopname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  desktopname : Desktopname value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchProcessSpecifiedDesktop(XSTRING& desktopname)
 {
@@ -486,13 +486,13 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::SwitchProcessSpecifiedDesktop(XSTRING& deskt
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::IsUserInteractive()
 * @brief      Is user interactive
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::IsUserInteractive()
 {
@@ -512,11 +512,11 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::IsUserInteractive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSVIRTUALDESKTOPMANAGER::XWINDOWSVIRTUALDESKTOPMANAGER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSVIRTUALDESKTOPMANAGER::XWINDOWSVIRTUALDESKTOPMANAGER()
 {
@@ -529,12 +529,12 @@ XWINDOWSVIRTUALDESKTOPMANAGER::XWINDOWSVIRTUALDESKTOPMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSVIRTUALDESKTOPMANAGER::~XWINDOWSVIRTUALDESKTOPMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSVIRTUALDESKTOPMANAGER::~XWINDOWSVIRTUALDESKTOPMANAGER()
 {
@@ -546,16 +546,16 @@ XWINDOWSVIRTUALDESKTOPMANAGER::~XWINDOWSVIRTUALDESKTOPMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSVIRTUALDESKTOPMANAGER::LaunchApplication(XCHAR* applicationfilepath, XCHAR* desktopname)
 * @brief      Launch application
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  applicationfilepath :
-* @param[in]  desktopname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  applicationfilepath : Applicationfilepath pointer to use.
+* @param[in]  desktopname : Desktopname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSVIRTUALDESKTOPMANAGER::LaunchApplication(XCHAR* applicationfilepath, XCHAR* desktopname)
 {
@@ -595,16 +595,16 @@ bool XWINDOWSVIRTUALDESKTOPMANAGER::LaunchApplication(XCHAR* applicationfilepath
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         BOOL __stdcall XWINDOWSVIRTUALDESKTOPMANAGER::EnumDesktopProc(LPTSTR desktop, LPARAM param)
+* 
+* @fn         BOOL __stdcall XWINDOWSVIRTUALDESKTOPMANAGER::EnumDesktopProc(LPTSTR namedesktop, LPARAM param)
 * @brief      Enum desktop proc
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  desktop :
-* @param[in]  param :
-*
-* @return     BOOL :
-*
+* 
+* @param[in]  namedesktop : Namedesktop value.
+* @param[in]  param : Param value.
+* 
+* @return     BOOL __stdcall : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL __stdcall XWINDOWSVIRTUALDESKTOPMANAGER::EnumDesktopProc(LPTSTR namedesktop, LPARAM param)
 {
@@ -622,12 +622,12 @@ BOOL __stdcall XWINDOWSVIRTUALDESKTOPMANAGER::EnumDesktopProc(LPTSTR namedesktop
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSVIRTUALDESKTOPMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSVIRTUALDESKTOPMANAGER::Clean()
 {

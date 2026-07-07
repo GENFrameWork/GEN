@@ -69,11 +69,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         APPFLOWCFG::APPFLOWCFG(XCHAR* namefile)
+* @fn         APPFLOWCFG::APPFLOWCFG(XCHAR* namefile) #ifdef APPFLOW_CFG_REMOTEFILE_ACTIVE : DIOREMOTEFILECFG(namefile) #else : XFILECFG(namefile) #endif
 * @brief      Constructor of class
 * @ingroup    APPFLOW
 * 
-* @param[in]  namefile : 
+* @param[in]  namefile : Namefile pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCFG::APPFLOWCFG(XCHAR* namefile)
@@ -109,7 +109,7 @@ APPFLOWCFG::~APPFLOWCFG()
 * @brief      Do variable mapping
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::DoVariableMapping()
@@ -313,7 +313,7 @@ bool APPFLOWCFG::DoVariableMapping()
 * @brief      Do default
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::DoDefault()
@@ -407,10 +407,10 @@ bool APPFLOWCFG::DoDefault()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool APPFLOWCFG::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::End()
@@ -469,13 +469,13 @@ bool APPFLOWCFG::End()
 
 #ifdef APPFLOW_CFG_GENERAL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::GetScraperWebScriptURLDownload()
 * @brief      Get scraper web script URL download
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::GetScraperWebScriptURLDownload()
 {
@@ -484,13 +484,13 @@ XSTRING* APPFLOWCFG::GetScraperWebScriptURLDownload()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD APPFLOWCFG::GetShowDetailInfo()
 * @brief      Get show detail info
 * @ingroup    APPFLOW
-*
-* @return     XWORD : 
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD APPFLOWCFG::GetShowDetailInfo()
 {
@@ -504,13 +504,13 @@ XWORD APPFLOWCFG::GetShowDetailInfo()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWCFG::SetShowDetailInfo(XWORD detail)
 * @brief      Set show detail info
 * @ingroup    APPFLOW
-*
-* @param[in]  detail : 
-*
+* 
+* @param[in]  detail : Detail value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWCFG::SetShowDetailInfo(XWORD detail)
 {
@@ -520,15 +520,15 @@ void APPFLOWCFG::SetShowDetailInfo(XWORD detail)
 
 #ifdef XTRACE_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::GetTraceTarget(int index)
 * @brief      Get trace target
 * @ingroup    APPFLOW
-*
-* @param[in]  index : 
-*
-* @return     XSTRING* : 
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::GetTraceTarget(int index)
 {
@@ -540,16 +540,16 @@ XSTRING* APPFLOWCFG::GetTraceTarget(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::SetTraceTarget(int index, XSTRING& target)
 * @brief      Set trace target
 * @ingroup    APPFLOW
-*
-* @param[in]  index :
-* @param[in]  target :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  target : Target value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::SetTraceTarget(int index, XSTRING& target)
 {
@@ -563,13 +563,13 @@ bool APPFLOWCFG::SetTraceTarget(int index, XSTRING& target)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::SetAutomaticTraceTargets()
 * @brief      Set automatic trace targets
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::SetAutomaticTraceTargets()
 {
@@ -601,13 +601,13 @@ bool APPFLOWCFG::SetAutomaticTraceTargets()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::SetDefaultTraceTargets()
 * @brief      Set default trace targets
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::SetDefaultTraceTargets()
 {
@@ -624,13 +624,13 @@ bool APPFLOWCFG::SetDefaultTraceTargets()
 #ifdef APPFLOW_CFG_CHECKRESOURCESHARDWARE_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::CheckResourcesHardware_GetMemStatusCheckCadence()
 * @brief      Check resources hardware get mem status check cadence
 * @ingroup    APPFLOW
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::CheckResourcesHardware_GetMemStatusCheckCadence()
 {
@@ -639,13 +639,13 @@ int APPFLOWCFG::CheckResourcesHardware_GetMemStatusCheckCadence()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::CheckResourcesHardware_GetMemStatusLimitPercent()
 * @brief      Check resources hardware get mem status limit percent
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::CheckResourcesHardware_GetMemStatusLimitPercent()
 {
@@ -654,13 +654,13 @@ int APPFLOWCFG::CheckResourcesHardware_GetMemStatusLimitPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::CheckResourcesHardware_GetTotalCPUUsageCheckCadence()
 * @brief      Check resources hardware get total CPU usage check cadence
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::CheckResourcesHardware_GetTotalCPUUsageCheckCadence()
 {
@@ -669,13 +669,13 @@ int APPFLOWCFG::CheckResourcesHardware_GetTotalCPUUsageCheckCadence()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::CheckResourcesHardware_GetTotalCPUUsageLimitPercent()
 * @brief      Check resources hardware get total CPU usage limit percent
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::CheckResourcesHardware_GetTotalCPUUsageLimitPercent()
 {
@@ -684,13 +684,13 @@ int APPFLOWCFG::CheckResourcesHardware_GetTotalCPUUsageLimitPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageProcessName()
 * @brief      Check resources hardware get app CPU usage process name
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageProcessName()
 {
@@ -699,13 +699,13 @@ XSTRING* APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageProcessName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageCheckCadence()
 * @brief      Check resources hardware get app CPU usage check cadence
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageCheckCadence()
 {
@@ -714,13 +714,13 @@ int APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageCheckCadence()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageLimitPercent()
 * @brief      Check resources hardware get app CPU usage limit percent
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageLimitPercent()
 {
@@ -734,13 +734,13 @@ int APPFLOWCFG::CheckResourcesHardware_GetAppCPUUsageLimitPercent()
 #ifdef APPFLOW_CFG_INTERNETSERVICES_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::InternetServices_GetCheckInternetStatusCadence()
 * @brief      Internet services get check internet status cadence
 * @ingroup    APPFLOW
-*
-* @return     int : check cadence in seconds
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::InternetServices_GetCheckInternetStatusCadence()
 {
@@ -754,7 +754,7 @@ int APPFLOWCFG::InternetServices_GetCheckInternetStatusCadence()
 * @brief      Internet services do not let internet connection matter
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::InternetServices_DoNotLetInternetConnectionMatter()
@@ -769,7 +769,7 @@ bool APPFLOWCFG::InternetServices_DoNotLetInternetConnectionMatter()
 * @brief      Internet services get check I ps change cadence
 * @ingroup    APPFLOW
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::InternetServices_GetCheckIPsChangeCadence()
@@ -779,13 +779,13 @@ int APPFLOWCFG::InternetServices_GetCheckIPsChangeCadence()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::InternetServices_GetUpdateTimeByNTPCadence()
 * @brief      Internet services get update time by NTP cadence
 * @ingroup    APPFLOW
-*
-* @return     int : check cadence in seconds
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::InternetServices_GetUpdateTimeByNTPCadence()
 {
@@ -799,7 +799,7 @@ int APPFLOWCFG::InternetServices_GetUpdateTimeByNTPCadence()
 * @brief      Internet services get update time NTP servers
 * @ingroup    APPFLOW
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* APPFLOWCFG::InternetServices_GetUpdateTimeNTPServers()
@@ -809,13 +809,15 @@ XVECTOR<XSTRING*>* APPFLOWCFG::InternetServices_GetUpdateTimeNTPServers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::InternetServices_GetUpdateTimeNTPServer(int index)
 * @brief      Internet services get update time NTP server
 * @ingroup    APPFLOW
-*
-* @param[in]  index :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::InternetServices_GetUpdateTimeNTPServer(int index)
 {  
@@ -827,13 +829,13 @@ XSTRING* APPFLOWCFG::InternetServices_GetUpdateTimeNTPServer(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::InternetServices_GetUpdateTimeNTPMeridianDifference()
 * @brief      Internet services get update time NTP meridian difference
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::InternetServices_GetUpdateTimeNTPMeridianDifference()
 {
@@ -842,13 +844,13 @@ int APPFLOWCFG::InternetServices_GetUpdateTimeNTPMeridianDifference()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::InternetServices_GetUpdateTimeNTPUseDayLightSaving()
 * @brief      Internet services get update time NTP use day light saving
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::InternetServices_GetUpdateTimeNTPUseDayLightSaving()
 {
@@ -859,17 +861,17 @@ bool APPFLOWCFG::InternetServices_GetUpdateTimeNTPUseDayLightSaving()
 #ifdef APPFLOW_CFG_DNSRESOLVER_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::DNSResolver_GetHost(int index, XSTRING& host, XSTRING& IPresolved)
 * @brief      DNS resolver get host
 * @ingroup    APPFLOW
-*
-* @param[in]  index :
-* @param[in]  host :
-* @param[in]  IPresolved :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  host : Host value.
+* @param[in]  IPresolved : I Presolved value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::DNSResolver_GetHost(int index, XSTRING& host, XSTRING& IPresolved)
 {
@@ -889,15 +891,15 @@ bool APPFLOWCFG::DNSResolver_GetHost(int index, XSTRING& host, XSTRING& IPresolv
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::DNSResolver_GetDNSserver(int index)
 * @brief      DNS resolver get DN sserver
 * @ingroup    APPFLOW
-*
-* @param[in]  index :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::DNSResolver_GetDNSserver(int index)
 {
@@ -911,13 +913,13 @@ XSTRING* APPFLOWCFG::DNSResolver_GetDNSserver(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::SetAutomaticDNSResolver()
 * @brief      Set automatic DNS resolver
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::SetAutomaticDNSResolver()
 {
@@ -956,7 +958,7 @@ bool APPFLOWCFG::SetAutomaticDNSResolver()
 * @brief      DNS manager get UR ls
 * @ingroup    APPFLOW
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* APPFLOWCFG::DNSManager_GetURLs()
@@ -967,15 +969,15 @@ XVECTOR<XSTRING*>* APPFLOWCFG::DNSManager_GetURLs()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::DNSManager_GetURL(int index)
-* @brief
+* @brief      DNS Manager Get URL
 * @ingroup    APPFLOW
-*
-* @param[in]  index :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::DNSManager_GetURL(int index)
 {
@@ -993,13 +995,13 @@ XSTRING* APPFLOWCFG::DNSManager_GetURL(int index)
 #ifdef APPFLOW_CFG_DIOLOCATION_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Location_GetStreet()
 * @brief      Location get street
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Location_GetStreet()
 {
@@ -1008,13 +1010,13 @@ XSTRING* APPFLOWCFG::Location_GetStreet()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Location_GetCity()
 * @brief      Location get city
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Location_GetCity()
 {
@@ -1023,13 +1025,13 @@ XSTRING* APPFLOWCFG::Location_GetCity()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Location_GetState()
 * @brief      Location get state
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Location_GetState()
 {
@@ -1038,13 +1040,13 @@ XSTRING* APPFLOWCFG::Location_GetState()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Location_GetCountry()
 * @brief      Location get country
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Location_GetCountry()
 {
@@ -1053,13 +1055,13 @@ XSTRING* APPFLOWCFG::Location_GetCountry()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::Location_GetPostalCode()
 * @brief      Location get postal code
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::Location_GetPostalCode()
 {
@@ -1072,13 +1074,13 @@ int APPFLOWCFG::Location_GetPostalCode()
 #ifdef APPFLOW_CFG_APPUPDATE_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::ApplicationUpdate_IsActive()
 * @brief      Application update is active
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::ApplicationUpdate_IsActive()
 {
@@ -1087,13 +1089,13 @@ bool APPFLOWCFG::ApplicationUpdate_IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::ApplicationUpdate_GetPort()
 * @brief      Application update get port
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::ApplicationUpdate_GetPort()
 {
@@ -1102,13 +1104,13 @@ int APPFLOWCFG::ApplicationUpdate_GetPort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::ApplicationUpdate_GetURL()
 * @brief      Application update get URL
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::ApplicationUpdate_GetURL()
 {
@@ -1117,13 +1119,13 @@ XSTRING* APPFLOWCFG::ApplicationUpdate_GetURL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::ApplicationUpdate_GetCheckCadence()
 * @brief      Application update get check cadence
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::ApplicationUpdate_GetCheckCadence()
 {
@@ -1132,13 +1134,13 @@ int APPFLOWCFG::ApplicationUpdate_GetCheckCadence()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::ApplicationUpdate_GetCheckTime()
 * @brief      Application update get check time
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::ApplicationUpdate_GetCheckTime()
 {
@@ -1147,13 +1149,13 @@ XSTRING* APPFLOWCFG::ApplicationUpdate_GetCheckTime()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::ApplicationUpdate_GetMaxRestorations()
 * @brief      Application update get max restorations
 * @ingroup    APPFLOW
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::ApplicationUpdate_GetMaxRestorations()
 {
@@ -1166,13 +1168,13 @@ int APPFLOWCFG::ApplicationUpdate_GetMaxRestorations()
 #ifdef APPFLOW_CFG_ALERTS_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Alerts_IsActive()
 * @brief      Alerts is active
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Alerts_IsActive()
 {
@@ -1186,7 +1188,7 @@ bool APPFLOWCFG::Alerts_IsActive()
 * @brief      Alerts get conditions
 * @ingroup    APPFLOW
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetConditions()
@@ -1196,15 +1198,15 @@ XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetConditions()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetCondition(int index)
 * @brief      Alerts get condition
 * @ingroup    APPFLOW
-*
-* @param[in]  index : 
-*
-* @return     XSTRING* : 
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetCondition(int index)
 {
@@ -1216,18 +1218,18 @@ XSTRING* APPFLOWCFG::Alerts_GetCondition(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Alerts_GetCondition(int index, XDWORD& conditionID, int& timelimitforrepeat, int& everynumberoftimes)
 * @brief      Alerts get condition
 * @ingroup    APPFLOW
-*
-* @param[in]  index : 
-* @param[in]  conditionID : 
-* @param[in]  timelimitforrepeat : 
-* @param[in]  everynumberoftimes : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  conditionID : Condition ID value.
+* @param[in]  timelimitforrepeat : Timelimitforrepeat value.
+* @param[in]  everynumberoftimes : Everynumberoftimes value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Alerts_GetCondition(int index, XDWORD& conditionID, int& timelimitforrepeat, int& everynumberoftimes)
 {
@@ -1246,13 +1248,13 @@ bool APPFLOWCFG::Alerts_GetCondition(int index, XDWORD& conditionID, int& timeli
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Alerts_IsActiveSMTP()
 * @brief      Alerts is active SMTP
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Alerts_IsActiveSMTP()
 {
@@ -1261,13 +1263,13 @@ bool APPFLOWCFG::Alerts_IsActiveSMTP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetSMTPURL()
 * @brief      Alerts get SMTPURL
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetSMTPURL()
 {
@@ -1276,13 +1278,13 @@ XSTRING* APPFLOWCFG::Alerts_GetSMTPURL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::Alerts_GetSMTPPort()
 * @brief      Alerts get SMTP port
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::Alerts_GetSMTPPort()
 {
@@ -1291,13 +1293,13 @@ int APPFLOWCFG::Alerts_GetSMTPPort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetSMTPLogin()
 * @brief      Alerts get SMTP login
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetSMTPLogin()
 {
@@ -1306,13 +1308,13 @@ XSTRING* APPFLOWCFG::Alerts_GetSMTPLogin()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetSMTPPassword()
 * @brief      Alerts get SMTP password
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetSMTPPassword()
 {
@@ -1321,13 +1323,13 @@ XSTRING* APPFLOWCFG::Alerts_GetSMTPPassword()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetSMTPSender()
 * @brief      Alerts get SMTP sender
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetSMTPSender()
 {
@@ -1341,7 +1343,7 @@ XSTRING* APPFLOWCFG::Alerts_GetSMTPSender()
 * @brief      Alerts get SMTP recipients
 * @ingroup    APPFLOW
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetSMTPRecipients()
@@ -1351,15 +1353,15 @@ XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetSMTPRecipients()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetSMTPRecipient(int index)
 * @brief      Alerts get SMTP recipient
 * @ingroup    APPFLOW
-*
-* @param[in]  index : 
-*
-* @return     XSTRING* : 
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetSMTPRecipient(int index)
 {
@@ -1371,13 +1373,13 @@ XSTRING* APPFLOWCFG::Alerts_GetSMTPRecipient(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Alerts_IsActiveSMS()
 * @brief      Alerts is active SMS
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Alerts_IsActiveSMS()
 {
@@ -1391,7 +1393,7 @@ bool APPFLOWCFG::Alerts_IsActiveSMS()
 * @brief      Alerts get SMS recipients
 * @ingroup    APPFLOW
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetSMSRecipients()
@@ -1401,15 +1403,15 @@ XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetSMSRecipients()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetSMSRecipient(int index)
 * @brief      Alerts get SMS recipient
 * @ingroup    APPFLOW
-*
-* @param[in]  index : 
-*
-* @return     XSTRING* : 
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetSMSRecipient(int index)
 {
@@ -1421,13 +1423,13 @@ XSTRING* APPFLOWCFG::Alerts_GetSMSRecipient(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Alerts_IsActiveWEB()
 * @brief      Alerts is active WEB
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Alerts_IsActiveWEB()
 {
@@ -1436,13 +1438,13 @@ bool APPFLOWCFG::Alerts_IsActiveWEB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Alerts_GetWEBIsUseGet()
 * @brief      Alerts get WEB is use get
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Alerts_GetWEBIsUseGet()
 {
@@ -1456,7 +1458,7 @@ bool APPFLOWCFG::Alerts_GetWEBIsUseGet()
 * @brief      Alerts get WEB recipients
 * @ingroup    APPFLOW
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetWEBRecipients()
@@ -1466,15 +1468,15 @@ XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetWEBRecipients()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetWEBRecipient(int index)
 * @brief      Alerts get WEB recipient
 * @ingroup    APPFLOW
-*
-* @param[in]  index : 
-*
-* @return     XSTRING* : 
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetWEBRecipient(int index)
 {
@@ -1486,13 +1488,13 @@ XSTRING* APPFLOWCFG::Alerts_GetWEBRecipient(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Alerts_IsActiveUDP()
 * @brief      Alerts is active UDP
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Alerts_IsActiveUDP()
 {
@@ -1501,13 +1503,13 @@ bool APPFLOWCFG::Alerts_IsActiveUDP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::Alerts_GetUDPPort()
 * @brief      Alerts get UDP port
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::Alerts_GetUDPPort()
 {
@@ -1521,7 +1523,7 @@ int APPFLOWCFG::Alerts_GetUDPPort()
 * @brief      Alerts get UDP recipients
 * @ingroup    APPFLOW
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetUDPRecipients()
@@ -1531,15 +1533,15 @@ XVECTOR<XSTRING*>* APPFLOWCFG::Alerts_GetUDPRecipients()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Alerts_GetUDPRecipient(int index)
 * @brief      Alerts get UDP recipient
 * @ingroup    APPFLOW
-*
-* @param[in]  index : 
-*
-* @return     XSTRING* : 
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Alerts_GetUDPRecipient(int index)
 {
@@ -1555,13 +1557,13 @@ XSTRING* APPFLOWCFG::Alerts_GetUDPRecipient(int index)
 #ifdef APPFLOW_CFG_WEBSERVER_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::WebServer_GetLocalAddress()
 * @brief      Web server get local address
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : local address
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::WebServer_GetLocalAddress()
 {
@@ -1570,13 +1572,13 @@ XSTRING* APPFLOWCFG::WebServer_GetLocalAddress()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::WebServer_GetPort()
 * @brief      Web server get port
 * @ingroup    APPFLOW
-*
-* @return     int : port number
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::WebServer_GetPort()
 {
@@ -1585,13 +1587,13 @@ int APPFLOWCFG::WebServer_GetPort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::WebServer_GetTimeoutToServerPage()
 * @brief      Web server get timeout to server page
 * @ingroup    APPFLOW
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::WebServer_GetTimeoutToServerPage()
 {
@@ -1600,13 +1602,13 @@ int APPFLOWCFG::WebServer_GetTimeoutToServerPage()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool APPFLOWCFG::WebServer_AuthenticatedAccess()
+* 
+* @fn         bool APPFLOWCFG::WebServer_IsAuthenticatedAccess()
 * @brief      Web server authenticated access
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::WebServer_IsAuthenticatedAccess()
 {
@@ -1615,13 +1617,13 @@ bool APPFLOWCFG::WebServer_IsAuthenticatedAccess()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::WebServer_GetPassword()
 * @brief      Web server get password
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : Password web server
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::WebServer_GetPassword()
 {
@@ -1630,13 +1632,13 @@ XSTRING* APPFLOWCFG::WebServer_GetPassword()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* APPFLOWCFG::WebServer_PathResources()
 * @brief      Web server path resources
 * @ingroup    APPFLOW
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* APPFLOWCFG::WebServer_PathResources()
 {
@@ -1645,13 +1647,13 @@ XPATH* APPFLOWCFG::WebServer_PathResources()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* APPFLOWCFG::WebServer_PathPHP()
 * @brief      Web server path PHP
 * @ingroup    APPFLOW
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* APPFLOWCFG::WebServer_PathPHP()
 {
@@ -1665,11 +1667,11 @@ XPATH* APPFLOWCFG::WebServer_PathPHP()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XVECTOR<XSTRING*>* CBUILDER_CFG::Scripts_GetAll()
+* @fn         XVECTOR<XSTRING*>* APPFLOWCFG::Scripts_GetAll()
 * @brief      Scripts get all
 * @ingroup    APPFLOW
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* APPFLOWCFG::Scripts_GetAll()
@@ -1680,13 +1682,13 @@ XVECTOR<XSTRING*>* APPFLOWCFG::Scripts_GetAll()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XSTRING* CBUILDER_CFG::Scripts_GetScript(int index)
+* @fn         XSTRING* APPFLOWCFG::Scripts_GetScript(int index)
 * @brief      Scripts get script
 * @ingroup    APPFLOW
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Scripts_GetScript(int index)
@@ -1703,13 +1705,13 @@ XSTRING* APPFLOWCFG::Scripts_GetScript(int index)
 #ifdef APPFLOW_CFG_LOG_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Log_IsActive()
 * @brief      Log is active
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Log_IsActive()
 {
@@ -1718,13 +1720,13 @@ bool APPFLOWCFG::Log_IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Log_Backup_IsActive()
 * @brief      Log backup is active
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Log_Backup_IsActive()
 {
@@ -1733,13 +1735,13 @@ bool APPFLOWCFG::Log_Backup_IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::Log_Backup_GetMaxFiles()
 * @brief      Log backup get max files
 * @ingroup    APPFLOW
-*
-* @return     int : max files number
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::Log_Backup_GetMaxFiles()
 {
@@ -1748,13 +1750,13 @@ int APPFLOWCFG::Log_Backup_GetMaxFiles()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCFG::Log_Backup_IsCompress()
 * @brief      Log backup is compress
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::Log_Backup_IsCompress()
 {
@@ -1763,13 +1765,13 @@ bool APPFLOWCFG::Log_Backup_IsCompress()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWCFG::Log_ActiveSectionsID()
 * @brief      Log active sections ID
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* : string with the secctions active (separated by comma ',')
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWCFG::Log_ActiveSectionsID()
 {
@@ -1778,13 +1780,13 @@ XSTRING* APPFLOWCFG::Log_ActiveSectionsID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE APPFLOWCFG::Log_LevelMask()
 * @brief      Log level mask
 * @ingroup    APPFLOW
-*
-* @return     XBYTE : Mask of log
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE APPFLOWCFG::Log_LevelMask()
 {
@@ -1793,13 +1795,13 @@ XBYTE APPFLOWCFG::Log_LevelMask()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::Log_MaxSize()
 * @brief      Log max size
 * @ingroup    APPFLOW
-*
-* @return     int : size in bytes
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::Log_MaxSize()
 {
@@ -1808,13 +1810,13 @@ int APPFLOWCFG::Log_MaxSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWCFG::Log_ReductionPercent()
 * @brief      Log reduction percent
 * @ingroup    APPFLOW
-*
-* @return     int : percent reduction (what remains)
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCFG::Log_ReductionPercent()
 {

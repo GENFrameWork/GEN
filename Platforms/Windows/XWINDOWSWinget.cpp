@@ -79,8 +79,8 @@ XWINDOWSWINGET_ELEMENTRESULT::XWINDOWSWINGET_ELEMENTRESULT()
 * 
 * @fn         XWINDOWSWINGET_ELEMENTRESULT::~XWINDOWSWINGET_ELEMENTRESULT()
 * @brief      Destructor of class
-* @ingroup    PLATFORM_WINDOWS
 * @note       VIRTUAL
+* @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWINGET_ELEMENTRESULT::~XWINDOWSWINGET_ELEMENTRESULT()
@@ -95,7 +95,7 @@ XWINDOWSWINGET_ELEMENTRESULT::~XWINDOWSWINGET_ELEMENTRESULT()
 * @brief      serialize
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET_ELEMENTRESULT::Serialize()
@@ -115,7 +115,7 @@ bool XWINDOWSWINGET_ELEMENTRESULT::Serialize()
 * @brief      deserialize
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET_ELEMENTRESULT::Deserialize()
@@ -133,8 +133,8 @@ bool XWINDOWSWINGET_ELEMENTRESULT::Deserialize()
 * 
 * @fn         void XWINDOWSWINGET_ELEMENTRESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    PLATFORM_WINDOWS
 * @note       INTERNAL
+* @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWINGET_ELEMENTRESULT::Clean()
@@ -164,8 +164,8 @@ XWINDOWSWINGET_LISTRESULT::XWINDOWSWINGET_LISTRESULT()
 * 
 * @fn         XWINDOWSWINGET_LISTRESULT::~XWINDOWSWINGET_LISTRESULT()
 * @brief      Destructor of class
-* @ingroup    PLATFORM_WINDOWS
 * @note       VIRTUAL
+* @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWINGET_LISTRESULT::~XWINDOWSWINGET_LISTRESULT()
@@ -182,7 +182,7 @@ XWINDOWSWINGET_LISTRESULT::~XWINDOWSWINGET_LISTRESULT()
 * @brief      serialize
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET_LISTRESULT::Serialize()
@@ -199,7 +199,7 @@ bool XWINDOWSWINGET_LISTRESULT::Serialize()
 * @brief      deserialize
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET_LISTRESULT::Deserialize()
@@ -214,8 +214,8 @@ bool XWINDOWSWINGET_LISTRESULT::Deserialize()
 * 
 * @fn         void XWINDOWSWINGET_LISTRESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    PLATFORM_WINDOWS
 * @note       INTERNAL
+* @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWINGET_LISTRESULT::Clean()
@@ -234,7 +234,7 @@ void XWINDOWSWINGET_LISTRESULT::Clean()
 * @brief      get is instanced
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::GetIsInstanced()
@@ -249,7 +249,7 @@ bool XWINDOWSWINGET::GetIsInstanced()
 * @brief      get instance
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XWINDOWSWINGET& : 
+* @return     XWINDOWSWINGET& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWINGET& XWINDOWSWINGET::GetInstance()
@@ -266,7 +266,7 @@ XWINDOWSWINGET& XWINDOWSWINGET::GetInstance()
 * @brief      del instance
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::DelInstance()
@@ -289,7 +289,7 @@ bool XWINDOWSWINGET::DelInstance()
 * @brief      install module
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::InstallModule()
@@ -316,9 +316,9 @@ bool XWINDOWSWINGET::InstallModule()
 * @brief      list
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  listresult : 
+* @param[in]  listresult : Output listresult.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::List(XWINDOWSWINGET_LISTRESULT* listresult)
@@ -380,9 +380,9 @@ bool XWINDOWSWINGET::List(XWINDOWSWINGET_LISTRESULT* listresult)
 * @brief      list update available
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  listresult : 
+* @param[in]  listresult : Output listresult.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::ListUpdateAvailable(XWINDOWSWINGET_LISTRESULT* listresult)
@@ -459,10 +459,10 @@ bool XWINDOWSWINGET::ListUpdateAvailable(XWINDOWSWINGET_LISTRESULT* listresult)
 * @brief      find
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  search : 
-* @param[in]  listresult : 
+* @param[in]  search : Search pointer to use.
+* @param[in]  listresult : Output listresult.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::Find(XCHAR* search, XWINDOWSWINGET_LISTRESULT* listresult)
@@ -542,10 +542,10 @@ bool XWINDOWSWINGET::Find(XCHAR* search, XWINDOWSWINGET_LISTRESULT* listresult)
 * @brief      list
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  updateavaible : 
-* @param[in]  jsonresult : 
+* @param[in]  updateavaible : Updateavaible value.
+* @param[in]  jsonresult : Output jsonresult.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::List(bool updateavaible, XSTRING& jsonresult)
@@ -583,10 +583,10 @@ bool XWINDOWSWINGET::List(bool updateavaible, XSTRING& jsonresult)
 * @brief      find
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  search : 
-* @param[in]  jsonresult : 
+* @param[in]  search : Search pointer to use.
+* @param[in]  jsonresult : Output jsonresult.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::Find(XCHAR* search, XSTRING& jsonresult)
@@ -629,11 +629,11 @@ bool XWINDOWSWINGET::Find(XCHAR* search, XSTRING& jsonresult)
 * @brief      application operation
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  appoper : 
-* @param[in]  ID : 
-* @param[in]  force : 
+* @param[in]  appoper : Appoper value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  force : Force value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::ApplicationOperation(XWINDOWSWINGET_APPLICATIONOPERATION appoper, XCHAR* ID, bool force)
@@ -724,8 +724,8 @@ XWINDOWSWINGET::XWINDOWSWINGET()
 * 
 * @fn         XWINDOWSWINGET::~XWINDOWSWINGET()
 * @brief      Destructor of class
-* @ingroup    PLATFORM_WINDOWS
 * @note       VIRTUAL
+* @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWINGET::~XWINDOWSWINGET()
@@ -740,10 +740,10 @@ XWINDOWSWINGET::~XWINDOWSWINGET()
 * @brief      exec
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  params : 
-* @param[in]  output : 
+* @param[in]  params : Params pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
@@ -844,10 +844,10 @@ bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
 * @brief      looks like UTf16
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XWINDOWSWINGET::LooksLikeUTF16(XBYTE* buffer, int size) 
@@ -862,10 +862,10 @@ int XWINDOWSWINGET::LooksLikeUTF16(XBYTE* buffer, int size)
 * @brief      looks like UTf8
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::LooksLikeUTF8(XBYTE* buffer, int size) 
@@ -907,7 +907,7 @@ bool XWINDOWSWINGET::LooksLikeUTF8(XBYTE* buffer, int size)
 * @brief      convert UTf16 to UTf8
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWINGET::ConvertUTF16ToUTF8(XBYTE* data) 
@@ -942,9 +942,9 @@ void XWINDOWSWINGET::ConvertUTF16ToUTF8(XBYTE* data)
 * @brief      Cp437 to ASCIi
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  dst : 
-* @param[in]  src : 
-* @param[in]  max : 
+* @param[in]  dst : Dst pointer to use.
+* @param[in]  src : Src value.
+* @param[in]  max : Max value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWINGET::CP437ToASCII(XBYTE* dst, const XBYTE* src, int max) 
@@ -974,7 +974,7 @@ void XWINDOWSWINGET::CP437ToASCII(XBYTE* dst, const XBYTE* src, int max)
 * @brief      normalize unicode
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWINGET::NormalizeUnicode(XBYTE* data) 
@@ -1016,10 +1016,10 @@ void XWINDOWSWINGET::NormalizeUnicode(XBYTE* data)
 * @brief      generate column list
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  ask : 
-* @param[in]  list : 
+* @param[in]  ask : Ask pointer to use.
+* @param[in]  list : List pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::GenerateColumnList(XCHAR* ask, XVECTOR<XSTRING*>* list) 
@@ -1042,14 +1042,14 @@ bool XWINDOWSWINGET::GenerateColumnList(XCHAR* ask, XVECTOR<XSTRING*>* list)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XWINDOWSWINGET::GenerateList(XSTRING& string, XVECTOR<XSTRING*>* list)
+* @fn         bool XWINDOWSWINGET::GenerateList(XSTRING& result, XVECTOR<XSTRING*>* list)
 * @brief      generate list
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  string : 
-* @param[in]  list : 
+* @param[in]  result : Output result.
+* @param[in]  list : List pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWINGET::GenerateList(XSTRING& result,  XVECTOR<XSTRING*>* list) 
@@ -1111,8 +1111,8 @@ bool XWINDOWSWINGET::GenerateList(XSTRING& result,  XVECTOR<XSTRING*>* list)
 * 
 * @fn         void XWINDOWSWINGET::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    PLATFORM_WINDOWS
 * @note       INTERNAL
+* @ingroup    PLATFORM_WINDOWS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWINGET::Clean()

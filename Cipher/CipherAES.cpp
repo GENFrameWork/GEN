@@ -59,12 +59,34 @@
                                                         | ( (XDWORD) (b)[(i) + 3] << 24 );    \
                                               }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define PUT_UINT32_LE(n,b,i)
+* @brief      PUT UINT32 LE
+* @ingroup    CIPHER
+* 
+* @param[in]  n : N value.
+* @param[in]  b : B value.
+* @param[in]  i : I value.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define PUT_UINT32_LE(n,b,i)                  {   (b)[(i)    ] = (XBYTE) ( (n)       );       \
                                                   (b)[(i) + 1] = (XBYTE) ( (n) >>  8 );       \
                                                   (b)[(i) + 2] = (XBYTE) ( (n) >> 16 );       \
                                                   (b)[(i) + 3] = (XBYTE) ( (n) >> 24 );       \
                                               }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define AES_FROUND(X0,X1,X2,X3,Y0,Y1,Y2,Y3)
+* @brief      AES FROUND
+* @ingroup    CIPHER
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define AES_FROUND(X0,X1,X2,X3,Y0,Y1,Y2,Y3)   {   X0 = *RK++ ^ FT0[ ( Y0       ) & 0xFF ] ^   \
                                                                FT1[ ( Y1 >>  8 ) & 0xFF ] ^   \
                                                                FT2[ ( Y2 >> 16 ) & 0xFF ] ^   \
@@ -86,6 +108,15 @@
                                                                FT3[ ( Y2 >> 24 ) & 0xFF ];    \
                                               }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define AES_RROUND(X0,X1,X2,X3,Y0,Y1,Y2,Y3)
+* @brief      AES RROUND
+* @ingroup    CIPHER
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define AES_RROUND(X0,X1,X2,X3,Y0,Y1,Y2,Y3)   {   X0 = *RK++ ^ RT0[ ( Y0       ) & 0xFF ] ^   \
                                                                RT1[ ( Y3 >>  8 ) & 0xFF ] ^   \
                                                                RT2[ ( Y2 >> 16 ) & 0xFF ] ^   \
@@ -171,10 +202,10 @@ CIPHERAES::~CIPHERAES()
 * @brief      Cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::Cipher(XBYTE* input,XDWORD size)
@@ -238,10 +269,10 @@ bool CIPHERAES::Cipher(XBYTE* input,XDWORD size)
 * @brief      Uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::Uncipher(XBYTE* input, XDWORD size)
@@ -304,8 +335,6 @@ bool CIPHERAES::Uncipher(XBYTE* input, XDWORD size)
 * @fn         void CIPHERAES::AESGenTables(void)
 * @brief      AES gen tables
 * @ingroup    CIPHER
-* 
-* @param[in]  void : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERAES::AESGenTables(void)
@@ -393,11 +422,11 @@ void CIPHERAES::AESGenTables(void)
 * @brief      AES set key cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  key : 
-* @param[in]  keysize : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key pointer to use.
+* @param[in]  keysize : Keysize value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::AESSetKeyCipher(CIPHERAES_CONTEXT* ctx, XBYTE* key, XDWORD keysize)
@@ -488,11 +517,11 @@ bool CIPHERAES::AESSetKeyCipher(CIPHERAES_CONTEXT* ctx, XBYTE* key, XDWORD keysi
 * @brief      AES set key uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  key : 
-* @param[in]  keysize : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key pointer to use.
+* @param[in]  keysize : Keysize value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::AESSetKeyUncipher(CIPHERAES_CONTEXT* ctx, XBYTE* key, XDWORD keysize)
@@ -551,12 +580,12 @@ bool CIPHERAES::AESSetKeyUncipher(CIPHERAES_CONTEXT* ctx, XBYTE* key, XDWORD key
 * @brief      AES cipher ECB block
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  input[16] : 
-* @param[in]  output[16] : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  input : Input value.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::AESCipher_ECB_Block(CIPHERAES_CONTEXT* ctx, int mode, XBYTE input[16], XBYTE output[16])
@@ -665,13 +694,13 @@ bool CIPHERAES::AESCipher_ECB_Block(CIPHERAES_CONTEXT* ctx, int mode, XBYTE inpu
 * @brief      AES cipher ECB
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  size : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  size : Size value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::AESCipher_ECB(CIPHERAES_CONTEXT* ctx, int mode, XDWORD size, XBYTE* input, XBYTE* output)
@@ -697,14 +726,14 @@ bool CIPHERAES::AESCipher_ECB(CIPHERAES_CONTEXT* ctx, int mode, XDWORD size, XBY
 * @brief      AES cipher CBC
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  size : 
-* @param[in]  iv[16] : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  size : Size value.
+* @param[in]  iv : Iv value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::AESCipher_CBC(CIPHERAES_CONTEXT* ctx, int mode, XDWORD size, XBYTE iv[16], XBYTE* input, XBYTE* output)
@@ -761,15 +790,15 @@ bool CIPHERAES::AESCipher_CBC(CIPHERAES_CONTEXT* ctx, int mode, XDWORD size, XBY
 * @brief      AES cipher CFB128
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  size : 
-* @param[in]  iv_off : 
-* @param[in]  iv[16] : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  size : Size value.
+* @param[in]  iv_off : Iv off pointer to use.
+* @param[in]  iv : Iv value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::AESCipher_CFB128(CIPHERAES_CONTEXT* ctx, int mode, XDWORD size, int* iv_off, XBYTE iv[16], XBYTE* input, XBYTE* output)
@@ -820,15 +849,15 @@ bool CIPHERAES::AESCipher_CFB128(CIPHERAES_CONTEXT* ctx, int mode, XDWORD size, 
 * @brief      AES cipher CTR
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  size : 
-* @param[in]  nc_off : 
-* @param[in]  nonce_counter[16] : 
-* @param[in]  stream_block[16] : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  nc_off : Nc off pointer to use.
+* @param[in]  nonce_counter : Nonce counter value.
+* @param[in]  stream_block : Stream block value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERAES::AESCipher_CTR(CIPHERAES_CONTEXT* ctx, XDWORD size, int* nc_off, XBYTE nonce_counter[16], XBYTE stream_block[16], XBYTE* input, XBYTE* output)

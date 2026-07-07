@@ -66,11 +66,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWWEBSERVER::APPFLOWWEBSERVER()
 * @brief      Constructor of class
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWWEBSERVER::APPFLOWWEBSERVER()
 {
@@ -81,12 +81,12 @@ APPFLOWWEBSERVER::APPFLOWWEBSERVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWWEBSERVER::~APPFLOWWEBSERVER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWWEBSERVER::~APPFLOWWEBSERVER()
 {
@@ -97,18 +97,18 @@ APPFLOWWEBSERVER::~APPFLOWWEBSERVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest, bool isapirestonly, bool chekuseragentid)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    APPFLOW
-*
-* @param[in]  cfg : 
-* @param[in]  doinitialconnectitivitytest : 
-* @param[in]  isapirestonly : 
-* @param[in]  chekuseragentid : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  cfg : Configuration object to use.
+* @param[in]  doinitialconnectitivitytest : Doinitialconnectitivitytest value.
+* @param[in]  isapirestonly : Isapirestonly value.
+* @param[in]  chekuseragentid : Chekuseragentid value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  bool isapirestonly, bool chekuseragentid)
 {
@@ -142,18 +142,18 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool APPFLOWWEBSERVER::Ini(XDWORD port, , bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal)
-* @brief      Ini
+* 
+* @fn         bool APPFLOWWEBSERVER::Ini(XDWORD port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal)
+* @brief      Initialize the object
 * @ingroup    APPFLOW
-*
-* @param[in]  port : 
-* @param[in]  doinitialconnectitivitytest : 
-* @param[in]  timeoutserverpage : 
-* @param[in]  addrlocal : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  port : Port number to use.
+* @param[in]  doinitialconnectitivitytest : Doinitialconnectitivitytest value.
+* @param[in]  timeoutserverpage : Timeoutserverpage value.
+* @param[in]  addrlocal : Addrlocal pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::Ini(XDWORD port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal)
 {
@@ -192,13 +192,13 @@ bool APPFLOWWEBSERVER::Ini(XDWORD port, bool doinitialconnectitivitytest, int ti
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER* APPFLOWWEBSERVER::GetWebServer()
 * @brief      Get web server
 * @ingroup    APPFLOW
-*
-* @return     DIOWEBSERVER* :
-*
+* 
+* @return     DIOWEBSERVER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER* APPFLOWWEBSERVER::GetWebServer()
 {
@@ -207,13 +207,13 @@ DIOWEBSERVER* APPFLOWWEBSERVER::GetWebServer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWWEBSERVER::GetIsAuthenticatedAccess()
 * @brief      Get is authenticated access
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::GetIsAuthenticatedAccess()
 {
@@ -222,13 +222,13 @@ bool APPFLOWWEBSERVER::GetIsAuthenticatedAccess()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWWEBSERVER::GetIsApiRestOnly()
 * @brief      Get is api rest only
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::GetIsApiRestOnly()
 {
@@ -242,13 +242,13 @@ bool APPFLOWWEBSERVER::GetIsApiRestOnly()
 * @brief      Send request
 * @ingroup    APPFLOW
 * 
-* @param[in]  connection : 
-* @param[in]  headerresult : 
-* @param[in]  data : 
-* @param[in]  timeout : 
-* @param[in]  addhead : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  headerresult : Output headerresult.
+* @param[in]  data : Data buffer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  addhead : Addhead pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHEADER_RESULT headerresult, XBUFFER* data, int timeout, XSTRING* addhead)
@@ -302,13 +302,13 @@ bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHE
 * @brief      Send request
 * @ingroup    APPFLOW
 * 
-* @param[in]  connection : 
-* @param[in]  headerresult : 
-* @param[in]  data : 
-* @param[in]  timeout : 
-* @param[in]  addhead : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  headerresult : Output headerresult.
+* @param[in]  data : Data buffer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  addhead : Addhead pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHEADER_RESULT headerresult, XSTRING& data, int timeout, XSTRING* addhead)
@@ -335,13 +335,13 @@ bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHE
 * @brief      Send request
 * @ingroup    APPFLOW
 * 
-* @param[in]  connection : 
-* @param[in]  headerresult : 
-* @param[in]  xpathfile : 
-* @param[in]  timeout : 
-* @param[in]  addhead : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  headerresult : Output headerresult.
+* @param[in]  xpathfile : Xpathfile value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  addhead : Addhead pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHEADER_RESULT headerresult, XPATH& xpathfile, int timeout, XSTRING* addhead)
@@ -381,11 +381,11 @@ bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHE
 * @brief      Resolve request
 * @ingroup    APPFLOW
 * 
-* @param[in]  server : 
-* @param[in]  connection : 
-* @param[in]  request : 
+* @param[in]  server : Server pointer to use.
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  request : Request pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECTION* connection, DIOWEBSERVER_REQUEST* request)
@@ -670,16 +670,16 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWWEBSERVER::GenerateMessagePage(XCHAR* leyend, DIOWEBPAGEHTMLCREATOR& webHTMLpage)
 * @brief      Generate message page
 * @ingroup    APPFLOW
-*
-* @param[in]  leyend :
-* @param[in]  webHTMLpage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  leyend : Leyend pointer to use.
+* @param[in]  webHTMLpage : Web HTM Lpage value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::GenerateMessagePage(XCHAR* leyend, DIOWEBPAGEHTMLCREATOR& webHTMLpage)
 {
@@ -692,16 +692,16 @@ bool APPFLOWWEBSERVER::GenerateMessagePage(XCHAR* leyend, DIOWEBPAGEHTMLCREATOR&
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWWEBSERVER::GenerateMessagePage(XSTRING& leyend, DIOWEBPAGEHTMLCREATOR& webHTMLpage)
 * @brief      Generate message page
 * @ingroup    APPFLOW
-*
-* @param[in]  leyend :
-* @param[in]  webHTMLpage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  leyend : Leyend value.
+* @param[in]  webHTMLpage : Web HTM Lpage value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::GenerateMessagePage(XSTRING& leyend, DIOWEBPAGEHTMLCREATOR& webHTMLpage)
 {
@@ -710,17 +710,17 @@ bool APPFLOWWEBSERVER::GenerateMessagePage(XSTRING& leyend, DIOWEBPAGEHTMLCREATO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connection, DIOWEBHEADER_RESULT result, XCHAR* leyend)
 * @brief      Generate response error
 * @ingroup    APPFLOW
-*
-* @param[in]  connection :
-* @param[in]  result :
-* @param[in]  leyend :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  leyend : Leyend pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connection,  DIOWEBHEADER_RESULT result, XCHAR* leyend)
 {
@@ -740,17 +740,17 @@ bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connectio
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connection, DIOWEBHEADER_RESULT result, XSTRING& leyend)
 * @brief      Generate response error
 * @ingroup    APPFLOW
-*
-* @param[in]  connection :
-* @param[in]  result :
-* @param[in]  leyend :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  leyend : Leyend value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connection,  DIOWEBHEADER_RESULT result, XSTRING& leyend)
 {
@@ -759,13 +759,13 @@ bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connectio
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWWEBSERVER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::End()
 {
@@ -820,14 +820,14 @@ bool APPFLOWWEBSERVER::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWWEBSERVER::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
 * @brief      Handle event web server
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
-* @param[in]  event :
-*
+* 
+* @param[in]  event : Event to process.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWWEBSERVER::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
 {
@@ -854,14 +854,14 @@ void APPFLOWWEBSERVER::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWWEBSERVER::HandleEvent(XEVENT* xevent)
 * @brief      Handle event
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
-* @param[in]  xevent :
-*
+* 
+* @param[in]  xevent : Xevent pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWWEBSERVER::HandleEvent(XEVENT* xevent)
 {
@@ -880,12 +880,12 @@ void APPFLOWWEBSERVER::HandleEvent(XEVENT* xevent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWWEBSERVER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWWEBSERVER::Clean()
 {

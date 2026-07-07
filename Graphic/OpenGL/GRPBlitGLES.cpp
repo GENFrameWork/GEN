@@ -7,6 +7,22 @@
 * @ingroup    GRAPHIC
 *
 * @copyright  EndoraSoft. All rights reserved.
+* 
+* @cond
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+* documentation files(the "Software"), to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
+* and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+* the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+* THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* @endcond
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
@@ -75,11 +91,11 @@ static const char* k_fshader_swizzle_src =
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBLITGLES::GRPBLITGLES()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBLITGLES::GRPBLITGLES()
 {
@@ -88,11 +104,11 @@ GRPBLITGLES::GRPBLITGLES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBLITGLES::~GRPBLITGLES()
 * @brief      Destructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBLITGLES::~GRPBLITGLES()
 {
@@ -107,7 +123,7 @@ GRPBLITGLES::~GRPBLITGLES()
 * @brief      pre create hook
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::PreCreateHook()
@@ -122,9 +138,9 @@ bool GRPBLITGLES::PreCreateHook()
 * @brief      post create hook
 * @ingroup    GRAPHIC
 * 
-* @param[in]  visid : 
+* @param[in]  visid : Native visual identifier.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::PostCreateHook(EGLint visid)
@@ -139,10 +155,10 @@ bool GRPBLITGLES::PostCreateHook(EGLint visid)
 * @brief      choose visual Id
 * @ingroup    GRAPHIC
 * 
-* @param[in]  native_display : 
-* @param[in]  out_native_visual_id : 
+* @param[in]  native_display : Native display handle.
+* @param[in]  out_native_visual_id : Output native visual identifier.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::ChooseVisualID(EGLNativeDisplayType native_display, EGLint& out_native_visual_id)
@@ -162,15 +178,15 @@ bool GRPBLITGLES::ChooseVisualID(EGLNativeDisplayType native_display, EGLint& ou
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPBLITGLES::Create(GRPSCREEN*)
+* 
+* @fn         bool GRPBLITGLES::Create(GRPSCREEN* screen)
 * @brief      Create the EGL context + GL resources.
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  screen : the screen this blitter is attached to (host of native handles).
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::Create(GRPSCREEN* screen)
 {
@@ -307,10 +323,10 @@ bool GRPBLITGLES::Create(GRPSCREEN* screen)
 * @brief      resize
 * @ingroup    GRAPHIC
 * 
-* @param[in]  width : 
-* @param[in]  height : 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::Resize(int width, int height)
@@ -353,9 +369,9 @@ bool GRPBLITGLES::Resize(int width, int height)
 * @brief      update
 * @ingroup    GRAPHIC
 * 
-* @param[in]  canvas : 
+* @param[in]  canvas : Canvas object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::Update(GRP2DCANVAS* canvas)
@@ -574,7 +590,7 @@ bool GRPBLITGLES::Update(GRP2DCANVAS* canvas)
 * @brief      destroy
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::Destroy()
@@ -625,14 +641,13 @@ bool GRPBLITGLES::Destroy()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBLITGLES::SwapBuffers()
-* @brief      Swap front/back buffers of the underlying EGL surface. Wrapper kept here so
-*             callers (e.g. screens) need not know about GRPEGLCONTEXT.
+* @brief      Swap front/back buffers of the underlying EGL surface. Wrapper kept here so callers (e.g. screens) need not know about GRPEGLCONTEXT.
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::SwapBuffers()
 {
@@ -653,7 +668,7 @@ bool GRPBLITGLES::SwapBuffers()
 * @brief      set use Vsync
 * @ingroup    GRAPHIC
 * 
-* @param[in]  a : 
+* @param[in]  a : A value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::SetUseVSync(bool a)
@@ -670,7 +685,7 @@ void GRPBLITGLES::SetUseVSync(bool a)
 * @brief      get use Vsync
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::GetUseVSync()
@@ -685,10 +700,10 @@ bool GRPBLITGLES::GetUseVSync()
 * @brief      get native window size (Default: no native window-size reporting (Windows/Linux have no rotation/resize concern here)
 * @ingroup    GRAPHIC
 * 
-* @param[in]  width : 
-* @param[in]  height : 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::GetNativeWindowSize(int& width, int& height) 
@@ -706,7 +721,7 @@ bool GRPBLITGLES::GetNativeWindowSize(int& width, int& height)
 * @brief      set use PBo
 * @ingroup    GRAPHIC
 * 
-* @param[in]  a : 
+* @param[in]  a : A value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::SetUsePBO(bool a)
@@ -721,7 +736,7 @@ void GRPBLITGLES::SetUsePBO(bool a)
 * @brief      get use PBo
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::GetUsePBO()
@@ -736,7 +751,7 @@ bool GRPBLITGLES::GetUsePBO()
 * @brief      set flip y
 * @ingroup    GRAPHIC
 * 
-* @param[in]  a : 
+* @param[in]  a : A value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::SetFlipY(bool a)
@@ -751,7 +766,7 @@ void GRPBLITGLES::SetFlipY(bool a)
 * @brief      get flip y
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::GetFlipY()
@@ -766,7 +781,7 @@ bool GRPBLITGLES::GetFlipY()
 * @brief      set flip x
 * @ingroup    GRAPHIC
 * 
-* @param[in]  a : 
+* @param[in]  a : A value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::SetFlipX(bool a)
@@ -781,7 +796,7 @@ void GRPBLITGLES::SetFlipX(bool a)
 * @brief      get flip x
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::GetFlipX()
@@ -791,14 +806,14 @@ bool GRPBLITGLES::GetFlipX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-
-@fn         void GRPBLITGLES::SetRotation(GRPSCREENROTATION r)
-@brief      set rotation
-@ingroup    GRAPHIC
-
-@param[in]  r : 
-
---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void GRPBLITGLES::SetRotation(GRPSCREENROTATION r)
+* @brief      set rotation
+* @ingroup    GRAPHIC
+* 
+* @param[in]  r : New screen rotation.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::SetRotation(GRPSCREENROTATION r) 
 { 
   rotation = r;     
@@ -806,14 +821,14 @@ void GRPBLITGLES::SetRotation(GRPSCREENROTATION r)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-
-@fn         GRPSCREENROTATION GRPBLITGLES::GetRotation()
-@brief      get rotation
-@ingroup    GRAPHIC
-
-@return     GRPSCREENROTATION : 
-
---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         GRPSCREENROTATION GRPBLITGLES::GetRotation()
+* @brief      get rotation
+* @ingroup    GRAPHIC
+* 
+* @return     GRPSCREENROTATION : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREENROTATION GRPBLITGLES::GetRotation()       
 {
   return rotation;  
@@ -821,14 +836,14 @@ GRPSCREENROTATION GRPBLITGLES::GetRotation()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-
-@fn         void GRPBLITGLES::SetUseAlpha(bool a)
-@brief      set use alpha
-@ingroup    GRAPHIC
-
-@param[in]  a : 
-
---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void GRPBLITGLES::SetUseAlpha(bool a)
+* @brief      set use alpha
+* @ingroup    GRAPHIC
+* 
+* @param[in]  a : true to enable alpha usage; false otherwise.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::SetUseAlpha(bool a)              
 { 
   usealpha = a;     
@@ -836,14 +851,14 @@ void GRPBLITGLES::SetUseAlpha(bool a)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-
-@fn         bool GRPBLITGLES::GetUseAlpha()
-@brief      get use alpha
-@ingroup    GRAPHIC
-
-@return     bool : true if is succesful. 
-
---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         bool GRPBLITGLES::GetUseAlpha()
+* @brief      get use alpha
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::GetUseAlpha()                    
 { 
   return usealpha;  
@@ -851,14 +866,14 @@ bool GRPBLITGLES::GetUseAlpha()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-
-@fn         bool GRPBLITGLES::IsES3()
-@brief      is Es3
-@ingroup    GRAPHIC
-
-@return     bool : true if is succesful. 
-
---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         bool GRPBLITGLES::IsES3()
+* @brief      is Es3
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::IsES3()                
 { 
   return eglctx && (eglctx->GetClientVersion() >= 3); 
@@ -866,14 +881,14 @@ bool GRPBLITGLES::IsES3()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-
-@fn         bool GRPBLITGLES::HasBGRAExtension()
-@brief      has BGRAextension
-@ingroup    GRAPHIC
-
-@return     bool : true if is succesful. 
-
---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         bool GRPBLITGLES::HasBGRAExtension()
+* @brief      has BGRAextension
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::HasBGRAExtension()     
 { 
   return hasbgraext; 
@@ -881,14 +896,14 @@ bool GRPBLITGLES::HasBGRAExtension()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-
-@fn         GRPEGLCONTEXT* GRPBLITGLES::GetEGLContext()
-@brief      get EGLcontext
-@ingroup    GRAPHIC
-
-@return     GRPEGLCONTEXT* : 
-
---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         GRPEGLCONTEXT* GRPBLITGLES::GetEGLContext()
+* @brief      get EGLcontext
+* @ingroup    GRAPHIC
+* 
+* @return     GRPEGLCONTEXT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPEGLCONTEXT* GRPBLITGLES::GetEGLContext()        
 { 
   return eglctx; 
@@ -901,7 +916,7 @@ GRPEGLCONTEXT* GRPBLITGLES::GetEGLContext()
 * @brief      detect BGRAextension
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::DetectBGRAExtension()
@@ -940,10 +955,10 @@ bool GRPBLITGLES::DetectBGRAExtension()
 * @brief      compile shader
 * @ingroup    GRAPHIC
 * 
-* @param[in]  stage : 
-* @param[in]  char* source : 
+* @param[in]  stage : Stage value.
+* @param[in]  source : Source value.
 * 
-* @return     GLuint : 
+* @return     GLuint : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GLuint GRPBLITGLES::CompileShader(GLenum stage, const char* source)
@@ -982,7 +997,7 @@ GLuint GRPBLITGLES::CompileShader(GLenum stage, const char* source)
 * @brief      compile shaders
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::CompileShaders()
@@ -1047,7 +1062,7 @@ bool GRPBLITGLES::CompileShaders()
 * @brief      build quad
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::BuildQuad()
@@ -1090,10 +1105,10 @@ bool GRPBLITGLES::BuildQuad()
 * @brief      alloc texture
 * @ingroup    GRAPHIC
 * 
-* @param[in]  width : 
-* @param[in]  height : 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::AllocTexture(int width, int height)
@@ -1148,10 +1163,10 @@ bool GRPBLITGLES::AllocTexture(int width, int height)
 * @brief      alloc PBos
 * @ingroup    GRAPHIC
 * 
-* @param[in]  width : 
-* @param[in]  height : 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBLITGLES::AllocPBOs(int width, int height)
@@ -1185,7 +1200,7 @@ bool GRPBLITGLES::AllocPBOs(int width, int height)
 * @brief      build model matrix
 * @ingroup    GRAPHIC
 * 
-* @param[in]  m : 
+* @param[in]  m : M pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::BuildModelMatrix(float* m)
@@ -1229,8 +1244,8 @@ void GRPBLITGLES::BuildModelMatrix(float* m)
 * 
 * @fn         void GRPBLITGLES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    GRAPHIC
 * @note       INTERNAL
+* @ingroup    GRAPHIC
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBLITGLES::Clean()

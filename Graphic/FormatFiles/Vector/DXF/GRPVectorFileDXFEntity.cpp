@@ -92,7 +92,7 @@ GRPVECTORFILEDXFENTITY::~GRPVECTORFILEDXFENTITY()
 * @brief      Get name
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILEDXFENTITY::GetName()
@@ -107,9 +107,9 @@ XSTRING* GRPVECTORFILEDXFENTITY::GetName()
 * @brief      Add value
 * @ingroup    GRAPHIC
 * 
-* @param[in]  value : 
+* @param[in]  value : Value pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITY::AddValue(GRPVECTORFILEDXFVALUE* value)
@@ -126,7 +126,7 @@ bool GRPVECTORFILEDXFENTITY::AddValue(GRPVECTORFILEDXFVALUE* value)
 * @brief      Get values
 * @ingroup    GRAPHIC
 * 
-* @return     XVECTOR<GRPVECTORFILEDXFVALUE*>* : 
+* @return     XVECTOR<GRPVECTORFILEDXFVALUE*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVECTORFILEDXFVALUE*>* GRPVECTORFILEDXFENTITY::GetValues()
@@ -141,9 +141,9 @@ XVECTOR<GRPVECTORFILEDXFVALUE*>* GRPVECTORFILEDXFENTITY::GetValues()
 * @brief      Get value
 * @ingroup    GRAPHIC
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
-* @return     GRPVECTORFILEDXFVALUE* : 
+* @return     GRPVECTORFILEDXFVALUE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFVALUE* GRPVECTORFILEDXFENTITY::GetValue(int index)
@@ -163,9 +163,9 @@ GRPVECTORFILEDXFVALUE* GRPVECTORFILEDXFENTITY::GetValue(int index)
 * @brief      Delete value
 * @ingroup    GRAPHIC
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITY::DeleteValue(int index)
@@ -185,7 +185,7 @@ bool GRPVECTORFILEDXFENTITY::DeleteValue(int index)
 * @brief      Delete all values
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITY::DeleteAllValues()
@@ -211,7 +211,7 @@ bool GRPVECTORFILEDXFENTITY::DeleteAllValues()
 * @brief      Get X data ctrl list
 * @ingroup    GRAPHIC
 * 
-* @return     XVECTOR<GRPVECTORFILEDXFXDATACTRL*>* : 
+* @return     XVECTOR<GRPVECTORFILEDXFXDATACTRL*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVECTORFILEDXFXDATACTRL*>* GRPVECTORFILEDXFENTITY::GetXDataCtrlList()

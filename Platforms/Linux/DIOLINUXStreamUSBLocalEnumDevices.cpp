@@ -69,7 +69,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXSTREAMUSBLOCALENUMDEVICES::DIOLINUXSTREAMUSBLOCALENUMDEVICES()
+* @fn         DIOLINUXSTREAMUSBLOCALENUMDEVICES::DIOLINUXSTREAMUSBLOCALENUMDEVICES() : DIOSTREAMUSBLOCALENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -100,7 +100,7 @@ DIOLINUXSTREAMUSBLOCALENUMDEVICES::~DIOLINUXSTREAMUSBLOCALENUMDEVICES()
 * @brief      Search
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::Search()
@@ -235,9 +235,9 @@ bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::Search()
 * @brief      Is device available
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  resource : 
+* @param[in]  resource : Resource pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::IsDeviceAvailable(XCHAR* resource)
@@ -247,16 +247,16 @@ bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::IsDeviceAvailable(XCHAR* resource)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::GetDescriptor(struct udev_device* udevdevice, DIOSTREAMDEVICEUSB_DESCRIPTOR* descriptor)
 * @brief      Get descriptor
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  udev_device* udevdevice :
-* @param[in]  descriptor :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  udevdevice : Udevdevice pointer to use.
+* @param[in]  descriptor : Descriptor pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::GetDescriptor(struct udev_device* udevdevice, DIOSTREAMDEVICEUSB_DESCRIPTOR* descriptor)
 {
@@ -296,7 +296,7 @@ bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::GetDescriptor(struct udev_device* udevde
 * @brief      Search and GEN_DELETE equal devices
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUSBLOCALENUMDEVICES::SearchAndDeleteEqualDevices()

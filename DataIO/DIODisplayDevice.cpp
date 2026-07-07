@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODISPLAYDEVICE_CONFIG::DIODISPLAYDEVICE_CONFIG()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODISPLAYDEVICE_CONFIG::DIODISPLAYDEVICE_CONFIG()
 {
@@ -68,12 +68,12 @@ DIODISPLAYDEVICE_CONFIG::DIODISPLAYDEVICE_CONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODISPLAYDEVICE_CONFIG::~DIODISPLAYDEVICE_CONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODISPLAYDEVICE_CONFIG::~DIODISPLAYDEVICE_CONFIG()
 {
@@ -82,13 +82,13 @@ DIODISPLAYDEVICE_CONFIG::~DIODISPLAYDEVICE_CONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIODISPLAYDEVICE_CONFIG::GetWidth()
 * @brief      Get width
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIODISPLAYDEVICE_CONFIG::GetWidth()
 {
@@ -97,13 +97,13 @@ int DIODISPLAYDEVICE_CONFIG::GetWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIODISPLAYDEVICE_CONFIG::GetHeight()
 * @brief      Get height
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIODISPLAYDEVICE_CONFIG::GetHeight()
 {
@@ -112,13 +112,13 @@ int DIODISPLAYDEVICE_CONFIG::GetHeight()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIODISPLAYDEVICE_CONFIG::GetNPixels()
 * @brief      Get N pixels
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIODISPLAYDEVICE_CONFIG::GetNPixels()
 {
@@ -127,13 +127,13 @@ XDWORD DIODISPLAYDEVICE_CONFIG::GetNPixels()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIODISPLAYDEVICE_CONFIG::GetSizeBuffer()
 * @brief      Get size buffer
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIODISPLAYDEVICE_CONFIG::GetSizeBuffer()
 {
@@ -142,12 +142,12 @@ XDWORD DIODISPLAYDEVICE_CONFIG::GetSizeBuffer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIODISPLAYDEVICE_CONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIODISPLAYDEVICE_CONFIG::Clean()
 {
@@ -164,11 +164,11 @@ void DIODISPLAYDEVICE_CONFIG::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODISPLAYDEVICE::DIODISPLAYDEVICE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODISPLAYDEVICE::DIODISPLAYDEVICE()
 {
@@ -177,12 +177,12 @@ DIODISPLAYDEVICE::DIODISPLAYDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODISPLAYDEVICE::~DIODISPLAYDEVICE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODISPLAYDEVICE::~DIODISPLAYDEVICE()
 {  
@@ -195,12 +195,12 @@ DIODISPLAYDEVICE::~DIODISPLAYDEVICE()
 * @fn         XDWORD DIODISPLAYDEVICE::GetGPIOEntryID(DIODISPLAYDEVICE_INDEX_GPIOENTRYID index)
 * @brief      Get GPIO entry ID
 * @ingroup    DATAIO
-*
-* @param[in]  index : 
 * 
-* @return     XDWORD : 
+* @param[in]  index : Index value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIODISPLAYDEVICE::GetGPIOEntryID(DIODISPLAYDEVICE_INDEX_GPIOENTRYID index)
 {
   return GPIOentrysID[index];        
@@ -212,13 +212,13 @@ XDWORD DIODISPLAYDEVICE::GetGPIOEntryID(DIODISPLAYDEVICE_INDEX_GPIOENTRYID index
 * @fn         bool DIODISPLAYDEVICE::SetGPIOEntryID(DIODISPLAYDEVICE_INDEX_GPIOENTRYID index, XDWORD GPIOentryID)
 * @brief      Set GPIO entry ID
 * @ingroup    DATAIO
-*
-* @param[in]  index : 
-* @param[in]  GPIOentryID : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  index : Index value.
+* @param[in]  GPIOentryID : GPI Oentry ID value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODISPLAYDEVICE::SetGPIOEntryID(DIODISPLAYDEVICE_INDEX_GPIOENTRYID index, XDWORD GPIOentryID)
 {
   GPIOentrysID[index] = GPIOentryID;   
@@ -233,9 +233,9 @@ bool DIODISPLAYDEVICE::SetGPIOEntryID(DIODISPLAYDEVICE_INDEX_GPIOENTRYID index, 
 * @brief      Set active black light
 * @ingroup    DATAIO
 * 
-* @param[in]  active : 
+* @param[in]  active : Active value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODISPLAYDEVICE::SetActiveBlackLight(bool active)
@@ -250,8 +250,8 @@ bool DIODISPLAYDEVICE::SetActiveBlackLight(bool active)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIODISPLAYDEVICE::Clean()
 {
   for(int c=0; c<DIODISPLAYDEVICE_INDEX_GPIOENTRYID_MAX; c++)

@@ -109,16 +109,16 @@ DIODNSPROTOCOLCLIENT::~DIODNSPROTOCOLCLIENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSPROTOCOLCLIENT::SetServer(DIOIP& serverIP, XWORD serverport)
 * @brief      Set server
 * @ingroup    DATAIO
-*
-* @param[in]  serverIP :
-* @param[in]  serverport :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  serverIP : Server IP value.
+* @param[in]  serverport : Serverport value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::SetServer(DIOIP& serverIP, XWORD serverport)
 {
@@ -133,16 +133,16 @@ bool DIODNSPROTOCOLCLIENT::SetServer(DIOIP& serverIP, XWORD serverport)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSPROTOCOLCLIENT::SetServer(XCHAR* serverIP, XWORD serverport)
 * @brief      Set server
 * @ingroup    DATAIO
-*
-* @param[in]  serverIP :
-* @param[in]  serverport :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  serverIP : Server IP pointer to use.
+* @param[in]  serverport : Serverport value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::SetServer(XCHAR* serverIP, XWORD serverport)
 {
@@ -157,16 +157,16 @@ bool DIODNSPROTOCOLCLIENT::SetServer(XCHAR* serverIP, XWORD serverport)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSPROTOCOLCLIENT::SetServer(XSTRING& serverIP, XWORD serverport)
 * @brief      Set server
 * @ingroup    DATAIO
-*
-* @param[in]  serverIP :
-* @param[in]  serverport :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  serverIP : Server IP value.
+* @param[in]  serverport : Serverport value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::SetServer(XSTRING& serverIP, XWORD serverport)
 {
@@ -175,18 +175,18 @@ bool DIODNSPROTOCOLCLIENT::SetServer(XSTRING& serverIP, XWORD serverport)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSPROTOCOLCLIENT::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 * @brief      Resolve URL
 * @ingroup    DATAIO
-*
-* @param[in]  URL :
-* @param[in]  IPresolved :
-* @param[in]  querytype :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  URL : URL to use.
+* @param[in]  IPresolved : I Presolved value.
+* @param[in]  querytype : Querytype value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 {
@@ -331,18 +331,18 @@ bool DIODNSPROTOCOLCLIENT::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int queryty
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSPROTOCOLCLIENT::ResolveURL(DIOURL& URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 * @brief      Resolve URL
 * @ingroup    DATAIO
-*
-* @param[in]  URL :
-* @param[in]  IPresolved :
-* @param[in]  querytype :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  URL : URL to use.
+* @param[in]  IPresolved : I Presolved value.
+* @param[in]  querytype : Querytype value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::ResolveURL(DIOURL& URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 {
@@ -351,18 +351,18 @@ bool DIODNSPROTOCOLCLIENT::ResolveURL(DIOURL& URL, DIOIP& IPresolved, int queryt
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSPROTOCOLCLIENT::ResolveURL(XSTRING& URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 * @brief      Resolve URL
 * @ingroup    DATAIO
-*
-* @param[in]  URL :
-* @param[in]  IPresolved :
-* @param[in]  querytype :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  URL : URL to use.
+* @param[in]  IPresolved : I Presolved value.
+* @param[in]  querytype : Querytype value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::ResolveURL(XSTRING& URL, DIOIP& IPresolved, int querytype,  XDWORD timeout)
 {
@@ -372,14 +372,14 @@ bool DIODNSPROTOCOLCLIENT::ResolveURL(XSTRING& URL, DIOIP& IPresolved, int query
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIODNSPROTOCOLCLIENT::EncodeDNSFormat(XSTRING& URL, char* EncodedURL)
+* @fn         bool DIODNSPROTOCOLCLIENT::EncodeDNSFormat(XSTRING& URL, XBUFFER& EncodedURL)
 * @brief      Encode DNS format
 * @ingroup    DATAIO
 * 
-* @param[in]  URL : 
-* @param[in]  EncodedURL : 
+* @param[in]  URL : URL to use.
+* @param[in]  EncodedURL : Encoded URL value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::EncodeDNSFormat(XSTRING& URL, XBUFFER& EncodedURL) 
@@ -424,14 +424,14 @@ bool DIODNSPROTOCOLCLIENT::EncodeDNSFormat(XSTRING& URL, XBUFFER& EncodedURL)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIODNSPROTOCOLCLIENT::DecodeDNSFormat(XBUFFER& EncodedURL, XSTRING& DecodedURL)
+* @fn         bool DIODNSPROTOCOLCLIENT::DecodeDNSFormat(XBUFFER& EncodedURL, XSTRING& URL)
 * @brief      Decode DNS format
 * @ingroup    DATAIO
 * 
-* @param[in]  EncodedURL : 
-* @param[in]  DecodedURL : 
+* @param[in]  EncodedURL : Encoded URL value.
+* @param[in]  URL : URL to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::DecodeDNSFormat(XBUFFER& EncodedURL, XSTRING& URL) 
@@ -478,10 +478,10 @@ bool DIODNSPROTOCOLCLIENT::DecodeDNSFormat(XBUFFER& EncodedURL, XSTRING& URL)
 * @brief      Decode DNS format
 * @ingroup    DATAIO
 * 
-* @param[in]  EncodedURL : 
-* @param[in]  URL : 
+* @param[in]  EncodedURL : Encoded URL pointer to use.
+* @param[in]  URL : URL to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOLCLIENT::DecodeDNSFormat(XBYTE* EncodedURL, XSTRING& URL)
@@ -496,17 +496,17 @@ bool DIODNSPROTOCOLCLIENT::DecodeDNSFormat(XBYTE* EncodedURL, XSTRING& URL)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XBYTE* DIODNSPROTOCOLCLIENT::GetBufferName(XBYTE* reader,XBYTE* buffer,int* count)
+* 
+* @fn         XBYTE* DIODNSPROTOCOLCLIENT::GetBufferName(XBYTE* reader, XBYTE* buffer, int* count)
 * @brief      Get buffer name
 * @ingroup    DATAIO
-*
-* @param[in]  reader :
-* @param[in]  buffer :
-* @param[in]  count :
-*
-* @return     XBYTE* :
-*
+* 
+* @param[in]  reader : Reader pointer to use.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  count : Count pointer to use.
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* DIODNSPROTOCOLCLIENT::GetBufferName(XBYTE* reader, XBYTE* buffer, int* count)
 {
@@ -571,12 +571,12 @@ XBYTE* DIODNSPROTOCOLCLIENT::GetBufferName(XBYTE* reader, XBYTE* buffer, int* co
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIODNSPROTOCOLCLIENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIODNSPROTOCOLCLIENT::Clean()
 {

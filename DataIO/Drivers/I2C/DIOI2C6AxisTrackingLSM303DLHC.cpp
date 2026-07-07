@@ -65,11 +65,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CLSM303DLHCVECTOR::DIOI2CLSM303DLHCVECTOR()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CLSM303DLHCVECTOR::DIOI2CLSM303DLHCVECTOR()
 {
@@ -78,12 +78,12 @@ DIOI2CLSM303DLHCVECTOR::DIOI2CLSM303DLHCVECTOR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CLSM303DLHCVECTOR::~DIOI2CLSM303DLHCVECTOR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CLSM303DLHCVECTOR::~DIOI2CLSM303DLHCVECTOR()
 {
@@ -92,15 +92,15 @@ DIOI2CLSM303DLHCVECTOR::~DIOI2CLSM303DLHCVECTOR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CLSM303DLHCVECTOR::Cross(const DIOI2CLSM303DLHCVECTOR& a, const DIOI2CLSM303DLHCVECTOR& b, DIOI2CLSM303DLHCVECTOR& out)
 * @brief      Cross
 * @ingroup    DATAIO
-*
-* @param[in]  a :
-* @param[in]  b :
-* @param[in]  out :
-*
+* 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  out : Output out.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CLSM303DLHCVECTOR::Cross(const DIOI2CLSM303DLHCVECTOR& a, const DIOI2CLSM303DLHCVECTOR& b, DIOI2CLSM303DLHCVECTOR& out)
 {
@@ -111,16 +111,16 @@ void DIOI2CLSM303DLHCVECTOR::Cross(const DIOI2CLSM303DLHCVECTOR& a, const DIOI2C
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float DIOI2CLSM303DLHCVECTOR::Dot(const DIOI2CLSM303DLHCVECTOR& a, const DIOI2CLSM303DLHCVECTOR& b)
 * @brief      Dot
 * @ingroup    DATAIO
-*
-* @param[in]  a :
-* @param[in]  b :
-*
-* @return     float :
-*
+* 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float DIOI2CLSM303DLHCVECTOR::Dot(const DIOI2CLSM303DLHCVECTOR& a, const DIOI2CLSM303DLHCVECTOR& b)
 {
@@ -129,13 +129,13 @@ float DIOI2CLSM303DLHCVECTOR::Dot(const DIOI2CLSM303DLHCVECTOR& a, const DIOI2CL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CLSM303DLHCVECTOR::Normalize(DIOI2CLSM303DLHCVECTOR& a)
 * @brief      Normalize
 * @ingroup    DATAIO
-*
-* @param[in]  a :
-*
+* 
+* @param[in]  a : A value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CLSM303DLHCVECTOR::Normalize(DIOI2CLSM303DLHCVECTOR& a)
 {
@@ -148,12 +148,12 @@ void DIOI2CLSM303DLHCVECTOR::Normalize(DIOI2CLSM303DLHCVECTOR& a)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CLSM303DLHCVECTOR::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CLSM303DLHCVECTOR::Clean()
 {
@@ -170,11 +170,11 @@ void DIOI2CLSM303DLHCVECTOR::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CLSM303DLHC::DIOI2CLSM303DLHC() : DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CLSM303DLHC::DIOI2CLSM303DLHC() : DIODEVICEI2C()
 {
@@ -183,12 +183,12 @@ DIOI2CLSM303DLHC::DIOI2CLSM303DLHC() : DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CLSM303DLHC::~DIOI2CLSM303DLHC()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CLSM303DLHC::~DIOI2CLSM303DLHC()
 {
@@ -199,13 +199,13 @@ DIOI2CLSM303DLHC::~DIOI2CLSM303DLHC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLSM303DLHC::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLSM303DLHC::End()
 {
@@ -216,13 +216,13 @@ bool DIOI2CLSM303DLHC::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLSM303DLHC::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLSM303DLHC::IniDevice()
 { 
@@ -241,16 +241,16 @@ bool DIOI2CLSM303DLHC::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLSM303DLHC::ReadRegister(XBYTE reg, XBYTE& value)
 * @brief      Read register
 * @ingroup    DATAIO
-*
-* @param[in]  reg :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLSM303DLHC::ReadRegister(XBYTE reg, XBYTE& value)
 {
@@ -272,16 +272,16 @@ bool DIOI2CLSM303DLHC::ReadRegister(XBYTE reg, XBYTE& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLSM303DLHC::ReadRegister(XBYTE reg, XWORD& value)
 * @brief      Read register
 * @ingroup    DATAIO
-*
-* @param[in]  reg :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLSM303DLHC::ReadRegister(XBYTE reg, XWORD& value)
 {
@@ -303,16 +303,16 @@ bool DIOI2CLSM303DLHC::ReadRegister(XBYTE reg, XWORD& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CLSM303DLHC::WriteRegister(XBYTE reg, XBYTE value)
 * @brief      Write register
 * @ingroup    DATAIO
-*
-* @param[in]  reg :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CLSM303DLHC::WriteRegister(XBYTE reg, XBYTE value)
 {
@@ -332,12 +332,12 @@ bool DIOI2CLSM303DLHC::WriteRegister(XBYTE reg, XBYTE value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CLSM303DLHC::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CLSM303DLHC::Clean()
 {
@@ -350,11 +350,11 @@ void DIOI2CLSM303DLHC::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2C3DCOMPASSLSM303DLHC::DIOI2C3DCOMPASSLSM303DLHC()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2C3DCOMPASSLSM303DLHC::DIOI2C3DCOMPASSLSM303DLHC()
 {
@@ -363,12 +363,12 @@ DIOI2C3DCOMPASSLSM303DLHC::DIOI2C3DCOMPASSLSM303DLHC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2C3DCOMPASSLSM303DLHC::~DIOI2C3DCOMPASSLSM303DLHC()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2C3DCOMPASSLSM303DLHC::~DIOI2C3DCOMPASSLSM303DLHC()
 {
@@ -377,13 +377,13 @@ DIOI2C3DCOMPASSLSM303DLHC::~DIOI2C3DCOMPASSLSM303DLHC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C3DACCELEROMETERLSM303DLHC::Configure()
 * @brief      Configure
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C3DACCELEROMETERLSM303DLHC::Configure()
 {
@@ -408,17 +408,17 @@ bool DIOI2C3DACCELEROMETERLSM303DLHC::Configure()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C3DACCELEROMETERLSM303DLHC::Read(XWORD& a_x, XWORD& a_y, XWORD& a_z)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  a_x :
-* @param[in]  a_y :
-* @param[in]  a_z :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  a_x : A x value.
+* @param[in]  a_y : A y value.
+* @param[in]  a_z : A z value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C3DACCELEROMETERLSM303DLHC::Read(XWORD& a_x, XWORD& a_y, XWORD& a_z)
 {
@@ -441,11 +441,11 @@ bool DIOI2C3DACCELEROMETERLSM303DLHC::Read(XWORD& a_x, XWORD& a_y, XWORD& a_z)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2C3DACCELEROMETERLSM303DLHC::DIOI2C3DACCELEROMETERLSM303DLHC()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2C3DACCELEROMETERLSM303DLHC::DIOI2C3DACCELEROMETERLSM303DLHC()
 {
@@ -454,12 +454,12 @@ DIOI2C3DACCELEROMETERLSM303DLHC::DIOI2C3DACCELEROMETERLSM303DLHC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2C3DACCELEROMETERLSM303DLHC::~DIOI2C3DACCELEROMETERLSM303DLHC()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2C3DACCELEROMETERLSM303DLHC::~DIOI2C3DACCELEROMETERLSM303DLHC()
 {
@@ -468,13 +468,13 @@ DIOI2C3DACCELEROMETERLSM303DLHC::~DIOI2C3DACCELEROMETERLSM303DLHC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C3DCOMPASSLSM303DLHC::Configure()
 * @brief      Configure
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C3DCOMPASSLSM303DLHC::Configure()
 {
@@ -499,17 +499,17 @@ bool DIOI2C3DCOMPASSLSM303DLHC::Configure()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C3DCOMPASSLSM303DLHC::Read(XWORD& c_x, XWORD& c_y, XWORD& c_z)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  c_x :
-* @param[in]  c_y :
-* @param[in]  c_z :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  c_x : C x value.
+* @param[in]  c_y : C y value.
+* @param[in]  c_z : C z value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C3DCOMPASSLSM303DLHC::Read(XWORD& c_x, XWORD& c_y, XWORD& c_z)
 {
@@ -531,11 +531,11 @@ bool DIOI2C3DCOMPASSLSM303DLHC::Read(XWORD& c_x, XWORD& c_y, XWORD& c_z)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2C6AXISTRACKINGLSM303DLHC::DIOI2C6AXISTRACKINGLSM303DLHC()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2C6AXISTRACKINGLSM303DLHC::DIOI2C6AXISTRACKINGLSM303DLHC()
 {
@@ -547,12 +547,12 @@ DIOI2C6AXISTRACKINGLSM303DLHC::DIOI2C6AXISTRACKINGLSM303DLHC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2C6AXISTRACKINGLSM303DLHC::~DIOI2C6AXISTRACKINGLSM303DLHC()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2C6AXISTRACKINGLSM303DLHC::~DIOI2C6AXISTRACKINGLSM303DLHC()
 {
@@ -564,18 +564,18 @@ DIOI2C6AXISTRACKINGLSM303DLHC::~DIOI2C6AXISTRACKINGLSM303DLHC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C6AXISTRACKINGLSM303DLHC::Ini(XCHAR* localdevicename, int remotedeviceaddressaccelerometer, int remotedeviceaddresscompass, int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  localdevicename :
-* @param[in]  remotedeviceaddressaccelerometer :
-* @param[in]  remotedeviceaddresscompass :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  localdevicename : Localdevicename pointer to use.
+* @param[in]  remotedeviceaddressaccelerometer : Remotedeviceaddressaccelerometer value.
+* @param[in]  remotedeviceaddresscompass : Remotedeviceaddresscompass value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGLSM303DLHC::Ini(XCHAR* localdevicename, int remotedeviceaddressaccelerometer, int remotedeviceaddresscompass, int timeout)
 {
@@ -593,18 +593,18 @@ bool DIOI2C6AXISTRACKINGLSM303DLHC::Ini(XCHAR* localdevicename, int remotedevice
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C6AXISTRACKINGLSM303DLHC::Ini(int port, int remotedeviceaddressaccelerometer, int remotedeviceaddresscompass, int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  port :
-* @param[in]  remotedeviceaddressaccelerometer :
-* @param[in]  remotedeviceaddresscompass :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  port : Port number to use.
+* @param[in]  remotedeviceaddressaccelerometer : Remotedeviceaddressaccelerometer value.
+* @param[in]  remotedeviceaddresscompass : Remotedeviceaddresscompass value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGLSM303DLHC::Ini(int port,  int remotedeviceaddressaccelerometer, int remotedeviceaddresscompass, int timeout)
 {
@@ -625,15 +625,15 @@ bool DIOI2C6AXISTRACKINGLSM303DLHC::Ini(int port,  int remotedeviceaddressaccele
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2C6AXISTRACKINGLSM303DLHC::SetOffset(float x, float y, float z)
 * @brief      Set offset
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  z :
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  z : Z coordinate.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2C6AXISTRACKINGLSM303DLHC::SetOffset(float x, float y, float z)
 {
@@ -644,15 +644,15 @@ void DIOI2C6AXISTRACKINGLSM303DLHC::SetOffset(float x, float y, float z)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2C6AXISTRACKINGLSM303DLHC::SetScale(float x, float y, float z)
 * @brief      Set scale
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  z :
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  z : Z coordinate.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2C6AXISTRACKINGLSM303DLHC::SetScale(float x, float y, float z)
 {
@@ -663,20 +663,20 @@ void DIOI2C6AXISTRACKINGLSM303DLHC::SetScale(float x, float y, float z)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C6AXISTRACKINGLSM303DLHC::Read(XWORD& a_x, XWORD& a_y, XWORD& a_z, XWORD& c_x, XWORD& c_y, XWORD& c_z)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  a_x :
-* @param[in]  a_y :
-* @param[in]  a_z :
-* @param[in]  c_x :
-* @param[in]  c_y :
-* @param[in]  c_z :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  a_x : A x value.
+* @param[in]  a_y : A y value.
+* @param[in]  a_z : A z value.
+* @param[in]  c_x : C x value.
+* @param[in]  c_y : C y value.
+* @param[in]  c_z : C z value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGLSM303DLHC::Read(XWORD& a_x, XWORD& a_y, XWORD& a_z, XWORD& c_x, XWORD& c_y, XWORD& c_z)
 {
@@ -693,16 +693,16 @@ bool DIOI2C6AXISTRACKINGLSM303DLHC::Read(XWORD& a_x, XWORD& a_y, XWORD& a_z, XWO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C6AXISTRACKINGLSM303DLHC::Read(DIOI2CLSM303DLHCVECTOR& a, DIOI2CLSM303DLHCVECTOR& c)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  a :
-* @param[in]  c :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  a : A value.
+* @param[in]  c : C value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGLSM303DLHC::Read(DIOI2CLSM303DLHCVECTOR& a, DIOI2CLSM303DLHCVECTOR& c)
 {
@@ -737,13 +737,13 @@ bool DIOI2C6AXISTRACKINGLSM303DLHC::Read(DIOI2CLSM303DLHCVECTOR& a, DIOI2CLSM303
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float DIOI2C6AXISTRACKINGLSM303DLHC::Heading()
 * @brief      Heading
 * @ingroup    DATAIO
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float DIOI2C6AXISTRACKINGLSM303DLHC::Heading()
 {
@@ -758,15 +758,15 @@ float DIOI2C6AXISTRACKINGLSM303DLHC::Heading()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float DIOI2C6AXISTRACKINGLSM303DLHC::Heading(DIOI2CLSM303DLHCVECTOR& from)
 * @brief      Heading
 * @ingroup    DATAIO
-*
-* @param[in]  from :
-*
-* @return     float :
-*
+* 
+* @param[in]  from : From value.
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float DIOI2C6AXISTRACKINGLSM303DLHC::Heading(DIOI2CLSM303DLHCVECTOR& from)
 {
@@ -803,13 +803,13 @@ float DIOI2C6AXISTRACKINGLSM303DLHC::Heading(DIOI2CLSM303DLHCVECTOR& from)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C6AXISTRACKINGLSM303DLHC::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGLSM303DLHC::End()
 {
@@ -824,12 +824,12 @@ bool DIOI2C6AXISTRACKINGLSM303DLHC::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2C6AXISTRACKINGLSM303DLHC::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2C6AXISTRACKINGLSM303DLHC::Clean()
 {

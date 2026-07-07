@@ -57,13 +57,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         INPCAPTURE_XEVENT::INPCAPTURE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* @fn         INPCAPTURE_XEVENT::INPCAPTURE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    INPUT
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPCAPTURE_XEVENT::INPCAPTURE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
@@ -93,7 +93,7 @@ INPCAPTURE_XEVENT::~INPCAPTURE_XEVENT()
 * @brief      Get VK code
 * @ingroup    INPUT
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD INPCAPTURE_XEVENT::GetVKCode()
@@ -108,7 +108,7 @@ XDWORD INPCAPTURE_XEVENT::GetVKCode()
 * @brief      Set VK code
 * @ingroup    INPUT
 * 
-* @param[in]  vkcode : 
+* @param[in]  vkcode : Vkcode value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE_XEVENT::SetVKCode(XDWORD vkcode)
@@ -123,7 +123,7 @@ void INPCAPTURE_XEVENT::SetVKCode(XDWORD vkcode)
 * @brief      Get scan code
 * @ingroup    INPUT
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD INPCAPTURE_XEVENT::GetScanCode()
@@ -138,7 +138,7 @@ XWORD INPCAPTURE_XEVENT::GetScanCode()
 * @brief      Set scan code
 * @ingroup    INPUT
 * 
-* @param[in]  scancode : 
+* @param[in]  scancode : Scancode value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE_XEVENT::SetScanCode(XWORD scancode)
@@ -153,7 +153,7 @@ void INPCAPTURE_XEVENT::SetScanCode(XWORD scancode)
 * @brief      Get flags
 * @ingroup    INPUT
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD INPCAPTURE_XEVENT::GetFlags()
@@ -168,7 +168,7 @@ XDWORD INPCAPTURE_XEVENT::GetFlags()
 * @brief      Set flags
 * @ingroup    INPUT
 * 
-* @param[in]  flags : 
+* @param[in]  flags : Flags value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE_XEVENT::SetFlags(XWORD flags)
@@ -183,7 +183,7 @@ void INPCAPTURE_XEVENT::SetFlags(XWORD flags)
 * @brief      Is key locked
 * @ingroup    INPUT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCAPTURE_XEVENT::IsKeyLocked()
@@ -198,7 +198,7 @@ bool INPCAPTURE_XEVENT::IsKeyLocked()
 * @brief      Set is key locked
 * @ingroup    INPUT
 * 
-* @param[in]  iskeylocked : 
+* @param[in]  iskeylocked : Iskeylocked value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE_XEVENT::SetIsKeyLocked(bool iskeylocked)
@@ -213,7 +213,7 @@ void INPCAPTURE_XEVENT::SetIsKeyLocked(bool iskeylocked)
 * @brief      Get N keys
 * @ingroup    INPUT
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD INPCAPTURE_XEVENT::GetNKeys()
@@ -228,7 +228,7 @@ XDWORD INPCAPTURE_XEVENT::GetNKeys()
 * @brief      Set N keys
 * @ingroup    INPUT
 * 
-* @param[in]  nkeys : 
+* @param[in]  nkeys : Nkeys value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE_XEVENT::SetNKeys(XDWORD nkeys)
@@ -243,7 +243,7 @@ void INPCAPTURE_XEVENT::SetNKeys(XDWORD nkeys)
 * @brief      Get limit
 * @ingroup    INPUT
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD INPCAPTURE_XEVENT::GetLimit()
@@ -258,7 +258,7 @@ XDWORD INPCAPTURE_XEVENT::GetLimit()
 * @brief      Set limit
 * @ingroup    INPUT
 * 
-* @param[in]  limit : 
+* @param[in]  limit : Limit value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE_XEVENT::SetLimit(XDWORD limit)
@@ -273,7 +273,7 @@ void INPCAPTURE_XEVENT::SetLimit(XDWORD limit)
 * @brief      Get buffer
 * @ingroup    INPUT
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* INPCAPTURE_XEVENT::GetBuffer()
@@ -288,7 +288,7 @@ XBUFFER* INPCAPTURE_XEVENT::GetBuffer()
 * @brief      Get string
 * @ingroup    INPUT
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* INPCAPTURE_XEVENT::GetString()

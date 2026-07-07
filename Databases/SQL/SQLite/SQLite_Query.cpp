@@ -87,13 +87,13 @@ SQLITE_QUERY::~SQLITE_QUERY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_QUERY::Execute()
 * @brief      Execute
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_QUERY::Execute()
 {
@@ -145,7 +145,7 @@ bool SQLITE_QUERY::Execute()
 * @brief      Clear cursor
 * @ingroup    DATABASE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_QUERY::ClearCursor()
@@ -160,10 +160,10 @@ bool SQLITE_QUERY::ClearCursor()
 * @brief      Bind
 * @ingroup    DATABASE
 * 
-* @param[in]  ID : 
-* @param[in]  integer : 
+* @param[in]  ID : Identifier to use.
+* @param[in]  integer : Integer value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_QUERY::Bind(XDWORD ID, int integer)
@@ -179,10 +179,10 @@ bool SQLITE_QUERY::Bind(XDWORD ID, int integer)
 * @brief      Bind
 * @ingroup    DATABASE
 * 
-* @param[in]  ID : 
-* @param[in]  string : 
+* @param[in]  ID : Identifier to use.
+* @param[in]  string : String to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_QUERY::Bind(XDWORD ID, XCHAR* string)
@@ -197,10 +197,10 @@ bool SQLITE_QUERY::Bind(XDWORD ID, XCHAR* string)
 * @brief      Bind
 * @ingroup    DATABASE
 * 
-* @param[in]  ID : 
-* @param[in]  decimal : 
+* @param[in]  ID : Identifier to use.
+* @param[in]  decimal : Decimal value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_QUERY::Bind(XDWORD ID, float decimal)
@@ -215,10 +215,10 @@ bool SQLITE_QUERY::Bind(XDWORD ID, float decimal)
 * @brief      Bind
 * @ingroup    DATABASE
 * 
-* @param[in]  ID : 
-* @param[in]  datetime : 
+* @param[in]  ID : Identifier to use.
+* @param[in]  datetime : Datetime value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_QUERY::Bind(XDWORD ID, XDATETIME& datetime)
@@ -233,7 +233,7 @@ bool SQLITE_QUERY::Bind(XDWORD ID, XDATETIME& datetime)
 * @brief      Is well constructed query
 * @ingroup    DATABASE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_QUERY::IsWellConstructedQuery()
@@ -244,16 +244,16 @@ bool SQLITE_QUERY::IsWellConstructedQuery()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int SQLITE_QUERY::Exec(const char* sql,XDWORD size)
+* 
+* @fn         int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
 * @brief      Exec
 * @ingroup    DATABASE
-*
-* @param[in]  char* sql :
-* @param[in]  size :
-*
-* @return     int :
-*
+* 
+* @param[in]  sql : Sql value.
+* @param[in]  size : Size value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
 {
@@ -393,7 +393,7 @@ int SQLITE_QUERY::Exec(const char* sql, XDWORD size)
 * @brief      Bind parameters to query
 * @ingroup    DATABASE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_QUERY::BindParametersToQuery()
@@ -486,13 +486,13 @@ bool SQLITE_QUERY::BindParametersToQuery()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_RESULT* SQLITE_QUERY::ConstructResult()
 * @brief      Construct result
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_RESULT* :
-*
+* 
+* @return     DB_SQL_RESULT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT* SQLITE_QUERY::ConstructResult()
 {

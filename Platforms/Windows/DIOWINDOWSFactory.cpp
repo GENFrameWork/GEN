@@ -163,15 +163,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMDEVICES* DIOWINDOWSFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE type)
 * @brief      Create stream enum devices
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  type : enum type to created
-*
-* @return     DIOSTREAMENUMDEVICES* : enum created
-*
+* 
+* @return     DIOSTREAMENUMDEVICES* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMDEVICES* DIOWINDOWSFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE type)
 {
@@ -219,15 +219,15 @@ DIOSTREAMENUMDEVICES* DIOWINDOWSFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
 * @brief      Delete stream enum devices
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  enumdevices : enum to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
 {
@@ -245,9 +245,9 @@ bool DIOWINDOWSFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevice
 * @brief      Create stream IO
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  config : 
+* @param[in]  config : Configuration object to use.
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOWINDOWSFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
@@ -349,15 +349,15 @@ DIOSTREAM* DIOWINDOWSFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 * @brief      Delete stream IO
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  diostream : stream IO to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 {

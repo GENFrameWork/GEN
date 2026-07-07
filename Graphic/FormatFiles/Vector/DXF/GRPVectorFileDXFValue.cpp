@@ -85,7 +85,7 @@ GRPVECTORFILEDXFVALUE::~GRPVECTORFILEDXFVALUE()
 * @brief      Get type
 * @ingroup    GRAPHIC
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILEDXFVALUE::GetType()
@@ -100,7 +100,7 @@ int GRPVECTORFILEDXFVALUE::GetType()
 * @brief      Set type
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFVALUE::SetType(int type)
@@ -115,7 +115,7 @@ void GRPVECTORFILEDXFVALUE::SetType(int type)
 * @brief      Get name
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILEDXFVALUE::GetName()
@@ -130,7 +130,7 @@ XSTRING* GRPVECTORFILEDXFVALUE::GetName()
 * @brief      Get data
 * @ingroup    GRAPHIC
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* GRPVECTORFILEDXFVALUE::GetData()
@@ -145,7 +145,7 @@ XVARIANT* GRPVECTORFILEDXFVALUE::GetData()
 * @brief      Get remark
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILEDXFVALUE::GetRemark()

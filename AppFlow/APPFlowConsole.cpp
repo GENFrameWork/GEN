@@ -63,11 +63,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWCONSOLE::APPFLOWCONSOLE()
 * @brief      Constructor of class
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCONSOLE::APPFLOWCONSOLE()
 {
@@ -78,12 +78,12 @@ APPFLOWCONSOLE::APPFLOWCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWCONSOLE::~APPFLOWCONSOLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCONSOLE::~APPFLOWCONSOLE()
 {
@@ -92,15 +92,15 @@ APPFLOWCONSOLE::~APPFLOWCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool APPFLOWCONSOLE::Ini(XSYSTEM* xsystem, XVECTOR<XSTRING*>* execparams)
-* @brief      Ini
+* 
+* @fn         bool APPFLOWCONSOLE::Ini(XVECTOR<XSTRING*>* execparams)
+* @brief      Initialize the object
 * @ingroup    APPFLOW
-*
+* 
 * @param[in]  execparams : Params of command line (params of exec application)
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::Ini(XVECTOR<XSTRING*>* execparams)
 {
@@ -119,12 +119,12 @@ bool APPFLOWCONSOLE::Ini(XVECTOR<XSTRING*>* execparams)
 * @brief      Show line
 * @ingroup    APPFLOW
 * 
-* @param[in]  string : 
-* @param[in]  string2 : 
-* @param[in]  tab : 
-* @param[in]  linefeed : 
+* @param[in]  string : String to use.
+* @param[in]  string2 : String2 value.
+* @param[in]  tab : Tab value.
+* @param[in]  linefeed : Linefeed value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool linefeed)
@@ -156,7 +156,7 @@ bool APPFLOWCONSOLE::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool 
 * @brief      Show blank line
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::Show_BlankLine()
@@ -174,10 +174,10 @@ bool APPFLOWCONSOLE::Show_BlankLine()
 * @brief      Show line direct
 * @ingroup    APPFLOW
 * 
-* @param[in]  string : 
-* @param[in]  lf : 
+* @param[in]  string : String to use.
+* @param[in]  lf : Lf value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::Show_LineDirect(XSTRING& string, bool lf)
@@ -195,9 +195,9 @@ bool APPFLOWCONSOLE::Show_LineDirect(XSTRING& string, bool lf)
 * @brief      Show header
 * @ingroup    APPFLOW
 * 
-* @param[in]  separator : 
+* @param[in]  separator : Separator value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::Show_Header(bool separator)
@@ -217,10 +217,10 @@ bool APPFLOWCONSOLE::Show_Header(bool separator)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool APPFLOWCONSOLE::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::End()
@@ -260,7 +260,7 @@ bool APPFLOWCONSOLE::End()
 * @brief      Get console
 * @ingroup    APPFLOW
 * 
-* @return     XCONSOLE* : 
+* @return     XCONSOLE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE* APPFLOWCONSOLE::GetConsole()
@@ -275,9 +275,9 @@ XCONSOLE* APPFLOWCONSOLE::GetConsole()
 * @brief      Print exit message active
 * @ingroup    APPFLOW
 * 
-* @param[in]  isprintexitmessageactive : 
+* @param[in]  isprintexitmessageactive : Isprintexitmessageactive value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::PrintExitMessage_Active(bool isprintexitmessageactive)
@@ -294,9 +294,9 @@ bool APPFLOWCONSOLE::PrintExitMessage_Active(bool isprintexitmessageactive)
 * @brief      Print exit message
 * @ingroup    APPFLOW
 * 
-* @param[in]  exitmessage : 
+* @param[in]  exitmessage : Exitmessage value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCONSOLE::PrintExitMessage(XSTRING& exitmessage)
@@ -313,12 +313,12 @@ bool APPFLOWCONSOLE::PrintExitMessage(XSTRING& exitmessage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWCONSOLE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWCONSOLE::Clean()
 {

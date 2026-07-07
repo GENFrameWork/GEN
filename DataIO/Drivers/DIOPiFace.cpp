@@ -61,7 +61,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOPIFACE::DIOPIFACE()
+* @fn         DIOPIFACE::DIOPIFACE() : DIOSPIGPIOMCP23S17()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
@@ -92,7 +92,7 @@ DIOPIFACE::~DIOPIFACE()
 * @brief      Configure
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPIFACE::Configure()
@@ -113,9 +113,9 @@ bool DIOPIFACE::Configure()
 * @brief      Read inputs
 * @ingroup    DATAIO
 * 
-* @param[in]  value : 
+* @param[in]  value : Value value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPIFACE::ReadInputs(XBYTE& value)
@@ -144,9 +144,9 @@ bool DIOPIFACE::ReadInputs(XBYTE& value)
 * @brief      Write outputs
 * @ingroup    DATAIO
 * 
-* @param[in]  value : 
+* @param[in]  value : Value value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPIFACE::WriteOutputs(XBYTE value)
@@ -158,10 +158,10 @@ bool DIOPIFACE::WriteOutputs(XBYTE value)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPIFACE::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPIFACE::End()

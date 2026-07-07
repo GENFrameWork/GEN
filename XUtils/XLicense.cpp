@@ -73,11 +73,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLICENSEID::XLICENSEID()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLICENSEID::XLICENSEID()
 {
@@ -86,12 +86,12 @@ XLICENSEID::XLICENSEID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLICENSEID::~XLICENSEID()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLICENSEID::~XLICENSEID()
 {
@@ -105,7 +105,7 @@ XLICENSEID::~XLICENSEID()
 * @brief      get Id
 * @ingroup    XUTILS
 * 
-* @return     XUUID* : 
+* @return     XUUID* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID* XLICENSEID::GetID()
@@ -115,12 +115,12 @@ XUUID* XLICENSEID::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLICENSEID::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLICENSEID::Clean()
 {
@@ -133,11 +133,11 @@ void XLICENSEID::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLICENSE::XLICENSE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLICENSE::XLICENSE()
 {
@@ -151,12 +151,12 @@ XLICENSE::XLICENSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLICENSE::~XLICENSE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLICENSE::~XLICENSE()
 {
@@ -170,15 +170,15 @@ XLICENSE::~XLICENSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::GenerateMachineID(XLICENSEID& licenseID)
 * @brief      Generate machine ID
 * @ingroup    XUTILS
-*
-* @param[in]  licenseID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  licenseID : License ID value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::GenerateMachineID(XLICENSEID& licenseID)
 {
@@ -242,17 +242,17 @@ bool XLICENSE::GenerateMachineID(XLICENSEID& licenseID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::Generate(XLICENSEID& licenseID, XSTRING* applicationID, XBUFFER* license)
 * @brief      Generate
 * @ingroup    XUTILS
-*
-* @param[in]  licenseID :
-* @param[in]  applicationID :
-* @param[in]  license :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  licenseID : License ID value.
+* @param[in]  applicationID : Application ID pointer to use.
+* @param[in]  license : License pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::Generate(XLICENSEID& licenseID, XSTRING* applicationID, XBUFFER* license)
 {
@@ -299,16 +299,16 @@ bool XLICENSE::Generate(XLICENSEID& licenseID, XSTRING* applicationID, XBUFFER* 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::GetBufferKeyFromMachineID(XSTRING& applicationID, XBUFFER& xbufferkey)
 * @brief      Get buffer key from machine ID
 * @ingroup    XUTILS
-*
-* @param[in]  applicationID :
-* @param[in]  xbufferkey :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  applicationID : Application ID value.
+* @param[in]  xbufferkey : Xbufferkey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::GetBufferKeyFromMachineID(XSTRING& applicationID, XBUFFER& xbufferkey)
 {
@@ -333,17 +333,17 @@ bool XLICENSE::GetBufferKeyFromMachineID(XSTRING& applicationID, XBUFFER& xbuffe
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::CipherExpirationDate(bool cipher, XSTRING& applicationID, XSTRING& expirationdate)
 * @brief      Cipher expiration date
 * @ingroup    XUTILS
-*
-* @param[in]  cipher :
-* @param[in]  applicationID :
-* @param[in]  expirationdate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  cipher : Cipher value.
+* @param[in]  applicationID : Application ID value.
+* @param[in]  expirationdate : Expirationdate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::CipherExpirationDate(bool cipher, XSTRING& applicationID, XSTRING& expirationdate)
 {
@@ -404,13 +404,13 @@ bool XLICENSE::CipherExpirationDate(bool cipher, XSTRING& applicationID, XSTRING
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XLICENSE::Application_GetID()
 * @brief      Application get ID
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XLICENSE::Application_GetID()
 {
@@ -419,13 +419,13 @@ XSTRING* XLICENSE::Application_GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* XLICENSE::GetExpirationDateTime()
 * @brief      Get expiration date time
 * @ingroup    XUTILS
-*
-* @return     XDATETIME* :
-*
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XLICENSE::GetExpirationDateTime()
 {
@@ -434,13 +434,13 @@ XDATETIME* XLICENSE::GetExpirationDateTime()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER* XLICENSE::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
-* @return     XBUFFER* :
-*
+* 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* XLICENSE::Get()
 {
@@ -449,15 +449,15 @@ XBUFFER* XLICENSE::Get()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::Get(XSTRING& licensestring)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
-* @param[in]  licensestring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  licensestring : Licensestring value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::Get(XSTRING& licensestring)
 {
@@ -486,18 +486,18 @@ bool XLICENSE::Get(XSTRING& licensestring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::LoadFromFile(XPATH& xpath, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 * @brief      Load from file
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  applicationID :
-* @param[in]  license :
-* @param[in]  expirationdate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  applicationID : Application ID value.
+* @param[in]  license : License pointer to use.
+* @param[in]  expirationdate : Expirationdate pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::LoadFromFile(XPATH& xpath, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 {
@@ -533,20 +533,20 @@ bool XLICENSE::LoadFromFile(XPATH& xpath, XSTRING& applicationID, XBUFFER* licen
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::LoadFromURL(DIOURL& url, int timeout, XSTRING* IPlocal, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 * @brief      Load from URL
 * @ingroup    XUTILS
-*
-* @param[in]  url :
-* @param[in]  timeout :
-* @param[in]  IPlocal :
-* @param[in]  applicationID :
-* @param[in]  license :
-* @param[in]  expirationdate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  IPlocal : I Plocal pointer to use.
+* @param[in]  applicationID : Application ID value.
+* @param[in]  license : License pointer to use.
+* @param[in]  expirationdate : Expirationdate pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::LoadFromURL(DIOURL& url, int timeout, XSTRING* IPlocal, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 {
@@ -572,18 +572,18 @@ bool XLICENSE::LoadFromURL(DIOURL& url, int timeout, XSTRING* IPlocal, XSTRING& 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 * @brief      Load from buffer
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-* @param[in]  applicationID :
-* @param[in]  license :
-* @param[in]  expirationdate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  applicationID : Application ID value.
+* @param[in]  license : License pointer to use.
+* @param[in]  expirationdate : Expirationdate pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER* license, XSTRING* expirationdate)
 {
@@ -638,12 +638,12 @@ bool XLICENSE::LoadFromBuffer(XBUFFER& xbuffer, XSTRING& applicationID, XBUFFER*
 * @brief      check master creation
 * @ingroup    XUTILS
 * 
-* @param[in]  xpath : 
-* @param[in]  licenseID : 
-* @param[in]  applicationID : 
-* @param[in]  expirationdays : 
+* @param[in]  xpath : Path to use.
+* @param[in]  licenseID : License ID value.
+* @param[in]  applicationID : Application ID value.
+* @param[in]  expirationdays : Expirationdays value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING& applicationID, int expirationdays)
@@ -717,15 +717,15 @@ bool XLICENSE::CheckMasterCreation(XPATH& xpath, XLICENSEID& licenseID, XSTRING&
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLICENSE::SetEvent(XLICENSEXEVENT_TYPE type)
 * @brief      Set event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLICENSE::SetEvent(XLICENSEXEVENT_TYPE type)
 {
@@ -739,12 +739,12 @@ bool XLICENSE::SetEvent(XLICENSEXEVENT_TYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLICENSE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLICENSE::Clean()
 {

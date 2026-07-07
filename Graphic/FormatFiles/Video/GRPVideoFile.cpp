@@ -80,8 +80,8 @@ GRPVIDEOFILE_PROPERTYS::GRPVIDEOFILE_PROPERTYS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPVIDEOFILE_PROPERTYS::~GRPVIDEOFILE_PROPERTYS()
 {
   Clean();
@@ -94,8 +94,8 @@ GRPVIDEOFILE_PROPERTYS::~GRPVIDEOFILE_PROPERTYS()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIDEOFILE_PROPERTYS::Clean()
 {
   width     = 0;
@@ -110,11 +110,11 @@ void GRPVIDEOFILE_PROPERTYS::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVIDEOFILE::GRPVIDEOFILE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVIDEOFILE::GRPVIDEOFILE()
 {
@@ -123,12 +123,12 @@ GRPVIDEOFILE::GRPVIDEOFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVIDEOFILE::~GRPVIDEOFILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVIDEOFILE::~GRPVIDEOFILE()
 {
@@ -141,12 +141,12 @@ GRPVIDEOFILE::~GRPVIDEOFILE()
 * @fn         bool GRPVIDEOFILE::Open(XCHAR* xpath)
 * @brief      Open
 * @ingroup    GRAPHIC
-*
-* @param[in]  xpath : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  xpath : Path to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILE::Open(XCHAR* xpath)
 {
   return false;
@@ -156,13 +156,13 @@ bool GRPVIDEOFILE::Open(XCHAR* xpath)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVIDEOFILE::Create(XCHAR* xpath, GRPVIDEOFILE_PROPERTYS& propertys)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    GRAPHIC
 * 
-* @param[in]  xpath : 
-* @param[in]  propertys : 
+* @param[in]  xpath : Path to use.
+* @param[in]  propertys : Propertys value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILE::Create(XCHAR* xpath, GRPVIDEOFILE_PROPERTYS& propertys)
@@ -176,10 +176,10 @@ bool GRPVIDEOFILE::Create(XCHAR* xpath, GRPVIDEOFILE_PROPERTYS& propertys)
 * @fn         GRPVIDEOFILE_PROPERTYS* GRPVIDEOFILE::GetPropertys()
 * @brief      Get propertys
 * @ingroup    GRAPHIC
-*
-* @return     GRPVIDEOFILE_PROPERTYS* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPVIDEOFILE_PROPERTYS* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPVIDEOFILE_PROPERTYS*  GRPVIDEOFILE::GetPropertys()
 {
   return &propertys;
@@ -191,13 +191,13 @@ GRPVIDEOFILE_PROPERTYS*  GRPVIDEOFILE::GetPropertys()
 * @fn         XBYTE* GRPVIDEOFILE::GetDataFrame(XDWORD index_frame, XDWORD& sizeframe)
 * @brief      Get data frame
 * @ingroup    GRAPHIC
-*
-* @param[in]  index_frame : 
-* @param[in]  sizeframe : 
 * 
-* @return     XBYTE* : 
+* @param[in]  index_frame : Index frame value.
+* @param[in]  sizeframe : Sizeframe value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* GRPVIDEOFILE::GetDataFrame(XDWORD index_frame, XDWORD& sizeframe)
 {
   return NULL;
@@ -209,13 +209,13 @@ XBYTE* GRPVIDEOFILE::GetDataFrame(XDWORD index_frame, XDWORD& sizeframe)
 * @fn         bool GRPVIDEOFILE::AddFrame(XBYTE* dataframe, XDWORD dataframesize)
 * @brief      Add frame
 * @ingroup    GRAPHIC
-*
-* @param[in]  dataframe : 
-* @param[in]  dataframesize : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  dataframe : Dataframe pointer to use.
+* @param[in]  dataframesize : Dataframesize value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILE::AddFrame(XBYTE* dataframe, XDWORD dataframesize)
 {
   return false;
@@ -227,10 +227,10 @@ bool GRPVIDEOFILE::AddFrame(XBYTE* dataframe, XDWORD dataframesize)
 * @fn         bool GRPVIDEOFILE::Close()
 * @brief      Close
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILE::Close()
 {
  return false;
@@ -238,12 +238,12 @@ bool GRPVIDEOFILE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVIDEOFILE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIDEOFILE::Clean()
 {

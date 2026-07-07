@@ -60,11 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMPSSE::DIOMPSSE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMPSSE::DIOMPSSE()
 {
@@ -76,12 +76,12 @@ DIOMPSSE::DIOMPSSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMPSSE::~DIOMPSSE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMPSSE::~DIOMPSSE()
 {
@@ -94,13 +94,13 @@ DIOMPSSE::~DIOMPSSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMPSSE_CHIP_TYPE DIOMPSSE::GetChipType()
 * @brief      Get chip type
 * @ingroup    DATAIO
-*
-* @return     DIOMPSSE_CHIP_TYPE :
-*
+* 
+* @return     DIOMPSSE_CHIP_TYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMPSSE_CHIP_TYPE DIOMPSSE::GetChipType()
 {
@@ -109,13 +109,13 @@ DIOMPSSE_CHIP_TYPE DIOMPSSE::GetChipType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOMPSSE::GetChipTypeName()
 * @brief      Get chip type name
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOMPSSE::GetChipTypeName()
 {
@@ -136,13 +136,15 @@ XCHAR* DIOMPSSE::GetChipTypeName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOMPSSE::Open()
+* 
+* @fn         bool DIOMPSSE::Open(int index)
 * @brief      Open
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMPSSE::Open(int index)
 {
@@ -196,13 +198,13 @@ bool DIOMPSSE::Open(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMPSSE::IsOpen()
 * @brief      Is open
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMPSSE::IsOpen()
 {
@@ -291,13 +293,13 @@ int API_EXPORTED libusb_control_transfer(libusb_device_handle *dev_handle, uint8
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMPSSE::Reset()
 * @brief      Reset
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMPSSE::Reset()
 {
@@ -331,13 +333,13 @@ bool DIOMPSSE::Reset()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMPSSE::Close()
 * @brief      Close
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMPSSE::Close()
 {
@@ -356,13 +358,13 @@ bool DIOMPSSE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMPSSE::EnumDevices()
 * @brief      Enum devices
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMPSSE::EnumDevices()
 {
@@ -401,16 +403,16 @@ bool DIOMPSSE::EnumDevices()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMPSSE::SendCommand(XBYTE command, XBUFFER& buffer)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  command :
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  command : Command value.
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMPSSE::SendCommand(XBYTE command, XBUFFER& buffer)
 {
@@ -438,16 +440,16 @@ bool DIOMPSSE::SendCommand(XBYTE command, XBUFFER& buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMPSSE::ReadResponse(XBUFFER& xbuffer, int timeout)
 * @brief      Read response
 * @ingroup    DATAIO
-*
-* @param[in]  xbuffer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMPSSE::ReadResponse(XBUFFER& xbuffer, int timeout)
 {
@@ -461,12 +463,12 @@ bool DIOMPSSE::ReadResponse(XBUFFER& xbuffer, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOMPSSE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOMPSSE::Clean()
 {

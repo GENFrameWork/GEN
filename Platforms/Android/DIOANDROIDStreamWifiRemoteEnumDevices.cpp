@@ -75,7 +75,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES()
+* @fn         DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES() : DIOSTREAMWIFIREMOTEENUMDEVICES() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -130,7 +130,7 @@ DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::~DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES()
 * @brief      Search
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::Search()
@@ -155,9 +155,9 @@ bool DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::Search()
 * @brief      Stop search
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  waitend : 
+* @param[in]  waitend : Waitend value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::StopSearch(bool waitend)
@@ -189,7 +189,7 @@ bool DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::StopSearch(bool waitend)
 * @brief      Is searching
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::IsSearching()
@@ -209,7 +209,7 @@ bool DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::IsSearching()
 * @brief      Thread enum devices
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMWIFIREMOTEENUMDEVICES::ThreadEnumDevices(void* param)

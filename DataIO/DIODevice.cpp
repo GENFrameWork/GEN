@@ -57,8 +57,8 @@
 * @fn         DIODEVICE::DIODEVICE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIODEVICE::DIODEVICE()
 { 
   Clean();                              
@@ -71,8 +71,8 @@ DIODEVICE::DIODEVICE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIODEVICE::~DIODEVICE()            
 { 
   Clean();                              
@@ -82,12 +82,12 @@ DIODEVICE::~DIODEVICE()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODEVICE::Ini(void)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICE::Ini(void)
 {
   isinitialized = true;
@@ -100,10 +100,10 @@ bool DIODEVICE::Ini(void)
 * @fn         bool DIODEVICE::IsInitialized()
 * @brief      Is initialized
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICE::IsInitialized()            
 { 
   return isinitialized;                 
@@ -113,12 +113,12 @@ bool DIODEVICE::IsInitialized()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODEVICE::End(void)
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICE::End(void)
 {
   isinitialized = false;
@@ -132,8 +132,8 @@ bool DIODEVICE::End(void)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIODEVICE::Clean()
 {
   isinitialized = false;

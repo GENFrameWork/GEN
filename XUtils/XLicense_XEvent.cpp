@@ -53,15 +53,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XLICENSE_XEVENT::XLICENSE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         XLICENSE_XEVENT::XLICENSE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  subject :
-* @param[in]  type :
-* @param[in]  family :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLICENSE_XEVENT::XLICENSE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 {
@@ -70,12 +70,12 @@ XLICENSE_XEVENT::XLICENSE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family):
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLICENSE_XEVENT::~XLICENSE_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLICENSE_XEVENT::~XLICENSE_XEVENT()
 {
@@ -84,13 +84,13 @@ XLICENSE_XEVENT::~XLICENSE_XEVENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLICENSE* XLICENSE_XEVENT::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
-* @return     XLICENSE* :
-*
+* 
+* @return     XLICENSE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLICENSE* XLICENSE_XEVENT::Get()
 {
@@ -99,13 +99,13 @@ XLICENSE* XLICENSE_XEVENT::Get()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLICENSE_XEVENT::Set(XLICENSE* xlicense)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  xlicense :
-*
+* 
+* @param[in]  xlicense : Xlicense pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLICENSE_XEVENT::Set(XLICENSE* xlicense)
 {
@@ -114,12 +114,12 @@ void XLICENSE_XEVENT::Set(XLICENSE* xlicense)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLICENSE_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLICENSE_XEVENT::Clean()
 {

@@ -57,8 +57,8 @@
 * @fn         UI_ELEMENT_PROGRESS_RADIAL::UI_ELEMENT_PROGRESS_RADIAL()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_PROGRESS_RADIAL::UI_ELEMENT_PROGRESS_RADIAL()
 {
   Clean();
@@ -74,8 +74,8 @@ UI_ELEMENT_PROGRESS_RADIAL::UI_ELEMENT_PROGRESS_RADIAL()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_PROGRESS_RADIAL::~UI_ELEMENT_PROGRESS_RADIAL()
 {
   Clean();
@@ -87,10 +87,10 @@ UI_ELEMENT_PROGRESS_RADIAL::~UI_ELEMENT_PROGRESS_RADIAL()
 * @fn         float UI_ELEMENT_PROGRESS_RADIAL::GetLevel()
 * @brief      Get level
 * @ingroup    USERINTERFACE
-*
-* @return     float : current level in the range [0 .. 100]
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     float : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 float UI_ELEMENT_PROGRESS_RADIAL::GetLevel()
 {
   return level;
@@ -102,10 +102,10 @@ float UI_ELEMENT_PROGRESS_RADIAL::GetLevel()
 * @fn         void UI_ELEMENT_PROGRESS_RADIAL::SetLevel(float level)
 * @brief      Set level (clamped to [0 .. 100])
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  level : new level
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_RADIAL::SetLevel(float level)
 {
   if(level < 0)   level = 0;
@@ -120,10 +120,10 @@ void UI_ELEMENT_PROGRESS_RADIAL::SetLevel(float level)
 * @fn         double UI_ELEMENT_PROGRESS_RADIAL::GetStartAngle()
 * @brief      Get start angle (degrees)
 * @ingroup    USERINTERFACE
-*
-* @return     double : start angle, in degrees (-90 = top / 12 o'clock)
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT_PROGRESS_RADIAL::GetStartAngle()
 {
   return startangle;
@@ -135,10 +135,10 @@ double UI_ELEMENT_PROGRESS_RADIAL::GetStartAngle()
 * @fn         void UI_ELEMENT_PROGRESS_RADIAL::SetStartAngle(double startangle)
 * @brief      Set start angle (degrees)
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  startangle : start angle in degrees
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_RADIAL::SetStartAngle(double startangle)
 {
   this->startangle = startangle;
@@ -150,10 +150,10 @@ void UI_ELEMENT_PROGRESS_RADIAL::SetStartAngle(double startangle)
 * @fn         double UI_ELEMENT_PROGRESS_RADIAL::GetSweepAngle()
 * @brief      Get sweep angle (degrees)
 * @ingroup    USERINTERFACE
-*
-* @return     double : sweep angle in degrees (positive = clockwise; 360 = full ring)
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT_PROGRESS_RADIAL::GetSweepAngle()
 {
   return sweepangle;
@@ -165,10 +165,10 @@ double UI_ELEMENT_PROGRESS_RADIAL::GetSweepAngle()
 * @fn         void UI_ELEMENT_PROGRESS_RADIAL::SetSweepAngle(double sweepangle)
 * @brief      Set sweep angle (degrees)
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  sweepangle : sweep angle in degrees
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_RADIAL::SetSweepAngle(double sweepangle)
 {
   this->sweepangle = sweepangle;
@@ -180,10 +180,10 @@ void UI_ELEMENT_PROGRESS_RADIAL::SetSweepAngle(double sweepangle)
 * @fn         double UI_ELEMENT_PROGRESS_RADIAL::GetThickness()
 * @brief      Get ring thickness (px). 0 means auto (a fraction of the radius)
 * @ingroup    USERINTERFACE
-*
-* @return     double : ring thickness in pixels
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT_PROGRESS_RADIAL::GetThickness()
 {
   return thickness;
@@ -195,10 +195,10 @@ double UI_ELEMENT_PROGRESS_RADIAL::GetThickness()
 * @fn         void UI_ELEMENT_PROGRESS_RADIAL::SetThickness(double thickness)
 * @brief      Set ring thickness (px). 0 means auto
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  thickness : ring thickness in pixels (0 = auto)
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_RADIAL::SetThickness(double thickness)
 {
   if(thickness < 0) thickness = 0;
@@ -213,7 +213,7 @@ void UI_ELEMENT_PROGRESS_RADIAL::SetThickness(double thickness)
 * @brief      get round cap
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_PROGRESS_RADIAL::GetRoundCap()
@@ -223,14 +223,14 @@ bool UI_ELEMENT_PROGRESS_RADIAL::GetRoundCap()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-
-@fn         void UI_ELEMENT_PROGRESS_RADIAL::SetRoundCap(bool roundcap)
-@brief      set round cap
-@ingroup    USERINTERFACE
-
-@param[in]  roundcap : 
-
---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void UI_ELEMENT_PROGRESS_RADIAL::SetRoundCap(bool roundcap)
+* @brief      set round cap
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  roundcap : true to draw the radial progress with rounded caps; false otherwise.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_RADIAL::SetRoundCap(bool roundcap)    
 { 
   this->roundcap = roundcap; 
@@ -242,10 +242,10 @@ void UI_ELEMENT_PROGRESS_RADIAL::SetRoundCap(bool roundcap)
 * @fn         UI_COLOR* UI_ELEMENT_PROGRESS_RADIAL::GetLineColor()
 * @brief      Get the value arc gradient END color (gradient START is GetColor())
 * @ingroup    USERINTERFACE
-*
-* @return     UI_COLOR* : the line (gradient end) color
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_COLOR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR* UI_ELEMENT_PROGRESS_RADIAL::GetLineColor()
 {
   return &linecolor;
@@ -253,11 +253,14 @@ UI_COLOR* UI_ELEMENT_PROGRESS_RADIAL::GetLineColor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         UI_COLOR* UI_ELEMENT_PROGRESS_RADIAL::GetGradientColor()
 * @brief      Get the value arc gradient END color (no gradient is drawn when its alpha is 0)
 * @ingroup    USERINTERFACE
-* @return     UI_COLOR* :
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @return     UI_COLOR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR* UI_ELEMENT_PROGRESS_RADIAL::GetGradientColor()
 {
   return &gradientcolor;
@@ -265,11 +268,14 @@ UI_COLOR* UI_ELEMENT_PROGRESS_RADIAL::GetGradientColor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int UI_ELEMENT_PROGRESS_RADIAL::GetGradientMode()
 * @brief      Get the gradient mode (FILL / TRACK)
 * @ingroup    USERINTERFACE
-* @return     int :
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_ELEMENT_PROGRESS_RADIAL::GetGradientMode()
 {
   return gradientmode;
@@ -277,11 +283,14 @@ int UI_ELEMENT_PROGRESS_RADIAL::GetGradientMode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void UI_ELEMENT_PROGRESS_RADIAL::SetGradientMode(int gradientmode)
 * @brief      Set the gradient mode (FILL / TRACK)
 * @ingroup    USERINTERFACE
-* @param[in]  gradientmode :
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  gradientmode : Gradientmode value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_RADIAL::SetGradientMode(int gradientmode)
 {
   this->gradientmode = gradientmode;
@@ -294,8 +303,8 @@ void UI_ELEMENT_PROGRESS_RADIAL::SetGradientMode(int gradientmode)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_RADIAL::Clean()
 {
   level       = 0.0f;

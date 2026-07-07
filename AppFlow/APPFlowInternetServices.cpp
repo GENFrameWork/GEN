@@ -75,11 +75,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWINTERNETSERVICES::APPFLOWINTERNETSERVICES()
 * @brief      Constructor of class
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWINTERNETSERVICES::APPFLOWINTERNETSERVICES()
 {
@@ -108,12 +108,12 @@ APPFLOWINTERNETSERVICES::APPFLOWINTERNETSERVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWINTERNETSERVICES::~APPFLOWINTERNETSERVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWINTERNETSERVICES::~APPFLOWINTERNETSERVICES()
 {
@@ -165,16 +165,16 @@ APPFLOWINTERNETSERVICES::~APPFLOWINTERNETSERVICES()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip = 0)
-* @brief      Ini
+* @fn         bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
+* @brief      Initialize the object
 * @ingroup    APPFLOW
-*
-* @param[in]  cfg : 
-* @param[in]  timeoutgetpublicip : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  cfg : Configuration object to use.
+* @param[in]  timeoutgetpublicip : Timeoutgetpublicip value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
 {
   bool status = false;
@@ -319,13 +319,13 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWINTERNETSERVICES::HaveInternetConnection()
 * @brief      Have internet connection
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::HaveInternetConnection()
 {
@@ -334,13 +334,13 @@ bool APPFLOWINTERNETSERVICES::HaveInternetConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWINTERNETSERVICES::GetAutomaticLocalIP()
 * @brief      Get automatic local IP
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWINTERNETSERVICES::GetAutomaticLocalIP()
 {
@@ -354,7 +354,7 @@ XSTRING* APPFLOWINTERNETSERVICES::GetAutomaticLocalIP()
 * @brief      Get all local IP
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWINTERNETSERVICES::GetAllLocalIP()
@@ -364,13 +364,13 @@ XSTRING* APPFLOWINTERNETSERVICES::GetAllLocalIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* APPFLOWINTERNETSERVICES::GetPublicIP()
 * @brief      Get public IP
 * @ingroup    APPFLOW
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWINTERNETSERVICES::GetPublicIP()
 {
@@ -384,11 +384,11 @@ XSTRING* APPFLOWINTERNETSERVICES::GetPublicIP()
 * @brief      Change cadence check
 * @ingroup    APPFLOW
 * 
-* @param[in]  taskID : 
-* @param[in]  timecadenceseconds : 
-* @param[in]  startimmediatelycycles : 
+* @param[in]  taskID : Task ID value.
+* @param[in]  timecadenceseconds : Timecadenceseconds value.
+* @param[in]  startimmediatelycycles : Startimmediatelycycles value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::ChangeCadenceCheck(APPFLOWINTERNETSERVICES_TASKID taskID, int timecadenceseconds, bool startimmediatelycycles)
@@ -424,16 +424,16 @@ bool APPFLOWINTERNETSERVICES::ChangeCadenceCheck(APPFLOWINTERNETSERVICES_TASKID 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetLocal(bool active_daylightsave, bool active_meridian)
 * @brief      Date time get local
 * @ingroup    APPFLOW
-*
-* @param[in]  active_daylightsave : 
-* @param[in]  active_meridian : 
-*
-* @return     XDATETIME* : 
-*
+* 
+* @param[in]  active_daylightsave : Active daylightsave value.
+* @param[in]  active_meridian : Active meridian value.
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetLocal(bool active_daylightsave, bool active_meridian)
 {
@@ -479,13 +479,13 @@ XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetLocal(bool active_daylightsave, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetUTC()
 * @brief      Date time get UTC
 * @ingroup    APPFLOW
-*
-* @return     XDATETIME* : 
-*
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetUTC()
 {
@@ -511,13 +511,13 @@ XDATETIME* APPFLOWINTERNETSERVICES::DateTime_GetUTC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWINTERNETSERVICES::DateTime_GetMeridian()
 * @brief      Date time get meridian
 * @ingroup    APPFLOW
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWINTERNETSERVICES::DateTime_GetMeridian()
 {
@@ -537,13 +537,13 @@ int APPFLOWINTERNETSERVICES::DateTime_GetMeridian()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTIONS* APPFLOWINTERNETSERVICES::GetCheckTCPIPConnections()
 * @brief      Get check TCPIP connections
 * @ingroup    APPFLOW
-*
-* @return     DIOCHECKTCPIPCONNECTIONS* :
-*
+* 
+* @return     DIOCHECKTCPIPCONNECTIONS* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTIONS* APPFLOWINTERNETSERVICES::GetCheckTCPIPConnections()
 {
@@ -552,13 +552,13 @@ DIOCHECKTCPIPCONNECTIONS* APPFLOWINTERNETSERVICES::GetCheckTCPIPConnections()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKINTERNETCONNECTION* APPFLOWINTERNETSERVICES::GetCheckInternetConnection()
 * @brief      Get check internet connection
 * @ingroup    APPFLOW
-*
-* @return     DIOCHECKINTERNETCONNECTION* :
-*
+* 
+* @return     DIOCHECKINTERNETCONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKINTERNETCONNECTION* APPFLOWINTERNETSERVICES::GetCheckInternetConnection()
 {
@@ -567,13 +567,13 @@ DIOCHECKINTERNETCONNECTION* APPFLOWINTERNETSERVICES::GetCheckInternetConnection(
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODYNDNS_MANAGER* APPFLOWINTERNETSERVICES::GetDynDNSManager()
 * @brief      Get dyn DNS manager
 * @ingroup    APPFLOW
-*
-* @return     DIODYNDNS_MANAGER* :
-*
+* 
+* @return     DIODYNDNS_MANAGER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODYNDNS_MANAGER* APPFLOWINTERNETSERVICES::GetDynDNSManager()
 {
@@ -587,7 +587,7 @@ DIODYNDNS_MANAGER* APPFLOWINTERNETSERVICES::GetDynDNSManager()
 * @brief      Get X scheduler
 * @ingroup    APPFLOW
 * 
-* @return     XSCHEDULER* : 
+* @return     XSCHEDULER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULER* APPFLOWINTERNETSERVICES::GetXScheduler()
@@ -602,7 +602,7 @@ XSCHEDULER* APPFLOWINTERNETSERVICES::GetXScheduler()
 * @brief      Is actived exit
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::IsActivedExit()
@@ -625,9 +625,9 @@ bool APPFLOWINTERNETSERVICES::IsActivedExit()
 * @brief      Set actived exit
 * @ingroup    APPFLOW
 * 
-* @param[in]  actived : 
+* @param[in]  actived : Actived value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::SetActivedExit(bool actived)
@@ -645,13 +645,13 @@ bool APPFLOWINTERNETSERVICES::SetActivedExit(bool actived)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWINTERNETSERVICES::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::End()
 {
@@ -681,7 +681,7 @@ bool APPFLOWINTERNETSERVICES::End()
 * @brief      Check internet connection
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::CheckInternetConnection()
@@ -707,13 +707,13 @@ bool APPFLOWINTERNETSERVICES::CheckInternetConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWINTERNETSERVICES::CheckInternetStatus()
 * @brief      Check internet status
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::CheckInternetStatus()
 {
@@ -787,11 +787,13 @@ bool APPFLOWINTERNETSERVICES::CheckInternetStatus()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool APPFLOWINTERNETSERVICES::UpdateIPs()
+* @fn         bool APPFLOWINTERNETSERVICES::UpdateIPs(XSTRING& actualpublicIP)
 * @brief      Update I ps
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  actualpublicIP : Actualpublic IP value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::UpdateIPs(XSTRING& actualpublicIP)
@@ -919,11 +921,13 @@ bool APPFLOWINTERNETSERVICES::UpdateIPs(XSTRING& actualpublicIP)
  #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool APPFLOWINTERNETSERVICES::UpdateDynDNSURLs()
+* @fn         bool APPFLOWINTERNETSERVICES::UpdateDynDNSURLs(XSTRING& actualpublicIP)
 * @brief      Update dyn DNSUR ls
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  actualpublicIP : Actualpublic IP value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::UpdateDynDNSURLs(XSTRING& actualpublicIP)
@@ -945,15 +949,15 @@ bool APPFLOWINTERNETSERVICES::UpdateDynDNSURLs(XSTRING& actualpublicIP)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWINTERNETSERVICES::AdjustTimerByNTP(XVECTOR<XSTRING*>* servers)
 * @brief      Adjust timer by NTP
 * @ingroup    APPFLOW
-*
-* @param[in]  servers :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  servers : Servers pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES::AdjustTimerByNTP(XVECTOR<XSTRING*>* servers)
 {
@@ -1022,14 +1026,14 @@ bool APPFLOWINTERNETSERVICES::AdjustTimerByNTP(XVECTOR<XSTRING*>* servers)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWINTERNETSERVICES::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 * @brief      Handle event scheduler
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
-* @param[in]  event : 
-*
+* 
+* @param[in]  event : Event to process.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 {
@@ -1098,14 +1102,14 @@ void APPFLOWINTERNETSERVICES::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWINTERNETSERVICES::HandleEvent(XEVENT* xevent)
 * @brief      Handle event
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
-* @param[in]  xevent :
-*
+* 
+* @param[in]  xevent : Xevent pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES::HandleEvent(XEVENT* xevent)
 {
@@ -1124,12 +1128,12 @@ void APPFLOWINTERNETSERVICES::HandleEvent(XEVENT* xevent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWINTERNETSERVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES::Clean()
 {

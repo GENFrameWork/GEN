@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDSHAREDMEMORY::XANDROIDSHAREDMEMORY()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDSHAREDMEMORY::XANDROIDSHAREDMEMORY()
 {
@@ -66,12 +66,12 @@ XANDROIDSHAREDMEMORY::XANDROIDSHAREDMEMORY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDSHAREDMEMORY::~XANDROIDSHAREDMEMORY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDSHAREDMEMORY::~XANDROIDSHAREDMEMORY()
 {

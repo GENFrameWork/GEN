@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOAIOBIMAINBOARD::DIOAIOBIMAINBOARD()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOAIOBIMAINBOARD::DIOAIOBIMAINBOARD()
 {
@@ -66,12 +66,12 @@ DIOAIOBIMAINBOARD::DIOAIOBIMAINBOARD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOAIOBIMAINBOARD::~DIOAIOBIMAINBOARD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOAIOBIMAINBOARD::~DIOAIOBIMAINBOARD()
 {
@@ -80,13 +80,13 @@ DIOAIOBIMAINBOARD::~DIOAIOBIMAINBOARD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::Ini()
 {
@@ -161,13 +161,13 @@ bool DIOAIOBIMAINBOARD::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::IsIni()
 * @brief      Is ini
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::IsIni()
 {
@@ -176,17 +176,17 @@ bool DIOAIOBIMAINBOARD::IsIni()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SetModeHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int pin, bool isinput)
 * @brief      Set mode header pin
 * @ingroup    DATAIO
-*
-* @param[in]  header :
-* @param[in]  pin :
-* @param[in]  isinput :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  header : Header value.
+* @param[in]  pin : Pin value.
+* @param[in]  isinput : Isinput value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SetModeHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int pin, bool isinput)
 {
@@ -234,16 +234,16 @@ bool DIOAIOBIMAINBOARD::SetModeHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int pi
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::GetStatusHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int pin)
 * @brief      Get status header pin
 * @ingroup    DATAIO
-*
-* @param[in]  header :
-* @param[in]  pin :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  header : Header value.
+* @param[in]  pin : Pin value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::GetStatusHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int pin)
 {
@@ -291,17 +291,17 @@ bool DIOAIOBIMAINBOARD::GetStatusHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SetStatusHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int pin, bool active)
 * @brief      Set status header pin
 * @ingroup    DATAIO
-*
-* @param[in]  header :
-* @param[in]  pin :
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  header : Header value.
+* @param[in]  pin : Pin value.
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SetStatusHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int pin, bool active)
 {
@@ -349,15 +349,15 @@ bool DIOAIOBIMAINBOARD::SetStatusHeaderPin(DIOAIOBIMAINBOARD_HEADER header, int 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SetP4HeaderForExternalButton(bool on)
 * @brief      Set P4 header for external button
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SetP4HeaderForExternalButton(bool on)
 {
@@ -376,13 +376,13 @@ bool DIOAIOBIMAINBOARD::SetP4HeaderForExternalButton(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::IsButtonAPressed()
 * @brief      Is button A pressed
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::IsButtonAPressed()
 {
@@ -392,13 +392,13 @@ bool DIOAIOBIMAINBOARD::IsButtonAPressed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::IsButtonBPressed()
 * @brief      Is button B pressed
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::IsButtonBPressed()
 {
@@ -408,15 +408,15 @@ bool DIOAIOBIMAINBOARD::IsButtonBPressed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SetLedA(bool on)
 * @brief      Set led a
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SetLedA(bool on)
 {
@@ -426,15 +426,15 @@ bool DIOAIOBIMAINBOARD::SetLedA(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SetLedB(bool on)
 * @brief      Set led b
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SetLedB(bool on)
 {
@@ -444,15 +444,15 @@ bool DIOAIOBIMAINBOARD::SetLedB(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::GetDigitalInput(XBYTE& data)
 * @brief      Get digital input
 * @ingroup    DATAIO
-*
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::GetDigitalInput(XBYTE& data)
 {
@@ -464,16 +464,16 @@ bool DIOAIOBIMAINBOARD::GetDigitalInput(XBYTE& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SetDigitalOutput(XBYTE bit, bool on)
 * @brief      Set digital output
 * @ingroup    DATAIO
-*
-* @param[in]  bit :
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  bit : Bit value.
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SetDigitalOutput(XBYTE bit, bool on)
 {
@@ -496,15 +496,15 @@ bool DIOAIOBIMAINBOARD::SetDigitalOutput(XBYTE bit, bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SwitchReleK1(bool on)
 * @brief      Switch rele K1
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SwitchReleK1(bool on)
 {
@@ -520,15 +520,15 @@ bool DIOAIOBIMAINBOARD::SwitchReleK1(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SwitchReleK2(bool on)
 * @brief      Switch rele K2
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SwitchReleK2(bool on)
 {
@@ -544,15 +544,15 @@ bool DIOAIOBIMAINBOARD::SwitchReleK2(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SwitchReleK3(bool on)
 * @brief      Switch rele K3
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SwitchReleK3(bool on)
 {
@@ -568,16 +568,16 @@ bool DIOAIOBIMAINBOARD::SwitchReleK3(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::EEProm(bool write, XBUFFER& xbuffer)
 * @brief      EE prom
 * @ingroup    DATAIO
-*
-* @param[in]  write :
-* @param[in]  xbuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  write : Write value.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::EEProm(bool write, XBUFFER& xbuffer)
 {
@@ -595,13 +595,13 @@ bool DIOAIOBIMAINBOARD::EEProm(bool write, XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOGPIO* DIOAIOBIMAINBOARD::GetGPIO()
 * @brief      Get GPIO
 * @ingroup    DATAIO
-*
-* @return     DIOGPIO* :
-*
+* 
+* @return     DIOGPIO* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOGPIO* DIOAIOBIMAINBOARD::GetGPIO()
 {
@@ -610,18 +610,18 @@ DIOGPIO* DIOAIOBIMAINBOARD::GetGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::SetPWM(XBYTE channel, XWORD on, XWORD off, bool wait)
 * @brief      Set PWM
 * @ingroup    DATAIO
-*
-* @param[in]  channel :
-* @param[in]  on :
-* @param[in]  off :
-* @param[in]  wait :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  channel : Channel value.
+* @param[in]  on : On value.
+* @param[in]  off : Off value.
+* @param[in]  wait : Wait value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::SetPWM(XBYTE channel, XWORD on, XWORD off, bool wait)
 {
@@ -631,13 +631,13 @@ bool DIOAIOBIMAINBOARD::SetPWM(XBYTE channel, XWORD on, XWORD off, bool wait)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::ResetMicroControler()
 * @brief      Reset micro controler
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::ResetMicroControler()
 {
@@ -660,13 +660,13 @@ bool DIOAIOBIMAINBOARD::ResetMicroControler()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAIOBIMAINBOARD::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAIOBIMAINBOARD::End()
 {
@@ -712,12 +712,12 @@ bool DIOAIOBIMAINBOARD::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAIOBIMAINBOARD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAIOBIMAINBOARD::Clean()
 {

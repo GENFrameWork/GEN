@@ -93,13 +93,13 @@ MAINPROC::~MAINPROC()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool MAINPROC::Ini(APPFLOWMAIN* appmain, APPFLOWBASE_MODE_TYPE applicationmode)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    MAIN_PROCEDURE
 * 
-* @param[in]  appmain : 
-* @param[in]  applicationmode : 
+* @param[in]  appmain : Appmain pointer to use.
+* @param[in]  applicationmode : Applicationmode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::Ini(APPFLOWMAIN* appmain, APPFLOWBASE_MODE_TYPE applicationmode)
@@ -114,7 +114,7 @@ bool MAINPROC::Ini(APPFLOWMAIN* appmain, APPFLOWBASE_MODE_TYPE applicationmode)
 * @brief      Update
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::Update()
@@ -126,10 +126,10 @@ bool MAINPROC::Update()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool MAINPROC::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::End()
@@ -148,7 +148,7 @@ bool MAINPROC::End()
 * @brief      Get handle
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     void* : 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* MAINPROC::GetHandle()
@@ -166,10 +166,10 @@ void* MAINPROC::GetHandle()
 * @brief      Create params
 * @ingroup    MAIN_PROCEDURE
 * 
-* @param[in]  nparams : 
-* @param[in]  params[] : 
+* @param[in]  nparams : Nparams value.
+* @param[in]  params : Params pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::CreateParams(int nparams, char* params[])
@@ -194,10 +194,10 @@ bool MAINPROC::CreateParams(int nparams, char* params[])
 * @brief      Create params
 * @ingroup    MAIN_PROCEDURE
 * 
-* @param[in]  nparams : 
-* @param[in]  params[] : 
+* @param[in]  nparams : Nparams value.
+* @param[in]  params : Params pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::CreateParams(int nparams, XCHAR* params[])
@@ -222,10 +222,10 @@ bool MAINPROC::CreateParams(int nparams, XCHAR* params[])
 * @brief      Create params
 * @ingroup    MAIN_PROCEDURE
 * 
-* @param[in]  nparams : 
-* @param[in]  params : 
+* @param[in]  nparams : Nparams value.
+* @param[in]  params : Params pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::CreateParams(int nparams, XCHAR* params)
@@ -250,9 +250,9 @@ bool MAINPROC::CreateParams(int nparams, XCHAR* params)
 * @brief      Create params
 * @ingroup    MAIN_PROCEDURE
 * 
-* @param[in]  commandline : 
+* @param[in]  commandline : Commandline pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::CreateParams(XCHAR* commandline)
@@ -290,7 +290,7 @@ bool MAINPROC::CreateParams(XCHAR* commandline)
 * @brief      Set handle
 * @ingroup    MAIN_PROCEDURE
 * 
-* @param[in]  handle : 
+* @param[in]  handle : Handle pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void MAINPROC::SetHandle(void* handle)
@@ -305,7 +305,7 @@ void MAINPROC::SetHandle(void* handle)
 * @brief      Get X path exec
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* MAINPROC::GetXPathExec()
@@ -323,7 +323,7 @@ XPATH* MAINPROC::GetXPathExec()
 * @brief      Factorys ini
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::Factorys_Ini()
@@ -338,7 +338,7 @@ bool MAINPROC::Factorys_Ini()
 * @brief      Factorys end
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::Factorys_End()
@@ -353,7 +353,7 @@ bool MAINPROC::Factorys_End()
 * @brief      Get app main
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     APPFLOWMAIN* : 
+* @return     APPFLOWMAIN* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWMAIN* MAINPROC::GetAppMain()
@@ -371,7 +371,7 @@ APPFLOWMAIN* MAINPROC::GetAppMain()
 * @brief      Get exec params
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* MAINPROC::GetExecParams()
@@ -386,7 +386,7 @@ XVECTOR<XSTRING*>* MAINPROC::GetExecParams()
 * @brief      Delete all exec params
 * @ingroup    MAIN_PROCEDURE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROC::DeleteAllExecParams()

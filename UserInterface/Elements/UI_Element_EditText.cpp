@@ -60,8 +60,8 @@
 * @fn         UI_ELEMENT_EDITTEXT::UI_ELEMENT_EDITTEXT()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_EDITTEXT::UI_ELEMENT_EDITTEXT()    
 { 
   Clean();   
@@ -80,8 +80,8 @@ UI_ELEMENT_EDITTEXT::UI_ELEMENT_EDITTEXT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_EDITTEXT::~UI_ELEMENT_EDITTEXT()    
 { 
   if(cursor_xtimerblink)
@@ -99,10 +99,10 @@ UI_ELEMENT_EDITTEXT::~UI_ELEMENT_EDITTEXT()
 * @fn         bool UI_ELEMENT_EDITTEXT::Cursor_IsVisible()
 * @brief      Cursor is visible
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_EDITTEXT::Cursor_IsVisible()
 {
   return cursor_isvisible;
@@ -114,12 +114,12 @@ bool UI_ELEMENT_EDITTEXT::Cursor_IsVisible()
 * @fn         bool UI_ELEMENT_EDITTEXT::Cursor_SetVisible(bool on)
 * @brief      Cursor set visible
 * @ingroup    USERINTERFACE
-*
-* @param[in]  on : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  on : On value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_EDITTEXT::Cursor_SetVisible(bool on)
 {
   this->cursor_isvisible = on;
@@ -133,10 +133,10 @@ bool UI_ELEMENT_EDITTEXT::Cursor_SetVisible(bool on)
 * @fn         XTIMER* UI_ELEMENT_EDITTEXT::Cursor_GetXTimerBlink()
 * @brief      Cursor get X timer blink
 * @ingroup    USERINTERFACE
-*
-* @return     XTIMER* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* UI_ELEMENT_EDITTEXT::Cursor_GetXTimerBlink()
 {
   return cursor_xtimerblink;
@@ -148,10 +148,10 @@ XTIMER* UI_ELEMENT_EDITTEXT::Cursor_GetXTimerBlink()
 * @fn         XDWORD UI_ELEMENT_EDITTEXT::Cursor_GetTimeBlink()
 * @brief      Cursor get time blink
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_ELEMENT_EDITTEXT::Cursor_GetTimeBlink()
 {
   return  cursor_timeblink;
@@ -163,10 +163,10 @@ XDWORD UI_ELEMENT_EDITTEXT::Cursor_GetTimeBlink()
 * @fn         void UI_ELEMENT_EDITTEXT::Cursor_SetTimeBlink(XDWORD timeblink)
 * @brief      Cursor set time blink
 * @ingroup    USERINTERFACE
-*
-* @param[in]  timeblink : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  timeblink : Timeblink value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_EDITTEXT::Cursor_SetTimeBlink(XDWORD timeblink)
 {
   this->cursor_timeblink = timeblink;
@@ -178,10 +178,10 @@ void UI_ELEMENT_EDITTEXT::Cursor_SetTimeBlink(XDWORD timeblink)
 * @fn         bool UI_ELEMENT_EDITTEXT::Cursor_GetStateBlink()
 * @brief      Cursor get state blink
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_EDITTEXT::Cursor_GetStateBlink()
 {
   return cursor_stateblink;
@@ -193,8 +193,8 @@ bool UI_ELEMENT_EDITTEXT::Cursor_GetStateBlink()
 * @fn         void UI_ELEMENT_EDITTEXT::Cursor_ChangeStateBlink()
 * @brief      Cursor change state blink
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void  UI_ELEMENT_EDITTEXT::Cursor_ChangeStateBlink()
 {
   cursor_stateblink =!cursor_stateblink;
@@ -207,8 +207,8 @@ void  UI_ELEMENT_EDITTEXT::Cursor_ChangeStateBlink()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_EDITTEXT::Clean()
 {
   cursor_isvisible    = false;

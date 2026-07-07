@@ -65,7 +65,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMUART::DIOWINDOWSSTREAMUART()
+* @fn         DIOWINDOWSSTREAMUART::DIOWINDOWSSTREAMUART() : DIOSTREAMUART(), XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -122,7 +122,7 @@ DIOWINDOWSSTREAMUART::~DIOWINDOWSSTREAMUART()
 * @brief      Get status
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     DIOSTREAMSTATUS : 
+* @return     DIOSTREAMSTATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOWINDOWSSTREAMUART::GetStatus()
@@ -140,7 +140,7 @@ DIOSTREAMSTATUS DIOWINDOWSSTREAMUART::GetStatus()
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::Open()
@@ -235,9 +235,9 @@ bool DIOWINDOWSSTREAMUART::Open()
 * @brief      Config
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  mask : 
+* @param[in]  mask : Mask value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::Config(XWORD mask)
@@ -323,10 +323,10 @@ bool DIOWINDOWSSTREAMUART::Config(XWORD mask)
 * @brief      Read direct
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWINDOWSSTREAMUART::ReadDirect(XBYTE* buffer,XDWORD size)
@@ -392,10 +392,10 @@ XDWORD DIOWINDOWSSTREAMUART::ReadDirect(XBYTE* buffer,XDWORD size)
 * @brief      Write direct
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWINDOWSSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
@@ -452,7 +452,7 @@ XDWORD DIOWINDOWSSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      disconnect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::Disconnect() 
@@ -469,7 +469,7 @@ bool DIOWINDOWSSTREAMUART::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::Close()
@@ -493,7 +493,7 @@ bool DIOWINDOWSSTREAMUART::Close()
 * @brief      Get CTS
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::GetCTS()
@@ -517,7 +517,7 @@ bool DIOWINDOWSSTREAMUART::GetCTS()
 * @brief      Get DSR
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::GetDSR()
@@ -541,7 +541,7 @@ bool DIOWINDOWSSTREAMUART::GetDSR()
 * @brief      Get ring
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::GetRing()
@@ -565,7 +565,7 @@ bool DIOWINDOWSSTREAMUART::GetRing()
 * @brief      Get RLSD
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::GetRLSD()
@@ -589,9 +589,9 @@ bool DIOWINDOWSSTREAMUART::GetRLSD()
 * @brief      Set RTS
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  on : 
+* @param[in]  on : On value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::SetRTS(bool on)
@@ -610,9 +610,9 @@ bool DIOWINDOWSSTREAMUART::SetRTS(bool on)
 * @brief      Set DTR
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  on : 
+* @param[in]  on : On value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::SetDTR(bool on)
@@ -632,7 +632,7 @@ bool DIOWINDOWSSTREAMUART::SetDTR(bool on)
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::CleanBuffers()
@@ -655,9 +655,9 @@ bool DIOWINDOWSSTREAMUART::CleanBuffers()
 * @brief      Set mask
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  mask : 
+* @param[in]  mask : Mask value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::SetMask(XDWORD mask)
@@ -682,7 +682,7 @@ bool DIOWINDOWSSTREAMUART::SetMask(XDWORD mask)
 * @brief      Set timeouts
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUART::SetTimeouts()
@@ -721,7 +721,7 @@ bool DIOWINDOWSSTREAMUART::SetTimeouts()
 * @brief      Thread connection
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMUART::ThreadConnection(void* data)

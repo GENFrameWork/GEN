@@ -112,7 +112,7 @@ SNDFACTORY::~SNDFACTORY()
 * @brief      Get is instanced
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::GetIsInstanced()
@@ -127,7 +127,7 @@ bool SNDFACTORY::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    SOUND
 * 
-* @return     SNDFACTORY& : 
+* @return     SNDFACTORY& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDFACTORY& SNDFACTORY::GetInstance()
@@ -144,9 +144,9 @@ SNDFACTORY& SNDFACTORY::GetInstance()
 * @brief      Set instance
 * @ingroup    SOUND
 * 
-* @param[in]  _instance : 
+* @param[in]  _instance : Instance pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::SetInstance(SNDFACTORY* _instance)
@@ -165,7 +165,7 @@ bool SNDFACTORY::SetInstance(SNDFACTORY* _instance)
 * @brief      Del instance
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::DelInstance()
@@ -182,10 +182,10 @@ bool SNDFACTORY::DelInstance()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool SNDFACTORY::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Ini()
@@ -200,7 +200,7 @@ bool SNDFACTORY::Ini()
 * @brief      Update
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Update()
@@ -212,10 +212,10 @@ bool SNDFACTORY::Update()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool SNDFACTORY::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::End()
@@ -232,7 +232,7 @@ bool SNDFACTORY::End()
 * @brief      Is sound active
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::IsSoundActive()
@@ -247,11 +247,11 @@ bool SNDFACTORY::IsSoundActive()
 * @brief      Sound play
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
-* @param[in]  playCFG : 
-* @param[in]  ntimestoplay : 
+* @param[in]  item : Item pointer to use.
+* @param[in]  playCFG : Play configuration pointer to use.
+* @param[in]  ntimestoplay : Ntimestoplay value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_Play(SNDITEM* item, SNDPLAYCFG* playCFG, int ntimestoplay)                                   
@@ -291,9 +291,9 @@ bool SNDFACTORY::Sound_Play(SNDITEM* item, SNDPLAYCFG* playCFG, int ntimestoplay
 * @brief      Sound pause
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_Pause(SNDITEM* item)                                   
@@ -308,9 +308,9 @@ bool SNDFACTORY::Sound_Pause(SNDITEM* item)
 * @brief      Sound stop
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_Stop(SNDITEM* item)                                   
@@ -325,7 +325,7 @@ bool SNDFACTORY::Sound_Stop(SNDITEM* item)
 * @brief      Sound stop all
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_StopAll()                                                      
@@ -340,11 +340,11 @@ bool SNDFACTORY::Sound_StopAll()
 * @brief      Sound wait to end
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
-* @param[in]  maxtimeout : 
-* @param[in]  waitfunction : 
+* @param[in]  item : Item pointer to use.
+* @param[in]  maxtimeout : Maxtimeout value.
+* @param[in]  waitfunction : Waitfunction value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_WaitToEnd(SNDITEM* item, int maxtimeout, SNDFACTORY_WAITFUNCTION waitfunction)
@@ -359,10 +359,10 @@ bool SNDFACTORY::Sound_WaitToEnd(SNDITEM* item, int maxtimeout, SNDFACTORY_WAITF
 * @brief      Sound wait all to end
 * @ingroup    SOUND
 * 
-* @param[in]  maxtimeout : 
-* @param[in]  waitfunction : 
+* @param[in]  maxtimeout : Maxtimeout value.
+* @param[in]  waitfunction : Waitfunction value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_WaitAllToEnd(int maxtimeout, SNDFACTORY_WAITFUNCTION waitfunction)
@@ -377,9 +377,9 @@ bool SNDFACTORY::Sound_WaitAllToEnd(int maxtimeout, SNDFACTORY_WAITFUNCTION wait
 * @brief      Sound get volume
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SNDFACTORY::Sound_GetVolume(SNDITEM* item)
@@ -394,10 +394,10 @@ int SNDFACTORY::Sound_GetVolume(SNDITEM* item)
 * @brief      Sound set volume
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
-* @param[in]  volume : 
+* @param[in]  item : Item pointer to use.
+* @param[in]  volume : Volume value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_SetVolume(SNDITEM* item, int volume)
@@ -412,9 +412,9 @@ bool SNDFACTORY::Sound_SetVolume(SNDITEM* item, int volume)
 * @brief      Sound get pitch
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float SNDFACTORY::Sound_GetPitch(SNDITEM* item)
@@ -429,10 +429,10 @@ float SNDFACTORY::Sound_GetPitch(SNDITEM* item)
 * @brief      Sound set pitch
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
-* @param[in]  pitch : 
+* @param[in]  item : Item pointer to use.
+* @param[in]  pitch : Pitch value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_SetPitch(SNDITEM* item, float pitch)
@@ -447,7 +447,7 @@ bool SNDFACTORY::Sound_SetPitch(SNDITEM* item, float pitch)
 * @brief      Delete all items
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::DeleteAllItems()
@@ -470,7 +470,7 @@ bool SNDFACTORY::DeleteAllItems()
 * @brief      Master volume get
 * @ingroup    SOUND
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SNDFACTORY::MasterVolume_Get()
@@ -485,9 +485,9 @@ int SNDFACTORY::MasterVolume_Get()
 * @brief      Master volume set
 * @ingroup    SOUND
 * 
-* @param[in]  volume : 
+* @param[in]  volume : Volume value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::MasterVolume_Set(int volume)
@@ -504,9 +504,9 @@ bool SNDFACTORY::MasterVolume_Set(int volume)
 * @brief      Create item
 * @ingroup    SOUND
 * 
-* @param[in]  path : 
+* @param[in]  path : Path to use.
 * 
-* @return     SNDITEM* : 
+* @return     SNDITEM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDITEM* SNDFACTORY::CreateItem(XCHAR* path)  
@@ -564,9 +564,9 @@ SNDITEM* SNDFACTORY::CreateItem(XCHAR* path)
 * @brief      Create item
 * @ingroup    SOUND
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     SNDITEM* : 
+* @return     SNDITEM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDITEM* SNDFACTORY::CreateItem(XPATH& xpath)
@@ -581,10 +581,10 @@ SNDITEM* SNDFACTORY::CreateItem(XPATH& xpath)
 * @brief      Create item
 * @ingroup    SOUND
 * 
-* @param[in]  frecuency : 
-* @param[in]  duration : 
+* @param[in]  frecuency : Frecuency value.
+* @param[in]  duration : Duration value.
 * 
-* @return     SNDITEM* : 
+* @return     SNDITEM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDITEM* SNDFACTORY::CreateItem(XDWORD frecuency, XDWORD duration)
@@ -634,7 +634,7 @@ SNDITEM* SNDFACTORY::CreateItem(XDWORD frecuency, XDWORD duration)
 * @brief      Get items
 * @ingroup    SOUND
 * 
-* @return     XVECTOR<SNDITEM*>* : 
+* @return     XVECTOR<SNDITEM*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<SNDITEM*>* SNDFACTORY::GetItems()
@@ -649,7 +649,7 @@ XVECTOR<SNDITEM*>* SNDFACTORY::GetItems()
 * @brief      Sound is any active
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_IsAnyActive()
@@ -684,7 +684,7 @@ bool SNDFACTORY::Sound_IsAnyActive()
 * @brief      Sound is any playing
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFACTORY::Sound_IsAnyPlaying()

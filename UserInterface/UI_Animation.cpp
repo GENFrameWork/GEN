@@ -63,8 +63,8 @@
 * @fn         UI_ANIMATION::UI_ANIMATION()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATION::UI_ANIMATION()    
 { 
   Clean();                            
@@ -77,8 +77,8 @@ UI_ANIMATION::UI_ANIMATION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATION::~UI_ANIMATION()    
 { 
   DeleteAll();
@@ -93,10 +93,10 @@ UI_ANIMATION::~UI_ANIMATION()
 * @brief      Load from file
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  resourcename : 
-* @param[in]  mode : 
+* @param[in]  resourcename : Resourcename value.
+* @param[in]  mode : Mode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ANIMATION::LoadFromFile(XSTRING& resourcename, GRPPROPERTYMODE mode)
@@ -211,10 +211,10 @@ bool UI_ANIMATION::LoadFromFile(XSTRING& resourcename, GRPPROPERTYMODE mode)
 * @fn         XSTRING* UI_ANIMATION::GetName()
 * @brief      Get name
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_ANIMATION::GetName()
 {
   return &name;
@@ -226,10 +226,10 @@ XSTRING* UI_ANIMATION::GetName()
 * @fn         XSTRING* UI_ANIMATION::GetResource()
 * @brief      Get resource
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_ANIMATION::GetResource()
 {
   return &resource;
@@ -241,10 +241,10 @@ XSTRING* UI_ANIMATION::GetResource()
 * @fn         XVECTOR<GRPBITMAP*>* UI_ANIMATION::GetBitmaps()
 * @brief      Get bitmaps
 * @ingroup    USERINTERFACE
-*
-* @return     XVECTOR<GRPBITMAP*>* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XVECTOR<GRPBITMAP*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPBITMAP*>* UI_ANIMATION::GetBitmaps()
 {
   return &bitmaps;
@@ -256,12 +256,12 @@ XVECTOR<GRPBITMAP*>* UI_ANIMATION::GetBitmaps()
 * @fn         GRPBITMAP* UI_ANIMATION::GetBitmap(int index)
 * @brief      Get bitmap
 * @ingroup    USERINTERFACE
-*
-* @param[in]  index : 
 * 
-* @return     GRPBITMAP* : 
+* @param[in]  index : Index value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_ANIMATION::GetBitmap(int index)
 {
   return bitmaps.Get(index);
@@ -273,10 +273,10 @@ GRPBITMAP* UI_ANIMATION::GetBitmap(int index)
 * @fn         bool UI_ANIMATION::DeleteAll()
 * @brief      Delete all
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ANIMATION::DeleteAll()
 {
   if(bitmaps.IsEmpty()) return false;
@@ -294,10 +294,10 @@ bool UI_ANIMATION::DeleteAll()
 * @brief      Change mode with alpha
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  typefile : 
-* @param[in]  modescreen : 
+* @param[in]  typefile : Typefile value.
+* @param[in]  modescreen : Modescreen value.
 * 
-* @return     GRPPROPERTYMODE : 
+* @return     GRPPROPERTYMODE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPPROPERTYMODE UI_ANIMATION::ChangeModeWithAlpha(GRPBITMAPFILE_TYPE typefile, GRPPROPERTYMODE modescreen)
@@ -344,8 +344,8 @@ GRPPROPERTYMODE UI_ANIMATION::ChangeModeWithAlpha(GRPBITMAPFILE_TYPE typefile, G
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ANIMATION::Clean()
 {
  

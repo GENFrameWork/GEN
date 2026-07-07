@@ -73,11 +73,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOAPPLICATIONUPDATE_VERSIONDATA::DIOAPPLICATIONUPDATE_VERSIONDATA()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOAPPLICATIONUPDATE_VERSIONDATA::DIOAPPLICATIONUPDATE_VERSIONDATA()
 {
@@ -86,12 +86,12 @@ DIOAPPLICATIONUPDATE_VERSIONDATA::DIOAPPLICATIONUPDATE_VERSIONDATA()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOAPPLICATIONUPDATE_VERSIONDATA::~DIOAPPLICATIONUPDATE_VERSIONDATA()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOAPPLICATIONUPDATE_VERSIONDATA::~DIOAPPLICATIONUPDATE_VERSIONDATA()
 {
@@ -100,13 +100,13 @@ DIOAPPLICATIONUPDATE_VERSIONDATA::~DIOAPPLICATIONUPDATE_VERSIONDATA()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetVersion()
 * @brief      Get version
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetVersion()
 {
@@ -115,13 +115,13 @@ XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAPPLICATIONUPDATE_VERSIONDATA::SetVersion(XDWORD version)
 * @brief      Set version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-*
+* 
+* @param[in]  version : Version value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAPPLICATIONUPDATE_VERSIONDATA::SetVersion(XDWORD version)
 {
@@ -130,13 +130,13 @@ void DIOAPPLICATIONUPDATE_VERSIONDATA::SetVersion(XDWORD version)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetSubVersion()
 * @brief      Get sub version
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetSubVersion()
 {
@@ -145,13 +145,13 @@ XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetSubVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSubVersion(XDWORD subversion)
 * @brief      Set sub version
 * @ingroup    DATAIO
-*
-* @param[in]  subversion :
-*
+* 
+* @param[in]  subversion : Subversion value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSubVersion(XDWORD subversion)
 {
@@ -160,13 +160,13 @@ void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSubVersion(XDWORD subversion)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetSubVersionError()
 * @brief      Get sub version error
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetSubVersionError()
 {
@@ -175,13 +175,13 @@ XDWORD DIOAPPLICATIONUPDATE_VERSIONDATA::GetSubVersionError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSubVersionError(XDWORD subversionerror)
 * @brief      Set sub version error
 * @ingroup    DATAIO
-*
-* @param[in]  subversionerror :
-*
+* 
+* @param[in]  subversionerror : Subversionerror value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSubVersionError(XDWORD subversionerror)
 {
@@ -190,13 +190,13 @@ void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSubVersionError(XDWORD subversionerror
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE_VERSIONDATA::SystemMustBeInit()
 * @brief      System must be init
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE_VERSIONDATA::SystemMustBeInit()
 {
@@ -205,15 +205,15 @@ bool DIOAPPLICATIONUPDATE_VERSIONDATA::SystemMustBeInit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE_VERSIONDATA::CopyTo(DIOAPPLICATIONUPDATE_VERSIONDATA& versiondata)
 * @brief      Copy to
 * @ingroup    DATAIO
-*
-* @param[in]  versiondata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  versiondata : Versiondata value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE_VERSIONDATA::CopyTo(DIOAPPLICATIONUPDATE_VERSIONDATA& versiondata)
 {
@@ -227,15 +227,15 @@ bool DIOAPPLICATIONUPDATE_VERSIONDATA::CopyTo(DIOAPPLICATIONUPDATE_VERSIONDATA& 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE_VERSIONDATA::CopyFrom(DIOAPPLICATIONUPDATE_VERSIONDATA* versiondata)
 * @brief      Copy from
 * @ingroup    DATAIO
-*
-* @param[in]  versiondata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  versiondata : Versiondata pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE_VERSIONDATA::CopyFrom(DIOAPPLICATIONUPDATE_VERSIONDATA* versiondata)
 {
@@ -251,17 +251,17 @@ bool DIOAPPLICATIONUPDATE_VERSIONDATA::CopyFrom(DIOAPPLICATIONUPDATE_VERSIONDATA
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOAPPLICATIONUPDATE_VERSIONDATA::Compare(XDWORD version, XDWORD subversion, XDWORD subversionerror)
 * @brief      Compare
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-* @param[in]  subversion :
-* @param[in]  subversionerror :
-*
-* @return     int :
-*
+* 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerror : Subversionerror value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOAPPLICATIONUPDATE_VERSIONDATA::Compare(XDWORD version, XDWORD subversion, XDWORD subversionerror)
 {
@@ -297,13 +297,13 @@ int DIOAPPLICATIONUPDATE_VERSIONDATA::Compare(XDWORD version, XDWORD subversion,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSystemMustBeInit(bool applicationmustbeinit)
 * @brief      Set system must be init
 * @ingroup    DATAIO
-*
-* @param[in]  applicationmustbeinit :
-*
+* 
+* @param[in]  applicationmustbeinit : Applicationmustbeinit value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSystemMustBeInit(bool applicationmustbeinit)
 {
@@ -312,12 +312,12 @@ void DIOAPPLICATIONUPDATE_VERSIONDATA::SetSystemMustBeInit(bool applicationmustb
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAPPLICATIONUPDATE_VERSIONDATA::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAPPLICATIONUPDATE_VERSIONDATA::Clean()
 {
@@ -333,15 +333,15 @@ void DIOAPPLICATIONUPDATE_VERSIONDATA::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOAPPLICATIONUPDATE_FILE::DIOAPPLICATIONUPDATE_FILE(XPATH& xpathfile, XDWORD CRC32, XDWORD size)
+* 
+* @fn         DIOAPPLICATIONUPDATE_FILE::DIOAPPLICATIONUPDATE_FILE(XPATH& xpathfile, XDWORD CRC32, XQWORD size)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  xpathfile :
-* @param[in]  CRC32 :
-* @param[in]  size :
-*
+* 
+* @param[in]  xpathfile : Xpathfile value.
+* @param[in]  CRC32 : CRC32 value.
+* @param[in]  size : Size value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOAPPLICATIONUPDATE_FILE::DIOAPPLICATIONUPDATE_FILE(XPATH& xpathfile, XDWORD CRC32, XQWORD size)
 {
@@ -354,12 +354,12 @@ DIOAPPLICATIONUPDATE_FILE::DIOAPPLICATIONUPDATE_FILE(XPATH& xpathfile, XDWORD CR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOAPPLICATIONUPDATE_FILE::~DIOAPPLICATIONUPDATE_FILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOAPPLICATIONUPDATE_FILE::~DIOAPPLICATIONUPDATE_FILE()
 {
@@ -368,13 +368,13 @@ DIOAPPLICATIONUPDATE_FILE::~DIOAPPLICATIONUPDATE_FILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* DIOAPPLICATIONUPDATE_FILE::GetXPathFile()
 * @brief      Get X path file
 * @ingroup    DATAIO
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* DIOAPPLICATIONUPDATE_FILE::GetXPathFile()
 {
@@ -383,13 +383,13 @@ XPATH* DIOAPPLICATIONUPDATE_FILE::GetXPathFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOAPPLICATIONUPDATE_FILE::GetCRC32()
 * @brief      Get CRC32
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOAPPLICATIONUPDATE_FILE::GetCRC32()
 {
@@ -398,13 +398,13 @@ XDWORD DIOAPPLICATIONUPDATE_FILE::GetCRC32()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int DIOAPPLICATIONUPDATE_FILE::GetSize()
+* 
+* @fn         XQWORD DIOAPPLICATIONUPDATE_FILE::GetSize()
 * @brief      Get size
 * @ingroup    DATAIO
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOAPPLICATIONUPDATE_FILE::GetSize()
 {
@@ -413,13 +413,13 @@ XQWORD DIOAPPLICATIONUPDATE_FILE::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE_FILE::HasSpecialControlUpdate()
 * @brief      Has special control update
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE_FILE::HasSpecialControlUpdate()
 {
@@ -428,13 +428,13 @@ bool DIOAPPLICATIONUPDATE_FILE::HasSpecialControlUpdate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAPPLICATIONUPDATE_FILE::SetHasSpecialControlUpdate(bool specialcontrolupdate)
 * @brief      Set has special control update
 * @ingroup    DATAIO
-*
-* @param[in]  specialcontrolupdate :
-*
+* 
+* @param[in]  specialcontrolupdate : Specialcontrolupdate value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAPPLICATIONUPDATE_FILE::SetHasSpecialControlUpdate(bool specialcontrolupdate)
 {
@@ -443,12 +443,12 @@ void DIOAPPLICATIONUPDATE_FILE::SetHasSpecialControlUpdate(bool specialcontrolup
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAPPLICATIONUPDATE_FILE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAPPLICATIONUPDATE_FILE::Clean()
 {
@@ -463,17 +463,17 @@ void DIOAPPLICATIONUPDATE_FILE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOAPPLICATIONUPDATE::DIOAPPLICATIONUPDATE(XDWORD applicationversion, XDWORD applicationsubversion, XDWORD applicationsubversionerror, XCHAR* applicationname, XPATH& xpathrootapp)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  applicationversion :
-* @param[in]  applicationsubversion :
-* @param[in]  applicationsubversionerror :
-* @param[in]  applicationname :
-* @param[in]  xpathrootapp :
-*
+* 
+* @param[in]  applicationversion : Applicationversion value.
+* @param[in]  applicationsubversion : Applicationsubversion value.
+* @param[in]  applicationsubversionerror : Applicationsubversionerror value.
+* @param[in]  applicationname : Application name.
+* @param[in]  xpathrootapp : Xpathrootapp value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOAPPLICATIONUPDATE::DIOAPPLICATIONUPDATE(XDWORD applicationversion, XDWORD applicationsubversion, XDWORD applicationsubversionerror, XCHAR* applicationname, XPATH& xpathrootapp)
 {
@@ -505,12 +505,12 @@ DIOAPPLICATIONUPDATE::DIOAPPLICATIONUPDATE(XDWORD applicationversion, XDWORD app
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOAPPLICATIONUPDATE::~DIOAPPLICATIONUPDATE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOAPPLICATIONUPDATE::~DIOAPPLICATIONUPDATE()
 {
@@ -533,19 +533,19 @@ DIOAPPLICATIONUPDATE::~DIOAPPLICATIONUPDATE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::GetVersionAvailable(DIOURL& url, int port, DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata, int timeout, DIOAPPLICATIONUPDATE_ERROR& error)
 * @brief      Get version available
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  port :
-* @param[in]  updateversiondata :
-* @param[in]  timeout :
-* @param[in]  error :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  port : Port number to use.
+* @param[in]  updateversiondata : Updateversiondata value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  error : Error value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::GetVersionAvailable(DIOURL& url, int port, DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata, int timeout, DIOAPPLICATIONUPDATE_ERROR& error)
 {
@@ -665,20 +665,20 @@ bool DIOAPPLICATIONUPDATE::GetVersionAvailable(DIOURL& url, int port, DIOAPPLICA
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XCHAR* addtargetpath, DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata, int timeout, DIOAPPLICATIONUPDATE_ERROR& error)
 * @brief      Download
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  port :
-* @param[in]  addtargetpath :
-* @param[in]  updateversiondata :
-* @param[in]  timeout :
-* @param[in]  error :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  port : Port number to use.
+* @param[in]  addtargetpath : Addtargetpath pointer to use.
+* @param[in]  updateversiondata : Updateversiondata value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  error : Error value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XCHAR* addtargetpath, DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata, int timeout, DIOAPPLICATIONUPDATE_ERROR& error)
 {
@@ -866,20 +866,20 @@ bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XCHAR* addtargetpath,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XPATH& addtargetpath, DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata, int timeout, DIOAPPLICATIONUPDATE_ERROR& error)
 * @brief      Download
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  port :
-* @param[in]  addtargetpath :
-* @param[in]  updateversiondata :
-* @param[in]  timeout :
-* @param[in]  error :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  port : Port number to use.
+* @param[in]  addtargetpath : Addtargetpath value.
+* @param[in]  updateversiondata : Updateversiondata value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  error : Error value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XPATH& addtargetpath, DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata, int timeout, DIOAPPLICATIONUPDATE_ERROR& error)
 {
@@ -888,16 +888,16 @@ bool DIOAPPLICATIONUPDATE::Download(DIOURL& url, int port, XPATH& addtargetpath,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::CopyOriginalFilesToBackup(XPATH& xpathbackup, DIOAPPLICATIONUPDATE_ERROR& error)
 * @brief      Copy original files to backup
 * @ingroup    DATAIO
-*
-* @param[in]  xpathbackup :
-* @param[in]  error :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathbackup : Xpathbackup value.
+* @param[in]  error : Error value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::CopyOriginalFilesToBackup(XPATH& xpathbackup, DIOAPPLICATIONUPDATE_ERROR& error)
 {
@@ -974,17 +974,17 @@ bool DIOAPPLICATIONUPDATE::CopyOriginalFilesToBackup(XPATH& xpathbackup, DIOAPPL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::CopyUpdateFilesToOriginal(XPATH& xpathupdate, DIOAPPLICATIONUPDATE_ERROR& error, bool restore)
 * @brief      Copy update files to original
 * @ingroup    DATAIO
-*
-* @param[in]  xpathupdate :
-* @param[in]  error :
-* @param[in]  restore :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathupdate : Xpathupdate value.
+* @param[in]  error : Error value.
+* @param[in]  restore : Restore value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::CopyUpdateFilesToOriginal(XPATH& xpathupdate, DIOAPPLICATIONUPDATE_ERROR& error, bool restore)
 {
@@ -1099,15 +1099,15 @@ bool DIOAPPLICATIONUPDATE::CopyUpdateFilesToOriginal(XPATH& xpathupdate, DIOAPPL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::DeleteFilesRenamed(XPATH& xpathtocheck)
 * @brief      Delete files renamed
 * @ingroup    DATAIO
-*
-* @param[in]  xpathtocheck :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathtocheck : Xpathtocheck value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::DeleteFilesRenamed(XPATH& xpathtocheck)
 {
@@ -1158,18 +1158,18 @@ bool DIOAPPLICATIONUPDATE::DeleteFilesRenamed(XPATH& xpathtocheck)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::ChangeFilesFromDownload(DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata, XPATH& xpathupdate, XPATH& xpathbackup, DIOAPPLICATIONUPDATE_ERROR& error)
 * @brief      Change files from download
 * @ingroup    DATAIO
-*
-* @param[in]  updateversiondata :
-* @param[in]  xpathupdate :
-* @param[in]  xpathbackup :
-* @param[in]  error :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  updateversiondata : Updateversiondata value.
+* @param[in]  xpathupdate : Xpathupdate value.
+* @param[in]  xpathbackup : Xpathbackup value.
+* @param[in]  error : Error value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::ChangeFilesFromDownload(DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata, XPATH& xpathupdate, XPATH& xpathbackup, DIOAPPLICATIONUPDATE_ERROR& error)
 {
@@ -1207,15 +1207,15 @@ bool DIOAPPLICATIONUPDATE::ChangeFilesFromDownload(DIOAPPLICATIONUPDATE_VERSIOND
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::RestartApplication(DIOAPPLICATIONUPDATE_ERROR& error)
 * @brief      Restart application
 * @ingroup    DATAIO
-*
-* @param[in]  error :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  error : Error value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::RestartApplication(DIOAPPLICATIONUPDATE_ERROR& error)
 {
@@ -1238,15 +1238,15 @@ bool DIOAPPLICATIONUPDATE::RestartApplication(DIOAPPLICATIONUPDATE_ERROR& error)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOAPPLICATIONUPDATE::GetListOfVersionsToRestore(XVECTOR<DIOAPPLICATIONUPDATE_VERSIONDATA*> listversiontorestore)
+* 
+* @fn         bool DIOAPPLICATIONUPDATE::GetListOfVersionsToRestore(XVECTOR<DIOAPPLICATIONUPDATE_VERSIONDATA*>& listversionstorestore)
 * @brief      Get list of versions to restore
 * @ingroup    DATAIO
-*
-* @param[in]  listversiontorestore :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  listversionstorestore : Listversionstorestore pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::GetListOfVersionsToRestore(XVECTOR<DIOAPPLICATIONUPDATE_VERSIONDATA*>& listversionstorestore)
 {
@@ -1307,16 +1307,16 @@ bool DIOAPPLICATIONUPDATE::GetListOfVersionsToRestore(XVECTOR<DIOAPPLICATIONUPDA
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::GetPreviousVersionToRestore(XVECTOR<DIOAPPLICATIONUPDATE_VERSIONDATA*>& listversionstorestore, DIOAPPLICATIONUPDATE_VERSIONDATA& versiontorestore)
 * @brief      Get previous version to restore
 * @ingroup    DATAIO
-*
-* @param[in]  listversionstorestore :
-* @param[in]  versiontorestore :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  listversionstorestore : Listversionstorestore pointer to use.
+* @param[in]  versiontorestore : Versiontorestore value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::GetPreviousVersionToRestore(XVECTOR<DIOAPPLICATIONUPDATE_VERSIONDATA*>& listversionstorestore, DIOAPPLICATIONUPDATE_VERSIONDATA& versiontorestore)
 {
@@ -1375,15 +1375,15 @@ bool DIOAPPLICATIONUPDATE::GetPreviousVersionToRestore(XVECTOR<DIOAPPLICATIONUPD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::RestorePrevious(DIOAPPLICATIONUPDATE_ERROR& error)
 * @brief      Restore previous
 * @ingroup    DATAIO
-*
-* @param[in]  error :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  error : Error value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::RestorePrevious(DIOAPPLICATIONUPDATE_ERROR& error)
 {
@@ -1408,16 +1408,16 @@ bool DIOAPPLICATIONUPDATE::RestorePrevious(DIOAPPLICATIONUPDATE_ERROR& error)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::Restore(DIOAPPLICATIONUPDATE_VERSIONDATA& applicationversiondata, DIOAPPLICATIONUPDATE_ERROR& error)
 * @brief      Restore
 * @ingroup    DATAIO
-*
-* @param[in]  applicationversiondata :
-* @param[in]  error :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  applicationversiondata : Applicationversiondata value.
+* @param[in]  error : Error value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::Restore(DIOAPPLICATIONUPDATE_VERSIONDATA& applicationversiondata, DIOAPPLICATIONUPDATE_ERROR& error)
 {
@@ -1446,10 +1446,10 @@ bool DIOAPPLICATIONUPDATE::Restore(DIOAPPLICATIONUPDATE_VERSIONDATA& application
 * @brief      Restore
 * @ingroup    DATAIO
 * 
-* @param[in]  xpathbackup : 
-* @param[in]  error : 
+* @param[in]  xpathbackup : Xpathbackup value.
+* @param[in]  error : Error value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::Restore(XPATH& xpathbackup, DIOAPPLICATIONUPDATE_ERROR& error)
@@ -1474,15 +1474,15 @@ bool DIOAPPLICATIONUPDATE::Restore(XPATH& xpathbackup, DIOAPPLICATIONUPDATE_ERRO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::EliminateOldRestorations(int maxrestorations)
 * @brief      Eliminate old restorations
 * @ingroup    DATAIO
-*
-* @param[in]  maxrestorations :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  maxrestorations : Maxrestorations value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::EliminateOldRestorations(int maxrestorations)
 {
@@ -1570,15 +1570,15 @@ bool DIOAPPLICATIONUPDATE::EliminateOldRestorations(int maxrestorations)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::IsNewVersion(DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata)
 * @brief      Is GEN_NEW version
 * @ingroup    DATAIO
-*
-* @param[in]  updateversiondata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  updateversiondata : Updateversiondata value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::IsNewVersion(DIOAPPLICATIONUPDATE_VERSIONDATA& updateversiondata)
 {
@@ -1602,13 +1602,13 @@ bool DIOAPPLICATIONUPDATE::IsNewVersion(DIOAPPLICATIONUPDATE_VERSIONDATA& update
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOAPPLICATIONUPDATE::Application_GetVersion()
 * @brief      Application get version
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOAPPLICATIONUPDATE::Application_GetVersion()
 {
@@ -1617,13 +1617,13 @@ XDWORD DIOAPPLICATIONUPDATE::Application_GetVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOAPPLICATIONUPDATE::GetApplicationSubversion()
 * @brief      Get application subversion
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOAPPLICATIONUPDATE::GetApplicationSubversion()
 {
@@ -1632,13 +1632,13 @@ XDWORD DIOAPPLICATIONUPDATE::GetApplicationSubversion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOAPPLICATIONUPDATE::GetApplicationSubVersionError()
 * @brief      Get application sub version error
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOAPPLICATIONUPDATE::GetApplicationSubVersionError()
 {
@@ -1647,16 +1647,15 @@ XDWORD DIOAPPLICATIONUPDATE::GetApplicationSubVersionError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOAPPLICATIONUPDATE::FilesToUpdate_CreateList(XPATH& xpathupdate, bool checkaredifferent)
+* 
+* @fn         bool DIOAPPLICATIONUPDATE::FilesToUpdate_CreateList(XPATH& xpathupdate)
 * @brief      Files to update create list
 * @ingroup    DATAIO
-*
-* @param[in]  xpathupdate :
-* @param[in]  checkaredifferent :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathupdate : Xpathupdate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::FilesToUpdate_CreateList(XPATH& xpathupdate)
 {
@@ -1731,15 +1730,15 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_CreateList(XPATH& xpathupdate)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::FilesToUpdate_EliminateFixedDir(XPATH& xpath)
 * @brief      Files to update eliminate fixed dir
 * @ingroup    DATAIO
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::FilesToUpdate_EliminateFixedDir(XPATH& xpath)
 {
@@ -1762,15 +1761,15 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_EliminateFixedDir(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::FilesToUpdate_CheckListChangedFiles(XPATH& xpathupdate)
 * @brief      Files to update check list changed files
 * @ingroup    DATAIO
-*
-* @param[in]  xpathupdate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathupdate : Xpathupdate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::FilesToUpdate_CheckListChangedFiles(XPATH& xpathupdate)
 {
@@ -1807,13 +1806,13 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_CheckListChangedFiles(XPATH& xpathupdat
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::FilesToUpdate_DeleteList()
 * @brief      Files to update GEN_DELETE list
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::FilesToUpdate_DeleteList()
 {
@@ -1827,16 +1826,16 @@ bool DIOAPPLICATIONUPDATE::FilesToUpdate_DeleteList()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOAPPLICATIONUPDATE::CopyFile(XPATH& origin, XPATH& target)
 * @brief      Copy file
 * @ingroup    DATAIO
-*
-* @param[in]  origin :
-* @param[in]  target :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  origin : Origin value.
+* @param[in]  target : Target value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOAPPLICATIONUPDATE::CopyFile(XPATH& origin, XPATH& target)
 {
@@ -1905,12 +1904,12 @@ bool DIOAPPLICATIONUPDATE::CopyFile(XPATH& origin, XPATH& target)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOAPPLICATIONUPDATE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOAPPLICATIONUPDATE::Clean()
 {

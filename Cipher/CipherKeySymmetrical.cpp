@@ -90,12 +90,12 @@ CIPHERKEYSYMMETRICAL::~CIPHERKEYSYMMETRICAL()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XBYTE* CIPHERKEYSYMMETRICAL::Get(int& size)
-* @brief      Get
+* @brief      Get value
 * @ingroup    CIPHER
 * 
-* @param[in]  size : 
+* @param[in]  size : Size value.
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* CIPHERKEYSYMMETRICAL::Get(int& size)
@@ -111,10 +111,10 @@ XBYTE* CIPHERKEYSYMMETRICAL::Get(int& size)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XBUFFER* CIPHERKEYSYMMETRICAL::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* CIPHERKEYSYMMETRICAL::Get()
@@ -126,13 +126,13 @@ XBUFFER* CIPHERKEYSYMMETRICAL::Get()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
-* @brief      Set
+* @brief      Set value
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
-* @param[in]  size : 
+* @param[in]  key : Key pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
@@ -150,12 +150,12 @@ bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool CIPHERKEYSYMMETRICAL::Set(XBUFFER& key)
-* @brief      Set
+* @brief      Set value
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSYMMETRICAL::Set(XBUFFER& key)
@@ -170,7 +170,7 @@ bool CIPHERKEYSYMMETRICAL::Set(XBUFFER& key)
 * @brief      Get size in bytes
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERKEYSYMMETRICAL::GetSizeInBytes()
@@ -185,9 +185,9 @@ int CIPHERKEYSYMMETRICAL::GetSizeInBytes()
 * @brief      Copy from
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSYMMETRICAL::CopyFrom(CIPHERKEYSYMMETRICAL* key)

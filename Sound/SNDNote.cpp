@@ -87,7 +87,7 @@ SNDNOTE::~SNDNOTE()
 * @brief      Get frequency
 * @ingroup    SOUND
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDNOTE::GetFrequency()
@@ -102,9 +102,9 @@ XDWORD SNDNOTE::GetFrequency()
 * @brief      Set frequency
 * @ingroup    SOUND
 * 
-* @param[in]  frequency : 
+* @param[in]  frequency : Frequency value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDNOTE::SetFrequency(XDWORD frequency)
@@ -121,7 +121,7 @@ bool SNDNOTE::SetFrequency(XDWORD frequency)
 * @brief      Get duration
 * @ingroup    SOUND
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDNOTE::GetDuration()
@@ -136,9 +136,9 @@ XDWORD SNDNOTE::GetDuration()
 * @brief      Set duration
 * @ingroup    SOUND
 * 
-* @param[in]  duration : 
+* @param[in]  duration : Duration value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDNOTE::SetDuration(XDWORD duration)

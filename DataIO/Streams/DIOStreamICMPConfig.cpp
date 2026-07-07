@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMICMPCONFIG::DIOSTREAMICMPCONFIG()
+* 
+* @fn         DIOSTREAMICMPCONFIG::DIOSTREAMICMPCONFIG() : DIOSTREAMCONFIG()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMICMPCONFIG::DIOSTREAMICMPCONFIG()  : DIOSTREAMCONFIG()
 {
@@ -72,12 +72,12 @@ DIOSTREAMICMPCONFIG::DIOSTREAMICMPCONFIG()  : DIOSTREAMCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMICMPCONFIG::~DIOSTREAMICMPCONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMICMPCONFIG::~DIOSTREAMICMPCONFIG()
 {
@@ -88,13 +88,13 @@ DIOSTREAMICMPCONFIG::~DIOSTREAMICMPCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOIP* DIOSTREAMICMPCONFIG ::GetLocalIP()
 * @brief      Get local IP
 * @ingroup    DATAIO
-*
-* @return     DIOIP* :
-*
+* 
+* @return     DIOIP* DIOSTREAMICMPCONFIG :: : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIOSTREAMICMPCONFIG ::GetLocalIP()
 {
@@ -103,13 +103,13 @@ DIOIP* DIOSTREAMICMPCONFIG ::GetLocalIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOURL* DIOSTREAMICMPCONFIG ::GetRemoteURL()
 * @brief      Get remote URL
 * @ingroup    DATAIO
-*
-* @return     DIOURL* :
-*
+* 
+* @return     DIOURL* DIOSTREAMICMPCONFIG :: : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOSTREAMICMPCONFIG ::GetRemoteURL()
 {
@@ -123,7 +123,7 @@ DIOURL* DIOSTREAMICMPCONFIG ::GetRemoteURL()
 * @brief      Get resolved remote URL
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMICMPCONFIG::GetResolvedRemoteURL()
@@ -133,12 +133,14 @@ XSTRING* DIOSTREAMICMPCONFIG::GetResolvedRemoteURL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMICMPCONFIG ::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
+* @return     void DIOSTREAMICMPCONFIG :: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMICMPCONFIG ::Clean()
 {

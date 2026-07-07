@@ -60,11 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILETXT::XFILETXT()
+* 
+* @fn         XFILETXT::XFILETXT(): XFILECONTAINER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILETXT::XFILETXT(): XFILECONTAINER()
 {
@@ -77,12 +77,12 @@ XFILETXT::XFILETXT(): XFILECONTAINER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILETXT::~XFILETXT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILETXT::~XFILETXT()
 {
@@ -102,10 +102,10 @@ XFILETXT::~XFILETXT()
 * @brief      Open
 * @ingroup    XUTILS
 * 
-* @param[in]  path : 
-* @param[in]  readonly : 
+* @param[in]  path : Path to use.
+* @param[in]  readonly : Readonly value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::Open(XCHAR* path,bool readonly)
@@ -129,16 +129,16 @@ bool XFILETXT::Open(XCHAR* path,bool readonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILETXT::Open(XPATH& xpath,bool readonly)
+* 
+* @fn         bool XFILETXT::Open(XPATH& xpath, bool readonly)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  readonly :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  readonly : Readonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::Open(XPATH& xpath, bool readonly)
 {
@@ -166,17 +166,17 @@ bool XFILETXT::Open(XPATH& xpath, bool readonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::Create(XPATH& xpath, XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  formatchar :
-* @param[in]  typeLF :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  typeLF : Type LF value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::Create(XPATH& xpath, XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF)
 {
@@ -192,13 +192,13 @@ bool XFILETXT::Create(XPATH& xpath, XFILETXTFORMATCHAR formatchar, XFILETXTTYPEL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::IsOpen()
 * @brief      Is open
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::IsOpen()
 {
@@ -209,13 +209,13 @@ bool XFILETXT::IsOpen()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::Close()
 {
@@ -227,13 +227,13 @@ bool XFILETXT::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILETXTFORMATCHAR XFILETXT::GetFormatChar()
 * @brief      Get format char
 * @ingroup    XUTILS
-*
-* @return     XFILETXTFORMATCHAR :
-*
+* 
+* @return     XFILETXTFORMATCHAR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILETXTFORMATCHAR XFILETXT::GetFormatChar()
 {
@@ -242,15 +242,15 @@ XFILETXTFORMATCHAR XFILETXT::GetFormatChar()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::SetFormatChar(XFILETXTFORMATCHAR formatchar)
 * @brief      Set format char
 * @ingroup    XUTILS
-*
-* @param[in]  formatchar :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  formatchar : Formatchar value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::SetFormatChar(XFILETXTFORMATCHAR formatchar)
 {
@@ -261,15 +261,15 @@ bool XFILETXT::SetFormatChar(XFILETXTFORMATCHAR formatchar)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILETXTFORMATCHAR XFILETXT::GetFormatCharFromFile(XDWORD* sizeBOM)
 * @brief      Get format char from file
 * @ingroup    XUTILS
-*
-* @param[in]  sizeBOM :
-*
-* @return     XFILETXTFORMATCHAR :
-*
+* 
+* @param[in]  sizeBOM : Size BOM pointer to use.
+* 
+* @return     XFILETXTFORMATCHAR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILETXTFORMATCHAR XFILETXT::GetFormatCharFromFile(XDWORD* sizeBOM)
 {
@@ -317,17 +317,17 @@ XFILETXTFORMATCHAR XFILETXT::GetFormatCharFromFile(XDWORD* sizeBOM)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::CreateBOMFormatChar(XFILETXTFORMATCHAR formatchar, XBYTE* BOM, XDWORD& sizeBOM)
 * @brief      Create BOM format char
 * @ingroup    XUTILS
-*
-* @param[in]  formatchar :
-* @param[in]  BOM :
-* @param[in]  sizeBOM :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  BOM : BOM pointer to use.
+* @param[in]  sizeBOM : Size BOM value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::CreateBOMFormatChar(XFILETXTFORMATCHAR formatchar, XBYTE* BOM, XDWORD& sizeBOM)
 {
@@ -363,15 +363,15 @@ bool XFILETXT::CreateBOMFormatChar(XFILETXTFORMATCHAR formatchar, XBYTE* BOM, XD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILETXT::SizeOfCharacter(XFILETXTFORMATCHAR formatchar)
 * @brief      Size of character
 * @ingroup    XUTILS
-*
-* @param[in]  formatchar :
-*
-* @return     int :
-*
+* 
+* @param[in]  formatchar : Formatchar value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILETXT::SizeOfCharacter(XFILETXTFORMATCHAR formatchar)
 {
@@ -393,13 +393,13 @@ int XFILETXT::SizeOfCharacter(XFILETXTFORMATCHAR formatchar)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILETXTTYPELF XFILETXT::GetTypeLF()
 * @brief      Get type LF
 * @ingroup    XUTILS
-*
-* @return     XFILETXTTYPELF :
-*
+* 
+* @return     XFILETXTTYPELF : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILETXTTYPELF XFILETXT::GetTypeLF()
 {
@@ -408,15 +408,15 @@ XFILETXTTYPELF XFILETXT::GetTypeLF()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::SetTypeLF(XFILETXTTYPELF typeLF)
 * @brief      Set type LF
 * @ingroup    XUTILS
-*
-* @param[in]  typeLF :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  typeLF : Type LF value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::SetTypeLF(XFILETXTTYPELF typeLF)
 {
@@ -427,18 +427,18 @@ bool XFILETXT::SetTypeLF(XFILETXTTYPELF typeLF)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::CreateTypeLF(XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF, XBYTE* LF, XDWORD& sizeLF)
 * @brief      Create type LF
 * @ingroup    XUTILS
-*
-* @param[in]  formatchar :
-* @param[in]  typeLF :
-* @param[in]  LF :
-* @param[in]  sizeLF :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  typeLF : Type LF value.
+* @param[in]  LF : LF pointer to use.
+* @param[in]  sizeLF : Size LF value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::CreateTypeLF(XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF, XBYTE* LF, XDWORD& sizeLF)
 {
@@ -542,15 +542,15 @@ bool XFILETXT::CreateTypeLF(XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::GetLF(XBUFFER& lfdata)
 * @brief      Get LF
 * @ingroup    XUTILS
-*
-* @param[in]  lfdata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  lfdata : Lfdata value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::GetLF(XBUFFER& lfdata)
 {
@@ -580,13 +580,13 @@ bool XFILETXT::GetLF(XBUFFER& lfdata)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILETXT::GetLF()
 * @brief      Get LF
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILETXT::GetLF()
 {  
@@ -600,9 +600,9 @@ XSTRING* XFILETXT::GetLF()
 * @brief      Get LF
 * @ingroup    XUTILS
 * 
-* @param[in]  typeLF : 
+* @param[in]  typeLF : Type LF value.
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILETXT::GetLF(XFILETXTTYPELF typeLF)
@@ -631,7 +631,7 @@ XSTRING* XFILETXT::GetLF(XFILETXTTYPELF typeLF)
 * @brief      Is binary file
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::IsBinaryFile()
@@ -670,13 +670,13 @@ bool XFILETXT::IsBinaryFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILETXT::GetNLines()
 * @brief      Get N lines
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILETXT::GetNLines()
 {
@@ -685,15 +685,15 @@ int XFILETXT::GetNLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILETXT::GetLine(int index)
 * @brief      Get line
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILETXT::GetLine(int index)
 {
@@ -709,15 +709,15 @@ XSTRING* XFILETXT::GetLine(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* XFILETXT::GetLineText(int index)
 * @brief      Get line text
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     XCHAR* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XFILETXT::GetLineText(int index)
 {
@@ -734,12 +734,12 @@ XCHAR* XFILETXT::GetLineText(int index)
 * @brief      Get all in one line
 * @ingroup    XUTILS
 * 
-* @param[in]  alllines : 
-* @param[in]  typeLF : 
-* @param[in]  start : 
-* @param[in]  end : 
+* @param[in]  alllines : Alllines value.
+* @param[in]  typeLF : Type LF value.
+* @param[in]  start : Start value.
+* @param[in]  end : End value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::GetAllInOneLine(XSTRING& alllines, XFILETXTTYPELF typeLF, XDWORD start, XDWORD end)
@@ -776,12 +776,12 @@ bool XFILETXT::GetAllInOneLine(XSTRING& alllines, XFILETXTTYPELF typeLF, XDWORD 
 * @brief      Get all in buffer
 * @ingroup    XUTILS
 * 
-* @param[in]  xbuffer : 
-* @param[in]  typeLF : 
-* @param[in]  start : 
-* @param[in]  end : 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  typeLF : Type LF value.
+* @param[in]  start : Start value.
+* @param[in]  end : End value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::GetAllInBuffer(XBUFFER& xbuffer, XFILETXTTYPELF typeLF, XDWORD start, XDWORD end)
@@ -813,13 +813,13 @@ bool XFILETXT::GetAllInBuffer(XBUFFER& xbuffer, XFILETXTTYPELF typeLF, XDWORD st
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::ReadAllFile()
 * @brief      Read all file
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::ReadAllFile()
 {
@@ -828,13 +828,13 @@ bool XFILETXT::ReadAllFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::WriteAllFile()
 * @brief      Write all file
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::WriteAllFile()
 {
@@ -950,7 +950,7 @@ bool XFILETXT::WriteAllFile()
 * 
 * @param[in]  nlines : number of lines to read in list. XFILETXT_ALLLINES for all
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::ReadNLines(int nlines)
@@ -1032,13 +1032,13 @@ bool XFILETXT::ReadNLines(int nlines)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::DeleteFormatFile()
 * @brief      Delete format file
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::DeleteFormatFile()
 {
@@ -1050,15 +1050,15 @@ bool XFILETXT::DeleteFormatFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::AddLine(XCHAR* line)
 * @brief      Add line
 * @ingroup    XUTILS
-*
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  line : Line pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLine(XCHAR* line)
 {
@@ -1071,15 +1071,15 @@ bool XFILETXT::AddLine(XCHAR* line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::AddLine(XSTRING& line)
 * @brief      Add line
 * @ingroup    XUTILS
-*
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  line : Line value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLine(XSTRING& line)
 {
@@ -1098,10 +1098,10 @@ bool XFILETXT::AddLine(XSTRING& line)
 * @brief      Add line
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  formatchar : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  formatchar : Formatchar value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLine(XBUFFER& data, XFILETXTFORMATCHAR formatchar)
@@ -1134,18 +1134,18 @@ bool XFILETXT::AddLine(XBUFFER& data, XFILETXTFORMATCHAR formatchar)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line, XDWORD sizeline, XSTRING& string)
 * @brief      Generate line from buffer
 * @ingroup    XUTILS
-*
-* @param[in]  formatchar :
-* @param[in]  line :
-* @param[in]  sizeline :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  line : Line pointer to use.
+* @param[in]  sizeline : Sizeline value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line, XDWORD sizeline, XSTRING& string)
 {
@@ -1203,17 +1203,17 @@ bool XFILETXT::GenerateLineFromBuffer(XFILETXTFORMATCHAR formatchar, XBYTE* line
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::AddLine(XFILETXTFORMATCHAR formatchar, XBYTE* line, XDWORD sizeline)
 * @brief      Add line
 * @ingroup    XUTILS
-*
-* @param[in]  formatchar :
-* @param[in]  line :
-* @param[in]  sizeline :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  line : Line pointer to use.
+* @param[in]  sizeline : Sizeline value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLine(XFILETXTFORMATCHAR formatchar, XBYTE* line, XDWORD sizeline)
 {
@@ -1235,17 +1235,17 @@ bool XFILETXT::AddLine(XFILETXTFORMATCHAR formatchar, XBYTE* line, XDWORD sizeli
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::AddLineAlready(XCHAR* line, XDWORD* resultsizeline, XDWORD* resultsizeLF)
 * @brief      Add line already
 * @ingroup    XUTILS
-*
-* @param[in]  line :
-* @param[in]  resultsizeline :
-* @param[in]  resultsizeLF :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  line : Line pointer to use.
+* @param[in]  resultsizeline : Output resultsizeline.
+* @param[in]  resultsizeLF : Output resultsize lf.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLineAlready(XCHAR* line, XDWORD* resultsizeline, XDWORD* resultsizeLF)
 {
@@ -1258,17 +1258,17 @@ bool XFILETXT::AddLineAlready(XCHAR* line, XDWORD* resultsizeline, XDWORD* resul
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::AddLineAlready(XSTRING& line, XDWORD* resultsizeline, XDWORD* resultsizeLF)
 * @brief      Add line already
 * @ingroup    XUTILS
-*
-* @param[in]  line :
-* @param[in]  resultsizeline :
-* @param[in]  resultsizeLF :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  line : Line value.
+* @param[in]  resultsizeline : Output resultsizeline.
+* @param[in]  resultsizeLF : Output resultsize lf.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddLineAlready(XSTRING& line, XDWORD* resultsizeline, XDWORD* resultsizeLF)
 {
@@ -1351,16 +1351,16 @@ bool XFILETXT::AddLineAlready(XSTRING& line, XDWORD* resultsizeline, XDWORD* res
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::InsertLine(int index, XCHAR* line)
 * @brief      Insert line
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  line : Line pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::InsertLine(int index, XCHAR* line)
 {
@@ -1373,16 +1373,16 @@ bool XFILETXT::InsertLine(int index, XCHAR* line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::InsertLine(int index, XSTRING& line)
 * @brief      Insert line
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  line : Line value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::InsertLine(int index, XSTRING& line)
 {
@@ -1394,15 +1394,15 @@ bool XFILETXT::InsertLine(int index, XSTRING& line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::DeleteLine(int index)
 * @brief      Delete line
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::DeleteLine(int index)
 {
@@ -1421,13 +1421,13 @@ bool XFILETXT::DeleteLine(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::DeleteAllLines()
 * @brief      Delete all lines
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::DeleteAllLines()
 {
@@ -1441,16 +1441,16 @@ bool XFILETXT::DeleteAllLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::AddBufferLines(XFILETXTFORMATCHAR formatchar, XBUFFER& xbuffer)
 * @brief      Add buffer lines
 * @ingroup    XUTILS
-*
-* @param[in]  formatchar :
-* @param[in]  xbuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::AddBufferLines(XFILETXTFORMATCHAR formatchar, XBUFFER& xbuffer)
 {
@@ -1497,20 +1497,20 @@ bool XFILETXT::AddBufferLines(XFILETXTFORMATCHAR formatchar, XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::GetSizeOfLine(XFILETXTFORMATCHAR formatchar, XBYTE* buffer, XFILETXTTYPELF& typeLF, XDWORD& sizeLF, XDWORD& size, XDWORD maxsize)
 * @brief      Get size of line
 * @ingroup    XUTILS
-*
-* @param[in]  formatchar :
-* @param[in]  buffer :
-* @param[in]  typeLF :
-* @param[in]  sizeLF :
-* @param[in]  size :
-* @param[in]  maxsize :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  typeLF : Type LF value.
+* @param[in]  sizeLF : Size LF value.
+* @param[in]  size : Size value.
+* @param[in]  maxsize : Maxsize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::GetSizeOfLine(XFILETXTFORMATCHAR formatchar, XBYTE* buffer, XFILETXTTYPELF& typeLF, XDWORD& sizeLF, XDWORD& size, XDWORD maxsize)
 {
@@ -1631,13 +1631,13 @@ bool XFILETXT::GetSizeOfLine(XFILETXTFORMATCHAR formatchar, XBYTE* buffer, XFILE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<XSTRING*>* XFILETXT::GetLines()
 * @brief      Get lines
 * @ingroup    XUTILS
-*
-* @return     XVECTOR<XSTRING*>* :
-*
+* 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* XFILETXT::GetLines()
 {
@@ -1646,15 +1646,15 @@ XVECTOR<XSTRING*>* XFILETXT::GetLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::CopyFrom(XFILETXT* filetxt)
 * @brief      Copy from
 * @ingroup    XUTILS
-*
-* @param[in]  filetxt :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filetxt : Filetxt pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::CopyFrom(XFILETXT* filetxt)
 {
@@ -1665,15 +1665,15 @@ bool XFILETXT::CopyFrom(XFILETXT* filetxt)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILETXT::CopyTo(XFILETXT* filetxt)
 * @brief      Copy to
 * @ingroup    XUTILS
-*
-* @param[in]  filetxt :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filetxt : Filetxt pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILETXT::CopyTo(XFILETXT* filetxt)
 {
@@ -1701,12 +1701,12 @@ bool XFILETXT::CopyTo(XFILETXT* filetxt)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILETXT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILETXT::Clean()
 {

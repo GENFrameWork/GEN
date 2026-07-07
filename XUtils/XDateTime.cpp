@@ -63,11 +63,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME::XDATETIME()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME::XDATETIME()
 {
@@ -76,12 +76,12 @@ XDATETIME::XDATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME::~XDATETIME()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME::~XDATETIME()
 {
@@ -90,13 +90,13 @@ XDATETIME::~XDATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetYear()
 * @brief      Get year
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetYear()
 {
@@ -105,13 +105,13 @@ int XDATETIME::GetYear()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetMonth()
 * @brief      Get month
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetMonth()
 {
@@ -120,13 +120,13 @@ int XDATETIME::GetMonth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetDay()
 * @brief      Get day
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetDay()
 {
@@ -135,13 +135,13 @@ int XDATETIME::GetDay()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetHours()
 * @brief      Get hours
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetHours()
 {
@@ -150,13 +150,13 @@ int XDATETIME::GetHours()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetMinutes()
 * @brief      Get minutes
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetMinutes()
 {
@@ -165,13 +165,13 @@ int XDATETIME::GetMinutes()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetSeconds()
 * @brief      Get seconds
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetSeconds()
 {
@@ -180,13 +180,13 @@ int XDATETIME::GetSeconds()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetMilliSeconds()
 * @brief      Get milli seconds
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetMilliSeconds()
 {
@@ -195,13 +195,13 @@ int XDATETIME::GetMilliSeconds()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::IsZero()
 * @brief      Is zero
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsZero()
 {
@@ -220,7 +220,7 @@ bool XDATETIME::IsZero()
 * @brief      Is local
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsLocal()
@@ -230,13 +230,13 @@ bool XDATETIME::IsLocal()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::IsLeapYear()
 * @brief      Is leap year
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsLeapYear()
 {
@@ -245,13 +245,13 @@ bool XDATETIME::IsLeapYear()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME_DAYWEEK XDATETIME::GetDayOfWeek()
 * @brief      Get day of week
 * @ingroup    XUTILS
-*
-* @return     XDATETIME_DAYWEEK :
-*
+* 
+* @return     XDATETIME_DAYWEEK : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME_DAYWEEK XDATETIME::GetDayOfWeek()
 {
@@ -308,13 +308,13 @@ XDATETIME_DAYWEEK XDATETIME::GetDayOfWeek()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetDaysOfYear()
 * @brief      Get days of year
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetDaysOfYear()
 {
@@ -336,13 +336,13 @@ int XDATETIME::GetDaysOfYear()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         long XDATETIME::GetNDaysInJulian()
 * @brief      Get N days in julian
 * @ingroup    XUTILS
-*
-* @return     long :
-*
+* 
+* @return     long : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 long XDATETIME::GetNDaysInJulian()
 {
@@ -364,13 +364,13 @@ long XDATETIME::GetNDaysInJulian()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         long XDATETIME::GetNDaysInGregorian()
 * @brief      Get N days in gregorian
 * @ingroup    XUTILS
-*
-* @return     long :
-*
+* 
+* @return     long : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 long XDATETIME::GetNDaysInGregorian()
 {
@@ -391,14 +391,14 @@ long XDATETIME::GetNDaysInGregorian()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::GetDateFromNDays(long ndays, bool injulian)
 * @brief      Get date from N days
 * @ingroup    XUTILS
-*
-* @param[in]  ndays :
-* @param[in]  injulian :
-*
+* 
+* @param[in]  ndays : Ndays value.
+* @param[in]  injulian : Injulian value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::GetDateFromNDays(long ndays, bool injulian)
 {
@@ -426,15 +426,15 @@ void XDATETIME::GetDateFromNDays(long ndays, bool injulian)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD XDATETIME::GetSeconsFromDate(bool injulian)
 * @brief      Get secons from date
 * @ingroup    XUTILS
-*
-* @param[in]  injulian :
-*
-* @return     XQWORD :
-*
+* 
+* @param[in]  injulian : Injulian value.
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XDATETIME::GetSeconsFromDate(bool injulian)
 {
@@ -448,16 +448,16 @@ XQWORD XDATETIME::GetSeconsFromDate(bool injulian)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SetDateFromSeconds(XQWORD allseconds, bool injulian)
 * @brief      Set date from seconds
 * @ingroup    XUTILS
-*
-* @param[in]  allseconds :
-* @param[in]  injulian :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  allseconds : Allseconds value.
+* @param[in]  injulian : Injulian value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SetDateFromSeconds(XQWORD allseconds, bool injulian)
 {
@@ -475,13 +475,13 @@ bool XDATETIME::SetDateFromSeconds(XQWORD allseconds, bool injulian)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XDATETIME::GetSecondsFromADay()
 * @brief      Get seconds from A day
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XDATETIME::GetSecondsFromADay()
 {
@@ -501,7 +501,7 @@ XDWORD XDATETIME::GetSecondsFromADay()
 * @brief      Set is local
 * @ingroup    XUTILS
 * 
-* @param[in]  islocal : 
+* @param[in]  islocal : Islocal value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::SetIsLocal(bool islocal)
@@ -511,13 +511,13 @@ void XDATETIME::SetIsLocal(bool islocal)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::SetYear(int year)
 * @brief      Set year
 * @ingroup    XUTILS
-*
-* @param[in]  year :
-*
+* 
+* @param[in]  year : Year value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::SetYear(int year)
 {
@@ -526,13 +526,13 @@ void XDATETIME::SetYear(int year)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::SetMonth(int month)
 * @brief      Set month
 * @ingroup    XUTILS
-*
-* @param[in]  month :
-*
+* 
+* @param[in]  month : Month value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::SetMonth(int month)
 {
@@ -541,13 +541,13 @@ void XDATETIME::SetMonth(int month)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::SetDay(int day)
 * @brief      Set day
 * @ingroup    XUTILS
-*
-* @param[in]  day :
-*
+* 
+* @param[in]  day : Day value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::SetDay(int day)
 {
@@ -556,13 +556,13 @@ void XDATETIME::SetDay(int day)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::SetHours(int hours)
 * @brief      Set hours
 * @ingroup    XUTILS
-*
-* @param[in]  hours :
-*
+* 
+* @param[in]  hours : Hours value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::SetHours(int hours)
 {
@@ -571,13 +571,13 @@ void XDATETIME::SetHours(int hours)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::SetMinutes(int minutes)
 * @brief      Set minutes
 * @ingroup    XUTILS
-*
-* @param[in]  minutes :
-*
+* 
+* @param[in]  minutes : Minutes value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::SetMinutes(int minutes)
 {
@@ -586,13 +586,13 @@ void XDATETIME::SetMinutes(int minutes)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::SetSeconds(int seconds)
 * @brief      Set seconds
 * @ingroup    XUTILS
-*
-* @param[in]  seconds :
-*
+* 
+* @param[in]  seconds : Seconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::SetSeconds(int seconds)
 {
@@ -601,13 +601,13 @@ void XDATETIME::SetSeconds(int seconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::SetMilliSeconds(int milliseconds)
 * @brief      Set milli seconds
 * @ingroup    XUTILS
-*
-* @param[in]  milliseconds :
-*
+* 
+* @param[in]  milliseconds : Milliseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::SetMilliSeconds(int milliseconds)
 {
@@ -616,13 +616,13 @@ void XDATETIME::SetMilliSeconds(int milliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::IsValidDate()
 * @brief      Is valid date
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsValidDate()
 {
@@ -653,15 +653,15 @@ bool XDATETIME::IsValidDate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::CopyFrom(XDATETIME* xtimesource)
 * @brief      Copy from
 * @ingroup    XUTILS
-*
-* @param[in]  xtimesource :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtimesource : Xtimesource pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::CopyFrom(XDATETIME* xtimesource)
 {
@@ -683,15 +683,15 @@ bool XDATETIME::CopyFrom(XDATETIME* xtimesource)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::CopyFrom(XDATETIME& xtimesource)
 * @brief      Copy from
 * @ingroup    XUTILS
-*
-* @param[in]  xtimesource :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtimesource : Xtimesource value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::CopyFrom(XDATETIME& xtimesource)
 {
@@ -700,15 +700,15 @@ bool XDATETIME::CopyFrom(XDATETIME& xtimesource)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::CopyTo(XDATETIME* xtimetarget)
 * @brief      Copy to
 * @ingroup    XUTILS
-*
-* @param[in]  xtimetarget :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtimetarget : Xtimetarget pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::CopyTo(XDATETIME* xtimetarget)
 {
@@ -730,15 +730,15 @@ bool XDATETIME::CopyTo(XDATETIME* xtimetarget)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::CopyTo(XDATETIME& xtimetarget)
 * @brief      Copy to
 * @ingroup    XUTILS
-*
-* @param[in]  xtimetarget :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtimetarget : Xtimetarget value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::CopyTo(XDATETIME& xtimetarget)
 {
@@ -747,15 +747,15 @@ bool XDATETIME::CopyTo(XDATETIME& xtimetarget)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::IsTheSameDay(XDATETIME* xtime)
 * @brief      Is the same day
 * @ingroup    XUTILS
-*
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtime : Xtime pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsTheSameDay(XDATETIME* xtime)
 {
@@ -779,15 +779,15 @@ bool XDATETIME::IsTheSameDay(XDATETIME* xtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::IsTheSameDay(XDATETIME& xtime)
 * @brief      Is the same day
 * @ingroup    XUTILS
-*
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtime : Xtime value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsTheSameDay(XDATETIME& xtime)
 {
@@ -796,15 +796,15 @@ bool XDATETIME::IsTheSameDay(XDATETIME& xtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::AddYears(int years)
 * @brief      Add years
 * @ingroup    XUTILS
-*
-* @param[in]  years :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  years : Years value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::AddYears(int years)
 {
@@ -836,15 +836,15 @@ bool XDATETIME::AddYears(int years)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::AddMonths(int months)
 * @brief      Add months
 * @ingroup    XUTILS
-*
-* @param[in]  months :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  months : Months value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::AddMonths(int months)
 {
@@ -879,15 +879,15 @@ bool XDATETIME::AddMonths(int months)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::AddDays(int days)
 * @brief      Add days
 * @ingroup    XUTILS
-*
-* @param[in]  days :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  days : Days value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::AddDays(int days)
 {
@@ -902,15 +902,15 @@ bool XDATETIME::AddDays(int days)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::AddHours(XQWORD hours)
 * @brief      Add hours
 * @ingroup    XUTILS
-*
-* @param[in]  hours :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  hours : Hours value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::AddHours(XQWORD hours)
 {
@@ -923,15 +923,15 @@ bool XDATETIME::AddHours(XQWORD hours)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::AddMinutes(XQWORD minutes)
 * @brief      Add minutes
 * @ingroup    XUTILS
-*
-* @param[in]  minutes :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  minutes : Minutes value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::AddMinutes(XQWORD minutes)
 {
@@ -944,15 +944,15 @@ bool XDATETIME::AddMinutes(XQWORD minutes)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::AddSeconds(XQWORD seconds)
 * @brief      Add seconds
 * @ingroup    XUTILS
-*
-* @param[in]  seconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  seconds : Seconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::AddSeconds(XQWORD seconds)
 {
@@ -965,15 +965,15 @@ bool XDATETIME::AddSeconds(XQWORD seconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SubtractYears(int years)
 * @brief      Subtract years
 * @ingroup    XUTILS
-*
-* @param[in]  years :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  years : Years value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SubtractYears(int years)
 {
@@ -1004,15 +1004,15 @@ bool XDATETIME::SubtractYears(int years)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SubtractMonths(int months)
 * @brief      Subtract months
 * @ingroup    XUTILS
-*
-* @param[in]  months :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  months : Months value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SubtractMonths(int months)
 {
@@ -1062,15 +1062,15 @@ bool XDATETIME::SubtractMonths(int months)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SubtractDays(int days)
 * @brief      Subtract days
 * @ingroup    XUTILS
-*
-* @param[in]  days :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  days : Days value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SubtractDays(int days)
 {
@@ -1085,15 +1085,15 @@ bool XDATETIME::SubtractDays(int days)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SubtractHours(XQWORD hours)
 * @brief      Subtract hours
 * @ingroup    XUTILS
-*
-* @param[in]  hours :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  hours : Hours value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SubtractHours(XQWORD hours)
 {
@@ -1106,15 +1106,15 @@ bool XDATETIME::SubtractHours(XQWORD hours)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SubtractMinutes(XQWORD minutes)
 * @brief      Subtract minutes
 * @ingroup    XUTILS
-*
-* @param[in]  minutes :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  minutes : Minutes value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SubtractMinutes(XQWORD minutes)
 {
@@ -1127,15 +1127,15 @@ bool XDATETIME::SubtractMinutes(XQWORD minutes)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SubtractSeconds(XQWORD seconds)
 * @brief      Subtract seconds
 * @ingroup    XUTILS
-*
-* @param[in]  seconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  seconds : Seconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SubtractSeconds(XQWORD seconds)
 {
@@ -1148,15 +1148,15 @@ bool XDATETIME::SubtractSeconds(XQWORD seconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::operator == (XDATETIME xtime)
-* @brief      operator == 
+* @brief      operator ==
 * @ingroup    XUTILS
-*
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtime : Xtime value.
+* 
+* @return     bool XDATETIME:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::operator == (XDATETIME xtime)
 {
@@ -1173,15 +1173,15 @@ bool XDATETIME::operator == (XDATETIME xtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::operator != (XDATETIME xtime)
-* @brief      operator != 
+* @brief      operator !=
 * @ingroup    XUTILS
-*
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtime : Xtime value.
+* 
+* @return     bool XDATETIME:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::operator != (XDATETIME xtime)
 {
@@ -1198,15 +1198,15 @@ bool XDATETIME::operator != (XDATETIME xtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::operator > (XDATETIME xtime)
-* @brief      operator > 
+* @brief      operator >
 * @ingroup    XUTILS
-*
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtime : Xtime value.
+* 
+* @return     bool XDATETIME:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::operator >  (XDATETIME xtime)
 {
@@ -1231,15 +1231,15 @@ bool XDATETIME::operator >  (XDATETIME xtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::operator >= (XDATETIME xtime)
-* @brief      operator >= 
+* @brief      operator >=
 * @ingroup    XUTILS
-*
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtime : Xtime value.
+* 
+* @return     bool XDATETIME:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::operator >= (XDATETIME xtime)
 {
@@ -1264,15 +1264,15 @@ bool XDATETIME::operator >= (XDATETIME xtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::operator < (XDATETIME xtime)
-* @brief      operator < 
+* @brief      operator <
 * @ingroup    XUTILS
-*
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtime : Xtime value.
+* 
+* @return     bool XDATETIME:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::operator <  (XDATETIME xtime)
 {
@@ -1297,15 +1297,15 @@ bool XDATETIME::operator <  (XDATETIME xtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::operator <= (XDATETIME xtime)
-* @brief      operator <= 
+* @brief      operator <=
 * @ingroup    XUTILS
-*
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xtime : Xtime value.
+* 
+* @return     bool XDATETIME:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::operator <= (XDATETIME xtime)
 {
@@ -1330,16 +1330,16 @@ bool XDATETIME::operator <= (XDATETIME xtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::IsBetween(XDATETIME& start, XDATETIME& end)
 * @brief      Is between
 * @ingroup    XUTILS
-*
-* @param[in]  start :
-* @param[in]  end :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  start : Start value.
+* @param[in]  end : End value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsBetween(XDATETIME& start, XDATETIME& end)
 {
@@ -1353,9 +1353,9 @@ bool XDATETIME::IsBetween(XDATETIME& start, XDATETIME& end)
 * @brief      Read
 * @ingroup    XUTILS
 * 
-* @param[in]  islocal : 
+* @param[in]  islocal : Islocal value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::Read(bool islocal)
@@ -1368,13 +1368,13 @@ bool XDATETIME::Read(bool islocal)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XDATETIME::Write(bool localmode)
+* @fn         bool XDATETIME::Write(bool islocal)
 * @brief      Write
 * @ingroup    XUTILS
 * 
-* @param[in]  localmode : 
+* @param[in]  islocal : Islocal value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::Write(bool islocal)
@@ -1384,17 +1384,17 @@ bool XDATETIME::Write(bool islocal)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::GetFileDateTime(XPATH& xpath, void* tmzip, XDWORD* dt)
 * @brief      Get file date time
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  tmzip :
-* @param[in]  dt :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  tmzip : Tmzip pointer to use.
+* @param[in]  dt : Dt pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::GetFileDateTime(XPATH& xpath, void* tmzip, XDWORD* dt)
 {
@@ -1403,15 +1403,15 @@ bool XDATETIME::GetFileDateTime(XPATH& xpath, void* tmzip, XDWORD* dt)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::GetFileDateTime(XPATH& xpath)
 * @brief      Get file date time
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::GetFileDateTime(XPATH& xpath)
 {
@@ -1420,13 +1420,13 @@ bool XDATETIME::GetFileDateTime(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XDATETIME::GetMeridianDifference()
 * @brief      Get meridian difference
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetMeridianDifference()
 {
@@ -1435,15 +1435,15 @@ int XDATETIME::GetMeridianDifference()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::IsDayLigthSavingTime(int* bias)
 * @brief      Is day ligth saving time
 * @ingroup    XUTILS
-*
-* @param[in]  bias :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  bias : Bias pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsDayLigthSavingTime(int* bias)
 {
@@ -1452,16 +1452,16 @@ bool XDATETIME::IsDayLigthSavingTime(int* bias)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::GetDateTimeToString(XDWORD modificator, XSTRING& string)
 * @brief      Get date time to string
 * @ingroup    XUTILS
-*
-* @param[in]  modificator :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  modificator : Modificator value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::GetDateTimeToString(XDWORD modificator, XSTRING& string)
 { 
@@ -1603,16 +1603,16 @@ bool XDATETIME::GetDateTimeToString(XDWORD modificator, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::GetDateTimeToStringISO8601(XDWORD modificator, XSTRING& string)
 * @brief      Get date time to string ISO8601
 * @ingroup    XUTILS
-*
-* @param[in]  modificator : 
-* @param[in]  string : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  modificator : Modificator value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::GetDateTimeToStringISO8601(XDWORD modificator, XSTRING& string)
 {
@@ -1731,16 +1731,16 @@ bool XDATETIME::GetDateTimeToStringISO8601(XDWORD modificator, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::GetDateTimeFromString(XSTRING& string, XWORD modificator)
 * @brief      Get date time from string
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-* @param[in]  modificator :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  modificator : Modificator value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::GetDateTimeFromString(XSTRING& string, XWORD modificator)
 {
@@ -1904,10 +1904,10 @@ bool XDATETIME::GetDateTimeFromString(XSTRING& string, XWORD modificator)
 * @brief      Get date time from string ISO8601
 * @ingroup    XUTILS
 * 
-* @param[in]  string : 
-* @param[in]  modificator : 
+* @param[in]  string : String to use.
+* @param[in]  modificator : Modificator value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::GetDateTimeFromStringISO8601(XSTRING& string, XWORD modificator)
@@ -2042,15 +2042,15 @@ bool XDATETIME::GetDateTimeFromStringISO8601(XSTRING& string, XWORD modificator)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::GetMonthString(XSTRING& string)
 * @brief      Get month string
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::GetMonthString(XSTRING& string)
 {
@@ -2084,15 +2084,15 @@ bool XDATETIME::GetMonthString(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::GetDayOfWeekString(XSTRING& string)
 * @brief      Get day of week string
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::GetDayOfWeekString(XSTRING& string)
 {
@@ -2121,7 +2121,7 @@ bool XDATETIME::GetDayOfWeekString(XSTRING& string)
 * @brief      Get day of year
 * @ingroup    XUTILS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetDayOfYear() 
@@ -2155,7 +2155,7 @@ int XDATETIME::GetDayOfYear()
 * @brief      Get week of year
 * @ingroup    XUTILS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::GetWeekOfYear() 
@@ -2176,10 +2176,10 @@ int XDATETIME::GetWeekOfYear()
 * @fn         XQWORD XDATETIME::GetEPOCHFormat()
 * @brief      Get EPOCH format
 * @ingroup    XUTILS
-*
-* @return     XQWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XQWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XDATETIME::GetEPOCHFormat()
 {
   Read();
@@ -2199,13 +2199,13 @@ XQWORD XDATETIME::GetEPOCHFormat()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SetToZero()
 * @brief      Set to zero
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SetToZero()
 {
@@ -2216,13 +2216,13 @@ bool XDATETIME::SetToZero()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SetDateToZero()
 * @brief      Set date to zero
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SetDateToZero()
 {
@@ -2235,13 +2235,13 @@ bool XDATETIME::SetDateToZero()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::SetHourToZero()
 * @brief      Set hour to zero
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::SetHourToZero()
 {
@@ -2255,15 +2255,15 @@ bool XDATETIME::SetHourToZero()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDATETIME::Set(XDATETIME* datetime)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  datetime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  datetime : Datetime pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::Set(XDATETIME* datetime)
 {
@@ -2283,13 +2283,13 @@ bool XDATETIME::Set(XDATETIME* datetime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::Set(XDATETIME& datetime)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  datetime :
-*
+* 
+* @param[in]  datetime : Datetime value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::Set(XDATETIME& datetime)
 {
@@ -2303,9 +2303,9 @@ void XDATETIME::Set(XDATETIME& datetime)
 * @brief      Compare
 * @ingroup    XUTILS
 * 
-* @param[in]  datetime : 
+* @param[in]  datetime : Datetime value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XDATETIME::Compare(XDATETIME& datetime)
@@ -2386,14 +2386,14 @@ int XDATETIME::Compare(XDATETIME& datetime)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XDATETIME::IsModificatorActive(XDWORD modificator, XWORD tocheck)
+* @fn         bool XDATETIME::IsModificatorActive(XDWORD modificator, XDWORD tocheck)
 * @brief      Is modificator active
 * @ingroup    XUTILS
 * 
-* @param[in]  modificator : 
-* @param[in]  tocheck : 
+* @param[in]  modificator : Modificator value.
+* @param[in]  tocheck : Tocheck value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDATETIME::IsModificatorActive(XDWORD modificator, XDWORD tocheck)
@@ -2408,17 +2408,17 @@ bool XDATETIME::IsModificatorActive(XDWORD modificator, XDWORD tocheck)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         long XDATETIME::GetNDaysInJulian(int day, int month, int year)
 * @brief      Get N days in julian
 * @ingroup    XUTILS
-*
-* @param[in]  day :
-* @param[in]  month :
-* @param[in]  year :
-*
-* @return     long :
-*
+* 
+* @param[in]  day : Day value.
+* @param[in]  month : Month value.
+* @param[in]  year : Year value.
+* 
+* @return     long : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 long XDATETIME::GetNDaysInJulian(int day, int month, int year)
 {
@@ -2431,17 +2431,17 @@ long XDATETIME::GetNDaysInJulian(int day, int month, int year)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         long XDATETIME::GetNDaysInGregorian(int day, int month, int year)
 * @brief      Get N days in gregorian
 * @ingroup    XUTILS
-*
-* @param[in]  day :
-* @param[in]  month :
-* @param[in]  year :
-*
-* @return     long :
-*
+* 
+* @param[in]  day : Day value.
+* @param[in]  month : Month value.
+* @param[in]  year : Year value.
+* 
+* @return     long : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 long XDATETIME::GetNDaysInGregorian(int day, int month, int year)
 {
@@ -2454,12 +2454,12 @@ long XDATETIME::GetNDaysInGregorian(int day, int month, int year)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDATETIME::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDATETIME::Clean()
 {

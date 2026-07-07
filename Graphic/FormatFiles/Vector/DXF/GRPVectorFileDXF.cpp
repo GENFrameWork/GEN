@@ -100,7 +100,7 @@ GRPVECTORFILEDXF::~GRPVECTORFILEDXF()
 * @brief      Detect type
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILERESULT : 
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILEDXF::DetectType()
@@ -180,7 +180,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXF::DetectType()
 * @brief      Load
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILERESULT : 
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILEDXF::Load()
@@ -230,7 +230,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXF::Load()
 * @brief      Get config
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILECONFIG* : 
+* @return     GRPVECTORFILECONFIG* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILECONFIG* GRPVECTORFILEDXF::GetConfig()
@@ -245,7 +245,7 @@ GRPVECTORFILECONFIG* GRPVECTORFILEDXF::GetConfig()
 * @brief      Get sections
 * @ingroup    GRAPHIC
 * 
-* @return     XVECTOR<GRPVECTORFILEDXFTEXTSECTION*>* : 
+* @return     XVECTOR<GRPVECTORFILEDXFTEXTSECTION*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVECTORFILEDXFTEXTSECTION*>* GRPVECTORFILEDXF::GetSections()
@@ -260,9 +260,9 @@ XVECTOR<GRPVECTORFILEDXFTEXTSECTION*>* GRPVECTORFILEDXF::GetSections()
 * @brief      Get section
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTION* : 
+* @return     GRPVECTORFILEDXFTEXTSECTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTION* GRPVECTORFILEDXF::GetSection(GRPVECTORFILEDXFTEXTSECTION_TYPESECTION type)
@@ -286,9 +286,9 @@ GRPVECTORFILEDXFTEXTSECTION* GRPVECTORFILEDXF::GetSection(GRPVECTORFILEDXFTEXTSE
 * @brief      Parser text file prepare line
 * @ingroup    GRAPHIC
 * 
-* @param[in]  line : 
+* @param[in]  line : Line pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXF::ParserTextFilePrepareLine(XSTRING* line)
@@ -316,10 +316,10 @@ bool GRPVECTORFILEDXF::ParserTextFilePrepareLine(XSTRING* line)
 * @brief      Parser text sections
 * @ingroup    GRAPHIC
 * 
-* @param[in]  fileTXT : 
-* @param[in]  sections : 
+* @param[in]  fileTXT : File TXT pointer to use.
+* @param[in]  sections : Sections pointer to use.
 * 
-* @return     GRPVECTORFILEDXFRESULT : 
+* @return     GRPVECTORFILEDXFRESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFRESULT GRPVECTORFILEDXF::ParserTextSections(XFILETXT* fileTXT, XVECTOR<GRPVECTORFILEDXFTEXTSECTION*>& sections)
@@ -433,10 +433,10 @@ GRPVECTORFILEDXFRESULT GRPVECTORFILEDXF::ParserTextSections(XFILETXT* fileTXT, X
 * @brief      Parser have any section
 * @ingroup    GRAPHIC
 * 
-* @param[in]  file : 
-* @param[in]  nlinesmax : 
+* @param[in]  file : File object to use.
+* @param[in]  nlinesmax : Nlinesmax value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXF::ParserHaveAnySection(XFILETXT* file, int nlinesmax)
@@ -486,9 +486,9 @@ bool GRPVECTORFILEDXF::ParserHaveAnySection(XFILETXT* file, int nlinesmax)
 * @brief      Parser text file
 * @ingroup    GRAPHIC
 * 
-* @param[in]  fileTXT : 
+* @param[in]  fileTXT : File TXT pointer to use.
 * 
-* @return     GRPVECTORFILEDXFRESULT : 
+* @return     GRPVECTORFILEDXFRESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFRESULT GRPVECTORFILEDXF::ParserTextFile(XFILETXT* fileTXT)
@@ -542,10 +542,10 @@ GRPVECTORFILEDXFRESULT GRPVECTORFILEDXF::ParserTextFile(XFILETXT* fileTXT)
 * @brief      Generate sections entities
 * @ingroup    GRAPHIC
 * 
-* @param[in]  sectionentities : 
-* @param[in]  line : 
+* @param[in]  sectionentities : Sectionentities pointer to use.
+* @param[in]  line : Line value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXF::GenerateSectionsEntities(GRPVECTORFILEDXFTEXTSECTIONENTITIES* sectionentities, XSTRING& line)
@@ -579,7 +579,7 @@ bool GRPVECTORFILEDXF::GenerateSectionsEntities(GRPVECTORFILEDXFTEXTSECTIONENTIT
 * @brief      Show trace all sections
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXF::ShowTraceAllSections()

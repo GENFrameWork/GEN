@@ -54,13 +54,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOPING_XEVENT::DIOPING_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* @fn         DIOPING_XEVENT::DIOPING_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPING_XEVENT::DIOPING_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
@@ -89,7 +89,7 @@ DIOPING_XEVENT::~DIOPING_XEVENT()
 * @brief      Get ping reply
 * @ingroup    DATAIO
 * 
-* @return     DIOPINGREPLY* : 
+* @return     DIOPINGREPLY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPINGREPLY* DIOPING_XEVENT::GetPingReply()
@@ -104,7 +104,7 @@ DIOPINGREPLY* DIOPING_XEVENT::GetPingReply()
 * @brief      Set ping reply
 * @ingroup    DATAIO
 * 
-* @param[in]  pingreply : 
+* @param[in]  pingreply : Pingreply pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPING_XEVENT::SetPingReply(DIOPINGREPLY* pingreply)

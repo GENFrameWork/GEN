@@ -84,7 +84,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMUART::DIOANDROIDSTREAMUART()
+* @fn         DIOANDROIDSTREAMUART::DIOANDROIDSTREAMUART() : DIOSTREAMUART() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -143,7 +143,7 @@ DIOANDROIDSTREAMUART::~DIOANDROIDSTREAMUART()
 * @brief      Get status
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     DIOSTREAMSTATUS : 
+* @return     DIOSTREAMSTATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOANDROIDSTREAMUART::GetStatus()
@@ -161,7 +161,7 @@ DIOSTREAMSTATUS DIOANDROIDSTREAMUART::GetStatus()
 * @brief      Open
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::Open()
@@ -212,9 +212,9 @@ bool DIOANDROIDSTREAMUART::Open()
 * @brief      Config
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  mask : 
+* @param[in]  mask : Mask value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::Config(XWORD mask)
@@ -343,10 +343,10 @@ bool DIOANDROIDSTREAMUART::Config(XWORD mask)
 * @brief      Read direct
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOANDROIDSTREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
@@ -396,10 +396,10 @@ XDWORD DIOANDROIDSTREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOANDROIDSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
@@ -434,7 +434,7 @@ XDWORD DIOANDROIDSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Disconnect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::Disconnect()                                
@@ -449,7 +449,7 @@ bool DIOANDROIDSTREAMUART::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::Close()
@@ -474,7 +474,7 @@ bool DIOANDROIDSTREAMUART::Close()
 * @brief      Get CTS
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::GetCTS()
@@ -495,7 +495,7 @@ bool DIOANDROIDSTREAMUART::GetCTS()
 * @brief      Get DSR
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::GetDSR()
@@ -516,7 +516,7 @@ bool DIOANDROIDSTREAMUART::GetDSR()
 * @brief      Get ring
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::GetRing()
@@ -537,7 +537,7 @@ bool DIOANDROIDSTREAMUART::GetRing()
 * @brief      Get RLSD
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::GetRLSD()
@@ -554,9 +554,9 @@ bool DIOANDROIDSTREAMUART::GetRLSD()
 * @brief      Set RTS
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  on : 
+* @param[in]  on : On value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::SetRTS(bool on)
@@ -581,9 +581,9 @@ bool DIOANDROIDSTREAMUART::SetRTS(bool on)
 * @brief      Set DTR
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  on : 
+* @param[in]  on : On value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::SetDTR(bool on)
@@ -609,7 +609,7 @@ bool DIOANDROIDSTREAMUART::SetDTR(bool on)
 * @note       INTERNAL
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUART::CleanBuffers()
@@ -628,7 +628,7 @@ bool DIOANDROIDSTREAMUART::CleanBuffers()
 * @brief      Thread connection
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMUART::ThreadConnection(void* param)

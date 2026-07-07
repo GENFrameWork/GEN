@@ -56,13 +56,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_LAYOUT::UI_LAYOUT(UI_SKINCANVAS* ui_skin)
+* @fn         UI_LAYOUT::UI_LAYOUT(UI_SKIN* ui_skin)
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* @param[in]  ui_skin : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  ui_skin : Ui skin pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT::UI_LAYOUT(UI_SKIN* ui_skin)    
 { 
   Clean();                        
@@ -77,8 +77,8 @@ UI_LAYOUT::UI_LAYOUT(UI_SKIN* ui_skin)
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT::~UI_LAYOUT()    
 { 
   if(ui_skin)
@@ -97,10 +97,10 @@ UI_LAYOUT::~UI_LAYOUT()
 * @fn         XSTRING* UI_LAYOUT::GetNameID()
 * @brief      Get name ID
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_LAYOUT::GetNameID()
 {
   return &nameID;
@@ -112,10 +112,10 @@ XSTRING* UI_LAYOUT::GetNameID()
 * @fn         UI_SKIN* UI_LAYOUT::GetSkin()
 * @brief      Get skin
 * @ingroup    USERINTERFACE
-*
-* @return     UI_SKIN* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_SKIN* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN* UI_LAYOUT::GetSkin()
 {
   return ui_skin;
@@ -128,7 +128,7 @@ UI_SKIN* UI_LAYOUT::GetSkin()
 * @brief      Set skin
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  ui_skin : 
+* @param[in]  ui_skin : Ui skin pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_LAYOUT::SetSkin(UI_SKIN* ui_skin)
@@ -143,7 +143,7 @@ void UI_LAYOUT::SetSkin(UI_SKIN* ui_skin)
 * @brief      Get background
 * @ingroup    USERINTERFACE
 * 
-* @return     UI_BACKGROUND* : 
+* @return     UI_BACKGROUND* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_BACKGROUND* UI_LAYOUT::GetBackground()
@@ -157,12 +157,12 @@ UI_BACKGROUND* UI_LAYOUT::GetBackground()
 * @fn         bool UI_LAYOUT::Elements_Add(UI_ELEMENT* element)
 * @brief      Elements add
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_LAYOUT::Elements_Add(UI_ELEMENT* element)
 {
   if(!element) return false;
@@ -178,10 +178,10 @@ bool UI_LAYOUT::Elements_Add(UI_ELEMENT* element)
 * @fn         XVECTOR<UI_ELEMENT*>* UI_LAYOUT::Elements_Get()
 * @brief      Elements get
 * @ingroup    USERINTERFACE
-*
-* @return     XVECTOR<UI_ELEMENT*>* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XVECTOR<UI_ELEMENT*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<UI_ELEMENT*>* UI_LAYOUT::Elements_Get()
 {
   return &elements;
@@ -193,13 +193,13 @@ XVECTOR<UI_ELEMENT*>* UI_LAYOUT::Elements_Get()
 * @fn         UI_ELEMENT* UI_LAYOUT::Elements_Get(XCHAR* nameelement, UI_ELEMENT_TYPE type)
 * @brief      Elements get
 * @ingroup    USERINTERFACE
-*
-* @param[in]  nameelement : 
-* @param[in]  type : 
 * 
-* @return     UI_ELEMENT* : 
+* @param[in]  nameelement : Nameelement pointer to use.
+* @param[in]  type : Type value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_LAYOUT::Elements_Get(XCHAR* nameelement, UI_ELEMENT_TYPE type)
     {
   if(elements.IsEmpty()) return NULL;
@@ -235,10 +235,10 @@ UI_ELEMENT* UI_LAYOUT::Elements_Get(XCHAR* nameelement, UI_ELEMENT_TYPE type)
 * @fn         bool UI_LAYOUT::Elements_DeleteAll()
 * @brief      Elements GEN_DELETE all
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_LAYOUT::Elements_DeleteAll()
 {
   if(elements.IsEmpty())  return false;
@@ -255,12 +255,12 @@ bool UI_LAYOUT::Elements_DeleteAll()
 * @fn         bool UI_LAYOUT::Elements_SetToRedraw(bool recursive)
 * @brief      Elements set to redraw
 * @ingroup    USERINTERFACE
-*
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_LAYOUT::Elements_SetToRedraw(bool recursive)
 {
   bool status = false;
@@ -283,13 +283,13 @@ bool UI_LAYOUT::Elements_SetToRedraw(bool recursive)
 * @fn         bool UI_LAYOUT::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 * @brief      Elements set to redraw
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_LAYOUT::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 {
   if(!element) return false;
@@ -319,10 +319,10 @@ bool UI_LAYOUT::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 * @fn         bool UI_LAYOUT::Update()
 * @brief      Update
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_LAYOUT::Update()
 {
   for(XDWORD c=0; c<elements.GetSize(); c++)
@@ -342,14 +342,14 @@ bool UI_LAYOUT::Update()
 * @fn         UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT* element, XCHAR* nameelement, UI_ELEMENT_TYPE type)
 * @brief      Elements get
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  nameelement : 
-* @param[in]  type : 
 * 
-* @return     UI_ELEMENT* : 
+* @param[in]  element : Element to process.
+* @param[in]  nameelement : Nameelement pointer to use.
+* @param[in]  type : Type value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT* element, XCHAR* nameelement, UI_ELEMENT_TYPE type)
 {
   if(!element) return NULL;
@@ -386,8 +386,8 @@ UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT* element, XCHAR* nameelement, UI_
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_LAYOUT::Clean()
 {
   ui_skin   =  NULL;

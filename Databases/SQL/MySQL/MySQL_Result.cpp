@@ -61,12 +61,12 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MYSQL_RESULT::~MYSQL_RESULT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_RESULT::~MYSQL_RESULT()
 {
@@ -121,13 +121,13 @@ MYSQL_RESULT::~MYSQL_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD MYSQL_RESULT::GetNumRows()
 * @brief      Get num rows
 * @ingroup    DATABASE
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD MYSQL_RESULT::GetNumRows()
 {
@@ -136,13 +136,13 @@ XQWORD MYSQL_RESULT::GetNumRows()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD MYSQL_RESULT::GetNumColumns()
 * @brief      Get num columns
 * @ingroup    DATABASE
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD MYSQL_RESULT::GetNumColumns()
 {
@@ -151,15 +151,15 @@ XQWORD MYSQL_RESULT::GetNumColumns()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_RESULT::Seek(int index)
 * @brief      Seek
 * @ingroup    DATABASE
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_RESULT::Seek(int index)
 {
@@ -170,13 +170,13 @@ bool MYSQL_RESULT::Seek(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_RESULT::First()
 * @brief      First
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_RESULT::First()
 {
@@ -185,13 +185,13 @@ bool MYSQL_RESULT::First()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_RESULT::Last()
 * @brief      Last
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_RESULT::Last()
 {
@@ -200,13 +200,13 @@ bool MYSQL_RESULT::Last()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_RESULT::Next()
 * @brief      Next
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_RESULT::Next()
 {
@@ -220,13 +220,13 @@ bool MYSQL_RESULT::Next()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_RESULT::ProcessRow()
 * @brief      Process row
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_RESULT::ProcessRow()
 {
@@ -322,13 +322,13 @@ bool MYSQL_RESULT::ProcessRow()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_RESULT::Abort()
 * @brief      Abort
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_RESULT::Abort()
 {
@@ -337,13 +337,13 @@ bool MYSQL_RESULT::Abort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_RESULT::HasNext()
 * @brief      Has next
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_RESULT::HasNext()
 {
@@ -352,11 +352,11 @@ bool MYSQL_RESULT::HasNext()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         MYSQL_RESULT::MYSQL_RESULT()
+* 
+* @fn         MYSQL_RESULT::MYSQL_RESULT() : DB_SQL_RESULT()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_RESULT::MYSQL_RESULT() : DB_SQL_RESULT()
 {
@@ -365,12 +365,12 @@ MYSQL_RESULT::MYSQL_RESULT() : DB_SQL_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void MYSQL_RESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void MYSQL_RESULT::Clean()
 {

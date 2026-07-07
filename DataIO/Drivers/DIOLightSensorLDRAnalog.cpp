@@ -60,13 +60,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLIGHTSENSORLDRANALOG::DIOLIGHTSENSORLDRANALOG( DIOGPIO* diogpio, int pindata, bool activatecache)
+* @fn         DIOLIGHTSENSORLDRANALOG::DIOLIGHTSENSORLDRANALOG( DIOGPIO* diogpio, int pindata, bool activatecache) : DIODEVICE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]   diogpio : 
-* @param[in]   pindata : 
-* @param[in]   activatecache : 
+* @param[in]  diogpio : Diogpio pointer to use.
+* @param[in]  pindata : Pindata value.
+* @param[in]  DIODEVICE : DIODEVICE value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLIGHTSENSORLDRANALOG::DIOLIGHTSENSORLDRANALOG( DIOGPIO* diogpio, int pindata, bool activatecache) : DIODEVICE()
@@ -121,10 +121,10 @@ DIOLIGHTSENSORLDRANALOG::~DIOLIGHTSENSORLDRANALOG()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLIGHTSENSORLDRANALOG::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLIGHTSENSORLDRANALOG::Ini()
@@ -143,7 +143,7 @@ bool DIOLIGHTSENSORLDRANALOG::Ini()
 * @brief      Get pin data
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLIGHTSENSORLDRANALOG::GetPinData()
@@ -158,9 +158,9 @@ int DIOLIGHTSENSORLDRANALOG::GetPinData()
 * @brief      Read from cache
 * @ingroup    DATAIO
 * 
-* @param[in]  level : 
+* @param[in]  level : Level value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLIGHTSENSORLDRANALOG::ReadFromCache(XDWORD& level)
@@ -187,9 +187,9 @@ bool DIOLIGHTSENSORLDRANALOG::ReadFromCache(XDWORD& level)
 * @brief      Read direct
 * @ingroup    DATAIO
 * 
-* @param[in]  level : 
+* @param[in]  level : Level value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLIGHTSENSORLDRANALOG::ReadDirect(XDWORD& level)
@@ -226,10 +226,10 @@ bool DIOLIGHTSENSORLDRANALOG::ReadDirect(XDWORD& level)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLIGHTSENSORLDRANALOG::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLIGHTSENSORLDRANALOG::End()
@@ -248,7 +248,7 @@ bool DIOLIGHTSENSORLDRANALOG::End()
 * @brief      Thread run function
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLIGHTSENSORLDRANALOG::ThreadRunFunction(void* param)

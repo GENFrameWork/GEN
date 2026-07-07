@@ -93,7 +93,7 @@ DIOPCAP_FILTER_ENTRY::~DIOPCAP_FILTER_ENTRY()
 * @brief      Get name
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPCAP_FILTER_ENTRY::GetName()
@@ -108,7 +108,7 @@ XSTRING* DIOPCAP_FILTER_ENTRY::GetName()
 * @brief      Get protocol type
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPCAP_FILTER_ENTRY::GetProtocolType()
@@ -123,9 +123,9 @@ XDWORD DIOPCAP_FILTER_ENTRY::GetProtocolType()
 * @brief      Set protocol type
 * @ingroup    DATAIO
 * 
-* @param[in]  protocoltype : 
+* @param[in]  protocoltype : Protocoltype value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTER_ENTRY::SetProtocolType(XDWORD protocoltype)
@@ -142,7 +142,7 @@ bool DIOPCAP_FILTER_ENTRY::SetProtocolType(XDWORD protocoltype)
 * @brief      Ports get all
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<XDWORD>* : 
+* @return     XVECTOR<XDWORD>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XDWORD>* DIOPCAP_FILTER_ENTRY::Ports_GetAll()
@@ -157,9 +157,9 @@ XVECTOR<XDWORD>* DIOPCAP_FILTER_ENTRY::Ports_GetAll()
 * @brief      Ports exists
 * @ingroup    DATAIO
 * 
-* @param[in]  port : 
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTER_ENTRY::Ports_Exists(XDWORD port)
@@ -183,9 +183,9 @@ bool DIOPCAP_FILTER_ENTRY::Ports_Exists(XDWORD port)
 * @brief      Ports get
 * @ingroup    DATAIO
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPCAP_FILTER_ENTRY::Ports_Get(int index)
@@ -210,9 +210,9 @@ XDWORD DIOPCAP_FILTER_ENTRY::Ports_Get(int index)
 * @brief      Ports add
 * @ingroup    DATAIO
 * 
-* @param[in]  port : 
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTER_ENTRY::Ports_Add(XDWORD port)
@@ -232,9 +232,9 @@ bool DIOPCAP_FILTER_ENTRY::Ports_Add(XDWORD port)
 * @brief      Ports del
 * @ingroup    DATAIO
 * 
-* @param[in]  port : 
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTER_ENTRY::Ports_Del(XDWORD port)
@@ -254,7 +254,7 @@ bool DIOPCAP_FILTER_ENTRY::Ports_Del(XDWORD port)
 * @brief      Ports del all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTER_ENTRY::Ports_DelAll()
@@ -322,7 +322,7 @@ DIOPCAP_FILTERS::~DIOPCAP_FILTERS()
 * @brief      Entrys get all
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIOPCAP_FILTER_ENTRY*>* : 
+* @return     XVECTOR<DIOPCAP_FILTER_ENTRY*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOPCAP_FILTER_ENTRY*>* DIOPCAP_FILTERS::Entrys_GetAll()
@@ -337,9 +337,9 @@ XVECTOR<DIOPCAP_FILTER_ENTRY*>* DIOPCAP_FILTERS::Entrys_GetAll()
 * @brief      Entrys get
 * @ingroup    DATAIO
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     DIOPCAP_FILTER_ENTRY* : 
+* @return     DIOPCAP_FILTER_ENTRY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP_FILTER_ENTRY* DIOPCAP_FILTERS::Entrys_Get(XCHAR* name)
@@ -366,9 +366,9 @@ DIOPCAP_FILTER_ENTRY* DIOPCAP_FILTERS::Entrys_Get(XCHAR* name)
 * @brief      Entrys get
 * @ingroup    DATAIO
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     DIOPCAP_FILTER_ENTRY* : 
+* @return     DIOPCAP_FILTER_ENTRY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP_FILTER_ENTRY* DIOPCAP_FILTERS::Entrys_Get(XSTRING& name)
@@ -383,9 +383,9 @@ DIOPCAP_FILTER_ENTRY* DIOPCAP_FILTERS::Entrys_Get(XSTRING& name)
 * @brief      Entrys get
 * @ingroup    DATAIO
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
-* @return     DIOPCAP_FILTER_ENTRY* : 
+* @return     DIOPCAP_FILTER_ENTRY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP_FILTER_ENTRY* DIOPCAP_FILTERS::Entrys_Get(int index)
@@ -410,12 +410,12 @@ DIOPCAP_FILTER_ENTRY* DIOPCAP_FILTERS::Entrys_Get(int index)
 * @brief      Entrys set
 * @ingroup    DATAIO
 * 
-* @param[in]  name : 
-* @param[in]  typeprotocol : 
-* @param[in]  nports : 
-* @param[in]  ... : 
+* @param[in]  name : Name to use.
+* @param[in]  typeprotocol : Typeprotocol value.
+* @param[in]  nports : Nports value.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTERS::Entrys_Set(XCHAR* name, XDWORD typeprotocol, int nports, ...)
@@ -453,12 +453,12 @@ bool DIOPCAP_FILTERS::Entrys_Set(XCHAR* name, XDWORD typeprotocol, int nports, .
 * @brief      Entrys add
 * @ingroup    DATAIO
 * 
-* @param[in]  name : 
-* @param[in]  typeprotocol : 
-* @param[in]  nports : 
-* @param[in]  ... : 
+* @param[in]  name : Name to use.
+* @param[in]  typeprotocol : Typeprotocol value.
+* @param[in]  nports : Nports value.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTERS::Entrys_Add(XCHAR* name, XDWORD typeprotocol, int nports, ...)
@@ -498,9 +498,9 @@ bool DIOPCAP_FILTERS::Entrys_Add(XCHAR* name, XDWORD typeprotocol, int nports, .
 * @brief      Entrys del
 * @ingroup    DATAIO
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTERS::Entrys_Del(XCHAR* name)
@@ -521,9 +521,9 @@ bool DIOPCAP_FILTERS::Entrys_Del(XCHAR* name)
 * @brief      Entrys check
 * @ingroup    DATAIO
 * 
-* @param[in]  frame : 
+* @param[in]  frame : Frame pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTERS::Entrys_Check(DIOPCAPFRAME* frame)
@@ -598,7 +598,7 @@ bool DIOPCAP_FILTERS::Entrys_Check(DIOPCAPFRAME* frame)
 * @brief      Entrys del all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP_FILTERS::Entrys_DelAll()

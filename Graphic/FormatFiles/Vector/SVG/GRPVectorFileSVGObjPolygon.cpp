@@ -55,9 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJPOLYGON::GRPVECTORFILESVGOBJPOLYGON()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJPOLYGON::GRPVECTORFILESVGOBJPOLYGON()
 {
@@ -66,10 +68,12 @@ GRPVECTORFILESVGOBJPOLYGON::GRPVECTORFILESVGOBJPOLYGON()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJPOLYGON::~GRPVECTORFILESVGOBJPOLYGON()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJPOLYGON::~GRPVECTORFILESVGOBJPOLYGON()
 {
@@ -78,11 +82,14 @@ GRPVECTORFILESVGOBJPOLYGON::~GRPVECTORFILESVGOBJPOLYGON()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPOLYGON::IsClosed()
 * @brief      Is closed : a polygon is always a closed sub path
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-* @return     bool : true
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPOLYGON::IsClosed()
 {
@@ -91,10 +98,12 @@ bool GRPVECTORFILESVGOBJPOLYGON::IsClosed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJPOLYGON::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJPOLYGON::Clean()
 {

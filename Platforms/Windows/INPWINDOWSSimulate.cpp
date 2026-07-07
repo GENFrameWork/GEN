@@ -90,9 +90,9 @@ INPWINDOWSSIMULATE::~INPWINDOWSSIMULATE()
 * @brief      Key press
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  code : 
+* @param[in]  code : Code value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Key_Press(XBYTE code)
@@ -109,9 +109,9 @@ bool INPWINDOWSSIMULATE::Key_Press(XBYTE code)
 * @brief      Key un press
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  code : 
+* @param[in]  code : Code value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Key_UnPress(XBYTE code)
@@ -128,10 +128,10 @@ bool INPWINDOWSSIMULATE::Key_UnPress(XBYTE code)
 * @brief      Key click
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  code : 
-* @param[in]  pressuretime : 
+* @param[in]  code : Code value.
+* @param[in]  pressuretime : Pressuretime value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Key_Click(XBYTE code, int pressuretime)
@@ -152,9 +152,9 @@ bool INPWINDOWSSIMULATE::Key_Click(XBYTE code, int pressuretime)
 * @brief      Key press by literal
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  literal : 
+* @param[in]  literal : Literal pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Key_PressByLiteral(XCHAR* literal)
@@ -185,9 +185,9 @@ bool INPWINDOWSSIMULATE::Key_PressByLiteral(XCHAR* literal)
 * @brief      Key un press by literal
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  literal : 
+* @param[in]  literal : Literal pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Key_UnPressByLiteral(XCHAR* literal)
@@ -219,10 +219,10 @@ bool INPWINDOWSSIMULATE::Key_UnPressByLiteral(XCHAR* literal)
 * @brief      Key click by literal
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  literal : 
-* @param[in]  pressuretime : 
+* @param[in]  literal : Literal pointer to use.
+* @param[in]  pressuretime : Pressuretime value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Key_ClickByLiteral(XCHAR* literal, int pressuretime)
@@ -261,10 +261,10 @@ bool INPWINDOWSSIMULATE::Key_ClickByLiteral(XCHAR* literal, int pressuretime)
 * @brief      Key click by text
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  text : 
-* @param[in]  pressuretimeinterval : 
+* @param[in]  text : Text to use.
+* @param[in]  pressuretimeinterval : Pressuretimeinterval value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Key_ClickByText(XCHAR* text, int pressuretimeinterval)
@@ -430,10 +430,10 @@ bool INPWINDOWSSIMULATE::Key_ClickByText(XCHAR* text, int pressuretimeinterval)
 * @brief      Mouse set pos
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Mouse_SetPos(int x, int y)
@@ -450,10 +450,10 @@ bool INPWINDOWSSIMULATE::Mouse_SetPos(int x, int y)
 * @brief      Mouse click
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::Mouse_Click(int x, int y)
@@ -473,7 +473,7 @@ bool INPWINDOWSSIMULATE::Mouse_Click(int x, int y)
 * @brief      Is caps lock active
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::IsCapsLockActive()
@@ -492,7 +492,7 @@ bool INPWINDOWSSIMULATE::IsCapsLockActive()
 * @brief      Is num lock active
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::IsNumLockActive()
@@ -511,7 +511,7 @@ bool INPWINDOWSSIMULATE::IsNumLockActive()
 * @brief      Is scroll lock active
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSSIMULATE::IsScrollLockActive()

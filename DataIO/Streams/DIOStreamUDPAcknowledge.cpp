@@ -65,11 +65,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSTREAMUDPACKNOWLEDGE::DIOSTREAMUDPACKNOWLEDGE(DIOSTREAMUDPCONFIG* config)
+* @fn         DIOSTREAMUDPACKNOWLEDGE::DIOSTREAMUDPACKNOWLEDGE(DIOSTREAMUDPCONFIG* config) : DIOSTREAMUDP()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  config : 
+* @param[in]  DIOSTREAMUDP : DIOSTREAMUDP pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUDPACKNOWLEDGE::DIOSTREAMUDPACKNOWLEDGE(DIOSTREAMUDPCONFIG* config) : DIOSTREAMUDP()
@@ -109,7 +109,7 @@ DIOSTREAMUDPACKNOWLEDGE::~DIOSTREAMUDPACKNOWLEDGE()
 * @brief      Get config
 * @ingroup    DATAIO
 * 
-* @return     DIOSTREAMCONFIG* : 
+* @return     DIOSTREAMCONFIG* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIG* DIOSTREAMUDPACKNOWLEDGE::GetConfig()
@@ -124,9 +124,9 @@ DIOSTREAMCONFIG* DIOSTREAMUDPACKNOWLEDGE::GetConfig()
 * @brief      Set config
 * @ingroup    DATAIO
 * 
-* @param[in]  config : 
+* @param[in]  config : Configuration object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPACKNOWLEDGE::SetConfig(DIOSTREAMCONFIG* config)
@@ -142,7 +142,7 @@ bool DIOSTREAMUDPACKNOWLEDGE::SetConfig(DIOSTREAMCONFIG* config)
 * @brief      Get status
 * @ingroup    DATAIO
 * 
-* @return     DIOSTREAMSTATUS : 
+* @return     DIOSTREAMSTATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOSTREAMUDPACKNOWLEDGE::GetStatus()
@@ -158,7 +158,7 @@ DIOSTREAMSTATUS DIOSTREAMUDPACKNOWLEDGE::GetStatus()
 * @brief      Get timeout
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMUDPACKNOWLEDGE::GetTimeout()                                                              
@@ -173,7 +173,7 @@ int DIOSTREAMUDPACKNOWLEDGE::GetTimeout()
 * @brief      Set timeout
 * @ingroup    DATAIO
 * 
-* @param[in]  timeout : 
+* @param[in]  timeout : Timeout value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUDPACKNOWLEDGE::SetTimeout(int timeout)
@@ -188,7 +188,7 @@ void DIOSTREAMUDPACKNOWLEDGE::SetTimeout(int timeout)
 * @brief      Open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPACKNOWLEDGE::Open()
@@ -223,10 +223,10 @@ bool DIOSTREAMUDPACKNOWLEDGE::Open()
 * @brief      Write
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMUDPACKNOWLEDGE::Write(XBYTE* buffer, XDWORD size)
@@ -298,12 +298,12 @@ XDWORD DIOSTREAMUDPACKNOWLEDGE::Write(XBYTE* buffer, XDWORD size)
 * @brief      Write datagram
 * @ingroup    DATAIO
 * 
-* @param[in]  address : 
-* @param[in]  port : 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  address : Address value.
+* @param[in]  port : Port number to use.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPACKNOWLEDGE::WriteDatagram(XSTRING& address, XWORD port, XBYTE* buffer, XDWORD size)
@@ -332,11 +332,11 @@ bool DIOSTREAMUDPACKNOWLEDGE::WriteDatagram(XSTRING& address, XWORD port, XBYTE*
 * @brief      Write datagram
 * @ingroup    DATAIO
 * 
-* @param[in]  address : 
-* @param[in]  port : 
-* @param[in]  xbuffer : 
+* @param[in]  address : Address value.
+* @param[in]  port : Port number to use.
+* @param[in]  xbuffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPACKNOWLEDGE::WriteDatagram(XSTRING& address, XWORD port, XBUFFER& xbuffer)
@@ -351,7 +351,7 @@ bool DIOSTREAMUDPACKNOWLEDGE::WriteDatagram(XSTRING& address, XWORD port, XBUFFE
 * @brief      Disconnect
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPACKNOWLEDGE::Disconnect()
@@ -382,7 +382,7 @@ bool DIOSTREAMUDPACKNOWLEDGE::Disconnect()
 * @brief      Close
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPACKNOWLEDGE::Close()
@@ -413,7 +413,7 @@ bool DIOSTREAMUDPACKNOWLEDGE::Close()
 * @brief      Get DIO stream base
 * @ingroup    DATAIO
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOSTREAMUDPACKNOWLEDGE::GetDIOStreamBase()
@@ -428,7 +428,7 @@ DIOSTREAM* DIOSTREAMUDPACKNOWLEDGE::GetDIOStreamBase()
 * @brief      Thread run function
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUDPACKNOWLEDGE::ThreadRunFunction(void* param)

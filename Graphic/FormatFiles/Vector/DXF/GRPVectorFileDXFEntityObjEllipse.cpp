@@ -56,11 +56,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILEDXFENTITYOBJELLIPSE::GRPVECTORFILEDXFENTITYOBJELLIPSE(XCHAR* nametype)
+* @fn         GRPVECTORFILEDXFENTITYOBJELLIPSE::GRPVECTORFILEDXFENTITYOBJELLIPSE(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ (nametype)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nametype : 
+* @param[in]  nametype : Nametype pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJELLIPSE::GRPVECTORFILEDXFENTITYOBJELLIPSE(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ (nametype)
@@ -91,7 +91,7 @@ GRPVECTORFILEDXFENTITYOBJELLIPSE::~GRPVECTORFILEDXFENTITYOBJELLIPSE()
 * @brief      Get center
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJELLIPSE::GetCenter()
@@ -106,9 +106,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJELLIPSE::GetCenter()
 * @brief      Set center
 * @ingroup    GRAPHIC
 * 
-* @param[in]  center : 
+* @param[in]  center : Center pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJELLIPSE::SetCenter(GRPVECTORFILEDXFENTITYDEFPOINT* center)
@@ -130,7 +130,7 @@ bool GRPVECTORFILEDXFENTITYOBJELLIPSE::SetCenter(GRPVECTORFILEDXFENTITYDEFPOINT*
 * @brief      Get major axis
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJELLIPSE::GetMajorAxis()
@@ -145,9 +145,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJELLIPSE::GetMajorAxis()
 * @brief      Set major axis
 * @ingroup    GRAPHIC
 * 
-* @param[in]  majoraxis : 
+* @param[in]  majoraxis : Majoraxis pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJELLIPSE::SetMajorAxis(GRPVECTORFILEDXFENTITYDEFPOINT* majoraxis)
@@ -169,7 +169,7 @@ bool GRPVECTORFILEDXFENTITYOBJELLIPSE::SetMajorAxis(GRPVECTORFILEDXFENTITYDEFPOI
 * @brief      Get ini parameter
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJELLIPSE::GetIniParameter()
@@ -184,7 +184,7 @@ double GRPVECTORFILEDXFENTITYOBJELLIPSE::GetIniParameter()
 * @brief      Set ini parameter
 * @ingroup    GRAPHIC
 * 
-* @param[in]  iniparameter : 
+* @param[in]  iniparameter : Iniparameter value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJELLIPSE::SetIniParameter(double iniparameter)
@@ -199,7 +199,7 @@ void GRPVECTORFILEDXFENTITYOBJELLIPSE::SetIniParameter(double iniparameter)
 * @brief      Get end parameter
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJELLIPSE::GetEndParameter()
@@ -214,7 +214,7 @@ double GRPVECTORFILEDXFENTITYOBJELLIPSE::GetEndParameter()
 * @brief      Set end parameter
 * @ingroup    GRAPHIC
 * 
-* @param[in]  endparameter : 
+* @param[in]  endparameter : Endparameter value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJELLIPSE::SetEndParameter(double endparameter)
@@ -229,7 +229,7 @@ void GRPVECTORFILEDXFENTITYOBJELLIPSE::SetEndParameter(double endparameter)
 * @brief      Get radius
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJELLIPSE::GetRadius()
@@ -244,7 +244,7 @@ double GRPVECTORFILEDXFENTITYOBJELLIPSE::GetRadius()
 * @brief      Set radius
 * @ingroup    GRAPHIC
 * 
-* @param[in]  radius : 
+* @param[in]  radius : Radius value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJELLIPSE::SetRadius(double radius)
@@ -259,7 +259,7 @@ void GRPVECTORFILEDXFENTITYOBJELLIPSE::SetRadius(double radius)
 * @brief      Get thickness
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJELLIPSE::GetThickness()
@@ -274,7 +274,7 @@ double GRPVECTORFILEDXFENTITYOBJELLIPSE::GetThickness()
 * @brief      Set thickness
 * @ingroup    GRAPHIC
 * 
-* @param[in]  thickness : 
+* @param[in]  thickness : Thickness value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJELLIPSE::SetThickness(double thickness)
@@ -289,7 +289,7 @@ void GRPVECTORFILEDXFENTITYOBJELLIPSE::SetThickness(double thickness)
 * @brief      Get dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJELLIPSE::GetDirExtrusion()
@@ -304,9 +304,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJELLIPSE::GetDirExtrusio
 * @brief      Set dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @param[in]  dirextrusion : 
+* @param[in]  dirextrusion : Dirextrusion pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJELLIPSE::SetDirExtrusion(GRPVECTORFILEDXFENTITYDEFPOINT* dirextrusion)
@@ -328,9 +328,9 @@ bool GRPVECTORFILEDXFENTITYOBJELLIPSE::SetDirExtrusion(GRPVECTORFILEDXFENTITYDEF
 * @brief      Apply data
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJELLIPSE::ApplyData(GRPVECTORFILEDXFENTITY* entity)

@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBASE::XBASE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBASE::XBASE()
 {
@@ -69,12 +69,12 @@ XBASE::XBASE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBASE::~XBASE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBASE::~XBASE()
 {
@@ -83,12 +83,12 @@ XBASE::~XBASE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBASE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBASE::Clean()
 {
@@ -97,15 +97,15 @@ void XBASE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double Truncate(double value)
 * @brief      Trucate double
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  value : double to truncate
-*
-* @return     double : double truncate
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double Truncate(double value)
 {
@@ -120,15 +120,15 @@ double Truncate(double value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double Fraction(double value)
 * @brief      Return the fractional part of double
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  value : double value to obtain fractional part
-*
-* @return     double : fractional part of value
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double Fraction(double value)
 {
@@ -147,13 +147,13 @@ double Fraction(double value)
 * @fn         float RoundOff(float value, XBYTE prec)
 * @brief      oundOff
 * @ingroup    XUTILS
-*
-* @param[in]  value : 
-* @param[in]  prec : 
 * 
-* @return     float :
+* @param[in]  value : Value value.
+* @param[in]  prec : Prec value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     float : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 float RoundOff(float value, XBYTE prec)
 {
   #ifdef BUILDER
@@ -166,17 +166,17 @@ float RoundOff(float value, XBYTE prec)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double RoundOff(double value, XBYTE prec)
 * @brief      RoundOff
 * @ingroup    XUTILS
-*
-* @param[in]  value :
-* @param[in]  prec :
-*
-* @return     double :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  value : Value value.
+* @param[in]  prec : Prec value.
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double RoundOff(double value, XBYTE prec)
 {
   #ifdef BUILDER
@@ -189,15 +189,15 @@ double RoundOff(double value, XBYTE prec)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float RoundFloat(float x)
 * @brief      Round float
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  x : float to round
-*
-* @return     float : rounded float
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float RoundFloat(float x)
 {
@@ -215,10 +215,10 @@ float RoundFloat(float x)
 * @brief      AdjustFloat
 * @ingroup    XUTILS
 * 
-* @param[in]  valor : 
-* @param[in]  decimals : 
+* @param[in]  valor : Valor value.
+* @param[in]  decimals : Decimals value.
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float AdjustFloat(float valor, int decimals) 
@@ -246,10 +246,10 @@ float AdjustFloat(float valor, int decimals)
 * @brief      AdjustDouble
 * @ingroup    XUTILS
 * 
-* @param[in]  valor : 
-* @param[in]  decimals : 
+* @param[in]  valor : Valor value.
+* @param[in]  decimals : Decimals value.
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double AdjustDouble(double valor, int decimals) 
@@ -272,15 +272,15 @@ double AdjustDouble(double valor, int decimals)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE HighWORD(XWORD data)
 * @brief      HighWORD
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-*
-* @return     XBYTE :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE HighWORD(XWORD data)
 {
@@ -289,15 +289,15 @@ XBYTE HighWORD(XWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD HighDWORD(XDWORD data)
 * @brief      HighDWORD
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-*
-* @return     XWORD :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD HighDWORD(XDWORD data)
 {
@@ -306,15 +306,15 @@ XWORD HighDWORD(XDWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD HighQWORD(XQWORD data)
 * @brief      HighQWORD
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD HighQWORD(XQWORD data)
 {
@@ -323,15 +323,15 @@ XDWORD HighQWORD(XQWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE LowWORD(XWORD data)
 * @brief      LowWORD
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-*
-* @return     XBYTE :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE LowWORD(XWORD data)
 {
@@ -340,15 +340,15 @@ XBYTE LowWORD(XWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD LowDWORD(XDWORD data)
 * @brief      LowDWORD
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-*
-* @return     XWORD :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD LowDWORD(XDWORD data)
 {
@@ -357,15 +357,15 @@ XWORD LowDWORD(XDWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD LowQWORD(XQWORD data);
+* 
+* @fn         XDWORD LowQWORD(XQWORD data)
 * @brief      Low_QWORD
 * @ingroup    XUTILS
-*
-* @param[in]  data) :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD LowQWORD(XQWORD data)
 {
@@ -374,15 +374,15 @@ XDWORD LowQWORD(XQWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD SwapWORD(XWORD data)
 * @brief      Return the swap of word (2 bytes) hi-lo  > lo-hi
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : word to swap
-*
-* @return     XWORD : word swaped
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD SwapWORD(XWORD data)
 {
@@ -394,15 +394,15 @@ XWORD SwapWORD(XWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD SwapDWORD(XDWORD data)
 * @brief      Swap double word (4 bytes) hi1 lo1 h2 lo2 >  lo2 hi2 lo1 hi1
 * @ingroup    XUTILS
-*
-* @param[in]  data :  dword to swap
-*
-* @return     XDWORD : double word swaped
-*
+* 
+* @param[in]  data : dword to swap
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SwapDWORD(XDWORD data)
 {
@@ -416,15 +416,15 @@ XDWORD SwapDWORD(XDWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD SwapQWORD(XQWORD data)
 * @brief      Swap quad word (8 bytes) hi1 lo1 h2 lo2 hi3 lo3 h4 lo4  > lo3 hi3 lo4 hi4 lo2 hi2 lo1 hi1
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : quad word to swap
-*
-* @return     XQWORD : quad word swaped
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD SwapQWORD(XQWORD data)
 {
@@ -448,9 +448,9 @@ XQWORD SwapQWORD(XQWORD data)
 * @brief      nvertSign
 * @ingroup    XUTILS
 * 
-* @param[in]  number : 
+* @param[in]  number : Number value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int InvertSign(int number) 
@@ -460,15 +460,15 @@ int InvertSign(int number)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD DWORDToBCD(XDWORD dword)
 * @brief      Convert double word to BCD
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  dword : double word to convert
-*
-* @return     XQWORD : Quad word converted BCD
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DWORDToBCD(XDWORD dword)
 {
@@ -486,15 +486,15 @@ XQWORD DWORDToBCD(XDWORD dword)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD BCDToDWORD(XQWORD bcd)
 * @brief      Convert BCD to double word
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  bcd : BCD to convert
-*
-* @return     XDWORD : doble word converted
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD BCDToDWORD(XQWORD bcd)
 {
@@ -518,9 +518,9 @@ XDWORD BCDToDWORD(XQWORD bcd)
 * @brief      RotateBitLeft
 * @ingroup    XUTILS
 * 
-* @param[in]  byte : 
+* @param[in]  byte : Byte value.
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE RotateBitLeft(XBYTE byte)
@@ -530,15 +530,15 @@ XBYTE RotateBitLeft(XBYTE byte)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE RotateBitRight(XBYTE byte)
 * @brief      RotateBitRight
 * @ingroup    XUTILS
-*
-* @param[in]  byte :
-*
-* @return     XBYTE :
-*
+* 
+* @param[in]  byte : Byte value.
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE RotateBitRight(XBYTE byte)
 {
@@ -547,15 +547,15 @@ XBYTE RotateBitRight(XBYTE byte)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE RotateBitReverse(XBYTE byte)
 * @brief      RotateBitReverse
 * @ingroup    XUTILS
-*
-* @param[in]  byte :
-*
-* @return     XBYTE :
-*
+* 
+* @param[in]  byte : Byte value.
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE RotateBitReverse(XBYTE byte)
 {
@@ -573,10 +573,10 @@ XBYTE RotateBitReverse(XBYTE byte)
 * @brief      izeBufferASCII
 * @ingroup    XUTILS
 * 
-* @param[in]  buffer : 
-* @param[in]  sizemax : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  sizemax : Sizemax value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SizeBufferASCII(XBYTE* buffer, int sizemax)

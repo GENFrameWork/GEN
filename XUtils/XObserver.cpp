@@ -66,12 +66,12 @@ XOBSERVER::XOBSERVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XOBSERVER::~XOBSERVER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XOBSERVER::~XOBSERVER()
 {
@@ -80,17 +80,17 @@ XOBSERVER::~XOBSERVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XOBSERVER::SubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observer)
 * @brief      Subscribe event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-* @param[in]  subject :
-* @param[in]  observer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  observer : Observer pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XOBSERVER::SubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observer)
 {
@@ -99,17 +99,17 @@ bool XOBSERVER::SubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observ
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XOBSERVER::UnSubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observer)
 * @brief      Un subscribe event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-* @param[in]  subject :
-* @param[in]  observer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  observer : Observer pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XOBSERVER::UnSubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observer)
 {
@@ -118,12 +118,12 @@ bool XOBSERVER::UnSubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* obse
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XOBSERVER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XOBSERVER::Clean()
 {

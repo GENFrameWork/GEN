@@ -60,11 +60,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_LIB_LOG::SCRIPT_LIB_LOG()
+* 
+* @fn         SCRIPT_LIB_LOG::SCRIPT_LIB_LOG() : SCRIPT_LIB(SCRIPT_LIB_NAME_LOG)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
+* 
+* @param[in]  SCRIPT_LIB_NAME_LOG : SCRIPT LIB NAME LOG value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_LOG::SCRIPT_LIB_LOG() : SCRIPT_LIB(SCRIPT_LIB_NAME_LOG)
 {
@@ -73,12 +75,12 @@ SCRIPT_LIB_LOG::SCRIPT_LIB_LOG() : SCRIPT_LIB(SCRIPT_LIB_NAME_LOG)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB_LOG::~SCRIPT_LIB_LOG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_LOG::~SCRIPT_LIB_LOG()
 {
@@ -87,15 +89,15 @@ SCRIPT_LIB_LOG::~SCRIPT_LIB_LOG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB_LOG::AddLibraryFunctions(SCRIPT* script)
 * @brief      Add library functions
 * @ingroup    SCRIPT
-*
-* @param[in]  script :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  script : Script pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_LOG::AddLibraryFunctions(SCRIPT* script)
 {
@@ -119,7 +121,7 @@ bool SCRIPT_LIB_LOG::AddLibraryFunctions(SCRIPT* script)
 * @brief      Get log
 * @ingroup    SCRIPT
 * 
-* @return     XLOGBASE* : 
+* @return     XLOGBASE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLOGBASE* SCRIPT_LIB_LOG::GetLog()
@@ -129,12 +131,12 @@ XLOGBASE* SCRIPT_LIB_LOG::GetLog()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LIB_LOG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_LOG::Clean()
 {
@@ -153,10 +155,10 @@ void SCRIPT_LIB_LOG::Clean()
 * @brief      Call_Log_Ini
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Log_Ini(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -199,10 +201,10 @@ void Call_Log_Ini(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 * @brief      all_Log_CFG_SetLimit
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Log_CFG_SetLimit(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -245,10 +247,10 @@ void Call_Log_CFG_SetLimit(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT
 * @brief      all_Log_CFG_SetFilters
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Log_CFG_SetFilters(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -291,10 +293,10 @@ void Call_Log_CFG_SetFilters(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIA
 * @brief      all_Log_CFG_SetBackup
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Log_CFG_SetBackup(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -339,10 +341,10 @@ void Call_Log_CFG_SetBackup(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIAN
 * @brief      Call_Log_AddEntry
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Log_AddEntry(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)

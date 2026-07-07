@@ -64,9 +64,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_PROCESS::SCRIPT_LIB_PROCESS()
+* @fn         SCRIPT_LIB_PROCESS::SCRIPT_LIB_PROCESS() : SCRIPT_LIB(SCRIPT_LIB_NAME_PROCESS)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
+* 
+* @param[in]  SCRIPT_LIB_NAME_PROCESS : SCRIPT LIB NAME PROCESS value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_PROCESS::SCRIPT_LIB_PROCESS() : SCRIPT_LIB(SCRIPT_LIB_NAME_PROCESS)
@@ -95,9 +97,9 @@ SCRIPT_LIB_PROCESS::~SCRIPT_LIB_PROCESS()
 * @brief      Add library functions
 * @ingroup    SCRIPT
 * 
-* @param[in]  script : 
+* @param[in]  script : Script pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_PROCESS::AddLibraryFunctions(SCRIPT* script)
@@ -141,10 +143,10 @@ void SCRIPT_LIB_PROCESS::Clean()
 * @brief      call  open URl
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_OpenURL(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -180,10 +182,10 @@ void Call_OpenURL(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 * @brief      Call  make command
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_MakeCommand(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -224,10 +226,10 @@ void Call_MakeCommand(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* p
 * @brief      Call_ExecApplication
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_ExecApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -288,10 +290,10 @@ void Call_ExecApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 * @brief      Call_TerminateApplication
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_TerminateApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -332,10 +334,10 @@ void Call_TerminateApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVAR
 * @brief      Call_TerminateApplicationWithWindow
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_TerminateApplicationWithWindow(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)

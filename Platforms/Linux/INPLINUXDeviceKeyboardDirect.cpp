@@ -75,11 +75,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPLINUXDEVICEKEYBOARDDIRECT::INPLINUXDEVICEKEYBOARDDIRECT()
+* 
+* @fn         INPLINUXDEVICEKEYBOARDDIRECT::INPLINUXDEVICEKEYBOARDDIRECT(): INPDEVICE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPLINUXDEVICEKEYBOARDDIRECT::INPLINUXDEVICEKEYBOARDDIRECT(): INPDEVICE()
 {
@@ -99,12 +99,12 @@ INPLINUXDEVICEKEYBOARDDIRECT::INPLINUXDEVICEKEYBOARDDIRECT(): INPDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPLINUXDEVICEKEYBOARDDIRECT::~INPLINUXDEVICEKEYBOARDDIRECT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPLINUXDEVICEKEYBOARDDIRECT::~INPLINUXDEVICEKEYBOARDDIRECT()
 {
@@ -124,13 +124,13 @@ INPLINUXDEVICEKEYBOARDDIRECT::~INPLINUXDEVICEKEYBOARDDIRECT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEKEYBOARDDIRECT::Update()
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEKEYBOARDDIRECT::Update()
 {
@@ -242,12 +242,12 @@ bool INPLINUXDEVICEKEYBOARDDIRECT::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPLINUXDEVICEKEYBOARDDIRECT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPLINUXDEVICEKEYBOARDDIRECT::Clean()
 {
@@ -256,14 +256,14 @@ void INPLINUXDEVICEKEYBOARDDIRECT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEKEYBOARDDIRECT::CreateAllButtons()
 * @brief      Create all buttons
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEKEYBOARDDIRECT::CreateAllButtons()
 {
@@ -369,14 +369,14 @@ bool INPLINUXDEVICEKEYBOARDDIRECT::CreateAllButtons()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEKEYBOARDDIRECT::CreateDevices()
 * @brief      Create devices
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEKEYBOARDDIRECT::CreateDevices()
 {
@@ -426,13 +426,13 @@ bool INPLINUXDEVICEKEYBOARDDIRECT::CreateDevices()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEKEYBOARDDIRECT::Old_CreateDevices()
 * @brief      Old create devices
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEKEYBOARDDIRECT::Old_CreateDevices()
 {
@@ -472,13 +472,13 @@ bool INPLINUXDEVICEKEYBOARDDIRECT::Old_CreateDevices()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEKEYBOARDDIRECT::Old_DeleteTerminalConfig()
 * @brief      Old GEN_DELETE terminal config
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEKEYBOARDDIRECT::Old_DeleteTerminalConfig()
 {
@@ -495,15 +495,15 @@ bool INPLINUXDEVICEKEYBOARDDIRECT::Old_DeleteTerminalConfig()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int INPLINUXDEVICEKEYBOARDDIRECT::Old_IsConsole(int fd)
 * @brief      Old is console
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  fd :
-*
-* @return     int :
-*
+* 
+* @param[in]  fd : Fd value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int INPLINUXDEVICEKEYBOARDDIRECT::Old_IsConsole(int fd)
 {
@@ -517,13 +517,13 @@ int INPLINUXDEVICEKEYBOARDDIRECT::Old_IsConsole(int fd)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         int INPLINUXDEVICEKEYBOARDDIRECT::Old_OpenConsole(const char*fnam)
+* @fn         int INPLINUXDEVICEKEYBOARDDIRECT::Old_OpenConsole(const char *fnam)
 * @brief      Old open console
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  char*fnam : 
+* @param[in]  fnam : Fnam value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int INPLINUXDEVICEKEYBOARDDIRECT::Old_OpenConsole(const char *fnam)
@@ -550,15 +550,15 @@ int INPLINUXDEVICEKEYBOARDDIRECT::Old_OpenConsole(const char *fnam)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int INPLINUXDEVICEKEYBOARDDIRECT::Old_GetFD(const char*fnam)
+* 
+* @fn         int INPLINUXDEVICEKEYBOARDDIRECT::Old_GetFD(const char *fnam)
 * @brief      Old get FD
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  char*fnam :
-*
-* @return     int :
-*
+* 
+* @param[in]  fnam : Fnam value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int INPLINUXDEVICEKEYBOARDDIRECT::Old_GetFD(const char *fnam)
 {

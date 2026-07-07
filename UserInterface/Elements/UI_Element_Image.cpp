@@ -59,8 +59,8 @@
 * @fn         UI_ELEMENT_IMAGE::UI_ELEMENT_IMAGE()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_IMAGE::UI_ELEMENT_IMAGE()    
 { 
   Clean();   
@@ -76,8 +76,8 @@ UI_ELEMENT_IMAGE::UI_ELEMENT_IMAGE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_IMAGE::~UI_ELEMENT_IMAGE()    
 { 
   Clean();                            
@@ -89,10 +89,10 @@ UI_ELEMENT_IMAGE::~UI_ELEMENT_IMAGE()
 * @fn         GRPBITMAP* UI_ELEMENT_IMAGE::GetImage()
 * @brief      Get image
 * @ingroup    USERINTERFACE
-*
-* @return     GRPBITMAP* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_ELEMENT_IMAGE::GetImage()
 {
   return image;
@@ -104,12 +104,12 @@ GRPBITMAP* UI_ELEMENT_IMAGE::GetImage()
 * @fn         bool UI_ELEMENT_IMAGE::SetImage(GRPBITMAP* image)
 * @brief      Set image
 * @ingroup    USERINTERFACE
-*
-* @param[in]  image : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  image : Image pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_IMAGE::SetImage(GRPBITMAP* image)
 {
   if(!image) return false;
@@ -125,10 +125,10 @@ bool UI_ELEMENT_IMAGE::SetImage(GRPBITMAP* image)
 * @fn         XBYTE UI_ELEMENT_IMAGE::GetAlpha()
 * @brief      Get alpha
 * @ingroup    USERINTERFACE
-*
-* @return     XBYTE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTE UI_ELEMENT_IMAGE::GetAlpha()
 {
   return alpha;
@@ -140,10 +140,10 @@ XBYTE UI_ELEMENT_IMAGE::GetAlpha()
 * @fn         void UI_ELEMENT_IMAGE::SetAlpha(XBYTE alpha)
 * @brief      Set alpha
 * @ingroup    USERINTERFACE
-*
-* @param[in]  alpha : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  alpha : Alpha value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_IMAGE::SetAlpha(XBYTE alpha)
 {
   this->alpha = alpha;
@@ -156,8 +156,8 @@ void UI_ELEMENT_IMAGE::SetAlpha(XBYTE alpha)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_IMAGE::Clean()
 {
   image =  NULL;

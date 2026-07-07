@@ -30,7 +30,6 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-
 #include <Windows.h>
 #include <winuser.h>
 
@@ -38,12 +37,9 @@
 
 #include "GRPScreen.h"
 
-
 #ifdef GRP_OPENGL_ACTIVE
 class GRPWINDOWSBLITGLES;
 #endif
-
-
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/

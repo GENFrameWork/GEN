@@ -97,10 +97,10 @@ DIOPCAPNETINTERFACE::~DIOPCAPNETINTERFACE()
 * @fn         XSTRING* DIOPCAPNETINTERFACE::GetName()
 * @brief      Get name
 * @ingroup    DATAIO
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPCAPNETINTERFACE::GetName()
 {
   return &name;
@@ -112,10 +112,10 @@ XSTRING* DIOPCAPNETINTERFACE::GetName()
 * @fn         XSTRING* DIOPCAPNETINTERFACE::GetDescription()
 * @brief      Get description
 * @ingroup    DATAIO
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPCAPNETINTERFACE::GetDescription()
 {
   return &description;
@@ -128,7 +128,7 @@ XSTRING* DIOPCAPNETINTERFACE::GetDescription()
 * @brief      Is up
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPNETINTERFACE::IsUp()
@@ -143,7 +143,7 @@ bool DIOPCAPNETINTERFACE::IsUp()
 * @brief      Set is up
 * @ingroup    DATAIO
 * 
-* @param[in]  isup : 
+* @param[in]  isup : Isup value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAPNETINTERFACE::SetIsUp(bool isup)
@@ -158,7 +158,7 @@ void DIOPCAPNETINTERFACE::SetIsUp(bool isup)
 * @brief      Is running
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPNETINTERFACE::IsRunning()
@@ -173,7 +173,7 @@ bool DIOPCAPNETINTERFACE::IsRunning()
 * @brief      Set is running
 * @ingroup    DATAIO
 * 
-* @param[in]  isrunning : 
+* @param[in]  isrunning : Isrunning value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAPNETINTERFACE::SetIsRunning(bool isrunning)
@@ -188,7 +188,7 @@ void DIOPCAPNETINTERFACE::SetIsRunning(bool isrunning)
 * @brief      Is wireless
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPNETINTERFACE::IsWireless()
@@ -203,7 +203,7 @@ bool DIOPCAPNETINTERFACE::IsWireless()
 * @brief      Set is wireless
 * @ingroup    DATAIO
 * 
-* @param[in]  iswireless : 
+* @param[in]  iswireless : Iswireless value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAPNETINTERFACE::SetIsWireless(bool iswireless)
@@ -218,7 +218,7 @@ void DIOPCAPNETINTERFACE::SetIsWireless(bool iswireless)
 * @brief      Is loop back
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPNETINTERFACE::IsLoopBack()
@@ -233,7 +233,7 @@ bool DIOPCAPNETINTERFACE::IsLoopBack()
 * @brief      Set is loop back
 * @ingroup    DATAIO
 * 
-* @param[in]  isloopback : 
+* @param[in]  isloopback : Isloopback value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAPNETINTERFACE::SetIsLoopBack(bool isloopback)
@@ -248,8 +248,8 @@ void DIOPCAPNETINTERFACE::SetIsLoopBack(bool isloopback)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAPNETINTERFACE::Clean()
 {
   isup        = false;  
@@ -268,8 +268,8 @@ void DIOPCAPNETINTERFACE::Clean()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  bool : 
-* @param[in]   bool isloopback : 
+* @param[in]  hardwareuselittleendian : Hardwareuselittleendian value.
+* @param[in]  isloopback : Isloopback value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAPFRAME::DIOPCAPFRAME(bool hardwareuselittleendian, bool isloopback)
@@ -290,8 +290,8 @@ DIOPCAPFRAME::DIOPCAPFRAME(bool hardwareuselittleendian, bool isloopback)
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAPFRAME::~DIOPCAPFRAME()
 {
   if(data)
@@ -309,10 +309,10 @@ DIOPCAPFRAME::~DIOPCAPFRAME()
 * @fn         XBUFFER* DIOPCAPFRAME::GetData()
 * @brief      Get data
 * @ingroup    DATAIO
-*
-* @return     XBUFFER* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOPCAPFRAME::GetData()
 {
   return data;
@@ -324,13 +324,13 @@ XBUFFER* DIOPCAPFRAME::GetData()
 * @fn         bool DIOPCAPFRAME::SetData(XBYTE* data, XDWORD size)
 * @brief      Set data
 * @ingroup    DATAIO
-*
-* @param[in]  data : 
-* @param[in]  size : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::SetData(XBYTE* data, XDWORD size)
 {
   if(!this->data) return false;
@@ -350,7 +350,7 @@ bool DIOPCAPFRAME::SetData(XBYTE* data, XDWORD size)
 * @brief      Get protocol type
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPCAPFRAME::GetProtocolType()
@@ -365,7 +365,7 @@ XDWORD DIOPCAPFRAME::GetProtocolType()
 * @brief      Get protocol type string
 * @ingroup    DATAIO
 * 
-* @param[in]  protocoltypestr : 
+* @param[in]  protocoltypestr : Protocoltypestr value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAPFRAME::GetProtocolTypeString(XSTRING& protocoltypestr)
@@ -388,9 +388,9 @@ void DIOPCAPFRAME::GetProtocolTypeString(XSTRING& protocoltypestr)
 * @brief      Set protocol type
 * @ingroup    DATAIO
 * 
-* @param[in]  protocoltype : 
+* @param[in]  protocoltype : Protocoltype value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::SetProtocolType(DIOPCAPPROTOCOL_TYPE protocoltype)
@@ -407,7 +407,7 @@ bool DIOPCAPFRAME::SetProtocolType(DIOPCAPPROTOCOL_TYPE protocoltype)
 * @brief      Get source MAC
 * @ingroup    DATAIO
 * 
-* @return     DIOMAC* : 
+* @return     DIOMAC* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMAC* DIOPCAPFRAME::GetSourceMAC()
@@ -422,7 +422,7 @@ DIOMAC* DIOPCAPFRAME::GetSourceMAC()
 * @brief      Get target MAC
 * @ingroup    DATAIO
 * 
-* @return     DIOMAC* : 
+* @return     DIOMAC* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMAC* DIOPCAPFRAME::GetTargetMAC()
@@ -437,7 +437,7 @@ DIOMAC* DIOPCAPFRAME::GetTargetMAC()
 * @brief      Get source IP
 * @ingroup    DATAIO
 * 
-* @return     DIOIP* : 
+* @return     DIOIP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIOPCAPFRAME::GetSourceIP()
@@ -452,7 +452,7 @@ DIOIP* DIOPCAPFRAME::GetSourceIP()
 * @brief      Get target IP
 * @ingroup    DATAIO
 * 
-* @return     DIOIP* : 
+* @return     DIOIP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIOPCAPFRAME::GetTargetIP()
@@ -467,7 +467,7 @@ DIOIP* DIOPCAPFRAME::GetTargetIP()
 * @brief      Get source port
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOPCAPFRAME::GetSourcePort()
@@ -482,9 +482,9 @@ XWORD DIOPCAPFRAME::GetSourcePort()
 * @brief      Set source port
 * @ingroup    DATAIO
 * 
-* @param[in]  port : 
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::SetSourcePort(XWORD port)
@@ -501,7 +501,7 @@ bool DIOPCAPFRAME::SetSourcePort(XWORD port)
 * @brief      Get target port
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOPCAPFRAME::GetTargetPort()
@@ -516,9 +516,9 @@ XWORD DIOPCAPFRAME::GetTargetPort()
 * @brief      Set target port
 * @ingroup    DATAIO
 * 
-* @param[in]  port : 
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::SetTargetPort(XWORD port)
@@ -535,7 +535,7 @@ bool DIOPCAPFRAME::SetTargetPort(XWORD port)
 * @brief      Get data payload
 * @ingroup    DATAIO
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* DIOPCAPFRAME::GetDataPayload()
@@ -550,7 +550,7 @@ XBYTE* DIOPCAPFRAME::GetDataPayload()
 * @brief      Get data pay load size
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPCAPFRAME::GetDataPayLoadSize()
@@ -566,7 +566,7 @@ int DIOPCAPFRAME::GetDataPayLoadSize()
 * @brief      Get all headers size
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPCAPFRAME::GetAllHeadersSize()
@@ -581,7 +581,7 @@ XDWORD DIOPCAPFRAME::GetAllHeadersSize()
 * @brief      Set all headers size
 * @ingroup    DATAIO
 * 
-* @param[in]  allheaderssize : 
+* @param[in]  allheaderssize : Allheaderssize value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAPFRAME::SetAllHeadersSize(XDWORD allheaderssize)
@@ -592,13 +592,13 @@ void DIOPCAPFRAME::SetAllHeadersSize(XDWORD allheaderssize)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOPCAPFRAME::GetHeader(DIOPCAPETHERNETHEADER& ethernetheader)
+* @fn         bool DIOPCAPFRAME::GetHeader(DIOPCAPETHERNETHEADER& header)
 * @brief      Get header
 * @ingroup    DATAIO
 * 
-* @param[in]  ethernetheader : 
+* @param[in]  header : Header value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::GetHeader(DIOPCAPETHERNETHEADER& header)
@@ -635,9 +635,9 @@ bool DIOPCAPFRAME::GetHeader(DIOPCAPETHERNETHEADER& header)
 * @brief      Get header
 * @ingroup    DATAIO
 * 
-* @param[in]  ipheader : 
+* @param[in]  header : Header value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::GetHeader(DIOPCAPIPHEADER& header)
@@ -677,9 +677,9 @@ bool DIOPCAPFRAME::GetHeader(DIOPCAPIPHEADER& header)
 * @brief      Get header
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
+* @param[in]  header : Header value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::GetHeader(DIOPCAPUDPHEADER& header)
@@ -718,9 +718,9 @@ bool DIOPCAPFRAME::GetHeader(DIOPCAPUDPHEADER& header)
 * @brief      Get header
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
+* @param[in]  header : Header value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::GetHeader(DIOPCAPTCPHEADER& header)
@@ -748,12 +748,12 @@ bool DIOPCAPFRAME::GetHeader(DIOPCAPTCPHEADER& header)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPCAPFRAME::Set(DIOPCAPETHERNETHEADER* ethernet_header)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  ethernet_header : 
+* @param[in]  ethernet_header : Ethernet header pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::Set(DIOPCAPETHERNETHEADER* ethernet_header)
@@ -767,12 +767,12 @@ bool DIOPCAPFRAME::Set(DIOPCAPETHERNETHEADER* ethernet_header)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPCAPFRAME::Set(DIOPCAPIPHEADER* IP_header)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  IP_header : 
+* @param[in]  IP_header : IP header pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::Set(DIOPCAPIPHEADER* IP_header)
@@ -786,12 +786,12 @@ bool DIOPCAPFRAME::Set(DIOPCAPIPHEADER* IP_header)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPCAPFRAME::Set(DIOPCAPUDPHEADER* UDP_header)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  UDP_header : 
+* @param[in]  UDP_header : UDP header pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::Set(DIOPCAPUDPHEADER* UDP_header)
@@ -805,12 +805,12 @@ bool DIOPCAPFRAME::Set(DIOPCAPUDPHEADER* UDP_header)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPCAPFRAME::Set(DIOPCAPTCPHEADER* TCP_header)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  TCP_header : 
+* @param[in]  TCP_header : TCP header pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::Set(DIOPCAPTCPHEADER* TCP_header)
@@ -824,13 +824,13 @@ bool DIOPCAPFRAME::Set(DIOPCAPTCPHEADER* TCP_header)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPCAPFRAME::Set(XBYTE* data_payload, XDWORD data_payloadsize)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  data_payload : 
-* @param[in]  data_payloadsize : 
+* @param[in]  data_payload : Data payload pointer to use.
+* @param[in]  data_payloadsize : Data payloadsize value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::Set(XBYTE* data_payload, XDWORD data_payloadsize)
@@ -848,12 +848,12 @@ bool DIOPCAPFRAME::Set(XBYTE* data_payload, XDWORD data_payloadsize)
 * @brief      IsValid
 * @ingroup    DATAIO
 * 
-* @param[in]  protocoltype : 
-* @param[in]  sourceport : 
-* @param[in]  targetport : 
-* @param[in]  minimumdatasize : 
+* @param[in]  protocoltype : Protocoltype value.
+* @param[in]  sourceport : Sourceport value.
+* @param[in]  targetport : Targetport value.
+* @param[in]  minimumdatasize : Minimumdatasize value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAPFRAME::IsValid(XDWORD protocoltype, XWORD sourceport, XWORD targetport, XDWORD minimumdatasize)
@@ -923,8 +923,8 @@ bool DIOPCAPFRAME::IsValid(XDWORD protocoltype, XWORD sourceport, XWORD targetpo
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAPFRAME::Clean()
 {
   hardwareuselittleendian = false;
@@ -957,8 +957,8 @@ void DIOPCAPFRAME::Clean()
 * @fn         DIOPCAP::DIOPCAP()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP::DIOPCAP()
 {
   Clean();
@@ -973,8 +973,8 @@ DIOPCAP::DIOPCAP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP::~DIOPCAP()
 {
   if(filters)
@@ -994,10 +994,10 @@ DIOPCAP::~DIOPCAP()
 * @fn         XVECTOR<DIOPCAPNETINTERFACE*>* DIOPCAP::GetNetInterfaces()
 * @brief      Get net interfaces
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<DIOPCAPNETINTERFACE*>* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XVECTOR<DIOPCAPNETINTERFACE*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOPCAPNETINTERFACE*>* DIOPCAP::GetNetInterfaces()
 {
   return &netinterfaces;
@@ -1009,12 +1009,12 @@ XVECTOR<DIOPCAPNETINTERFACE*>* DIOPCAP::GetNetInterfaces()
 * @fn         DIOPCAPNETINTERFACE* DIOPCAP::GetNetInterface(int index)
 * @brief      Get net interface
 * @ingroup    DATAIO
-*
-* @param[in]  index : 
 * 
-* @return     DIOPCAPNETINTERFACE* : 
+* @param[in]  index : Index value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOPCAPNETINTERFACE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAPNETINTERFACE* DIOPCAP::GetNetInterface(int index)
 {
   return (DIOPCAPNETINTERFACE*)netinterfaces.Get(index);
@@ -1027,7 +1027,7 @@ DIOPCAPNETINTERFACE* DIOPCAP::GetNetInterface(int index)
 * @brief      Get net interface selected
 * @ingroup    DATAIO
 * 
-* @return     DIOPCAPNETINTERFACE* : 
+* @return     DIOPCAPNETINTERFACE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAPNETINTERFACE* DIOPCAP::GetNetInterfaceSelected()
@@ -1039,12 +1039,12 @@ DIOPCAPNETINTERFACE* DIOPCAP::GetNetInterfaceSelected()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPCAP::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP::Ini()
 {
   if(!CreateListNetInterfaces()) return false;
@@ -1060,14 +1060,14 @@ bool DIOPCAP::Ini()
 * @fn         bool DIOPCAP::Capture_Start(int index, bool promiscuousmode, int timeout)
 * @brief      Capture start
 * @ingroup    DATAIO
-*
-* @param[in]  index : 
-* @param[in]  promiscuousmode : 
-* @param[in]  timeout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  index : Index value.
+* @param[in]  promiscuousmode : Promiscuousmode value.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP::Capture_Start(int index, bool promiscuousmode, int timeout)
 {
   DIOPCAPNETINTERFACE* netinterface = GetNetInterface(index);
@@ -1082,12 +1082,12 @@ bool DIOPCAP::Capture_Start(int index, bool promiscuousmode, int timeout)
 * @fn         DIOPCAPFRAME* DIOPCAP::Frames_Get(int index)
 * @brief      Frames get
 * @ingroup    DATAIO
-*
-* @param[in]  index : 
 * 
-* @return     DIOPCAPFRAME* : 
+* @param[in]  index : Index value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOPCAPFRAME* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAPFRAME* DIOPCAP::Frames_Get(int index)
 {
   if(index<0)                      return NULL;
@@ -1108,12 +1108,12 @@ DIOPCAPFRAME* DIOPCAP::Frames_Get(int index)
 * @fn         bool DIOPCAP::Frames_Delete(int index)
 * @brief      Frames delete
 * @ingroup    DATAIO
-*
-* @param[in]  index : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  index : Index value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP::Frames_Delete(int index)
 {
   if(xmutexframes) xmutexframes->Lock();
@@ -1139,10 +1139,10 @@ bool DIOPCAP::Frames_Delete(int index)
 * @fn         XVECTOR<DIOPCAPFRAME*>* DIOPCAP::Frames_Get()
 * @brief      Frames get
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<DIOPCAPFRAME*>* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XVECTOR<DIOPCAPFRAME*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOPCAPFRAME*>* DIOPCAP::Frames_Get()
 {
   return &frames;
@@ -1154,10 +1154,10 @@ XVECTOR<DIOPCAPFRAME*>* DIOPCAP::Frames_Get()
 * @fn         bool DIOPCAP::Frames_DeleteAll()
 * @brief      Frames GEN_DELETE all
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP::Frames_DeleteAll()
 {
   if(frames.IsEmpty())  return false;
@@ -1180,7 +1180,7 @@ bool DIOPCAP::Frames_DeleteAll()
 * @brief      Get filters
 * @ingroup    DATAIO
 * 
-* @return     DIOPCAP_FILTERS* : 
+* @return     DIOPCAP_FILTERS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP_FILTERS* DIOPCAP::GetFilters()
@@ -1192,12 +1192,12 @@ DIOPCAP_FILTERS* DIOPCAP::GetFilters()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPCAP::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP::End()
 {
   DeleteListNetInterfaces();
@@ -1222,11 +1222,11 @@ bool DIOPCAP::End()
 * @brief      Frames add
 * @ingroup    DATAIO
 * 
-* @param[in]  data : 
-* @param[in]  size : 
-* @param[in]  isloopback : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  isloopback : Isloopback value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP::Frames_Add(XBYTE* data,XDWORD size, bool isloopback)
@@ -1361,8 +1361,8 @@ bool DIOPCAP::Frames_Add(XBYTE* data,XDWORD size, bool isloopback)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOPCAP::Clean()
 {
   xmutexframes          = NULL;  
@@ -1377,10 +1377,10 @@ void DIOPCAP::Clean()
 * @fn         bool DIOPCAP::DeleteListNetInterfaces()
 * @brief      Delete list net interfaces
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPCAP::DeleteListNetInterfaces()
 {
   if(netinterfaces.IsEmpty()) return false;

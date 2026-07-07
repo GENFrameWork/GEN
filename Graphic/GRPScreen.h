@@ -195,7 +195,7 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 
     static XMAP<void*, GRPSCREEN*>*       GetListScreens                ();
 
-    GRP2DCANVAS*                            GetScreenCanvas               ();   
+    GRP2DCANVAS*                          GetScreenCanvas               ();   
     bool                                  SetScreenCanvas               (GRP2DCANVAS* screencanvas);   
 
   protected:    
@@ -206,7 +206,7 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     XDWORD                                styles;
     GRPSCREENROTATION                     rotation;
        
-    GRP2DCANVAS*                            screencanvas;  
+    GRP2DCANVAS*                          screencanvas;  
     XVECTOR<GRPVIEWPORT*>                 viewports;  
     
     GRPFRAMERATE*                         framerate;

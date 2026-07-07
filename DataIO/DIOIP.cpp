@@ -89,10 +89,10 @@ DIOIPADDRESS::~DIOIPADDRESS()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XBYTE* DIOIPADDRESS::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* DIOIPADDRESS::Get()
@@ -107,9 +107,9 @@ XBYTE* DIOIPADDRESS::Get()
 * @brief      Get X string
 * @ingroup    DATAIO
 * 
-* @param[in]  addressstring : 
+* @param[in]  addressstring : Addressstring value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::GetXString(XSTRING& addressstring)
@@ -137,9 +137,9 @@ bool DIOIPADDRESS::GetXString(XSTRING& addressstring)
 * @brief      Get DIOURL
 * @ingroup    DATAIO
 * 
-* @param[in]  url : 
+* @param[in]  url : URL to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::GetDIOURL(DIOURL* url)
@@ -167,7 +167,7 @@ bool DIOIPADDRESS::GetDIOURL(DIOURL* url)
 * @brief      Is empty
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::IsEmpty()
@@ -184,7 +184,7 @@ bool DIOIPADDRESS::IsEmpty()
 * @brief      Is local
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::IsLocal()
@@ -210,7 +210,7 @@ bool DIOIPADDRESS::IsLocal()
 * @brief      Is APIPA
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::IsAPIPA()
@@ -224,12 +224,12 @@ bool DIOIPADDRESS::IsAPIPA()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOIPADDRESS::Set(XBYTE* address)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  address : 
+* @param[in]  address : Address pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::Set(XBYTE* address)
@@ -246,15 +246,15 @@ bool DIOIPADDRESS::Set(XBYTE* address)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOIPADDRESS::Set(XBYTE byte1, XBYTE byte2, XBYTE byte3, XBYTE byte4)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  byte1 : 
-* @param[in]  byte2 : 
-* @param[in]  byte3 : 
-* @param[in]  byte4 : 
+* @param[in]  byte1 : Byte1 value.
+* @param[in]  byte2 : Byte2 value.
+* @param[in]  byte3 : Byte3 value.
+* @param[in]  byte4 : Byte4 value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::Set(XBYTE byte1, XBYTE byte2, XBYTE byte3, XBYTE byte4)
@@ -271,12 +271,12 @@ bool DIOIPADDRESS::Set(XBYTE byte1, XBYTE byte2, XBYTE byte3, XBYTE byte4)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOIPADDRESS::Set(XCHAR* addresschar)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  addresschar : 
+* @param[in]  addresschar : Addresschar pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::Set(XCHAR* addresschar)
@@ -292,12 +292,12 @@ bool DIOIPADDRESS::Set(XCHAR* addresschar)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOIPADDRESS::Set(XSTRING& addressstring)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  addressstring : 
+* @param[in]  addressstring : Addressstring value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::Set(XSTRING& addressstring)
@@ -328,12 +328,12 @@ bool DIOIPADDRESS::Set(XSTRING& addressstring)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOIPADDRESS::Set(char* addresschar)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  addresschar : 
+* @param[in]  addresschar : Addresschar pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::Set(char* addresschar)
@@ -352,9 +352,9 @@ bool DIOIPADDRESS::Set(char* addresschar)
 * @brief      Compare
 * @ingroup    DATAIO
 * 
-* @param[in]  otheraddress : 
+* @param[in]  otheraddress : Otheraddress value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOIPADDRESS::Compare(DIOIP& otheraddress)
@@ -419,7 +419,7 @@ DIOIP::~DIOIP()
 * @brief      Get mask
 * @ingroup    DATAIO
 * 
-* @return     DIOIPADDRESS* : 
+* @return     DIOIPADDRESS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIPADDRESS* DIOIP::GetMask()

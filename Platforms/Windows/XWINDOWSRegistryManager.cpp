@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSREGISTRYKEY::XWINDOWSREGISTRYKEY()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSREGISTRYKEY::XWINDOWSREGISTRYKEY()
 {
@@ -75,12 +75,12 @@ XWINDOWSREGISTRYKEY::XWINDOWSREGISTRYKEY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSREGISTRYKEY::~XWINDOWSREGISTRYKEY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSREGISTRYKEY::~XWINDOWSREGISTRYKEY()
 {
@@ -89,13 +89,13 @@ XWINDOWSREGISTRYKEY::~XWINDOWSREGISTRYKEY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         HKEY XWINDOWSREGISTRYKEY::GetHandle()
 * @brief      Get handle
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     HKEY :
-*
+* 
+* @return     HKEY : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 HKEY XWINDOWSREGISTRYKEY::GetHandle()
 {
@@ -104,13 +104,13 @@ HKEY XWINDOWSREGISTRYKEY::GetHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSREGISTRYKEY::SetHandle(HKEY handlekey)
 * @brief      Set handle
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlekey :
-*
+* 
+* @param[in]  handlekey : Handlekey value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSREGISTRYKEY::SetHandle(HKEY handlekey)
 {
@@ -119,13 +119,13 @@ void XWINDOWSREGISTRYKEY::SetHandle(HKEY handlekey)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XWINDOWSREGISTRYKEY::GetType()
 * @brief      Get type
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XWINDOWSREGISTRYKEY::GetType()
 {
@@ -134,13 +134,13 @@ XDWORD XWINDOWSREGISTRYKEY::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSREGISTRYKEY::SetType(XDWORD type)
 * @brief      Set type
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  type :
-*
+* 
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSREGISTRYKEY::SetType(XDWORD type)
 {
@@ -149,16 +149,16 @@ void XWINDOWSREGISTRYKEY::SetType(XDWORD type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYKEY::ReadValue(XCHAR* name, XVARIANT& data)
 * @brief      Read value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::ReadValue(XCHAR* name, XVARIANT& data)
 {
@@ -241,16 +241,16 @@ bool XWINDOWSREGISTRYKEY::ReadValue(XCHAR* name, XVARIANT& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYKEY::ReadValue(XSTRING& name, XVARIANT& data)
 * @brief      Read value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::ReadValue(XSTRING& name, XVARIANT& data)
 {
@@ -259,17 +259,17 @@ bool XWINDOWSREGISTRYKEY::ReadValue(XSTRING& name, XVARIANT& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYKEY::WriteValue(XCHAR* name, XDWORD type, XVARIANT& data)
 * @brief      Write value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-* @param[in]  type :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::WriteValue(XCHAR* name, XDWORD type, XVARIANT& data)
 {
@@ -285,16 +285,16 @@ bool XWINDOWSREGISTRYKEY::WriteValue(XCHAR* name, XDWORD type, XVARIANT& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYKEY::WriteValue(XCHAR* name, XVARIANT& data)
 * @brief      Write value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::WriteValue(XCHAR* name, XVARIANT& data)
 {
@@ -351,16 +351,16 @@ bool XWINDOWSREGISTRYKEY::WriteValue(XCHAR* name, XVARIANT& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYKEY::WriteValue(XSTRING& name, XVARIANT& data)
 * @brief      Write value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::WriteValue(XSTRING& name, XVARIANT& data)
 {
@@ -371,17 +371,17 @@ bool XWINDOWSREGISTRYKEY::WriteValue(XSTRING& name, XVARIANT& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSREGISTRYKEY::WriteValue(XSTRING& name, XDWORD type, XVARIANT& data);
+* 
+* @fn         bool XWINDOWSREGISTRYKEY::WriteValue(XSTRING& name, XDWORD type, XVARIANT& data)
 * @brief      Write value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-* @param[in]  type :
-* @param[in]  data) :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::WriteValue(XSTRING& name, XDWORD type, XVARIANT& data)
 {
@@ -390,15 +390,15 @@ bool XWINDOWSREGISTRYKEY::WriteValue(XSTRING& name, XDWORD type, XVARIANT& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYKEY::EnumValues(XVECTOR<XSTRING*>* valuelist)
 * @brief      Enum values
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  valuelist :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  valuelist : Valuelist pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::EnumValues(XVECTOR<XSTRING*>* valuelist)
 {
@@ -434,15 +434,15 @@ bool XWINDOWSREGISTRYKEY::EnumValues(XVECTOR<XSTRING*>* valuelist)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYKEY::DeleteValue(XCHAR* name)
 * @brief      Delete value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::DeleteValue(XCHAR* name)
 {
@@ -456,15 +456,15 @@ bool XWINDOWSREGISTRYKEY::DeleteValue(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYKEY::DeleteValue(XSTRING& name)
 * @brief      Delete value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYKEY::DeleteValue(XSTRING& name)
 {
@@ -473,11 +473,11 @@ bool XWINDOWSREGISTRYKEY::DeleteValue(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSREGISTRYKEY::Clear()
 * @brief      Clear
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSREGISTRYKEY::Clear()
 {
@@ -487,12 +487,12 @@ void XWINDOWSREGISTRYKEY::Clear()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSREGISTRYKEY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSREGISTRYKEY::Clean()
 {
@@ -505,11 +505,11 @@ void XWINDOWSREGISTRYKEY::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSREGISTRYMANAGER::XWINDOWSREGISTRYMANAGER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSREGISTRYMANAGER::XWINDOWSREGISTRYMANAGER()
 {
@@ -518,12 +518,12 @@ XWINDOWSREGISTRYMANAGER::XWINDOWSREGISTRYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSREGISTRYMANAGER::~XWINDOWSREGISTRYMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSREGISTRYMANAGER::~XWINDOWSREGISTRYMANAGER()
 {
@@ -532,17 +532,17 @@ XWINDOWSREGISTRYMANAGER::~XWINDOWSREGISTRYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSREGISTRYMANAGER::CreateKey(HKEY handlekey, XCHAR* subkeystring , XWINDOWSREGISTRYKEY& registrykey)
+* 
+* @fn         bool XWINDOWSREGISTRYMANAGER::CreateKey(HKEY handlekey, XCHAR* subkeystring, XWINDOWSREGISTRYKEY& registrykey)
 * @brief      Create key
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlekey :
-* @param[in]  subkeystring :
-* @param[in]  registrykey :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handlekey : Handlekey value.
+* @param[in]  subkeystring : Subkeystring pointer to use.
+* @param[in]  registrykey : Registrykey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYMANAGER::CreateKey(HKEY handlekey, XCHAR* subkeystring, XWINDOWSREGISTRYKEY& registrykey)
 {
@@ -596,17 +596,17 @@ bool XWINDOWSREGISTRYMANAGER::CreateKey(HKEY handlekey, XCHAR* subkeystring, XWI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSREGISTRYMANAGER::CreateKey(HKEY handlekey, XSTRING& subkeystring , XWINDOWSREGISTRYKEY& registrykey)
+* 
+* @fn         bool XWINDOWSREGISTRYMANAGER::CreateKey(HKEY handlekey, XSTRING& subkeystring, XWINDOWSREGISTRYKEY& registrykey)
 * @brief      Create key
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlekey :
-* @param[in]  subkeystring :
-* @param[in]  registrykey :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handlekey : Handlekey value.
+* @param[in]  subkeystring : Subkeystring value.
+* @param[in]  registrykey : Registrykey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYMANAGER::CreateKey(HKEY handlekey, XSTRING& subkeystring, XWINDOWSREGISTRYKEY& registrykey)
 {
@@ -615,17 +615,17 @@ bool XWINDOWSREGISTRYMANAGER::CreateKey(HKEY handlekey, XSTRING& subkeystring, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYMANAGER::OpenKey(HKEY handlekey, XCHAR* subkeystring, XWINDOWSREGISTRYKEY& registrykey)
 * @brief      Open key
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlekey :
-* @param[in]  subkeystring :
-* @param[in]  registrykey :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handlekey : Handlekey value.
+* @param[in]  subkeystring : Subkeystring pointer to use.
+* @param[in]  registrykey : Registrykey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYMANAGER::OpenKey(HKEY handlekey, XCHAR* subkeystring, XWINDOWSREGISTRYKEY& registrykey)
 {
@@ -644,17 +644,17 @@ bool XWINDOWSREGISTRYMANAGER::OpenKey(HKEY handlekey, XCHAR* subkeystring, XWIND
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYMANAGER::OpenKey(HKEY handlekey, XSTRING& subkeystring, XWINDOWSREGISTRYKEY& registrykey)
 * @brief      Open key
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlekey :
-* @param[in]  subkeystring :
-* @param[in]  registrykey :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handlekey : Handlekey value.
+* @param[in]  subkeystring : Subkeystring value.
+* @param[in]  registrykey : Registrykey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYMANAGER::OpenKey(HKEY handlekey, XSTRING& subkeystring, XWINDOWSREGISTRYKEY& registrykey)
 {
@@ -663,17 +663,16 @@ bool XWINDOWSREGISTRYMANAGER::OpenKey(HKEY handlekey, XSTRING& subkeystring, XWI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSREGISTRYMANAGER::EnumKeys(HKEY handlekey, XSTRING& subkeystring, XVECTOR<XSTRING*> keylist)
+* 
+* @fn         bool XWINDOWSREGISTRYMANAGER::EnumKeys(XWINDOWSREGISTRYKEY& registrykey, XVECTOR<XSTRING*>* keylist)
 * @brief      Enum keys
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlekey :
-* @param[in]  subkeystring :
-* @param[out] keylist :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  registrykey : Registrykey value.
+* @param[in]  keylist : Keylist pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYMANAGER::EnumKeys(XWINDOWSREGISTRYKEY& registrykey, XVECTOR<XSTRING*>* keylist)
 {
@@ -712,15 +711,15 @@ bool XWINDOWSREGISTRYMANAGER::EnumKeys(XWINDOWSREGISTRYKEY& registrykey, XVECTOR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSREGISTRYMANAGER::CloseKey(XWINDOWSREGISTRYKEY& registyrkey)
+* 
+* @fn         bool XWINDOWSREGISTRYMANAGER::CloseKey(XWINDOWSREGISTRYKEY& registrykey)
 * @brief      Close key
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  registyrkey :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  registrykey : Registrykey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYMANAGER::CloseKey(XWINDOWSREGISTRYKEY& registrykey)
 {
@@ -735,16 +734,16 @@ bool XWINDOWSREGISTRYMANAGER::CloseKey(XWINDOWSREGISTRYKEY& registrykey)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYMANAGER::DeleteKey(HKEY handlekey, XCHAR* subkeystring)
 * @brief      Delete key
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlekey :
-* @param[in]  subkeystring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handlekey : Handlekey value.
+* @param[in]  subkeystring : Subkeystring pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYMANAGER::DeleteKey(HKEY handlekey, XCHAR* subkeystring)
 {
@@ -802,16 +801,16 @@ bool XWINDOWSREGISTRYMANAGER::DeleteKey(HKEY handlekey, XCHAR* subkeystring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSREGISTRYMANAGER::DeleteKey(HKEY handlekey, XSTRING& subkeystring)
 * @brief      Delete key
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlekey :
-* @param[in]  subkeystring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handlekey : Handlekey value.
+* @param[in]  subkeystring : Subkeystring value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSREGISTRYMANAGER::DeleteKey(HKEY handlekey, XSTRING& subkeystring)
 {
@@ -820,12 +819,12 @@ bool XWINDOWSREGISTRYMANAGER::DeleteKey(HKEY handlekey, XSTRING& subkeystring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSREGISTRYMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSREGISTRYMANAGER::Clean()
 {

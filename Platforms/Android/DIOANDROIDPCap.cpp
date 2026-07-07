@@ -61,7 +61,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDPCAP::DIOANDROIDPCAP()
+* @fn         DIOANDROIDPCAP::DIOANDROIDPCAP() : DIOPCAP()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -94,11 +94,11 @@ DIOANDROIDPCAP::~DIOANDROIDPCAP()
 * @brief      Capture start
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  netinterface : 
-* @param[in]  promiscuousmode : 
-* @param[in]  timeout : 
+* @param[in]  netinterface : Netinterface pointer to use.
+* @param[in]  promiscuousmode : Promiscuousmode value.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDPCAP::Capture_Start(DIOPCAPNETINTERFACE* netinterface, bool promiscuousmode, int timeout)
@@ -133,7 +133,7 @@ bool DIOANDROIDPCAP::Capture_Start(DIOPCAPNETINTERFACE* netinterface, bool promi
 * @brief      Capture end
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDPCAP::Capture_End()
@@ -161,7 +161,7 @@ bool DIOANDROIDPCAP::Capture_End()
 * @brief      Create list net interfaces
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDPCAP::CreateListNetInterfaces()
@@ -200,7 +200,7 @@ bool DIOANDROIDPCAP::CreateListNetInterfaces()
 * @brief      Thread capture
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDPCAP::ThreadCapture(void* data)
@@ -225,9 +225,9 @@ void DIOANDROIDPCAP::ThreadCapture(void* data)
 * @brief      Packet handler
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  param : 
-* @param[in]  struct pcap_pkthdr* header : 
-* @param[in]  u_char* data : 
+* @param[in]  param : Param pointer to use.
+* @param[in]  header : Header value.
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDPCAP::PacketHandler(u_char* param, const struct pcap_pkthdr* header, const u_char* data)

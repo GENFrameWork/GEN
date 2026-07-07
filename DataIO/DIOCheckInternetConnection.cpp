@@ -58,13 +58,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  timeconnectionchecks :
-*
+* 
+* @param[in]  timeconnectionchecks : Timeconnectionchecks value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks)
 {
@@ -111,12 +111,12 @@ DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKINTERNETCONNECTION::~DIOCHECKINTERNETCONNECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKINTERNETCONNECTION::~DIOCHECKINTERNETCONNECTION()
 {
@@ -143,13 +143,13 @@ DIOCHECKINTERNETCONNECTION::~DIOCHECKINTERNETCONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTIONS* DIOCHECKINTERNETCONNECTION::GetCheckConnections()
 * @brief      Get check connections
 * @ingroup    DATAIO
-*
-* @return     DIOCHECKTCPIPCONNECTIONS* :
-*
+* 
+* @return     DIOCHECKTCPIPCONNECTIONS* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTIONS* DIOCHECKINTERNETCONNECTION::GetCheckConnections()
 {
@@ -158,13 +158,13 @@ DIOCHECKTCPIPCONNECTIONS* DIOCHECKINTERNETCONNECTION::GetCheckConnections()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKINTERNETCONNECTION::Check()
 * @brief      Check
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKINTERNETCONNECTION::Check()
 {
@@ -221,15 +221,15 @@ bool DIOCHECKINTERNETCONNECTION::Check()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKINTERNETCONNECTION::AddConnectionCut(DIOCHECKTCPIPCONNECTION_CUT& connectioncut)
 * @brief      Add connection cut
 * @ingroup    DATAIO
-*
-* @param[in]  connectioncut :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  connectioncut : Connectioncut value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKINTERNETCONNECTION::AddConnectionCut(DIOCHECKTCPIPCONNECTION_CUT& connectioncut)
 {
@@ -247,13 +247,13 @@ bool DIOCHECKINTERNETCONNECTION::AddConnectionCut(DIOCHECKTCPIPCONNECTION_CUT& c
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKINTERNETCONNECTION::DeleteAllConnectionCuts()
 * @brief      Delete all connection cuts
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKINTERNETCONNECTION::DeleteAllConnectionCuts()
 {
@@ -273,13 +273,13 @@ bool DIOCHECKINTERNETCONNECTION::DeleteAllConnectionCuts()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<DIOCHECKTCPIPCONNECTION_CUT*>* DIOCHECKINTERNETCONNECTION::GetConnectionCuts()
 * @brief      Get connection cuts
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<DIOCHECKTCPIPCONNECTION_CUT*>* :
-*
+* 
+* @return     XVECTOR<DIOCHECKTCPIPCONNECTION_CUT*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOCHECKTCPIPCONNECTION_CUT*>*   DIOCHECKINTERNETCONNECTION::GetConnectionCuts()
 {
@@ -288,13 +288,13 @@ XVECTOR<DIOCHECKTCPIPCONNECTION_CUT*>*   DIOCHECKINTERNETCONNECTION::GetConnecti
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTION_CUT* DIOCHECKINTERNETCONNECTION::GetLastConnectionsCut()
 * @brief      Get last connections cut
 * @ingroup    DATAIO
-*
-* @return     DIOCHECKTCPIPCONNECTION_CUT* :
-*
+* 
+* @return     DIOCHECKTCPIPCONNECTION_CUT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION_CUT* DIOCHECKINTERNETCONNECTION::GetLastConnectionsCut()
 {
@@ -303,13 +303,13 @@ DIOCHECKTCPIPCONNECTION_CUT* DIOCHECKINTERNETCONNECTION::GetLastConnectionsCut()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKINTERNETCONNECTION::IsChangeConnectionStatus()
 * @brief      Is change connection status
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKINTERNETCONNECTION::IsChangeConnectionStatus()
 {
@@ -318,12 +318,12 @@ bool DIOCHECKINTERNETCONNECTION::IsChangeConnectionStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKINTERNETCONNECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKINTERNETCONNECTION::Clean()
 {

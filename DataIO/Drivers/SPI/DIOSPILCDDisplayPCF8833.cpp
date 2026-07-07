@@ -63,11 +63,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSPILCDDISPLAYPCF8833::DIOSPILCDDISPLAYPCF8833(DIOSPILCDDISPLAYPCF8833_TYPE type)
+* @fn         DIOSPILCDDISPLAYPCF8833::DIOSPILCDDISPLAYPCF8833(DIOSPILCDDISPLAYPCF8833_TYPE type) : DIODEVICESPI()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  DIODEVICESPI : DIODEVICESPI value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPILCDDISPLAYPCF8833::DIOSPILCDDISPLAYPCF8833(DIOSPILCDDISPLAYPCF8833_TYPE type) : DIODEVICESPI()
@@ -79,12 +79,12 @@ DIOSPILCDDISPLAYPCF8833::DIOSPILCDDISPLAYPCF8833(DIOSPILCDDISPLAYPCF8833_TYPE ty
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSPILCDDISPLAYPCF8833::~DIOSPILCDDISPLAYPCF8833()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPILCDDISPLAYPCF8833::~DIOSPILCDDISPLAYPCF8833()
 {
@@ -95,13 +95,13 @@ DIOSPILCDDISPLAYPCF8833::~DIOSPILCDDISPLAYPCF8833()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::IniDevice()
 {
@@ -147,15 +147,15 @@ bool DIOSPILCDDISPLAYPCF8833::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::Clear(XWORD color)
 * @brief      Clear
 * @ingroup    DATAIO
-*
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Clear(XWORD color)
 {
@@ -201,15 +201,15 @@ bool DIOSPILCDDISPLAYPCF8833::Clear(XWORD color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::Update(XBYTE* buffer)
 * @brief      Update
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Update(XBYTE* buffer)
 {
@@ -235,17 +235,17 @@ bool DIOSPILCDDISPLAYPCF8833::Update(XBYTE* buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::PutPixel(XWORD x, XWORD y, XWORD color)
 * @brief      Put pixel
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::PutPixel(XWORD x, XWORD y, XWORD color)
 {
@@ -265,13 +265,13 @@ bool DIOSPILCDDISPLAYPCF8833::PutPixel(XWORD x, XWORD y, XWORD color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::End()
 {  
@@ -288,10 +288,10 @@ bool DIOSPILCDDISPLAYPCF8833::End()
 * @fn         bool DIOSPILCDDISPLAYPCF8833::Initializate()
 * @brief      Initializate
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Initializate()
 {
   Reset();
@@ -427,13 +427,13 @@ bool DIOSPILCDDISPLAYPCF8833::Initializate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::Reset()
 * @brief      Reset
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Reset()
 {
@@ -450,18 +450,18 @@ bool DIOSPILCDDISPLAYPCF8833::Reset()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::SetWindow(XWORD x0, XWORD y0, XWORD x1, XWORD y1)
 * @brief      Set window
 * @ingroup    DATAIO
-*
-* @param[in]  x0 :
-* @param[in]  y0 :
-* @param[in]  x1 :
-* @param[in]  y1 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x0 : X0 value.
+* @param[in]  y0 : Y0 value.
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::SetWindow(XWORD x0, XWORD y0, XWORD x1, XWORD y1)
 {
@@ -506,18 +506,18 @@ bool DIOSPILCDDISPLAYPCF8833::SetWindow(XWORD x0, XWORD y0, XWORD x1, XWORD y1)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::Draw_HLine(XBYTE x, XBYTE y, XBYTE width, XWORD color)
 * @brief      Draw H line
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  width :
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  width : Width value.
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Draw_HLine(XBYTE x, XBYTE y, XBYTE width, XWORD color)
 {
@@ -543,18 +543,18 @@ bool DIOSPILCDDISPLAYPCF8833::Draw_HLine(XBYTE x, XBYTE y, XBYTE width, XWORD co
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::Draw_HLine(XBYTE x, XBYTE y, XBYTE width, XWORD* buffer)
 * @brief      Draw H line
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  width :
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  width : Width value.
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Draw_HLine(XBYTE x, XBYTE y, XBYTE width, XWORD* buffer)
 {
@@ -583,15 +583,15 @@ bool DIOSPILCDDISPLAYPCF8833::Draw_HLine(XBYTE x, XBYTE y, XBYTE width, XWORD* b
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::Buffer_AjustWithNOP(XBUFFER& databuffer)
 * @brief      Buffer ajust with NOP
 * @ingroup    DATAIO
-*
-* @param[in]  databuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  databuffer : Databuffer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Buffer_AjustWithNOP(XBUFFER& databuffer)
 {
@@ -604,15 +604,15 @@ bool DIOSPILCDDISPLAYPCF8833::Buffer_AjustWithNOP(XBUFFER& databuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPILCDDISPLAYPCF8833::Buffer_Send(XBUFFER& databuffer)
 * @brief      Buffer send
 * @ingroup    DATAIO
-*
-* @param[in]  databuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  databuffer : Databuffer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Buffer_Send(XBUFFER& databuffer)
 {
@@ -628,13 +628,15 @@ bool DIOSPILCDDISPLAYPCF8833::Buffer_Send(XBUFFER& databuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOSPILCDDISPLAYPCF8833::Buffer_Delete()
+* 
+* @fn         bool DIOSPILCDDISPLAYPCF8833::Buffer_Delete(XBUFFER& databuffer)
 * @brief      Buffer delete
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  databuffer : Databuffer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPILCDDISPLAYPCF8833::Buffer_Delete(XBUFFER& databuffer)
 {
@@ -647,12 +649,12 @@ bool DIOSPILCDDISPLAYPCF8833::Buffer_Delete(XBUFFER& databuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSPILCDDISPLAYPCF8833::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPILCDDISPLAYPCF8833::Clean()
 {

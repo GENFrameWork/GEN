@@ -65,11 +65,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XWINDOWSCONSOLE::XWINDOWSCONSOLE()
+* 
+* @fn         XWINDOWSCONSOLE::XWINDOWSCONSOLE(): XCONSOLE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSCONSOLE::XWINDOWSCONSOLE(): XCONSOLE()
 {
@@ -87,12 +87,12 @@ XWINDOWSCONSOLE::XWINDOWSCONSOLE(): XCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSCONSOLE::~XWINDOWSCONSOLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSCONSOLE::~XWINDOWSCONSOLE()
 {
@@ -101,16 +101,16 @@ XWINDOWSCONSOLE::~XWINDOWSCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::GetSize(int& width, int& height)
 * @brief      Get size
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::GetSize(int& width, int& height)
 {
@@ -134,16 +134,16 @@ bool XWINDOWSCONSOLE::GetSize(int& width, int& height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::SetSize(int width, int height)
 * @brief      Set size
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::SetSize(int width, int height)
 {
@@ -169,16 +169,16 @@ bool XWINDOWSCONSOLE::SetSize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::GetSizeText(int& columns, int& rows)
 * @brief      Get size text
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  columns :
-* @param[in]  rows :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  columns : Columns value.
+* @param[in]  rows : Rows value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::GetSizeText(int& columns, int& rows)
 {
@@ -203,7 +203,7 @@ bool XWINDOWSCONSOLE::GetSizeText(int& columns, int& rows)
 * @brief      get symbols used
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XCONSOLE_SYMBOLSUSED : 
+* @return     XCONSOLE_SYMBOLSUSED : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE_SYMBOLSUSED XWINDOWSCONSOLE::GetSymbolsUsed()
@@ -264,13 +264,13 @@ XCONSOLE_SYMBOLSUSED XWINDOWSCONSOLE::GetSymbolsUsed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::Maximize()
 * @brief      Maximize
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::Maximize()
 {
@@ -299,13 +299,13 @@ bool XWINDOWSCONSOLE::Maximize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::Minimize()
 * @brief      Minimize
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::Minimize()
 {
@@ -334,13 +334,13 @@ bool XWINDOWSCONSOLE::Minimize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::Hide()
 * @brief      Hide
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::Hide()
 {
@@ -358,13 +358,13 @@ bool XWINDOWSCONSOLE::Hide()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::IsHide()
 * @brief      Is hide
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::IsHide()
 {
@@ -384,13 +384,13 @@ bool XWINDOWSCONSOLE::IsHide()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::UnHide()
 * @brief      Un hide
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::UnHide()
 {
@@ -409,15 +409,15 @@ bool XWINDOWSCONSOLE::UnHide()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSCONSOLE::Print(XCHAR* string)
 * @brief      Print
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::Print(XCHAR* string)
 {
@@ -440,12 +440,12 @@ bool XWINDOWSCONSOLE::Print(XCHAR* string)
 * @fn         bool XWINDOWSCONSOLE::Clear(bool fill)
 * @brief      Clear
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  fill : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  fill : Fill value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::Clear(bool fill)
 {
   #ifndef APPFLOW_GRAPHICS_NOTCONSOLE_ACTIVE
@@ -463,8 +463,8 @@ bool XWINDOWSCONSOLE::Clear(bool fill)
 * @fn         bool XWINDOWSCONSOLE::KBHit(void)
 * @brief      KB hit
 * @ingroup    PLATFORM_WINDOWS
-*  
-* @return     bool : true if is succesful. 
+* 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::KBHit(void)
@@ -482,13 +482,13 @@ bool XWINDOWSCONSOLE::KBHit(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XWINDOWSCONSOLE::GetChar()
 * @brief      Get char
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XWINDOWSCONSOLE::GetChar()
 {
@@ -512,7 +512,7 @@ int XWINDOWSCONSOLE::GetChar()
 * @brief      Generate
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::Generate()
@@ -585,7 +585,7 @@ bool XWINDOWSCONSOLE::Generate()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSCONSOLE::Close()

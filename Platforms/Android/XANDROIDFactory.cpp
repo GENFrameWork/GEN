@@ -86,18 +86,18 @@ DELETEFUNC(XANDROIDFACTORY, XMUTEX     , XANDROIDMUTEX      , Delete_Mutex)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREAD* XANDROIDFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* param)
 * @brief      Create thread
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * @param[in]  groupID : group ID of threads
 * @param[in]  ID : ID for thread
 * @param[in]  function : callback to thread
 * @param[in]  param : param to callback
-*
-* @return     XTHREAD* : thread created
-*
+* 
+* @return     XTHREAD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XANDROIDFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* param)
 {
@@ -107,16 +107,16 @@ XTHREAD* XANDROIDFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREAD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XANDROIDFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 * @brief      Delete thread
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * @param[in]  groupID : group ID of threads
 * @param[in]  xthread : thread to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XANDROIDFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 {

@@ -115,7 +115,7 @@ DIOCOREPROTOCOL_HEADER::~DIOCOREPROTOCOL_HEADER()
 * @brief      Get ID message
 * @ingroup    DATAIO
 * 
-* @return     XUUID* : 
+* @return     XUUID* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID* DIOCOREPROTOCOL_HEADER::GetIDMessage()
@@ -130,7 +130,7 @@ XUUID* DIOCOREPROTOCOL_HEADER::GetIDMessage()
 * @brief      Get message type
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_HEADER_MESSAGETYPE : 
+* @return     DIOCOREPROTOCOL_HEADER_MESSAGETYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER_MESSAGETYPE DIOCOREPROTOCOL_HEADER::GetMessageType()
@@ -145,7 +145,7 @@ DIOCOREPROTOCOL_HEADER_MESSAGETYPE DIOCOREPROTOCOL_HEADER::GetMessageType()
 * @brief      Set message type
 * @ingroup    DATAIO
 * 
-* @param[in]  message_type : 
+* @param[in]  message_type : Message type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_HEADER::SetMessageType(DIOCOREPROTOCOL_HEADER_MESSAGETYPE message_type)
@@ -161,9 +161,9 @@ void DIOCOREPROTOCOL_HEADER::SetMessageType(DIOCOREPROTOCOL_HEADER_MESSAGETYPE m
 * @brief      Get message type to string
 * @ingroup    DATAIO
 * 
-* @param[in]  message_typestr : 
+* @param[in]  message_typestr : Message typestr value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::GetMessageTypeToString(XSTRING& message_typestr)
@@ -187,10 +187,10 @@ bool DIOCOREPROTOCOL_HEADER::GetMessageTypeToString(XSTRING& message_typestr)
 * @brief      Get message type from string
 * @ingroup    DATAIO
 * 
-* @param[in]  message_typestr : 
-* @param[in]  message_type : 
+* @param[in]  message_typestr : Message typestr pointer to use.
+* @param[in]  message_type : Message type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::GetMessageTypeFromString(XSTRING* message_typestr, DIOCOREPROTOCOL_HEADER_MESSAGETYPE& message_type)
@@ -228,7 +228,7 @@ bool DIOCOREPROTOCOL_HEADER::GetMessageTypeFromString(XSTRING* message_typestr, 
 * @brief      Get operation
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_HEADER_OPERATION : 
+* @return     DIOCOREPROTOCOL_HEADER_OPERATION : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER_OPERATION DIOCOREPROTOCOL_HEADER::GetOperation()
@@ -243,7 +243,7 @@ DIOCOREPROTOCOL_HEADER_OPERATION DIOCOREPROTOCOL_HEADER::GetOperation()
 * @brief      Set operation
 * @ingroup    DATAIO
 * 
-* @param[in]  operation : 
+* @param[in]  operation : Operation value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_HEADER::SetOperation(DIOCOREPROTOCOL_HEADER_OPERATION operation)
@@ -259,9 +259,9 @@ void DIOCOREPROTOCOL_HEADER::SetOperation(DIOCOREPROTOCOL_HEADER_OPERATION opera
 * @brief      Get operation to string
 * @ingroup    DATAIO
 * 
-* @param[in]  operationstr : 
+* @param[in]  operationstr : Operationstr value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::GetOperationToString(XSTRING& operationstr)
@@ -287,14 +287,14 @@ bool DIOCOREPROTOCOL_HEADER::GetOperationToString(XSTRING& operationstr)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOCOREPROTOCOL_HEADER::GetOperationFromString (XSTRING* operationstr, DIOCOREPROTOCOL_HEADER_OPERATION& operation)
-* @brief      Get operation from string 
+* @fn         bool DIOCOREPROTOCOL_HEADER::GetOperationFromString(XSTRING* operationstr, DIOCOREPROTOCOL_HEADER_OPERATION& operation)
+* @brief      Get operation from string
 * @ingroup    DATAIO
 * 
-* @param[in]  operationstr : 
-* @param[in]  operation : 
+* @param[in]  operationstr : Operationstr pointer to use.
+* @param[in]  operation : Operation value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::GetOperationFromString(XSTRING* operationstr, DIOCOREPROTOCOL_HEADER_OPERATION& operation)
@@ -362,7 +362,7 @@ bool DIOCOREPROTOCOL_HEADER::GetOperationFromString(XSTRING* operationstr, DIOCO
 * @brief      Get operation param
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCOREPROTOCOL_HEADER::GetOperationParam()
@@ -377,7 +377,7 @@ XSTRING* DIOCOREPROTOCOL_HEADER::GetOperationParam()
 * @brief      Get date time send
 * @ingroup    DATAIO
 * 
-* @return     XDATETIME* : 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* DIOCOREPROTOCOL_HEADER::GetDateTimeSend()
@@ -392,7 +392,7 @@ XDATETIME* DIOCOREPROTOCOL_HEADER::GetDateTimeSend()
 * @brief      Get content type
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_HEADER_CONTENTTYPE : 
+* @return     DIOCOREPROTOCOL_HEADER_CONTENTTYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER_CONTENTTYPE DIOCOREPROTOCOL_HEADER::GetContentType()
@@ -403,11 +403,11 @@ DIOCOREPROTOCOL_HEADER_CONTENTTYPE DIOCOREPROTOCOL_HEADER::GetContentType()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOCOREPROTOCOL_HEADER::SetContentType(DIOCOREPROTOCOL_HEADER_CONTENTTYPE contenttype)
+* @fn         void DIOCOREPROTOCOL_HEADER::SetContentType(DIOCOREPROTOCOL_HEADER_CONTENTTYPE content_type)
 * @brief      Set content type
 * @ingroup    DATAIO
 * 
-* @param[in]  contenttype : 
+* @param[in]  content_type : Content type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_HEADER::SetContentType(DIOCOREPROTOCOL_HEADER_CONTENTTYPE content_type)
@@ -423,9 +423,9 @@ void DIOCOREPROTOCOL_HEADER::SetContentType(DIOCOREPROTOCOL_HEADER_CONTENTTYPE c
 * @brief      Get content type to string
 * @ingroup    DATAIO
 * 
-* @param[in]  contenttypestr : 
+* @param[in]  content_typestr : Content typestr value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::GetContentTypeToString(XSTRING& content_typestr)
@@ -450,10 +450,10 @@ bool DIOCOREPROTOCOL_HEADER::GetContentTypeToString(XSTRING& content_typestr)
 * @brief      Get content type from string
 * @ingroup    DATAIO
 * 
-* @param[in]  content_typestr : 
-* @param[in]  content_type : 
+* @param[in]  content_typestr : Content typestr pointer to use.
+* @param[in]  content_type : Content type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::GetContentTypeFromString(XSTRING* content_typestr, DIOCOREPROTOCOL_HEADER_CONTENTTYPE& content_type)
@@ -496,7 +496,7 @@ bool DIOCOREPROTOCOL_HEADER::GetContentTypeFromString(XSTRING* content_typestr, 
 * @brief      Get block index
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_HEADER::GetBlockIndex()
@@ -511,7 +511,7 @@ XDWORD DIOCOREPROTOCOL_HEADER::GetBlockIndex()
 * @brief      Set block index
 * @ingroup    DATAIO
 * 
-* @param[in]  block_index : 
+* @param[in]  block_index : Block index value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_HEADER::SetBlockIndex(XDWORD block_index)
@@ -526,7 +526,7 @@ void DIOCOREPROTOCOL_HEADER::SetBlockIndex(XDWORD block_index)
 * @brief      Get block amount
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_HEADER::GetBlockAmount()
@@ -541,7 +541,7 @@ XDWORD DIOCOREPROTOCOL_HEADER::GetBlockAmount()
 * @brief      Set block amount
 * @ingroup    DATAIO
 * 
-* @param[in]  block_amount : 
+* @param[in]  block_amount : Block amount value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_HEADER::SetBlockAmount(XDWORD block_amount)
@@ -556,7 +556,7 @@ void DIOCOREPROTOCOL_HEADER::SetBlockAmount(XDWORD block_amount)
 * @brief      Get content size
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_HEADER::GetContentSize()
@@ -571,7 +571,7 @@ XDWORD DIOCOREPROTOCOL_HEADER::GetContentSize()
 * @brief      Set content size
 * @ingroup    DATAIO
 * 
-* @param[in]  content_size : 
+* @param[in]  content_size : Content size value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_HEADER::SetContentSize(XDWORD content_size)
@@ -586,7 +586,7 @@ void DIOCOREPROTOCOL_HEADER::SetContentSize(XDWORD content_size)
 * @brief      Get content compress size
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_HEADER::GetContentCompressSize()
@@ -601,7 +601,7 @@ XDWORD DIOCOREPROTOCOL_HEADER::GetContentCompressSize()
 * @brief      Set content compress size
 * @ingroup    DATAIO
 * 
-* @param[in]  content_compresssize : 
+* @param[in]  content_compresssize : Content compresssize value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_HEADER::SetContentCompressSize(XDWORD content_compresssize)
@@ -616,7 +616,7 @@ void DIOCOREPROTOCOL_HEADER::SetContentCompressSize(XDWORD content_compresssize)
 * @brief      Get content CRC32
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_HEADER::GetContentCRC32()
@@ -631,7 +631,7 @@ XDWORD DIOCOREPROTOCOL_HEADER::GetContentCRC32()
 * @brief      Set content CRC32
 * @ingroup    DATAIO
 * 
-* @param[in]  content_CRC32 : 
+* @param[in]  content_CRC32 : Content CRC32 value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_HEADER::SetContentCRC32(XDWORD content_CRC32)
@@ -646,7 +646,7 @@ void DIOCOREPROTOCOL_HEADER::SetContentCRC32(XDWORD content_CRC32)
 * @brief      Get serialization X file JSON
 * @ingroup    DATAIO
 * 
-* @return     XFILEJSON* : 
+* @return     XFILEJSON* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSON* DIOCOREPROTOCOL_HEADER::GetSerializationXFileJSON()
@@ -661,7 +661,7 @@ XFILEJSON* DIOCOREPROTOCOL_HEADER::GetSerializationXFileJSON()
 * @brief      Get serialization method
 * @ingroup    DATAIO
 * 
-* @return     XSERIALIZATIONMETHOD* : 
+* @return     XSERIALIZATIONMETHOD* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSERIALIZATIONMETHOD* DIOCOREPROTOCOL_HEADER::GetSerializationMethod()
@@ -676,9 +676,9 @@ XSERIALIZATIONMETHOD* DIOCOREPROTOCOL_HEADER::GetSerializationMethod()
 * @brief      Copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
+* @param[in]  header : Header pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::CopyFrom(DIOCOREPROTOCOL_HEADER* header)
@@ -715,9 +715,9 @@ bool DIOCOREPROTOCOL_HEADER::CopyFrom(DIOCOREPROTOCOL_HEADER* header)
 * @brief      Copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
+* @param[in]  header : Header pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::CopyTo(DIOCOREPROTOCOL_HEADER* header)
@@ -754,9 +754,9 @@ bool DIOCOREPROTOCOL_HEADER::CopyTo(DIOCOREPROTOCOL_HEADER* header)
 * @brief      Compare
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
+* @param[in]  header : Header pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::Compare(DIOCOREPROTOCOL_HEADER* header)
@@ -831,7 +831,7 @@ bool DIOCOREPROTOCOL_HEADER::Compare(DIOCOREPROTOCOL_HEADER* header)
 * @brief      Serialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::Serialize()
@@ -889,7 +889,7 @@ bool DIOCOREPROTOCOL_HEADER::Serialize()
 * @brief      Deserialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_HEADER::Deserialize()

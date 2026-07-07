@@ -163,7 +163,7 @@ SCRIPT::~SCRIPT()
 * @brief      Get type
 * @ingroup    SCRIPT
 * 
-* @return     SCRIPT_TYPE : 
+* @return     SCRIPT_TYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_TYPE SCRIPT::GetType()
@@ -178,9 +178,9 @@ SCRIPT_TYPE SCRIPT::GetType()
 * @brief      Get type by extension
 * @ingroup    SCRIPT
 * 
-* @param[in]  namefilescript : 
+* @param[in]  namefilescript : Namefilescript pointer to use.
 * 
-* @return     SCRIPT_TYPE : 
+* @return     SCRIPT_TYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_TYPE SCRIPT::GetTypeByExtension(XCHAR* namefilescript)
@@ -224,12 +224,12 @@ SCRIPT_TYPE SCRIPT::GetTypeByExtension(XCHAR* namefilescript)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         SCRIPT* SCRIPT::Create(XCHAR* namefilescript)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    SCRIPT
 * 
-* @param[in]  namefilescript : 
+* @param[in]  namefilescript : Namefilescript pointer to use.
 * 
-* @return     SCRIPT* : 
+* @return     SCRIPT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT* SCRIPT::Create(XCHAR* namefilescript)
@@ -241,12 +241,12 @@ SCRIPT* SCRIPT::Create(XCHAR* namefilescript)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         SCRIPT* SCRIPT::Create(SCRIPT_TYPE type)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    SCRIPT
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     SCRIPT* : 
+* @return     SCRIPT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT* SCRIPT::Create(SCRIPT_TYPE type)
@@ -287,9 +287,9 @@ SCRIPT* SCRIPT::Create(SCRIPT_TYPE type)
 * @brief      Load
 * @ingroup    SCRIPT
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::Load(XPATH& xpath)
@@ -355,9 +355,9 @@ bool SCRIPT::Load(XPATH& xpath)
 * @brief      Load add
 * @ingroup    SCRIPT
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::LoadAdd(XPATH& xpath)
@@ -397,9 +397,9 @@ bool SCRIPT::LoadAdd(XPATH& xpath)
 * @brief      Save
 * @ingroup    SCRIPT
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::Save(XPATH& xpath)
@@ -426,10 +426,10 @@ bool SCRIPT::Save(XPATH& xpath)
 * @brief      Load script and run
 * @ingroup    SCRIPT
 * 
-* @param[in]  listscripts : 
-* @param[in]  adjustlibrarys : 
+* @param[in]  listscripts : Listscripts pointer to use.
+* @param[in]  adjustlibrarys : Adjustlibrarys value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRARYS adjustlibrarys)
@@ -553,7 +553,7 @@ bool SCRIPT::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRA
 * @brief      Add return by type
 * @ingroup    SCRIPT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::AddReturnByType()
@@ -577,10 +577,10 @@ bool SCRIPT::AddReturnByType()
 * @brief      Is script
 * @ingroup    SCRIPT
 * 
-* @param[in]  xpath : 
-* @param[in]  extension : 
+* @param[in]  xpath : Path to use.
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::IsScript(XPATH& xpath, XCHAR* extension)
@@ -599,7 +599,7 @@ bool SCRIPT::IsScript(XPATH& xpath, XCHAR* extension)
 * @brief      Get name script
 * @ingroup    SCRIPT
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* SCRIPT::GetNameScript()
@@ -614,7 +614,7 @@ XSTRING* SCRIPT::GetNameScript()
 * @brief      Get script
 * @ingroup    SCRIPT
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* SCRIPT::GetScript()
@@ -629,7 +629,7 @@ XSTRING* SCRIPT::GetScript()
 * @brief      Get path
 * @ingroup    SCRIPT
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* SCRIPT::GetPath()
@@ -641,12 +641,12 @@ XPATH* SCRIPT::GetPath()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         int SCRIPT::Run(int* returnval)
-* @brief      Run
+* @brief      Run operation
 * @ingroup    SCRIPT
 * 
-* @param[in]  returnval : 
+* @param[in]  returnval : Returnval pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SCRIPT::Run(int* returnval)
@@ -672,7 +672,7 @@ int SCRIPT::Run(int* returnval)
 * @brief      Run with thread
 * @ingroup    SCRIPT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::RunWithThread()
@@ -685,13 +685,13 @@ bool SCRIPT::RunWithThread()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT::IsRunWithThread()
 * @brief      Is run with thread
 * @ingroup    SCRIPT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::IsRunWithThread()
 {
@@ -700,16 +700,16 @@ bool SCRIPT::IsRunWithThread()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool SCRIPT::IsRunThread(SCRIPT_G_ERRORCODE* error,int* returnvalue)
+* 
+* @fn         bool SCRIPT::IsRunThread(int* error,int* returnvalue)
 * @brief      Is run thread
 * @ingroup    SCRIPT
-*
-* @param[in]  error :
-* @param[in]  returnvalue :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  error : Error pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::IsRunThread(int* error,int* returnvalue)
 {
@@ -739,7 +739,7 @@ bool SCRIPT::IsRunThread(int* error,int* returnvalue)
 * @brief      Cancel execution
 * @ingroup    SCRIPT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::CancelExecution()
@@ -758,7 +758,7 @@ bool SCRIPT::CancelExecution()
 * @brief      Get timer
 * @ingroup    SCRIPT
 * 
-* @return     XTIMER* : 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* SCRIPT::GetTimer()
@@ -773,7 +773,7 @@ XTIMER* SCRIPT::GetTimer()
 * @brief      Get thread
 * @ingroup    SCRIPT
 * 
-* @return     XTHREADCOLLECTED* : 
+* @return     XTHREADCOLLECTED* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADCOLLECTED* SCRIPT::GetThread()
@@ -783,15 +783,15 @@ XTHREADCOLLECTED* SCRIPT::GetThread()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB* SCRIPT::GetLibrary(XCHAR* ID)
 * @brief      Get library
 * @ingroup    SCRIPT
-*
-* @param[in]  ID :
-*
-* @return     SCRIPT_LIB* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     SCRIPT_LIB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB* SCRIPT::GetLibrary(XCHAR* ID)
 {
@@ -818,15 +818,15 @@ SCRIPT_LIB* SCRIPT::GetLibrary(XCHAR* ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT::AddLibrary(SCRIPT_LIB* scriptlib)
 * @brief      Add library
 * @ingroup    SCRIPT
-*
-* @param[in]  scriptlib :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  scriptlib : Scriptlib pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::AddLibrary(SCRIPT_LIB* scriptlib)
 {
@@ -844,7 +844,7 @@ bool SCRIPT::AddLibrary(SCRIPT_LIB* scriptlib)
 * @brief      Delete all librarys
 * @ingroup    SCRIPT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::DeleteAllLibrarys()
@@ -864,9 +864,9 @@ bool SCRIPT::DeleteAllLibrarys()
 * @brief      Get library function
 * @ingroup    SCRIPT
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     SCRIPT_LIB_FUNCTION* : 
+* @return     SCRIPT_LIB_FUNCTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_FUNCTION* SCRIPT::GetLibraryFunction(XCHAR* name)
@@ -890,9 +890,9 @@ SCRIPT_LIB_FUNCTION* SCRIPT::GetLibraryFunction(XCHAR* name)
 * @brief      Get library function
 * @ingroup    SCRIPT
 * 
-* @param[in]  ptrfunction : 
+* @param[in]  ptrfunction : Ptrfunction pointer to use.
 * 
-* @return     SCRIPT_LIB_FUNCTION* : 
+* @return     SCRIPT_LIB_FUNCTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_FUNCTION* SCRIPT::GetLibraryFunction(void* ptrfunction)
@@ -916,11 +916,11 @@ SCRIPT_LIB_FUNCTION* SCRIPT::GetLibraryFunction(void* ptrfunction)
 * @brief      Add library function
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  name : 
-* @param[in]  libfunction : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  name : Name to use.
+* @param[in]  libfunction : Libfunction value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY libfunction)
@@ -940,7 +940,7 @@ bool SCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBR
 * @brief      Delete library funcions
 * @ingroup    SCRIPT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::DeleteLibraryFuncions()
@@ -960,7 +960,7 @@ bool SCRIPT::DeleteLibraryFuncions()
 * @brief      Add internal libraries
 * @ingroup    SCRIPT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::AddInternalLibraries()
@@ -1041,7 +1041,7 @@ bool SCRIPT::AddInternalLibraries()
 * @brief      Get error script
 * @ingroup    SCRIPT
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SCRIPT::GetErrorScript()
@@ -1056,9 +1056,9 @@ int SCRIPT::GetErrorScript()
 * @brief      Set error script
 * @ingroup    SCRIPT
 * 
-* @param[in]  errorcode : 
+* @param[in]  errorcode : Errorcode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::SetErrorScript(int errorcode)
@@ -1075,9 +1075,9 @@ bool SCRIPT::SetErrorScript(int errorcode)
 * @brief      Have error
 * @ingroup    SCRIPT
 * 
-* @param[in]  errorcode : 
+* @param[in]  errorcode : Errorcode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::HaveError(int errorcode)
@@ -1092,9 +1092,9 @@ bool SCRIPT::HaveError(int errorcode)
 * @brief      Eliminate extra chars
 * @ingroup    SCRIPT
 * 
-* @param[in]  namescript : 
+* @param[in]  namescript : Namescript pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT::EliminateExtraChars(XSTRING* namescript)
@@ -1126,7 +1126,7 @@ bool SCRIPT::EliminateExtraChars(XSTRING* namescript)
 * @note       INTERNAL
 * @ingroup    SCRIPT
 * 
-* @param[in]  xevent : 
+* @param[in]  xevent : Xevent pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT::HandleEvent(XEVENT* xevent)
@@ -1141,7 +1141,7 @@ void SCRIPT::HandleEvent(XEVENT* xevent)
 * @brief      Thread function
 * @ingroup    SCRIPT
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT::ThreadFunction(void* data)

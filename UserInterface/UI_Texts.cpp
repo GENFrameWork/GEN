@@ -59,10 +59,10 @@ UI_TEXTS* UI_TEXTS::instance = NULL;
 * @fn         bool UI_TEXTS::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_TEXTS::GetIsInstanced()
 {
   return instance!=NULL;
@@ -74,10 +74,10 @@ bool UI_TEXTS::GetIsInstanced()
 * @fn         UI_TEXTS& UI_TEXTS::GetInstance()
 * @brief      Get instance
 * @ingroup    USERINTERFACE
-*
-* @return     UI_TEXTS& : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_TEXTS& : Reference to the requested object.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_TEXTS& UI_TEXTS::GetInstance()
 {
   if(!instance) instance = GEN_NEW UI_TEXTS();
@@ -91,10 +91,10 @@ UI_TEXTS& UI_TEXTS::GetInstance()
 * @fn         bool UI_TEXTS::DelInstance()
 * @brief      Del instance
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_TEXTS::DelInstance()
 {
   if(instance)
@@ -111,16 +111,16 @@ bool UI_TEXTS::DelInstance()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_TEXTS::Add(XCHAR* name, XCHAR* texts)
-* @brief      Add
+* @fn         bool UI_TEXTS::Add(XCHAR* name, XCHAR* text)
+* @brief      Add value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
-* @param[in]  texts : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  name : Name to use.
+* @param[in]  text : Text to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_TEXTS::Add(XCHAR* name, XCHAR* text)
 {
   if(!name)   return false;
@@ -150,15 +150,15 @@ bool UI_TEXTS::Add(XCHAR* name, XCHAR* text)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_TEXTS::Add(XSTRING& name, XSTRING& text)
-* @brief      Add
+* @brief      Add value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
-* @param[in]  text : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  name : Name to use.
+* @param[in]  text : Text to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_TEXTS::Add(XSTRING& name, XSTRING& text)
 {
   return Add(name.Get(), text.Get());
@@ -168,14 +168,14 @@ bool UI_TEXTS::Add(XSTRING& name, XSTRING& text)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XSTRING* UI_TEXTS::Get(XCHAR* name)
-* @brief      Get
+* @brief      Get value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
 * 
-* @return     XSTRING* : 
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_TEXTS::Get(XCHAR* name)
 {
   if(!name) return NULL;
@@ -196,14 +196,14 @@ XSTRING* UI_TEXTS::Get(XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XSTRING* UI_TEXTS::Get(XSTRING& name)
-* @brief      Get
+* @brief      Get value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
 * 
-* @return     XSTRING* : 
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_TEXTS::Get(XSTRING& name)
 {
   return Get(name.Get());
@@ -215,10 +215,10 @@ XSTRING* UI_TEXTS::Get(XSTRING& name)
 * @fn         bool UI_TEXTS::DeleteAll()
 * @brief      Delete all
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_TEXTS::DeleteAll()
 {
   texts.DeleteKeyContents();
@@ -234,8 +234,8 @@ bool UI_TEXTS::DeleteAll()
 * @fn         UI_TEXTS::UI_TEXTS()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_TEXTS::UI_TEXTS()
 {
   Clean();
@@ -248,8 +248,8 @@ UI_TEXTS::UI_TEXTS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_TEXTS::~UI_TEXTS()
 {
   DeleteAll();
@@ -264,8 +264,8 @@ UI_TEXTS::~UI_TEXTS()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_TEXTS::Clean()
 {
 

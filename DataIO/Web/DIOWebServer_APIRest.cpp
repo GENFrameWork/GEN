@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_ENDPOINT::DIOWEBSERVER_ENDPOINT()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_ENDPOINT::DIOWEBSERVER_ENDPOINT()
 {
@@ -70,12 +70,12 @@ DIOWEBSERVER_ENDPOINT::DIOWEBSERVER_ENDPOINT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_ENDPOINT::~DIOWEBSERVER_ENDPOINT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_ENDPOINT::~DIOWEBSERVER_ENDPOINT()
 {
@@ -84,12 +84,12 @@ DIOWEBSERVER_ENDPOINT::~DIOWEBSERVER_ENDPOINT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_ENDPOINT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_ENDPOINT::Clean()
 {
@@ -134,9 +134,9 @@ DIOWEBSERVER_APIREST::~DIOWEBSERVER_APIREST()
 * @brief      Resolve end point
 * @ingroup    DATAIO
 * 
-* @param[in]  event : 
+* @param[in]  event : Event to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_APIREST::ResolveEndPoint(DIOWEBSERVER_XEVENT* event)

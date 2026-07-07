@@ -63,11 +63,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXMUTEX::XLINUXMUTEX()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXMUTEX::XLINUXMUTEX()
 {
@@ -81,12 +81,12 @@ XLINUXMUTEX::XLINUXMUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXMUTEX::~XLINUXMUTEX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXMUTEX::~XLINUXMUTEX()
 {
@@ -101,13 +101,13 @@ XLINUXMUTEX::~XLINUXMUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXMUTEX::Lock()
 * @brief      Lock
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXMUTEX::Lock()
 {
@@ -122,13 +122,13 @@ bool XLINUXMUTEX::Lock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXMUTEX::UnLock()
 * @brief      Un lock
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXMUTEX::UnLock()
 {
@@ -142,12 +142,12 @@ bool XLINUXMUTEX::UnLock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXMUTEX::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXMUTEX::Clean()
 {
@@ -161,14 +161,14 @@ void XLINUXMUTEX::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XLINUXTHREAD::XLINUXTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
+* @fn         XLINUXTHREAD::XLINUXTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param) : XTHREAD(groupID, ID, function, param)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  groupID : 
-* @param[in]  ID : 
-* @param[in]  function : 
-* @param[in]  param : 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXTHREAD::XLINUXTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param) : XTHREAD(groupID, ID, function, param)
@@ -178,12 +178,12 @@ XLINUXTHREAD::XLINUXTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION fu
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXTHREAD::~XLINUXTHREAD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXTHREAD::~XLINUXTHREAD()
 {
@@ -194,15 +194,15 @@ XLINUXTHREAD::~XLINUXTHREAD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXTHREAD::Ini(bool run)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  run : if run the thread directly
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXTHREAD::Ini(bool run)
 {
@@ -247,15 +247,15 @@ bool XLINUXTHREAD::Ini(bool run)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXTHREAD::Wait(int miliseconds)
 * @brief      Wait
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  miliseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  miliseconds : Miliseconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXTHREAD::Wait(int miliseconds)
 {
@@ -266,13 +266,13 @@ bool XLINUXTHREAD::Wait(int miliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXTHREAD::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXTHREAD::End()
 {
@@ -293,15 +293,15 @@ bool XLINUXTHREAD::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* XLINUXTHREAD::Callback(void* thread)
 * @brief      Callback
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  thread : thread class
-*
-* @return     void* : NULL always
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XLINUXTHREAD::Callback(void* thread)
 {
@@ -380,12 +380,12 @@ void* XLINUXTHREAD::Callback(void* thread)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXTHREAD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXTHREAD::Clean()
 {

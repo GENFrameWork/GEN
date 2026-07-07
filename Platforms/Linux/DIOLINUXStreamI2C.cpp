@@ -74,12 +74,12 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOLINUXSTREAMI2C::DIOLINUXSTREAMI2C()
+* 
+* @fn         DIOLINUXSTREAMI2C::DIOLINUXSTREAMI2C() : DIOSTREAMI2C()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXSTREAMI2C::DIOLINUXSTREAMI2C() : DIOSTREAMI2C()
 {
   Clean();
@@ -115,7 +115,7 @@ DIOLINUXSTREAMI2C::~DIOLINUXSTREAMI2C()
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMI2C::Open()
@@ -157,10 +157,10 @@ bool DIOLINUXSTREAMI2C::Open()
 * @brief      Wait to filled reading buffer
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  filledto : 
-* @param[in]  timeout : 
+* @param[in]  filledto : Filledto value.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMI2C::WaitToFilledReadingBuffer(int filledto, int timeout)
@@ -179,10 +179,10 @@ bool DIOLINUXSTREAMI2C::WaitToFilledReadingBuffer(int filledto, int timeout)
 * @brief      Read direct
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOLINUXSTREAMI2C::ReadDirect(XBYTE* buffer, XDWORD size)
@@ -216,10 +216,10 @@ XDWORD DIOLINUXSTREAMI2C::ReadDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOLINUXSTREAMI2C::WriteDirect(XBYTE* buffer, XDWORD size)
@@ -255,7 +255,7 @@ XDWORD DIOLINUXSTREAMI2C::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMI2C::Close()
@@ -280,7 +280,7 @@ bool DIOLINUXSTREAMI2C::Close()
 * @brief      Thread connection
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMI2C::ThreadConnection(void* data)

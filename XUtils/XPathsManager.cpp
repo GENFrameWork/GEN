@@ -61,11 +61,11 @@ XPATHSMANAGER*  XPATHSMANAGER::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATHSMANAGERSECTION::XPATHSMANAGERSECTION()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATHSMANAGERSECTION::XPATHSMANAGERSECTION()
 {
@@ -76,12 +76,12 @@ XPATHSMANAGERSECTION::XPATHSMANAGERSECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATHSMANAGERSECTION::~XPATHSMANAGERSECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATHSMANAGERSECTION::~XPATHSMANAGERSECTION()
 {
@@ -92,12 +92,12 @@ XPATHSMANAGERSECTION::~XPATHSMANAGERSECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATHSMANAGERSECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATHSMANAGERSECTION::Clean()
 {
@@ -111,13 +111,13 @@ void XPATHSMANAGERSECTION::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATHSMANAGER::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::GetIsInstanced()
 {
@@ -126,13 +126,13 @@ bool XPATHSMANAGER::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATHSMANAGER& XPATHSMANAGER::GetInstance()
 * @brief      Get instance
 * @ingroup    XUTILS
-*
-* @return     XPATHSMANAGER& :
-*
+* 
+* @return     XPATHSMANAGER& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATHSMANAGER& XPATHSMANAGER::GetInstance()
 {
@@ -142,13 +142,13 @@ XPATHSMANAGER& XPATHSMANAGER::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATHSMANAGER::DelInstance()
 * @brief      Del instance
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::DelInstance()
 {
@@ -162,17 +162,17 @@ bool XPATHSMANAGER::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATHSMANAGER::GetPathOfSection(XPATHSMANAGERSECTIONTYPE sectiontype, XPATH& xpath, bool addroot)
 * @brief      Get path of section
 * @ingroup    XUTILS
-*
-* @param[in]  sectiontype :
-* @param[in]  xpath :
-* @param[in]  addroot :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sectiontype : Sectiontype value.
+* @param[in]  xpath : Path to use.
+* @param[in]  addroot : Addroot value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::GetPathOfSection(XPATHSMANAGERSECTIONTYPE sectiontype, XPATH& xpath, bool addroot)
 {
@@ -213,13 +213,13 @@ bool XPATHSMANAGER::GetPathOfSection(XPATHSMANAGERSECTIONTYPE sectiontype, XPATH
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* XPATHSMANAGER::GetAppExecPath()
 * @brief      Get app exec path
 * @ingroup    XUTILS
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* XPATHSMANAGER::GetAppExecPath()
 {
@@ -228,16 +228,16 @@ XPATH* XPATHSMANAGER::GetAppExecPath()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XPATHSMANAGER::GetAppExecPathWithoutAsset(XCHAR* assetlevel, XPATH& xpath);
+* 
+* @fn         bool XPATHSMANAGER::GetAppExecPathWithoutAsset(XCHAR* assetlevel, XPATH& xpath)
 * @brief      Get app exec path without asset
 * @ingroup    XUTILS
-*
-* @param[in]  assetlevel : 
-* @param[in]  xpath : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  assetlevel : Assetlevel pointer to use.
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::GetAppExecPathWithoutAsset(XCHAR* assetlevel, XPATH& xpath)
 {
@@ -261,15 +261,15 @@ bool XPATHSMANAGER::GetAppExecPathWithoutAsset(XCHAR* assetlevel, XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATHSMANAGERSECTION* XPATHSMANAGER::GetPathSection(XPATHSMANAGERSECTIONTYPE sectiontype)
 * @brief      Get path section
 * @ingroup    XUTILS
-*
-* @param[in]  sectiontype :
-*
-* @return     XPATHSMANAGERSECTION* :
-*
+* 
+* @param[in]  sectiontype : Sectiontype value.
+* 
+* @return     XPATHSMANAGERSECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATHSMANAGERSECTION* XPATHSMANAGER::GetPathSection(XPATHSMANAGERSECTIONTYPE sectiontype)
 {
@@ -292,16 +292,16 @@ XPATHSMANAGERSECTION* XPATHSMANAGER::GetPathSection(XPATHSMANAGERSECTIONTYPE sec
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATHSMANAGER::AddPathSection(XPATHSMANAGERSECTIONTYPE sectiontype, XSTRING& xpath)
 * @brief      Add path section
 * @ingroup    XUTILS
-*
-* @param[in]  sectiontype :
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sectiontype : Sectiontype value.
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::AddPathSection(XPATHSMANAGERSECTIONTYPE sectiontype, XSTRING& xpath)
 {
@@ -334,16 +334,16 @@ bool XPATHSMANAGER::AddPathSection(XPATHSMANAGERSECTIONTYPE sectiontype, XSTRING
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATHSMANAGER::AddPathSection(XPATHSMANAGERSECTIONTYPE sectiontype,const XCHAR* string)
 * @brief      Add path section
 * @ingroup    XUTILS
-*
-* @param[in]  sectiontype :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sectiontype : Sectiontype value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::AddPathSection(XPATHSMANAGERSECTIONTYPE sectiontype,const XCHAR* string)
 {
@@ -354,13 +354,13 @@ bool XPATHSMANAGER::AddPathSection(XPATHSMANAGERSECTIONTYPE sectiontype,const XC
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATHSMANAGER::DeleteAllPathSections()
 * @brief      Delete all path sections
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::DeleteAllPathSections()
 {
@@ -375,13 +375,13 @@ bool XPATHSMANAGER::DeleteAllPathSections()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATHSMANAGER::CreateAllPathSectionOnDisk()
 * @brief      Create all path section on disk
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::CreateAllPathSectionOnDisk()
 {
@@ -423,15 +423,15 @@ bool XPATHSMANAGER::CreateAllPathSectionOnDisk()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATHSMANAGER::AdjustRootPathDefault(XCHAR* assetsdirname)
 * @brief      Adjust root path default
 * @ingroup    XUTILS
-*
-* @param[in]  assetsdirname : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  assetsdirname : Assetsdirname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::AdjustRootPathDefault(XCHAR* assetsdirname)
 { 
@@ -491,11 +491,11 @@ bool XPATHSMANAGER::AdjustRootPathDefault(XCHAR* assetsdirname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATHSMANAGER::XPATHSMANAGER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATHSMANAGER::XPATHSMANAGER()
 {
@@ -506,12 +506,12 @@ XPATHSMANAGER::XPATHSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATHSMANAGER::~XPATHSMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATHSMANAGER::~XPATHSMANAGER()
 {
@@ -527,12 +527,12 @@ XPATHSMANAGER::~XPATHSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATHSMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATHSMANAGER::Clean()
 {

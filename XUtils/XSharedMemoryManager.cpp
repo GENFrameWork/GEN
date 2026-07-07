@@ -55,11 +55,11 @@ XSHAREDMEMORYMANAGER* XSHAREDMEMORYMANAGER::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSHAREDMEMORYMANAGER::XSHAREDMEMORYMANAGER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSHAREDMEMORYMANAGER::XSHAREDMEMORYMANAGER()
 {
@@ -68,12 +68,12 @@ XSHAREDMEMORYMANAGER::XSHAREDMEMORYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSHAREDMEMORYMANAGER::~XSHAREDMEMORYMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSHAREDMEMORYMANAGER::~XSHAREDMEMORYMANAGER()
 {
@@ -82,14 +82,14 @@ XSHAREDMEMORYMANAGER::~XSHAREDMEMORYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSHAREDMEMORYMANAGER::GetIsInstanced()
 * @brief      Get is instanced
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSHAREDMEMORYMANAGER::GetIsInstanced()
 {
@@ -98,14 +98,14 @@ bool XSHAREDMEMORYMANAGER::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSHAREDMEMORYMANAGER& XSHAREDMEMORYMANAGER::GetInstance()
 * @brief      Get instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     XSHAREDMEMORYMANAGER& :
-*
+* 
+* @return     XSHAREDMEMORYMANAGER& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSHAREDMEMORYMANAGER& XSHAREDMEMORYMANAGER::GetInstance()
 {
@@ -119,16 +119,16 @@ XSHAREDMEMORYMANAGER& XSHAREDMEMORYMANAGER::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSHAREDMEMORYMANAGER::SetInstance(XSHAREDMEMORYMANAGER* _instance)
 * @brief      Set instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  _instance : GEN_NEW instance
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSHAREDMEMORYMANAGER::SetInstance(XSHAREDMEMORYMANAGER* _instance)
 {
@@ -141,14 +141,14 @@ bool XSHAREDMEMORYMANAGER::SetInstance(XSHAREDMEMORYMANAGER* _instance)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSHAREDMEMORYMANAGER::DelInstance()
 * @brief      Del instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSHAREDMEMORYMANAGER::DelInstance()
 {
@@ -165,17 +165,17 @@ bool XSHAREDMEMORYMANAGER::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XSHAREDMEMORYMANAGER::Create(XCHAR* ID, XDWORD size, bool ispublic)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-* @param[in]  size :
-* @param[in]  ispublic :
-*
-* @return     XBYTE* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  size : Size value.
+* @param[in]  ispublic : Ispublic value.
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XSHAREDMEMORYMANAGER::Create(XCHAR* ID, XDWORD size, bool ispublic)
 {
@@ -184,17 +184,17 @@ XBYTE* XSHAREDMEMORYMANAGER::Create(XCHAR* ID, XDWORD size, bool ispublic)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XSHAREDMEMORYMANAGER::Create(XSTRING& ID, XDWORD size, bool ispublic)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-* @param[in]  size :
-* @param[in]  ispublic :
-*
-* @return     XBYTE* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  size : Size value.
+* @param[in]  ispublic : Ispublic value.
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XSHAREDMEMORYMANAGER::Create(XSTRING& ID, XDWORD size, bool ispublic)
 {
@@ -203,16 +203,16 @@ XBYTE* XSHAREDMEMORYMANAGER::Create(XSTRING& ID, XDWORD size, bool ispublic)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XSHAREDMEMORYMANAGER::Open(XCHAR* ID, XDWORD& size)
 * @brief      Open
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  ID : ID of Shared memory
 * @param[in]  size : size of shared memory
-*
-* @return     XBYTE* : Pointer to shared memory
-*
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XSHAREDMEMORYMANAGER::Open(XCHAR* ID, XDWORD& size)
 {
@@ -221,16 +221,16 @@ XBYTE* XSHAREDMEMORYMANAGER::Open(XCHAR* ID, XDWORD& size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XSHAREDMEMORYMANAGER::Open(XSTRING& ID, XDWORD& size)
 * @brief      Open
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  ID : ID of Shared memory
 * @param[in]  size : size of shared memory
-*
-* @return     XBYTE* : Pointer to shared memory
-*
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XSHAREDMEMORYMANAGER::Open(XSTRING& ID, XDWORD& size)
 {
@@ -239,13 +239,13 @@ XBYTE* XSHAREDMEMORYMANAGER::Open(XSTRING& ID, XDWORD& size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XSHAREDMEMORYMANAGER::GetPointer()
 * @brief      Get pointer
 * @ingroup    XUTILS
-*
-* @return     XBYTE* : Pointer to shared memory
-*
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XSHAREDMEMORYMANAGER::GetPointer()
 {
@@ -254,13 +254,13 @@ XBYTE* XSHAREDMEMORYMANAGER::GetPointer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSHAREDMEMORYMANAGER::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSHAREDMEMORYMANAGER::Close()
 {
@@ -269,13 +269,13 @@ bool XSHAREDMEMORYMANAGER::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSHAREDMEMORYMANAGER::IsServer()
 * @brief      Is server
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSHAREDMEMORYMANAGER::IsServer()
 {
@@ -284,12 +284,12 @@ bool XSHAREDMEMORYMANAGER::IsServer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSHAREDMEMORYMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSHAREDMEMORYMANAGER::Clean()
 {

@@ -54,15 +54,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_XEVENT::SCRIPT_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         SCRIPT_XEVENT::SCRIPT_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
-* @param[in]  subject :
-* @param[in]  type :
-* @param[in]  family :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_XEVENT::SCRIPT_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 {
@@ -71,12 +71,12 @@ SCRIPT_XEVENT::SCRIPT_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEV
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_XEVENT::~SCRIPT_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_XEVENT::~SCRIPT_XEVENT()
 {
@@ -90,7 +90,7 @@ SCRIPT_XEVENT::~SCRIPT_XEVENT()
 * @brief      Get script
 * @ingroup    SCRIPT
 * 
-* @return     SCRIPT* : 
+* @return     SCRIPT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT* SCRIPT_XEVENT::GetScript()
@@ -105,7 +105,7 @@ SCRIPT* SCRIPT_XEVENT::GetScript()
 * @brief      Set script
 * @ingroup    SCRIPT
 * 
-* @param[in]  script : 
+* @param[in]  script : Script pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_XEVENT::SetScript(SCRIPT* script)
@@ -115,13 +115,13 @@ void SCRIPT_XEVENT::SetScript(SCRIPT* script)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* SCRIPT_XEVENT::GetNameScript()
 * @brief      Get name script
 * @ingroup    SCRIPT
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* SCRIPT_XEVENT::GetNameScript()
 {
@@ -130,13 +130,13 @@ XSTRING* SCRIPT_XEVENT::GetNameScript()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_G_ERRORCODE SCRIPT_XEVENT::GetError()
+* 
+* @fn         int SCRIPT_XEVENT::GetError()
 * @brief      Get error
 * @ingroup    SCRIPT
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SCRIPT_XEVENT::GetError()
 {
@@ -145,13 +145,13 @@ int SCRIPT_XEVENT::GetError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void SCRIPT_XEVENT::SetError(SCRIPT_G_ERRORCODE error)
+* 
+* @fn         void SCRIPT_XEVENT::SetError(int error)
 * @brief      Set error
 * @ingroup    SCRIPT
-*
-* @param[in]  error :
-*
+* 
+* @param[in]  error : Error value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_XEVENT::SetError(int error)
 {
@@ -160,13 +160,13 @@ void SCRIPT_XEVENT::SetError(int error)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* SCRIPT_XEVENT::GetErrorText()
 * @brief      Get error text
 * @ingroup    SCRIPT
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* SCRIPT_XEVENT::GetErrorText()
 {
@@ -175,13 +175,13 @@ XSTRING* SCRIPT_XEVENT::GetErrorText()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int SCRIPT_XEVENT::GetNLine()
 * @brief      Get N line
 * @ingroup    SCRIPT
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SCRIPT_XEVENT::GetNLine()
 {
@@ -190,13 +190,13 @@ int SCRIPT_XEVENT::GetNLine()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_XEVENT::SetNLine(int nline)
 * @brief      Set N line
 * @ingroup    SCRIPT
-*
-* @param[in]  nline :
-*
+* 
+* @param[in]  nline : Nline value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_XEVENT::SetNLine(int nline)
 {
@@ -205,13 +205,13 @@ void SCRIPT_XEVENT::SetNLine(int nline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* SCRIPT_XEVENT::GetCurrentToken()
 * @brief      Get current token
 * @ingroup    SCRIPT
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* SCRIPT_XEVENT::GetCurrentToken()
 {
@@ -220,12 +220,12 @@ XSTRING* SCRIPT_XEVENT::GetCurrentToken()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_XEVENT::Clean()
 {

@@ -58,9 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJPOLYLINE::GRPVECTORFILESVGOBJPOLYLINE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJPOLYLINE::GRPVECTORFILESVGOBJPOLYLINE()
 {
@@ -69,10 +71,12 @@ GRPVECTORFILESVGOBJPOLYLINE::GRPVECTORFILESVGOBJPOLYLINE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJPOLYLINE::~GRPVECTORFILESVGOBJPOLYLINE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJPOLYLINE::~GRPVECTORFILESVGOBJPOLYLINE()
 {
@@ -81,11 +85,15 @@ GRPVECTORFILESVGOBJPOLYLINE::~GRPVECTORFILESVGOBJPOLYLINE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPOLYLINE::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read the common attributes and the points list
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPOLYLINE::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -100,11 +108,15 @@ bool GRPVECTORFILESVGOBJPOLYLINE::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPOLYLINE::BuildPath(GRP2DPATH& path)
 * @brief      Build path : emit the poly line (closed for polygon)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  path : output path
-* @return     bool : true if geometry was emitted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPOLYLINE::BuildPath(GRP2DPATH& path)
 {
@@ -125,10 +137,13 @@ bool GRPVECTORFILESVGOBJPOLYLINE::BuildPath(GRP2DPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XVECTOR<double>* GRPVECTORFILESVGOBJPOLYLINE::GetPoints()
 * @brief      Get points (interleaved x0,y0,x1,y1,...)
 * @ingroup    GRAPHIC
-* @return     XVECTOR<double>* : points
+* 
+* @return     XVECTOR<double>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<double>* GRPVECTORFILESVGOBJPOLYLINE::GetPoints()
 {
@@ -137,10 +152,13 @@ XVECTOR<double>* GRPVECTORFILESVGOBJPOLYLINE::GetPoints()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XDWORD GRPVECTORFILESVGOBJPOLYLINE::GetNPoints()
 * @brief      Get number of (x,y) points
 * @ingroup    GRAPHIC
-* @return     XDWORD : number of points
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRPVECTORFILESVGOBJPOLYLINE::GetNPoints()
 {
@@ -149,12 +167,16 @@ XDWORD GRPVECTORFILESVGOBJPOLYLINE::GetNPoints()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPOLYLINE::ParsePoints(XFILEXMLELEMENT* element)
 * @brief      Parse points : parse the 'points' attribute ("x1,y1 x2,y2 ..." or "x1 y1 x2 y2 ...")
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPOLYLINE::ParsePoints(XFILEXMLELEMENT* element)
 {
@@ -186,11 +208,14 @@ bool GRPVECTORFILESVGOBJPOLYLINE::ParsePoints(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPOLYLINE::IsClosed()
 * @brief      Is closed : poly line is open (polygon overrides to true)
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-* @return     bool : false
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPOLYLINE::IsClosed()
 {
@@ -199,10 +224,12 @@ bool GRPVECTORFILESVGOBJPOLYLINE::IsClosed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJPOLYLINE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJPOLYLINE::Clean()
 {

@@ -58,11 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOGEOLOCATIONIP_RESULT::DIOGEOLOCATIONIP_RESULT()
+* 
+* @fn         DIOGEOLOCATIONIP_RESULT::DIOGEOLOCATIONIP_RESULT(): DIOSCRAPERWEBCACHE_RESULT()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOGEOLOCATIONIP_RESULT::DIOGEOLOCATIONIP_RESULT(): DIOSCRAPERWEBCACHE_RESULT()
 {
@@ -71,12 +71,12 @@ DIOGEOLOCATIONIP_RESULT::DIOGEOLOCATIONIP_RESULT(): DIOSCRAPERWEBCACHE_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOGEOLOCATIONIP_RESULT::~DIOGEOLOCATIONIP_RESULT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOGEOLOCATIONIP_RESULT::~DIOGEOLOCATIONIP_RESULT()
 {
@@ -85,13 +85,13 @@ DIOGEOLOCATIONIP_RESULT::~DIOGEOLOCATIONIP_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOGEOLOCATIONIP_RESULT::GetCountry()
 * @brief      Get country
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOGEOLOCATIONIP_RESULT::GetCountry()
 {
@@ -100,13 +100,13 @@ XCHAR* DIOGEOLOCATIONIP_RESULT::GetCountry()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOGEOLOCATIONIP_RESULT::GetState()
 * @brief      Get state
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOGEOLOCATIONIP_RESULT::GetState()
 {
@@ -115,13 +115,13 @@ XCHAR* DIOGEOLOCATIONIP_RESULT::GetState()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOGEOLOCATIONIP_RESULT::GetCity()
 * @brief      Get city
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOGEOLOCATIONIP_RESULT::GetCity()
 {
@@ -130,13 +130,13 @@ XCHAR* DIOGEOLOCATIONIP_RESULT::GetCity()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOGEOLOCATIONIP_RESULT::GetISP()
 * @brief      Get ISP
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOGEOLOCATIONIP_RESULT::GetISP()
 {
@@ -145,13 +145,13 @@ XCHAR* DIOGEOLOCATIONIP_RESULT::GetISP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOGEOLOCATIONIP_RESULT::GetOrganization()
 * @brief      Get organization
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOGEOLOCATIONIP_RESULT::GetOrganization()
 {
@@ -160,13 +160,13 @@ XCHAR* DIOGEOLOCATIONIP_RESULT::GetOrganization()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float DIOGEOLOCATIONIP_RESULT::GetLatitude()
 * @brief      Get latitude
 * @ingroup    DATAIO
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float DIOGEOLOCATIONIP_RESULT::GetLatitude()
 {
@@ -175,13 +175,13 @@ float DIOGEOLOCATIONIP_RESULT::GetLatitude()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float DIOGEOLOCATIONIP_RESULT::GetLongitude()
 * @brief      Get longitude
 * @ingroup    DATAIO
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float DIOGEOLOCATIONIP_RESULT::GetLongitude()
 {
@@ -190,13 +190,13 @@ float DIOGEOLOCATIONIP_RESULT::GetLongitude()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOGEOLOCATIONIP_RESULT::IsEmpty()
 * @brief      Is empty
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOGEOLOCATIONIP_RESULT::IsEmpty()
 {
@@ -207,15 +207,15 @@ bool DIOGEOLOCATIONIP_RESULT::IsEmpty()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOGEOLOCATIONIP_RESULT::CopyFrom(DIOSCRAPERWEBCACHE_RESULT* result)
 * @brief      Copy from
 * @ingroup    DATAIO
-*
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOGEOLOCATIONIP_RESULT::CopyFrom(DIOSCRAPERWEBCACHE_RESULT* result)
 {
@@ -239,15 +239,15 @@ bool DIOGEOLOCATIONIP_RESULT::CopyFrom(DIOSCRAPERWEBCACHE_RESULT* result)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOGEOLOCATIONIP_RESULT::CopyTo(DIOSCRAPERWEBCACHE_RESULT* result)
 * @brief      Copy to
 * @ingroup    DATAIO
-*
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOGEOLOCATIONIP_RESULT::CopyTo(DIOSCRAPERWEBCACHE_RESULT* result)
 {
@@ -270,19 +270,19 @@ bool DIOGEOLOCATIONIP_RESULT::CopyTo(DIOSCRAPERWEBCACHE_RESULT* result)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOGEOLOCATIONIP_RESULT::Set(XSTRING& country, XSTRING& state, XSTRING& city, XSTRING& ISP, XSTRING& organization)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
-*
-* @param[in]  country :
-* @param[in]  state :
-* @param[in]  city :
-* @param[in]  ISP :
-* @param[in]  organization :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  country : Country value.
+* @param[in]  state : State value.
+* @param[in]  city : City value.
+* @param[in]  ISP : ISP value.
+* @param[in]  organization : Organization value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOGEOLOCATIONIP_RESULT::Set(XSTRING& country, XSTRING& state, XSTRING& city, XSTRING& ISP, XSTRING& organization)
 {
@@ -291,19 +291,19 @@ bool DIOGEOLOCATIONIP_RESULT::Set(XSTRING& country, XSTRING& state, XSTRING& cit
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOGEOLOCATIONIP_RESULT::Set(XCHAR* country, XCHAR* state, XCHAR* city, XCHAR* ISP, XCHAR* organization)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
-*
-* @param[in]  country :
-* @param[in]  state :
-* @param[in]  city :
-* @param[in]  ISP :
-* @param[in]  organization :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  country : Country pointer to use.
+* @param[in]  state : State pointer to use.
+* @param[in]  city : City pointer to use.
+* @param[in]  ISP : ISP pointer to use.
+* @param[in]  organization : Organization pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOGEOLOCATIONIP_RESULT::Set(XCHAR* country, XCHAR* state, XCHAR* city, XCHAR* ISP, XCHAR* organization)
 {
@@ -329,16 +329,16 @@ bool DIOGEOLOCATIONIP_RESULT::Set(XCHAR* country, XCHAR* state, XCHAR* city, XCH
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOGEOLOCATIONIP_RESULT::Set(float latitude, float longitude)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
-*
-* @param[in]  latitude :
-* @param[in]  longitude :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  latitude : Latitude value.
+* @param[in]  longitude : Longitude value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOGEOLOCATIONIP_RESULT::Set(float latitude, float longitude)
 {
@@ -350,12 +350,12 @@ bool DIOGEOLOCATIONIP_RESULT::Set(float latitude, float longitude)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOGEOLOCATIONIP_RESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOGEOLOCATIONIP_RESULT::Clean()
 {
@@ -369,13 +369,13 @@ void DIOGEOLOCATIONIP_RESULT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSCRAPERWEBGEOLOCATIONIP::DIOSCRAPERWEBGEOLOCATIONIP(DIOWEBCLIENT* webclient)
+* 
+* @fn         DIOSCRAPERWEBGEOLOCATIONIP::DIOSCRAPERWEBGEOLOCATIONIP(DIOWEBCLIENT* webclient): DIOSCRAPERWEB()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  webclient :
-*
+* 
+* @param[in]  DIOSCRAPERWEB : DIOSCRAPERWEB pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBGEOLOCATIONIP::DIOSCRAPERWEBGEOLOCATIONIP(DIOWEBCLIENT* webclient): DIOSCRAPERWEB()
 {
@@ -384,12 +384,12 @@ DIOSCRAPERWEBGEOLOCATIONIP::DIOSCRAPERWEBGEOLOCATIONIP(DIOWEBCLIENT* webclient):
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSCRAPERWEBGEOLOCATIONIP::~DIOSCRAPERWEBGEOLOCATIONIP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBGEOLOCATIONIP::~DIOSCRAPERWEBGEOLOCATIONIP()
 {
@@ -398,16 +398,16 @@ DIOSCRAPERWEBGEOLOCATIONIP::~DIOSCRAPERWEBGEOLOCATIONIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBGEOLOCATIONIP::ChangeURL(XCHAR* maskurl, DIOURL& url)
 * @brief      Change URL
 * @ingroup    DATAIO
-*
-* @param[in]  maskurl :
-* @param[in]  url :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  maskurl : Maskurl pointer to use.
+* @param[in]  url : URL to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBGEOLOCATIONIP::ChangeURL(XCHAR* maskurl, DIOURL& url)
 {
@@ -424,16 +424,16 @@ bool DIOSCRAPERWEBGEOLOCATIONIP::ChangeURL(XCHAR* maskurl, DIOURL& url)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSCRAPERWEBGEOLOCATIONIP::Get(XCHAR* IP, DIOGEOLOCATIONIP_RESULT& geolocationIPresult, int timeoutforurl, XSTRING* localIP, bool usecache)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
 * 
-* @param[in]  IP : 
-* @param[in]  geolocationIPresult : 
-* @param[in]  timeoutforurl : 
-* @param[in]  localIP : 
-* @param[in]  usecache : 
+* @param[in]  IP : IP address to use.
+* @param[in]  geolocationIPresult : Output geolocation i presult.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  usecache : Usecache value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBGEOLOCATIONIP::Get(XCHAR* IP, DIOGEOLOCATIONIP_RESULT& geolocationIPresult, int timeoutforurl, XSTRING* localIP, bool usecache)
@@ -449,16 +449,16 @@ bool DIOSCRAPERWEBGEOLOCATIONIP::Get(XCHAR* IP, DIOGEOLOCATIONIP_RESULT& geoloca
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSCRAPERWEBGEOLOCATIONIP::Get(XSTRING& IP, DIOGEOLOCATIONIP_RESULT& geolocationIPresult, int timeoutforurl, XSTRING* localIP, bool usecache)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
 * 
-* @param[in]  IP : 
-* @param[in]  geolocationIPresult : 
-* @param[in]  timeoutforurl : 
-* @param[in]  localIP : 
-* @param[in]  usecache : 
+* @param[in]  IP : IP address to use.
+* @param[in]  geolocationIPresult : Output geolocation i presult.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  usecache : Usecache value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBGEOLOCATIONIP::Get(XSTRING& IP, DIOGEOLOCATIONIP_RESULT& geolocationIPresult, int timeoutforurl, XSTRING* localIP, bool usecache)
@@ -470,16 +470,16 @@ bool DIOSCRAPERWEBGEOLOCATIONIP::Get(XSTRING& IP, DIOGEOLOCATIONIP_RESULT& geolo
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSCRAPERWEBGEOLOCATIONIP::Get(DIOIP& IP, DIOGEOLOCATIONIP_RESULT& geolocationIPresult, int timeoutforurl, XSTRING* localIP, bool usecache)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
 * 
-* @param[in]  IP : 
-* @param[in]  geolocationIPresult : 
-* @param[in]  timeoutforurl : 
-* @param[in]  localIP : 
-* @param[in]  usecache : 
+* @param[in]  IP : IP address to use.
+* @param[in]  geolocationIPresult : Output geolocation i presult.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  usecache : Usecache value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBGEOLOCATIONIP::Get(DIOIP& IP, DIOGEOLOCATIONIP_RESULT& geolocationIPresult, int timeoutforurl, XSTRING* localIP, bool usecache)
@@ -562,12 +562,12 @@ bool DIOSCRAPERWEBGEOLOCATIONIP::Get(DIOIP& IP, DIOGEOLOCATIONIP_RESULT& geoloca
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSCRAPERWEBGEOLOCATIONIP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSCRAPERWEBGEOLOCATIONIP::Clean()
 {

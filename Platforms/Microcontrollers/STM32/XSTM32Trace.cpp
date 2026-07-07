@@ -52,11 +52,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32TRACE::XSTM32TRACE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32TRACE::XSTM32TRACE()
 {
@@ -68,12 +68,12 @@ XSTM32TRACE::XSTM32TRACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32TRACE::~XSTM32TRACE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32TRACE::~XSTM32TRACE()
 {
@@ -86,15 +86,15 @@ XSTM32TRACE::~XSTM32TRACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSTM32TRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 * @brief      Print special
 * @ingroup    PLATFORM_STM32
-*
+* 
 * @param[in]  target : target to print the debug
 * @param[in]  level : level of debug
 * @param[in]  string : string with the line
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSTM32TRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 {
@@ -136,13 +136,13 @@ void XSTM32TRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UART_HandleTypeDef* XSTM32TRACE::GetHuart()
 * @brief      Get huart
 * @ingroup    PLATFORM_STM32
-*
-* @return     UART_HandleTypeDef* :
-*
+* 
+* @return     UART_HandleTypeDef* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UART_HandleTypeDef* XSTM32TRACE::GetHuart()
 {
@@ -152,13 +152,13 @@ UART_HandleTypeDef* XSTM32TRACE::GetHuart()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSTM32TRACE::SetHuart(UART_HandleTypeDef* huart)
 * @brief      Set huart
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  huart :
-*
+* 
+* @param[in]  huart : Huart pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSTM32TRACE::SetHuart(UART_HandleTypeDef* huart)
 {
@@ -168,12 +168,12 @@ void XSTM32TRACE::SetHuart(UART_HandleTypeDef* huart)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSTM32TRACE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSTM32TRACE::Clean()
 {

@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_QUERYSTRINGS::DIOWEBSERVER_QUERYSTRINGS()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_QUERYSTRINGS::DIOWEBSERVER_QUERYSTRINGS()
 {
@@ -66,12 +66,12 @@ DIOWEBSERVER_QUERYSTRINGS::DIOWEBSERVER_QUERYSTRINGS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_QUERYSTRINGS::~DIOWEBSERVER_QUERYSTRINGS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_QUERYSTRINGS::~DIOWEBSERVER_QUERYSTRINGS()
 {
@@ -82,13 +82,13 @@ DIOWEBSERVER_QUERYSTRINGS::~DIOWEBSERVER_QUERYSTRINGS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_QUERYSTRINGS::GetNParams()
 * @brief      Get N params
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_QUERYSTRINGS::GetNParams()
 {
@@ -97,13 +97,13 @@ int DIOWEBSERVER_QUERYSTRINGS::GetNParams()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMAP<XSTRING*, XSTRING*>* DIOWEBSERVER_QUERYSTRINGS::GetParams()
 * @brief      Get params
 * @ingroup    DATAIO
-*
-* @return     XMAP<XSTRING*, :
-*
+* 
+* @return     XMAP<XSTRING*, XSTRING*>* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMAP<XSTRING*, XSTRING*>* DIOWEBSERVER_QUERYSTRINGS::GetParams()
 {
@@ -112,16 +112,16 @@ XMAP<XSTRING*, XSTRING*>* DIOWEBSERVER_QUERYSTRINGS::GetParams()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XSTRING& ID, XSTRING& value)
 * @brief      Add param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XSTRING& ID, XSTRING& value)
 {
@@ -130,16 +130,16 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XSTRING& ID, XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID , XSTRING& value)
 * @brief      Add param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID  , XSTRING& value)
 {
@@ -148,16 +148,16 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID  , XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XSTRING& ID, XCHAR* value)
 * @brief      Add param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  value : Value pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XSTRING& ID, XCHAR* value)
 {
@@ -166,16 +166,16 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XSTRING& ID, XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, XCHAR* value)
 * @brief      Add param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  value : Value pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, XCHAR* value)
 {
@@ -200,16 +200,16 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, int value)
 * @brief      Add param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, int value)
 {
@@ -234,15 +234,15 @@ bool DIOWEBSERVER_QUERYSTRINGS::AddParam(XCHAR* ID, int value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParam(XSTRING& ID)
 * @brief      Get param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParam(XSTRING& ID)
 {
@@ -251,15 +251,15 @@ XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParam(XSTRING& ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParam(XCHAR* ID)
 * @brief      Get param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParam(XCHAR* ID)
 {
@@ -283,15 +283,15 @@ XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParam(XCHAR* ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParamID(int index)
 * @brief      Get param ID
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParamID(int index)
 {
@@ -302,15 +302,15 @@ XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParamID(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParamValue(int index)
 * @brief      Get param value
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParamValue(int index)
 {
@@ -321,15 +321,15 @@ XSTRING* DIOWEBSERVER_QUERYSTRINGS::GetParamValue(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::DelParam(XSTRING& ID)
 * @brief      Del param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::DelParam(XSTRING& ID)
 {
@@ -338,15 +338,15 @@ bool DIOWEBSERVER_QUERYSTRINGS::DelParam(XSTRING& ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::DelParam(XCHAR* ID)
 * @brief      Del param
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::DelParam(XCHAR* ID)
 {
@@ -358,13 +358,13 @@ bool DIOWEBSERVER_QUERYSTRINGS::DelParam(XCHAR* ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::DelAllParam()
 * @brief      Del all param
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::DelAllParam()
 {
@@ -380,15 +380,15 @@ bool DIOWEBSERVER_QUERYSTRINGS::DelAllParam()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::GetAllParam(XSTRING& allparam)
 * @brief      Get all param
 * @ingroup    DATAIO
-*
-* @param[in]  allparam :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  allparam : Allparam value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::GetAllParam(XSTRING& allparam)
 {
@@ -410,15 +410,15 @@ bool DIOWEBSERVER_QUERYSTRINGS::GetAllParam(XSTRING& allparam)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(DIOURL& url)
 * @brief      Get params from URL
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-*
-* @return     int :
-*
+* 
+* @param[in]  url : URL to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(DIOURL& url)
 {
@@ -427,15 +427,15 @@ int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(DIOURL& url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(XSTRING& url)
 * @brief      Get params from URL
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-*
-* @return     int :
-*
+* 
+* @param[in]  url : URL to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(XSTRING& url)
 {
@@ -444,15 +444,15 @@ int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(XSTRING& url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(XCHAR* url)
 * @brief      Get params from URL
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-*
-* @return     int :
-*
+* 
+* @param[in]  url : URL to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(XCHAR* url)
 {
@@ -505,15 +505,15 @@ int DIOWEBSERVER_QUERYSTRINGS::GetParamsFromURL(XCHAR* url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::DeleteParamsFromURL(XSTRING& url)
 * @brief      Delete params from URL
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::DeleteParamsFromURL(XSTRING& url)
 {
@@ -535,15 +535,15 @@ bool DIOWEBSERVER_QUERYSTRINGS::DeleteParamsFromURL(XSTRING& url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_QUERYSTRINGS::CreateURLFromParams(XSTRING& urlpart)
 * @brief      Create URL from params
 * @ingroup    DATAIO
-*
-* @param[in]  urlpart :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  urlpart : Urlpart value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_QUERYSTRINGS::CreateURLFromParams(XSTRING& urlpart)
 {
@@ -575,12 +575,12 @@ bool DIOWEBSERVER_QUERYSTRINGS::CreateURLFromParams(XSTRING& urlpart)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_QUERYSTRINGS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_QUERYSTRINGS::Clean()
 {

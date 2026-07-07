@@ -98,11 +98,11 @@ extern "C"
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES()
+* 
+* @fn         DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES() : DIOSTREAMBLUETOOTHREMOTEENUMDEVICES() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES() : DIOSTREAMBLUETOOTHREMOTEENUMDEVICES() , XFSMACHINE(0)
 {
@@ -132,12 +132,12 @@ DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVIC
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::~DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::~DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES()
 {
@@ -154,13 +154,13 @@ DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::~DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::Search()
 {
@@ -191,15 +191,15 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::Search()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::StopSearch(bool waitend)
 * @brief      Stop search
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  waitend : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  waitend : Waitend value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::StopSearch(bool waitend)
 {
@@ -224,13 +224,13 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::StopSearch(bool waitend)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::IsSearching()
 * @brief      Is searching
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::IsSearching()
 {
@@ -245,16 +245,16 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::IsSearching()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::GetAddrFromLocalDevice(int localdeviceindex, char* btaddr)
 * @brief      Get addr from local device
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  localdeviceindex : 
-* @param[in]  btaddr : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  localdeviceindex : Localdeviceindex value.
+* @param[in]  btaddr : Btaddr pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::GetAddrFromLocalDevice(int localdeviceindex, char* btaddr)
 {
@@ -275,15 +275,15 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::GetAddrFromLocalDevice(int locald
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::IsReadyConnect(int socket)
 * @brief      Is ready connect
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  socket : 
-*
-* @return     int : 
-*
+* 
+* @param[in]  socket : Socket value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::IsReadyConnect(int socket)
 {
@@ -322,15 +322,15 @@ int DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::IsReadyConnect(int socket)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevices(XVECTOR<DIOSTREAMDEVICE*>* devices)
 * @brief      Scan devices
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  devices : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  devices : Devices pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevices(XVECTOR<DIOSTREAMDEVICE*>* devices)
 {
@@ -382,15 +382,15 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevices(XVECTOR<DIOSTREAMDEVI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesName(DIOSTREAMDEVICEBLUETOOTH* device)
 * @brief      Scan devices name
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  device : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  device : Device pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesName(DIOSTREAMDEVICEBLUETOOTH* device)
 {
@@ -432,15 +432,15 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesName(DIOSTREAMDEVICEBL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesServices(XVECTOR<DIOSTREAMDEVICE*>* devices)
 * @brief      Scan devices services
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  devices : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  devices : Devices pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesServices(XVECTOR<DIOSTREAMDEVICE*>* devices)
 {
@@ -479,16 +479,16 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesServices(XVECTOR<DIOST
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDeviceServices(DIOSTREAMDEVICEBLUETOOTH* device, struct search_context* context)
 * @brief      Scan device services
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  device : 
-* @param[in]  search_context* context : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  device : Device pointer to use.
+* @param[in]  context : Context object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDeviceServices(DIOSTREAMDEVICEBLUETOOTH* device, struct search_context* context)
 {
@@ -598,13 +598,13 @@ bool DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDeviceServices(DIOSTREAMDEVIC
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ThreadEnumDevices(void* param)
 * @brief      Thread enum devices
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  param : 
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ThreadEnumDevices(void* param)
 {
@@ -652,12 +652,12 @@ void DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::ThreadEnumDevices(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMBLUETOOTHREMOTEENUMDEVICES::Clean()
 {
@@ -670,15 +670,15 @@ extern "C"
 
 
   /**-------------------------------------------------------------------------------------------------------------------
-  *
-  * @fn         void print_service_class(void* value, void* userData)
-  * @brief      rint_service_class
-  * @ingroup    PLATFORM_LINUX
-  *
-  * @param[in]  value : 
-  * @param[in]  userData : 
-  *
-  * --------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void print_service_class(void* value, void* userData)
+* @brief      rint_service_class
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  value : Value pointer to use.
+* @param[in]  userData : User Data pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
   void print_service_class(void* value, void* userData)
   {
     if(!SDP_lastservice) return;
@@ -696,15 +696,15 @@ extern "C"
 
 
   /**-------------------------------------------------------------------------------------------------------------------
-  *
-  * @fn         void print_service_desc(void* value, void* user)
-  * @brief      rint_service_desc
-  * @ingroup    PLATFORM_LINUX
-  *
-  * @param[in]  value : 
-  * @param[in]  user : 
-  *
-  * --------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void print_service_desc(void* value, void* user)
+* @brief      rint_service_desc
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  value : Value pointer to use.
+* @param[in]  user : User name.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
   void print_service_desc(void* value, void* user)
   {
     if(!SDP_lastservice) return;
@@ -743,15 +743,15 @@ extern "C"
 
 
   /**-------------------------------------------------------------------------------------------------------------------
-  *
-  * @fn         void print_access_protos(void* value, void* userData)
-  * @brief      oid print_access_protos
-  * @ingroup    PLATFORM_LINUX
-  *
-  * @param[in]  value : 
-  * @param[in]  userData :  
-  *
-  * --------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void print_access_protos(void* value, void* userData)
+* @brief      oid print_access_protos
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  value : Value pointer to use.
+* @param[in]  userData : User Data pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
   void print_access_protos(void* value, void* userData)
   {
     //XTRACE_PRINTCOLOR(4, __L("print_access_protos"));

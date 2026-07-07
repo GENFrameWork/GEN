@@ -65,13 +65,13 @@ XTRANSLATION* XTRANSLATION::instance  = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::GetIsInstanced()
 {
@@ -80,13 +80,13 @@ bool XTRANSLATION::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION& XTRANSLATION::GetInstance()
 * @brief      Get instance
 * @ingroup    XUTILS
-*
-* @return     XTRANSLATION& : language instance
-*
+* 
+* @return     XTRANSLATION& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION& XTRANSLATION::GetInstance()
 {
@@ -97,13 +97,13 @@ XTRANSLATION& XTRANSLATION::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::DelInstance()
 * @brief      Del instance
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::DelInstance()
 {
@@ -122,15 +122,15 @@ bool XTRANSLATION::DelInstance()
 
 #ifdef XFILE_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::Ini(XPATH& xpath)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xpath : path of the language file
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::Ini(XPATH& xpath)
 {
@@ -142,10 +142,10 @@ bool XTRANSLATION::Ini(XPATH& xpath)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XTRANSLATION::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::Ini()
@@ -156,13 +156,13 @@ bool XTRANSLATION::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XTRANSLATION::GetActual()
 * @brief      Get actual
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XTRANSLATION::GetActual()
 {
@@ -176,9 +176,9 @@ XDWORD XTRANSLATION::GetActual()
 * @brief      Set actual
 * @ingroup    XUTILS
 * 
-* @param[in]  code : 
+* @param[in]  code : Code value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::SetActual(XDWORD code)
@@ -198,17 +198,17 @@ bool XTRANSLATION::SetActual(XDWORD code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::Translate_Add(XDWORD ID, XCHAR* sentence, XDWORD fixed)
 * @brief      Translate add
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-* @param[in]  sentence :
-* @param[in]  fixed :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  sentence : Sentence pointer to use.
+* @param[in]  fixed : Fixed value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::Translate_Add(XDWORD ID, XCHAR* sentence, XDWORD fixed)
 {
@@ -240,9 +240,9 @@ bool XTRANSLATION::Translate_Add(XDWORD ID, XCHAR* sentence, XDWORD fixed)
 * @brief      Translate get sentence
 * @ingroup    XUTILS
 * 
-* @param[in]  ID : 
+* @param[in]  ID : Identifier to use.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XTRANSLATION::Translate_GetSentence(XDWORD ID)
@@ -262,13 +262,13 @@ XCHAR* XTRANSLATION::Translate_GetSentence(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::End()
 {
@@ -281,11 +281,11 @@ bool XTRANSLATION::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION::XTRANSLATION()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION::XTRANSLATION()
 {
@@ -294,12 +294,12 @@ XTRANSLATION::XTRANSLATION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION::~XTRANSLATION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION::~XTRANSLATION()
 {
@@ -310,13 +310,13 @@ XTRANSLATION::~XTRANSLATION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::LoadLanguageAvailable()
 * @brief      Load language available
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::LoadLanguageAvailable()
 {
@@ -383,15 +383,15 @@ bool XTRANSLATION::LoadLanguageAvailable()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::IsLanguageAvailable(XDWORD code)
 * @brief      Is language available
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::IsLanguageAvailable(XDWORD code)
 {
@@ -402,15 +402,15 @@ bool XTRANSLATION::IsLanguageAvailable(XDWORD code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::AddLanguageAvailable(XDWORD code)
 * @brief      Add language available
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::AddLanguageAvailable(XDWORD code)
 {
@@ -423,15 +423,15 @@ bool XTRANSLATION::AddLanguageAvailable(XDWORD code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XTRANSLATION::GetIndexLanguageByCode(XDWORD code)
 * @brief      Get index language by code
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-*
-* @return     int :
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XTRANSLATION::GetIndexLanguageByCode(XDWORD code)
 {
@@ -445,13 +445,13 @@ int XTRANSLATION::GetIndexLanguageByCode(XDWORD code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION::Translate_Load()
 * @brief      Translate load
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::Translate_Load()
 {
@@ -512,7 +512,7 @@ bool XTRANSLATION::Translate_Load()
 * @brief      Translate delete
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::Translate_Delete()
@@ -531,12 +531,12 @@ bool XTRANSLATION::Translate_Delete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTRANSLATION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRANSLATION::Clean()
 {

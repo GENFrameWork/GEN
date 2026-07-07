@@ -62,7 +62,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         HASHCRC32::HASHCRC32()
+* @fn         HASHCRC32::HASHCRC32() : HASH()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -105,13 +105,13 @@ HASHCRC32::~HASHCRC32()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASHCRC32::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCRC32::Do(XBYTE* input, XQWORD size)
@@ -140,7 +140,7 @@ bool HASHCRC32::Do(XBYTE* input, XQWORD size)
 * @brief      Reset result
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCRC32::ResetResult()
@@ -161,7 +161,7 @@ bool HASHCRC32::ResetResult()
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASHCRC32::GetDefaultSize()
@@ -176,7 +176,7 @@ int HASHCRC32::GetDefaultSize()
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* HASHCRC32::GetResult()
@@ -193,9 +193,9 @@ XBUFFER* HASHCRC32::GetResult()
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @param[in]  resultsize : 
+* @param[in]  resultsize : Output resultsize.
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* HASHCRC32::GetResult(XDWORD& resultsize)
@@ -214,7 +214,7 @@ XBYTE* HASHCRC32::GetResult(XDWORD& resultsize)
 * @brief      Get result CRC32
 * @ingroup    CIPHER
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD HASHCRC32::GetResultCRC32()
@@ -236,7 +236,7 @@ XDWORD HASHCRC32::GetResultCRC32()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void HASHCRC32::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -268,10 +268,10 @@ void HASHCRC32::Ini()
 * @brief      Update
 * @ingroup    CIPHER
 * 
-* @param[in]  CRC32 : 
-* @param[in]  data : 
+* @param[in]  CRC32 : CRC32 value.
+* @param[in]  data : Data buffer to use.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD HASHCRC32::Update(XDWORD CRC32, XBYTE data)

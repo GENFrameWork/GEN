@@ -57,9 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJUSE::GRPVECTORFILESVGOBJUSE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJUSE::GRPVECTORFILESVGOBJUSE()
 {
@@ -68,10 +70,12 @@ GRPVECTORFILESVGOBJUSE::GRPVECTORFILESVGOBJUSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJUSE::~GRPVECTORFILESVGOBJUSE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJUSE::~GRPVECTORFILESVGOBJUSE()
 {
@@ -80,11 +84,15 @@ GRPVECTORFILESVGOBJUSE::~GRPVECTORFILESVGOBJUSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJUSE::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read the common attributes plus href / xlink:href and the x, y offset
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJUSE::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -115,10 +123,13 @@ bool GRPVECTORFILESVGOBJUSE::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSTRING* GRPVECTORFILESVGOBJUSE::GetHRef()
 * @brief      Get href (referenced id, without the leading '#')
 * @ingroup    GRAPHIC
-* @return     XSTRING* : referenced id
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILESVGOBJUSE::GetHRef()
 {
@@ -127,28 +138,36 @@ XSTRING* GRPVECTORFILESVGOBJUSE::GetHRef()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJUSE::GetX()
 * @brief      Get x
 * @ingroup    GRAPHIC
-* @return     double : x offset
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJUSE::GetX()   { return x; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJUSE::GetY()
 * @brief      Get y
 * @ingroup    GRAPHIC
-* @return     double : y offset
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJUSE::GetY()   { return y; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJUSE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJUSE::Clean()
 {

@@ -60,9 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJRECT::GRPVECTORFILESVGOBJRECT()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJRECT::GRPVECTORFILESVGOBJRECT()
 {
@@ -71,10 +73,12 @@ GRPVECTORFILESVGOBJRECT::GRPVECTORFILESVGOBJRECT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJRECT::~GRPVECTORFILESVGOBJRECT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJRECT::~GRPVECTORFILESVGOBJRECT()
 {
@@ -83,11 +87,15 @@ GRPVECTORFILESVGOBJRECT::~GRPVECTORFILESVGOBJRECT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJRECT::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read the common attributes and the rect geometry (x, y, width, height, rx, ry)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJRECT::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -117,11 +125,15 @@ bool GRPVECTORFILESVGOBJRECT::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJRECT::BuildPath(GRP2DPATH& path)
 * @brief      Build path : emit the rectangle (with optional rounded corners) into the path
 * @ingroup    GRAPHIC
+* 
 * @param[in]  path : output path
-* @return     bool : true if geometry was emitted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJRECT::BuildPath(GRP2DPATH& path)
 {
@@ -163,64 +175,84 @@ bool GRPVECTORFILESVGOBJRECT::BuildPath(GRP2DPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJRECT::GetX()
 * @brief      Get x
 * @ingroup    GRAPHIC
-* @return     double : x
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJRECT::GetX()       { return x;      }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJRECT::GetY()
 * @brief      Get y
 * @ingroup    GRAPHIC
-* @return     double : y
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJRECT::GetY()       { return y;      }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJRECT::GetWidth()
 * @brief      Get width
 * @ingroup    GRAPHIC
-* @return     double : width
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJRECT::GetWidth()   { return width;  }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJRECT::GetHeight()
 * @brief      Get height
 * @ingroup    GRAPHIC
-* @return     double : height
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJRECT::GetHeight()  { return height; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJRECT::GetRX()
 * @brief      Get rx
 * @ingroup    GRAPHIC
-* @return     double : rx
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJRECT::GetRX()      { return rx;     }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJRECT::GetRY()
 * @brief      Get ry
 * @ingroup    GRAPHIC
-* @return     double : ry
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJRECT::GetRY()      { return ry;     }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJRECT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJRECT::Clean()
 {

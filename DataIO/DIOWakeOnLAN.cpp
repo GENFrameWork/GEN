@@ -58,11 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWAKEONLAN::DIOWAKEONLAN()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWAKEONLAN::DIOWAKEONLAN()
 {
@@ -71,12 +71,12 @@ DIOWAKEONLAN::DIOWAKEONLAN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWAKEONLAN::~DIOWAKEONLAN()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWAKEONLAN::~DIOWAKEONLAN()
 {
@@ -85,17 +85,17 @@ DIOWAKEONLAN::~DIOWAKEONLAN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWAKEONLAN::SendActivation(DIOMAC* MAC, DIOIP* broadcastIP, int timeout)
 * @brief      Send activation
 * @ingroup    DATAIO
-*
-* @param[in]  MAC : 
-* @param[in]  broadcastIP : 
-* @param[in]  timeout : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  MAC : MAC pointer to use.
+* @param[in]  broadcastIP : Broadcast IP pointer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWAKEONLAN::SendActivation(DIOMAC* MAC, DIOIP* broadcastIP, int timeout)
 {
@@ -151,12 +151,12 @@ bool DIOWAKEONLAN::SendActivation(DIOMAC* MAC, DIOIP* broadcastIP, int timeout)
 
  
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWAKEONLAN::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWAKEONLAN::Clean()
 {

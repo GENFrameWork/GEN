@@ -58,11 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGCONFIG::GRPVECTORFILESVGCONFIG()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGCONFIG::GRPVECTORFILESVGCONFIG()
 {
@@ -71,12 +71,12 @@ GRPVECTORFILESVGCONFIG::GRPVECTORFILESVGCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGCONFIG::~GRPVECTORFILESVGCONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGCONFIG::~GRPVECTORFILESVGCONFIG()
 {
@@ -85,15 +85,15 @@ GRPVECTORFILESVGCONFIG::~GRPVECTORFILESVGCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGCONFIG::ApplyData(XFILEXMLELEMENT* elementsvg)
 * @brief      Apply data : read the root <svg> attributes (width, height, viewBox, preserveAspectRatio)
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  elementsvg : root svg element
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGCONFIG::ApplyData(XFILEXMLELEMENT* elementsvg)
 {
@@ -152,13 +152,13 @@ bool GRPVECTORFILESVGCONFIG::ApplyData(XFILEXMLELEMENT* elementsvg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRPVECTORFILESVGCONFIG::GetWidth()
 * @brief      Get width
 * @ingroup    GRAPHIC
-*
-* @return     double : width
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGCONFIG::GetWidth()
 {
@@ -167,13 +167,13 @@ double GRPVECTORFILESVGCONFIG::GetWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGCONFIG::SetWidth(double width)
 * @brief      Set width
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  width : width
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGCONFIG::SetWidth(double width)
 {
@@ -182,13 +182,13 @@ void GRPVECTORFILESVGCONFIG::SetWidth(double width)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRPVECTORFILESVGCONFIG::GetHeight()
 * @brief      Get height
 * @ingroup    GRAPHIC
-*
-* @return     double : height
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGCONFIG::GetHeight()
 {
@@ -197,13 +197,13 @@ double GRPVECTORFILESVGCONFIG::GetHeight()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGCONFIG::SetHeight(double height)
 * @brief      Set height
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  height : height
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGCONFIG::SetHeight(double height)
 {
@@ -212,13 +212,13 @@ void GRPVECTORFILESVGCONFIG::SetHeight(double height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGCONFIG::HasViewBox()
 * @brief      Has view box
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if a viewBox was defined.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGCONFIG::HasViewBox()
 {
@@ -227,13 +227,13 @@ bool GRPVECTORFILESVGCONFIG::HasViewBox()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGCONFIG::SetHasViewBox(bool hasviewbox)
 * @brief      Set has view box
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  hasviewbox : has view box
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGCONFIG::SetHasViewBox(bool hasviewbox)
 {
@@ -242,13 +242,13 @@ void GRPVECTORFILESVGCONFIG::SetHasViewBox(bool hasviewbox)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRPVECTORFILESVGCONFIG::GetViewBoxMinX()
 * @brief      Get view box min x
 * @ingroup    GRAPHIC
-*
-* @return     double : view box min x
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGCONFIG::GetViewBoxMinX()
 {
@@ -257,13 +257,13 @@ double GRPVECTORFILESVGCONFIG::GetViewBoxMinX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRPVECTORFILESVGCONFIG::GetViewBoxMinY()
 * @brief      Get view box min y
 * @ingroup    GRAPHIC
-*
-* @return     double : view box min y
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGCONFIG::GetViewBoxMinY()
 {
@@ -272,13 +272,13 @@ double GRPVECTORFILESVGCONFIG::GetViewBoxMinY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRPVECTORFILESVGCONFIG::GetViewBoxWidth()
 * @brief      Get view box width
 * @ingroup    GRAPHIC
-*
-* @return     double : view box width
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGCONFIG::GetViewBoxWidth()
 {
@@ -287,13 +287,13 @@ double GRPVECTORFILESVGCONFIG::GetViewBoxWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRPVECTORFILESVGCONFIG::GetViewBoxHeight()
 * @brief      Get view box height
 * @ingroup    GRAPHIC
-*
-* @return     double : view box height
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGCONFIG::GetViewBoxHeight()
 {
@@ -302,16 +302,16 @@ double GRPVECTORFILESVGCONFIG::GetViewBoxHeight()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGCONFIG::SetViewBox(double minx, double miny, double width, double height)
 * @brief      Set view box
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  minx : view box min x
 * @param[in]  miny : view box min y
 * @param[in]  width : view box width
 * @param[in]  height : view box height
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGCONFIG::SetViewBox(double minx, double miny, double width, double height)
 {
@@ -324,13 +324,13 @@ void GRPVECTORFILESVGCONFIG::SetViewBox(double minx, double miny, double width, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* GRPVECTORFILESVGCONFIG::GetPreserveAspectRatio()
 * @brief      Get preserve aspect ratio
 * @ingroup    GRAPHIC
-*
-* @return     XSTRING* : preserve aspect ratio string
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILESVGCONFIG::GetPreserveAspectRatio()
 {
@@ -339,12 +339,12 @@ XSTRING* GRPVECTORFILESVGCONFIG::GetPreserveAspectRatio()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGCONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGCONFIG::Clean()
 {

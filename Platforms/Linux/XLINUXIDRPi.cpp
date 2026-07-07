@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXIDRPI::XLINUXIDRPI()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXIDRPI::XLINUXIDRPI()
 {
@@ -77,12 +77,12 @@ XLINUXIDRPI::XLINUXIDRPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXIDRPI::~XLINUXIDRPI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXIDRPI::~XLINUXIDRPI()
 {
@@ -96,7 +96,7 @@ XLINUXIDRPI::~XLINUXIDRPI()
 * @brief      Get model
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     RPI_MODEL : 
+* @return     RPI_MODEL : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 RPI_MODEL XLINUXIDRPI::GetModel()
@@ -111,7 +111,7 @@ RPI_MODEL XLINUXIDRPI::GetModel()
 * @brief      Get RAM megabytes
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XLINUXIDRPI::GetRAMMegabytes()
@@ -126,7 +126,7 @@ int XLINUXIDRPI::GetRAMMegabytes()
 * @brief      Get revision
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XLINUXIDRPI::GetRevision()
@@ -141,11 +141,11 @@ float XLINUXIDRPI::GetRevision()
 * @brief      Detect board
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  model : 
-* @param[in]  megabytes : 
-* @param[in]  revision : 
+* @param[in]  model : Model value.
+* @param[in]  megabytes : Megabytes value.
+* @param[in]  revision : Revision value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXIDRPI::DetectBoard(RPI_MODEL& model, int& megabytes, float& revision)
@@ -235,12 +235,12 @@ bool XLINUXIDRPI::DetectBoard(RPI_MODEL& model, int& megabytes, float& revision)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXIDRPI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXIDRPI::Clean()
 {

@@ -85,7 +85,7 @@ GRPVECTORFILEDXFXDATACTRL::~GRPVECTORFILEDXFXDATACTRL()
 * @brief      Get name
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILEDXFXDATACTRL::GetName()
@@ -100,7 +100,7 @@ XSTRING* GRPVECTORFILEDXFXDATACTRL::GetName()
 * @brief      Get values
 * @ingroup    GRAPHIC
 * 
-* @return     XVECTOR<GRPVECTORFILEDXFVALUE*>* : 
+* @return     XVECTOR<GRPVECTORFILEDXFVALUE*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVECTORFILEDXFVALUE*>* GRPVECTORFILEDXFXDATACTRL::GetValues()

@@ -59,9 +59,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_CFG::SCRIPT_LIB_CFG()
+* @fn         SCRIPT_LIB_CFG::SCRIPT_LIB_CFG() : SCRIPT_LIB(SCRIPT_LIB_NAME_CFG)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
+* 
+* @param[in]  SCRIPT_LIB_NAME_CFG : SCRIPT LIB NAME configuration value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_CFG::SCRIPT_LIB_CFG() : SCRIPT_LIB(SCRIPT_LIB_NAME_CFG)
@@ -71,12 +73,12 @@ SCRIPT_LIB_CFG::SCRIPT_LIB_CFG() : SCRIPT_LIB(SCRIPT_LIB_NAME_CFG)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB_CFG::~SCRIPT_LIB_CFG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_CFG::~SCRIPT_LIB_CFG()
 {
@@ -85,15 +87,15 @@ SCRIPT_LIB_CFG::~SCRIPT_LIB_CFG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB_CFG::AddLibraryFunctions(SCRIPT* script)
 * @brief      Add library functions
 * @ingroup    SCRIPT
-*
-* @param[in]  script :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  script : Script pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_CFG::AddLibraryFunctions(SCRIPT* script)
 {
@@ -113,7 +115,7 @@ bool SCRIPT_LIB_CFG::AddLibraryFunctions(SCRIPT* script)
 * @brief      Get X file CFG
 * @ingroup    SCRIPT
 * 
-* @return     XFILECFG* : 
+* @return     XFILECFG* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFG* SCRIPT_LIB_CFG::GetXFileCFG()
@@ -128,7 +130,7 @@ XFILECFG* SCRIPT_LIB_CFG::GetXFileCFG()
 * @brief      Set X file CFG
 * @ingroup    SCRIPT
 * 
-* @param[in]  xfileCFG : 
+* @param[in]  xfileCFG : Xfile configuration pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_CFG::SetXFileCFG(XFILECFG* xfileCFG)
@@ -138,12 +140,12 @@ void SCRIPT_LIB_CFG::SetXFileCFG(XFILECFG* xfileCFG)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LIB_CFG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_CFG::Clean()
 {
@@ -162,10 +164,10 @@ void SCRIPT_LIB_CFG::Clean()
 * @brief      Call_GetFileCFGValue
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_GetFileCFGValue(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)

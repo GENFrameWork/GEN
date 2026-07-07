@@ -81,12 +81,12 @@ GRPSTATISTICSCHARTLINES3D::~GRPSTATISTICSCHARTLINES3D()
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  x       : plot area left
-* @param[in]  y       : plot area top
-* @param[in]  width   : plot area width
-* @param[in]  height  : plot area height
+* @param[in]  x : plot area left
+* @param[in]  y : plot area top
+* @param[in]  width : plot area width
+* @param[in]  height : plot area height
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTLINES3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
@@ -276,14 +276,14 @@ bool GRPSTATISTICSCHARTLINES3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, dou
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  x0      : plane x of the start point (z = 0)
-* @param[in]  y0      : plane y of the start point (z = 0)
-* @param[in]  x1      : plane x of the end point (z = 0)
-* @param[in]  y1      : plane y of the end point (z = 0)
-* @param[in]  zfront  : lane front depth offset
-* @param[in]  zback   : lane back depth offset
-* @param[in]  thick   : vertical thickness of the front edge
-* @param[in]  color   : ribbon color
+* @param[in]  x0 : plane x of the start point (z = 0)
+* @param[in]  y0 : plane y of the start point (z = 0)
+* @param[in]  x1 : plane x of the end point (z = 0)
+* @param[in]  y1 : plane y of the end point (z = 0)
+* @param[in]  zfront : lane front depth offset
+* @param[in]  zback : lane back depth offset
+* @param[in]  thick : vertical thickness of the front edge
+* @param[in]  color : ribbon color
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHARTLINES3D::DrawRibbonSegment(GRPSTATISTICSCHARTBUILDER& builder, double x0, double y0, double x1, double y1, double zfront, double zback, double thick, GRPSTATISTICSCHARTCOLOR& color)
@@ -318,12 +318,12 @@ void GRPSTATISTICSCHARTLINES3D::DrawRibbonSegment(GRPSTATISTICSCHARTBUILDER& bui
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  px      : plane x of the end point (z = 0)
-* @param[in]  py      : plane y of the end point (z = 0)
-* @param[in]  zfront  : lane front depth offset
-* @param[in]  zback   : lane back depth offset
-* @param[in]  thick   : vertical thickness of the ribbon
-* @param[in]  color   : ribbon color
+* @param[in]  px : plane x of the end point (z = 0)
+* @param[in]  py : plane y of the end point (z = 0)
+* @param[in]  zfront : lane front depth offset
+* @param[in]  zback : lane back depth offset
+* @param[in]  thick : vertical thickness of the ribbon
+* @param[in]  color : ribbon color
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHARTLINES3D::DrawRibbonCap(GRPSTATISTICSCHARTBUILDER& builder, double px, double py, double zfront, double zback, double thick, GRPSTATISTICSCHARTCOLOR& color)
@@ -350,10 +350,10 @@ void GRPSTATISTICSCHARTLINES3D::DrawRibbonCap(GRPSTATISTICSCHARTBUILDER& builder
 * @brief      Make shade : scale a color by a factor (>1 lighter, <1 darker), clamped to 0..255
 * @ingroup    GRAPHIC
 * 
-* @param[in]  color  : base color
+* @param[in]  color : base color
 * @param[in]  factor : brightness factor
 * 
-* @return     GRPSTATISTICSCHARTCOLOR : the shaded color
+* @return     GRPSTATISTICSCHARTCOLOR : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSTATISTICSCHARTCOLOR GRPSTATISTICSCHARTLINES3D::MakeShade(GRPSTATISTICSCHARTCOLOR& color, double factor)

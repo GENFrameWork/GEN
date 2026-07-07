@@ -69,7 +69,7 @@
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEYSFILEGKF::CIPHERKEYSFILEGKF(XPATH& xpath)
@@ -109,7 +109,7 @@ CIPHERKEYSFILEGKF::~CIPHERKEYSFILEGKF()
 * @brief      Get creator name
 * @ingroup    CIPHER
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERKEYSFILEGKF::GetCreatorName()
@@ -124,7 +124,7 @@ XSTRING* CIPHERKEYSFILEGKF::GetCreatorName()
 * @brief      Get creator date time
 * @ingroup    CIPHER
 * 
-* @return     XDATETIME* : 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* CIPHERKEYSFILEGKF::GetCreatorDateTime()
@@ -139,7 +139,7 @@ XDATETIME* CIPHERKEYSFILEGKF::GetCreatorDateTime()
 * @brief      Get creator last modified date time
 * @ingroup    CIPHER
 * 
-* @return     XDATETIME* : 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* CIPHERKEYSFILEGKF::GetCreatorLastModifiedDateTime()
@@ -154,9 +154,9 @@ XDATETIME* CIPHERKEYSFILEGKF::GetCreatorLastModifiedDateTime()
 * @brief      Have key
 * @ingroup    CIPHER
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEGKF::HaveKey(CIPHERKEYTYPE type)
@@ -180,9 +180,9 @@ bool CIPHERKEYSFILEGKF::HaveKey(CIPHERKEYTYPE type)
 * @brief      Get key
 * @ingroup    CIPHER
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     CIPHERKEY* : 
+* @return     CIPHERKEY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEY* CIPHERKEYSFILEGKF::GetKey(CIPHERKEYTYPE type)
@@ -206,9 +206,9 @@ CIPHERKEY* CIPHERKEYSFILEGKF::GetKey(CIPHERKEYTYPE type)
 * @brief      Add key
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEGKF::AddKey(CIPHERKEY& key)
@@ -254,9 +254,9 @@ bool CIPHERKEYSFILEGKF::AddKey(CIPHERKEY& key)
 * @brief      Delete key
 * @ingroup    CIPHER
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEGKF::DeleteKey(CIPHERKEYTYPE type)
@@ -284,7 +284,7 @@ bool CIPHERKEYSFILEGKF::DeleteKey(CIPHERKEYTYPE type)
 * @brief      Delete all keys
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEGKF::DeleteAllKeys()
@@ -305,7 +305,7 @@ bool CIPHERKEYSFILEGKF::DeleteAllKeys()
 * @brief      Update file
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEGKF::UpdateFile()
@@ -440,10 +440,10 @@ bool CIPHERKEYSFILEGKF::UpdateFile()
 * @brief      Export to PEM file
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
-* @param[in]  publicPEM : 
+* @param[in]  key : Key pointer to use.
+* @param[in]  publicPEM : Public PEM value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEGKF::ExportToPEMFile(CIPHERKEY* key, XSTRING& publicPEM)
@@ -551,10 +551,10 @@ bool CIPHERKEYSFILEGKF::ExportToPEMFile(CIPHERKEY* key, XSTRING& publicPEM)
 * @brief      Export to PEM file
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
-* @param[in]  xpath : 
+* @param[in]  key : Key pointer to use.
+* @param[in]  xpath : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEGKF::ExportToPEMFile(CIPHERKEY* key, XPATH& xpath)
@@ -591,7 +591,7 @@ bool CIPHERKEYSFILEGKF::ExportToPEMFile(CIPHERKEY* key, XPATH& xpath)
 * @brief      Get X path
 * @ingroup    CIPHER
 * 
-* @return     XPATH& : 
+* @return     XPATH& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH& CIPHERKEYSFILEGKF::GetXPath()
@@ -606,7 +606,7 @@ XPATH& CIPHERKEYSFILEGKF::GetXPath()
 * @brief      Get X file XML
 * @ingroup    CIPHER
 * 
-* @return     XFILEXML* : 
+* @return     XFILEXML* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXML* CIPHERKEYSFILEGKF::GetXFileXML()
@@ -621,7 +621,7 @@ XFILEXML* CIPHERKEYSFILEGKF::GetXFileXML()
 * @brief      Read all file
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEGKF::ReadAllFile()

@@ -62,13 +62,13 @@ SCRIPT_CACHE*  SCRIPT_CACHE::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_CACHE::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    SCRIPT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::GetIsInstanced()
 {
@@ -77,13 +77,13 @@ bool SCRIPT_CACHE::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_CACHE& SCRIPT_CACHE::GetInstance()
 * @brief      Get instance
 * @ingroup    SCRIPT
-*
-* @return     SCRIPT_CACHE& :
-*
+* 
+* @return     SCRIPT_CACHE& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_CACHE& SCRIPT_CACHE::GetInstance()
 {
@@ -93,13 +93,13 @@ SCRIPT_CACHE& SCRIPT_CACHE::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_CACHE::DelInstance()
 * @brief      Del instance
 * @ingroup    SCRIPT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::DelInstance()
 {
@@ -118,9 +118,9 @@ bool SCRIPT_CACHE::DelInstance()
 * @brief      Generate ID
 * @ingroup    SCRIPT
 * 
-* @param[in]  stringID : 
+* @param[in]  stringID : String ID value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SCRIPT_CACHE::GenerateID(XSTRING& stringID)
@@ -144,10 +144,10 @@ XDWORD SCRIPT_CACHE::GenerateID(XSTRING& stringID)
 * @brief      Cache add
 * @ingroup    SCRIPT
 * 
-* @param[in]  ID : 
-* @param[in]  script : 
+* @param[in]  ID : Identifier to use.
+* @param[in]  script : Script pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script)
@@ -192,10 +192,10 @@ bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script)
 * @brief      Cache get
 * @ingroup    SCRIPT
 * 
-* @param[in]  ID : 
-* @param[in]  index : 
+* @param[in]  ID : Identifier to use.
+* @param[in]  index : Index value.
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* SCRIPT_CACHE::Cache_Get(XDWORD ID, int* index)
@@ -238,10 +238,10 @@ XSTRING* SCRIPT_CACHE::Cache_Get(XDWORD ID, int* index)
 * @brief      Cache set
 * @ingroup    SCRIPT
 * 
-* @param[in]  ID : 
-* @param[in]  script : 
+* @param[in]  ID : Identifier to use.
+* @param[in]  script : Script pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::Cache_Set(XDWORD ID, XSTRING* script)
@@ -286,9 +286,9 @@ bool SCRIPT_CACHE::Cache_Set(XDWORD ID, XSTRING* script)
 * @brief      Cache del
 * @ingroup    SCRIPT
 * 
-* @param[in]  ID : 
+* @param[in]  ID : Identifier to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::Cache_Del(XDWORD ID)
@@ -309,11 +309,11 @@ bool SCRIPT_CACHE::Cache_Del(XDWORD ID)
     
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XMAP<XSTRING*, XSTRING*> SCRIPT_CACHE::Cache_Get()
+* @fn         XMAP<XDWORD, XSTRING*>* SCRIPT_CACHE::Cache_GetAll()
 * @brief      Cache get
 * @ingroup    SCRIPT
 * 
-* @return     XMAP<XSTRING*, XSTRING*> : 
+* @return     XMAP<XDWORD, XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMAP<XDWORD, XSTRING*>* SCRIPT_CACHE::Cache_GetAll()
@@ -328,7 +328,7 @@ XMAP<XDWORD, XSTRING*>* SCRIPT_CACHE::Cache_GetAll()
 * @brief      Cache del all
 * @ingroup    SCRIPT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::Cache_DelAll()
@@ -351,9 +351,9 @@ bool SCRIPT_CACHE::Cache_DelAll()
 * @brief      Cache all directory
 * @ingroup    SCRIPT
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::Cache_AllDirectory(XPATH& xpath)
@@ -402,9 +402,9 @@ bool SCRIPT_CACHE::Cache_AllDirectory(XPATH& xpath)
 * @brief      Cache all list
 * @ingroup    SCRIPT
 * 
-* @param[in]  listscripts : 
+* @param[in]  listscripts : Listscripts pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::Cache_AllList(XVECTOR<XSTRING*>* listscripts)

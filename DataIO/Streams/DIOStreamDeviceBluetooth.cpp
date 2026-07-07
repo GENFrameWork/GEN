@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL()
 {
@@ -74,12 +74,12 @@ DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::~DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::~DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL()
 {
@@ -88,13 +88,13 @@ DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::~DIOSTREAMDEVICEBLUETOOTHSDPSERVICEP
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::GetType()
 * @brief      Get type
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::GetType()
 {
@@ -103,13 +103,13 @@ XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::SetType(XDWORD type)
 * @brief      Set type
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-*
+* 
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::SetType(XDWORD type)
 {
@@ -118,13 +118,13 @@ void DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::SetType(XDWORD type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::GetChannel()
 * @brief      Get channel
 * @ingroup    DATAIO
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::GetChannel()
 {
@@ -133,13 +133,13 @@ XWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::GetChannel()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::SetChannel(XWORD channel)
 * @brief      Set channel
 * @ingroup    DATAIO
-*
-* @param[in]  channel :
-*
+* 
+* @param[in]  channel : Channel value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::SetChannel(XWORD channel)
 {
@@ -148,12 +148,12 @@ void DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::SetChannel(XWORD channel)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL::Clean()
 {
@@ -180,12 +180,12 @@ DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::DIOSTREAMDEVICEBLUETOOTHSDPSERVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::~DIOSTREAMDEVICEBLUETOOTHSDPSERVICE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::~DIOSTREAMDEVICEBLUETOOTHSDPSERVICE()
 {
@@ -194,13 +194,13 @@ DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::~DIOSTREAMDEVICEBLUETOOTHSDPSERVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetID()
 * @brief      Get ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetID()
 {
@@ -209,13 +209,13 @@ XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetID(XDWORD ID)
 * @brief      Set ID
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetID(XDWORD ID)
 {
@@ -224,13 +224,13 @@ void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetID(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetRecHandle()
 * @brief      Get rec handle
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetRecHandle()
 {
@@ -239,13 +239,13 @@ XDWORD DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetRecHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetRecHandle(XDWORD rechandle)
 * @brief      Set rec handle
 * @ingroup    DATAIO
-*
-* @param[in]  rechandle :
-*
+* 
+* @param[in]  rechandle : Rechandle value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetRecHandle(XDWORD rechandle)
 {
@@ -254,13 +254,13 @@ void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetRecHandle(XDWORD rechandle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetName()
 * @brief      Get name
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetName()
 {
@@ -269,13 +269,13 @@ XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetDescription()
 * @brief      Get description
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetDescription()
 {
@@ -284,13 +284,13 @@ XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetDescription()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetProvider()
 * @brief      Get provider
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetProvider()
 {
@@ -299,13 +299,13 @@ XSTRING* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetProvider()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetNProtocols()
 * @brief      Get N protocols
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetNProtocols()
 {
@@ -314,13 +314,13 @@ int DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetNProtocols()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetNProtocols(int nprotocols)
 * @brief      Set N protocols
 * @ingroup    DATAIO
-*
-* @param[in]  nprotocols :
-*
+* 
+* @param[in]  nprotocols : Nprotocols value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetNProtocols(int nprotocols)
 {
@@ -329,15 +329,15 @@ void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetNProtocols(int nprotocols)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetProtocol(int index)
 * @brief      Get protocol
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::GetProtocol(int index)
 {
@@ -349,16 +349,16 @@ DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL* DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetProtocol(int index, DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL* protocol)
 * @brief      Set protocol
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-* @param[in]  protocol :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  protocol : Protocol pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetProtocol(int index, DIOSTREAMDEVICEBLUETOOTHSDPSERVICEPROTOCOL* protocol)
 {
@@ -374,12 +374,12 @@ bool DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::SetProtocol(int index, DIOSTREAMDEVICEB
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHSDPSERVICE::Clean()
 {
@@ -424,13 +424,13 @@ DIOSTREAMDEVICEBLUETOOTH::~DIOSTREAMDEVICEBLUETOOTH()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMAC* DIOSTREAMDEVICEBLUETOOTH::GetMAC()
 * @brief      Get MAC
 * @ingroup    DATAIO
-*
-* @return     DIOMAC* :
-*
+* 
+* @return     DIOMAC* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMAC* DIOSTREAMDEVICEBLUETOOTH::GetMAC()
 {
@@ -439,13 +439,13 @@ DIOMAC* DIOSTREAMDEVICEBLUETOOTH::GetMAC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICEBLUETOOTH::GetRSSI()
 * @brief      Get RSSI
 * @ingroup    DATAIO
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICEBLUETOOTH::GetRSSI()
 {
@@ -454,13 +454,13 @@ int DIOSTREAMDEVICEBLUETOOTH::GetRSSI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTH::SetRSSI(int rssi)
 * @brief      Set RSSI
 * @ingroup    DATAIO
-*
-* @param[in]  rssi : 
-*
+* 
+* @param[in]  rssi : Rssi value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTH::SetRSSI(int rssi)
 {
@@ -469,13 +469,13 @@ void DIOSTREAMDEVICEBLUETOOTH::SetRSSI(int rssi)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEBLUETOOTH::IsVisible()
 * @brief      Is visible
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEBLUETOOTH::IsVisible()
 {
@@ -484,15 +484,15 @@ bool DIOSTREAMDEVICEBLUETOOTH::IsVisible()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEBLUETOOTH::SetIsVisible(bool isvisible)
 * @brief      Set is visible
 * @ingroup    DATAIO
-*
-* @param[in]  isvisible :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  isvisible : Isvisible value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEBLUETOOTH::SetIsVisible(bool isvisible)
 {
@@ -503,13 +503,13 @@ bool DIOSTREAMDEVICEBLUETOOTH::SetIsVisible(bool isvisible)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOGUID* DIOSTREAMDEVICEBLUETOOTH::GetServiceClass()
 * @brief      Get service class
 * @ingroup    DATAIO
-*
-* @return     DIOGUID* :
-*
+* 
+* @return     DIOGUID* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOGUID* DIOSTREAMDEVICEBLUETOOTH::GetServiceClass()
 {
@@ -518,15 +518,15 @@ DIOGUID* DIOSTREAMDEVICEBLUETOOTH::GetServiceClass()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEBLUETOOTH::Service_Add(DIOSTREAMDEVICEBLUETOOTHSDPSERVICE* service)
 * @brief      Service add
 * @ingroup    DATAIO
-*
-* @param[in]  service :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  service : Service pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEBLUETOOTH::Service_Add(DIOSTREAMDEVICEBLUETOOTHSDPSERVICE* service)
 {
@@ -539,13 +539,13 @@ bool DIOSTREAMDEVICEBLUETOOTH::Service_Add(DIOSTREAMDEVICEBLUETOOTHSDPSERVICE* s
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<DIOSTREAMDEVICEBLUETOOTHSDPSERVICE*>* DIOSTREAMDEVICEBLUETOOTH::Service_GetAll()
 * @brief      Service get all
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<DIOSTREAMDEVICEBLUETOOTHSDPSERVICE*>* :
-*
+* 
+* @return     XVECTOR<DIOSTREAMDEVICEBLUETOOTHSDPSERVICE*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOSTREAMDEVICEBLUETOOTHSDPSERVICE*>* DIOSTREAMDEVICEBLUETOOTH::Service_GetAll()
 {
@@ -554,13 +554,13 @@ XVECTOR<DIOSTREAMDEVICEBLUETOOTHSDPSERVICE*>* DIOSTREAMDEVICEBLUETOOTH::Service_
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEBLUETOOTH::Service_DeleteAll()
 * @brief      Service GEN_DELETE all
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEBLUETOOTH::Service_DeleteAll()
 {
@@ -575,15 +575,15 @@ bool DIOSTREAMDEVICEBLUETOOTH::Service_DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICEBLUETOOTH::GetChannel(XWORD servicetype)
 * @brief      Get channel
 * @ingroup    DATAIO
-*
-* @param[in]  servicetype :
-*
-* @return     int :
-*
+* 
+* @param[in]  servicetype : Servicetype value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICEBLUETOOTH::GetChannel(XWORD servicetype)
 {
@@ -612,13 +612,13 @@ int DIOSTREAMDEVICEBLUETOOTH::GetChannel(XWORD servicetype)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICEBLUETOOTH::GetChannelSerialPort()
 * @brief      Get channel serial port
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICEBLUETOOTH::GetChannelSerialPort()
 {
@@ -627,13 +627,13 @@ int DIOSTREAMDEVICEBLUETOOTH::GetChannelSerialPort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICEBLUETOOTH::GetChannelObexPush()
 * @brief      Get channel obex push
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICEBLUETOOTH::GetChannelObexPush()
 {
@@ -642,13 +642,13 @@ int DIOSTREAMDEVICEBLUETOOTH::GetChannelObexPush()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICEBLUETOOTH::GetChannelDialUpNetworking()
 * @brief      Get channel dial up networking
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICEBLUETOOTH::GetChannelDialUpNetworking()
 {
@@ -657,13 +657,13 @@ int DIOSTREAMDEVICEBLUETOOTH::GetChannelDialUpNetworking()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICEBLUETOOTH::GetChannelHID()
 * @brief      Get channel HID
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICEBLUETOOTH::GetChannelHID()
 {
@@ -672,13 +672,13 @@ int DIOSTREAMDEVICEBLUETOOTH::GetChannelHID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEBLUETOOTH::DebugPrintInfo()
 * @brief      Debug print info
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEBLUETOOTH::DebugPrintInfo()
 {
@@ -743,12 +743,12 @@ bool DIOSTREAMDEVICEBLUETOOTH::DebugPrintInfo()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTH::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTH::Clean()
 {

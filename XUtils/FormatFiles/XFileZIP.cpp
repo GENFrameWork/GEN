@@ -62,14 +62,14 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECMPZIP::XFILECMPZIP(bool compress, void* filehdl)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  compress :
-* @param[in]  filehdl :
-*
+* 
+* @param[in]  compress : Compress value.
+* @param[in]  filehdl : Filehdl pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP::XFILECMPZIP(bool compress, void* filehdl)
 {
@@ -113,12 +113,12 @@ XFILECMPZIP::XFILECMPZIP(bool compress, void* filehdl)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECMPZIP::~XFILECMPZIP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP::~XFILECMPZIP()
 {
@@ -129,15 +129,15 @@ XFILECMPZIP::~XFILECMPZIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECMPZIP::Open(XSTRING& password)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::Open(XSTRING& password)
 {
@@ -170,17 +170,17 @@ bool XFILECMPZIP::Open(XSTRING& password)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILECMPZIP::Create(XDWORD crcfile,zip_fileinfo* zfinfo,XCHAR* password)
-* @brief      Create
+* 
+* @fn         bool XFILECMPZIP::Create(XDWORD crcfile, zip_fileinfo* zfinfo, XCHAR* password)
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  crcfile :
-* @param[in]  zfinfo :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  crcfile : Crcfile value.
+* @param[in]  zfinfo : Zfinfo pointer to use.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::Create(XDWORD crcfile, zip_fileinfo* zfinfo, XCHAR* password)
 {
@@ -215,13 +215,13 @@ bool XFILECMPZIP::Create(XDWORD crcfile, zip_fileinfo* zfinfo, XCHAR* password)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECMPZIP::IsActive()
 * @brief      Is active
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::IsActive()
 {
@@ -230,13 +230,13 @@ bool XFILECMPZIP::IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* XFILECMPZIP::GetName()
 * @brief      Get name
 * @ingroup    XUTILS
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XFILECMPZIP::GetName()
 {
@@ -247,13 +247,13 @@ XCHAR* XFILECMPZIP::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILECMPZIP::SetName(XSTRING& name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
+* 
+* @param[in]  name : Name to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECMPZIP::SetName(XSTRING& name)
 {
@@ -264,13 +264,13 @@ void XFILECMPZIP::SetName(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECMPZIP::IsDirectory()
 * @brief      Is directory
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::IsDirectory()
 {
@@ -285,13 +285,13 @@ bool XFILECMPZIP::IsDirectory()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD XFILECMPZIP::Size()
 * @brief      Size
 * @ingroup    XUTILS
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XFILECMPZIP::Size()
 {
@@ -302,13 +302,13 @@ XQWORD XFILECMPZIP::Size()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD XFILECMPZIP::UnCompressSize()
 * @brief      Un compress size
 * @ingroup    XUTILS
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XFILECMPZIP::UnCompressSize()
 {
@@ -319,13 +319,13 @@ XQWORD XFILECMPZIP::UnCompressSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XFILECMPZIP::GetCRC32()
 * @brief      Get CRC32
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILECMPZIP::GetCRC32()
 {
@@ -336,15 +336,15 @@ XDWORD XFILECMPZIP::GetCRC32()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILECMPZIP::GetSeek(int*position)
+* 
+* @fn         bool XFILECMPZIP::GetSeek(int* position)
 * @brief      Get seek
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::GetSeek(int* position)
 {
@@ -363,16 +363,16 @@ bool XFILECMPZIP::GetSeek(int* position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILECMPZIP::Read(XBYTE* buffer,XDWORD size)
+* 
+* @fn         bool XFILECMPZIP::Read(XBYTE* buffer, XDWORD size)
 * @brief      Read
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::Read(XBYTE* buffer, XDWORD size)
 {
@@ -386,16 +386,16 @@ bool XFILECMPZIP::Read(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECMPZIP::Read(XBYTE* buffer, int* size)
 * @brief      Read
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::Read(XBYTE* buffer, int* size)
 {
@@ -414,16 +414,16 @@ bool XFILECMPZIP::Read(XBYTE* buffer, int* size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECMPZIP::Write(XBYTE* buffer, XDWORD size)
 * @brief      Write
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::Write(XBYTE* buffer, XDWORD size)
 {
@@ -437,13 +437,13 @@ bool XFILECMPZIP::Write(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECMPZIP::IsEOF()
 * @brief      Is EOF
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::IsEOF()
 {
@@ -456,13 +456,13 @@ bool XFILECMPZIP::IsEOF()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECMPZIP::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::Close()
 {
@@ -490,12 +490,12 @@ bool XFILECMPZIP::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILECMPZIP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECMPZIP::Clean()
 {
@@ -516,13 +516,13 @@ void XFILECMPZIP::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECMPZIP::SelectCurrenFile()
 * @brief      Select curren file
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECMPZIP::SelectCurrenFile()
 {
@@ -543,13 +543,13 @@ bool XFILECMPZIP::SelectCurrenFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEZIP::XFILEZIP(XDWORD maxsizebuffer)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  maxsizebuffer :
-*
+* 
+* @param[in]  maxsizebuffer : Maxsizebuffer value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEZIP::XFILEZIP(XDWORD maxsizebuffer)
 {
@@ -562,12 +562,12 @@ XFILEZIP::XFILEZIP(XDWORD maxsizebuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEZIP::~XFILEZIP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEZIP::~XFILEZIP()
 {
@@ -580,13 +580,13 @@ XFILEZIP::~XFILEZIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XFILEZIP::GetMaxSizeBuffer()
 * @brief      Get max size buffer
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILEZIP::GetMaxSizeBuffer()
 {
@@ -595,13 +595,13 @@ XDWORD XFILEZIP::GetMaxSizeBuffer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEZIP::SetMaxSizeBuffer(XDWORD maxsizebuffer)
 * @brief      Set max size buffer
 * @ingroup    XUTILS
-*
-* @param[in]  maxsizebuffer : 
-*
+* 
+* @param[in]  maxsizebuffer : Maxsizebuffer value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEZIP::SetMaxSizeBuffer(XDWORD maxsizebuffer)
 {
@@ -610,15 +610,15 @@ void XFILEZIP::SetMaxSizeBuffer(XDWORD maxsizebuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEZIP::Open(XPATH& xpath)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEZIP::Open(XPATH& xpath)
 {
@@ -651,15 +651,15 @@ bool XFILEZIP::Open(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECMPZIP* XFILEZIP::CreateFileCmp(XPATH& xpath)
 * @brief      Create file cmp
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     XFILECMPZIP* :
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     XFILECMPZIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP* XFILEZIP::CreateFileCmp(XPATH& xpath)
 {
@@ -671,15 +671,15 @@ XFILECMPZIP* XFILEZIP::CreateFileCmp(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XFILEZIP::GetFileCRC(XFILE* xfile)
 * @brief      Get file CRC
 * @ingroup    XUTILS
-*
-* @param[in]  xfile :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  xfile : Xfile pointer to use.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILEZIP::GetFileCRC(XFILE*  xfile)
 {
@@ -712,17 +712,17 @@ XDWORD XFILEZIP::GetFileCRC(XFILE*  xfile)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEZIP::AddFile(XPATH& xpath, XPATH& xpathnew, XCHAR* password)
 * @brief      Add file
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  xpathnew :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  xpathnew : Xpathnew value.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEZIP::AddFile(XPATH& xpath, XPATH& xpathnew, XCHAR* password)
 {
@@ -800,13 +800,13 @@ bool XFILEZIP::AddFile(XPATH& xpath, XPATH& xpathnew, XCHAR* password)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEZIP::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEZIP::Close()
 {
@@ -838,7 +838,7 @@ bool XFILEZIP::Close()
 * @brief      Get last operation percent
 * @ingroup    XUTILS
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XFILEZIP::GetLastOperationPercent()
@@ -848,13 +848,13 @@ float XFILEZIP::GetLastOperationPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEZIP_ERROR XFILEZIP::GetLastError()
 * @brief      Get last error
 * @ingroup    XUTILS
-*
-* @return     XFILEZIP_ERROR :
-*
+* 
+* @return     XFILEZIP_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEZIP_ERROR XFILEZIP::GetLastError()
 {
@@ -863,12 +863,12 @@ XFILEZIP_ERROR XFILEZIP::GetLastError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEZIP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEZIP::Clean()
 {
@@ -886,13 +886,13 @@ void XFILEZIP::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEUNZIP::XFILEUNZIP(XDWORD maxsizebuffer)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  maxsizebuffer :
-*
+* 
+* @param[in]  maxsizebuffer : Maxsizebuffer value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEUNZIP::XFILEUNZIP(XDWORD maxsizebuffer)
 {
@@ -907,12 +907,12 @@ XFILEUNZIP::XFILEUNZIP(XDWORD maxsizebuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEUNZIP::~XFILEUNZIP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEUNZIP::~XFILEUNZIP()
 {
@@ -927,13 +927,13 @@ XFILEUNZIP::~XFILEUNZIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XFILEUNZIP::GetMaxSizeBuffer()
 * @brief      Get max size buffer
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILEUNZIP::GetMaxSizeBuffer()
 {
@@ -942,13 +942,13 @@ XDWORD XFILEUNZIP::GetMaxSizeBuffer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEUNZIP::SetMaxSizeBuffer(XDWORD maxsizebuffer)
 * @brief      Set max size buffer
 * @ingroup    XUTILS
-*
-* @param[in]  maxsizebuffer : 
-*
+* 
+* @param[in]  maxsizebuffer : Maxsizebuffer value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEUNZIP::SetMaxSizeBuffer(XDWORD maxsizebuffer)
 {
@@ -957,15 +957,15 @@ void XFILEUNZIP::SetMaxSizeBuffer(XDWORD maxsizebuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEUNZIP::Open(XPATH& xpath)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEUNZIP::Open(XPATH& xpath)
 {
@@ -997,13 +997,13 @@ bool XFILEUNZIP::Open(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEUNZIP::GetNFiles()
 * @brief      Get N files
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEUNZIP::GetNFiles()
 {
@@ -1024,15 +1024,15 @@ int XFILEUNZIP::GetNFiles()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECMPZIP* XFILEUNZIP::GotoFile(bool first)
 * @brief      Goto file
 * @ingroup    XUTILS
-*
-* @param[in]  first :
-*
-* @return     XFILECMPZIP* :
-*
+* 
+* @param[in]  first : First value.
+* 
+* @return     XFILECMPZIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP* XFILEUNZIP::GotoFile(bool first)
 {
@@ -1046,15 +1046,15 @@ XFILECMPZIP* XFILEUNZIP::GotoFile(bool first)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECMPZIP* XFILEUNZIP::GotoFile(XPATH& xpath)
 * @brief      Goto file
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     XFILECMPZIP* :
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     XFILECMPZIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP* XFILEUNZIP::GotoFile(XPATH& xpath)
 { 
@@ -1070,15 +1070,15 @@ XFILECMPZIP* XFILEUNZIP::GotoFile(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECMPZIP* XFILEUNZIP::GotoFile(int index)
 * @brief      Goto file
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     XFILECMPZIP* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XFILECMPZIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP* XFILEUNZIP::GotoFile(int index)
 {
@@ -1100,16 +1100,16 @@ XFILECMPZIP* XFILEUNZIP::GotoFile(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEUNZIP::DelFile(int index, XCHAR* password)
 * @brief      Del file
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEUNZIP::DelFile(int index, XCHAR* password)
 {
@@ -1221,18 +1221,18 @@ bool XFILEUNZIP::DelFile(int index, XCHAR* password)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEUNZIP::DecompressFile(int sourceindex ,XPATH& xpathtarget, XCHAR* nametarget, XCHAR* password)
 * @brief      Decompress file
 * @ingroup    XUTILS
-*
-* @param[in]  sourceindex :
-* @param[in]  xpathtarget :
-* @param[in]  nametarget :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sourceindex : Sourceindex value.
+* @param[in]  xpathtarget : Xpathtarget value.
+* @param[in]  nametarget : Nametarget pointer to use.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEUNZIP::DecompressFile(int sourceindex ,XPATH& xpathtarget, XCHAR* nametarget, XCHAR* password)
 {
@@ -1259,18 +1259,18 @@ bool XFILEUNZIP::DecompressFile(int sourceindex ,XPATH& xpathtarget, XCHAR* name
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEUNZIP::DecompressFile(XSTRING& namesource,XPATH& xpathtarget,XCHAR* nametarget, XCHAR* password)
 * @brief      Decompress file
 * @ingroup    XUTILS
-*
-* @param[in]  namesource :
-* @param[in]  xpathtarget :
-* @param[in]  nametarget :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namesource : Namesource value.
+* @param[in]  xpathtarget : Xpathtarget value.
+* @param[in]  nametarget : Nametarget pointer to use.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEUNZIP::DecompressFile(XSTRING& namesource,XPATH& xpathtarget,XCHAR* nametarget, XCHAR* password)
 {
@@ -1288,18 +1288,18 @@ bool XFILEUNZIP::DecompressFile(XSTRING& namesource,XPATH& xpathtarget,XCHAR* na
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILEUNZIP::DecompressFile(XFILECMPZIP* filecmp,XPATH& xpathtarget,XCHAR* nametarget,XCHAR* password)
+* 
+* @fn         bool XFILEUNZIP::DecompressFile(XFILECMPZIP* filecmp, XPATH& xpathtarget, XCHAR* nametarget, XCHAR* password)
 * @brief      Decompress file
 * @ingroup    XUTILS
-*
-* @param[in]  filecmp :
-* @param[in]  xpathtarget :
-* @param[in]  nametarget :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filecmp : Filecmp pointer to use.
+* @param[in]  xpathtarget : Xpathtarget value.
+* @param[in]  nametarget : Nametarget pointer to use.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEUNZIP::DecompressFile(XFILECMPZIP* filecmp, XPATH& xpathtarget, XCHAR* nametarget, XCHAR* password)
 {
@@ -1393,13 +1393,13 @@ bool XFILEUNZIP::DecompressFile(XFILECMPZIP* filecmp, XPATH& xpathtarget, XCHAR*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEUNZIP::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEUNZIP::Close()
 {
@@ -1426,13 +1426,13 @@ bool XFILEUNZIP::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float XFILEUNZIP::GetLastOperationPercent()
 * @brief      Get last operation percent
 * @ingroup    XUTILS
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XFILEUNZIP::GetLastOperationPercent()
 {
@@ -1441,13 +1441,13 @@ float XFILEUNZIP::GetLastOperationPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEZIP_ERROR XFILEUNZIP::GetLastError()
 * @brief      Get last error
 * @ingroup    XUTILS
-*
-* @return     XFILEZIP_ERROR :
-*
+* 
+* @return     XFILEZIP_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEZIP_ERROR XFILEUNZIP::GetLastError()
 {
@@ -1456,13 +1456,13 @@ XFILEZIP_ERROR XFILEUNZIP::GetLastError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECMPZIP* XFILEUNZIP::CreateCurrentFile()
 * @brief      Create current file
 * @ingroup    XUTILS
-*
-* @return     XFILECMPZIP* :
-*
+* 
+* @return     XFILECMPZIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP* XFILEUNZIP::CreateCurrentFile()
 {
@@ -1480,12 +1480,12 @@ XFILECMPZIP* XFILEUNZIP::CreateCurrentFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEUNZIP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEUNZIP::Clean()
 {

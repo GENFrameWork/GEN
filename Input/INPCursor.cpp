@@ -58,11 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPCURSOR::INPCURSOR()
+* 
+* @fn         INPCURSOR::INPCURSOR(): INPCURSORMOTIONPOINT()
 * @brief      Constructor of class
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPCURSOR::INPCURSOR(): INPCURSORMOTIONPOINT()
 {
@@ -73,12 +73,12 @@ INPCURSOR::INPCURSOR(): INPCURSORMOTIONPOINT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPCURSOR::~INPCURSOR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPCURSOR::~INPCURSOR()
 {
@@ -92,13 +92,13 @@ INPCURSOR::~INPCURSOR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPCURSOR_ID INPCURSOR::GetID()
 * @brief      Get ID
 * @ingroup    INPUT
-*
-* @return     INPCURSOR_ID : cursor ID
-*
+* 
+* @return     INPCURSOR_ID : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPCURSOR_ID INPCURSOR::GetID()
 {
@@ -107,13 +107,13 @@ INPCURSOR_ID INPCURSOR::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPCURSOR::SetID(INPCURSOR_ID ID)
 * @brief      Set ID
 * @ingroup    INPUT
-*
+* 
 * @param[in]  ID : GEN_NEW ID of cursor
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::SetID(INPCURSOR_ID ID)
 {
@@ -122,13 +122,13 @@ void INPCURSOR::SetID(INPCURSOR_ID ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTIMER* INPCURSOR::GetTimer()
 * @brief      Get timer
 * @ingroup    INPUT
-*
-* @return     XTIMER* : Timer of cursor
-*
+* 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* INPCURSOR::GetTimer()
 {
@@ -137,13 +137,13 @@ XTIMER* INPCURSOR::GetTimer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPCURSOR::HavePreSelect()
 * @brief      Have pre select
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCURSOR::HavePreSelect()
 {
@@ -152,15 +152,15 @@ bool INPCURSOR::HavePreSelect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPCURSOR::SetHavePreSelect(bool havepreselect)
 * @brief      Set have pre select
 * @ingroup    INPUT
-*
+* 
 * @param[in]  havepreselect : true active have pre-select
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCURSOR::SetHavePreSelect(bool havepreselect)
 {
@@ -171,13 +171,13 @@ bool INPCURSOR::SetHavePreSelect(bool havepreselect)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPCURSOR::IsChanged()
 * @brief      Is changed
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCURSOR::IsChanged()
 {
@@ -186,15 +186,15 @@ bool INPCURSOR::IsChanged()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPCURSOR::SetIsChanged(bool ischanged)
 * @brief      Set is changed
 * @ingroup    INPUT
-*
+* 
 * @param[in]  ischanged : true is changed
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCURSOR::SetIsChanged(bool ischanged)
 {
@@ -205,18 +205,18 @@ bool INPCURSOR::SetIsChanged(bool ischanged)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPCURSOR::IsPositionInRect(int x, int y, int width,int height)
 * @brief      Is position in rect
 * @ingroup    INPUT
-*
+* 
 * @param[in]  x : x position of rect
 * @param[in]  y : y position of rect
 * @param[in]  width : width of rect
 * @param[in]  height : height of rect
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCURSOR::IsPositionInRect(int x, int y, int width,int height)
 {
@@ -228,13 +228,13 @@ bool INPCURSOR::IsPositionInRect(int x, int y, int width,int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPCURSORMOTION* INPCURSOR::GetMotion()
 * @brief      Get motion
 * @ingroup    INPUT
-*
-* @return     INPCURSORMOTION* : Motion instance
-*
+* 
+* @return     INPCURSORMOTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPCURSORMOTION* INPCURSOR::GetMotion()
 {
@@ -243,15 +243,15 @@ INPCURSORMOTION* INPCURSOR::GetMotion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPCURSOR::AddPointToMotion(bool ispressed)
 * @brief      Add point to motion
 * @ingroup    INPUT
-*
+* 
 * @param[in]  ispressed : is pressed
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCURSOR::AddPointToMotion(bool ispressed)
 {
@@ -281,15 +281,15 @@ bool INPCURSOR::AddPointToMotion(bool ispressed)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPCURSOR::Set(float x , float y, float z)
-* @brief      Set
+* @brief      Set value
 * @ingroup    INPUT
-*
+* 
 * @param[in]  x : GEN_NEW x position
 * @param[in]  y : GEN_NEW y position
 * @param[in]  z : GEN_NEW x position
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::Set(float x , float y, float z)
 {
@@ -308,13 +308,13 @@ void INPCURSOR::Set(float x , float y, float z)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPCURSOR::SetX(float x)
 * @brief      Set x
 * @ingroup    INPUT
-*
+* 
 * @param[in]  x : GEN_NEW x position
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::SetX(float x)
 {
@@ -327,13 +327,13 @@ void INPCURSOR::SetX(float x)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPCURSOR::SetY(float y)
 * @brief      Set y
 * @ingroup    INPUT
-*
+* 
 * @param[in]  y : GEN_NEW y position
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::SetY(float y)
 {
@@ -346,13 +346,13 @@ void INPCURSOR::SetY(float y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPCURSOR::SetZ(float z)
 * @brief      Set z
 * @ingroup    INPUT
-*
+* 
 * @param[in]  z : GEN_NEW z position
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCURSOR::SetZ(float z)
 {

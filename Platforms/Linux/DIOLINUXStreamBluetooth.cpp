@@ -64,11 +64,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOLINUXSTREAMBLUETOOTH::DIOLINUXSTREAMBLUETOOTH()
+* 
+* @fn         DIOLINUXSTREAMBLUETOOTH::DIOLINUXSTREAMBLUETOOTH() : DIOSTREAMBLUETOOTH() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXSTREAMBLUETOOTH::DIOLINUXSTREAMBLUETOOTH() : DIOSTREAMBLUETOOTH() , XFSMACHINE(0)
 {
@@ -111,12 +111,12 @@ DIOLINUXSTREAMBLUETOOTH::DIOLINUXSTREAMBLUETOOTH() : DIOSTREAMBLUETOOTH() , XFSM
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXSTREAMBLUETOOTH::~DIOLINUXSTREAMBLUETOOTH()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXSTREAMBLUETOOTH::~DIOLINUXSTREAMBLUETOOTH()
 {
@@ -131,13 +131,13 @@ DIOLINUXSTREAMBLUETOOTH::~DIOLINUXSTREAMBLUETOOTH()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTH::Open()
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTH::Open()
 {
@@ -153,13 +153,13 @@ bool DIOLINUXSTREAMBLUETOOTH::Open()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTH::Disconnect()
 * @brief      Disconnect
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTH::Disconnect()
 {
@@ -179,13 +179,13 @@ bool DIOLINUXSTREAMBLUETOOTH::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTH::Close()
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTH::Close()
 {
@@ -218,15 +218,15 @@ bool DIOLINUXSTREAMBLUETOOTH::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOLINUXSTREAMBLUETOOTH::IsReadyConnect(int socket)
 * @brief      Is ready connect
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  socket : 
-*
-* @return     int : 
-*
+* 
+* @param[in]  socket : Socket value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMBLUETOOTH::IsReadyConnect(int socket)
 {
@@ -265,18 +265,18 @@ int DIOLINUXSTREAMBLUETOOTH::IsReadyConnect(int socket)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         sdp_session_t* DIOLINUXSTREAMBLUETOOTH::SDP_RegisterService(char* service_name,char* service_dsc,char* service_prov,int rfcomm_channel)
 * @brief      SDP register service
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  service_name : 
-* @param[in]  service_dsc : 
-* @param[in]  service_prov : 
-* @param[in]  rfcomm_channel : 
-*
-* @return     sdp_session_t* : 
-*
+* 
+* @param[in]  service_name : Service name pointer to use.
+* @param[in]  service_dsc : Service dsc pointer to use.
+* @param[in]  service_prov : Service prov pointer to use.
+* @param[in]  rfcomm_channel : Rfcomm channel value.
+* 
+* @return     sdp_session_t* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 sdp_session_t* DIOLINUXSTREAMBLUETOOTH::SDP_RegisterService(char* service_name,char* service_dsc,char* service_prov,int rfcomm_channel)
 {
@@ -350,18 +350,18 @@ sdp_session_t* DIOLINUXSTREAMBLUETOOTH::SDP_RegisterService(char* service_name,c
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACstring, XSTRING &remoteMACstring, XSTRING& PIN)
 * @brief      Management of PIN
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  active : 
-* @param[in]  &localMACstring : 
-* @param[in]  &remoteMACstring : 
-* @param[in]  PIN : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  active : Active value.
+* @param[in]  localMACstring : Local MA Cstring value.
+* @param[in]  remoteMACstring : Remote MA Cstring value.
+* @param[in]  PIN : PIN value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACstring, XSTRING &remoteMACstring, XSTRING& PIN)
 {
@@ -462,13 +462,13 @@ bool DIOLINUXSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACstri
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXSTREAMBLUETOOTH::ThreadRunFunction(void* param)
 * @brief      Thread run function
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  param : 
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMBLUETOOTH::ThreadRunFunction(void* param)
 {
@@ -748,12 +748,12 @@ void DIOLINUXSTREAMBLUETOOTH::ThreadRunFunction(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXSTREAMBLUETOOTH::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMBLUETOOTH::Clean()
 {

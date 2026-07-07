@@ -56,7 +56,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMSPI::DIOWINDOWSSTREAMSPI()
+* @fn         DIOWINDOWSSTREAMSPI::DIOWINDOWSSTREAMSPI() : DIOSTREAMSPI()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -87,7 +87,7 @@ DIOWINDOWSSTREAMSPI::~DIOWINDOWSSTREAMSPI()
 * @brief      Sleep
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  count : 
+* @param[in]  count : Count value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMSPI::Sleep(int count)

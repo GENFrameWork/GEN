@@ -62,7 +62,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSPIGPIOMCP23S17::DIOSPIGPIOMCP23S17()
+* @fn         DIOSPIGPIOMCP23S17::DIOSPIGPIOMCP23S17() : DIODEVICESPI()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
@@ -74,12 +74,12 @@ DIOSPIGPIOMCP23S17::DIOSPIGPIOMCP23S17() : DIODEVICESPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSPIGPIOMCP23S17::~DIOSPIGPIOMCP23S17()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPIGPIOMCP23S17::~DIOSPIGPIOMCP23S17()
 {
@@ -90,13 +90,13 @@ DIOSPIGPIOMCP23S17::~DIOSPIGPIOMCP23S17()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIGPIOMCP23S17::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIGPIOMCP23S17::IniDevice()
 {
@@ -138,13 +138,13 @@ bool DIOSPIGPIOMCP23S17::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIGPIOMCP23S17::Configure()
 * @brief      Configure
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIGPIOMCP23S17::Configure()
 {
@@ -172,17 +172,17 @@ bool DIOSPIGPIOMCP23S17::Configure()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIGPIOMCP23S17::Read_Register(XBYTE reg, XBYTE addr, XBYTE& data)
 * @brief      Read register
 * @ingroup    DATAIO
-*
-* @param[in]  reg : 
-* @param[in]  addr : 
-* @param[in]  data : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  addr : Addr value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIGPIOMCP23S17::Read_Register(XBYTE reg, XBYTE addr, XBYTE& data)
 {
@@ -201,17 +201,17 @@ bool DIOSPIGPIOMCP23S17::Read_Register(XBYTE reg, XBYTE addr, XBYTE& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIGPIOMCP23S17::Write_Register(XBYTE reg, XBYTE addr, XBYTE data)
 * @brief      Write register
 * @ingroup    DATAIO
-*
-* @param[in]  reg : 
-* @param[in]  addr : 
-* @param[in]  data : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  addr : Addr value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIGPIOMCP23S17::Write_Register(XBYTE reg, XBYTE addr, XBYTE data)
 {
@@ -224,18 +224,18 @@ bool DIOSPIGPIOMCP23S17::Write_Register(XBYTE reg, XBYTE addr, XBYTE data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIGPIOMCP23S17::Read_Bit(XBYTE reg, XBYTE addr, XBYTE bitnum, XBYTE& data)
 * @brief      Read bit
 * @ingroup    DATAIO
-*
-* @param[in]  reg : 
-* @param[in]  addr : 
-* @param[in]  bitnum : 
-* @param[in]  data : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  addr : Addr value.
+* @param[in]  bitnum : Bitnum value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIGPIOMCP23S17::Read_Bit(XBYTE reg, XBYTE addr, XBYTE bitnum, XBYTE& data)
 {
@@ -249,18 +249,18 @@ bool DIOSPIGPIOMCP23S17::Read_Bit(XBYTE reg, XBYTE addr, XBYTE bitnum, XBYTE& da
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIGPIOMCP23S17::Write_Bit(XBYTE reg, XBYTE addr, XBYTE bitnum, XBYTE data)
 * @brief      Write bit
 * @ingroup    DATAIO
-*
-* @param[in]  reg : 
-* @param[in]  addr : 
-* @param[in]  bitnum : 
-* @param[in]  data : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  addr : Addr value.
+* @param[in]  bitnum : Bitnum value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIGPIOMCP23S17::Write_Bit(XBYTE reg, XBYTE addr, XBYTE bitnum, XBYTE data)
 {
@@ -282,13 +282,13 @@ bool DIOSPIGPIOMCP23S17::Write_Bit(XBYTE reg, XBYTE addr, XBYTE bitnum, XBYTE da
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPIGPIOMCP23S17::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPIGPIOMCP23S17::End()
 {
@@ -316,13 +316,13 @@ bool DIOSPIGPIOMCP23S17::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSPI* DIOSPIGPIOMCP23S17::GetDIOStreamSPI()
 * @brief      Get DIO stream SPI
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMSPI* :
-*
+* 
+* @return     DIOSTREAMSPI* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSPI* DIOSPIGPIOMCP23S17::GetDIOStreamSPI()
 {
@@ -331,13 +331,13 @@ DIOSTREAMSPI* DIOSPIGPIOMCP23S17::GetDIOStreamSPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSPIGPIOMCP23S17::SetDIOStreamSPI(DIOSTREAMSPI* diostream)
 * @brief      Set DIO stream SPI
 * @ingroup    DATAIO
-*
-* @param[in]  diostream :
-*
+* 
+* @param[in]  diostream : Diostream pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPIGPIOMCP23S17::SetDIOStreamSPI(DIOSTREAMSPI* diostream)
 {
@@ -347,16 +347,16 @@ void DIOSPIGPIOMCP23S17::SetDIOStreamSPI(DIOSTREAMSPI* diostream)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSPIGPIOMCP23S17::GetControlByte(XBYTE rw_cmd, XBYTE addr)
 * @brief      Get control byte
 * @ingroup    DATAIO
-*
-* @param[in]  rw_cmd : 
-* @param[in]  addr : 
-*
-* @return     XBYTE : 
-*
+* 
+* @param[in]  rw_cmd : Rw cmd value.
+* @param[in]  addr : Addr value.
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSPIGPIOMCP23S17::GetControlByte(XBYTE rw_cmd, XBYTE addr)
 {
@@ -367,12 +367,12 @@ XBYTE DIOSPIGPIOMCP23S17::GetControlByte(XBYTE rw_cmd, XBYTE addr)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSPIGPIOMCP23S17::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPIGPIOMCP23S17::Clean()
 {

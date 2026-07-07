@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICE::DIOSTREAMDEVICE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICE::DIOSTREAMDEVICE()
 {
@@ -68,12 +68,12 @@ DIOSTREAMDEVICE::DIOSTREAMDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICE::~DIOSTREAMDEVICE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICE::~DIOSTREAMDEVICE()
 {
@@ -82,13 +82,13 @@ DIOSTREAMDEVICE::~DIOSTREAMDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICE::GetIndex()
 * @brief      Get index
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICE::GetIndex()
 {
@@ -97,15 +97,15 @@ int DIOSTREAMDEVICE::GetIndex()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICE::SetIndex(int index)
 * @brief      Set index
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICE::SetIndex(int index)
 {
@@ -116,13 +116,13 @@ bool DIOSTREAMDEVICE::SetIndex(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICE_TYPE DIOSTREAMDEVICE::GetType()
 * @brief      Get type
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMDEVICE_TYPE :
-*
+* 
+* @return     DIOSTREAMDEVICE_TYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICE_TYPE DIOSTREAMDEVICE::GetType()
 {
@@ -131,13 +131,13 @@ DIOSTREAMDEVICE_TYPE DIOSTREAMDEVICE::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICE::SetType(DIOSTREAMDEVICE_TYPE type)
 * @brief      Set type
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-*
+* 
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICE::SetType(DIOSTREAMDEVICE_TYPE type)
 {
@@ -146,13 +146,13 @@ void DIOSTREAMDEVICE::SetType(DIOSTREAMDEVICE_TYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICE::GetName()
 * @brief      Get name
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICE::GetName()
 {
@@ -161,13 +161,13 @@ XSTRING* DIOSTREAMDEVICE::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICE::GetDescription()
 * @brief      Get description
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICE::GetDescription()
 {
@@ -176,13 +176,13 @@ XSTRING* DIOSTREAMDEVICE::GetDescription()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICE::GetResource()
 * @brief      Get resource
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICE::GetResource()
 {
@@ -191,15 +191,15 @@ XSTRING* DIOSTREAMDEVICE::GetResource()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICE::CopyFrom(DIOSTREAMDEVICE& device)
 * @brief      Copy from
 * @ingroup    DATAIO
-*
-* @param[in]  device :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  device : Device value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICE::CopyFrom(DIOSTREAMDEVICE& device)
 {
@@ -208,15 +208,15 @@ bool DIOSTREAMDEVICE::CopyFrom(DIOSTREAMDEVICE& device)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICE::CopyTo(DIOSTREAMDEVICE& device)
 * @brief      Copy to
 * @ingroup    DATAIO
-*
-* @param[in]  device :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  device : Device value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICE::CopyTo(DIOSTREAMDEVICE& device)
 {
@@ -230,13 +230,13 @@ bool DIOSTREAMDEVICE::CopyTo(DIOSTREAMDEVICE& device)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICE::DebugPrintInfo()
 * @brief      Debug print info
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICE::DebugPrintInfo()
 {
@@ -257,12 +257,12 @@ bool DIOSTREAMDEVICE::DebugPrintInfo()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICE::Clean()
 {

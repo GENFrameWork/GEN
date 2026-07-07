@@ -56,13 +56,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         POSTGRESQL_CONNECTION::POSTGRESQL_CONNECTION(DB_SQL_DATABASE* database) : DB_SQL_CONNECTION(database)
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  DB_SQL_DATABASE* :
-*
+* 
+* @param[in]  database : Database pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 POSTGRESQL_CONNECTION::POSTGRESQL_CONNECTION(DB_SQL_DATABASE* database) : DB_SQL_CONNECTION(database)
 {
@@ -71,12 +71,12 @@ POSTGRESQL_CONNECTION::POSTGRESQL_CONNECTION(DB_SQL_DATABASE* database) : DB_SQL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         POSTGRESQL_CONNECTION::~POSTGRESQL_CONNECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 POSTGRESQL_CONNECTION::~POSTGRESQL_CONNECTION()
 {
@@ -85,13 +85,13 @@ POSTGRESQL_CONNECTION::~POSTGRESQL_CONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool POSTGRESQL_CONNECTION::Connect()
 * @brief      Connect
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool POSTGRESQL_CONNECTION::Connect()
 {
@@ -199,13 +199,13 @@ bool POSTGRESQL_CONNECTION::Connect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool POSTGRESQL_CONNECTION::Disconnect()
 * @brief      Disconnect
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool POSTGRESQL_CONNECTION::Disconnect()
 {
@@ -216,12 +216,12 @@ bool POSTGRESQL_CONNECTION::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void POSTGRESQL_CONNECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void POSTGRESQL_CONNECTION::Clean()
 {

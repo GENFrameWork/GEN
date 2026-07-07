@@ -83,8 +83,8 @@ CIPHERTRUSTEDROOTCERTIFICATESX509::CIPHERTRUSTEDROOTCERTIFICATESX509()
 * 
 * @fn         CIPHERTRUSTEDROOTCERTIFICATESX509::~CIPHERTRUSTEDROOTCERTIFICATESX509()
 * @brief      Destructor of class
-* @ingroup    CIPHER
 * @note       VIRTUAL
+* @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERTRUSTEDROOTCERTIFICATESX509::~CIPHERTRUSTEDROOTCERTIFICATESX509()
@@ -97,13 +97,13 @@ CIPHERTRUSTEDROOTCERTIFICATESX509::~CIPHERTRUSTEDROOTCERTIFICATESX509()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool CIPHERTRUSTEDROOTCERTIFICATESX509::ReadFromFile(XPATH* namefile)
+* @fn         bool CIPHERTRUSTEDROOTCERTIFICATESX509::ReadFromFile(XPATH* pathnamefile)
 * @brief      read from file
 * @ingroup    CIPHER
 * 
-* @param[in]  namefile : 
+* @param[in]  pathnamefile : Pathnamefile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERTRUSTEDROOTCERTIFICATESX509::ReadFromFile(XPATH* pathnamefile)
@@ -156,10 +156,10 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::ReadFromFile(XPATH* pathnamefile)
 * @brief      generate embedded headere
 * @ingroup    CIPHER
 * 
-* @param[in]  originpathnamefile : 
-* @param[in]  targetpathnamefile : 
+* @param[in]  originpathnamefile : Originpathnamefile pointer to use.
+* @param[in]  targetpathnamefile : Targetpathnamefile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERTRUSTEDROOTCERTIFICATESX509::GenerateEmbeddedHeadere(XPATH* originpathnamefile, XPATH* targetpathnamefile)
@@ -240,7 +240,7 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::GenerateEmbeddedHeadere(XPATH* originpat
 * @brief      get lines
 * @ingroup    CIPHER
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* CIPHERTRUSTEDROOTCERTIFICATESX509::GetLines()
@@ -255,7 +255,7 @@ XVECTOR<XSTRING*>* CIPHERTRUSTEDROOTCERTIFICATESX509::GetLines()
 * @brief      GEN_DELETE all lines
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERTRUSTEDROOTCERTIFICATESX509::DeleteAllLines()
@@ -276,8 +276,8 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::DeleteAllLines()
 * 
 * @fn         void CIPHERTRUSTEDROOTCERTIFICATESX509::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    CIPHER
 * @note       INTERNAL
+* @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERTRUSTEDROOTCERTIFICATESX509::Clean()

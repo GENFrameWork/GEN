@@ -56,11 +56,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILEDXFENTITYOBJPOINT::GRPVECTORFILEDXFENTITYOBJPOINT(XCHAR* nametype)
+* @fn         GRPVECTORFILEDXFENTITYOBJPOINT::GRPVECTORFILEDXFENTITYOBJPOINT(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ(nametype)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nametype : 
+* @param[in]  nametype : Nametype pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJPOINT::GRPVECTORFILEDXFENTITYOBJPOINT(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ(nametype)
@@ -91,7 +91,7 @@ GRPVECTORFILEDXFENTITYOBJPOINT::~GRPVECTORFILEDXFENTITYOBJPOINT()
 * @brief      Get point
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJPOINT::GetPoint()
@@ -106,9 +106,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJPOINT::GetPoint()
 * @brief      Set point
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJPOINT::SetPoint(GRPVECTORFILEDXFENTITYDEFPOINT* point)
@@ -130,7 +130,7 @@ bool GRPVECTORFILEDXFENTITYOBJPOINT::SetPoint(GRPVECTORFILEDXFENTITYDEFPOINT* po
 * @brief      Get X axis angle
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJPOINT::GetXAxisAngle()
@@ -142,10 +142,10 @@ double GRPVECTORFILEDXFENTITYOBJPOINT::GetXAxisAngle()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILEDXFENTITYOBJPOINT::SetXAxisAngle (double xaxisangle)
-* @brief      Set X axis angle 
+* @brief      Set X axis angle
 * @ingroup    GRAPHIC
 * 
-* @param[in]  xaxisangle : 
+* @param[in]  xaxisangle : Xaxisangle value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJPOINT::SetXAxisAngle (double xaxisangle)
@@ -160,7 +160,7 @@ void GRPVECTORFILEDXFENTITYOBJPOINT::SetXAxisAngle (double xaxisangle)
 * @brief      Get thickness
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJPOINT::GetThickness()
@@ -175,7 +175,7 @@ double GRPVECTORFILEDXFENTITYOBJPOINT::GetThickness()
 * @brief      Set thickness
 * @ingroup    GRAPHIC
 * 
-* @param[in]  thickness : 
+* @param[in]  thickness : Thickness value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJPOINT::SetThickness(double thickness)
@@ -190,7 +190,7 @@ void GRPVECTORFILEDXFENTITYOBJPOINT::SetThickness(double thickness)
 * @brief      Get dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJPOINT::GetDirExtrusion()
@@ -205,9 +205,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJPOINT::GetDirExtrusion(
 * @brief      Set dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @param[in]  dirextrusion : 
+* @param[in]  dirextrusion : Dirextrusion pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJPOINT::SetDirExtrusion(GRPVECTORFILEDXFENTITYDEFPOINT* dirextrusion)
@@ -229,9 +229,9 @@ bool GRPVECTORFILEDXFENTITYOBJPOINT::SetDirExtrusion(GRPVECTORFILEDXFENTITYDEFPO
 * @brief      Apply data
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJPOINT::ApplyData(GRPVECTORFILEDXFENTITY* entity)

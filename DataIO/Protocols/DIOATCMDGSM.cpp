@@ -65,11 +65,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMDGSM_ALPHABET_8859_1::DIOATCMDGSM_ALPHABET_8859_1()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMDGSM_ALPHABET_8859_1::DIOATCMDGSM_ALPHABET_8859_1()
 {
@@ -79,12 +79,12 @@ DIOATCMDGSM_ALPHABET_8859_1::DIOATCMDGSM_ALPHABET_8859_1()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMDGSM_ALPHABET_8859_1::~DIOATCMDGSM_ALPHABET_8859_1()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMDGSM_ALPHABET_8859_1::~DIOATCMDGSM_ALPHABET_8859_1()
 {
@@ -93,13 +93,13 @@ DIOATCMDGSM_ALPHABET_8859_1::~DIOATCMDGSM_ALPHABET_8859_1()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDGSM_ALPHABET_8859_1::CreateTable()
 * @brief      Create table
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDGSM_ALPHABET_8859_1::CreateTable()
 {
@@ -144,16 +144,16 @@ bool DIOATCMDGSM_ALPHABET_8859_1::CreateTable()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOATCMDGSM_ALPHABET_8859_1::Traslate(bool from, XWORD data)
 * @brief      Traslate
 * @ingroup    DATAIO
-*
-* @param[in]  from :
-* @param[in]  data :
-*
-* @return     XWORD :
-*
+* 
+* @param[in]  from : From value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOATCMDGSM_ALPHABET_8859_1::Traslate(bool from, XWORD data)
 {
@@ -194,12 +194,12 @@ XWORD DIOATCMDGSM_ALPHABET_8859_1::Traslate(bool from, XWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOATCMDGSM_ALPHABET_8859_1::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOATCMDGSM_ALPHABET_8859_1::Clean()
 {
@@ -212,13 +212,13 @@ void DIOATCMDGSM_ALPHABET_8859_1::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOATCMDGSM::DIOATCMDGSM(DIOSTREAM* diostream)
+* 
+* @fn         DIOATCMDGSM::DIOATCMDGSM(DIOSTREAM* diostream) : DIOATCMDS(diostream)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  diostream :
-*
+* 
+* @param[in]  diostream : Diostream pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMDGSM::DIOATCMDGSM(DIOSTREAM* diostream) : DIOATCMDS(diostream)
 {
@@ -243,12 +243,12 @@ DIOATCMDGSM::DIOATCMDGSM(DIOSTREAM* diostream) : DIOATCMDS(diostream)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMDGSM::~DIOATCMDGSM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMDGSM::~DIOATCMDGSM()
 {
@@ -257,16 +257,16 @@ DIOATCMDGSM::~DIOATCMDGSM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::GetManufactured(XSTRING& manufactured, int timeout)
 * @brief      Get manufactured
 * @ingroup    DATAIO
-*
-* @param[in]  manufactured :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  manufactured : Manufactured value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetManufactured(XSTRING& manufactured, int timeout)
 {
@@ -275,16 +275,16 @@ DIOATCMD_ERROR DIOATCMDGSM::GetManufactured(XSTRING& manufactured, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::GetModel(XSTRING& model, int timeout)
 * @brief      Get model
 * @ingroup    DATAIO
-*
-* @param[in]  model :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  model : Model value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetModel(XSTRING& model, int timeout)
 {
@@ -293,16 +293,16 @@ DIOATCMD_ERROR DIOATCMDGSM::GetModel(XSTRING& model, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::GetIMEI(XSTRING& IMEI, int timeout)
 * @brief      Get IMEI
 * @ingroup    DATAIO
-*
-* @param[in]  IMEI :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  IMEI : IMEI value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetIMEI(XSTRING& IMEI, int timeout)
 {
@@ -311,16 +311,16 @@ DIOATCMD_ERROR DIOATCMDGSM::GetIMEI(XSTRING& IMEI, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOATCMD_ERROR DIOATCMDGSM::GetVersion(XSTRING& version,int timeout)
+* 
+* @fn         DIOATCMD_ERROR DIOATCMDGSM::GetVersion(XSTRING& version, int timeout)
 * @brief      Get version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  version : Version value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetVersion(XSTRING& version, int timeout)
 {
@@ -360,17 +360,17 @@ DIOATCMD_ERROR DIOATCMDGSM::GetVersion(XSTRING& version, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::GetSignalQuality(int& RSSI, int& BER, int timeout)
 * @brief      Get signal quality
 * @ingroup    DATAIO
-*
-* @param[in]  RSSI :
-* @param[in]  BER :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  RSSI : RSSI value.
+* @param[in]  BER : BER value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetSignalQuality(int& RSSI, int& BER, int timeout)
 {
@@ -402,16 +402,16 @@ DIOATCMD_ERROR DIOATCMDGSM::GetSignalQuality(int& RSSI, int& BER, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::IsAvailableServiceGSM(bool& available, int timeout)
 * @brief      Is available service GSM
 * @ingroup    DATAIO
-*
-* @param[in]  available :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  available : Available value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::IsAvailableServiceGSM(bool& available, int timeout)
 {
@@ -437,16 +437,16 @@ DIOATCMD_ERROR DIOATCMDGSM::IsAvailableServiceGSM(bool& available, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::GetIMSI(XSTRING& IMSI, int timeout)
 * @brief      Get IMSI
 * @ingroup    DATAIO
-*
-* @param[in]  IMSI :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  IMSI : IMSI value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetIMSI(XSTRING& IMSI, int timeout)
 {
@@ -459,13 +459,13 @@ DIOATCMD_ERROR DIOATCMDGSM::GetIMSI(XSTRING& IMSI, int timeout)
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::PIN_Is(bool& isresolved, int timeout)
 * @brief      PIN is
 * @ingroup    DATAIO
-*
-* @param[in]  isresolved : 
-* @param[in]  timeout : 
 * 
-* @return     DIOATCMD_ERROR : 
+* @param[in]  isresolved : Isresolved value.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOATCMD_ERROR : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::PIN_Is(bool& isresolved, int timeout)
 {
   isresolved = false;
@@ -494,14 +494,14 @@ DIOATCMD_ERROR DIOATCMDGSM::PIN_Is(bool& isresolved, int timeout)
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::PIN_Enter(XCHAR* PIN, bool& isenter, int timeout)
 * @brief      PIN enter
 * @ingroup    DATAIO
-*
-* @param[in]  PIN : 
-* @param[in]  isenter : 
-* @param[in]  timeout : 
 * 
-* @return     DIOATCMD_ERROR : 
+* @param[in]  PIN : PIN pointer to use.
+* @param[in]  isenter : Isenter value.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOATCMD_ERROR : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::PIN_Enter(XCHAR* PIN, bool& isenter, int timeout)
 {
   XSTRING PINstr;  
@@ -529,14 +529,14 @@ DIOATCMD_ERROR DIOATCMDGSM::PIN_Enter(XCHAR* PIN, bool& isenter, int timeout)
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::PIN_Activate(XCHAR* PIN, bool activate, int timeout)
 * @brief      PIN activate
 * @ingroup    DATAIO
-*
-* @param[in]  PIN : 
-* @param[in]  activate : 
-* @param[in]  timeout : 
 * 
-* @return     DIOATCMD_ERROR : 
+* @param[in]  PIN : PIN pointer to use.
+* @param[in]  activate : Activate value.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOATCMD_ERROR : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::PIN_Activate(XCHAR* PIN, bool activate, int timeout)
 {
   XSTRING PINstr;  
@@ -556,16 +556,16 @@ DIOATCMD_ERROR DIOATCMDGSM::PIN_Activate(XCHAR* PIN, bool activate, int timeout)
  
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::GetSMSSupport(XBYTE& support, int timeout)
 * @brief      Get SMS support
 * @ingroup    DATAIO
-*
-* @param[in]  support :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  support : Support value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetSMSSupport(XBYTE& support, int timeout)
 {
@@ -607,17 +607,17 @@ DIOATCMD_ERROR DIOATCMDGSM::GetSMSSupport(XBYTE& support, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::GetSMSFormat(XBYTE& format,bool support, int timeout)
 * @brief      Get SMS format
 * @ingroup    DATAIO
-*
-* @param[in]  format :
-* @param[in]  support :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  format : Format value.
+* @param[in]  support : Support value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetSMSFormat(XBYTE& format,bool support, int timeout)
 {
@@ -672,16 +672,16 @@ DIOATCMD_ERROR DIOATCMDGSM::GetSMSFormat(XBYTE& format,bool support, int timeout
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::SetSMSFormat(XBYTE format, int timeout)
 * @brief      Set SMS format
 * @ingroup    DATAIO
-*
-* @param[in]  format :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  format : Format value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::SetSMSFormat(XBYTE format, int timeout)
 {
@@ -701,16 +701,16 @@ DIOATCMD_ERROR DIOATCMDGSM::SetSMSFormat(XBYTE format, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::GetSMSCenter(XSTRING& SMScenter, int timeout)
 * @brief      Get SMS center
 * @ingroup    DATAIO
-*
-* @param[in]  SMScenter :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  SMScenter : SM Scenter value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::GetSMSCenter(XSTRING& SMScenter, int timeout)
 {
@@ -750,16 +750,16 @@ DIOATCMD_ERROR DIOATCMDGSM::GetSMSCenter(XSTRING& SMScenter, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::SetSMSCenter(XCHAR* smscenter, int timeout)
 * @brief      Set SMS center
 * @ingroup    DATAIO
-*
-* @param[in]  smscenter :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  smscenter : Smscenter pointer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::SetSMSCenter(XCHAR* smscenter, int timeout)
 {
@@ -775,18 +775,18 @@ DIOATCMD_ERROR DIOATCMDGSM::SetSMSCenter(XCHAR* smscenter, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDGSM::SendSMS(XCHAR* number, XCHAR* message, int* mrID, int timeout)
 * @brief      Send SMS
 * @ingroup    DATAIO
-*
-* @param[in]  number :
-* @param[in]  message :
-* @param[in]  mrID :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  number : Number pointer to use.
+* @param[in]  message : Message text.
+* @param[in]  mrID : Mr ID pointer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDGSM::SendSMS(XCHAR* number, XCHAR* message, int* mrID, int timeout)
 {
@@ -858,20 +858,20 @@ DIOATCMD_ERROR DIOATCMDGSM::SendSMS(XCHAR* number, XCHAR* message, int* mrID, in
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDGSM::CodecPDUFormat(XCHAR* number, XCHAR* message, bool inoctets, int validperiod, XSTRING& length, XSTRING& result)
 * @brief      Codec PDU format
 * @ingroup    DATAIO
-*
-* @param[in]  number :
-* @param[in]  message :
-* @param[in]  inoctets :
-* @param[in]  validperiod :
-* @param[in]  length :
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  number : Number pointer to use.
+* @param[in]  message : Message text.
+* @param[in]  inoctets : Inoctets value.
+* @param[in]  validperiod : Validperiod value.
+* @param[in]  length : Length value.
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDGSM::CodecPDUFormat(XCHAR* number, XCHAR* message, bool inoctets, int validperiod, XSTRING& length, XSTRING& result)
 {
@@ -992,12 +992,12 @@ bool DIOATCMDGSM::CodecPDUFormat(XCHAR* number, XCHAR* message, bool inoctets, i
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOATCMDGSM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOATCMDGSM::Clean()
 {

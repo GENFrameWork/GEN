@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMBLUETOOTHCONFIG::DIOSTREAMBLUETOOTHCONFIG()
+* 
+* @fn         DIOSTREAMBLUETOOTHCONFIG::DIOSTREAMBLUETOOTHCONFIG(): DIOSTREAMCONFIG()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMBLUETOOTHCONFIG::DIOSTREAMBLUETOOTHCONFIG(): DIOSTREAMCONFIG()
 {
@@ -68,12 +68,12 @@ DIOSTREAMBLUETOOTHCONFIG::DIOSTREAMBLUETOOTHCONFIG(): DIOSTREAMCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMBLUETOOTHCONFIG::~DIOSTREAMBLUETOOTHCONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMBLUETOOTHCONFIG::~DIOSTREAMBLUETOOTHCONFIG()
 {
@@ -82,13 +82,13 @@ DIOSTREAMBLUETOOTHCONFIG::~DIOSTREAMBLUETOOTHCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMBLUETOOTHCONFIG::GetDeviceSelect()
 * @brief      Get device select
 * @ingroup    DATAIO
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMBLUETOOTHCONFIG::GetDeviceSelect()
 {
@@ -97,15 +97,15 @@ int DIOSTREAMBLUETOOTHCONFIG::GetDeviceSelect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTHCONFIG::SetDeviceSelect(int deviceselect)
 * @brief      Set device select
 * @ingroup    DATAIO
-*
-* @param[in]  deviceselect : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  deviceselect : Deviceselect value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTHCONFIG::SetDeviceSelect(int deviceselect)
 {
@@ -116,13 +116,13 @@ bool DIOSTREAMBLUETOOTHCONFIG::SetDeviceSelect(int deviceselect)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMAC* DIOSTREAMBLUETOOTHCONFIG::GetLocalMAC()
 * @brief      Get local MAC
 * @ingroup    DATAIO
-*
-* @return     DIOMAC* : 
-*
+* 
+* @return     DIOMAC* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMAC* DIOSTREAMBLUETOOTHCONFIG::GetLocalMAC()
 {
@@ -131,13 +131,13 @@ DIOMAC* DIOSTREAMBLUETOOTHCONFIG::GetLocalMAC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMAC* DIOSTREAMBLUETOOTHCONFIG::GetRemoteMAC()
 * @brief      Get remote MAC
 * @ingroup    DATAIO
-*
-* @return     DIOMAC* : 
-*
+* 
+* @return     DIOMAC* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMAC* DIOSTREAMBLUETOOTHCONFIG::GetRemoteMAC()
 {
@@ -147,13 +147,13 @@ DIOMAC* DIOSTREAMBLUETOOTHCONFIG::GetRemoteMAC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMBLUETOOTHCONFIG::GetRemoteChannel()
 * @brief      Get remote channel
 * @ingroup    DATAIO
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMBLUETOOTHCONFIG::GetRemoteChannel()
 {
@@ -162,15 +162,15 @@ int DIOSTREAMBLUETOOTHCONFIG::GetRemoteChannel()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTHCONFIG::SetRemoteChannel(int channel)
 * @brief      Set remote channel
 * @ingroup    DATAIO
-*
-* @param[in]  channel : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  channel : Channel value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTHCONFIG::SetRemoteChannel(int channel)
 {
@@ -181,13 +181,13 @@ bool DIOSTREAMBLUETOOTHCONFIG::SetRemoteChannel(int channel)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMBLUETOOTHCONFIG::GetPIN()
 * @brief      Get PIN
 * @ingroup    DATAIO
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMBLUETOOTHCONFIG::GetPIN()
 {
@@ -196,15 +196,15 @@ XSTRING* DIOSTREAMBLUETOOTHCONFIG::GetPIN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* DIOSTREAMBLUETOOTHCONFIG::GetServerPropertys(int index)
 * @brief      Get server propertys
 * @ingroup    DATAIO
-*
-* @param[in]  index : 
-*
-* @return     void* : 
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* DIOSTREAMBLUETOOTHCONFIG::GetServerPropertys(int index)
 {
@@ -216,12 +216,12 @@ void* DIOSTREAMBLUETOOTHCONFIG::GetServerPropertys(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMBLUETOOTHCONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMBLUETOOTHCONFIG::Clean()
 {

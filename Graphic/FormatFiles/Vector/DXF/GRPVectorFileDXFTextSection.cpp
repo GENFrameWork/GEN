@@ -202,7 +202,7 @@ GRPVECTORFILEDXFTEXTSECTION::~GRPVECTORFILEDXFTEXTSECTION()
 * @brief      Get grp vector file
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILE* : 
+* @return     GRPVECTORFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILE* GRPVECTORFILEDXFTEXTSECTION::GetGrpVectorFile()
@@ -217,7 +217,7 @@ GRPVECTORFILE* GRPVECTORFILEDXFTEXTSECTION::GetGrpVectorFile()
 * @brief      Set grp vector file
 * @ingroup    GRAPHIC
 * 
-* @param[in]  vectorfile : 
+* @param[in]  vectorfile : Vectorfile pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFTEXTSECTION::SetGrpVectorFile(GRPVECTORFILE* vectorfile)
@@ -232,9 +232,9 @@ void GRPVECTORFILEDXFTEXTSECTION::SetGrpVectorFile(GRPVECTORFILE* vectorfile)
 * @brief      Create instance
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTION* : 
+* @return     GRPVECTORFILEDXFTEXTSECTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTION* GRPVECTORFILEDXFTEXTSECTION::CreateInstance(GRPVECTORFILEDXFTEXTSECTION_TYPESECTION type)
@@ -273,9 +273,9 @@ GRPVECTORFILEDXFTEXTSECTION* GRPVECTORFILEDXFTEXTSECTION::CreateInstance(GRPVECT
 * @brief      Get type section
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namesection : 
+* @param[in]  namesection : Namesection value.
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTION_TYPESECTION : 
+* @return     GRPVECTORFILEDXFTEXTSECTION_TYPESECTION : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTION_TYPESECTION GRPVECTORFILEDXFTEXTSECTION::GetTypeSection(XSTRING& namesection)
@@ -298,9 +298,9 @@ GRPVECTORFILEDXFTEXTSECTION_TYPESECTION GRPVECTORFILEDXFTEXTSECTION::GetTypeSect
 * @brief      Get type basic
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTION_BASICTYPE : 
+* @return     GRPVECTORFILEDXFTEXTSECTION_BASICTYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTION_BASICTYPE GRPVECTORFILEDXFTEXTSECTION::GetTypeBasic(int type)
@@ -845,9 +845,9 @@ GRPVECTORFILEDXFTEXTSECTION_BASICTYPE GRPVECTORFILEDXFTEXTSECTION::GetTypeBasic(
 * @brief      Get generic def type
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTIONGENERICDEFTYPE* : 
+* @return     GRPVECTORFILEDXFTEXTSECTIONGENERICDEFTYPE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTIONGENERICDEFTYPE* GRPVECTORFILEDXFTEXTSECTION::GetGenericDefType(int type)
@@ -881,10 +881,10 @@ GRPVECTORFILEDXFTEXTSECTIONGENERICDEFTYPE* GRPVECTORFILEDXFTEXTSECTION::GetGener
 * @brief      Get variable from line
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
-* @param[in]  type : 
-* @param[in]  line : 
-* @param[in]  variant : 
+* @param[in]  namevar : Namevar pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  line : Line pointer to use.
+* @param[in]  variant : Variant value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFTEXTSECTION::GetVariableFromLine(XCHAR* namevar, int type, XSTRING* line, XVARIANT& variant)
@@ -918,10 +918,10 @@ void GRPVECTORFILEDXFTEXTSECTION::GetVariableFromLine(XCHAR* namevar, int type, 
 * @brief      Is X data control
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
-* @param[in]  line : 
+* @param[in]  type : Type value.
+* @param[in]  line : Line value.
 * 
-* @return     GRPVECTORFILEDXFText_XDataCtrl_Status : 
+* @return     GRPVECTORFILEDXFText_XDataCtrl_Status : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFText_XDataCtrl_Status GRPVECTORFILEDXFTEXTSECTION::IsXDataControl(int type, XSTRING& line)
@@ -949,12 +949,12 @@ GRPVECTORFILEDXFText_XDataCtrl_Status GRPVECTORFILEDXFTEXTSECTION::IsXDataContro
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTION::ParserTextSection (XFILETXT* fileTXT)
-* @brief      Parser text section 
+* @brief      Parser text section
 * @ingroup    GRAPHIC
 * 
-* @param[in]  fileTXT : 
+* @param[in]  fileTXT : File TXT pointer to use.
 * 
-* @return     GRPVECTORFILERESULT : 
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTION::ParserTextSection (XFILETXT* fileTXT)

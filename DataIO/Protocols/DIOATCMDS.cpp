@@ -64,11 +64,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD::DIOATCMD()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD::DIOATCMD()
 {
@@ -77,12 +77,12 @@ DIOATCMD::DIOATCMD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD::~DIOATCMD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD::~DIOATCMD()
 {
@@ -91,13 +91,13 @@ DIOATCMD::~DIOATCMD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOATCMD::GetType()
 * @brief      Get type
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOATCMD::GetType()
 {
@@ -106,13 +106,13 @@ XDWORD DIOATCMD::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOATCMD::GetCommand()
 * @brief      Get command
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOATCMD::GetCommand()
 {
@@ -121,13 +121,13 @@ XCHAR* DIOATCMD::GetCommand()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOATCMD::GetCommandString()
 * @brief      Get command string
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOATCMD::GetCommandString()
 {
@@ -136,17 +136,17 @@ XSTRING* DIOATCMD::GetCommandString()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMD::Set(XDWORD type, XCHAR* command, bool isunsolicited)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  command :
-* @param[in]  isunsolicited :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  command : Command pointer to use.
+* @param[in]  isunsolicited : Isunsolicited value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMD::Set(XDWORD type, XCHAR* command, bool isunsolicited)
 {
@@ -159,13 +159,13 @@ bool DIOATCMD::Set(XDWORD type, XCHAR* command, bool isunsolicited)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMD::IsUnSolicited()
 * @brief      Is un solicited
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMD::IsUnSolicited()
 {
@@ -174,12 +174,12 @@ bool DIOATCMD::IsUnSolicited()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOATCMD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOATCMD::Clean()
 {
@@ -189,13 +189,13 @@ void DIOATCMD::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOATCMDS::DIOATCMDS(DIOSTREAM* diostream)
+* 
+* @fn         DIOATCMDS::DIOATCMDS(DIOSTREAM* diostream) : XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  diostream :
-*
+* 
+* @param[in]  XFSMACHINE : XFSMACHINE pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMDS::DIOATCMDS(DIOSTREAM* diostream) : XFSMACHINE(0)
 {
@@ -218,12 +218,12 @@ DIOATCMDS::DIOATCMDS(DIOSTREAM* diostream) : XFSMACHINE(0)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMDS::~DIOATCMDS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMDS::~DIOATCMDS()
 {
@@ -256,13 +256,13 @@ DIOATCMDS::~DIOATCMDS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAM* DIOATCMDS::GetDIOStream()
 * @brief      Get DIO stream
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAM* :
-*
+* 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOATCMDS::GetDIOStream()
 {
@@ -271,13 +271,13 @@ DIOSTREAM* DIOATCMDS::GetDIOStream()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTIMER* DIOATCMDS::GetXTimer()
 * @brief      Get X timer
 * @ingroup    DATAIO
-*
-* @return     XTIMER* :
-*
+* 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIOATCMDS::GetXTimer()
 {
@@ -286,18 +286,18 @@ XTIMER* DIOATCMDS::GetXTimer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::Ini(int timeout, bool echomode, bool verbosemode, int minimumbaurate)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-* @param[in]  echomode :
-* @param[in]  verbosemode :
-* @param[in]  minimumbaurate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  timeout : Timeout value.
+* @param[in]  echomode : Echomode value.
+* @param[in]  verbosemode : Verbosemode value.
+* @param[in]  minimumbaurate : Minimumbaurate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::Ini(int timeout, bool echomode, bool verbosemode, int minimumbaurate)
 {
@@ -361,15 +361,15 @@ bool DIOATCMDS::Ini(int timeout, bool echomode, bool verbosemode, int minimumbau
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::Basic(int timeout)
 * @brief      Basic
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::Basic(int timeout)
 {
@@ -378,17 +378,17 @@ DIOATCMD_ERROR DIOATCMDS::Basic(int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::GetCharacter(DIOATCMD_CODECHARACTER code,XBYTE& character,int timeout)
 * @brief      Get character
 * @ingroup    DATAIO
-*
-* @param[in]  code :
-* @param[in]  character :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  code : Code value.
+* @param[in]  character : Character value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::GetCharacter(DIOATCMD_CODECHARACTER code,XBYTE& character,int timeout)
 {
@@ -418,15 +418,15 @@ DIOATCMD_ERROR DIOATCMDS::GetCharacter(DIOATCMD_CODECHARACTER code,XBYTE& charac
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::Reset(int timeout)
 * @brief      Reset
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::Reset(int timeout)
 {
@@ -435,16 +435,16 @@ DIOATCMD_ERROR DIOATCMDS::Reset(int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::SetEchoMode(bool echomode, int timeout)
 * @brief      Set echo mode
 * @ingroup    DATAIO
-*
-* @param[in]  echomode :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  echomode : Echomode value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::SetEchoMode(bool echomode, int timeout)
 {
@@ -458,16 +458,16 @@ DIOATCMD_ERROR DIOATCMDS::SetEchoMode(bool echomode, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::SetVerboseMode(bool verbosemode , int timeout)
 * @brief      Set verbose mode
 * @ingroup    DATAIO
-*
-* @param[in]  verbosemode :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  verbosemode : Verbosemode value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::SetVerboseMode(bool verbosemode  , int timeout)
 {
@@ -481,16 +481,16 @@ DIOATCMD_ERROR DIOATCMDS::SetVerboseMode(bool verbosemode  , int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::GetBaudRate(int& baudrate, int timeout)
 * @brief      Get baud rate
 * @ingroup    DATAIO
-*
-* @param[in]  baudrate :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  baudrate : Baudrate value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::GetBaudRate(int& baudrate, int timeout)
 {
@@ -518,16 +518,16 @@ DIOATCMD_ERROR DIOATCMDS::GetBaudRate(int& baudrate, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::SetBaudRate(int baudrate, int timeout)
 * @brief      Set baud rate
 * @ingroup    DATAIO
-*
-* @param[in]  baudrate :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  baudrate : Baudrate value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::SetBaudRate(int baudrate, int timeout)
 {
@@ -559,11 +559,11 @@ DIOATCMD_ERROR DIOATCMDS::SetBaudRate(int baudrate, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOATCMDS::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOATCMDS::End()
 {
@@ -574,15 +574,15 @@ void DIOATCMDS::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::AdditionalInitialization(int timeout)
 * @brief      Additional initialization
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::AdditionalInitialization(int timeout)
 {
@@ -591,18 +591,18 @@ bool DIOATCMDS::AdditionalInitialization(int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::UnsolicitedCommandAddtionalSize(XDWORD type, XSTRING& param, DIOATCMD_TYPEADDITIONALSIZE& typesize, int& size)
 * @brief      Unsolicited command addtional size
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  param :
-* @param[in]  typesize :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  param : Param value.
+* @param[in]  typesize : Typesize value.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::UnsolicitedCommandAddtionalSize(XDWORD type, XSTRING& param, DIOATCMD_TYPEADDITIONALSIZE& typesize, int& size)
 {
@@ -611,17 +611,17 @@ bool DIOATCMDS::UnsolicitedCommandAddtionalSize(XDWORD type, XSTRING& param, DIO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::UnsolicitedCommand(XDWORD type, XSTRING& param, XBUFFER& additionalparamint)
 * @brief      Unsolicited command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  param :
-* @param[in]  additionalparamint :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  param : Param value.
+* @param[in]  additionalparamint : Additionalparamint value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::UnsolicitedCommand(XDWORD type, XSTRING& param, XBUFFER& additionalparamint)
 {
@@ -630,15 +630,15 @@ bool DIOATCMDS::UnsolicitedCommand(XDWORD type, XSTRING& param, XBUFFER& additio
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOATCMDS::CalculeBaudRateStreamUART(int timeout)
 * @brief      Calcule baud rate stream UART
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     int :
-*
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOATCMDS::CalculeBaudRateStreamUART(int timeout)
 {
@@ -685,17 +685,17 @@ int DIOATCMDS::CalculeBaudRateStreamUART(int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::AddCommand(XDWORD type, XCHAR* command,bool isunsolicited)
 * @brief      Add command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  command :
-* @param[in]  isunsolicited :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  command : Command pointer to use.
+* @param[in]  isunsolicited : Isunsolicited value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::AddCommand(XDWORD type, XCHAR* command,bool isunsolicited)
 {
@@ -714,15 +714,15 @@ bool DIOATCMDS::AddCommand(XDWORD type, XCHAR* command,bool isunsolicited)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD* DIOATCMDS::GetCommand(XDWORD type)
 * @brief      Get command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-*
-* @return     DIOATCMD* :
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     DIOATCMD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD* DIOATCMDS::GetCommand(XDWORD type)
 {
@@ -742,15 +742,15 @@ DIOATCMD* DIOATCMDS::GetCommand(XDWORD type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOATCMDS::GetCommandString(XDWORD type)
 * @brief      Get command string
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-*
-* @return     XCHAR* :
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOATCMDS::GetCommandString(XDWORD type)
 {
@@ -762,13 +762,13 @@ XCHAR* DIOATCMDS::GetCommandString(XDWORD type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::DeleteAllCommand()
 * @brief      Delete all command
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::DeleteAllCommand()
 {
@@ -783,16 +783,16 @@ bool DIOATCMDS::DeleteAllCommand()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::SendCommand(XDWORD type,XCHAR* param)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  param :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  param : Param pointer to use.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::SendCommand(XDWORD type,XCHAR* param)
 {
@@ -827,16 +827,16 @@ DIOATCMD_ERROR DIOATCMDS::SendCommand(XDWORD type,XCHAR* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOATCMD_ERROR DIOATCMDS::SendCommand(XDWORD type,XSTRING& param)
+* 
+* @fn         DIOATCMD_ERROR DIOATCMDS::SendCommand(XDWORD type, XSTRING& param)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  param :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  param : Param value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::SendCommand(XDWORD type, XSTRING& param)
 {
@@ -845,15 +845,15 @@ DIOATCMD_ERROR DIOATCMDS::SendCommand(XDWORD type, XSTRING& param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::SendParam(XCHAR* param)
 * @brief      Send param
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::SendParam(XCHAR* param)
 {
@@ -883,15 +883,15 @@ DIOATCMD_ERROR DIOATCMDS::SendParam(XCHAR* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::SendParam(XBUFFER& xbuffer)
 * @brief      Send param
 * @ingroup    DATAIO
-*
-* @param[in]  xbuffer :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::SendParam(XBUFFER& xbuffer)
 {
@@ -925,15 +925,15 @@ DIOATCMD_ERROR DIOATCMDS::SendParam(XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::SendParam(XSTRING& param)
 * @brief      Send param
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  param : Param value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::SendParam(XSTRING& param)
 {
@@ -942,15 +942,15 @@ DIOATCMD_ERROR DIOATCMDS::SendParam(XSTRING& param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::AddSendCommand(XSTRING* sendcommand)
 * @brief      Add send command
 * @ingroup    DATAIO
-*
-* @param[in]  sendcommand :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sendcommand : Sendcommand pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::AddSendCommand(XSTRING* sendcommand)
 {
@@ -973,15 +973,15 @@ bool DIOATCMDS::AddSendCommand(XSTRING* sendcommand)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::AddSendCommand(XBUFFER& xbuffer)
 * @brief      Add send command
 * @ingroup    DATAIO
-*
-* @param[in]  xbuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::AddSendCommand(XBUFFER& xbuffer)
 {
@@ -994,15 +994,15 @@ bool DIOATCMDS::AddSendCommand(XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOATCMDS::GetSendCommand(int index)
 * @brief      Get send command
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOATCMDS::GetSendCommand(int index)
 {
@@ -1014,15 +1014,15 @@ XSTRING* DIOATCMDS::GetSendCommand(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOATCMDS::SearchSendCommand(XSTRING* sendcommand)
 * @brief      Search send command
 * @ingroup    DATAIO
-*
-* @param[in]  sendcommand :
-*
-* @return     int :
-*
+* 
+* @param[in]  sendcommand : Sendcommand pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOATCMDS::SearchSendCommand(XSTRING* sendcommand)
 {
@@ -1042,15 +1042,15 @@ int DIOATCMDS::SearchSendCommand(XSTRING* sendcommand)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::DeleteSendCommand(int index)
 * @brief      Delete send command
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::DeleteSendCommand(int index)
 {
@@ -1065,13 +1065,13 @@ bool DIOATCMDS::DeleteSendCommand(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::DeleteAllSendCommand()
 * @brief      Delete all send command
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::DeleteAllSendCommand()
 {
@@ -1086,16 +1086,16 @@ bool DIOATCMDS::DeleteAllSendCommand()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::ReadAnswer(XSTRING& answer,int timeout)
 * @brief      Read answer
 * @ingroup    DATAIO
-*
-* @param[in]  answer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  answer : Answer value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::ReadAnswer(XSTRING& answer,int timeout)
 {
@@ -1171,16 +1171,16 @@ bool DIOATCMDS::ReadAnswer(XSTRING& answer,int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::ReadAnswerWithOutEndChar(XSTRING& answer, int timeout)
 * @brief      Read answer with out end char
 * @ingroup    DATAIO
-*
-* @param[in]  answer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  answer : Answer value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::ReadAnswerWithOutEndChar(XSTRING& answer, int timeout)
 {
@@ -1247,16 +1247,16 @@ bool DIOATCMDS::ReadAnswerWithOutEndChar(XSTRING& answer, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::ReadAnswerWithOutEndChar(XCHAR* answer, int timeout)
 * @brief      Read answer with out end char
 * @ingroup    DATAIO
-*
-* @param[in]  answer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  answer : Answer pointer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::ReadAnswerWithOutEndChar(XCHAR* answer, int timeout)
 {
@@ -1269,15 +1269,15 @@ bool DIOATCMDS::ReadAnswerWithOutEndChar(XCHAR* answer, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOATCMDS::GetAnswer(int index)
 * @brief      Get answer
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     XSTRING* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOATCMDS::GetAnswer(int index)
 {
@@ -1289,13 +1289,13 @@ XSTRING* DIOATCMDS::GetAnswer(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOATCMDS::GetLastAnswer()
 * @brief      Get last answer
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOATCMDS::GetLastAnswer()
 {
@@ -1305,15 +1305,15 @@ XSTRING* DIOATCMDS::GetLastAnswer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::DeleteAnswer(int index)
 * @brief      Delete answer
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::DeleteAnswer(int index)
 {
@@ -1328,13 +1328,13 @@ bool DIOATCMDS::DeleteAnswer(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::DeleteLastAnswer()
 * @brief      Delete last answer
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::DeleteLastAnswer()
 {
@@ -1355,13 +1355,13 @@ bool DIOATCMDS::DeleteLastAnswer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::DeleteAllAnswers()
 * @brief      Delete all answers
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::DeleteAllAnswers()
 {
@@ -1376,13 +1376,13 @@ bool DIOATCMDS::DeleteAllAnswers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<XSTRING*>* DIOATCMDS::GetAnswers()
 * @brief      Get answers
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<XSTRING*>* :
-*
+* 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* DIOATCMDS::GetAnswers()
 {
@@ -1391,16 +1391,16 @@ XVECTOR<XSTRING*>* DIOATCMDS::GetAnswers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOATCMDS::SearchInAnswers(XCHAR* string, int timeout)
 * @brief      Search in answers
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-* @param[in]  timeout :
-*
-* @return     int :
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOATCMDS::SearchInAnswers(XCHAR* string, int timeout)
 {
@@ -1434,16 +1434,16 @@ int DIOATCMDS::SearchInAnswers(XCHAR* string, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOATCMDS::SearchInAnswers(XDWORD typecommand,int timeout)
 * @brief      Search in answers
 * @ingroup    DATAIO
-*
-* @param[in]  typecommand :
-* @param[in]  timeout :
-*
-* @return     int :
-*
+* 
+* @param[in]  typecommand : Typecommand value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOATCMDS::SearchInAnswers(XDWORD typecommand,int timeout)
 {
@@ -1460,16 +1460,16 @@ int DIOATCMDS::SearchInAnswers(XDWORD typecommand,int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::WaitToProcessAnswer(int timeout, int* index)
 * @brief      Wait to process answer
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-* @param[in]  index :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  timeout : Timeout value.
+* @param[in]  index : Index value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::WaitToProcessAnswer(int timeout, int* index)
 {
@@ -1511,15 +1511,15 @@ DIOATCMD_ERROR DIOATCMDS::WaitToProcessAnswer(int timeout, int* index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::WaitToOneAnswerMore(int timeout)
 * @brief      Wait to one answer more
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::WaitToOneAnswerMore(int timeout)
 {
@@ -1542,17 +1542,17 @@ DIOATCMD_ERROR DIOATCMDS::WaitToOneAnswerMore(int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOATCMD_ERROR DIOATCMDS::MakeSimpleCommand(XDWORD type,XCHAR* param,int timeout)
 * @brief      Make simple command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  param :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  param : Param pointer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::MakeSimpleCommand(XDWORD type,XCHAR* param,int timeout)
 {
@@ -1564,18 +1564,18 @@ DIOATCMD_ERROR DIOATCMDS::MakeSimpleCommand(XDWORD type,XCHAR* param,int timeout
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOATCMD_ERROR DIOATCMDS::MakeCommandWithSimpleAnswer(XDWORD type,XSTRING& answer,XCHAR* param,int timeout)
+* 
+* @fn         DIOATCMD_ERROR DIOATCMDS::MakeCommandWithSimpleAnswer(XDWORD type, XSTRING& answer, XCHAR* param, int timeout)
 * @brief      Make command with simple answer
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  answer :
-* @param[in]  param :
-* @param[in]  timeout :
-*
-* @return     DIOATCMD_ERROR :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  answer : Answer value.
+* @param[in]  param : Param pointer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     DIOATCMD_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOATCMD_ERROR DIOATCMDS::MakeCommandWithSimpleAnswer(XDWORD type, XSTRING& answer, XCHAR* param, int timeout)
 {
@@ -1599,13 +1599,13 @@ DIOATCMD_ERROR DIOATCMDS::MakeCommandWithSimpleAnswer(XDWORD type, XSTRING& answ
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOATCMDS::ThreadConnection(void* data)
+* 
+* @fn         void DIOATCMDS::ThreadConnection(void* param)
 * @brief      Thread connection
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOATCMDS::ThreadConnection(void* param)
 {
@@ -1660,15 +1660,15 @@ void DIOATCMDS::ThreadConnection(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOATCMDS::CheckUnsolicitedAnswer(XSTRING& answer)
 * @brief      Check unsolicited answer
 * @ingroup    DATAIO
-*
-* @param[in]  answer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  answer : Answer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOATCMDS::CheckUnsolicitedAnswer(XSTRING& answer)
 {
@@ -1738,12 +1738,12 @@ bool DIOATCMDS::CheckUnsolicitedAnswer(XSTRING& answer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOATCMDS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOATCMDS::Clean()
 {

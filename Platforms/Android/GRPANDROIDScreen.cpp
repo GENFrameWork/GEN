@@ -66,11 +66,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRPANDROIDSCREEN::GRPANDROIDSCREEN()
+* 
+* @fn         GRPANDROIDSCREEN::GRPANDROIDSCREEN(): GRPSCREEN()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPANDROIDSCREEN::GRPANDROIDSCREEN(): GRPSCREEN()
 {
@@ -89,12 +89,12 @@ GRPANDROIDSCREEN::GRPANDROIDSCREEN(): GRPSCREEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPANDROIDSCREEN::~GRPANDROIDSCREEN()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPANDROIDSCREEN::~GRPANDROIDSCREEN()
 {
@@ -104,15 +104,15 @@ GRPANDROIDSCREEN::~GRPANDROIDSCREEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPANDROIDSCREEN::Create(bool show)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  show :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  show : Show value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Create(bool show)
 {
@@ -121,13 +121,13 @@ bool GRPANDROIDSCREEN::Create(bool show)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPANDROIDSCREEN::Update()
 * @brief      Update
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Update()
 {
@@ -137,15 +137,15 @@ bool GRPANDROIDSCREEN::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPANDROIDSCREEN::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  canvas :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  canvas : Canvas object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Update(GRP2DCANVAS* canvas)
 {
@@ -232,37 +232,15 @@ bool GRPANDROIDSCREEN::Update(GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPANDROIDSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 * @brief      Present a transparent-style screen.
-*
-*             GRPSCREEN::UpdateViewports() routes transparent screens (the style
-*             GRPSCREENSTYLE_TRANSPARENT, used e.g. by UI_Message) to
-*             UpdateTransparent() instead of Update(). The base class
-*             GRPSCREEN::UpdateTransparent() returns false (does nothing), so
-*             without this override an Android transparent screen presented
-*             NOTHING — most visibly with GRP_OPENGL_ACTIVE, where the popup
-*             never appeared.
-*
-*             On Android there is no desktop window/compositor to composite a
-*             layered window against (unlike Windows' UpdateLayeredWindow): the
-*             activity owns a single surface and the canvas (RGBA, with the dialog
-*             opaque and the rest alpha=0) is simply presented onto it. So we
-*             present it through the normal path — exactly as the Linux X11 screen
-*             does. In the software build this posts the canvas via
-*             ANativeWindow_lock/unlockAndPost; in the OpenGL build it goes through
-*             the blitter. The dialog becomes visible either way.
-*
-*             NOTE: for the see-through-to-launcher effect (truly transparent
-*             background) the activity must additionally be translucent and the
-*             GL path must use an alpha surface; see the delivery notes. Making the
-*             popup VISIBLE (the reported bug) only needs this override.
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * @param[in]  canvas : canvas to present.
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 {
@@ -288,13 +266,13 @@ bool GRPANDROIDSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPANDROIDSCREEN::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Delete()
 {
@@ -314,16 +292,16 @@ bool GRPANDROIDSCREEN::Delete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPANDROIDSCREEN::Resize(int width, int height)
 * @brief      Resize
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::Resize(int width, int height)
 {
@@ -332,13 +310,13 @@ bool GRPANDROIDSCREEN::Resize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* GRPANDROIDSCREEN::GetHandle()
 * @brief      Get handle
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPANDROIDSCREEN::GetHandle()
 {
@@ -347,13 +325,13 @@ void* GRPANDROIDSCREEN::GetHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         ANativeWindow* GRPANDROIDSCREEN::GetAndroidHandle()
 * @brief      Get android handle
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     ANativeWindow* :
-*
+* 
+* @return     ANativeWindow* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 ANativeWindow* GRPANDROIDSCREEN::GetAndroidHandle()
 {
@@ -362,13 +340,13 @@ ANativeWindow* GRPANDROIDSCREEN::GetAndroidHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPANDROIDSCREEN::SetAndroidHandle(ANativeWindow* anativehandle)
 * @brief      Set android handle
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  anativehandle :
-*
+* 
+* @param[in]  anativehandle : Anativehandle pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPANDROIDSCREEN::SetAndroidHandle(ANativeWindow* anativehandle)
 {
@@ -377,29 +355,18 @@ void GRPANDROIDSCREEN::SetAndroidHandle(ANativeWindow* anativehandle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPANDROIDSCREEN::MapWindowToCanvas(float windowx, float windowy, float& canvasx, float& canvasy)
-* @brief      Convert a touch/pointer position expressed in NATIVE-WINDOW pixels (the space Android reports
-*             in AMotionEvent_getX/getY) into CANVAS pixels (the design-resolution space the UI works in).
-*
-*             On Android the EGL surface is the full device window (e.g. 2712x1220) while the canvas keeps the
-*             application design resolution (e.g. 1024x768). The blitter (GRPBLITGLES) draws the canvas centered
-*             inside the surface with letterbox/pillarbox bars, so a raw touch coordinate does NOT match the
-*             canvas coordinate. This inverts exactly that mapping (and the presentation rotation) so the cursor
-*             lands where the user actually pressed. Returns canvasx/canvasy with TOP-LEFT origin (the caller is
-*             responsible for the bottom-left flip, like every other platform).
-*
-*             Note: on Windows/Linux the window equals the canvas, so this path is never used there.
-*
+* @brief      Convert a touch/pointer position expressed in NATIVE-WINDOW pixels (the space Android reports in AMotionEvent_getX/getY) into CANVAS pixels (the design-resolution space the UI works in).
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  windowx  : pointer X in native-window pixels.
-* @param[in]  windowy  : pointer Y in native-window pixels.
-* @param[out] canvasx  : resulting X in canvas pixels (top-left origin).
-* @param[out] canvasy  : resulting Y in canvas pixels (top-left origin).
-*
-* @return     bool : true if the mapping could be computed (false -> caller should keep the raw value).
-*
+* 
+* @param[in]  windowx : pointer X in native-window pixels.
+* @param[in]  windowy : pointer Y in native-window pixels.
+* @param[in]  canvasx : resulting X in canvas pixels (top-left origin).
+* @param[in]  canvasy : resulting Y in canvas pixels (top-left origin).
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDSCREEN::MapWindowToCanvas(float windowx, float windowy, float& canvasx, float& canvasy)
 {
@@ -472,13 +439,13 @@ bool GRPANDROIDSCREEN::MapWindowToCanvas(float windowx, float windowy, float& ca
 
 #ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPANDROIDBLITGLES* GRPANDROIDSCREEN::GetBlitGLES()
 * @brief      Get OpenGL ES blitter (only present when GRP_OPENGL_ACTIVE is defined)
 * @ingroup    PLATFORM_ANDROID
-*
-* @return     GRPANDROIDBLITGLES* :
-*
+* 
+* @return     GRPANDROIDBLITGLES* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPANDROIDBLITGLES* GRPANDROIDSCREEN::GetBlitGLES()
 {
@@ -488,12 +455,12 @@ GRPANDROIDBLITGLES* GRPANDROIDSCREEN::GetBlitGLES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPANDROIDSCREEN::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPANDROIDSCREEN::Clean()
 {

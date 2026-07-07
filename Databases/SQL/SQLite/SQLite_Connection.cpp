@@ -65,13 +65,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SQLITE_CONNECTION::SQLITE_CONNECTION(DB_SQL_DATABASE* database)
+* 
+* @fn         SQLITE_CONNECTION::SQLITE_CONNECTION(DB_SQL_DATABASE* database) : DB_SQL_CONNECTION(database)
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  DB_SQL_DATABASE* :
-*
+* 
+* @param[in]  database : Database pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SQLITE_CONNECTION::SQLITE_CONNECTION(DB_SQL_DATABASE* database) : DB_SQL_CONNECTION(database)
 {
@@ -80,12 +80,12 @@ SQLITE_CONNECTION::SQLITE_CONNECTION(DB_SQL_DATABASE* database) : DB_SQL_CONNECT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SQLITE_CONNECTION::~SQLITE_CONNECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SQLITE_CONNECTION::~SQLITE_CONNECTION()
 {
@@ -94,13 +94,13 @@ SQLITE_CONNECTION::~SQLITE_CONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_CONNECTION::Connect()
 * @brief      Connect
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_CONNECTION::Connect()
 {
@@ -164,13 +164,13 @@ bool SQLITE_CONNECTION::Connect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_CONNECTION::Disconnect()
 * @brief      Disconnect
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_CONNECTION::Disconnect()
 {
@@ -185,12 +185,12 @@ bool SQLITE_CONNECTION::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SQLITE_CONNECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SQLITE_CONNECTION::Clean()
 {

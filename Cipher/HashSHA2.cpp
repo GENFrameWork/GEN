@@ -71,6 +71,18 @@
 #define SHA512_F3(x) (ROTR(x,  1) ^ ROTR(x,  8) ^ SHFR(x,  7))
 #define SHA512_F4(x) (ROTR(x, 19) ^ ROTR(x, 61) ^ SHFR(x,  6))
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define UNPACK32(x, str)
+* @brief      UNPACK32
+* @ingroup    CIPHER
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  str : String to use.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define UNPACK32(x, str)    {                                             \
                                 *((str) + 3) = (XBYTE) ((x)      );       \
                                 *((str) + 2) = (XBYTE) ((x) >>  8);       \
@@ -78,6 +90,18 @@
                                 *((str) + 0) = (XBYTE) ((x) >> 24);       \
                             }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define PACK32(str, x)
+* @brief      PACK32
+* @ingroup    CIPHER
+* 
+* @param[in]  str : String to use.
+* @param[in]  x : X coordinate.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define PACK32(str, x)      {                                             \
                                 *(x) =   ((XDWORD) *((str) + 3)      )    \
                                        | ((XDWORD) *((str) + 2) <<  8)    \
@@ -85,6 +109,18 @@
                                        | ((XDWORD) *((str) + 0) << 24);   \
                             }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define UNPACK64(x, str)
+* @brief      UNPACK64
+* @ingroup    CIPHER
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  str : String to use.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define UNPACK64(x, str)    {                                             \
                                 *((str) + 7) = (XBYTE) ((x)      );       \
                                 *((str) + 6) = (XBYTE) ((x) >>  8);       \
@@ -96,6 +132,18 @@
                                 *((str) + 0) = (XBYTE) ((x) >> 56);       \
                             }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define PACK64(str, x)
+* @brief      PACK64
+* @ingroup    CIPHER
+* 
+* @param[in]  str : String to use.
+* @param[in]  x : X coordinate.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define PACK64(str, x)      {                                             \
                                 *(x) =   ((XQWORD) *((str) + 7)      )    \
                                        | ((XQWORD) *((str) + 6) <<  8)    \
@@ -107,6 +155,17 @@
                                        | ((XQWORD) *((str) + 0) << 56);   \
                             }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define SHA256_SCR(i)
+* @brief      SHA256 SCR
+* @ingroup    CIPHER
+* 
+* @param[in]  i : I value.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 /* Macros used for loops unrolling */
 
 #define SHA256_SCR(i)       {                                             \
@@ -114,11 +173,41 @@
                                       + SHA256_F3(w[i - 15]) + w[i - 16]; \
                             }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define SHA512_SCR(i)
+* @brief      SHA512 SCR
+* @ingroup    CIPHER
+* 
+* @param[in]  i : I value.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define SHA512_SCR(i)       {                                             \
                                 w[i] =  SHA512_F4(w[i -  2]) + w[i -  7]  \
                                       + SHA512_F3(w[i - 15]) + w[i - 16]; \
                             }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define SHA256_EXP(a, b, c, d, e, f, g, h, j)
+* @brief      SHA256 EXP
+* @ingroup    CIPHER
+* 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* @param[in]  e : E value.
+* @param[in]  f : F value.
+* @param[in]  g : G value.
+* @param[in]  h : H value.
+* @param[in]  j : J value.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define SHA256_EXP(a, b, c, d, e, f, g, h, j) {                                                           \
                                                   t1 = wv[h] + SHA256_F2(wv[e]) + CH(wv[e], wv[f], wv[g]) \
                                                        + sha256_k[j] + w[j];                              \
@@ -127,6 +216,25 @@
                                                   wv[h] = t1 + t2;                                        \
                                               }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define SHA512_EXP(a, b, c, d, e, f, g ,h, j)
+* @brief      SHA512 EXP
+* @ingroup    CIPHER
+* 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* @param[in]  e : E value.
+* @param[in]  f : F value.
+* @param[in]  g : G value.
+* @param[in]  h : H value.
+* @param[in]  j : J value.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define SHA512_EXP(a, b, c, d, e, f, g ,h, j) {                                                           \
                                                   t1 = wv[h] + SHA512_F2(wv[e]) + CH(wv[e], wv[f], wv[g]) \
                                                        + sha512_k[j] + w[j];                              \
@@ -222,11 +330,11 @@ XDWORD HASHSHA2::Sha256_k[64] =   { 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5db
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         HASHSHA2::HASHSHA2(HASHSHA2TYPE type)
+* @fn         HASHSHA2::HASHSHA2(HASHSHA2TYPE type) : HASH()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
-* @param[in]  type : 
+* @param[in]  HASH : HASH value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 HASHSHA2::HASHSHA2(HASHSHA2TYPE type) : HASH()
@@ -263,13 +371,13 @@ HASHSHA2::~HASHSHA2()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASHSHA2::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHSHA2::Do(XBYTE* input, XQWORD size)
@@ -311,7 +419,7 @@ bool HASHSHA2::Do(XBYTE* input, XQWORD size)
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASHSHA2::GetDefaultSize()
@@ -334,9 +442,9 @@ int HASHSHA2::GetDefaultSize()
 * @brief      Sha2256 transf
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  input : 
-* @param[in]  blocknb : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  input : Input pointer to use.
+* @param[in]  blocknb : Blocknb value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_256_Transf(HASHSHA2_256_CTX* ctx, XBYTE* input, XDWORD blocknb)
@@ -397,9 +505,9 @@ void HASHSHA2::Sha2_256_Transf(HASHSHA2_256_CTX* ctx, XBYTE* input, XDWORD block
 * @brief      Sha2256
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
-* @param[in]  digest : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  digest : Digest pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_256(XBYTE* input, XDWORD size, XBYTE* digest)
@@ -418,7 +526,7 @@ void HASHSHA2::Sha2_256(XBYTE* input, XDWORD size, XBYTE* digest)
 * @brief      Sha2256 ini
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
+* @param[in]  ctx : Ctx pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_256_Ini(HASHSHA2_256_CTX* ctx)
@@ -441,9 +549,9 @@ void HASHSHA2::Sha2_256_Ini(HASHSHA2_256_CTX* ctx)
 * @brief      Sha2256 update
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_256_Update(HASHSHA2_256_CTX* ctx, XBYTE* input, XDWORD size)
@@ -486,8 +594,8 @@ void HASHSHA2::Sha2_256_Update(HASHSHA2_256_CTX* ctx, XBYTE* input, XDWORD size)
 * @brief      Sha2256 end
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  digest : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  digest : Digest pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_256_End(HASHSHA2_256_CTX* ctx, XBYTE* digest)
@@ -522,9 +630,9 @@ void HASHSHA2::Sha2_256_End(HASHSHA2_256_CTX* ctx, XBYTE* digest)
 * @brief      Sha2512 transf
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  input : 
-* @param[in]  blocknb : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  input : Input pointer to use.
+* @param[in]  blocknb : Blocknb value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_512_Transf(HASHSHA2_512_CTX* ctx, XBYTE* input, XDWORD blocknb)
@@ -585,9 +693,9 @@ void HASHSHA2::Sha2_512_Transf(HASHSHA2_512_CTX* ctx, XBYTE* input, XDWORD block
 * @brief      Sha2512
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
-* @param[in]  digest : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  digest : Digest pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_512(XBYTE* input, XDWORD size, XBYTE* digest)
@@ -606,7 +714,7 @@ void HASHSHA2::Sha2_512(XBYTE* input, XDWORD size, XBYTE* digest)
 * @brief      Sha2512 ini
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
+* @param[in]  ctx : Ctx pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_512_Ini(HASHSHA2_512_CTX* ctx)
@@ -629,9 +737,9 @@ void HASHSHA2::Sha2_512_Ini(HASHSHA2_512_CTX* ctx)
 * @brief      Sha2512 update
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_512_Update(HASHSHA2_512_CTX* ctx, XBYTE* input, XDWORD size)
@@ -674,8 +782,8 @@ void HASHSHA2::Sha2_512_Update(HASHSHA2_512_CTX* ctx, XBYTE* input, XDWORD size)
 * @brief      Sha2512 end
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  digest : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  digest : Digest pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_512_End(HASHSHA2_512_CTX* ctx, XBYTE* digest)
@@ -710,9 +818,9 @@ void HASHSHA2::Sha2_512_End(HASHSHA2_512_CTX* ctx, XBYTE* digest)
 * @brief      Sha2384
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
-* @param[in]  digest : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  digest : Digest pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_384(XBYTE* input, XDWORD size, XBYTE* digest)
@@ -731,7 +839,7 @@ void HASHSHA2::Sha2_384(XBYTE* input, XDWORD size, XBYTE* digest)
 * @brief      Sha2384 ini
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
+* @param[in]  ctx : Ctx pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_384_Ini(HASHSHA2_384_CTX* ctx)
@@ -754,9 +862,9 @@ void HASHSHA2::Sha2_384_Ini(HASHSHA2_384_CTX* ctx)
 * @brief      Sha2384 update
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  input : 
-* @param[in]  len : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  input : Input pointer to use.
+* @param[in]  len : Len value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_384_Update(HASHSHA2_384_CTX* ctx, XBYTE* input, XDWORD len)
@@ -799,8 +907,8 @@ void HASHSHA2::Sha2_384_Update(HASHSHA2_384_CTX* ctx, XBYTE* input, XDWORD len)
 * @brief      Sha2384 end
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  digest : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  digest : Digest pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_384_End(HASHSHA2_384_CTX* ctx, XBYTE* digest)
@@ -835,9 +943,9 @@ void HASHSHA2::Sha2_384_End(HASHSHA2_384_CTX* ctx, XBYTE* digest)
 * @brief      Sha2224
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  len : 
-* @param[in]  digest : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  len : Len value.
+* @param[in]  digest : Digest pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_224(XBYTE* input, XDWORD len, XBYTE* digest)
@@ -856,7 +964,7 @@ void HASHSHA2::Sha2_224(XBYTE* input, XDWORD len, XBYTE* digest)
 * @brief      Sha2224 ini
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
+* @param[in]  ctx : Ctx pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_224_Ini(HASHSHA2_224_CTX* ctx)
@@ -879,9 +987,9 @@ void HASHSHA2::Sha2_224_Ini(HASHSHA2_224_CTX* ctx)
 * @brief      Sha2224 update
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  input : 
-* @param[in]  len : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  input : Input pointer to use.
+* @param[in]  len : Len value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_224_Update(HASHSHA2_224_CTX* ctx, XBYTE* input, XDWORD len)
@@ -926,8 +1034,8 @@ void HASHSHA2::Sha2_224_Update(HASHSHA2_224_CTX* ctx, XBYTE* input, XDWORD len)
 * @brief      Sha2224 end
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  digest : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  digest : Digest pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA2::Sha2_224_End(HASHSHA2_224_CTX* ctx, XBYTE* digest)

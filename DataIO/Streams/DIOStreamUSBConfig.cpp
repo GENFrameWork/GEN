@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMUSBCONFIG::DIOSTREAMUSBCONFIG()
+* 
+* @fn         DIOSTREAMUSBCONFIG::DIOSTREAMUSBCONFIG() : DIOSTREAMCONFIG()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUSBCONFIG::DIOSTREAMUSBCONFIG() : DIOSTREAMCONFIG()
 {
@@ -70,12 +70,12 @@ DIOSTREAMUSBCONFIG::DIOSTREAMUSBCONFIG() : DIOSTREAMCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUSBCONFIG::~DIOSTREAMUSBCONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUSBCONFIG::~DIOSTREAMUSBCONFIG()
 {
@@ -84,13 +84,13 @@ DIOSTREAMUSBCONFIG::~DIOSTREAMUSBCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMUSBCONFIG::GetLocation()
 * @brief      Get location
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMUSBCONFIG::GetLocation()
 {
@@ -99,13 +99,13 @@ XSTRING* DIOSTREAMUSBCONFIG::GetLocation()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMUSBCONFIG::GetVendorID()
 * @brief      Get vendor ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMUSBCONFIG::GetVendorID()
 {
@@ -114,13 +114,13 @@ XDWORD DIOSTREAMUSBCONFIG::GetVendorID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUSBCONFIG::SetVendorID(XDWORD vendorID)
 * @brief      Set vendor ID
 * @ingroup    DATAIO
-*
-* @param[in]  vendorID :
-*
+* 
+* @param[in]  vendorID : Vendor ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUSBCONFIG::SetVendorID(XDWORD vendorID)
 {
@@ -129,13 +129,13 @@ void DIOSTREAMUSBCONFIG::SetVendorID(XDWORD vendorID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMUSBCONFIG::GetProductID()
 * @brief      Get product ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMUSBCONFIG::GetProductID()
 {
@@ -144,13 +144,13 @@ XDWORD DIOSTREAMUSBCONFIG::GetProductID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUSBCONFIG::SetProductID(XDWORD productID)
 * @brief      Set product ID
 * @ingroup    DATAIO
-*
-* @param[in]  productID :
-*
+* 
+* @param[in]  productID : Product ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUSBCONFIG::SetProductID(XDWORD productID)
 {
@@ -159,13 +159,13 @@ void DIOSTREAMUSBCONFIG::SetProductID(XDWORD productID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSBCLASS DIOSTREAMUSBCONFIG::GetClass()
 * @brief      Get class
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMDEVICEUSBCLASS :
-*
+* 
+* @return     DIOSTREAMDEVICEUSBCLASS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSBCLASS DIOSTREAMUSBCONFIG::GetClass()
 {
@@ -174,13 +174,13 @@ DIOSTREAMDEVICEUSBCLASS DIOSTREAMUSBCONFIG::GetClass()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUSBCONFIG::SetClass(DIOSTREAMDEVICEUSBCLASS classdev)
 * @brief      Set class
 * @ingroup    DATAIO
-*
-* @param[in]  classdev :
-*
+* 
+* @param[in]  classdev : Classdev value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUSBCONFIG::SetClass(DIOSTREAMDEVICEUSBCLASS classdev)
 {
@@ -189,13 +189,13 @@ void DIOSTREAMUSBCONFIG::SetClass(DIOSTREAMDEVICEUSBCLASS classdev)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMUSBCONFIG::GetResource()
 * @brief      Get resource
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMUSBCONFIG::GetResource()
 {
@@ -204,15 +204,15 @@ XSTRING* DIOSTREAMUSBCONFIG::GetResource()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBCONFIG::GetToString(XSTRING* string)
 * @brief      Get to string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBCONFIG::GetToString(XSTRING* string)
 {
@@ -237,15 +237,15 @@ bool DIOSTREAMUSBCONFIG::GetToString(XSTRING* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBCONFIG::GetToString(XSTRING& string)
 * @brief      Get to string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBCONFIG::GetToString(XSTRING& string)
 {
@@ -254,15 +254,15 @@ bool DIOSTREAMUSBCONFIG::GetToString(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBCONFIG::SetFromString(XCHAR* string)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBCONFIG::SetFromString(XCHAR* string)
 {
@@ -300,15 +300,15 @@ bool DIOSTREAMUSBCONFIG::SetFromString(XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBCONFIG::SetFromString(XSTRING* string)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBCONFIG::SetFromString(XSTRING* string)
 {
@@ -319,15 +319,15 @@ bool DIOSTREAMUSBCONFIG::SetFromString(XSTRING* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBCONFIG::SetFromString(XSTRING& string)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBCONFIG::SetFromString(XSTRING& string)
 {
@@ -336,12 +336,12 @@ bool DIOSTREAMUSBCONFIG::SetFromString(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUSBCONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUSBCONFIG::Clean()
 {

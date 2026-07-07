@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOALERTSUDPSERVER::DIOALERTSUDPSERVER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOALERTSUDPSERVER::DIOALERTSUDPSERVER()
 {
@@ -74,12 +74,12 @@ DIOALERTSUDPSERVER::DIOALERTSUDPSERVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOALERTSUDPSERVER::~DIOALERTSUDPSERVER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOALERTSUDPSERVER::~DIOALERTSUDPSERVER()
 {
@@ -90,16 +90,16 @@ DIOALERTSUDPSERVER::~DIOALERTSUDPSERVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOALERTSUDPSERVER::Ini(XCHAR* URL, int port)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  URL :
-* @param[in]  port :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  URL : URL to use.
+* @param[in]  port : Port number to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOALERTSUDPSERVER::Ini(XCHAR* URL, int port)
 {
@@ -133,13 +133,13 @@ bool DIOALERTSUDPSERVER::Ini(XCHAR* URL, int port)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOALERTSUDPSERVER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOALERTSUDPSERVER::End()
 {
@@ -177,13 +177,13 @@ bool DIOALERTSUDPSERVER::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOALERTSUDPSERVER::GetNAlerts()
 * @brief      Get N alerts
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOALERTSUDPSERVER::GetNAlerts()
 {
@@ -198,15 +198,15 @@ int DIOALERTSUDPSERVER::GetNAlerts()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOALERT* DIOALERTSUDPSERVER::GetAlertByIndex(int index)
 * @brief      Get alert by index
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     DIOALERT* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     DIOALERT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOALERT* DIOALERTSUDPSERVER::GetAlertByIndex(int index)
 {
@@ -221,15 +221,15 @@ DIOALERT* DIOALERTSUDPSERVER::GetAlertByIndex(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOALERT* DIOALERTSUDPSERVER::GetAlertByID(XDWORD ID)
 * @brief      Get alert by ID
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return     DIOALERT* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     DIOALERT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOALERT* DIOALERTSUDPSERVER::GetAlertByID(XDWORD ID)
 {
@@ -253,15 +253,15 @@ DIOALERT* DIOALERTSUDPSERVER::GetAlertByID(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOALERTSUDPSERVER::DeleteAlertByIndex(int index)
 * @brief      Delete alert by index
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOALERTSUDPSERVER::DeleteAlertByIndex(int index)
 {
@@ -283,15 +283,15 @@ bool DIOALERTSUDPSERVER::DeleteAlertByIndex(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOALERTSUDPSERVER::DeleteAlertByID(XDWORD ID)
 * @brief      Delete alert by ID
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOALERTSUDPSERVER::DeleteAlertByID(XDWORD ID)
 {
@@ -322,13 +322,13 @@ bool DIOALERTSUDPSERVER::DeleteAlertByID(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOALERTSUDPSERVER::DeleteAllAlerts()
 * @brief      Delete all alerts
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOALERTSUDPSERVER::DeleteAllAlerts()
 {
@@ -346,13 +346,13 @@ bool DIOALERTSUDPSERVER::DeleteAllAlerts()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOALERTSUDPSERVER::ReceivedEvents()
 * @brief      Received events
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOALERTSUDPSERVER::ReceivedEvents()
 {
@@ -423,13 +423,13 @@ bool DIOALERTSUDPSERVER::ReceivedEvents()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOALERTSUDPSERVER::ThreadReadFunction(void* param)
 * @brief      Thread read function
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOALERTSUDPSERVER::ThreadReadFunction(void* param)
 {
@@ -441,12 +441,12 @@ void DIOALERTSUDPSERVER::ThreadReadFunction(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOALERTSUDPSERVER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOALERTSUDPSERVER::Clean()
 {

@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DREBUILDAREA::GRP2DREBUILDAREA()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DREBUILDAREA::GRP2DREBUILDAREA()
 {
@@ -70,12 +70,12 @@ GRP2DREBUILDAREA::GRP2DREBUILDAREA()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DREBUILDAREA::~GRP2DREBUILDAREA()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DREBUILDAREA::~GRP2DREBUILDAREA()
 {
@@ -90,13 +90,13 @@ GRP2DREBUILDAREA::~GRP2DREBUILDAREA()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRP2DREBUILDAREA::GetXPos()
 * @brief      Get X pos
 * @ingroup    GRAPHIC
-*
-* @return     double :
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DREBUILDAREA::GetXPos()
 {
@@ -105,13 +105,13 @@ double GRP2DREBUILDAREA::GetXPos()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRP2DREBUILDAREA::GetYPos()
 * @brief      Get Y pos
 * @ingroup    GRAPHIC
-*
-* @return     double :
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DREBUILDAREA::GetYPos()
 {
@@ -120,13 +120,13 @@ double GRP2DREBUILDAREA::GetYPos()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DREBUILDAREA::SetXPos(double xpos)
 * @brief      Set X pos
 * @ingroup    GRAPHIC
-*
-* @param[in]  xpos :
-*
+* 
+* @param[in]  xpos : Xpos value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DREBUILDAREA::SetXPos(double xpos)
 {
@@ -135,13 +135,13 @@ void GRP2DREBUILDAREA::SetXPos(double xpos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DREBUILDAREA::SetYPos(double ypos)
 * @brief      Set Y pos
 * @ingroup    GRAPHIC
-*
-* @param[in]  ypos :
-*
+* 
+* @param[in]  ypos : Ypos value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DREBUILDAREA::SetYPos(double ypos)
 {
@@ -150,13 +150,13 @@ void GRP2DREBUILDAREA::SetYPos(double ypos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRP2DREBUILDAREA::GetBitmap()
 * @brief      Get bitmap
 * @ingroup    GRAPHIC
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRP2DREBUILDAREA::GetBitmap()
 {
@@ -165,13 +165,13 @@ GRPBITMAP* GRP2DREBUILDAREA::GetBitmap()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DREBUILDAREA::SetBitmap(GRPBITMAP* bitmap)
 * @brief      Set bitmap
 * @ingroup    GRAPHIC
-*
-* @param[in]  bitmap :
-*
+* 
+* @param[in]  bitmap : Bitmap pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DREBUILDAREA::SetBitmap(GRPBITMAP* bitmap)
 {
@@ -184,10 +184,10 @@ void GRP2DREBUILDAREA::SetBitmap(GRPBITMAP* bitmap)
 * @fn         void* GRP2DREBUILDAREA::GetExtraData()
 * @brief      Get extra data
 * @ingroup    GRAPHIC
-*
-* @return     void* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void* GRP2DREBUILDAREA::GetExtraData()
 {
   return extra_data;
@@ -199,10 +199,10 @@ void* GRP2DREBUILDAREA::GetExtraData()
 * @fn         void GRP2DREBUILDAREA::SetExtraData(void* extra_data)
 * @brief      Set extra data
 * @ingroup    GRAPHIC
-*
-* @param[in]  extra_data : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  extra_data : Extra data pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DREBUILDAREA::SetExtraData(void* extra_data)
 {
   this->extra_data = extra_data;
@@ -210,12 +210,12 @@ void GRP2DREBUILDAREA::SetExtraData(void* extra_data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DREBUILDAREA::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DREBUILDAREA::Clean()
 {
@@ -233,11 +233,11 @@ void GRP2DREBUILDAREA::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DREBUILDAREAS::GRP2DREBUILDAREAS()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DREBUILDAREAS::GRP2DREBUILDAREAS()
 {
@@ -246,12 +246,12 @@ GRP2DREBUILDAREAS::GRP2DREBUILDAREAS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DREBUILDAREAS::~GRP2DREBUILDAREAS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DREBUILDAREAS::~GRP2DREBUILDAREAS()
 {
@@ -262,13 +262,13 @@ GRP2DREBUILDAREAS::~GRP2DREBUILDAREAS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD GRP2DREBUILDAREAS::GetExcessEdge()
 * @brief      Get excess edge
 * @ingroup    GRAPHIC
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRP2DREBUILDAREAS::GetExcessEdge()
 {
@@ -277,15 +277,15 @@ XDWORD GRP2DREBUILDAREAS::GetExcessEdge()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DREBUILDAREAS::SetExcessEdge(XDWORD excessedge)
 * @brief      Set excess edge
 * @ingroup    GRAPHIC
-*
-* @param[in]  excessedge :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  excessedge : Excessedge value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DREBUILDAREAS::SetExcessEdge(XDWORD excessedge)
 {
@@ -295,13 +295,13 @@ bool GRP2DREBUILDAREAS::SetExcessEdge(XDWORD excessedge)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<GRP2DREBUILDAREA*>* GRP2DREBUILDAREAS::GetRebuildAreas()
 * @brief      Get rebuild areas
 * @ingroup    GRAPHIC
-*
-* @return     XVECTOR<GRP2DREBUILDAREA*>* :
-*
+* 
+* @return     XVECTOR<GRP2DREBUILDAREA*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRP2DREBUILDAREA*>* GRP2DREBUILDAREAS::GetRebuildAreas()
 {
@@ -310,13 +310,13 @@ XVECTOR<GRP2DREBUILDAREA*>* GRP2DREBUILDAREAS::GetRebuildAreas()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DREBUILDAREAS::RebuildAllAreas()
 * @brief      Rebuild all areas
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DREBUILDAREAS::RebuildAllAreas()
 {
@@ -331,13 +331,13 @@ bool GRP2DREBUILDAREAS::RebuildAllAreas()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DREBUILDAREAS::DeleteAllRebuildAreas()
 * @brief      Delete all rebuild areas
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DREBUILDAREAS::DeleteAllRebuildAreas()
 {
@@ -356,13 +356,13 @@ bool GRP2DREBUILDAREAS::DeleteAllRebuildAreas()
 * @brief      Create rebuild area
 * @ingroup    GRAPHIC
 * 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  width : 
-* @param[in]  height : 
-* @param[in]  extra_data : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* @param[in]  extra_data : Extra data pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DREBUILDAREAS::CreateRebuildArea(double x, double y, double width, double height, void* extra_data)
@@ -395,18 +395,18 @@ bool GRP2DREBUILDAREAS::CreateRebuildArea(double x, double y, double width, doub
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRP2DREBUILDAREAS::GetBitmap(double x, double y, double width, double height)
 * @brief      Get bitmap
 * @ingroup    GRAPHIC
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRP2DREBUILDAREAS::GetBitmap(double x, double y, double width, double height)
 {
@@ -415,15 +415,15 @@ GRPBITMAP* GRP2DREBUILDAREAS::GetBitmap(double x, double y, double width, double
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DREBUILDAREAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP* bitmap)
 * @brief      Put bitmap no alpha
 * @ingroup    GRAPHIC
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  bitmap :
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  bitmap : Bitmap pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DREBUILDAREAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP* bitmap)
 {
@@ -432,12 +432,12 @@ void GRP2DREBUILDAREAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP* bitmap)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DREBUILDAREAS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DREBUILDAREAS::Clean()
 {

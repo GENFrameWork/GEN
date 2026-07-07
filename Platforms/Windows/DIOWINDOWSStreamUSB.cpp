@@ -63,7 +63,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMUSB::DIOWINDOWSSTREAMUSB()
+* @fn         DIOWINDOWSSTREAMUSB::DIOWINDOWSSTREAMUSB() : DIOSTREAMUSB() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -124,7 +124,7 @@ DIOWINDOWSSTREAMUSB::~DIOWINDOWSSTREAMUSB()
 * @brief      Get status
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     DIOSTREAMSTATUS : 
+* @return     DIOSTREAMSTATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOWINDOWSSTREAMUSB::GetStatus()
@@ -142,7 +142,7 @@ DIOSTREAMSTATUS DIOWINDOWSSTREAMUSB::GetStatus()
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUSB::Open()
@@ -188,7 +188,7 @@ bool DIOWINDOWSSTREAMUSB::Open()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUSB::Close()
@@ -214,7 +214,7 @@ bool DIOWINDOWSSTREAMUSB::Close()
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUSB::CleanBuffers()
@@ -231,7 +231,7 @@ bool DIOWINDOWSSTREAMUSB::CleanBuffers()
 * @brief      Thread connection
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMUSB::ThreadConnection(void* data)
@@ -327,10 +327,10 @@ void DIOWINDOWSSTREAMUSB::ThreadConnection(void* data)
 * @brief      Read buffer
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWINDOWSSTREAMUSB::ReadBuffer(XBYTE* buffer,XDWORD size)
@@ -355,10 +355,10 @@ XDWORD DIOWINDOWSSTREAMUSB::ReadBuffer(XBYTE* buffer,XDWORD size)
 * @brief      Write buffer
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWINDOWSSTREAMUSB::WriteBuffer(XBYTE* buffer, XDWORD size)

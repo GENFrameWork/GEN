@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSUBJECT::XSUBJECT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSUBJECT::XSUBJECT()
 {
@@ -68,12 +68,12 @@ XSUBJECT::XSUBJECT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSUBJECT::~XSUBJECT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSUBJECT::~XSUBJECT()
 {
@@ -82,15 +82,15 @@ XSUBJECT::~XSUBJECT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSUBJECT::RegisterEvent(XDWORD type)
 * @brief      Register event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSUBJECT::RegisterEvent(XDWORD type)
 {
@@ -99,15 +99,15 @@ bool XSUBJECT::RegisterEvent(XDWORD type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSUBJECT::DeRegisterEvent(XDWORD type)
 * @brief      De register event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSUBJECT::DeRegisterEvent(XDWORD type)
 {
@@ -116,13 +116,13 @@ bool XSUBJECT::DeRegisterEvent(XDWORD type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSUBJECT::DeRegisterAllEvents()
 * @brief      De register all events
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSUBJECT::DeRegisterAllEvents()
 {
@@ -131,15 +131,15 @@ bool XSUBJECT::DeRegisterAllEvents()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSUBJECT::PostEvent(XEVENT* event)
 * @brief      Post event
 * @ingroup    XUTILS
-*
-* @param[in]  event :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  event : Event to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSUBJECT::PostEvent(XEVENT* event)
 {
@@ -148,16 +148,16 @@ bool XSUBJECT::PostEvent(XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSUBJECT::PostEvent(XEVENT* event, XSUBJECT* xsubject)
 * @brief      Post event
 * @ingroup    XUTILS
-*
-* @param[in]  event :
-* @param[in]  xsubject :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  event : Event to process.
+* @param[in]  xsubject : Xsubject pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSUBJECT::PostEvent(XEVENT* event, XSUBJECT* xsubject)
 {
@@ -166,12 +166,12 @@ bool XSUBJECT::PostEvent(XEVENT* event, XSUBJECT* xsubject)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSUBJECT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSUBJECT::Clean()
 {

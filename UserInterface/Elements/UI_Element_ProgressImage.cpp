@@ -57,8 +57,8 @@
 * @fn         UI_ELEMENT_PROGRESS_IMAGE::UI_ELEMENT_PROGRESS_IMAGE()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_PROGRESS_IMAGE::UI_ELEMENT_PROGRESS_IMAGE()
 {
   Clean();
@@ -74,8 +74,8 @@ UI_ELEMENT_PROGRESS_IMAGE::UI_ELEMENT_PROGRESS_IMAGE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_PROGRESS_IMAGE::~UI_ELEMENT_PROGRESS_IMAGE()
 {
   // imageempty / imagefull are owned by the animation/bitmap cache, not by this element: do not delete.
@@ -89,10 +89,10 @@ UI_ELEMENT_PROGRESS_IMAGE::~UI_ELEMENT_PROGRESS_IMAGE()
 * @fn         GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageEmpty()
 * @brief      Get the empty (0%) graphic
 * @ingroup    USERINTERFACE
-*
-* @return     GRPBITMAP* : the empty graphic (cache-owned), or NULL
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageEmpty()
 {
   return imageempty;
@@ -104,10 +104,10 @@ GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageEmpty()
 * @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetImageEmpty(GRPBITMAP* image)
 * @brief      Set the empty (0%) graphic (pointer is cache-owned, not copied nor deleted by this element)
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  image : the empty graphic
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_IMAGE::SetImageEmpty(GRPBITMAP* image)
 {
   this->imageempty = image;
@@ -119,10 +119,10 @@ void UI_ELEMENT_PROGRESS_IMAGE::SetImageEmpty(GRPBITMAP* image)
 * @fn         GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageFull()
 * @brief      Get the full (100%) graphic
 * @ingroup    USERINTERFACE
-*
-* @return     GRPBITMAP* : the full graphic (cache-owned), or NULL
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageFull()
 {
   return imagefull;
@@ -134,10 +134,10 @@ GRPBITMAP* UI_ELEMENT_PROGRESS_IMAGE::GetImageFull()
 * @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetImageFull(GRPBITMAP* image)
 * @brief      Set the full (100%) graphic (pointer is cache-owned, not copied nor deleted by this element)
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  image : the full graphic
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_IMAGE::SetImageFull(GRPBITMAP* image)
 {
   this->imagefull = image;
@@ -150,7 +150,7 @@ void UI_ELEMENT_PROGRESS_IMAGE::SetImageFull(GRPBITMAP* image)
 * @brief      get offset start
 * @ingroup    USERINTERFACE
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT_PROGRESS_IMAGE::GetOffsetStart()
@@ -165,7 +165,7 @@ double UI_ELEMENT_PROGRESS_IMAGE::GetOffsetStart()
 * @brief      set offset start
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  offsetstart : 
+* @param[in]  offsetstart : Offsetstart value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_IMAGE::SetOffsetStart(double offsetstart)  
@@ -181,7 +181,7 @@ void UI_ELEMENT_PROGRESS_IMAGE::SetOffsetStart(double offsetstart)
 * @brief      get offset end
 * @ingroup    USERINTERFACE
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT_PROGRESS_IMAGE::GetOffsetEnd()
@@ -196,7 +196,7 @@ double UI_ELEMENT_PROGRESS_IMAGE::GetOffsetEnd()
 * @brief      set offset end
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  offsetend : 
+* @param[in]  offsetend : Offsetend value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_IMAGE::SetOffsetEnd(double offsetend)
@@ -210,10 +210,10 @@ void UI_ELEMENT_PROGRESS_IMAGE::SetOffsetEnd(double offsetend)
 * @fn         float UI_ELEMENT_PROGRESS_IMAGE::GetLevel()
 * @brief      Get level
 * @ingroup    USERINTERFACE
-*
-* @return     float : current level in the range [0 .. 100]
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     float : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 float UI_ELEMENT_PROGRESS_IMAGE::GetLevel()
 {
   return level;
@@ -225,10 +225,10 @@ float UI_ELEMENT_PROGRESS_IMAGE::GetLevel()
 * @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetLevel(float level)
 * @brief      Set level (clamped to [0 .. 100])
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  level : new level
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_IMAGE::SetLevel(float level)
 {
   if(level < 0)   level = 0;
@@ -243,10 +243,10 @@ void UI_ELEMENT_PROGRESS_IMAGE::SetLevel(float level)
 * @fn         XBYTE UI_ELEMENT_PROGRESS_IMAGE::GetAlpha()
 * @brief      Get alpha (0 .. 100)
 * @ingroup    USERINTERFACE
-*
-* @return     XBYTE : alpha
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTE UI_ELEMENT_PROGRESS_IMAGE::GetAlpha()
 {
   return alpha;
@@ -258,10 +258,10 @@ XBYTE UI_ELEMENT_PROGRESS_IMAGE::GetAlpha()
 * @fn         void UI_ELEMENT_PROGRESS_IMAGE::SetAlpha(XBYTE alpha)
 * @brief      Set alpha (0 .. 100)
 * @ingroup    USERINTERFACE
-*
+* 
 * @param[in]  alpha : alpha
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_IMAGE::SetAlpha(XBYTE alpha)
 {
   if(alpha > 100) alpha = 100;
@@ -276,8 +276,8 @@ void UI_ELEMENT_PROGRESS_IMAGE::SetAlpha(XBYTE alpha)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_PROGRESS_IMAGE::Clean()
 {
   imageempty  = NULL;

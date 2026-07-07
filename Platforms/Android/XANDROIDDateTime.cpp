@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDDATETIME::XANDROIDDATETIME()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDDATETIME::XANDROIDDATETIME()
 {
@@ -66,12 +66,12 @@ XANDROIDDATETIME::XANDROIDDATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDDATETIME::~XANDROIDDATETIME()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDDATETIME::~XANDROIDDATETIME()
 {

@@ -58,7 +58,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         HASHSHA1::HASHSHA1()
+* @fn         HASHSHA1::HASHSHA1() : HASH()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -90,13 +90,13 @@ HASHSHA1::~HASHSHA1()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASHSHA1::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHSHA1::Do(XBYTE* input, XQWORD size)
@@ -124,7 +124,7 @@ bool HASHSHA1::Do(XBYTE* input, XQWORD size)
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASHSHA1::GetDefaultSize()
@@ -163,8 +163,8 @@ void HASHSHA1::Reset()
 * @brief      Input
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  length : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  length : Length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHSHA1::Input(XBYTE* input, XQWORD length)
@@ -358,10 +358,10 @@ void HASHSHA1::PadMessage()
 * @brief      Circular shift
 * @ingroup    CIPHER
 * 
-* @param[in]  bits : 
-* @param[in]  word : 
+* @param[in]  bits : Bits value.
+* @param[in]  word : Word value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD HASHSHA1::CircularShift(int bits, XDWORD word)
@@ -376,9 +376,9 @@ XDWORD HASHSHA1::CircularShift(int bits, XDWORD word)
 * @brief      Result
 * @ingroup    CIPHER
 * 
-* @param[in]  msgdigest : 
+* @param[in]  msgdigest : Msgdigest pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHSHA1::Result(XDWORD* msgdigest)

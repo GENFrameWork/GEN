@@ -71,7 +71,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMSPI::DIOANDROIDSTREAMSPI()
+* @fn         DIOANDROIDSTREAMSPI::DIOANDROIDSTREAMSPI() : DIOSTREAMSPI()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -102,7 +102,7 @@ DIOANDROIDSTREAMSPI::~DIOANDROIDSTREAMSPI()
 * @brief      Open
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMSPI::Open()
@@ -141,7 +141,7 @@ bool DIOANDROIDSTREAMSPI::Open()
 * @brief      Close
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMSPI::Close()
@@ -164,11 +164,11 @@ bool DIOANDROIDSTREAMSPI::Close()
 * @brief      Transfer buffer
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  bufferread : 
-* @param[in]  bufferwrite : 
-* @param[in]  size : 
+* @param[in]  bufferread : Bufferread pointer to use.
+* @param[in]  bufferwrite : Bufferwrite pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMSPI::TransferBuffer(XBYTE* bufferread, XBYTE* bufferwrite, XDWORD size)
@@ -209,7 +209,7 @@ bool DIOANDROIDSTREAMSPI::TransferBuffer(XBYTE* bufferread, XBYTE* bufferwrite, 
 * @brief      Sleep
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  count : 
+* @param[in]  count : Count value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMSPI::Sleep(int count)

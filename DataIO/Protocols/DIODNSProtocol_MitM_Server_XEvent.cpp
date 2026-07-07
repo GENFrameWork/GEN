@@ -58,9 +58,9 @@
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODNSPROTOCOL_MITM_SERVER_XEVENT::DIODNSPROTOCOL_MITM_SERVER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
@@ -89,7 +89,7 @@ DIODNSPROTOCOL_MITM_SERVER_XEVENT::~DIODNSPROTOCOL_MITM_SERVER_XEVENT()
 * @brief      Get origin IP
 * @ingroup    DATAIO
 * 
-* @return     DIOIP* : 
+* @return     DIOIP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetOriginIP()
@@ -104,7 +104,7 @@ DIOIP* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetOriginIP()
 * @brief      Get asked URL
 * @ingroup    DATAIO
 * 
-* @return     DIOURL* : 
+* @return     DIOURL* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetAskedURL()
@@ -119,7 +119,7 @@ DIOURL* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetAskedURL()
 * @brief      Get asked buffer
 * @ingroup    DATAIO
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetAskedBuffer()
@@ -134,7 +134,7 @@ XBUFFER* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetAskedBuffer()
 * @brief      Get answered buffer
 * @ingroup    DATAIO
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetAnsweredBuffer()
@@ -149,7 +149,7 @@ XBUFFER* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetAnsweredBuffer()
 * @brief      Get answered IP
 * @ingroup    DATAIO
 * 
-* @return     DIOIP* : 
+* @return     DIOIP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIODNSPROTOCOL_MITM_SERVER_XEVENT::GetAnsweredIP()

@@ -86,12 +86,12 @@ GRPSTATISTICSCHARTPIE3D::~GRPSTATISTICSCHARTPIE3D()
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  x       : plot area left
-* @param[in]  y       : plot area top
-* @param[in]  width   : plot area width
-* @param[in]  height  : plot area height
+* @param[in]  x : plot area left
+* @param[in]  y : plot area top
+* @param[in]  width : plot area width
+* @param[in]  height : plot area height
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTPIE3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
@@ -215,7 +215,7 @@ bool GRPSTATISTICSCHARTPIE3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, doubl
 * @brief      Get legend count : one legend entry per category (a pie legend describes the sectors)
 * @ingroup    GRAPHIC
 * 
-* @return     XDWORD : number of legend entries
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRPSTATISTICSCHARTPIE3D::GetLegendCount()
@@ -231,10 +231,10 @@ XDWORD GRPSTATISTICSCHARTPIE3D::GetLegendCount()
 * @ingroup    GRAPHIC
 * 
 * @param[in]  index : entry index
-* @param[out] name  : category name (not owned)
-* @param[out] color : sector color
+* @param[in]  name : category name (not owned)
+* @param[in]  color : sector color
 * 
-* @return     bool : true if the entry exists
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTPIE3D::GetLegendEntry(XDWORD index, XSTRING** name, GRPSTATISTICSCHARTCOLOR& color)
@@ -256,14 +256,14 @@ bool GRPSTATISTICSCHARTPIE3D::GetLegendEntry(XDWORD index, XSTRING** name, GRPST
 * @brief      Draw sector top : the (elliptical) top face of one sector (center + arc)
 * @ingroup    GRAPHIC
 * 
-* @param[in]  builder  : output builder
-* @param[in]  cx       : ellipse center x
-* @param[in]  cy       : ellipse center y
-* @param[in]  rx       : horizontal radius
-* @param[in]  ry       : vertical radius (tilted)
+* @param[in]  builder : output builder
+* @param[in]  cx : ellipse center x
+* @param[in]  cy : ellipse center y
+* @param[in]  rx : horizontal radius
+* @param[in]  ry : vertical radius (tilted)
 * @param[in]  startdeg : start angle in degrees
-* @param[in]  enddeg   : end angle in degrees
-* @param[in]  color    : sector color
+* @param[in]  enddeg : end angle in degrees
+* @param[in]  color : sector color
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHARTPIE3D::DrawSectorTop(GRPSTATISTICSCHARTBUILDER& builder, double cx, double cy, double rx, double ry, double startdeg, double enddeg, GRPSTATISTICSCHARTCOLOR& color)
@@ -304,15 +304,15 @@ void GRPSTATISTICSCHARTPIE3D::DrawSectorTop(GRPSTATISTICSCHARTBUILDER& builder, 
 * @brief      Draw sector wall : the outer side wall (thickness) for the front half of a sector rim (sin > 0)
 * @ingroup    GRAPHIC
 * 
-* @param[in]  builder  : output builder
-* @param[in]  cx       : ellipse center x
-* @param[in]  cy       : ellipse center y
-* @param[in]  rx       : horizontal radius
-* @param[in]  ry       : vertical radius (tilted)
-* @param[in]  thick    : wall height (pie thickness)
+* @param[in]  builder : output builder
+* @param[in]  cx : ellipse center x
+* @param[in]  cy : ellipse center y
+* @param[in]  rx : horizontal radius
+* @param[in]  ry : vertical radius (tilted)
+* @param[in]  thick : wall height (pie thickness)
 * @param[in]  startdeg : start angle in degrees
-* @param[in]  enddeg   : end angle in degrees
-* @param[in]  color    : sector color
+* @param[in]  enddeg : end angle in degrees
+* @param[in]  color : sector color
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHARTPIE3D::DrawSectorWall(GRPSTATISTICSCHARTBUILDER& builder, double cx, double cy, double rx, double ry, double thick, double startdeg, double enddeg, GRPSTATISTICSCHARTCOLOR& color)
@@ -364,10 +364,10 @@ void GRPSTATISTICSCHARTPIE3D::DrawSectorWall(GRPSTATISTICSCHARTBUILDER& builder,
 * @brief      Make shade : scale a color by a factor (>1 lighter, <1 darker), clamped to 0..255
 * @ingroup    GRAPHIC
 * 
-* @param[in]  color  : base color
+* @param[in]  color : base color
 * @param[in]  factor : brightness factor
 * 
-* @return     GRPSTATISTICSCHARTCOLOR : the shaded color
+* @return     GRPSTATISTICSCHARTCOLOR : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSTATISTICSCHARTCOLOR GRPSTATISTICSCHARTPIE3D::MakeShade(GRPSTATISTICSCHARTCOLOR& color, double factor)

@@ -97,7 +97,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXSTREAMTCPIP::DIOLINUXSTREAMTCPIP()
+* @fn         DIOLINUXSTREAMTCPIPSERVER::DIOLINUXSTREAMTCPIPSERVER() : DIOSTREAMTCPIPSERVER() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -169,7 +169,7 @@ DIOLINUXSTREAMTCPIPSERVER::~DIOLINUXSTREAMTCPIPSERVER()
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIPSERVER::Open()
@@ -194,7 +194,7 @@ bool DIOLINUXSTREAMTCPIPSERVER::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIPSERVER::Disconnect()
@@ -222,7 +222,7 @@ bool DIOLINUXSTREAMTCPIPSERVER::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIPSERVER::Close()
@@ -261,12 +261,12 @@ bool DIOLINUXSTREAMTCPIPSERVER::Close()
 * @brief      Accept
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  handlesocket : 
-* @param[in]  addr : 
-* @param[in]  addrlen : 
-* @param[in]  usec : 
+* @param[in]  handlesocket : Handlesocket value.
+* @param[in]  addr : Addr pointer to use.
+* @param[in]  addrlen : Addrlen pointer to use.
+* @param[in]  usec : Usec value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMTCPIPSERVER::Accept(int handlesocket, void* addr, void* addrlen, XDWORD usec)
@@ -306,9 +306,9 @@ int DIOLINUXSTREAMTCPIPSERVER::Accept(int handlesocket, void* addr, void* addrle
 * @brief      Is ready connect
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  handlesocket : 
+* @param[in]  handlesocket : Handlesocket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMTCPIPSERVER::IsReadyConnect(int handlesocket)
@@ -362,7 +362,7 @@ int DIOLINUXSTREAMTCPIPSERVER::IsReadyConnect(int handlesocket)
 * @brief      Create stream
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOLINUXSTREAMTCPIPSERVER::CreateStream()
@@ -400,7 +400,7 @@ DIOSTREAM* DIOLINUXSTREAMTCPIPSERVER::CreateStream()
 * @brief      Delete all stream disconnected
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIPSERVER::DeleteAllStreamDisconnected()
@@ -439,7 +439,7 @@ bool DIOLINUXSTREAMTCPIPSERVER::DeleteAllStreamDisconnected()
 * @brief      Delete all stream
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIPSERVER::DeleteAllStream()
@@ -475,9 +475,9 @@ bool DIOLINUXSTREAMTCPIPSERVER::DeleteAllStream()
 * @brief      Get handle server
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  diostream : 
+* @param[in]  diostream : Diostream pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIPSERVER::GetHandleServer(DIOSTREAMTCPIP* diostream)
@@ -645,7 +645,7 @@ bool DIOLINUXSTREAMTCPIPSERVER::GetHandleServer(DIOSTREAMTCPIP* diostream)
 * @brief      Thread connection
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMTCPIPSERVER::ThreadConnection(void* data)

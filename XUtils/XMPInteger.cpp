@@ -69,11 +69,11 @@ static const int SmallPrime[] = {   3,    5,    7,   11,   13,   17,   19,   23,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMPINTEGER::XMPINTEGER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMPINTEGER::XMPINTEGER()
 {
@@ -82,12 +82,12 @@ XMPINTEGER::XMPINTEGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMPINTEGER::~XMPINTEGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMPINTEGER::~XMPINTEGER()
 {
@@ -97,13 +97,13 @@ XMPINTEGER::~XMPINTEGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::GetSign()
 * @brief      Get sign
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::GetSign()
 {
@@ -112,13 +112,13 @@ int XMPINTEGER::GetSign()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XMPINTEGER::GetNLimbs()
 * @brief      Get N limbs
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XMPINTEGER::GetNLimbs()
 {
@@ -127,13 +127,13 @@ XDWORD XMPINTEGER::GetNLimbs()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLIMB* XMPINTEGER::GetLimbs()
 * @brief      Get limbs
 * @ingroup    XUTILS
-*
-* @return     XLIMB* :
-*
+* 
+* @return     XLIMB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLIMB* XMPINTEGER::GetLimbs()
 {
@@ -142,13 +142,13 @@ XLIMB* XMPINTEGER::GetLimbs()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMPINTEGER::SetSign(int sign)
 * @brief      Set sign
 * @ingroup    XUTILS
-*
-* @param[in]  sign :
-*
+* 
+* @param[in]  sign : Sign value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::SetSign(int sign)
 {
@@ -157,13 +157,13 @@ void XMPINTEGER::SetSign(int sign)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMPINTEGER::SetNLimbs(XDWORD nlimbs)
 * @brief      Set N limbs
 * @ingroup    XUTILS
-*
-* @param[in]  nlimbs :
-*
+* 
+* @param[in]  nlimbs : Nlimbs value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::SetNLimbs(XDWORD nlimbs)
 {
@@ -172,13 +172,13 @@ void XMPINTEGER::SetNLimbs(XDWORD nlimbs)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMPINTEGER::SetLimbs(XLIMB* limbs)
 * @brief      Set limbs
 * @ingroup    XUTILS
-*
-* @param[in]  limbs :
-*
+* 
+* @param[in]  limbs : Limbs pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::SetLimbs(XLIMB* limbs)
 {
@@ -187,13 +187,13 @@ void XMPINTEGER::SetLimbs(XLIMB* limbs)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Ini()
 {
@@ -206,15 +206,15 @@ bool XMPINTEGER::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Grow(XDWORD nblimbs)
 * @brief      Grow
 * @ingroup    XUTILS
-*
-* @param[in]  nblimbs :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nblimbs : Nblimbs value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Grow(XDWORD nblimbs)
 {
@@ -245,15 +245,15 @@ bool XMPINTEGER::Grow(XDWORD nblimbs)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Shrink(XDWORD nblimbs)
 * @brief      Shrink
 * @ingroup    XUTILS
-*
-* @param[in]  nblimbs :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nblimbs : Nblimbs value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Shrink(XDWORD nblimbs)
 {
@@ -292,15 +292,15 @@ bool XMPINTEGER::Shrink(XDWORD nblimbs)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::CopyFrom(XMPINTEGER* xmpinteger)
 * @brief      Copy from
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger : Xmpinteger pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::CopyFrom(XMPINTEGER* xmpinteger)
 {
@@ -333,13 +333,13 @@ bool XMPINTEGER::CopyFrom(XMPINTEGER* xmpinteger)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMPINTEGER::Swap(XMPINTEGER* xmpinteger)
 * @brief      Swap
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger :
-*
+* 
+* @param[in]  xmpinteger : Xmpinteger pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::Swap(XMPINTEGER* xmpinteger)
 {
@@ -356,15 +356,15 @@ void XMPINTEGER::Swap(XMPINTEGER* xmpinteger)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::LeftSet(int z)
 * @brief      Left set
 * @ingroup    XUTILS
-*
-* @param[in]  z :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  z : Z coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::LeftSet(int z)
 {
@@ -380,15 +380,15 @@ bool XMPINTEGER::LeftSet(int z)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::GetBit(XDWORD position)
 * @brief      Get bit
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-*
-* @return     int :
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::GetBit(XDWORD position)
 {
@@ -399,16 +399,16 @@ int XMPINTEGER::GetBit(XDWORD position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SetBit(XDWORD position, XBYTE value)
 * @brief      Set bit
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SetBit(XDWORD position, XBYTE value)
 {
@@ -432,13 +432,13 @@ bool XMPINTEGER::SetBit(XDWORD position, XBYTE value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::GetLSB()
 * @brief      Get LSB
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::GetLSB()
 {
@@ -459,13 +459,13 @@ int XMPINTEGER::GetLSB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::GetMSB()
 * @brief      Get MSB
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 /*
 int XMPINTEGER::GetMSB()
@@ -518,13 +518,13 @@ int XMPINTEGER::GetMSB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XMPINTEGER::GetSize()
 * @brief      Get size
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XMPINTEGER::GetSize()
 {
@@ -538,10 +538,10 @@ XDWORD XMPINTEGER::GetSize()
 * @brief      import from binary
 * @ingroup    XUTILS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::ImportFromBinary(XBYTE* buffer, XDWORD size)
@@ -602,10 +602,10 @@ bool XMPINTEGER::ImportFromBinary(XBYTE* buffer, XDWORD size)
 * @brief      export to binary
 * @ingroup    XUTILS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::ExportToBinary(XBYTE* buffer, XDWORD size)
@@ -630,15 +630,15 @@ bool XMPINTEGER::ExportToBinary(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::LeftShift(XDWORD count)
 * @brief      Left shift
 * @ingroup    XUTILS
-*
-* @param[in]  count :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  count : Count value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::LeftShift(XDWORD count)
 {
@@ -690,15 +690,15 @@ bool XMPINTEGER::LeftShift(XDWORD count)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::RightShift(XDWORD count)
 * @brief      Right shift
 * @ingroup    XUTILS
-*
-* @param[in]  count :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  count : Count value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::RightShift(XDWORD count)
 {
@@ -744,15 +744,15 @@ bool XMPINTEGER::RightShift(XDWORD count)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::CompareABSValues(XMPINTEGER& xmpinteger)
 * @brief      Compare ABS values
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger :
-*
-* @return     int :
-*
+* 
+* @param[in]  xmpinteger : Xmpinteger value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::CompareABSValues(XMPINTEGER& xmpinteger)
 {
@@ -785,15 +785,15 @@ int XMPINTEGER::CompareABSValues(XMPINTEGER& xmpinteger)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::CompareSignedValues(XMPINTEGER& xmpinteger)
 * @brief      Compare signed values
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger :
-*
-* @return     int :
-*
+* 
+* @param[in]  xmpinteger : Xmpinteger value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::CompareSignedValues(XMPINTEGER& xmpinteger)
 {
@@ -829,15 +829,15 @@ int XMPINTEGER::CompareSignedValues(XMPINTEGER& xmpinteger)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::CompareSignedValues(int integer)
 * @brief      Compare signed values
 * @ingroup    XUTILS
-*
-* @param[in]  integer :
-*
-* @return     int :
-*
+* 
+* @param[in]  integer : Integer value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::CompareSignedValues(int integer)
 {
@@ -856,16 +856,16 @@ int XMPINTEGER::CompareSignedValues(int integer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::AdditionABS(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 * @brief      Addition ABS
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger1 :
-* @param[in]  xmpinteger2 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger1 : Xmpinteger1 pointer to use.
+* @param[in]  xmpinteger2 : Xmpinteger2 pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::AdditionABS(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 {
@@ -923,16 +923,16 @@ bool XMPINTEGER::AdditionABS(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SubtractionABS(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 * @brief      Subtraction ABS
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger1 :
-* @param[in]  xmpinteger2 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger1 : Xmpinteger1 pointer to use.
+* @param[in]  xmpinteger2 : Xmpinteger2 pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SubtractionABS(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 {
@@ -968,16 +968,16 @@ bool XMPINTEGER::SubtractionABS(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 * @brief      Addition signed
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger1 :
-* @param[in]  xmpinteger2 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger1 : Xmpinteger1 pointer to use.
+* @param[in]  xmpinteger2 : Xmpinteger2 pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 {
@@ -1007,16 +1007,16 @@ bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 * @brief      Subtraction signed
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger1 :
-* @param[in]  xmpinteger2 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger1 : Xmpinteger1 pointer to use.
+* @param[in]  xmpinteger2 : Xmpinteger2 pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 {
@@ -1046,16 +1046,16 @@ bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteg
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger, int integer)
 * @brief      Addition signed
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger :
-* @param[in]  integer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger : Xmpinteger pointer to use.
+* @param[in]  integer : Integer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger, int integer)
 {
@@ -1073,16 +1073,16 @@ bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger, int integer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger, int integer)
 * @brief      Subtraction signed
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger :
-* @param[in]  integer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger : Xmpinteger pointer to use.
+* @param[in]  integer : Integer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger, int integer)
 {
@@ -1100,16 +1100,16 @@ bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger, int integer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 * @brief      Multiplication
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger1 :
-* @param[in]  xmpinteger2 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger1 : Xmpinteger1 pointer to use.
+* @param[in]  xmpinteger2 : Xmpinteger2 pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2)
 {
@@ -1162,16 +1162,16 @@ bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, int integer)
 * @brief      Multiplication
 * @ingroup    XUTILS
-*
-* @param[in]  xmpinteger :
-* @param[in]  integer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpinteger : Xmpinteger pointer to use.
+* @param[in]  integer : Integer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, int integer)
 {
@@ -1188,18 +1188,18 @@ bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, int integer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, XMPINTEGER* xmpintegerB)
 * @brief      Division
 * @ingroup    XUTILS
-*
-* @param[in]  xmpintegerQ :
-* @param[in]  xmpintegerR :
-* @param[in]  xmpintegerA :
-* @param[in]  xmpintegerB :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpintegerQ : Xmpinteger Q pointer to use.
+* @param[in]  xmpintegerR : Xmpinteger R pointer to use.
+* @param[in]  xmpintegerA : Xmpinteger A pointer to use.
+* @param[in]  xmpintegerB : Xmpinteger B pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, XMPINTEGER* xmpintegerB)
 {
@@ -1353,18 +1353,18 @@ bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, int integerb)
 * @brief      Division
 * @ingroup    XUTILS
-*
-* @param[in]  xmpintegerQ :
-* @param[in]  xmpintegerR :
-* @param[in]  xmpintegerA :
-* @param[in]  integerb :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpintegerQ : Xmpinteger Q pointer to use.
+* @param[in]  xmpintegerR : Xmpinteger R pointer to use.
+* @param[in]  xmpintegerA : Xmpinteger A pointer to use.
+* @param[in]  integerb : Integerb value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, int integerb)
 {
@@ -1381,17 +1381,17 @@ bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Module(XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, XMPINTEGER* xmpintegerB)
 * @brief      Module
 * @ingroup    XUTILS
-*
-* @param[in]  xmpintegerR :
-* @param[in]  xmpintegerA :
-* @param[in]  xmpintegerB :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xmpintegerR : Xmpinteger R pointer to use.
+* @param[in]  xmpintegerA : Xmpinteger A pointer to use.
+* @param[in]  xmpintegerB : Xmpinteger B pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Module(XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, XMPINTEGER* xmpintegerB)
 {
@@ -1414,17 +1414,17 @@ bool XMPINTEGER::Module(XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, XMPINT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::Module(XLIMB* r, XMPINTEGER* xmpintegerA, int integerb)
 * @brief      Module
 * @ingroup    XUTILS
-*
-* @param[in]  r :
-* @param[in]  xmpintegerA :
-* @param[in]  integerb :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  r : R pointer to use.
+* @param[in]  xmpintegerA : Xmpinteger A pointer to use.
+* @param[in]  integerb : Integerb value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::Module(XLIMB* r, XMPINTEGER* xmpintegerA, int integerb)
 {
@@ -1473,14 +1473,14 @@ bool XMPINTEGER::Module(XLIMB* r, XMPINTEGER* xmpintegerA, int integerb)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XMPINTEGER::MontgomeryIni(XLIMB*mm, XMPINTEGER* N)
+* 
+* @fn         void XMPINTEGER::MontgomeryIni(XLIMB* mm, XMPINTEGER* N)
 * @brief      Montgomery ini
 * @ingroup    XUTILS
-*
-* @param[in]  mm :
-* @param[in]  N :
-*
+* 
+* @param[in]  mm : Mm pointer to use.
+* @param[in]  N : N pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::MontgomeryIni(XLIMB* mm, XMPINTEGER* N)
 {
@@ -1500,17 +1500,17 @@ void XMPINTEGER::MontgomeryIni(XLIMB* mm, XMPINTEGER* N)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMPINTEGER::MontgomeryMultiplication(XMPINTEGER* A, XMPINTEGER* B, XMPINTEGER* N, XLIMB mm, XMPINTEGER* T)
 * @brief      Montgomery multiplication
 * @ingroup    XUTILS
-*
-* @param[in]  A :
-* @param[in]  B :
-* @param[in]  N :
-* @param[in]  mm :
-* @param[in]  T :
-*
+* 
+* @param[in]  A : A pointer to use.
+* @param[in]  B : B pointer to use.
+* @param[in]  N : N pointer to use.
+* @param[in]  mm : Mm value.
+* @param[in]  T : T pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::MontgomeryMultiplication(XMPINTEGER* A, XMPINTEGER* B, XMPINTEGER* N, XLIMB mm, XMPINTEGER* T)
 {
@@ -1546,16 +1546,16 @@ void XMPINTEGER::MontgomeryMultiplication(XMPINTEGER* A, XMPINTEGER* B, XMPINTEG
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMPINTEGER::MontgomeryReduction(XMPINTEGER* A, XMPINTEGER* N, XLIMB mm, XMPINTEGER* T)
 * @brief      Montgomery reduction
 * @ingroup    XUTILS
-*
-* @param[in]  A :
-* @param[in]  N :
-* @param[in]  mm :
-* @param[in]  T :
-*
+* 
+* @param[in]  A : A pointer to use.
+* @param[in]  N : N pointer to use.
+* @param[in]  mm : Mm value.
+* @param[in]  T : T pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::MontgomeryReduction(XMPINTEGER* A, XMPINTEGER* N, XLIMB mm, XMPINTEGER* T)
 {
@@ -1573,18 +1573,18 @@ void XMPINTEGER::MontgomeryReduction(XMPINTEGER* A, XMPINTEGER* N, XLIMB mm, XMP
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SlidingWindowExponentiation(XMPINTEGER* A, XMPINTEGER* E, XMPINTEGER* N, XMPINTEGER* _RR)
 * @brief      Sliding window exponentiation
 * @ingroup    XUTILS
-*
-* @param[in]  A :
-* @param[in]  E :
-* @param[in]  N :
-* @param[in]  _RR :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  A : A pointer to use.
+* @param[in]  E : E pointer to use.
+* @param[in]  N : N pointer to use.
+* @param[in]  _RR : RR pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SlidingWindowExponentiation(XMPINTEGER* A, XMPINTEGER* E, XMPINTEGER* N, XMPINTEGER* _RR)
 {
@@ -1775,17 +1775,17 @@ bool XMPINTEGER::SlidingWindowExponentiation(XMPINTEGER* A, XMPINTEGER* E, XMPIN
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::GreatestCommonDivisor(XMPINTEGER* G, XMPINTEGER* A, XMPINTEGER* B)
 * @brief      Greatest common divisor
 * @ingroup    XUTILS
-*
-* @param[in]  G :
-* @param[in]  A :
-* @param[in]  B :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  G : G pointer to use.
+* @param[in]  A : A pointer to use.
+* @param[in]  B : B pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::GreatestCommonDivisor(XMPINTEGER* G, XMPINTEGER* A, XMPINTEGER* B)
 {
@@ -1842,17 +1842,17 @@ bool XMPINTEGER::GreatestCommonDivisor(XMPINTEGER* G, XMPINTEGER* A, XMPINTEGER*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::FillRandom(XDWORD size, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 * @brief      Fill random
 * @ingroup    XUTILS
-*
-* @param[in]  size :
-* @param[in]  funcrandom :
-* @param[in]  paramrandom :
-*
-* @return     int :
-*
+* 
+* @param[in]  size : Size value.
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::FillRandom(XDWORD size, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 {
@@ -1867,16 +1867,16 @@ int XMPINTEGER::FillRandom(XDWORD size, XMPINTEGER_FUNCRANDOM funcrandom, void* 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::ModularInverse(XMPINTEGER* A, XMPINTEGER* N)
 * @brief      Modular inverse
 * @ingroup    XUTILS
-*
-* @param[in]  A :
-* @param[in]  N :
-*
-* @return     int :
-*
+* 
+* @param[in]  A : A pointer to use.
+* @param[in]  N : N pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::ModularInverse(XMPINTEGER* A, XMPINTEGER* N)
 {
@@ -1987,13 +1987,13 @@ int XMPINTEGER::ModularInverse(XMPINTEGER* A, XMPINTEGER* N)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::CheckSmallFactors()
 * @brief      Check small factors
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::CheckSmallFactors()
 {
@@ -2017,17 +2017,17 @@ int XMPINTEGER::CheckSmallFactors()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::MillerRabin(XMPINTEGER* X, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 * @brief      Miller rabin
 * @ingroup    XUTILS
-*
-* @param[in]  X :
-* @param[in]  funcrandom :
-* @param[in]  paramrandom :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  X : X coordinate.
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::MillerRabin(XMPINTEGER* X, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 {
@@ -2111,16 +2111,16 @@ bool XMPINTEGER::MillerRabin(XMPINTEGER* X, XMPINTEGER_FUNCRANDOM funcrandom, vo
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XMPINTEGER::IsPrime(XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 * @brief      Is prime
 * @ingroup    XUTILS
-*
-* @param[in]  funcrandom :
-* @param[in]  paramrandom :
-*
-* @return     int :
-*
+* 
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::IsPrime(XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 {
@@ -2148,18 +2148,18 @@ int XMPINTEGER::IsPrime(XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::GeneratePrime(int nbits, int dhflag, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 * @brief      Generate prime
 * @ingroup    XUTILS
-*
-* @param[in]  nbits :
-* @param[in]  dhflag :
-* @param[in]  funcrandom :
-* @param[in]  paramrandom :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nbits : Nbits value.
+* @param[in]  dhflag : Dhflag value.
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::GeneratePrime(int nbits, int dhflag, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
 {
@@ -2246,16 +2246,16 @@ bool XMPINTEGER::GeneratePrime(int nbits, int dhflag, XMPINTEGER_FUNCRANDOM func
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SetFromString(int radix, XCHAR* string)
 * @brief      Set from string
 * @ingroup    XUTILS
-*
-* @param[in]  radix :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  radix : Radix value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SetFromString(int radix, XCHAR* string)
 {
@@ -2329,16 +2329,16 @@ bool XMPINTEGER::SetFromString(int radix, XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SetFromString(int radix, XSTRING& string)
 * @brief      Set from string
 * @ingroup    XUTILS
-*
-* @param[in]  radix :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  radix : Radix value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SetFromString(int radix, XSTRING& string)
 {
@@ -2347,16 +2347,16 @@ bool XMPINTEGER::SetFromString(int radix, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::GetToString(int radix, XSTRING& string)
 * @brief      Get to string
 * @ingroup    XUTILS
-*
-* @param[in]  radix :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  radix : Radix value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::GetToString(int radix, XSTRING& string)
 {
@@ -2421,15 +2421,15 @@ bool XMPINTEGER::GetToString(int radix, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SetFromXBuffer(XBUFFER& xbuffer)
 * @brief      Set from X buffer
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SetFromXBuffer(XBUFFER& xbuffer)
 {
@@ -2455,16 +2455,16 @@ bool XMPINTEGER::SetFromXBuffer(XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::GetToXBuffer(XBUFFER& xbuffer, XDWORD size)
 * @brief      Get to X buffer
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::GetToXBuffer(XBUFFER& xbuffer, XDWORD size)
 {
@@ -2488,13 +2488,13 @@ bool XMPINTEGER::GetToXBuffer(XBUFFER& xbuffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::End()
 {
@@ -2512,15 +2512,15 @@ bool XMPINTEGER::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XMPINTEGER::SubtractionHelper(XDWORD n, XLIMB*s, XLIMB*d)
+* 
+* @fn         void XMPINTEGER::SubtractionHelper(XDWORD n, XLIMB *s, XLIMB *d)
 * @brief      Subtraction helper
 * @ingroup    XUTILS
-*
-* @param[in]  n :
-* @param[in]  XLIMB*s :
-* @param[in]  XLIMB*d :
-*
+* 
+* @param[in]  n : N value.
+* @param[in]  s : S pointer to use.
+* @param[in]  d : D pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::SubtractionHelper(XDWORD n, XLIMB *s, XLIMB *d)
 {
@@ -2543,16 +2543,16 @@ void XMPINTEGER::SubtractionHelper(XDWORD n, XLIMB *s, XLIMB *d)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMPINTEGER::MultiplicationHelper(XDWORD i, XLIMB* s, XLIMB* d, XLIMB b)
 * @brief      Multiplication helper
 * @ingroup    XUTILS
-*
-* @param[in]  i :
-* @param[in]  s :
-* @param[in]  d :
-* @param[in]  b :
-*
+* 
+* @param[in]  i : I value.
+* @param[in]  s : S pointer to use.
+* @param[in]  d : D pointer to use.
+* @param[in]  b : B value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::MultiplicationHelper(XDWORD i, XLIMB* s, XLIMB* d, XLIMB b)
 {
@@ -2607,17 +2607,17 @@ void XMPINTEGER::MultiplicationHelper(XDWORD i, XLIMB* s, XLIMB* d, XLIMB b)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::GetDigit(XDWORD* data, int radix, XCHAR character)
 * @brief      Get digit
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-* @param[in]  radix :
-* @param[in]  character :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* @param[in]  radix : Radix value.
+* @param[in]  character : Character value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::GetDigit(XDWORD* data, int radix, XCHAR character)
 {
@@ -2634,16 +2634,16 @@ bool XMPINTEGER::GetDigit(XDWORD* data, int radix, XCHAR character)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMPINTEGER::SetToStringHelper(int radix, XSTRING& string)
 * @brief      Set to string helper
 * @ingroup    XUTILS
-*
-* @param[in]  radix :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  radix : Radix value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::SetToStringHelper(int radix, XSTRING& string)
 {
@@ -2668,12 +2668,12 @@ bool XMPINTEGER::SetToStringHelper(int radix, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMPINTEGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::Clean()
 {

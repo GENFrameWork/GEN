@@ -620,7 +620,7 @@ XQWORD HASHWHIRLPOOL::rc[HASHWHIRLPOOL_ROUNDS+1]  = { LL(0x0000000000000000),
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         HASHWHIRLPOOL::HASHWHIRLPOOL()
+* @fn         HASHWHIRLPOOL::HASHWHIRLPOOL() : HASH()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -648,13 +648,13 @@ HASHWHIRLPOOL::~HASHWHIRLPOOL()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASHWHIRLPOOL::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHWHIRLPOOL::Do(XBYTE* input, XQWORD size)
@@ -682,7 +682,7 @@ bool HASHWHIRLPOOL::Do(XBYTE* input, XQWORD size)
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASHWHIRLPOOL::GetDefaultSize()
@@ -697,7 +697,7 @@ int HASHWHIRLPOOL::GetDefaultSize()
 * @brief      Process buffer
 * @ingroup    CIPHER
 * 
-* @param[in]  structpointer : 
+* @param[in]  structpointer : Structpointer pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHWHIRLPOOL::ProcessBuffer(WHIRLPOOL* structpointer)
@@ -930,10 +930,10 @@ void HASHWHIRLPOOL::ProcessBuffer(WHIRLPOOL* structpointer)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void HASHWHIRLPOOL::Ini(WHIRLPOOL* structpointer)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    CIPHER
 * 
-* @param[in]  structpointer : 
+* @param[in]  structpointer : Structpointer pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHWHIRLPOOL::Ini(WHIRLPOOL* structpointer)
@@ -955,12 +955,12 @@ void HASHWHIRLPOOL::Ini(WHIRLPOOL* structpointer)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void HASHWHIRLPOOL::Add(XBYTE* source, XDWORD sourceBits, WHIRLPOOL* structpointer)
-* @brief      Add
+* @brief      Add value
 * @ingroup    CIPHER
 * 
-* @param[in]  source : 
-* @param[in]  sourceBits : 
-* @param[in]  structpointer : 
+* @param[in]  source : Source pointer to use.
+* @param[in]  sourceBits : Source Bits value.
+* @param[in]  structpointer : Structpointer pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHWHIRLPOOL::Add(XBYTE* source, XDWORD sourceBits, WHIRLPOOL* structpointer)
@@ -1076,11 +1076,11 @@ void HASHWHIRLPOOL::Add(XBYTE* source, XDWORD sourceBits, WHIRLPOOL* structpoint
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void HASHWHIRLPOOL::End(WHIRLPOOL* structpointer, XBYTE* result)
-* @brief      End
+* @brief      End the object
 * @ingroup    CIPHER
 * 
-* @param[in]  structpointer : 
-* @param[in]  result : 
+* @param[in]  structpointer : Structpointer pointer to use.
+* @param[in]  result : Output result.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHWHIRLPOOL::End(WHIRLPOOL* structpointer, XBYTE* result)

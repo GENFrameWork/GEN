@@ -57,11 +57,11 @@ DIOSTM32STREAMUSB*      diostreamusbptrhandle =  NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTM32STREAMUSB::DIOSTM32STREAMUSB()
+* 
+* @fn         DIOSTM32STREAMUSB::DIOSTM32STREAMUSB() : DIOSTREAMUSB(), XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMUSB::DIOSTM32STREAMUSB() : DIOSTREAMUSB(), XFSMACHINE(0)
 {
@@ -93,12 +93,12 @@ DIOSTM32STREAMUSB::DIOSTM32STREAMUSB() : DIOSTREAMUSB(), XFSMACHINE(0)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32STREAMUSB::~DIOSTM32STREAMUSB()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMUSB::~DIOSTM32STREAMUSB()
 {
@@ -112,13 +112,13 @@ DIOSTM32STREAMUSB::~DIOSTM32STREAMUSB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSTATUS DIOSTM32STREAMUSB::GetStatus()
 * @brief      Get status
 * @ingroup    PLATFORM_STM32
-*
-* @return     DIOSTREAMSTATUS :
-*
+* 
+* @return     DIOSTREAMSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOSTM32STREAMUSB::GetStatus()
 {
@@ -130,13 +130,13 @@ DIOSTREAMSTATUS DIOSTM32STREAMUSB::GetStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUSB::Open()
 * @brief      Open
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUSB::Open()
 {
@@ -159,16 +159,16 @@ bool DIOSTM32STREAMUSB::Open()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMUSB::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMUSB::WriteDirect(XBYTE* buffer, XDWORD size)
 {
@@ -182,16 +182,16 @@ XDWORD DIOSTM32STREAMUSB::WriteDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMUSB::Write(XBYTE* buffer, XDWORD size)
 * @brief      Write
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMUSB::Write(XBYTE* buffer, XDWORD size)
 {
@@ -215,13 +215,13 @@ XDWORD DIOSTM32STREAMUSB::Write(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUSB::Disconnect()
 * @brief      Disconnect
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUSB::Disconnect()
 {
@@ -231,13 +231,13 @@ bool DIOSTM32STREAMUSB::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUSB::Close()
 * @brief      Close
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUSB::Close()
 {
@@ -255,14 +255,14 @@ bool DIOSTM32STREAMUSB::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUSB::CleanBuffers()
 * @brief      Clean buffers
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUSB::CleanBuffers()
 {
@@ -273,14 +273,14 @@ bool DIOSTM32STREAMUSB::CleanBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOSTM32STREAMUSB::HAL_USB_RxCpltCallback(uint8_t* buffer, uint32_t*len)
+* 
+* @fn         void DIOSTM32STREAMUSB::HAL_USB_RxCpltCallback(uint8_t* buffer, uint32_t *len)
 * @brief      HALUSB rx cplt callback
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  uint32_t*len :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  len : Len pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMUSB::HAL_USB_RxCpltCallback(uint8_t* buffer, uint32_t *len)
 {
@@ -306,13 +306,13 @@ void DIOSTM32STREAMUSB::HAL_USB_RxCpltCallback(uint8_t* buffer, uint32_t *len)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMUSB::ThreadConnection(void* param)
 * @brief      Thread connection
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMUSB::ThreadConnection(void* param)
 {
@@ -398,12 +398,12 @@ void DIOSTM32STREAMUSB::ThreadConnection(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMUSB::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMUSB::Clean()
 {

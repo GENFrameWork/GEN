@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOTRANSLATION_RESULT::DIOTRANSLATION_RESULT()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOTRANSLATION_RESULT::DIOTRANSLATION_RESULT()
 {
@@ -70,12 +70,12 @@ DIOTRANSLATION_RESULT::DIOTRANSLATION_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOTRANSLATION_RESULT::~DIOTRANSLATION_RESULT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOTRANSLATION_RESULT::~DIOTRANSLATION_RESULT()
 {
@@ -84,13 +84,13 @@ DIOTRANSLATION_RESULT::~DIOTRANSLATION_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLANGUAGE_CODE DIOTRANSLATION_RESULT::GetLanguageTextCode()
 * @brief      Get language text code
 * @ingroup    DATAIO
-*
-* @return     XLANGUAGE_CODE :
-*
+* 
+* @return     XLANGUAGE_CODE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLANGUAGE_CODE DIOTRANSLATION_RESULT::GetLanguageTextCode()
 {
@@ -99,15 +99,15 @@ XLANGUAGE_CODE DIOTRANSLATION_RESULT::GetLanguageTextCode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOTRANSLATION_RESULT::SetLanguageTextCode(XLANGUAGE_CODE code)
 * @brief      Set language text code
 * @ingroup    DATAIO
-*
-* @param[in]  code :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOTRANSLATION_RESULT::SetLanguageTextCode(XLANGUAGE_CODE code)
 {
@@ -118,13 +118,13 @@ bool DIOTRANSLATION_RESULT::SetLanguageTextCode(XLANGUAGE_CODE code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLANGUAGE_CODE DIOTRANSLATION_RESULT::GetLanguageTranslationCode()
 * @brief      Get language translation code
 * @ingroup    DATAIO
-*
-* @return     XLANGUAGE_CODE :
-*
+* 
+* @return     XLANGUAGE_CODE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLANGUAGE_CODE DIOTRANSLATION_RESULT::GetLanguageTranslationCode()
 {
@@ -133,15 +133,15 @@ XLANGUAGE_CODE DIOTRANSLATION_RESULT::GetLanguageTranslationCode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOTRANSLATION_RESULT::SetLanguageTranslationCode(XLANGUAGE_CODE code)
 * @brief      Set language translation code
 * @ingroup    DATAIO
-*
-* @param[in]  code :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOTRANSLATION_RESULT::SetLanguageTranslationCode(XLANGUAGE_CODE code)
 {
@@ -152,13 +152,13 @@ bool DIOTRANSLATION_RESULT::SetLanguageTranslationCode(XLANGUAGE_CODE code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOTRANSLATION_RESULT::GetTranslation()
 * @brief      Get translation
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOTRANSLATION_RESULT::GetTranslation()
 {
@@ -167,12 +167,12 @@ XSTRING* DIOTRANSLATION_RESULT::GetTranslation()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOTRANSLATION_RESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOTRANSLATION_RESULT::Clean()
 {
@@ -186,11 +186,11 @@ void DIOTRANSLATION_RESULT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSCRAPERWEBTRANSLATION::DIOSCRAPERWEBTRANSLATION()
+* 
+* @fn         DIOSCRAPERWEBTRANSLATION::DIOSCRAPERWEBTRANSLATION() : DIOSCRAPERWEB()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBTRANSLATION::DIOSCRAPERWEBTRANSLATION() : DIOSCRAPERWEB()
 {
@@ -199,12 +199,12 @@ DIOSCRAPERWEBTRANSLATION::DIOSCRAPERWEBTRANSLATION() : DIOSCRAPERWEB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSCRAPERWEBTRANSLATION::~DIOSCRAPERWEBTRANSLATION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBTRANSLATION::~DIOSCRAPERWEBTRANSLATION()
 {
@@ -213,16 +213,16 @@ DIOSCRAPERWEBTRANSLATION::~DIOSCRAPERWEBTRANSLATION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBTRANSLATION::ChangeURL(XCHAR* maskurl, DIOURL& url)
 * @brief      Change URL
 * @ingroup    DATAIO
-*
-* @param[in]  maskurl :
-* @param[in]  url :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  maskurl : Maskurl pointer to use.
+* @param[in]  url : URL to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBTRANSLATION::ChangeURL(XCHAR* maskurl, DIOURL& url)
 {
@@ -256,21 +256,21 @@ bool DIOSCRAPERWEBTRANSLATION::ChangeURL(XCHAR* maskurl, DIOURL& url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBTRANSLATION::Get(XCHAR* text, XLANGUAGE_CODE languagetextcode, XLANGUAGE_CODE languagetranslationcode, XSTRING& translation, int timeoutforurl, XSTRING* localIP, bool usecache)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  text :
-* @param[in]  languagetextcode :
-* @param[in]  languagetranslationcode :
-* @param[in]  translation :
-* @param[in]  timeoutforurl :
-* @param[in]  localIP :
-* @param[in]  usecache :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  text : Text to use.
+* @param[in]  languagetextcode : Languagetextcode value.
+* @param[in]  languagetranslationcode : Languagetranslationcode value.
+* @param[in]  translation : Translation value.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  usecache : Usecache value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBTRANSLATION::Get(XCHAR* text, XLANGUAGE_CODE languagetextcode, XLANGUAGE_CODE languagetranslationcode, XSTRING& translation, int timeoutforurl, XSTRING* localIP, bool usecache)
 {
@@ -329,21 +329,21 @@ bool DIOSCRAPERWEBTRANSLATION::Get(XCHAR* text, XLANGUAGE_CODE languagetextcode,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBTRANSLATION::Get(XSTRING& text, XLANGUAGE_CODE languagetextcode, XLANGUAGE_CODE languagetranslationcode, XSTRING& translation, int timeoutforurl, XSTRING* localIP, bool usecache)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  text :
-* @param[in]  languagetextcode :
-* @param[in]  languagetranslationcode :
-* @param[in]  translation :
-* @param[in]  timeoutforurl :
-* @param[in]  localIP :
-* @param[in]  usecache :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  text : Text to use.
+* @param[in]  languagetextcode : Languagetextcode value.
+* @param[in]  languagetranslationcode : Languagetranslationcode value.
+* @param[in]  translation : Translation value.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  usecache : Usecache value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBTRANSLATION::Get(XSTRING& text, XLANGUAGE_CODE languagetextcode, XLANGUAGE_CODE languagetranslationcode, XSTRING& translation, int timeoutforurl, XSTRING* localIP, bool usecache)
 {
@@ -352,16 +352,16 @@ bool DIOSCRAPERWEBTRANSLATION::Get(XSTRING& text, XLANGUAGE_CODE languagetextcod
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBTRANSLATION::GoogleLanguageCode(XLANGUAGE_CODE languagecode, XSTRING& googlecode)
 * @brief      Google language code
 * @ingroup    DATAIO
-*
-* @param[in]  languagecode :
-* @param[in]  googlecode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  languagecode : Languagecode value.
+* @param[in]  googlecode : Googlecode value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBTRANSLATION::GoogleLanguageCode(XLANGUAGE_CODE languagecode, XSTRING& googlecode)
 {
@@ -561,12 +561,12 @@ bool DIOSCRAPERWEBTRANSLATION::GoogleLanguageCode(XLANGUAGE_CODE languagecode, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSCRAPERWEBTRANSLATION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSCRAPERWEBTRANSLATION::Clean()
 {

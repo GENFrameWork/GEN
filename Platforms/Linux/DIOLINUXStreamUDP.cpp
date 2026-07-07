@@ -91,7 +91,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXSTREAMUDP::DIOLINUXSTREAMUDP()
+* @fn         DIOLINUXSTREAMUDP::DIOLINUXSTREAMUDP() : DIOSTREAMUDP() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -163,7 +163,7 @@ DIOLINUXSTREAMUDP::~DIOLINUXSTREAMUDP()
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUDP::Open()
@@ -212,7 +212,7 @@ bool DIOLINUXSTREAMUDP::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUDP::Disconnect()
@@ -246,7 +246,7 @@ bool DIOLINUXSTREAMUDP::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUDP::Close()
@@ -272,9 +272,9 @@ bool DIOLINUXSTREAMUDP::Close()
 * @brief      Is ready connect
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMUDP::IsReadyConnect(int socket)
@@ -342,7 +342,7 @@ void DIOLINUXSTREAMUDP::Clean()
 * @brief      Thread run function
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  thread : 
+* @param[in]  thread : Thread pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMUDP::ThreadRunFunction(void* thread)

@@ -61,10 +61,10 @@ UI_ANIMATIONS* UI_ANIMATIONS::instance = NULL;
 * @fn         bool UI_ANIMATIONS::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ANIMATIONS::GetIsInstanced()
 {
   return instance!=NULL;
@@ -76,10 +76,10 @@ bool UI_ANIMATIONS::GetIsInstanced()
 * @fn         UI_ANIMATIONS& UI_ANIMATIONS::GetInstance()
 * @brief      Get instance
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ANIMATIONS& : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ANIMATIONS& : Reference to the requested object.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATIONS& UI_ANIMATIONS::GetInstance()
 {
   if(!instance) 
@@ -96,10 +96,10 @@ UI_ANIMATIONS& UI_ANIMATIONS::GetInstance()
 * @fn         bool UI_ANIMATIONS::DelInstance()
 * @brief      Del instance
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ANIMATIONS::DelInstance()
 {
   if(instance)
@@ -117,12 +117,12 @@ bool UI_ANIMATIONS::DelInstance()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_ANIMATIONS::Add(UI_ANIMATION* animation)
-* @brief      Add
+* @brief      Add value
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  animation : 
+* @param[in]  animation : Animation pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ANIMATIONS::Add(UI_ANIMATION* animation)
@@ -141,14 +141,14 @@ bool UI_ANIMATIONS::Add(UI_ANIMATION* animation)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         UI_ANIMATION* UI_ANIMATIONS::Get(XCHAR* ID)
-* @brief      Get
+* @brief      Get value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  ID : 
 * 
-* @return     UI_ANIMATION* : 
+* @param[in]  ID : Identifier to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ANIMATION* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATION* UI_ANIMATIONS::Get(XCHAR* ID)
 {
   if(!ID) return NULL;
@@ -175,14 +175,14 @@ UI_ANIMATION* UI_ANIMATIONS::Get(XCHAR* ID)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         UI_ANIMATION* UI_ANIMATIONS::Get(XSTRING& ID)
-* @brief      Get
+* @brief      Get value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  ID : 
 * 
-* @return     UI_ANIMATION* : 
+* @param[in]  ID : Identifier to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ANIMATION* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATION* UI_ANIMATIONS::Get(XSTRING& ID)
 {
   return Get(ID.Get());
@@ -194,10 +194,10 @@ UI_ANIMATION* UI_ANIMATIONS::Get(XSTRING& ID)
 * @fn         bool UI_ANIMATIONS::DeleteAll()
 * @brief      Delete all
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ANIMATIONS::DeleteAll()
 {
   animations.DeleteContents();  
@@ -212,8 +212,8 @@ bool UI_ANIMATIONS::DeleteAll()
 * @fn         UI_ANIMATIONS::UI_ANIMATIONS()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATIONS::UI_ANIMATIONS()
 {
   Clean(); 
@@ -226,8 +226,8 @@ UI_ANIMATIONS::UI_ANIMATIONS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATIONS::~UI_ANIMATIONS()
 {
   DeleteAll();
@@ -242,8 +242,8 @@ UI_ANIMATIONS::~UI_ANIMATIONS()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ANIMATIONS::Clean()
 {
 

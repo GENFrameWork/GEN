@@ -94,7 +94,7 @@ UI_BACKGROUND::~UI_BACKGROUND()
 * @brief      Get color
 * @ingroup    USERINTERFACE
 * 
-* @return     UI_COLOR* : 
+* @return     UI_COLOR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR* UI_BACKGROUND::GetColor()
@@ -109,7 +109,7 @@ UI_COLOR* UI_BACKGROUND::GetColor()
 * @brief      Get bitmap file name
 * @ingroup    USERINTERFACE
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_BACKGROUND::GetBitmapFileName()
@@ -124,7 +124,7 @@ XSTRING* UI_BACKGROUND::GetBitmapFileName()
 * @brief      Get bitmap
 * @ingroup    USERINTERFACE
 * 
-* @return     GRPBITMAP* : 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_BACKGROUND::GetBitmap()
@@ -139,9 +139,9 @@ GRPBITMAP* UI_BACKGROUND::GetBitmap()
 * @brief      Set bitmap
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  bitmap : 
+* @param[in]  bitmap : Bitmap pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_BACKGROUND::SetBitmap(GRPBITMAP* bitmap)

@@ -104,7 +104,7 @@ DIOPINGREPLY::~DIOPINGREPLY()
 * @brief      Get sequence
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPINGREPLY::GetSequence()
@@ -119,7 +119,7 @@ XDWORD DIOPINGREPLY::GetSequence()
 * @brief      Set sequence
 * @ingroup    DATAIO
 * 
-* @param[in]  sequence : 
+* @param[in]  sequence : Sequence value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPINGREPLY::SetSequence(XDWORD sequence)
@@ -134,7 +134,7 @@ void DIOPINGREPLY::SetSequence(XDWORD sequence)
 * @brief      Get from IP
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPINGREPLY::GetFromIP()
@@ -149,7 +149,7 @@ XSTRING* DIOPINGREPLY::GetFromIP()
 * @brief      Get size request
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPINGREPLY::GetSizeRequest()
@@ -164,7 +164,7 @@ XDWORD DIOPINGREPLY::GetSizeRequest()
 * @brief      Set size request
 * @ingroup    DATAIO
 * 
-* @param[in]  sizerequest : 
+* @param[in]  sizerequest : Sizerequest value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPINGREPLY::SetSizeRequest(XDWORD sizerequest)
@@ -179,7 +179,7 @@ void DIOPINGREPLY::SetSizeRequest(XDWORD sizerequest)
 * @brief      Get time elapsed
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPINGREPLY::GetTimeElapsed()
@@ -194,7 +194,7 @@ XDWORD DIOPINGREPLY::GetTimeElapsed()
 * @brief      Set time elapsed
 * @ingroup    DATAIO
 * 
-* @param[in]  timeelapsed : 
+* @param[in]  timeelapsed : Timeelapsed value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPINGREPLY::SetTimeElapsed(XDWORD timeelapsed)
@@ -209,7 +209,7 @@ void DIOPINGREPLY::SetTimeElapsed(XDWORD timeelapsed)
 * @brief      Get TTL
 * @ingroup    DATAIO
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOPINGREPLY::GetTTL()
@@ -224,7 +224,7 @@ XBYTE DIOPINGREPLY::GetTTL()
 * @brief      Set TTL
 * @ingroup    DATAIO
 * 
-* @param[in]  TTL : 
+* @param[in]  TTL : TTL value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPINGREPLY::SetTTL(XBYTE TTL)
@@ -341,7 +341,7 @@ DIOPING::~DIOPING()
 * @brief      Get is instanced
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::GetIsInstanced()
@@ -356,7 +356,7 @@ bool DIOPING::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    DATAIO
 * 
-* @return     DIOPING& : 
+* @return     DIOPING& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPING& DIOPING::GetInstance()
@@ -373,9 +373,9 @@ DIOPING& DIOPING::GetInstance()
 * @brief      Set instance
 * @ingroup    DATAIO
 * 
-* @param[in]  _instance : 
+* @param[in]  _instance : Instance pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::SetInstance(DIOPING* _instance)
@@ -394,7 +394,7 @@ bool DIOPING::SetInstance(DIOPING* _instance)
 * @brief      Del instance
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::DelInstance()
@@ -417,7 +417,7 @@ bool DIOPING::DelInstance()
 * @brief      Get target
 * @ingroup    DATAIO
 * 
-* @return     DIOURL* : 
+* @return     DIOURL* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOPING::GetTarget()
@@ -429,13 +429,13 @@ DIOURL* DIOPING::GetTarget()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPING::Set(XCHAR* urltarget , XCHAR* IPLocal)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  urltarget : 
-* @param[in]  IPLocal : 
+* @param[in]  urltarget : Urltarget pointer to use.
+* @param[in]  IPLocal : IP Local pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::Set(XCHAR* urltarget , XCHAR* IPLocal)
@@ -451,13 +451,13 @@ bool DIOPING::Set(XCHAR* urltarget , XCHAR* IPLocal)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPING::Set(DIOURL& urltarget, XCHAR* IPLocal)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  urltarget : 
-* @param[in]  IPLocal : 
+* @param[in]  urltarget : Urltarget value.
+* @param[in]  IPLocal : IP Local pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::Set(DIOURL& urltarget, XCHAR* IPLocal)
@@ -469,14 +469,14 @@ bool DIOPING::Set(DIOURL& urltarget, XCHAR* IPLocal)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPING::Do(XDWORD nretries, XDWORD timebetweenchecks, bool exitfirstgoodreply)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    DATAIO
 * 
-* @param[in]  nretries : 
-* @param[in]  timebetweenchecks : 
-* @param[in]  exitfirstgoodreply : 
+* @param[in]  nretries : Nretries value.
+* @param[in]  timebetweenchecks : Timebetweenchecks value.
+* @param[in]  exitfirstgoodreply : Exitfirstgoodreply value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::Do(XDWORD nretries, XDWORD timebetweenchecks, bool exitfirstgoodreply)
@@ -727,7 +727,7 @@ bool DIOPING::Do(XDWORD nretries, XDWORD timebetweenchecks, bool exitfirstgoodre
 * @brief      Was connected
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::WasConnected()
@@ -750,7 +750,7 @@ bool DIOPING::WasConnected()
 * @brief      Get replys
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIOPINGREPLY*>* : 
+* @return     XVECTOR<DIOPINGREPLY*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOPINGREPLY*>* DIOPING::GetReplys()
@@ -765,7 +765,7 @@ XVECTOR<DIOPINGREPLY*>* DIOPING::GetReplys()
 * @brief      Calculate mean time
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPING::CalculateMeanTime()
@@ -802,7 +802,7 @@ XDWORD DIOPING::CalculateMeanTime()
 * @brief      Delete all replys
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::DeleteAllReplys()
@@ -833,13 +833,13 @@ bool DIOPING::DeleteAllReplys()
 * @brief      Add reply
 * @ingroup    DATAIO
 * 
-* @param[in]  sequence : 
-* @param[in]  fromIP : 
-* @param[in]  sizerequest : 
-* @param[in]  timeelapsed : 
-* @param[in]  TTL : 
+* @param[in]  sequence : Sequence value.
+* @param[in]  fromIP : From IP pointer to use.
+* @param[in]  sizerequest : Sizerequest value.
+* @param[in]  timeelapsed : Timeelapsed value.
+* @param[in]  TTL : TTL value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPING::AddReply(XWORD sequence, XCHAR* fromIP, XDWORD sizerequest, XDWORD timeelapsed, XBYTE TTL)
@@ -876,10 +876,10 @@ bool DIOPING::AddReply(XWORD sequence, XCHAR* fromIP, XDWORD sizerequest, XDWORD
 * @brief      Calcule check sum
 * @ingroup    DATAIO
 * 
-* @param[in]  addr : 
-* @param[in]  len : 
+* @param[in]  addr : Addr pointer to use.
+* @param[in]  len : Len value.
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOPING::CalculeCheckSum(XWORD* addr, int len)

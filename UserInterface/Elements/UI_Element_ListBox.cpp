@@ -59,8 +59,8 @@
 * @fn         UI_ELEMENT_LISTBOX::UI_ELEMENT_LISTBOX()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_LISTBOX::UI_ELEMENT_LISTBOX()    
 { 
   Clean();   
@@ -76,8 +76,8 @@ UI_ELEMENT_LISTBOX::UI_ELEMENT_LISTBOX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_LISTBOX::~UI_ELEMENT_LISTBOX()    
 { 
   Clean();                            
@@ -89,10 +89,10 @@ UI_ELEMENT_LISTBOX::~UI_ELEMENT_LISTBOX()
 * @fn         UI_ELEMENT_MENU* UI_ELEMENT_LISTBOX::Get_UIMenu()
 * @brief      Get UI menu
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_MENU* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_MENU* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_MENU* UI_ELEMENT_LISTBOX::Get_UIMenu()
 {
   return UImenu;
@@ -104,12 +104,12 @@ UI_ELEMENT_MENU* UI_ELEMENT_LISTBOX::Get_UIMenu()
 * @fn         bool UI_ELEMENT_LISTBOX::Set_UIMenu(UI_ELEMENT_MENU* element_menu)
 * @brief      Set UI menu
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element_menu : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element_menu : Element menu pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_LISTBOX::Set_UIMenu(UI_ELEMENT_MENU* element_menu)
 {
   UImenu = element_menu;
@@ -124,8 +124,8 @@ bool UI_ELEMENT_LISTBOX::Set_UIMenu(UI_ELEMENT_MENU* element_menu)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_LISTBOX::Clean()
 {
   UImenu  = NULL;   

@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMUSBLOCALENUMDEVICES::DIOSTREAMUSBLOCALENUMDEVICES()
+* 
+* @fn         DIOSTREAMUSBLOCALENUMDEVICES::DIOSTREAMUSBLOCALENUMDEVICES() : DIOSTREAMENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUSBLOCALENUMDEVICES::DIOSTREAMUSBLOCALENUMDEVICES() : DIOSTREAMENUMDEVICES()
 {
@@ -69,12 +69,12 @@ DIOSTREAMUSBLOCALENUMDEVICES::DIOSTREAMUSBLOCALENUMDEVICES() : DIOSTREAMENUMDEVI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUSBLOCALENUMDEVICES::~DIOSTREAMUSBLOCALENUMDEVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUSBLOCALENUMDEVICES::~DIOSTREAMUSBLOCALENUMDEVICES()
 {
@@ -83,13 +83,13 @@ DIOSTREAMUSBLOCALENUMDEVICES::~DIOSTREAMUSBLOCALENUMDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBLOCALENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBLOCALENUMDEVICES::Search()
 {
@@ -98,15 +98,15 @@ bool DIOSTREAMUSBLOCALENUMDEVICES::Search()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBLOCALENUMDEVICES::StopSearch(bool waitend)
 * @brief      Stop search
 * @ingroup    DATAIO
-*
-* @param[in]  waitend :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  waitend : Waitend value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBLOCALENUMDEVICES::StopSearch(bool waitend)
 {
@@ -115,13 +115,13 @@ bool DIOSTREAMUSBLOCALENUMDEVICES::StopSearch(bool waitend)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBLOCALENUMDEVICES::IsSearching()
 * @brief      Is searching
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBLOCALENUMDEVICES::IsSearching()
 {
@@ -130,15 +130,15 @@ bool DIOSTREAMUSBLOCALENUMDEVICES::IsSearching()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSBLOCALENUMDEVICES::IsDeviceAvailable(XCHAR* resource)
 * @brief      Is device available
 * @ingroup    DATAIO
-*
-* @param[in]  resource :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  resource : Resource pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSBLOCALENUMDEVICES::IsDeviceAvailable(XCHAR* resource)
 {
@@ -147,15 +147,15 @@ bool DIOSTREAMUSBLOCALENUMDEVICES::IsDeviceAvailable(XCHAR* resource)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XCHAR* location)
 * @brief      Find device
 * @ingroup    DATAIO
-*
-* @param[in]  location :
-*
-* @return     DIOSTREAMDEVICEUSB* :
-*
+* 
+* @param[in]  location : Location pointer to use.
+* 
+* @return     DIOSTREAMDEVICEUSB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XCHAR* location)
 {
@@ -176,15 +176,15 @@ DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XCHAR* location)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XSTRING& location)
 * @brief      Find device
 * @ingroup    DATAIO
-*
-* @param[in]  location :
-*
-* @return     DIOSTREAMDEVICEUSB* :
-*
+* 
+* @param[in]  location : Location value.
+* 
+* @return     DIOSTREAMDEVICEUSB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XSTRING& location)
 {
@@ -193,16 +193,16 @@ DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XSTRING& location)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XCHAR* location, DIOSTREAMDEVICEUSBCLASS classdev)
 * @brief      Find device
 * @ingroup    DATAIO
-*
-* @param[in]  location :
-* @param[in]  classdev :
-*
-* @return     DIOSTREAMDEVICEUSB* :
-*
+* 
+* @param[in]  location : Location pointer to use.
+* @param[in]  classdev : Classdev value.
+* 
+* @return     DIOSTREAMDEVICEUSB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XCHAR* location, DIOSTREAMDEVICEUSBCLASS classdev)
 {
@@ -225,16 +225,16 @@ DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XCHAR* location, DI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XSTRING& location, DIOSTREAMDEVICEUSBCLASS classdev)
 * @brief      Find device
 * @ingroup    DATAIO
-*
-* @param[in]  location :
-* @param[in]  classdev :
-*
-* @return     DIOSTREAMDEVICEUSB* :
-*
+* 
+* @param[in]  location : Location value.
+* @param[in]  classdev : Classdev value.
+* 
+* @return     DIOSTREAMDEVICEUSB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XSTRING& location, DIOSTREAMDEVICEUSBCLASS classdev)
 {
@@ -243,16 +243,16 @@ DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XSTRING& location, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XDWORD vendorID, XDWORD productID)
 * @brief      Find device
 * @ingroup    DATAIO
-*
-* @param[in]  vendorID :
-* @param[in]  productID :
-*
-* @return     DIOSTREAMDEVICEUSB* :
-*
+* 
+* @param[in]  vendorID : Vendor ID value.
+* @param[in]  productID : Product ID value.
+* 
+* @return     DIOSTREAMDEVICEUSB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XDWORD vendorID, XDWORD productID)
 {
@@ -272,17 +272,17 @@ DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XDWORD vendorID, XD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XDWORD vendorID, XDWORD productID, DIOSTREAMDEVICEUSBCLASS classdev)
 * @brief      Find device
 * @ingroup    DATAIO
-*
-* @param[in]  vendorID :
-* @param[in]  productID :
-* @param[in]  classdev :
-*
-* @return     DIOSTREAMDEVICEUSB* :
-*
+* 
+* @param[in]  vendorID : Vendor ID value.
+* @param[in]  productID : Product ID value.
+* @param[in]  classdev : Classdev value.
+* 
+* @return     DIOSTREAMDEVICEUSB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XDWORD vendorID, XDWORD productID, DIOSTREAMDEVICEUSBCLASS classdev)
 {
@@ -302,15 +302,15 @@ DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(XDWORD vendorID, XD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(DIOSTREAMUSBCONFIG& config)
 * @brief      Find device
 * @ingroup    DATAIO
-*
-* @param[in]  config :
-*
-* @return     DIOSTREAMDEVICEUSB* :
-*
+* 
+* @param[in]  config : Configuration object to use.
+* 
+* @return     DIOSTREAMDEVICEUSB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(DIOSTREAMUSBCONFIG& config)
 {
@@ -331,12 +331,12 @@ DIOSTREAMDEVICEUSB* DIOSTREAMUSBLOCALENUMDEVICES::FindDevice(DIOSTREAMUSBCONFIG&
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUSBLOCALENUMDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUSBLOCALENUMDEVICES::Clean()
 {

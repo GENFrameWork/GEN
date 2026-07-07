@@ -83,15 +83,15 @@ DIOWEBSERVER_PLUGINSMANAGER::~DIOWEBSERVER_PLUGINSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_Add(DIOWEBSERVER_PLUGIN* plugin)
 * @brief      Plugins add
 * @ingroup    DATAIO
-*
-* @param[in]  plugin :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  plugin : Plugin pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_Add(DIOWEBSERVER_PLUGIN* plugin)
 {
@@ -102,13 +102,13 @@ bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_Add(DIOWEBSERVER_PLUGIN* plugin)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOWEBSERVER_PLUGIN* DIOWEBSERVER_PLUGINSMANAGER::Plugins_GetNPlugins()
+* 
+* @fn         XDWORD DIOWEBSERVER_PLUGINSMANAGER::Plugins_GetNPlugins()
 * @brief      Plugins get N plugins
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER_PLUGIN* :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWEBSERVER_PLUGINSMANAGER::Plugins_GetNPlugins()
 {
@@ -117,15 +117,15 @@ XDWORD DIOWEBSERVER_PLUGINSMANAGER::Plugins_GetNPlugins()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_PLUGIN* DIOWEBSERVER_PLUGINSMANAGER::Plugins_Get(int index)
 * @brief      Plugins get
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     DIOWEBSERVER_PLUGIN* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     DIOWEBSERVER_PLUGIN* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_PLUGIN* DIOWEBSERVER_PLUGINSMANAGER::Plugins_Get(int index)
 {
@@ -134,15 +134,15 @@ DIOWEBSERVER_PLUGIN* DIOWEBSERVER_PLUGINSMANAGER::Plugins_Get(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_Delete(DIOWEBSERVER_PLUGIN* plugin)
 * @brief      Plugins delete
 * @ingroup    DATAIO
-*
-* @param[in]  plugin :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  plugin : Plugin pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_Delete(DIOWEBSERVER_PLUGIN* plugin)
 {
@@ -151,13 +151,13 @@ bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_Delete(DIOWEBSERVER_PLUGIN* plugin)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_DeleteAll()
 * @brief      Plugins GEN_DELETE all
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_DeleteAll()
 {
@@ -171,12 +171,12 @@ bool DIOWEBSERVER_PLUGINSMANAGER::Plugins_DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_PLUGINSMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_PLUGINSMANAGER::Clean()
 {

@@ -58,11 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGSTYLE::GRPVECTORFILESVGSTYLE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGSTYLE::GRPVECTORFILESVGSTYLE()
 {
@@ -71,12 +71,12 @@ GRPVECTORFILESVGSTYLE::GRPVECTORFILESVGSTYLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGSTYLE::~GRPVECTORFILESVGSTYLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGSTYLE::~GRPVECTORFILESVGSTYLE()
 {
@@ -85,15 +85,15 @@ GRPVECTORFILESVGSTYLE::~GRPVECTORFILESVGSTYLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read presentation attributes and the inline style attribute (style overrides)
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  element : xml element
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -133,13 +133,13 @@ bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGSTYLE::InheritFrom(GRPVECTORFILESVGSTYLE& parent)
 * @brief      Inherit from : for every property not specified locally, take the parent value
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  parent : parent (effective) style
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGSTYLE::InheritFrom(GRPVECTORFILESVGSTYLE& parent)
 {
@@ -174,102 +174,135 @@ void GRPVECTORFILESVGSTYLE::InheritFrom(GRPVECTORFILESVGSTYLE& parent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::HasFill()
 * @brief      Has fill
 * @ingroup    GRAPHIC
-* @return     bool : true if there is a fill (not 'none')
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::HasFill()                       { return !fillnone; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::IsFillSpecified()
 * @brief      Is fill specified
 * @ingroup    GRAPHIC
-* @return     bool : true if fill was specified
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::IsFillSpecified()               { return fillspecified; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DCOLOR_RGBA8& GRPVECTORFILESVGSTYLE::GetFillColor()
 * @brief      Get fill color
 * @ingroup    GRAPHIC
-* @return     GRP2DCOLOR_RGBA8& : fill color
+* 
+* @return     GRP2DCOLOR_RGBA8& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR_RGBA8& GRPVECTORFILESVGSTYLE::GetFillColor()     { return fillcolor; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::HasStroke()
 * @brief      Has stroke
 * @ingroup    GRAPHIC
-* @return     bool : true if there is a stroke (not 'none')
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::HasStroke()                     { return (strokespecified && !strokenone); }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::IsStrokeSpecified()
 * @brief      Is stroke specified
 * @ingroup    GRAPHIC
-* @return     bool : true if stroke was specified
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::IsStrokeSpecified()             { return strokespecified; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DCOLOR_RGBA8& GRPVECTORFILESVGSTYLE::GetStrokeColor()
 * @brief      Get stroke color
 * @ingroup    GRAPHIC
-* @return     GRP2DCOLOR_RGBA8& : stroke color
+* 
+* @return     GRP2DCOLOR_RGBA8& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR_RGBA8& GRPVECTORFILESVGSTYLE::GetStrokeColor()   { return strokecolor; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::IsFillPaintServer()
 * @brief      Is fill paint server : the fill is a url(#id) reference (gradient / pattern)
 * @ingroup    GRAPHIC
-* @return     bool : true if the fill is a paint server reference.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::IsFillPaintServer()             { return fillispaintserver; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSTRING* GRPVECTORFILESVGSTYLE::GetFillPaintID()
 * @brief      Get fill paint id : the referenced id (without '#')
 * @ingroup    GRAPHIC
-* @return     XSTRING* : paint server id
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILESVGSTYLE::GetFillPaintID()            { return &fillpaintid; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::IsStrokePaintServer()
 * @brief      Is stroke paint server : the stroke is a url(#id) reference
 * @ingroup    GRAPHIC
-* @return     bool : true if the stroke is a paint server reference.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::IsStrokePaintServer()           { return strokeispaintserver; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSTRING* GRPVECTORFILESVGSTYLE::GetStrokePaintID()
 * @brief      Get stroke paint id : the referenced id (without '#')
 * @ingroup    GRAPHIC
-* @return     XSTRING* : paint server id
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILESVGSTYLE::GetStrokePaintID()          { return &strokepaintid; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGSTYLE::ExtractPaintServerID(XSTRING& value, XSTRING& id)
 * @brief      Extract paint server id : parse the id from a "url(#id)" / "url(id)" value
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  value : the url(...) value
-* @param[out] id : extracted id (without '#')
+* @param[in]  id : extracted id (without '#')
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGSTYLE::ExtractPaintServerID(XSTRING& value, XSTRING& id)
 {
@@ -289,71 +322,89 @@ void GRPVECTORFILESVGSTYLE::ExtractPaintServerID(XSTRING& value, XSTRING& id)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGSTYLE::GetStrokeWidth()
 * @brief      Get stroke width
 * @ingroup    GRAPHIC
-* @return     double : stroke width
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGSTYLE::GetStrokeWidth()              { return strokewidth; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::IsStrokeWidthSpecified()
 * @brief      Is stroke width specified
 * @ingroup    GRAPHIC
-* @return     bool : true if stroke width was specified
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::IsStrokeWidthSpecified()        { return strokewidthspecified; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGSTYLE::GetOpacity()
 * @brief      Get opacity
 * @ingroup    GRAPHIC
-* @return     double : opacity
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGSTYLE::GetOpacity()                  { return opacity; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGSTYLE::GetFillOpacity()
 * @brief      Get fill opacity
 * @ingroup    GRAPHIC
-* @return     double : fill opacity
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGSTYLE::GetFillOpacity()              { return fillopacity; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGSTYLE::GetStrokeOpacity()
 * @brief      Get stroke opacity
 * @ingroup    GRAPHIC
-* @return     double : stroke opacity
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGSTYLE::GetStrokeOpacity()            { return strokeopacity; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DPATHFILLRULE GRPVECTORFILESVGSTYLE::GetFillRule()
 * @brief      Get fill rule
 * @ingroup    GRAPHIC
-* @return     GRP2DPATHFILLRULE : fill rule
+* 
+* @return     GRP2DPATHFILLRULE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DPATHFILLRULE GRPVECTORFILESVGSTYLE::GetFillRule()      { return fillrule; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::ApplyProperty(XSTRING& name, XSTRING& value)
 * @brief      Apply property : set a single style property by name
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  name : property name
 * @param[in]  value : property value
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::ApplyProperty(XSTRING& name, XSTRING& value)
 {
@@ -438,16 +489,16 @@ bool GRPVECTORFILESVGSTYLE::ApplyProperty(XSTRING& name, XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::ParseStyleAttribute(XSTRING& style)
 * @brief      Parse style attribute : "fill:#f00;stroke:black;stroke-width:2"
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  style : style attribute value
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::ParseStyleAttribute(XSTRING& style)
 {
@@ -481,18 +532,18 @@ bool GRPVECTORFILESVGSTYLE::ParseStyleAttribute(XSTRING& style)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGSTYLE::ParseColor(XSTRING& value, GRP2DCOLOR_RGBA8& color, bool& isnone)
 * @brief      Parse color : #rgb, #rrggbb, rgb(r,g,b), none, basic named colors
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  value : color string
 * @param[in]  color : output color
-* @param[out] isnone : true if the color is 'none'
-*
-* @return     bool : true if the value was recognized.
-*
+* @param[in]  isnone : true if the color is 'none'
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::ParseColor(XSTRING& value, GRP2DCOLOR_RGBA8& color, bool& isnone)
 {
@@ -614,16 +665,16 @@ bool GRPVECTORFILESVGSTYLE::ParseColor(XSTRING& value, GRP2DCOLOR_RGBA8& color, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPVECTORFILESVGSTYLE::HexValue(XCHAR character)
 * @brief      Hex value : convert one hexadecimal character to its numeric value (0..15)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  character : hexadecimal character
-*
-* @return     int : numeric value (0..15) or 0 if invalid
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILESVGSTYLE::HexValue(XCHAR character)
 {
@@ -636,12 +687,12 @@ int GRPVECTORFILESVGSTYLE::HexValue(XCHAR character)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGSTYLE::Clean()
 * @brief      Clean the attributes of the class: Default initialize (SVG defaults)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGSTYLE::Clean()
 {

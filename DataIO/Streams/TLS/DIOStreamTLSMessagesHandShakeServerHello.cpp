@@ -71,8 +71,8 @@ DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO()
 * 
 * @fn         DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::~DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::~DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO()
@@ -89,7 +89,7 @@ DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::~DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO(
 * @brief      get legacy version
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetLegacyVersion()
@@ -104,7 +104,7 @@ XWORD DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetLegacyVersion()
 * @brief      set legacy version
 * @ingroup    DATAIO
 * 
-* @param[in]  legacy_version : 
+* @param[in]  legacy_version : Legacy version value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetLegacyVersion(XWORD legacy_version)
@@ -119,7 +119,7 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetLegacyVersion(XWORD legacy_versi
 * @brief      get random
 * @ingroup    DATAIO
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetRandom()
@@ -134,7 +134,7 @@ XBYTE* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetRandom()
 * @brief      get session IDlength
 * @ingroup    DATAIO
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetSessionIDLength()
@@ -149,7 +149,7 @@ XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetSessionIDLength()
 * @brief      set session IDlength
 * @ingroup    DATAIO
 * 
-* @param[in]  sessionID_length : 
+* @param[in]  sessionID_length : Session ID length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetSessionIDLength(XBYTE sessionID_length)
@@ -164,7 +164,7 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetSessionIDLength(XBYTE sessionID_
 * @brief      get session Id
 * @ingroup    DATAIO
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetSessionID()
@@ -179,7 +179,7 @@ XBYTE* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetSessionID()
 * @brief      get ciphersuites length
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCiphersuitesLength()
@@ -194,7 +194,7 @@ XWORD DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCiphersuitesLength()
 * @brief      set ciphersuites length
 * @ingroup    DATAIO
 * 
-* @param[in]  ciphersuites_length : 
+* @param[in]  ciphersuites_length : Ciphersuites length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetCiphersuitesLength(XWORD ciphersuites_length)
@@ -209,7 +209,7 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetCiphersuitesLength(XWORD ciphers
 * @brief      get cipher suites
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<XWORD>* : 
+* @return     XVECTOR<XWORD>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XWORD>* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCipherSuites()
@@ -224,7 +224,7 @@ XVECTOR<XWORD>* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCipherSuites()
 * @brief      get compression length
 * @ingroup    DATAIO
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCompressionLength()
@@ -239,7 +239,7 @@ XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCompressionLength()
 * @brief      set compression length
 * @ingroup    DATAIO
 * 
-* @param[in]  compress_length : 
+* @param[in]  compress_length : Compress length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetCompressionLength(XBYTE compress_length)
@@ -254,7 +254,7 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetCompressionLength(XBYTE compress
 * @brief      get compression method
 * @ingroup    DATAIO
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCompressionMethod()
@@ -269,7 +269,7 @@ XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCompressionMethod()
 * @brief      set compression method
 * @ingroup    DATAIO
 * 
-* @param[in]  compress_method : 
+* @param[in]  compress_method : Compress method value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetCompressionMethod(XBYTE compress_method)
@@ -284,7 +284,7 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetCompressionMethod(XBYTE compress
 * @brief      extensions  get lenght
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_GetLenght()
@@ -299,7 +299,7 @@ XWORD DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_GetLenght()
 * @brief      extensions  set lenght
 * @ingroup    DATAIO
 * 
-* @param[in]  extensions_lenght : 
+* @param[in]  extensions_lenght : Extensions lenght value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_SetLenght(XWORD extensions_lenght)
@@ -314,7 +314,7 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_SetLenght(XWORD extensio
 * @brief      extensions  get all
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* : 
+* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_GetAll()
@@ -329,9 +329,9 @@ XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Ex
 * @brief      extensions  add
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_Add(DIOSTREAMTLS_MSG_EXTENSION* extension)
@@ -364,7 +364,7 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_Add(DIOSTREAMTLS_MSG_EXT
 * @brief      extensions  GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_DeleteAll()
@@ -389,10 +389,10 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_DeleteAll()
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetToBuffer(XBUFFER& buffer, bool showdebug)
@@ -440,10 +440,10 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetToBuffer(XBUFFER& buffer, bool s
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetFromBuffer(XBUFFER& buffer, bool showdebug)
@@ -456,8 +456,8 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetFromBuffer(XBUFFER& buffer, bool
 * 
 * @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Clean()

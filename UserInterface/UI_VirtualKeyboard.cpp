@@ -76,8 +76,8 @@
 * @fn         UI_VIRTUALKEYBOARD_KEYINFO::UI_VIRTUALKEYBOARD_KEYINFO()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_VIRTUALKEYBOARD_KEYINFO::UI_VIRTUALKEYBOARD_KEYINFO()    
 {
   Clean();
@@ -90,8 +90,8 @@ UI_VIRTUALKEYBOARD_KEYINFO::UI_VIRTUALKEYBOARD_KEYINFO()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_VIRTUALKEYBOARD_KEYINFO::~UI_VIRTUALKEYBOARD_KEYINFO()
 {
   Clean();
@@ -104,8 +104,8 @@ UI_VIRTUALKEYBOARD_KEYINFO::~UI_VIRTUALKEYBOARD_KEYINFO()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_VIRTUALKEYBOARD_KEYINFO::Clean()
 {
   color.Empty();
@@ -127,8 +127,8 @@ void UI_VIRTUALKEYBOARD_KEYINFO::Clean()
 * @fn         UI_VIRTUALKEYBOARD::UI_VIRTUALKEYBOARD()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_VIRTUALKEYBOARD::UI_VIRTUALKEYBOARD()
 { 
   Clean();                            
@@ -137,11 +137,11 @@ UI_VIRTUALKEYBOARD::UI_VIRTUALKEYBOARD()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn          UI_VIRTUALKEYBOARD::~UI_VIRTUALKEYBOARD()
+* @fn         UI_VIRTUALKEYBOARD::~UI_VIRTUALKEYBOARD()
 * @brief      Destructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_VIRTUALKEYBOARD::~UI_VIRTUALKEYBOARD()
 { 
   Clean();                            
@@ -151,13 +151,13 @@ UI_VIRTUALKEYBOARD::~UI_VIRTUALKEYBOARD()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_VIRTUALKEYBOARD::Ini(UI_LAYOUT* layout, GRPSCREEN* screen)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layout : 
-* @param[in]  screen : 
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  screen : Screen object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::Ini(UI_LAYOUT* layout, GRPSCREEN* screen)
@@ -210,10 +210,10 @@ bool UI_VIRTUALKEYBOARD::Ini(UI_LAYOUT* layout, GRPSCREEN* screen)
 * @fn         bool UI_VIRTUALKEYBOARD::IsShow()
 * @brief      Is show
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::IsShow()
 {
   return isshow;
@@ -225,10 +225,10 @@ bool UI_VIRTUALKEYBOARD::IsShow()
 * @fn         UI_ELEMENT* UI_VIRTUALKEYBOARD::GetElementEditable()
 * @brief      Get element editable
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_VIRTUALKEYBOARD::GetElementEditable()
 {
   return element_editable;
@@ -240,13 +240,13 @@ UI_ELEMENT* UI_VIRTUALKEYBOARD::GetElementEditable()
 * @fn         bool UI_VIRTUALKEYBOARD::Show(bool on, UI_ELEMENT* element_editable)
 * @brief      Show
 * @ingroup    USERINTERFACE
-*
-* @param[in]  on : 
-* @param[in]  element_editable : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  on : On value.
+* @param[in]  element_editable : Element editable pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::Show(bool on, UI_ELEMENT* element_editable)
 {
   if(!main_form)  return false;
@@ -347,12 +347,12 @@ bool UI_VIRTUALKEYBOARD::Show(bool on, UI_ELEMENT* element_editable)
 * @fn         bool UI_VIRTUALKEYBOARD::SelectInput(UI_ELEMENT* key_select)
 * @brief      Select input
 * @ingroup    USERINTERFACE
-*
-* @param[in]  key_select : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  key_select : Key select pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::SelectInput(UI_ELEMENT* key_select)
 {
   XCHAR* literals[] =  { __L("RETURN")        ,  // 0
@@ -517,12 +517,12 @@ bool UI_VIRTUALKEYBOARD::SelectInput(UI_ELEMENT* key_select)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_VIRTUALKEYBOARD::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::End()
 {
   return true;
@@ -535,10 +535,10 @@ bool UI_VIRTUALKEYBOARD::End()
 * @brief      Add image cache
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  name : 
-* @param[in]  resource : 
+* @param[in]  name : Name to use.
+* @param[in]  resource : Resource pointer to use.
 * 
-* @return     UI_ANIMATION* : 
+* @return     UI_ANIMATION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATION* UI_VIRTUALKEYBOARD::AddImageCache(XCHAR* name, XCHAR* resource)
@@ -594,12 +594,12 @@ UI_ANIMATION* UI_VIRTUALKEYBOARD::AddImageCache(XCHAR* name, XCHAR* resource)
 * @fn         GRPBITMAP* UI_VIRTUALKEYBOARD::LoadKeyImage(XCHAR* pathimage)
 * @brief      Load key image
 * @ingroup    USERINTERFACE
-*
-* @param[in]  pathimage : 
 * 
-* @return     GRPBITMAP* : 
+* @param[in]  pathimage : Pathimage pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_VIRTUALKEYBOARD::LoadKeyImage(XCHAR* pathimage)
 {
   UI_ANIMATION* animation = NULL;
@@ -617,15 +617,15 @@ GRPBITMAP* UI_VIRTUALKEYBOARD::LoadKeyImage(XCHAR* pathimage)
 * @fn         bool UI_VIRTUALKEYBOARD::AddKeyButton(XCHAR* leyend, XCHAR* text, XCHAR* xpathbitmap, UI_VIRTUALKEYBOARD_KEYINFO& keyinfo)
 * @brief      Add key button
 * @ingroup    USERINTERFACE
-*
-* @param[in]  leyend : 
-* @param[in]  text : 
-* @param[in]  xpathbitmap : 
-* @param[in]  keyinfo : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  leyend : Leyend pointer to use.
+* @param[in]  text : Text to use.
+* @param[in]  xpathbitmap : Xpathbitmap pointer to use.
+* @param[in]  keyinfo : Keyinfo value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::AddKeyButton(XCHAR* leyend, XCHAR* text, XCHAR* xpathbitmap, UI_VIRTUALKEYBOARD_KEYINFO& keyinfo)
 {  
   UI_ELEMENT_MULTIOPTION* element_multioption = GEN_NEW UI_ELEMENT_MULTIOPTION();
@@ -757,13 +757,13 @@ bool UI_VIRTUALKEYBOARD::AddKeyButton(XCHAR* leyend, XCHAR* text, XCHAR* xpathbi
 * @fn         bool UI_VIRTUALKEYBOARD::CreateAllKeys(double x, double y)
 * @brief      Create all keys
 * @ingroup    USERINTERFACE
-*
-* @param[in]  x : 
-* @param[in]  y : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::CreateAllKeys(double x, double y)
 {
   #define UI_VIRTUALKEYBOARD_MARGIN   40
@@ -898,10 +898,10 @@ bool UI_VIRTUALKEYBOARD::CreateAllKeys(double x, double y)
 * @fn         bool UI_VIRTUALKEYBOARD::DeleteAllKeys()
 * @brief      Delete all keys
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_VIRTUALKEYBOARD::DeleteAllKeys()
 {
   if(main_form->GetComposeElements()->IsEmpty()) return false;
@@ -919,8 +919,8 @@ bool UI_VIRTUALKEYBOARD::DeleteAllKeys()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_VIRTUALKEYBOARD::Clean()
 {
   screen            = NULL;

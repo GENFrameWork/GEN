@@ -53,11 +53,11 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32DATETIME::XESP32DATETIME()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32DATETIME::XESP32DATETIME()
 {
@@ -66,12 +66,12 @@ XESP32DATETIME::XESP32DATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32DATETIME::~XESP32DATETIME()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32DATETIME::~XESP32DATETIME()
 {
@@ -80,13 +80,13 @@ XESP32DATETIME::~XESP32DATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32DATETIME::Read()
 * @brief      Read
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DATETIME::Read()
 {
@@ -97,13 +97,13 @@ bool XESP32DATETIME::Read()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32DATETIME::Write()
 * @brief      Write
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DATETIME::Write()
 {
@@ -114,13 +114,13 @@ bool XESP32DATETIME::Write()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XESP32DATETIME::GetMeridianDifference()
 * @brief      Get meridian difference
 * @ingroup    PLATFORM_ESP32
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XESP32DATETIME::GetMeridianDifference()
 {
@@ -129,15 +129,15 @@ int XESP32DATETIME::GetMeridianDifference()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32DATETIME::IsDayLigthSavingTime(int* bias)
 * @brief      Is day ligth saving time
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  bias :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  bias : Bias pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DATETIME::IsDayLigthSavingTime(int* bias)
 {

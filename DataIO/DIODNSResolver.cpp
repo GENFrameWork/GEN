@@ -98,7 +98,7 @@ DIODNSRESOLVER_HOSTRESOLVED::~DIODNSRESOLVER_HOSTRESOLVED()
 * @brief      Get host
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIODNSRESOLVER_HOSTRESOLVED::GetHost()
@@ -108,13 +108,13 @@ XSTRING* DIODNSRESOLVER_HOSTRESOLVED::GetHost()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIODNSRESOLVER_HOSTRESOLVED::GetIP()
 * @brief      Get IP
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIODNSRESOLVER_HOSTRESOLVED::GetIP()
 {
@@ -173,7 +173,7 @@ DIODNSRESOLVER_DNSSERVER::~DIODNSRESOLVER_DNSSERVER()
 * @brief      Get IP
 * @ingroup    DATAIO
 * 
-* @return     DIOIP* : 
+* @return     DIOIP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIODNSRESOLVER_DNSSERVER::GetIP()
@@ -188,7 +188,7 @@ DIOIP* DIODNSRESOLVER_DNSSERVER::GetIP()
 * @brief      Get port
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIODNSRESOLVER_DNSSERVER::GetPort()
@@ -203,7 +203,7 @@ XWORD DIODNSRESOLVER_DNSSERVER::GetPort()
 * @brief      Set port
 * @ingroup    DATAIO
 * 
-* @param[in]  port : 
+* @param[in]  port : Port number to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIODNSRESOLVER_DNSSERVER::SetPort(XWORD port)
@@ -231,13 +231,13 @@ void DIODNSRESOLVER_DNSSERVER::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::GetIsInstanced()
 {
@@ -246,13 +246,13 @@ bool DIODNSRESOLVER::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODNSRESOLVER& DIODNSRESOLVER::GetInstance()
 * @brief      Get instance
 * @ingroup    DATAIO
-*
-* @return     DIODNSRESOLVER& :
-*
+* 
+* @return     DIODNSRESOLVER& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODNSRESOLVER& DIODNSRESOLVER::GetInstance()
 {
@@ -263,13 +263,13 @@ DIODNSRESOLVER& DIODNSRESOLVER::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::DelInstance()
 * @brief      Del instance
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::DelInstance()
 {
@@ -286,18 +286,18 @@ bool DIODNSRESOLVER::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 * @brief      Resolve URL
 * @ingroup    DATAIO
-*
-* @param[in]  URL :
-* @param[in]  IPresolved :
-* @param[in]  querytype :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  URL : URL to use.
+* @param[in]  IPresolved : I Presolved value.
+* @param[in]  querytype : Querytype value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 {
@@ -389,18 +389,18 @@ bool DIODNSRESOLVER::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int querytype, XD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::ResolveURL(DIOURL& URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 * @brief      Resolve URL
 * @ingroup    DATAIO
-*
-* @param[in]  URL :
-* @param[in]  IPresolved :
-* @param[in]  querytype :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  URL : URL to use.
+* @param[in]  IPresolved : I Presolved value.
+* @param[in]  querytype : Querytype value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::ResolveURL(DIOURL& URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 {
@@ -409,18 +409,18 @@ bool DIODNSRESOLVER::ResolveURL(DIOURL& URL, DIOIP& IPresolved, int querytype, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::ResolveURL(XSTRING& URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 * @brief      Resolve URL
 * @ingroup    DATAIO
-*
-* @param[in]  URL :
-* @param[in]  IPresolved :
-* @param[in]  querytype :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  URL : URL to use.
+* @param[in]  IPresolved : I Presolved value.
+* @param[in]  querytype : Querytype value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::ResolveURL(XSTRING& URL, DIOIP& IPresolved, int querytype, XDWORD timeout)
 {
@@ -429,15 +429,15 @@ bool DIODNSRESOLVER::ResolveURL(XSTRING& URL, DIOIP& IPresolved, int querytype, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::DNSServer_AddDNSServer(XCHAR* server)
 * @brief      DNS server add DNS server
 * @ingroup    DATAIO
-*
-* @param[in]  server :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  server : Server pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::DNSServer_AddDNSServer(XCHAR* server)
 {
@@ -477,15 +477,15 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(XCHAR* server)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::DNSServer_AddDNSServer(XSTRING& server)
 * @brief      DNS server add DNS server
 * @ingroup    DATAIO
-*
-* @param[in]  server :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  server : Server value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::DNSServer_AddDNSServer(XSTRING& server)
 {
@@ -494,16 +494,16 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(XSTRING& server)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::DNSServer_AddDNSServer(XBYTE* serverIP, XWORD port)
 * @brief      DNS server add DNS server
 * @ingroup    DATAIO
-*
-* @param[in]  serverIP :
-* @param[in]  port :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  serverIP : Server IP pointer to use.
+* @param[in]  port : Port number to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::DNSServer_AddDNSServer(XBYTE* serverIP, XWORD port)
 {
@@ -525,16 +525,16 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(XBYTE* serverIP, XWORD port)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::DNSServer_AddDNSServer(DIOIP& serverIP, XWORD port)
 * @brief      DNS server add DNS server
 * @ingroup    DATAIO
-*
-* @param[in]  serverIP :
-* @param[in]  port :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  serverIP : Server IP value.
+* @param[in]  port : Port number to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::DNSServer_AddDNSServer(DIOIP& serverIP, XWORD port)
 {
@@ -556,9 +556,9 @@ bool DIODNSRESOLVER::DNSServer_AddDNSServer(DIOIP& serverIP, XWORD port)
 * @brief      DNS server is I pon list
 * @ingroup    DATAIO
 * 
-* @param[in]  serverIP : 
+* @param[in]  serverIP : Server IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::DNSServer_IsIPonList(DIOIP& serverIP)
@@ -580,13 +580,13 @@ bool DIODNSRESOLVER::DNSServer_IsIPonList(DIOIP& serverIP)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XVECTOR<DIOIP*>* DIODNSRESOLVER::DNSServer_GetList()
+* 
+* @fn         XVECTOR<DIODNSRESOLVER_DNSSERVER*>* DIODNSRESOLVER::DNSServer_GetList()
 * @brief      DNS server get list
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<DIOIP*>* :
-*
+* 
+* @return     XVECTOR<DIODNSRESOLVER_DNSSERVER*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIODNSRESOLVER_DNSSERVER*>* DIODNSRESOLVER::DNSServer_GetList()
 {
@@ -595,16 +595,16 @@ XVECTOR<DIODNSRESOLVER_DNSSERVER*>* DIODNSRESOLVER::DNSServer_GetList()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::Host_FindIP(XCHAR* host, DIOIP& IPresolved)
 * @brief      Host find IP
 * @ingroup    DATAIO
-*
-* @param[in]  host :
-* @param[in]  IPresolved :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  host : Host pointer to use.
+* @param[in]  IPresolved : I Presolved value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::Host_FindIP(XCHAR* host, DIOIP& IPresolved)
 {
@@ -629,16 +629,16 @@ bool DIODNSRESOLVER::Host_FindIP(XCHAR* host, DIOIP& IPresolved)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::Host_FindIP(XSTRING& host, DIOIP& IPresolved)
 * @brief      Host find IP
 * @ingroup    DATAIO
-*
-* @param[in]  host :
-* @param[in]  IPresolved :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  host : Host value.
+* @param[in]  IPresolved : I Presolved value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::Host_FindIP(XSTRING& host, DIOIP& IPresolved)
 {
@@ -647,13 +647,13 @@ bool DIODNSRESOLVER::Host_FindIP(XSTRING& host, DIOIP& IPresolved)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::DNSServer_DeleteAllList()
 * @brief      DNS server GEN_DELETE all list
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::DNSServer_DeleteAllList()
 {
@@ -665,16 +665,16 @@ bool DIODNSRESOLVER::DNSServer_DeleteAllList()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::Host_Add(XCHAR* host, XCHAR* IPresolved)
 * @brief      Host add
 * @ingroup    DATAIO
-*
-* @param[in]  host :
-* @param[in]  IPresolved :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  host : Host pointer to use.
+* @param[in]  IPresolved : I Presolved pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::Host_Add(XCHAR* host, XCHAR* IPresolved)
 {
@@ -689,16 +689,16 @@ bool DIODNSRESOLVER::Host_Add(XCHAR* host, XCHAR* IPresolved)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::Host_Add(XSTRING& host, XSTRING& IPresolved)
 * @brief      Host add
 * @ingroup    DATAIO
-*
-* @param[in]  host :
-* @param[in]  IPresolved :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  host : Host value.
+* @param[in]  IPresolved : I Presolved value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::Host_Add(XSTRING& host, XSTRING& IPresolved)
 {
@@ -707,13 +707,13 @@ bool DIODNSRESOLVER::Host_Add(XSTRING& host, XSTRING& IPresolved)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<DIODNSRESOLVER_HOSTRESOLVED*>* DIODNSRESOLVER::Host_GetList()
 * @brief      Host get list
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<DIODNSRESOLVER_HOSTRESOLVED*>* :
-*
+* 
+* @return     XVECTOR<DIODNSRESOLVER_HOSTRESOLVED*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIODNSRESOLVER_HOSTRESOLVED*>*  DIODNSRESOLVER::Host_GetList()
 {
@@ -722,13 +722,13 @@ XVECTOR<DIODNSRESOLVER_HOSTRESOLVED*>*  DIODNSRESOLVER::Host_GetList()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODNSRESOLVER::Host_DeleteAllList()
 * @brief      Host GEN_DELETE all list
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSRESOLVER::Host_DeleteAllList()
 {
@@ -740,11 +740,11 @@ bool DIODNSRESOLVER::Host_DeleteAllList()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODNSRESOLVER::DIODNSRESOLVER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODNSRESOLVER::DIODNSRESOLVER()
 {
@@ -755,12 +755,12 @@ DIODNSRESOLVER::DIODNSRESOLVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODNSRESOLVER::~DIODNSRESOLVER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODNSRESOLVER::~DIODNSRESOLVER()
 {  
@@ -778,12 +778,12 @@ DIODNSRESOLVER::~DIODNSRESOLVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIODNSRESOLVER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIODNSRESOLVER::Clean()
 {

@@ -63,8 +63,8 @@ XPROCESSMANAGER* XPROCESSMANAGER::instance = NULL;
 * @fn         XPROCESS::XPROCESS()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XPROCESS::XPROCESS()
 {
   Clean();
@@ -77,8 +77,8 @@ XPROCESS::XPROCESS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XPROCESS::~XPROCESS()
 {
   processIDs.DeleteAll();
@@ -92,10 +92,10 @@ XPROCESS::~XPROCESS()
 * @fn         XDWORD XPROCESS::GetID()
 * @brief      Get ID
 * @ingroup    XUTILS
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XPROCESS::GetID()
 {
   return ID;
@@ -107,10 +107,10 @@ XDWORD XPROCESS::GetID()
 * @fn         void XPROCESS::SetID(XDWORD ID)
 * @brief      Set ID
 * @ingroup    XUTILS
-*
-* @param[in]  ID : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  ID : Identifier to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XPROCESS::SetID(XDWORD ID)
 {
   this->ID = ID;
@@ -123,7 +123,7 @@ void XPROCESS::SetID(XDWORD ID)
 * @brief      Get process I ds
 * @ingroup    XUTILS
 * 
-* @return     XVECTOR<XDWORD>* : 
+* @return     XVECTOR<XDWORD>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XDWORD>* XPROCESS::GetProcessIDs()
@@ -137,10 +137,10 @@ XVECTOR<XDWORD>* XPROCESS::GetProcessIDs()
 * @fn         XPATH* XPROCESS::GetPath()
 * @brief      Get path
 * @ingroup    XUTILS
-*
-* @return     XPATH* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XPATH* XPROCESS::GetPath()
 {
   return &path;
@@ -152,10 +152,10 @@ XPATH* XPROCESS::GetPath()
 * @fn         XSTRING* XPROCESS::GetName()
 * @brief      Get name
 * @ingroup    XUTILS
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XPROCESS::GetName()
 {
   return &name;
@@ -168,7 +168,7 @@ XSTRING* XPROCESS::GetName()
 * @brief      Get window handle
 * @ingroup    XUTILS
 * 
-* @return     void* : 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XPROCESS::GetWindowHandle()
@@ -184,7 +184,7 @@ void* XPROCESS::GetWindowHandle()
 * @brief      Set window handle
 * @ingroup    XUTILS
 * 
-* @param[in]  windowhandle : 
+* @param[in]  windowhandle : Windowhandle pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPROCESS::SetWindowHandle(void* windowhandle)
@@ -198,10 +198,10 @@ void XPROCESS::SetWindowHandle(void* windowhandle)
 * @fn         XSTRING* XPROCESS::GetWindowTitle()
 * @brief      Get window title
 * @ingroup    XUTILS
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XPROCESS::GetWindowTitle()
 {
   return &windowtitle;
@@ -214,7 +214,7 @@ XSTRING* XPROCESS::GetWindowTitle()
 * @brief      Get window rect
 * @ingroup    XUTILS
 * 
-* @return     GRPRECTINT* : 
+* @return     GRPRECTINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPRECTINT* XPROCESS::GetWindowRect()
@@ -229,7 +229,7 @@ GRPRECTINT* XPROCESS::GetWindowRect()
 * @brief      Get window title height
 * @ingroup    XUTILS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XPROCESS::GetWindowTitleHeight()
@@ -244,7 +244,7 @@ int XPROCESS::GetWindowTitleHeight()
 * @brief      Set window title height
 * @ingroup    XUTILS
 * 
-* @param[in]  windowtitleheight : 
+* @param[in]  windowtitleheight : Windowtitleheight value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPROCESS::SetWindowTitleHeight(int windowtitleheight)
@@ -259,7 +259,7 @@ void XPROCESS::SetWindowTitleHeight(int windowtitleheight)
 * @brief      Get window border width
 * @ingroup    XUTILS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XPROCESS::GetWindowBorderWidth()
@@ -274,7 +274,7 @@ int XPROCESS::GetWindowBorderWidth()
 * @brief      Set window border width
 * @ingroup    XUTILS
 * 
-* @param[in]  windowborderwidth : 
+* @param[in]  windowborderwidth : Windowborderwidth value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPROCESS::SetWindowBorderWidth(int windowborderwidth)
@@ -288,12 +288,12 @@ void XPROCESS::SetWindowBorderWidth(int windowborderwidth)
 * @fn         bool XPROCESS::CopyTo(XPROCESS& xprocess)
 * @brief      Copy to
 * @ingroup    XUTILS
-*
-* @param[in]  xprocess : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  xprocess : Xprocess value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESS::CopyTo(XPROCESS& xprocess)
 {
   xprocess.SetID(ID);
@@ -315,12 +315,12 @@ bool XPROCESS::CopyTo(XPROCESS& xprocess)
 * @fn         bool XPROCESS::CopyFrom(XPROCESS& xprocess)
 * @brief      Copy from
 * @ingroup    XUTILS
-*
-* @param[in]  xprocess : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  xprocess : Xprocess value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESS::CopyFrom(XPROCESS& xprocess)
 {
   ID                = xprocess.GetID();
@@ -343,10 +343,10 @@ bool XPROCESS::CopyFrom(XPROCESS& xprocess)
 * @brief      Compare
 * @ingroup    XUTILS
 * 
-* @param[in]  xprocess : 
-* @param[in]  onlyfixed : 
+* @param[in]  xprocess : Xprocess value.
+* @param[in]  onlyfixed : Onlyfixed value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESS::Compare(XPROCESS& xprocess, bool onlyfixed)
@@ -400,8 +400,8 @@ bool XPROCESS::Compare(XPROCESS& xprocess, bool onlyfixed)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XPROCESS::Clean()
 {
   ID                  = 0xFFFFFFFF;
@@ -414,11 +414,11 @@ void XPROCESS::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPROCESSMANAGER::XPROCESSMANAGER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPROCESSMANAGER::XPROCESSMANAGER()
 {
@@ -427,12 +427,12 @@ XPROCESSMANAGER::XPROCESSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPROCESSMANAGER::~XPROCESSMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPROCESSMANAGER::~XPROCESSMANAGER()
 {
@@ -441,14 +441,14 @@ XPROCESSMANAGER::~XPROCESSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPROCESSMANAGER::GetIsInstanced()
 * @brief      Get is instanced
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::GetIsInstanced()
 {
@@ -457,14 +457,14 @@ bool XPROCESSMANAGER::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPROCESSMANAGER& XPROCESSMANAGER::GetInstance()
 * @brief      Get instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     XPROCESSMANAGER& :
-*
+* 
+* @return     XPROCESSMANAGER& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPROCESSMANAGER& XPROCESSMANAGER::GetInstance()
 {
@@ -475,16 +475,16 @@ XPROCESSMANAGER& XPROCESSMANAGER::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPROCESSMANAGER::SetInstance(XPROCESSMANAGER* _instance)
 * @brief      Set instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  _instance : GEN_NEW instance
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::SetInstance(XPROCESSMANAGER* _instance)
 {
@@ -497,14 +497,14 @@ bool XPROCESSMANAGER::SetInstance(XPROCESSMANAGER* _instance)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPROCESSMANAGER::DelInstance()
 * @brief      Del instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::DelInstance()
 {
@@ -521,15 +521,15 @@ bool XPROCESSMANAGER::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 * @brief      Make system command
 * @ingroup    XUTILS
-*
-* @param[in]  command : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  command : Command pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 {
@@ -543,11 +543,11 @@ bool XPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 * @brief      Make command
 * @ingroup    XUTILS
 * 
-* @param[in]  command : 
-* @param[in]  out : 
-* @param[in]  returncode : 
+* @param[in]  command : Command pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* returncode)
@@ -562,9 +562,9 @@ bool XPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* returncode)
 * @brief      Open URL
 * @ingroup    XUTILS
 * 
-* @param[in]  url : 
+* @param[in]  url : URL to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::OpenURL(XCHAR* url)
@@ -579,13 +579,13 @@ bool XPROCESSMANAGER::OpenURL(XCHAR* url)
 * @brief      Application execute
 * @ingroup    XUTILS
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  in : In pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
@@ -600,11 +600,11 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
 * @brief      application  execute
 * @ingroup    XUTILS
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, int* returncode)
@@ -622,13 +622,13 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
 * @brief      Application execute
 * @ingroup    XUTILS
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  in : In pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
@@ -664,13 +664,13 @@ bool XPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params,
 * @brief      application  execute elevated
 * @ingroup    XUTILS
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  in : In pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
@@ -685,11 +685,11 @@ bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR*
 * @brief      application  execute elevated
 * @ingroup    XUTILS
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, int* returncode)
@@ -706,13 +706,13 @@ bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR*
 * @brief      application  execute elevated
 * @ingroup    XUTILS
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  in : In pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XSTRING* in, XSTRING* out, int* returncode)
@@ -748,10 +748,10 @@ bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR*
 * @brief      adjust string to consola symbols used
 * @ingroup    XUTILS
 * 
-* @param[in]  string : 
-* @param[in]  target_buffer : 
+* @param[in]  string : String to use.
+* @param[in]  target_buffer : Target buffer value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::AdjustStringToConsolaSymbolsUsed(XSTRING& string, XBUFFER& target_buffer)
@@ -793,10 +793,10 @@ bool XPROCESSMANAGER::AdjustStringToConsolaSymbolsUsed(XSTRING& string, XBUFFER&
 * @brief      adjust consola symbols used to string
 * @ingroup    XUTILS
 * 
-* @param[in]  origin_buffer : 
-* @param[in]  string : 
+* @param[in]  origin_buffer : Origin buffer value.
+* @param[in]  string : String to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::AdjustConsolaSymbolsUsedToString(XBUFFER& origin_buffer, XSTRING& string)
@@ -833,17 +833,17 @@ bool XPROCESSMANAGER::AdjustConsolaSymbolsUsedToString(XBUFFER& origin_buffer, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD* ID)
 * @brief      Application is running
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  applicationname : name of application
-* @param[out] ID : ID of this application of SO
-*
-* @return     bool : true if is succesful.
-*
+* @param[in]  ID : ID of this application of SO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD* ID)
 {
@@ -857,10 +857,10 @@ bool XPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD* ID)
 * @brief      Application get running list
 * @ingroup    XUTILS
 * 
-* @param[in]  applist : 
-* @param[in]  onlywithvalidwindow : 
+* @param[in]  applist : Applist pointer to use.
+* @param[in]  onlywithvalidwindow : Onlywithvalidwindow value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applist, bool onlywithvalidwindow)
@@ -874,13 +874,13 @@ bool XPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applist, bo
 * @fn         bool XPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD exitcode)
 * @brief      Application terminate
 * @ingroup    XUTILS
-*
-* @param[in]  processID : 
-* @param[in]  exitcode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  processID : Process ID value.
+* @param[in]  exitcode : Exitcode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD exitcode)
 {
   return false;
@@ -892,13 +892,13 @@ bool XPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD exitcode)
 * @fn         bool XPROCESSMANAGER::Application_Terminate(XPROCESS& process, XDWORD exitcode)
 * @brief      Application terminate
 * @ingroup    XUTILS
-*
-* @param[in]  process : 
-* @param[in]  exitcode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  process : Process value.
+* @param[in]  exitcode : Exitcode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_Terminate(XPROCESS& process, XDWORD exitcode)
 {
   return Application_Terminate(process.GetID(), exitcode);
@@ -910,13 +910,13 @@ bool XPROCESSMANAGER::Application_Terminate(XPROCESS& process, XDWORD exitcode)
 * @fn         bool XPROCESSMANAGER::Application_Terminate(XCHAR* processname, XDWORD exitcode)
 * @brief      Application terminate
 * @ingroup    XUTILS
-*
-* @param[in]  processname : 
-* @param[in]  exitcode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  processname : Processname pointer to use.
+* @param[in]  exitcode : Exitcode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_Terminate(XCHAR* processname, XDWORD exitcode)
 {
   XVECTOR<XPROCESS*> apprunning; 
@@ -949,13 +949,13 @@ bool XPROCESSMANAGER::Application_Terminate(XCHAR* processname, XDWORD exitcode)
 * @fn         bool XPROCESSMANAGER::Application_Terminate(XSTRING& processname, XDWORD exitcode)
 * @brief      Application terminate
 * @ingroup    XUTILS
-*
-* @param[in]  processname : 
-* @param[in]  exitcode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  processname : Processname value.
+* @param[in]  exitcode : Exitcode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::Application_Terminate(XSTRING& processname, XDWORD exitcode)
 {
   return Application_Terminate(processname.Get(), exitcode);
@@ -968,10 +968,10 @@ bool XPROCESSMANAGER::Application_Terminate(XSTRING& processname, XDWORD exitcod
 * @brief      Application get process by ID
 * @ingroup    XUTILS
 * 
-* @param[in]  processID : 
-* @param[in]  applist : 
+* @param[in]  processID : Process ID value.
+* @param[in]  applist : Applist pointer to use.
 * 
-* @return     XPROCESS* : 
+* @return     XPROCESS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPROCESS* XPROCESSMANAGER::Application_GetProcessByID(XDWORD processID, XVECTOR<XPROCESS*>& applist)
@@ -993,12 +993,12 @@ XPROCESS* XPROCESSMANAGER::Application_GetProcessByID(XDWORD processID, XVECTOR<
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPROCESSMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPROCESSMANAGER::Clean()
 {

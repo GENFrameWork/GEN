@@ -98,12 +98,12 @@ SNDFILE::~SNDFILE()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         SNDFILE* SNDFILE::Create(XCHAR* path)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    SOUND
 * 
-* @param[in]  path : 
+* @param[in]  path : Path to use.
 * 
-* @return     SNDFILE* : 
+* @return     SNDFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDFILE* SNDFILE::Create(XCHAR* path)
@@ -163,12 +163,12 @@ SNDFILE* SNDFILE::Create(XCHAR* path)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         SNDFILE* SNDFILE::Create(XPATH& xpath)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    SOUND
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     SNDFILE* : 
+* @return     SNDFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDFILE* SNDFILE::Create(XPATH& xpath)
@@ -183,7 +183,7 @@ SNDFILE* SNDFILE::Create(XPATH& xpath)
 * @brief      Get type
 * @ingroup    SOUND
 * 
-* @return     SNDFILE_TYPE : 
+* @return     SNDFILE_TYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDFILE_TYPE SNDFILE::GetType()
@@ -198,7 +198,7 @@ SNDFILE_TYPE SNDFILE::GetType()
 * @brief      Get path
 * @ingroup    SOUND
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* SNDFILE::GetPath()
@@ -213,7 +213,7 @@ XPATH* SNDFILE::GetPath()
 * @brief      Get data
 * @ingroup    SOUND
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* SNDFILE::GetData()
@@ -228,7 +228,7 @@ XBUFFER* SNDFILE::GetData()
 * @brief      Get channels
 * @ingroup    SOUND
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD SNDFILE::GetChannels()
@@ -243,7 +243,7 @@ XWORD SNDFILE::GetChannels()
 * @brief      Get N samples
 * @ingroup    SOUND
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDFILE::GetNSamples()
@@ -258,7 +258,7 @@ XDWORD SNDFILE::GetNSamples()
 * @brief      Get sample rate
 * @ingroup    SOUND
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDFILE::GetSampleRate()
@@ -273,7 +273,7 @@ XDWORD SNDFILE::GetSampleRate()
 * @brief      Get duration
 * @ingroup    SOUND
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDFILE::GetDuration()
@@ -288,7 +288,7 @@ XDWORD SNDFILE::GetDuration()
 * @brief      Load file
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFILE::LoadFile()      

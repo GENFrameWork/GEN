@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVIDEOFILEAVI::GRPVIDEOFILEAVI()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVIDEOFILEAVI::GRPVIDEOFILEAVI()
 {
@@ -76,12 +76,12 @@ GRPVIDEOFILEAVI::GRPVIDEOFILEAVI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVIDEOFILEAVI::~GRPVIDEOFILEAVI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVIDEOFILEAVI::~GRPVIDEOFILEAVI()
 {
@@ -102,12 +102,12 @@ GRPVIDEOFILEAVI::~GRPVIDEOFILEAVI()
 * @fn         bool GRPVIDEOFILEAVI::Open(XCHAR* path)
 * @brief      Open
 * @ingroup    GRAPHIC
-*
-* @param[in]  path : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  path : Path to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILEAVI::Open(XCHAR* path)
 {
   if(!fileRIFF->Open(path)) return false;
@@ -170,15 +170,15 @@ bool GRPVIDEOFILEAVI::Open(XCHAR* path)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVIDEOFILEAVI::Create(XCHAR* path, GRPVIDEOFILE_PROPERTYS& propertys)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    GRAPHIC
-*
-* @param[in]  path : 
-* @param[in]  propertys : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  path : Path to use.
+* @param[in]  propertys : Propertys value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILEAVI::Create(XCHAR* path, GRPVIDEOFILE_PROPERTYS& propertys)
 {
   if(!fileRIFF->Create(path)) return false; 
@@ -335,13 +335,13 @@ bool GRPVIDEOFILEAVI::Create(XCHAR* path, GRPVIDEOFILE_PROPERTYS& propertys)
 * @fn         XBYTE* GRPVIDEOFILEAVI::GetDataFrame(XDWORD index_frame, XDWORD& sizeframe)
 * @brief      Get data frame
 * @ingroup    GRAPHIC
-*
-* @param[in]  index_frame : 
-* @param[in]  sizeframe : 
 * 
-* @return     XBYTE* : 
+* @param[in]  index_frame : Index frame value.
+* @param[in]  sizeframe : Sizeframe value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* GRPVIDEOFILEAVI::GetDataFrame(XDWORD index_frame, XDWORD& sizeframe)
 {
   if(!frames_node)                      return NULL;
@@ -386,13 +386,13 @@ XBYTE* GRPVIDEOFILEAVI::GetDataFrame(XDWORD index_frame, XDWORD& sizeframe)
 * @fn         bool GRPVIDEOFILEAVI::AddFrame(XBYTE* dataframe, XDWORD dataframesize)
 * @brief      Add frame
 * @ingroup    GRAPHIC
-*
-* @param[in]  dataframe : 
-* @param[in]  dataframesize : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  dataframe : Dataframe pointer to use.
+* @param[in]  dataframesize : Dataframesize value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILEAVI::AddFrame(XBYTE* dataframe, XDWORD dataframesize)
 {
   if(!dataframe)      return false;
@@ -442,10 +442,10 @@ bool GRPVIDEOFILEAVI::AddFrame(XBYTE* dataframe, XDWORD dataframesize)
 * @fn         bool GRPVIDEOFILEAVI::Close()
 * @brief      Close
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILEAVI::Close()
 {
   if(iscreate)
@@ -479,13 +479,13 @@ bool GRPVIDEOFILEAVI::Close()
 * @fn         bool GRPVIDEOFILEAVI::CreateAndWriteJUNK(XFILERIFF_LIST_NODE* father_node, XDWORD datasize)
 * @brief      Create and write JUNK
 * @ingroup    GRAPHIC
-*
-* @param[in]  father_node : 
-* @param[in]  datasize : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  father_node : Father node pointer to use.
+* @param[in]  datasize : Datasize value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILEAVI::CreateAndWriteJUNK(XFILERIFF_LIST_NODE* father_node, XDWORD datasize)
 {
   if(!father_node) return false;
@@ -514,10 +514,10 @@ bool GRPVIDEOFILEAVI::CreateAndWriteJUNK(XFILERIFF_LIST_NODE* father_node, XDWOR
 * @fn         bool GRPVIDEOFILEAVI::CreateIndexofFrames()
 * @brief      Create indexof frames
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIDEOFILEAVI::CreateIndexofFrames()
 {
   if(!avi_node) return false;
@@ -546,12 +546,12 @@ bool GRPVIDEOFILEAVI::CreateIndexofFrames()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVIDEOFILEAVI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIDEOFILEAVI::Clean()
 {

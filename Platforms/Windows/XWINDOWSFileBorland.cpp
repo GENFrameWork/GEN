@@ -64,7 +64,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWINDOWSFILEBORLAND::XWINDOWSFILEBORLAND()
+* @fn         XWINDOWSFILEBORLAND::XWINDOWSFILEBORLAND(): XFILE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -95,9 +95,9 @@ XWINDOWSFILEBORLAND::~XWINDOWSFILEBORLAND()
 * @brief      Exist
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  path : 
+* @param[in]  path : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Exist(XCHAR* path)
@@ -115,10 +115,10 @@ bool XWINDOWSFILEBORLAND::Exist(XCHAR* path)
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  path : 
-* @param[in]  isreadonly : 
+* @param[in]  path : Path to use.
+* @param[in]  isreadonly : Isreadonly value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Open(XCHAR* path, bool isreadonly)
@@ -130,12 +130,12 @@ bool XWINDOWSFILEBORLAND::Open(XCHAR* path, bool isreadonly)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XWINDOWSFILEBORLAND::Create(XCHAR* path)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  path : 
+* @param[in]  path : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Create(XCHAR* path)
@@ -150,9 +150,9 @@ bool XWINDOWSFILEBORLAND::Create(XCHAR* path)
 * @brief      Set size
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  size : 
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::SetSize(XQWORD size)
@@ -178,9 +178,9 @@ bool XWINDOWSFILEBORLAND::SetSize(XQWORD size)
 * @brief      Get position
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  position : 
+* @param[in]  position : Position value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::GetPosition(XQWORD& position)
@@ -202,9 +202,9 @@ bool XWINDOWSFILEBORLAND::GetPosition(XQWORD& position)
 * @brief      Set position
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  position : 
+* @param[in]  position : Position value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::SetPosition(XQWORD position)
@@ -231,11 +231,11 @@ bool XWINDOWSFILEBORLAND::SetPosition(XQWORD position)
 * @brief      Read
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
-* @param[in]  cipher : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
@@ -260,11 +260,11 @@ bool XWINDOWSFILEBORLAND::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 * @brief      Read
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
-* @param[in]  cipher : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
@@ -300,11 +300,11 @@ bool XWINDOWSFILEBORLAND::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 * @brief      Write
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
-* @param[in]  cipher : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
@@ -334,7 +334,7 @@ bool XWINDOWSFILEBORLAND::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 * @brief      Flush
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Flush()
@@ -354,7 +354,7 @@ bool XWINDOWSFILEBORLAND::Flush()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Close()
@@ -381,14 +381,14 @@ bool XWINDOWSFILEBORLAND::Close()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XWINDOWSFILEBORLAND::Erase(XCHAR* path, bool overwrite)
+* @fn         bool XWINDOWSFILEBORLAND::Erase(XCHAR* path,bool overwrite)
 * @brief      Erase
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  path : 
-* @param[in]  overwrite : 
+* @param[in]  path : Path to use.
+* @param[in]  overwrite : Overwrite value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Erase(XCHAR* path,bool overwrite)
@@ -411,10 +411,10 @@ bool XWINDOWSFILEBORLAND::Erase(XCHAR* path,bool overwrite)
 * @brief      Rename
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  xpathold : 
-* @param[in]  xpathnew : 
+* @param[in]  xpathold : Xpathold pointer to use.
+* @param[in]  xpathnew : Xpathnew pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::Rename(XCHAR* xpathold, XCHAR* xpathnew)
@@ -431,7 +431,7 @@ bool XWINDOWSFILEBORLAND::Rename(XCHAR* xpathold, XCHAR* xpathnew)
 * @brief      Get file struct handle
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     FILE* : 
+* @return     FILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 FILE* XWINDOWSFILEBORLAND::GetFileStructHandle()                                            
@@ -446,7 +446,7 @@ FILE* XWINDOWSFILEBORLAND::GetFileStructHandle()
 * @brief      Create struct handle
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     FILE* : 
+* @return     FILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 FILE* XWINDOWSFILEBORLAND::CreateStructHandle()
@@ -461,7 +461,7 @@ FILE* XWINDOWSFILEBORLAND::CreateStructHandle()
 * @brief      Delete struct handle
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::DeleteStructHandle()
@@ -476,7 +476,7 @@ bool XWINDOWSFILEBORLAND::DeleteStructHandle()
 * @brief      Actualize size
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::ActualizeSize()
@@ -502,10 +502,10 @@ bool XWINDOWSFILEBORLAND::ActualizeSize()
 * @brief      Extended open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  path : 
-* @param[in]  mode : 
+* @param[in]  path : Path to use.
+* @param[in]  mode : Mode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILEBORLAND::ExtendedOpen(XCHAR* path, XCHAR* mode)

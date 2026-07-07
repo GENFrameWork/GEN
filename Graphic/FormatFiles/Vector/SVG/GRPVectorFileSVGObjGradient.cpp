@@ -59,9 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJGRADIENT::GRPVECTORFILESVGOBJGRADIENT()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJGRADIENT::GRPVECTORFILESVGOBJGRADIENT()
 {
@@ -70,10 +72,12 @@ GRPVECTORFILESVGOBJGRADIENT::GRPVECTORFILESVGOBJGRADIENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJGRADIENT::~GRPVECTORFILESVGOBJGRADIENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJGRADIENT::~GRPVECTORFILESVGOBJGRADIENT()
 {
@@ -82,11 +86,15 @@ GRPVECTORFILESVGOBJGRADIENT::~GRPVECTORFILESVGOBJGRADIENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJGRADIENT::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read the common attributes plus the gradient definition and its <stop> children
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJGRADIENT::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -146,12 +154,16 @@ bool GRPVECTORFILESVGOBJGRADIENT::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJGRADIENT::ParseStops(XFILEXMLELEMENT* element)
 * @brief      Parse stops : read the <stop> children (offset, stop-color, stop-opacity)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : gradient xml element
-* @return     bool : true if at least one stop was read.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJGRADIENT::ParseStops(XFILEXMLELEMENT* element)
 {
@@ -200,13 +212,17 @@ bool GRPVECTORFILESVGOBJGRADIENT::ParseStops(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJGRADIENT::ParseCoordinate(XCHAR* value, double defaultvalue)
 * @brief      Parse coordinate : parse a gradient coordinate, supporting the trailing '%' (divided by 100)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  value : attribute value (may be NULL)
 * @param[in]  defaultvalue : value to return when the attribute is missing
-* @return     double : parsed coordinate.
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::ParseCoordinate(XCHAR* value, double defaultvalue)
 {
@@ -233,14 +249,18 @@ double GRPVECTORFILESVGOBJGRADIENT::ParseCoordinate(XCHAR* value, double default
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJGRADIENT::GetStopProperty(XFILEXMLELEMENT* element, XCHAR* name, XSTRING& outvalue)
 * @brief      Get stop property : read a stop property from its attribute or from the inline style="" string
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : <stop> element
 * @param[in]  name : property name
-* @param[out] outvalue : property value
-* @return     bool : true if the property was found.
+* @param[in]  outvalue : property value
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJGRADIENT::GetStopProperty(XFILEXMLELEMENT* element, XCHAR* name, XSTRING& outvalue)
 {
@@ -274,47 +294,181 @@ bool GRPVECTORFILESVGOBJGRADIENT::GetStopProperty(XFILEXMLELEMENT* element, XCHA
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJGRADIENT::IsLinear()
 * @brief      Is linear
 * @ingroup    GRAPHIC
-* @return     bool : true if it is a linear gradient.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJGRADIENT::IsLinear()   { return (GetObjType() == GRPVECTORFILESVGOBJTYPE_LINEARGRADIENT); }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJGRADIENT::IsRadial()
 * @brief      Is radial
 * @ingroup    GRAPHIC
-* @return     bool : true if it is a radial gradient.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJGRADIENT::IsRadial()   { return (GetObjType() == GRPVECTORFILESVGOBJTYPE_RADIALGRADIENT); }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPVECTORFILESVGGRADIENTUNITS GRPVECTORFILESVGOBJGRADIENT::GetUnits()
+* @brief      Get units
+* @ingroup    GRAPHIC
+* 
+* @return     GRPVECTORFILESVGGRADIENTUNITS : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGGRADIENTUNITS GRPVECTORFILESVGOBJGRADIENT::GetUnits()              { return units;              }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPVECTORFILESVGTRANSFORM* GRPVECTORFILESVGOBJGRADIENT::GetGradientTransform()
+* @brief      Get gradient transform
+* @ingroup    GRAPHIC
+* 
+* @return     GRPVECTORFILESVGTRANSFORM* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGTRANSFORM*    GRPVECTORFILESVGOBJGRADIENT::GetGradientTransform()  { return &gradienttransform; }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetX1()
+* @brief      Get x1
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetX1()   { return x1; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetY1()
+* @brief      Get y1
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetY1()   { return y1; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetX2()
+* @brief      Get x2
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetX2()   { return x2; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetY2()
+* @brief      Get y2
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetY2()   { return y2; }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetCX()
+* @brief      Get cx
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetCX()   { return cx; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetCY()
+* @brief      Get cy
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetCY()   { return cy; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetR()
+* @brief      Get r
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetR()    { return r;  }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetFX()
+* @brief      Get fx
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetFX()   { return fx; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double GRPVECTORFILESVGOBJGRADIENT::GetFY()
+* @brief      Get fy
+* @ingroup    GRAPHIC
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJGRADIENT::GetFY()   { return fy; }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRP2DGRADIENTSTOP* GRPVECTORFILESVGOBJGRADIENT::GetStops()
+* @brief      Get stops
+* @ingroup    GRAPHIC
+* 
+* @return     GRP2DGRADIENTSTOP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRP2DGRADIENTSTOP* GRPVECTORFILESVGOBJGRADIENT::GetStops()   { return stops;  }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int GRPVECTORFILESVGOBJGRADIENT::GetNStops()
+* @brief      Get n stops
+* @ingroup    GRAPHIC
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int                GRPVECTORFILESVGOBJGRADIENT::GetNStops()  { return nstops; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* GRPVECTORFILESVGOBJGRADIENT::GetHRef()
+* @brief      Get h ref
+* @ingroup    GRAPHIC
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING*           GRPVECTORFILESVGOBJGRADIENT::GetHRef()    { return &href;  }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJGRADIENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJGRADIENT::Clean()
 {

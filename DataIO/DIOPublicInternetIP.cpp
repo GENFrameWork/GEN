@@ -63,7 +63,7 @@ DIOPUBLICINTERNETIP* DIOPUBLICINTERNETIP::instance = NULL;
 * @brief      Get is instanced
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPUBLICINTERNETIP::GetIsInstanced()
@@ -78,7 +78,7 @@ bool DIOPUBLICINTERNETIP::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    DATAIO
 * 
-* @return     DIOPUBLICINTERNETIP& : 
+* @return     DIOPUBLICINTERNETIP& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPUBLICINTERNETIP& DIOPUBLICINTERNETIP::GetInstance()
@@ -95,7 +95,7 @@ DIOPUBLICINTERNETIP& DIOPUBLICINTERNETIP::GetInstance()
 * @brief      Del instance
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPUBLICINTERNETIP::DelInstance()
@@ -118,7 +118,7 @@ bool DIOPUBLICINTERNETIP::DelInstance()
 * @brief      Fast is there internet connection
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPUBLICINTERNETIP::FastIsThereInternetConnection()
@@ -138,12 +138,12 @@ bool DIOPUBLICINTERNETIP::FastIsThereInternetConnection()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPUBLICINTERNETIP::Get(XSTRING& publicIP)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
 * 
-* @param[in]  publicIP : 
+* @param[in]  publicIP : Public IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPUBLICINTERNETIP::Get(XSTRING& publicIP)
@@ -178,12 +178,12 @@ bool DIOPUBLICINTERNETIP::Get(XSTRING& publicIP)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOPUBLICINTERNETIP::Get(DIOIP& publicIP)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
 * 
-* @param[in]  publicIP : 
+* @param[in]  publicIP : Public IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPUBLICINTERNETIP::Get(DIOIP& publicIP)

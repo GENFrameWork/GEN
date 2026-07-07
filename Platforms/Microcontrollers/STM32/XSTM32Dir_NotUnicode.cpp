@@ -50,11 +50,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTM32DIR_NOTUNICODE::XSTM32DIR_NOTUNICODE()
+* 
+* @fn         XSTM32DIR_NOTUNICODE::XSTM32DIR_NOTUNICODE(): XDIR()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32DIR_NOTUNICODE::XSTM32DIR_NOTUNICODE(): XDIR()
 {
@@ -67,12 +67,12 @@ XSTM32DIR_NOTUNICODE::XSTM32DIR_NOTUNICODE(): XDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32DIR_NOTUNICODE::~XSTM32DIR_NOTUNICODE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32DIR_NOTUNICODE::~XSTM32DIR_NOTUNICODE()
 {
@@ -82,15 +82,15 @@ XSTM32DIR_NOTUNICODE::~XSTM32DIR_NOTUNICODE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR_NOTUNICODE::Exist(XCHAR* path)
 * @brief      Exist
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR_NOTUNICODE::Exist(XCHAR* path)
 {   
@@ -116,13 +116,13 @@ bool XSTM32DIR_NOTUNICODE::Exist(XCHAR* path)
 * @fn         bool XSTM32DIR_NOTUNICODE::Make(XCHAR* path, bool recursive)
 * @brief      Make
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  path : 
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  path : Path to use.
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR_NOTUNICODE::Make(XCHAR* path, bool recursive)
 {
   if(!path)   return false;
@@ -185,15 +185,15 @@ bool XSTM32DIR_NOTUNICODE::Make(XCHAR* path, bool recursive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR_NOTUNICODE::ChangeTo(XCHAR* path)
 * @brief      Change to
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR_NOTUNICODE::ChangeTo(XCHAR* path)
 {  
@@ -220,16 +220,16 @@ bool XSTM32DIR_NOTUNICODE::ChangeTo(XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XSTM32DIR_NOTUNICODE::Delete(XCHAR* path,bool all)
-* @brief      Delete
+* 
+* @fn         bool XSTM32DIR_NOTUNICODE::Delete(XCHAR* path, bool all)
+* @brief      Delete resource
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  path :
-* @param[in]  all :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  all : All value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR_NOTUNICODE::Delete(XCHAR* path, bool all)
 {
@@ -285,15 +285,15 @@ bool XSTM32DIR_NOTUNICODE::Delete(XCHAR* path, bool all)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR_NOTUNICODE::GetActual(XPATH& xpath)
 * @brief      Get actual
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR_NOTUNICODE::GetActual(XPATH& xpath)
 { 
@@ -312,17 +312,17 @@ bool XSTM32DIR_NOTUNICODE::GetActual(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR_NOTUNICODE::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* searchelement)
 * @brief      First search
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  xpath :
-* @param[in]  patternsearch :
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  patternsearch : Patternsearch pointer to use.
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR_NOTUNICODE::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* searchelement)
 {  
@@ -381,15 +381,15 @@ bool XSTM32DIR_NOTUNICODE::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR_NOTUNICODE::NextSearch(XDIRELEMENT* searchelement)
 * @brief      Next search
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR_NOTUNICODE::NextSearch(XDIRELEMENT* searchelement)
 {
@@ -430,10 +430,10 @@ bool XSTM32DIR_NOTUNICODE::NextSearch(XDIRELEMENT* searchelement)
 * @brief      Reconvert search data
 * @ingroup    PLATFORM_STM32
 * 
-* @param[in]  searchelement : 
-* @param[in]  fileinfo : 
+* @param[in]  searchelement : Searchelement pointer to use.
+* @param[in]  fileinfo : Fileinfo pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR_NOTUNICODE::ReconvertSearchData(XDIRELEMENT* searchelement, FILINFO* fileinfo)
@@ -453,12 +453,12 @@ bool XSTM32DIR_NOTUNICODE::ReconvertSearchData(XDIRELEMENT* searchelement, FILIN
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSTM32DIR_NOTUNICODE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSTM32DIR_NOTUNICODE::Clean()
 {

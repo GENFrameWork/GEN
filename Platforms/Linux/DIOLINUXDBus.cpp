@@ -66,8 +66,8 @@
 * @fn         DIOLINUXDBUS_MESSAGE::DIOLINUXDBUS_MESSAGE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_MESSAGE::DIOLINUXDBUS_MESSAGE()
 {
   Clean();
@@ -80,8 +80,8 @@ DIOLINUXDBUS_MESSAGE::DIOLINUXDBUS_MESSAGE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_MESSAGE::~DIOLINUXDBUS_MESSAGE()
 {
   Delete();
@@ -95,10 +95,10 @@ DIOLINUXDBUS_MESSAGE::~DIOLINUXDBUS_MESSAGE()
 * @fn         XSTRING* DIOLINUXDBUS_MESSAGE::GetDestination()
 * @brief      Get destination
 * @ingroup    PLATFORM_LINUX
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLINUXDBUS_MESSAGE::GetDestination()
 {
   return &destination;
@@ -110,10 +110,10 @@ XSTRING* DIOLINUXDBUS_MESSAGE::GetDestination()
 * @fn         XSTRING* DIOLINUXDBUS_MESSAGE::GetPath()
 * @brief      Get path
 * @ingroup    PLATFORM_LINUX
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLINUXDBUS_MESSAGE::GetPath()
 {
   return &path;
@@ -125,10 +125,10 @@ XSTRING* DIOLINUXDBUS_MESSAGE::GetPath()
 * @fn         XSTRING* DIOLINUXDBUS_MESSAGE::GetIFace()
 * @brief      Get I face
 * @ingroup    PLATFORM_LINUX
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLINUXDBUS_MESSAGE::GetIFace()
 {
   return &iface;
@@ -140,10 +140,10 @@ XSTRING* DIOLINUXDBUS_MESSAGE::GetIFace()
 * @fn         XSTRING* DIOLINUXDBUS_MESSAGE::GetMethod()
 * @brief      Get method
 * @ingroup    PLATFORM_LINUX
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLINUXDBUS_MESSAGE::GetMethod()
 {
   return &method;
@@ -153,12 +153,12 @@ XSTRING* DIOLINUXDBUS_MESSAGE::GetMethod()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXDBUS_MESSAGE::Create()
-* @brief      Create
+* @brief      Create resource
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_MESSAGE::Create()
 {
   bool status = false;
@@ -193,10 +193,10 @@ bool DIOLINUXDBUS_MESSAGE::Create()
 * @fn         DBusMessage* DIOLINUXDBUS_MESSAGE::GetHandler()
 * @brief      Get handler
 * @ingroup    PLATFORM_LINUX
-*
-* @return     DBusMessage* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DBusMessage* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DBusMessage* DIOLINUXDBUS_MESSAGE::GetHandler()
 {
   return handler;
@@ -208,12 +208,12 @@ DBusMessage* DIOLINUXDBUS_MESSAGE::GetHandler()
 * @fn         bool DIOLINUXDBUS_MESSAGE::SetHandler(DBusMessage* handler)
 * @brief      Set handler
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  handler : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  handler : Handler pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_MESSAGE::SetHandler(DBusMessage* handler)
 {  
   this->handler = handler;
@@ -225,12 +225,12 @@ bool DIOLINUXDBUS_MESSAGE::SetHandler(DBusMessage* handler)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXDBUS_MESSAGE::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_MESSAGE::Delete()
 {
   if(!handler) return false;
@@ -247,12 +247,12 @@ bool DIOLINUXDBUS_MESSAGE::Delete()
 * @fn         bool DIOLINUXDBUS_MESSAGE::GetResult(XDWORD& result)
 * @brief      Get result
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  result : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  result : Output result.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_MESSAGE::GetResult(XDWORD& result)
 {
   DBusError   error;   
@@ -282,12 +282,12 @@ bool DIOLINUXDBUS_MESSAGE::GetResult(XDWORD& result)
 * @fn         bool DIOLINUXDBUS_MESSAGE::GetResult(XSTRING& result)
 * @brief      Get result
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  result : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  result : Output result.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_MESSAGE::GetResult(XSTRING& result)
 {
   const char* result_char  = NULL;
@@ -319,12 +319,12 @@ bool DIOLINUXDBUS_MESSAGE::GetResult(XSTRING& result)
 * @fn         bool DIOLINUXDBUS_MESSAGE::GetResult(XVECTOR<XSTRING*>& result)
 * @brief      Get result
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  result : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  result : Output result.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_MESSAGE::GetResult(XVECTOR<XSTRING*>& result)
 {
   const char**  result_char  = NULL;
@@ -366,8 +366,8 @@ bool DIOLINUXDBUS_MESSAGE::GetResult(XVECTOR<XSTRING*>& result)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXDBUS_MESSAGE::Clean()
 {
   handler   = NULL;
@@ -385,11 +385,14 @@ void DIOLINUXDBUS_MESSAGE::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXDBUS_ARGUMENTS::DIOLINUXDBUS_ARGUMENTS()
+* @fn         DIOLINUXDBUS_ARGUMENTS::DIOLINUXDBUS_ARGUMENTS(bool in, DIOLINUXDBUS_MESSAGE* message)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  in : In value.
+* @param[in]  message : Message text.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_ARGUMENTS::DIOLINUXDBUS_ARGUMENTS(bool in, DIOLINUXDBUS_MESSAGE* message)
 {
   Clean();
@@ -418,8 +421,8 @@ DIOLINUXDBUS_ARGUMENTS::DIOLINUXDBUS_ARGUMENTS(bool in, DIOLINUXDBUS_MESSAGE* me
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_ARGUMENTS::~DIOLINUXDBUS_ARGUMENTS()
 {
   Clean();
@@ -431,10 +434,10 @@ DIOLINUXDBUS_ARGUMENTS::~DIOLINUXDBUS_ARGUMENTS()
 * @fn         DBusMessageIter* DIOLINUXDBUS_ARGUMENTS::GetHandler()
 * @brief      Get handler
 * @ingroup    PLATFORM_LINUX
-*
-* @return     DBusMessageIter* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DBusMessageIter* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DBusMessageIter* DIOLINUXDBUS_ARGUMENTS::GetHandler()
 {
   return &iter;
@@ -446,12 +449,12 @@ DBusMessageIter* DIOLINUXDBUS_ARGUMENTS::GetHandler()
 * @fn         bool DIOLINUXDBUS_ARGUMENTS::Append(bool value)
 * @brief      Append
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  value : Value value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_ARGUMENTS::Append(bool value)
 {
   dbus_bool_t _value  = false;  
@@ -473,12 +476,12 @@ bool DIOLINUXDBUS_ARGUMENTS::Append(bool value)
 * @fn         bool DIOLINUXDBUS_ARGUMENTS::Append(XCHAR* value)
 * @brief      Append
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  value : Value pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_ARGUMENTS::Append(XCHAR* value)
 {
   XSTRING _value;     
@@ -504,12 +507,12 @@ bool DIOLINUXDBUS_ARGUMENTS::Append(XCHAR* value)
 * @fn         bool DIOLINUXDBUS_ARGUMENTS::AppendIterator(bool value)
 * @brief      Append iterator
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  value : Value value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_ARGUMENTS::AppendIterator(bool value)
 {
   dbus_bool_t _value  = false;  
@@ -531,12 +534,12 @@ bool DIOLINUXDBUS_ARGUMENTS::AppendIterator(bool value)
 * @fn         bool DIOLINUXDBUS_ARGUMENTS::AppendIterator(XCHAR* value)
 * @brief      Append iterator
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  value : Value pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_ARGUMENTS::AppendIterator(XCHAR* value)
 {
   XSTRING _value;     
@@ -563,9 +566,9 @@ bool DIOLINUXDBUS_ARGUMENTS::AppendIterator(XCHAR* value)
 * @brief      Get result interactor
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  result : 
+* @param[in]  result : Output result.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS_ARGUMENTS::GetResultInteractor(XVARIANT& result)
@@ -612,8 +615,8 @@ bool DIOLINUXDBUS_ARGUMENTS::GetResultInteractor(XVARIANT& result)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXDBUS_ARGUMENTS::Clean()
 {
   in        = false;
@@ -630,8 +633,8 @@ void DIOLINUXDBUS_ARGUMENTS::Clean()
 * @fn         DIOLINUXDBUS_SIGNAL::DIOLINUXDBUS_SIGNAL()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_SIGNAL::DIOLINUXDBUS_SIGNAL()
 {
   Clean();
@@ -644,8 +647,8 @@ DIOLINUXDBUS_SIGNAL::DIOLINUXDBUS_SIGNAL()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_SIGNAL::~DIOLINUXDBUS_SIGNAL()
 {
   Clean();
@@ -657,10 +660,10 @@ DIOLINUXDBUS_SIGNAL::~DIOLINUXDBUS_SIGNAL()
 * @fn         XSTRING* DIOLINUXDBUS_SIGNAL::GetType()
 * @brief      Get type
 * @ingroup    PLATFORM_LINUX
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLINUXDBUS_SIGNAL::GetType()
 {
   return &type;
@@ -672,10 +675,10 @@ XSTRING* DIOLINUXDBUS_SIGNAL::GetType()
 * @fn         XSTRING* DIOLINUXDBUS_SIGNAL::GetName()
 * @brief      Get name
 * @ingroup    PLATFORM_LINUX
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLINUXDBUS_SIGNAL::GetName()
 {
   return &name;
@@ -688,8 +691,8 @@ XSTRING* DIOLINUXDBUS_SIGNAL::GetName()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXDBUS_SIGNAL::Clean()
 {
   type.Empty();
@@ -702,11 +705,11 @@ void DIOLINUXDBUS_SIGNAL::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXDBUS::DIOLINUXDBUS()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS::DIOLINUXDBUS()    
 { 
@@ -717,12 +720,12 @@ DIOLINUXDBUS::DIOLINUXDBUS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXDBUS::~DIOLINUXDBUS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS::~DIOLINUXDBUS()    
 { 
@@ -737,14 +740,14 @@ DIOLINUXDBUS::~DIOLINUXDBUS()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXDBUS::Ini(DBusBusType type)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  type : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::Ini(DBusBusType type)
 {
   DBusError error;
@@ -775,10 +778,10 @@ bool DIOLINUXDBUS::Ini(DBusBusType type)
 * @fn         bool DIOLINUXDBUS::IsConnected()
 * @brief      Is connected
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::IsConnected()
 {
   if(!connection) return false;
@@ -792,13 +795,13 @@ bool DIOLINUXDBUS::IsConnected()
 * @fn         bool DIOLINUXDBUS::CallMethod(DIOLINUXDBUS_MESSAGE& message, DIOLINUXDBUS_MESSAGE& reply)
 * @brief      Call method
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  message : 
-* @param[in]  reply : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  message : Message text.
+* @param[in]  reply : Reply value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::CallMethod(DIOLINUXDBUS_MESSAGE& message, DIOLINUXDBUS_MESSAGE& reply)
 {  
   DBusMessage*  _reply   = NULL;
@@ -834,13 +837,13 @@ bool DIOLINUXDBUS::CallMethod(DIOLINUXDBUS_MESSAGE& message, DIOLINUXDBUS_MESSAG
 * @fn         bool DIOLINUXDBUS::Signal_Add(XCHAR* type, XCHAR* name)
 * @brief      Signal add
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  type : 
-* @param[in]  name : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::Signal_Add(XCHAR* type, XCHAR* name)
 {
   if(!connection) return false;
@@ -892,13 +895,13 @@ bool DIOLINUXDBUS::Signal_Add(XCHAR* type, XCHAR* name)
 * @fn         bool DIOLINUXDBUS::Signal_Add(XSTRING& type, XSTRING& name)
 * @brief      Signal add
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  type : 
-* @param[in]  name : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::Signal_Add(XSTRING& type, XSTRING& name)
 {
   return Signal_Add(type.Get(), name.Get());
@@ -910,12 +913,12 @@ bool DIOLINUXDBUS::Signal_Add(XSTRING& type, XSTRING& name)
 * @fn         bool DIOLINUXDBUS::Signal_IsTypeAdd(XCHAR* type)
 * @brief      Signal is type add
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  type : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::Signal_IsTypeAdd(XCHAR* type)
 {
   if(signals.IsEmpty()) return false;
@@ -938,10 +941,10 @@ bool DIOLINUXDBUS::Signal_IsTypeAdd(XCHAR* type)
 * @fn         bool DIOLINUXDBUS::Signal_DeleteAll()
 * @brief      Signal GEN_DELETE all
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::Signal_DeleteAll()
 {
   if(signals.IsEmpty()) return false;
@@ -954,13 +957,13 @@ bool DIOLINUXDBUS::Signal_DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXDBUS::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::End()
 {
@@ -986,15 +989,15 @@ bool DIOLINUXDBUS::End()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOLINUXDBUS::TraceError(DBusError error)
+* @fn         bool DIOLINUXDBUS::TraceError(DBusError& error)
 * @brief      Trace error
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  error : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  error : Error value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXDBUS::TraceError(DBusError& error)
 {
   XSTRING error_name;
@@ -1016,10 +1019,10 @@ bool DIOLINUXDBUS::TraceError(DBusError& error)
 * @fn         void DIOLINUXDBUS::Thread_Signals(void* param)
 * @brief      Thread signals
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  param : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  param : Param pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXDBUS::Thread_Signals(void* param)
 {
   DIOLINUXDBUS* dbus = (DIOLINUXDBUS*)param;
@@ -1098,12 +1101,12 @@ void DIOLINUXDBUS::Thread_Signals(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXDBUS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXDBUS::Clean()
 {

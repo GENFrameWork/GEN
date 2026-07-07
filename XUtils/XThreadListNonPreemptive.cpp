@@ -63,7 +63,7 @@ XTHREADLISTNONPREEMPTIVE* XTHREADLISTNONPREEMPTIVE::instance = NULL;
 * @brief      Get instance
 * @ingroup    XUTILS
 * 
-* @return     XTHREADLISTNONPREEMPTIVE& : 
+* @return     XTHREADLISTNONPREEMPTIVE& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADLISTNONPREEMPTIVE& XTHREADLISTNONPREEMPTIVE::GetInstance()
@@ -80,7 +80,7 @@ XTHREADLISTNONPREEMPTIVE& XTHREADLISTNONPREEMPTIVE::GetInstance()
 * @brief      Del instance
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADLISTNONPREEMPTIVE::DelInstance()
@@ -103,9 +103,9 @@ bool XTHREADLISTNONPREEMPTIVE::DelInstance()
 * @brief      Add thread
 * @ingroup    XUTILS
 * 
-* @param[in]  thread : 
+* @param[in]  thread : Thread pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADLISTNONPREEMPTIVE::AddThread(XTHREAD* thread)
@@ -121,9 +121,9 @@ bool XTHREADLISTNONPREEMPTIVE::AddThread(XTHREAD* thread)
 * @brief      Delete thread
 * @ingroup    XUTILS
 * 
-* @param[in]  thread : 
+* @param[in]  thread : Thread pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADLISTNONPREEMPTIVE::DeleteThread(XTHREAD* thread)
@@ -139,7 +139,7 @@ bool XTHREADLISTNONPREEMPTIVE::DeleteThread(XTHREAD* thread)
 * @brief      Delete all
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADLISTNONPREEMPTIVE::DeleteAll()
@@ -157,7 +157,7 @@ bool XTHREADLISTNONPREEMPTIVE::DeleteAll()
 * @brief      Execute functions
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADLISTNONPREEMPTIVE::ExecuteFunctions()

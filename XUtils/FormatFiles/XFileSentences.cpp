@@ -60,14 +60,14 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILESENTENCES::XFILESENTENCES(HASH* hash, XPATH& xpath) : XFILEXDB(hash, xpath)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  hash :
-* @param[in]  xpath:
-*
+* 
+* @param[in]  hash : Hash pointer to use.
+* @param[in]  xpath : Path to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILESENTENCES::XFILESENTENCES(HASH* hash, XPATH& xpath) : XFILEXDB(hash, xpath)
 {
@@ -76,12 +76,12 @@ XFILESENTENCES::XFILESENTENCES(HASH* hash, XPATH& xpath) : XFILEXDB(hash, xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILESENTENCES::~XFILESENTENCES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILESENTENCES::~XFILESENTENCES()
 {
@@ -90,15 +90,15 @@ XFILESENTENCES::~XFILESENTENCES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
 * @brief      Convert file from DBF
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
 {
@@ -210,13 +210,13 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILESENTENCES::GetNumberSentences()
 * @brief      Get number sentences
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILESENTENCES::GetNumberSentences()
 {
@@ -225,16 +225,16 @@ int XFILESENTENCES::GetNumberSentences()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILESENTENCES::GetSentence(XDWORD index,XSTRING& sentence)
 * @brief      Get sentence
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-* @param[in]  sentence :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  sentence : Sentence value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILESENTENCES::GetSentence(XDWORD index,XSTRING& sentence)
 {

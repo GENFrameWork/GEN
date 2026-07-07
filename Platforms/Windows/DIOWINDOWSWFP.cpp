@@ -98,12 +98,12 @@ DIOWINDOWSWFP::~DIOWINDOWSWFP()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOWINDOWSWFP::Ini(bool dynamicsession)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_WINDOWS
 * 
 * @param[in]  dynamicsession : if true, WFP objects are deleted automatically when the engine session is closed
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::Ini(bool dynamicsession)
@@ -155,10 +155,10 @@ bool DIOWINDOWSWFP::Ini(bool dynamicsession)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOWINDOWSWFP::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::End()
@@ -188,7 +188,7 @@ bool DIOWINDOWSWFP::End()
 * @brief      Is initialized
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::IsInitialized()
@@ -203,7 +203,7 @@ bool DIOWINDOWSWFP::IsInitialized()
 * @brief      Get last error
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWINDOWSWFP::GetLastError()
@@ -218,12 +218,12 @@ XDWORD DIOWINDOWSWFP::GetLastError()
 * @brief      Add block remote IPv4
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  remoteIP : 
-* @param[in]  remoteport : optional. 0 means any remote port
+* @param[in]  remoteIP : Remote IP pointer to use.
+* @param[in]  remoteport : Remoteport value.
 * @param[in]  protocol : optional. 0 means any protocol. Use IPPROTO_TCP/IPPROTO_UDP
-* @param[in]  filtername : 
+* @param[in]  filtername : Filtername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockRemoteIPv4(XCHAR* remoteIP, XWORD remoteport, XBYTE protocol, XCHAR* filtername)
@@ -247,12 +247,12 @@ bool DIOWINDOWSWFP::AddBlockRemoteIPv4(XCHAR* remoteIP, XWORD remoteport, XBYTE 
 * @brief      Add block remote IPv4
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  remoteIP : 
-* @param[in]  remoteport : optional. 0 means any remote port
+* @param[in]  remoteIP : Remote IP value.
+* @param[in]  remoteport : Remoteport value.
 * @param[in]  protocol : optional. 0 means any protocol. Use IPPROTO_TCP/IPPROTO_UDP
-* @param[in]  filtername : 
+* @param[in]  filtername : Filtername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockRemoteIPv4(XSTRING& remoteIP, XWORD remoteport, XBYTE protocol, XCHAR* filtername)
@@ -274,12 +274,12 @@ bool DIOWINDOWSWFP::AddBlockRemoteIPv4(XSTRING& remoteIP, XWORD remoteport, XBYT
 * @brief      Add block remote IPv4
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  remoteIP : 
-* @param[in]  remoteport : optional. 0 means any remote port
+* @param[in]  remoteIP : Remote IP value.
+* @param[in]  remoteport : Remoteport value.
 * @param[in]  protocol : optional. 0 means any protocol. Use IPPROTO_TCP/IPPROTO_UDP
-* @param[in]  filtername : 
+* @param[in]  filtername : Filtername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockRemoteIPv4(DIOIP& remoteIP, XWORD remoteport, XBYTE protocol, XCHAR* filtername)
@@ -335,11 +335,11 @@ bool DIOWINDOWSWFP::AddBlockRemoteIPv4(DIOIP& remoteIP, XWORD remoteport, XBYTE 
 * @brief      Add block remote port IPv4
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  remoteport : 
-* @param[in]  protocol : Use IPPROTO_TCP/IPPROTO_UDP
-* @param[in]  filtername : 
+* @param[in]  remoteport : Remoteport value.
+* @param[in]  protocol : Protocol value.
+* @param[in]  filtername : Filtername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockRemotePortIPv4(XWORD remoteport, XBYTE protocol, XCHAR* filtername)
@@ -354,11 +354,11 @@ bool DIOWINDOWSWFP::AddBlockRemotePortIPv4(XWORD remoteport, XBYTE protocol, XCH
 * @brief      Add block remote port IPv6
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  remoteport : 
-* @param[in]  protocol : Use IPPROTO_TCP/IPPROTO_UDP
-* @param[in]  filtername : 
+* @param[in]  remoteport : Remoteport value.
+* @param[in]  protocol : Protocol value.
+* @param[in]  filtername : Filtername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockRemotePortIPv6(XWORD remoteport, XBYTE protocol, XCHAR* filtername)
@@ -373,9 +373,9 @@ bool DIOWINDOWSWFP::AddBlockRemotePortIPv6(XWORD remoteport, XBYTE protocol, XCH
 * @brief      Add block external DNS. It blocks TCP/UDP port 53, optionally excluding current process path.
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  excludeownprocess : 
+* @param[in]  excludeownprocess : Excludeownprocess value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockDNSExternal(bool excludeownprocess)
@@ -397,9 +397,9 @@ bool DIOWINDOWSWFP::AddBlockDNSExternal(bool excludeownprocess)
 * @brief      Add block external DNS. It blocks TCP/UDP port 53, excluding an application path if specified.
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  applicationpathexception : 
+* @param[in]  applicationpathexception : Applicationpathexception pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockDNSExternal(XCHAR* applicationpathexception)
@@ -421,9 +421,9 @@ bool DIOWINDOWSWFP::AddBlockDNSExternal(XCHAR* applicationpathexception)
 * @brief      Add block external DNS. It blocks TCP/UDP port 53, excluding an application path if specified.
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  applicationpathexception : 
+* @param[in]  applicationpathexception : Applicationpathexception value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockDNSExternal(XSTRING& applicationpathexception)
@@ -445,7 +445,7 @@ bool DIOWINDOWSWFP::AddBlockDNSExternal(XSTRING& applicationpathexception)
 * @brief      Delete filters created by this object
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::DeleteFilters()
@@ -475,7 +475,7 @@ bool DIOWINDOWSWFP::DeleteFilters()
 * @brief      Provider add
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::Provider_Add()
@@ -504,7 +504,7 @@ bool DIOWINDOWSWFP::Provider_Add()
 * @brief      Sub layer add
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::SubLayer_Add()
@@ -535,13 +535,13 @@ bool DIOWINDOWSWFP::SubLayer_Add()
 * @brief      Add block remote port
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  layerkey : 
-* @param[in]  remoteport : 
+* @param[in]  layerkey : Layerkey value.
+* @param[in]  remoteport : Remoteport value.
 * @param[in]  protocol : Use IPPROTO_TCP/IPPROTO_UDP
 * @param[in]  applicationpathexception : full path of application not blocked by this filter
-* @param[in]  filtername : 
+* @param[in]  filtername : Filtername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddBlockRemotePort(const GUID& layerkey, XWORD remoteport, XBYTE protocol, XCHAR* applicationpathexception, XCHAR* filtername)
@@ -606,13 +606,13 @@ bool DIOWINDOWSWFP::AddBlockRemotePort(const GUID& layerkey, XWORD remoteport, X
 * @brief      Add filter
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  layerkey : 
-* @param[in]  filterconditions : 
-* @param[in]  nfilterconditions : 
-* @param[out] filterID : 
-* @param[in]  filtername : 
+* @param[in]  layerkey : Layerkey value.
+* @param[in]  filterconditions : Filterconditions pointer to use.
+* @param[in]  nfilterconditions : Nfilterconditions value.
+* @param[in]  filterID : Filter ID value.
+* @param[in]  filtername : Filtername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::AddFilter(const GUID& layerkey, void* filterconditions, XDWORD nfilterconditions, UINT64& filterID, XCHAR* filtername)
@@ -665,9 +665,9 @@ bool DIOWINDOWSWFP::AddFilter(const GUID& layerkey, void* filterconditions, XDWO
 * @brief      Get current process path
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[out] path : 
+* @param[in]  path : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::GetCurrentProcessPath(XSTRING& path)
@@ -693,10 +693,10 @@ bool DIOWINDOWSWFP::GetCurrentProcessPath(XSTRING& path)
 * @brief      Get WFP application ID from path
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  applicationpath : 
-* @param[out] appID : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  appID : Application ID pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::GetAppIDFromPath(XCHAR* applicationpath, void** appID)
@@ -730,9 +730,9 @@ bool DIOWINDOWSWFP::GetAppIDFromPath(XCHAR* applicationpath, void** appID)
 * @brief      Free app ID
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  appID : 
+* @param[in]  appID : Application ID pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWFP::FreeAppID(void** appID)
@@ -759,9 +759,9 @@ bool DIOWINDOWSWFP::FreeAppID(void** appID)
 * @brief      IPv4 to UINT32 in WFP IPv4 address format
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  IP : 
+* @param[in]  IP : IP address to use.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWINDOWSWFP::IPv4ToUINT32(DIOIP& IP)

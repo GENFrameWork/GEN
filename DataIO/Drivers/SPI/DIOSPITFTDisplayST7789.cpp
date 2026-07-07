@@ -63,11 +63,11 @@
 * @fn         DIOSPITFTDISPLAYST7789::DIOSPITFTDISPLAYST7789(XDWORD width, XDWORD height)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  width : 
-* @param[in]  height : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSPITFTDISPLAYST7789::DIOSPITFTDISPLAYST7789(XDWORD width, XDWORD height)
 {
   Clean();
@@ -80,12 +80,12 @@ DIOSPITFTDISPLAYST7789::DIOSPITFTDISPLAYST7789(XDWORD width, XDWORD height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSPITFTDISPLAYST7789::~DIOSPITFTDISPLAYST7789()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPITFTDISPLAYST7789::~DIOSPITFTDISPLAYST7789()
 {
@@ -96,13 +96,13 @@ DIOSPITFTDISPLAYST7789::~DIOSPITFTDISPLAYST7789()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::IniDevice()
 {
@@ -154,15 +154,15 @@ bool DIOSPITFTDISPLAYST7789::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::Clear(XWORD color)
 * @brief      Clear
 * @ingroup    DATAIO
-*
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::Clear(XWORD color)
 {
@@ -191,15 +191,15 @@ bool DIOSPITFTDISPLAYST7789::Clear(XWORD color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::Update(XBYTE* buffer)
 * @brief      Update
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::Update(XBYTE* buffer)
 {
@@ -217,17 +217,17 @@ bool DIOSPITFTDISPLAYST7789::Update(XBYTE* buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::PutPixel(XWORD x, XWORD y, XWORD color)
 * @brief      Put pixel
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::PutPixel(XWORD x, XWORD y, XWORD color)
 {
@@ -242,13 +242,13 @@ bool DIOSPITFTDISPLAYST7789::PutPixel(XWORD x, XWORD y, XWORD color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::End()
 {
@@ -261,15 +261,15 @@ bool DIOSPITFTDISPLAYST7789::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::SetActiveBlackLight(bool active)
 * @brief      Set active black light
 * @ingroup    DATAIO
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::SetActiveBlackLight(bool active)
 {
@@ -280,13 +280,13 @@ bool DIOSPITFTDISPLAYST7789::SetActiveBlackLight(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::TFT_Init()
 * @brief      TFT init
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::TFT_Init()
 {
@@ -338,13 +338,13 @@ bool DIOSPITFTDISPLAYST7789::TFT_Init()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::TFT_Reset()
 * @brief      TFT reset
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::TFT_Reset()
 {  
@@ -364,18 +364,18 @@ bool DIOSPITFTDISPLAYST7789::TFT_Reset()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::TFT_SetWindow(int xs, int ys, int xe, int ye)
 * @brief      TFT set window
 * @ingroup    DATAIO
-*
-* @param[in]  xs :
-* @param[in]  ys :
-* @param[in]  xe :
-* @param[in]  ye :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xs : Xs value.
+* @param[in]  ys : Ys value.
+* @param[in]  xe : Xe value.
+* @param[in]  ye : Ye value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::TFT_SetWindow(int xs, int ys, int xe, int ye)
 {
@@ -425,10 +425,10 @@ bool DIOSPITFTDISPLAYST7789::TFT_SetWindow(int xs, int ys, int xe, int ye)
 * @fn         void DIOSPITFTDISPLAYST7789::TFT_SetRotation(XBYTE mode)
 * @brief      TFT set rotation
 * @ingroup    DATAIO
-*
-* @param[in]  mode : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  mode : Mode value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPITFTDISPLAYST7789::TFT_SetRotation(XBYTE mode) 
 {
   SendCommand(DIOSPITFTDISPLAYST7789_CMD_ST7789_MADCTL);
@@ -461,15 +461,15 @@ void DIOSPITFTDISPLAYST7789::TFT_SetRotation(XBYTE mode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::SendCommand(XBYTE command)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  command :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  command : Command value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::SendCommand(XBYTE command)
 {
@@ -485,13 +485,13 @@ bool DIOSPITFTDISPLAYST7789::SendCommand(XBYTE command)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITFTDISPLAYST7789::SendData()
 * @brief      Send data
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::SendData()
 {
@@ -511,12 +511,12 @@ bool DIOSPITFTDISPLAYST7789::SendData()
 * @fn         bool DIOSPITFTDISPLAYST7789::SendData(XBYTE data)
 * @brief      Send data
 * @ingroup    DATAIO
-*
-* @param[in]  data : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  data : Data buffer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::SendData(XBYTE data)
 {
   bool status;
@@ -536,9 +536,9 @@ bool DIOSPITFTDISPLAYST7789::SendData(XBYTE data)
 * @brief      Send data
 * @ingroup    DATAIO
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::SendData(XWORD data)
@@ -559,14 +559,14 @@ bool DIOSPITFTDISPLAYST7789::SendData(XWORD data)
 * @fn         bool DIOSPITFTDISPLAYST7789::SendCommandParams(XBYTE command, int ndata, ...)
 * @brief      Send command params
 * @ingroup    DATAIO
-*
-* @param[in]  command : 
-* @param[in]  ndata : 
-* @param[in]  ... : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  command : Command value.
+* @param[in]  ndata : Ndata value.
+* @param[in]  ... : Variable argument list.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITFTDISPLAYST7789::SendCommandParams(XBYTE command, int ndata, ...)
 {
   va_list arg;
@@ -592,12 +592,12 @@ bool DIOSPITFTDISPLAYST7789::SendCommandParams(XBYTE command, int ndata, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSPITFTDISPLAYST7789::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPITFTDISPLAYST7789::Clean()
 {

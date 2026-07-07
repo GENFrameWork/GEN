@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPBUTTON::INPBUTTON()
 * @brief      Constructor of class
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPBUTTON::INPBUTTON()
 {
@@ -74,12 +74,12 @@ INPBUTTON::INPBUTTON()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPBUTTON::~INPBUTTON()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPBUTTON::~INPBUTTON()
 {
@@ -90,13 +90,13 @@ INPBUTTON::~INPBUTTON()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPBUTTON_ID INPBUTTON::GetID()
 * @brief      Get ID
 * @ingroup    INPUT
-*
-* @return     INPBUTTON_ID : ID of button
-*
+* 
+* @return     INPBUTTON_ID : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPBUTTON_ID INPBUTTON::GetID()
 {
@@ -105,13 +105,13 @@ INPBUTTON_ID INPBUTTON::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPBUTTON::SetID(INPBUTTON_ID ID)
 * @brief      Set ID
 * @ingroup    INPUT
-*
+* 
 * @param[in]  ID : GEN_NEW ID to Set
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetID(INPBUTTON_ID ID)
 {
@@ -120,13 +120,13 @@ void INPBUTTON::SetID(INPBUTTON_ID ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD INPBUTTON::GetKeyCode()
 * @brief      Get key code
 * @ingroup    INPUT
-*
-* @return     XWORD : Key Code of button
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD INPBUTTON::GetKeyCode()
 {
@@ -135,13 +135,13 @@ XWORD INPBUTTON::GetKeyCode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPBUTTON::SetKeyCode(XWORD keycode)
 * @brief      Set key code
 * @ingroup    INPUT
-*
+* 
 * @param[in]  keycode : GEN_NEW Key Code of button
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetKeyCode(XWORD keycode)
 {
@@ -150,13 +150,13 @@ void INPBUTTON::SetKeyCode(XWORD keycode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR INPBUTTON::GetSymbol()
 * @brief      Get symbol
 * @ingroup    INPUT
-*
-* @return     XCHAR : Symbol of key
-*
+* 
+* @return     XCHAR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR INPBUTTON::GetSymbol()
 {
@@ -165,13 +165,13 @@ XCHAR INPBUTTON::GetSymbol()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPBUTTON::SetSymbol(XCHAR symbol)
 * @brief      Set symbol
 * @ingroup    INPUT
-*
+* 
 * @param[in]  symbol : GEN_NEW Symbol of key
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetSymbol(XCHAR symbol)
 {
@@ -180,13 +180,13 @@ void INPBUTTON::SetSymbol(XCHAR symbol)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPBUTTON_STATE INPBUTTON::GetState()
 * @brief      Get state
 * @ingroup    INPUT
-*
-* @return     INPBUTTON_STATE : statue of button
-*
+* 
+* @return     INPBUTTON_STATE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPBUTTON_STATE INPBUTTON::GetState()
 {
@@ -195,13 +195,13 @@ INPBUTTON_STATE INPBUTTON::GetState()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPBUTTON::SetState(INPBUTTON_STATE state)
 * @brief      Set state
 * @ingroup    INPUT
-*
+* 
 * @param[in]  state : GEN_NEW state
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetState(INPBUTTON_STATE state)
 {
@@ -210,13 +210,13 @@ void INPBUTTON::SetState(INPBUTTON_STATE state)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float INPBUTTON::GetPressure()
 * @brief      Get pressure
 * @ingroup    INPUT
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float INPBUTTON::GetPressure()
 {
@@ -225,13 +225,13 @@ float INPBUTTON::GetPressure()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPBUTTON::SetPressure(float pressure)
 * @brief      Set pressure
 * @ingroup    INPUT
-*
+* 
 * @param[in]  pressure : GEN_NEW pressure
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetPressure(float pressure)
 {
@@ -240,13 +240,13 @@ void INPBUTTON::SetPressure(float pressure)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPBUTTON::IsPressed()
 * @brief      Is pressed
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPBUTTON::IsPressed()
 {
@@ -255,13 +255,13 @@ bool INPBUTTON::IsPressed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPBUTTON::IsPressedWithRelease()
 * @brief      Is pressed with release
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPBUTTON::IsPressedWithRelease()
 {
@@ -283,13 +283,13 @@ bool INPBUTTON::IsPressedWithRelease()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPBUTTON::SetPressed(bool ispressed)
 * @brief      Set pressed
 * @ingroup    INPUT
-*
-* @param[in]  ispressed :
-*
+* 
+* @param[in]  ispressed : Ispressed value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::SetPressed(bool ispressed)
 {
@@ -306,13 +306,13 @@ void INPBUTTON::SetPressed(bool ispressed)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD INPBUTTON::GetTimePressed()
 * @brief      Get time pressed
 * @ingroup    INPUT
-*
-* @return     XQWORD : Millisecond pressed
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD INPBUTTON::GetTimePressed()
 {
@@ -323,18 +323,18 @@ XQWORD INPBUTTON::GetTimePressed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPBUTTON::CreateButton(XVECTOR<INPBUTTON*>* buttons, int keycode, INPBUTTON_ID ID, XCHAR symbol)
 * @brief      Create button
 * @ingroup    INPUT
-*
+* 
 * @param[in]  buttons : vector to add GEN_NEW button
 * @param[in]  keycode : key code of GEN_NEW button
 * @param[in]  ID : ID of GEN_NEW button
 * @param[in]  symbol : symbol of GEN_NEW button
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPBUTTON::CreateButton(XVECTOR<INPBUTTON*>* buttons, int keycode, INPBUTTON_ID ID, XCHAR symbol)
 {
@@ -356,12 +356,12 @@ bool INPBUTTON::CreateButton(XVECTOR<INPBUTTON*>* buttons, int keycode, INPBUTTO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPBUTTON::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPBUTTON::Clean()
 {

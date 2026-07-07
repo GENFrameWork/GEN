@@ -63,11 +63,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECFGVALUE::XFILECFGVALUE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFGVALUE::XFILECFGVALUE()
 {
@@ -76,12 +76,12 @@ XFILECFGVALUE::XFILECFGVALUE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECFGVALUE::~XFILECFGVALUE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFGVALUE::~XFILECFGVALUE()
 {
@@ -90,13 +90,13 @@ XFILECFGVALUE::~XFILECFGVALUE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECFG_VALUETYPE XFILECFGVALUE::GetType()
 * @brief      Get type
 * @ingroup    XUTILS
-*
-* @return     XFILECFG_VALUETYPE : Type of value
-*
+* 
+* @return     XFILECFG_VALUETYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFG_VALUETYPE XFILECFGVALUE::GetType()
 {
@@ -105,15 +105,15 @@ XFILECFG_VALUETYPE XFILECFGVALUE::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECFGVALUE::SetType(XFILECFG_VALUETYPE type)
 * @brief      Set type
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  type : GEN_NEW type of value
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFGVALUE::SetType(XFILECFG_VALUETYPE type)
 {
@@ -123,13 +123,13 @@ bool XFILECFGVALUE::SetType(XFILECFG_VALUETYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILECFGVALUE::GetGroup()
 * @brief      Get group
 * @ingroup    XUTILS
-*
-* @return     XSTRING* : group of value
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILECFGVALUE::GetGroup()
 {
@@ -138,13 +138,13 @@ XSTRING* XFILECFGVALUE::GetGroup()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILECFGVALUE::GetID()
 * @brief      Get ID
 * @ingroup    XUTILS
-*
-* @return     XSTRING* : ID df vlaue
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILECFGVALUE::GetID()
 {
@@ -153,13 +153,13 @@ XSTRING* XFILECFGVALUE::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* XFILECFGVALUE::GetValue()
 * @brief      Get value
 * @ingroup    XUTILS
-*
-* @return     void* : data of value
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XFILECFGVALUE::GetValue()
 {
@@ -168,15 +168,15 @@ void* XFILECFGVALUE::GetValue()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECFGVALUE::SetValue(void* value)
 * @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  value : GEN_NEW data of value
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFGVALUE::SetValue(void* value)
 {
@@ -191,7 +191,7 @@ bool XFILECFGVALUE::SetValue(void* value)
 * @brief      Get ID basic
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILECFGVALUE::GetIDBasic()
@@ -206,7 +206,7 @@ XSTRING* XFILECFGVALUE::GetIDBasic()
 * @brief      Get mask
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILECFGVALUE::GetMask()
@@ -221,7 +221,7 @@ XSTRING* XFILECFGVALUE::GetMask()
 * @brief      Get min secuences
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILECFGVALUE::GetMinSecuences()
@@ -236,7 +236,7 @@ XDWORD XFILECFGVALUE::GetMinSecuences()
 * @brief      Set min secuences
 * @ingroup    XUTILS
 * 
-* @param[in]  minsecuences : 
+* @param[in]  minsecuences : Minsecuences value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFGVALUE::SetMinSecuences(XDWORD minsecuences)
@@ -251,7 +251,7 @@ void XFILECFGVALUE::SetMinSecuences(XDWORD minsecuences)
 * @brief      Get max secuences
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILECFGVALUE::GetMaxSecuences()
@@ -266,7 +266,7 @@ XDWORD XFILECFGVALUE::GetMaxSecuences()
 * @brief      Set max secuences
 * @ingroup    XUTILS
 * 
-* @param[in]  maxsecuences : 
+* @param[in]  maxsecuences : Maxsecuences value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFGVALUE::SetMaxSecuences(XDWORD maxsecuences)
@@ -281,7 +281,7 @@ void XFILECFGVALUE::SetMaxSecuences(XDWORD maxsecuences)
 * @brief      Get index secuence
 * @ingroup    XUTILS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILECFGVALUE::GetIndexSecuence()
@@ -296,7 +296,7 @@ int XFILECFGVALUE::GetIndexSecuence()
 * @brief      Set index secuence
 * @ingroup    XUTILS
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFGVALUE::SetIndexSecuence(int index)
@@ -311,7 +311,7 @@ void XFILECFGVALUE::SetIndexSecuence(int index)
 * @brief      Get N secuences
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILECFGVALUE::GetNSecuences()
@@ -326,7 +326,7 @@ XDWORD XFILECFGVALUE::GetNSecuences()
 * @brief      Set N secuences
 * @ingroup    XUTILS
 * 
-* @param[in]  nsecuences : 
+* @param[in]  nsecuences : Nsecuences value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFGVALUE::SetNSecuences(XDWORD nsecuences)
@@ -341,7 +341,7 @@ void XFILECFGVALUE::SetNSecuences(XDWORD nsecuences)
 * @brief      Get remark text
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILECFGVALUE::GetRemarkText()
@@ -356,7 +356,7 @@ XSTRING* XFILECFGVALUE::GetRemarkText()
 * @brief      Get remark X pos
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILECFGVALUE::GetRemarkXPos()
@@ -371,7 +371,7 @@ XDWORD XFILECFGVALUE::GetRemarkXPos()
 * @brief      Set remark X pos
 * @ingroup    XUTILS
 * 
-* @param[in]  remark_xpos : 
+* @param[in]  remark_xpos : Remark xpos value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFGVALUE::SetRemarkXPos(XDWORD remark_xpos)
@@ -386,7 +386,7 @@ void XFILECFGVALUE::SetRemarkXPos(XDWORD remark_xpos)
 * @brief      Get values vector
 * @ingroup    XUTILS
 * 
-* @return     void* : 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XFILECFGVALUE::GetValuesVector()
@@ -401,7 +401,7 @@ void* XFILECFGVALUE::GetValuesVector()
 * @brief      Set values vector
 * @ingroup    XUTILS
 * 
-* @param[in]  valuesvector : 
+* @param[in]  valuesvector : Valuesvector pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFGVALUE::SetValuesVector(void* valuesvector)
@@ -416,7 +416,7 @@ void XFILECFGVALUE::SetValuesVector(void* valuesvector)
 * @brief      Get mode remote mix
 * @ingroup    XUTILS
 * 
-* @return     XFILECFG_MODEREMOTEMIX : 
+* @return     XFILECFG_MODEREMOTEMIX : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFG_MODEREMOTEMIX XFILECFGVALUE::GetModeRemoteMix()
@@ -431,7 +431,7 @@ XFILECFG_MODEREMOTEMIX XFILECFGVALUE::GetModeRemoteMix()
 * @brief      Set mode remote mix
 * @ingroup    XUTILS
 * 
-* @param[in]  moderemotemix : 
+* @param[in]  moderemotemix : Moderemotemix value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFGVALUE::SetModeRemoteMix(XFILECFG_MODEREMOTEMIX moderemotemix)
@@ -441,12 +441,12 @@ void XFILECFGVALUE::SetModeRemoteMix(XFILECFG_MODEREMOTEMIX moderemotemix)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILECFGVALUE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFGVALUE::Clean()
 {
@@ -474,13 +474,13 @@ void XFILECFGVALUE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECFG::XFILECFG(XCHAR* namefile)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  namefile : name file of config
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFG::XFILECFG(XCHAR* namefile)
 {
@@ -530,7 +530,7 @@ XFILECFG::~XFILECFG()
 * @brief      Do variable mapping
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::DoVariableMapping()
@@ -545,7 +545,7 @@ bool XFILECFG::DoVariableMapping()
 * @brief      Do default
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::DoDefault()
@@ -561,7 +561,7 @@ bool XFILECFG::DoDefault()
 * @brief      Load readjustment
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::LoadReadjustment()
@@ -571,13 +571,13 @@ bool XFILECFG::LoadReadjustment()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECFG::Load()
 * @brief      Load
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::Load()
 {
@@ -588,15 +588,15 @@ bool XFILECFG::Load()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECFG::Load(XPATH& xpath)
 * @brief      Load
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xpath : path to file config
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::Load(XPATH& xpath)
 {
@@ -684,9 +684,9 @@ bool XFILECFG::Load(XPATH& xpath)
 * @brief      save
 * @ingroup    XUTILS
 * 
-* @param[in]  formatchar : 
+* @param[in]  formatchar : Formatchar value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::Save(XFILETXTFORMATCHAR formatchar)
@@ -706,10 +706,10 @@ bool XFILECFG::Save(XFILETXTFORMATCHAR formatchar)
 * @brief      save
 * @ingroup    XUTILS
 * 
-* @param[in]  xpath : 
-* @param[in]  formatchar : 
+* @param[in]  xpath : Path to use.
+* @param[in]  formatchar : Formatchar value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::Save(XPATH& xpath, XFILETXTFORMATCHAR formatchar)
@@ -800,10 +800,10 @@ bool XFILECFG::Save(XPATH& xpath, XFILETXTFORMATCHAR formatchar)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILECFG::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::End()
@@ -818,7 +818,7 @@ bool XFILECFG::End()
 * @brief      Get path file
 * @ingroup    XUTILS
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* XFILECFG::GetPathFile()
@@ -833,14 +833,14 @@ XPATH* XFILECFG::GetPathFile()
 * @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  type : 
-* @param[in]  group : 
-* @param[in]  ID : 
-* @param[in]  value : 
-* @param[in]  remark_text : 
-* @param[in]  remark_xpos : 
+* @param[in]  type : Type value.
+* @param[in]  group : Group pointer to use.
+* @param[in]  ID : Identifier to use.
+* @param[in]  value : Value pointer to use.
+* @param[in]  remark_text : Remark text pointer to use.
+* @param[in]  remark_xpos : Remark xpos value.
 * 
-* @return     XFILECFGVALUE* : 
+* @return     XFILECFGVALUE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFGVALUE* XFILECFG::AddValue(XFILECFG_VALUETYPE type, XCHAR* group, XCHAR* ID, void* value, XCHAR* remark_text, XDWORD remark_xpos)
@@ -871,7 +871,7 @@ XFILECFGVALUE* XFILECFG::AddValue(XFILECFG_VALUETYPE type, XCHAR* group, XCHAR* 
 * @brief      Get values
 * @ingroup    XUTILS
 * 
-* @return     XVECTOR<XFILECFGVALUE*>* : 
+* @return     XVECTOR<XFILECFGVALUE*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XFILECFGVALUE*>* XFILECFG::GetValues()
@@ -886,7 +886,7 @@ XVECTOR<XFILECFGVALUE*>* XFILECFG::GetValues()
 * @brief      Get file INI
 * @ingroup    XUTILS
 * 
-* @return     XFILEINI* : 
+* @return     XFILEINI* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINI* XFILECFG::GetFileINI()
@@ -901,10 +901,10 @@ XFILEINI* XFILECFG::GetFileINI()
 * @brief      Get value
 * @ingroup    XUTILS
 * 
-* @param[in]  group : 
-* @param[in]  ID : 
+* @param[in]  group : Group pointer to use.
+* @param[in]  ID : Identifier to use.
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* XFILECFG::GetValue(XCHAR* group, XCHAR* ID)
@@ -955,13 +955,13 @@ XVARIANT* XFILECFG::GetValue(XCHAR* group, XCHAR* ID)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XVARIANT* XFILECFG::GetValue(XFILECFGVALUE* cfgvalue)
+* @fn         XVARIANT* XFILECFG::GetValue(XFILECFGVALUE* CFGvalue)
 * @brief      Get value
 * @ingroup    XUTILS
 * 
-* @param[in]  cfgvalue : 
+* @param[in]  CFGvalue : CF Gvalue pointer to use.
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* XFILECFG::GetValue(XFILECFGVALUE* CFGvalue)
@@ -1005,10 +1005,10 @@ XVARIANT* XFILECFG::GetValue(XFILECFGVALUE* CFGvalue)
 * @brief      Get CFG value
 * @ingroup    XUTILS
 * 
-* @param[in]  group : 
-* @param[in]  ID : 
+* @param[in]  group : Group pointer to use.
+* @param[in]  ID : Identifier to use.
 * 
-* @return     XFILECFGVALUE* : 
+* @return     XFILECFGVALUE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECFGVALUE* XFILECFG::GetCFGValue(XCHAR* group, XCHAR* ID)
@@ -1041,10 +1041,10 @@ XFILECFGVALUE* XFILECFG::GetCFGValue(XCHAR* group, XCHAR* ID)
 * @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  CFGvalue : 
-* @param[in]  value : 
+* @param[in]  CFGvalue : CF Gvalue pointer to use.
+* @param[in]  value : Value pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::SetValue(XFILECFGVALUE* CFGvalue, XVARIANT* value)
@@ -1079,13 +1079,13 @@ bool XFILECFG::SetValue(XFILECFGVALUE* CFGvalue, XVARIANT* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECFG::DeleteAllValues()
 * @brief      Delete all values
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::DeleteAllValues()
 {
@@ -1103,15 +1103,15 @@ bool XFILECFG::DeleteAllValues()
 * @fn         bool XFILECFG::AddRemark(XCHAR* group, XCHAR* text, XDWORD xpos, XDWORD relativeypos)
 * @brief      Add remark
 * @ingroup    XUTILS
-*
-* @param[in]  group : 
-* @param[in]  text : 
-* @param[in]  xpos : 
-* @param[in]  relativeypos : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  group : Group pointer to use.
+* @param[in]  text : Text to use.
+* @param[in]  xpos : Xpos value.
+* @param[in]  relativeypos : Relativeypos value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::AddRemark(XCHAR* group, XCHAR* text, XDWORD xpos, XDWORD relativeypos)
 {
   if(!fileini) return false;
@@ -1138,16 +1138,16 @@ bool XFILECFG::AddRemark(XCHAR* group, XCHAR* text, XDWORD xpos, XDWORD relative
 * @fn         bool XFILECFG::AddRemark(XCHAR* group, XCHAR* ID, XCHAR* text, XDWORD xpos, XDWORD relativeypos)
 * @brief      Add remark
 * @ingroup    XUTILS
-*
-* @param[in]  group : 
-* @param[in]  ID : 
-* @param[in]  text : 
-* @param[in]  xpos : 
-* @param[in]  relativeypos : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  group : Group pointer to use.
+* @param[in]  ID : Identifier to use.
+* @param[in]  text : Text to use.
+* @param[in]  xpos : Xpos value.
+* @param[in]  relativeypos : Relativeypos value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::AddRemark(XCHAR* group, XCHAR* ID, XCHAR* text, XDWORD xpos, XDWORD relativeypos)
 {
   if(!fileini) return false;
@@ -1175,7 +1175,7 @@ bool XFILECFG::AddRemark(XCHAR* group, XCHAR* ID, XCHAR* text, XDWORD xpos, XDWO
 * @brief      Get remarks
 * @ingroup    XUTILS
 * 
-* @return     XVECTOR<XFILEINIREMARK*>* : 
+* @return     XVECTOR<XFILEINIREMARK*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XFILEINIREMARK*>* XFILECFG::GetRemarks()
@@ -1190,10 +1190,10 @@ XVECTOR<XFILEINIREMARK*>* XFILECFG::GetRemarks()
 * @brief      Del CFG value
 * @ingroup    XUTILS
 * 
-* @param[in]  group : 
-* @param[in]  ID : 
+* @param[in]  group : Group pointer to use.
+* @param[in]  ID : Identifier to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::DelCFGValue(XCHAR* group, XCHAR* ID)
@@ -1214,10 +1214,10 @@ bool XFILECFG::DelCFGValue(XCHAR* group, XCHAR* ID)
 * @fn         bool XFILECFG::DeleteAllRemarks()
 * @brief      Delete all remarks
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::DeleteAllRemarks()
 {
   if(remarks.IsEmpty()) return false;
@@ -1230,16 +1230,16 @@ bool XFILECFG::DeleteAllRemarks()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECFG::IniFile(XPATH& xpath)
 * @brief      Ini file
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::IniFile(XPATH& xpath)
 {
@@ -1273,14 +1273,14 @@ bool XFILECFG::IniFile(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECFG::EndFile()
 * @brief      End file
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::EndFile()
 {
@@ -1295,10 +1295,10 @@ bool XFILECFG::EndFile()
 * @fn         bool XFILECFG::AjustRemarks()
 * @brief      Ajust remarks
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::AjustRemarks()
 {
   if(!fileini) return false;
@@ -1344,16 +1344,16 @@ bool XFILECFG::AjustRemarks()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         int XFILECFG::GetCountKeys(XCHAR* group, XCHAR* IDbase, XCHAR* mask, int maxcount)
+* @fn         int XFILECFG::GetCountKeys(XCHAR* group, XCHAR* IDbasic, XCHAR* mask, int maxcount)
 * @brief      Get count keys
 * @ingroup    XUTILS
 * 
-* @param[in]  group : 
-* @param[in]  IDbase : 
-* @param[in]  mask : 
-* @param[in]  maxcount : 
+* @param[in]  group : Group pointer to use.
+* @param[in]  IDbasic : I Dbasic pointer to use.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  maxcount : Maxcount value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILECFG::GetCountKeys(XCHAR* group, XCHAR* IDbasic, XCHAR* mask, int maxcount)
@@ -1390,12 +1390,12 @@ int XFILECFG::GetCountKeys(XCHAR* group, XCHAR* IDbasic, XCHAR* mask, int maxcou
 * @brief      Generate key secuence
 * @ingroup    XUTILS
 * 
-* @param[in]  IDbase : 
-* @param[in]  mask : 
-* @param[in]  index : 
-* @param[in]  key : 
+* @param[in]  IDbase : I Dbase pointer to use.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  index : Index value.
+* @param[in]  key : Key value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECFG::GenerateKeySecuence(XCHAR* IDbase, XCHAR* mask, int index, XSTRING& key)
@@ -1418,12 +1418,12 @@ bool XFILECFG::GenerateKeySecuence(XCHAR* IDbase, XCHAR* mask, int index, XSTRIN
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILECFG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECFG::Clean()
 {

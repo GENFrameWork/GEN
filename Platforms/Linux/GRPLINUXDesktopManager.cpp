@@ -64,7 +64,7 @@
    
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPLINUXDESKTOPMONITORS::GRPLINUXDESKTOPMONITORS()
+* @fn         GRPLINUXDESKTOPMONITORS::GRPLINUXDESKTOPMONITORS() : GRPDESKTOPMONITORS()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -100,7 +100,7 @@ GRPLINUXDESKTOPMONITORS::~GRPLINUXDESKTOPMONITORS()
 * @brief      Monitor enum
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXDESKTOPMONITORS::MonitorEnum()
@@ -271,11 +271,11 @@ GRPLINUXDESKTOPMANAGER::~GRPLINUXDESKTOPMANAGER()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPLINUXDESKTOPMONITORS* GRPLINUXDESKTOPMANAGER::GetDesktopMonitors()
+* @fn         GRPDESKTOPMONITORS* GRPLINUXDESKTOPMANAGER::GetDesktopMonitors()
 * @brief      Get desktop monitors
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     XDESKTOPMONITORS* : 
+* @return     GRPDESKTOPMONITORS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPDESKTOPMONITORS* GRPLINUXDESKTOPMANAGER::GetDesktopMonitors()

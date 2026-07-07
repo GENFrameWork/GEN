@@ -66,7 +66,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOI2CMONITORGAUGELTC2942::DIOI2CMONITORGAUGELTC2942()
+* @fn         DIOI2CMONITORGAUGELTC2942::DIOI2CMONITORGAUGELTC2942() : DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
@@ -78,12 +78,12 @@ DIOI2CMONITORGAUGELTC2942::DIOI2CMONITORGAUGELTC2942() : DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CMONITORGAUGELTC2942::~DIOI2CMONITORGAUGELTC2942()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CMONITORGAUGELTC2942::~DIOI2CMONITORGAUGELTC2942()
 {
@@ -96,10 +96,10 @@ DIOI2CMONITORGAUGELTC2942::~DIOI2CMONITORGAUGELTC2942()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         float DIOI2CMONITORGAUGELTC2942::GetVoltage (void)
-* @brief      Get voltage 
+* @brief      Get voltage
 * @ingroup    DATAIO
-*  
-* @return     float : 
+* 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float DIOI2CMONITORGAUGELTC2942::GetVoltage (void)
@@ -129,12 +129,12 @@ float DIOI2CMONITORGAUGELTC2942::GetVoltage (void)
 * @fn         bool DIOI2CMONITORGAUGELTC2942::SetAC(XWORD ac)
 * @brief      Set AC
 * @ingroup    DATAIO
-*
-* @param[in]  ac : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  ac : Ac value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CMONITORGAUGELTC2942::SetAC(XWORD ac)
 {  		  
   XBYTE ctrl;
@@ -163,7 +163,7 @@ bool DIOI2CMONITORGAUGELTC2942::SetAC(XWORD ac)
 * @brief      Get AC
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOI2CMONITORGAUGELTC2942::GetAC(void)
@@ -184,8 +184,8 @@ XWORD DIOI2CMONITORGAUGELTC2942::GetAC(void)
 * @fn         XWORD DIOI2CMONITORGAUGELTC2942::GetMaxAC(void)
 * @brief      Get max AC
 * @ingroup    DATAIO
-*  
-* @return     XWORD : 
+* 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOI2CMONITORGAUGELTC2942::GetMaxAC(void)
@@ -195,13 +195,13 @@ XWORD DIOI2CMONITORGAUGELTC2942::GetMaxAC(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CMONITORGAUGELTC2942::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CMONITORGAUGELTC2942::End()
 {
@@ -212,13 +212,13 @@ bool DIOI2CMONITORGAUGELTC2942::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CMONITORGAUGELTC2942::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CMONITORGAUGELTC2942::IniDevice()
 {  
@@ -243,10 +243,10 @@ bool DIOI2CMONITORGAUGELTC2942::IniDevice()
 * @fn         bool DIOI2CMONITORGAUGELTC2942::Initialize()
 * @brief      Initialize
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CMONITORGAUGELTC2942::Initialize()
 {  
   XBYTE ctrl; 
@@ -303,10 +303,10 @@ bool DIOI2CMONITORGAUGELTC2942::Initialize()
 * @brief      Read register
 * @ingroup    DATAIO
 * 
-* @param[in]  offset : 
-* @param[in]  data : 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CMONITORGAUGELTC2942::ReadRegister(XBYTE offset, XBYTE& data)
@@ -316,17 +316,17 @@ bool DIOI2CMONITORGAUGELTC2942::ReadRegister(XBYTE offset, XBYTE& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*+
+* 
 * @fn         bool DIOI2CMONITORGAUGELTC2942::ReadRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
 * @brief      Read register
 * @ingroup    DATAIO
-*
-* @param[in]  offset :
-* @param[in]  data :
-* @param[in]  sizedata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizedata : Sizedata value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CMONITORGAUGELTC2942::ReadRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
 {
@@ -347,16 +347,16 @@ bool DIOI2CMONITORGAUGELTC2942::ReadRegister(XBYTE offset, XBYTE* data, XDWORD s
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CMONITORGAUGELTC2942::WriteRegister(XBYTE offset, XBYTE data)
 * @brief      Write register
 * @ingroup    DATAIO
-*
-* @param[in]  offset :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CMONITORGAUGELTC2942::WriteRegister(XBYTE offset, XBYTE data)
 {
@@ -365,17 +365,17 @@ bool DIOI2CMONITORGAUGELTC2942::WriteRegister(XBYTE offset, XBYTE data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CMONITORGAUGELTC2942::WriteRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
 * @brief      Write register
 * @ingroup    DATAIO
-*
-* @param[in]  offset :
-* @param[in]  data :
-* @param[in]  sizedata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizedata : Sizedata value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CMONITORGAUGELTC2942::WriteRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
 {
@@ -395,12 +395,12 @@ bool DIOI2CMONITORGAUGELTC2942::WriteRegister(XBYTE offset, XBYTE* data, XDWORD 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CMONITORGAUGELTC2942::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CMONITORGAUGELTC2942::Clean()
 {

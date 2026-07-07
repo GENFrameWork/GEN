@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODYNDNS_MANAGER::DIODYNDNS_MANAGER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODYNDNS_MANAGER::DIODYNDNS_MANAGER()
 {
@@ -68,12 +68,12 @@ DIODYNDNS_MANAGER::DIODYNDNS_MANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODYNDNS_MANAGER::~DIODYNDNS_MANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODYNDNS_MANAGER::~DIODYNDNS_MANAGER()
 {
@@ -84,13 +84,13 @@ DIODYNDNS_MANAGER::~DIODYNDNS_MANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIODYNDNS_MANAGER::GetLogin()
 * @brief      Get login
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIODYNDNS_MANAGER::GetLogin()
 {
@@ -99,13 +99,13 @@ XSTRING* DIODYNDNS_MANAGER::GetLogin()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIODYNDNS_MANAGER::GetPassword()
 * @brief      Get password
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIODYNDNS_MANAGER::GetPassword()
 {
@@ -114,15 +114,15 @@ XSTRING* DIODYNDNS_MANAGER::GetPassword()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODYNDNS_MANAGER::AddDNS(XSTRING& DNS)
 * @brief      Add DNS
 * @ingroup    DATAIO
-*
-* @param[in]  DNS :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  DNS : DNS value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODYNDNS_MANAGER::AddDNS(XSTRING& DNS)
 {
@@ -140,13 +140,13 @@ bool DIODYNDNS_MANAGER::AddDNS(XSTRING& DNS)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODYNDNS_MANAGER::DeleteAllDNS()
 * @brief      Delete all DNS
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODYNDNS_MANAGER::DeleteAllDNS()
 {
@@ -160,13 +160,13 @@ bool DIODYNDNS_MANAGER::DeleteAllDNS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIODYNDNS_MANAGER::GetNDNS()
 * @brief      Get NDNS
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIODYNDNS_MANAGER::GetNDNS()
 {
@@ -176,13 +176,13 @@ XDWORD DIODYNDNS_MANAGER::GetNDNS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIODYNDNS_MANAGER::AssingAll(bool endproccess)
+* @fn         bool DIODYNDNS_MANAGER::AssingAll(bool* endproccess)
 * @brief      assing all
 * @ingroup    DATAIO
 * 
-* @param[in]  endproccess : 
+* @param[in]  endproccess : Endproccess pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODYNDNS_MANAGER::AssingAll(bool* endproccess)
@@ -277,12 +277,12 @@ bool DIODYNDNS_MANAGER::AssingAll(bool* endproccess)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIODYNDNS_MANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIODYNDNS_MANAGER::Clean()
 {

@@ -54,11 +54,11 @@ INPFACTORY* INPFACTORY::instance = NULL;
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPFACTORY::INPFACTORY()
 * @brief      Constructor of class
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPFACTORY::INPFACTORY()
 {
@@ -67,12 +67,12 @@ INPFACTORY::INPFACTORY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPFACTORY::~INPFACTORY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPFACTORY::~INPFACTORY()
 {
@@ -81,14 +81,14 @@ INPFACTORY::~INPFACTORY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPFACTORY::GetIsInstanced()
 * @brief      Get is instanced
 * @note       STATIC
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPFACTORY::GetIsInstanced()
 {
@@ -102,7 +102,7 @@ bool INPFACTORY::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    INPUT
 * 
-* @return     INPFACTORY& : 
+* @return     INPFACTORY& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPFACTORY& INPFACTORY::GetInstance()
@@ -119,9 +119,9 @@ INPFACTORY& INPFACTORY::GetInstance()
 * @brief      Set instance
 * @ingroup    INPUT
 * 
-* @param[in]  _instance : 
+* @param[in]  _instance : Instance pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPFACTORY::SetInstance(INPFACTORY* _instance)
@@ -140,7 +140,7 @@ bool INPFACTORY::SetInstance(INPFACTORY* _instance)
 * @brief      Del instance
 * @ingroup    INPUT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPFACTORY::DelInstance()
@@ -155,16 +155,16 @@ bool INPFACTORY::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPDEVICE* INPFACTORY::CreateDevice(XCHAR* device, void* param)
+* 
+* @fn         INPDEVICE* INPFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 * @brief      Create device
 * @ingroup    INPUT
-*
-* @param[in]  type  : device type of the input device
+* 
+* @param[in]  type : device type of the input device
 * @param[in]  param : param to create device (if is necessary)
-*
-* @return     INPDEVICE* : device input created
-*
+* 
+* @return     INPDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* INPFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 {
@@ -173,15 +173,15 @@ INPDEVICE* INPFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPFACTORY::DeleteDevice(INPDEVICE* device)
 * @brief      Delete device
 * @ingroup    INPUT
-*
+* 
 * @param[in]  device : GEN_DELETE device
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPFACTORY::DeleteDevice(INPDEVICE* device)
 {
@@ -196,7 +196,7 @@ bool INPFACTORY::DeleteDevice(INPDEVICE* device)
 * @brief      Create simulator
 * @ingroup    INPUT
 * 
-* @return     INPSIMULATE* : 
+* @return     INPSIMULATE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPSIMULATE* INPFACTORY::CreateSimulator()
@@ -211,9 +211,9 @@ INPSIMULATE* INPFACTORY::CreateSimulator()
 * @brief      Delete simulator
 * @ingroup    INPUT
 * 
-* @param[in]  inputsimulated : 
+* @param[in]  inputsimulated : Inputsimulated pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)
@@ -230,7 +230,7 @@ bool INPFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)
 * @brief      Create capture
 * @ingroup    INPUT
 * 
-* @return     INPCAPTURE* : 
+* @return     INPCAPTURE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPCAPTURE* INPFACTORY::CreateCapture()
@@ -245,9 +245,9 @@ INPCAPTURE* INPFACTORY::CreateCapture()
 * @brief      Delete capture
 * @ingroup    INPUT
 * 
-* @param[in]  inputcapture : 
+* @param[in]  inputcapture : Inputcapture pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPFACTORY::DeleteCapture(INPCAPTURE* inputcapture)
@@ -259,12 +259,12 @@ bool INPFACTORY::DeleteCapture(INPCAPTURE* inputcapture)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPFACTORY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPFACTORY::Clean()
 {

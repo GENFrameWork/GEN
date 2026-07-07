@@ -346,7 +346,6 @@ void GRPSTATISTICSCHART::DrawLegend(GRPSTATISTICSCHARTBUILDER& builder, double x
           GRPSTATISTICSCHARTSTYLE box;
           box.SetFill(color);
           box.SetStroke(boxedge, 0.75);
-
           builder.DrawRect(curx, cy - (swatch * 0.5), swatch, swatch, box);
           builder.DrawText(curx + swatch + gap, cy + (lf * 0.35), name->Get(), textstyle);
 
@@ -377,7 +376,6 @@ void GRPSTATISTICSCHART::DrawLegend(GRPSTATISTICSCHARTBUILDER& builder, double x
       GRPSTATISTICSCHARTSTYLE box;
       box.SetFill(color);
       box.SetStroke(boxedge, 0.75);
-
       builder.DrawRect(x, cury, swatch, swatch, box);
       builder.DrawText(x + swatch + gap, cury + (swatch * 0.8), name->Get(), textstyle);
 

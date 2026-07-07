@@ -86,7 +86,7 @@ SNDOPENALBUFFER::~SNDOPENALBUFFER()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void SNDOPENALBUFFER::Create()
-* @brief      Create
+* @brief      Create resource
 * @ingroup    SOUND
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -101,7 +101,7 @@ void SNDOPENALBUFFER::Create()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void SNDOPENALBUFFER::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    SOUND
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -119,7 +119,7 @@ void SNDOPENALBUFFER::Delete()
 * @brief      Get handle
 * @ingroup    SOUND
 * 
-* @return     ALuint : 
+* @return     ALuint : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 ALuint SNDOPENALBUFFER::GetHandle()
@@ -134,9 +134,9 @@ ALuint SNDOPENALBUFFER::GetHandle()
 * @brief      Set handle
 * @ingroup    SOUND
 * 
-* @param[in]  handle : 
+* @param[in]  handle : Handle value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALBUFFER::SetHandle(ALuint handle)
@@ -153,7 +153,7 @@ bool SNDOPENALBUFFER::SetHandle(ALuint handle)
 * @brief      Get X buffer
 * @ingroup    SOUND
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* SNDOPENALBUFFER::GetXBuffer()
@@ -168,11 +168,11 @@ XBUFFER* SNDOPENALBUFFER::GetXBuffer()
 * @brief      Generate note
 * @ingroup    SOUND
 * 
-* @param[in]  frequency : 
-* @param[in]  duration : 
-* @param[in]  samplerate : 
+* @param[in]  frequency : Frequency value.
+* @param[in]  duration : Duration value.
+* @param[in]  samplerate : Samplerate value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDOPENALBUFFER::GenerateNote(XDWORD frequency, XDWORD duration, XDWORD samplerate)
@@ -202,11 +202,11 @@ XDWORD SNDOPENALBUFFER::GenerateNote(XDWORD frequency, XDWORD duration, XDWORD s
 * @brief      Assign
 * @ingroup    SOUND
 * 
-* @param[in]  channels : 
-* @param[in]  size : 
-* @param[in]  samplerate : 
+* @param[in]  channels : Channels value.
+* @param[in]  size : Size value.
+* @param[in]  samplerate : Samplerate value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALBUFFER::Assign(XWORD channels, size_t size, XDWORD samplerate)

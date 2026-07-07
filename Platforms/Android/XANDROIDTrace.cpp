@@ -64,11 +64,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDTRACE::XANDROIDTRACE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDTRACE::XANDROIDTRACE()
 {
@@ -77,12 +77,12 @@ XANDROIDTRACE::XANDROIDTRACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDTRACE::~XANDROIDTRACE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDTRACE::~XANDROIDTRACE()
 {
@@ -91,15 +91,15 @@ XANDROIDTRACE::~XANDROIDTRACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XANDROIDTRACE::PrintSpecial(XDEBUGCTRLTARGET* target, XBYTE level, XCHAR* string)
+* 
+* @fn         void XANDROIDTRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 * @brief      Print special
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * @param[in]  target : target to print the debug
 * @param[in]  level : level of debug
 * @param[in]  string : string with the line
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XANDROIDTRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 {

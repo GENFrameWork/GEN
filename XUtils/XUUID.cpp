@@ -58,11 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XUUID::XUUID()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID::XUUID()
 {
@@ -77,12 +77,12 @@ XUUID::XUUID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XUUID::~XUUID()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID::~XUUID()
 {
@@ -96,13 +96,13 @@ XUUID::~XUUID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XUUID::GetData1()
 * @brief      Get data1
 * @ingroup    XUTILS
-*
-* @return     XDWORD : 
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XUUID::GetData1()
 {
@@ -111,13 +111,13 @@ XDWORD XUUID::GetData1()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD XUUID::GetData2()
 * @brief      Get data2
 * @ingroup    XUTILS
-*
-* @return     XWORD : 
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD XUUID::GetData2()
 {
@@ -126,13 +126,13 @@ XWORD XUUID::GetData2()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD XUUID::GetData3()
 * @brief      Get data3
 * @ingroup    XUTILS
-*
-* @return     XWORD : 
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD XUUID::GetData3()
 {
@@ -145,10 +145,10 @@ XWORD XUUID::GetData3()
 * @fn         XBYTE XUUID::GetData4()
 * @brief      Get data4
 * @ingroup    XUTILS
-*
-* @return     XBYTE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XUUID::GetData4()
 {
   return data4;
@@ -157,13 +157,13 @@ XBYTE XUUID::GetData4()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTE XUUID::GetData4()
+* @fn         XBYTE XUUID::GetData5()
 * @brief      Get data4
 * @ingroup    XUTILS
-*
-* @return     XBYTE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XUUID::GetData5()
 {
   return data5;
@@ -175,10 +175,10 @@ XBYTE XUUID::GetData5()
 * @fn         XBYTE* XUUID::GetData6()
 * @brief      Get data6
 * @ingroup    XUTILS
-*
-* @return     XBYTE* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XUUID::GetData6()
 {
   return data6;
@@ -191,9 +191,9 @@ XBYTE* XUUID::GetData6()
 * @brief      get to buffer
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::GetToBuffer(XBUFFER& data)
@@ -216,12 +216,12 @@ bool XUUID::GetToBuffer(XBUFFER& data)
 * @fn         bool XUUID::GetToString(XSTRING& string)
 * @brief      Get to string
 * @ingroup    XUTILS
-*
-* @param[in]  string : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  string : String to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::GetToString(XSTRING& string)
 {
   string.Format(__L("%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X"), data1
@@ -234,15 +234,15 @@ bool XUUID::GetToString(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XUUID::SetData1(XDWORD data)
 * @brief      Set data1
 * @ingroup    XUTILS
-*
-* @param[in]  data : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::SetData1(XDWORD data)
 {
@@ -253,15 +253,15 @@ bool XUUID::SetData1(XDWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XUUID::SetData2(XWORD data)
 * @brief      Set data2
 * @ingroup    XUTILS
-*
-* @param[in]  data : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::SetData2(XWORD data)
 {
@@ -272,15 +272,15 @@ bool XUUID::SetData2(XWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XUUID::SetData3(XWORD data)
 * @brief      Set data3
 * @ingroup    XUTILS
-*
-* @param[in]  data : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::SetData3(XWORD data)
 {
@@ -295,12 +295,12 @@ bool XUUID::SetData3(XWORD data)
 * @fn         bool XUUID::SetData4(XBYTE data)
 * @brief      Set data4
 * @ingroup    XUTILS
-*
-* @param[in]  data : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  data : Data buffer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::SetData4(XBYTE data)
 {
   this->data4 = data;
@@ -314,12 +314,12 @@ bool XUUID::SetData4(XBYTE data)
 * @fn         bool XUUID::SetData5(XBYTE data)
 * @brief      Set data5
 * @ingroup    XUTILS
-*
-* @param[in]  data : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  data : Data buffer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::SetData5(XBYTE data)
 {
   this->data5 = data;
@@ -329,15 +329,15 @@ bool XUUID::SetData5(XBYTE data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XUUID::SetData6(XBYTE* data)
 * @brief      Set data6
 * @ingroup    XUTILS
-*
-* @param[in]  data : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::SetData6(XBYTE* data)
 {
@@ -356,9 +356,9 @@ bool XUUID::SetData6(XBYTE* data)
 * @brief      set from buffer
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::SetFromBuffer(XBUFFER& data)
@@ -388,12 +388,12 @@ bool XUUID::SetFromBuffer(XBUFFER& data)
 * @fn         bool XUUID::SetFromString(XSTRING& string)
 * @brief      Set from string
 * @ingroup    XUTILS
-*
-* @param[in]  string : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  string : String to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::SetFromString(XSTRING& string)
 {
   XSTRING string2;  
@@ -439,7 +439,7 @@ bool XUUID::SetFromString(XSTRING& string)
 * @brief      Is empty
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::IsEmpty()
@@ -487,7 +487,7 @@ bool XUUID::IsEmpty()
 * @brief      Empty
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::Empty()
@@ -510,12 +510,12 @@ bool XUUID::Empty()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XUUID::Set(XUUID& ID)
-* @brief      set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  ID : 
+* @param[in]  ID : Identifier to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::Set(XUUID& ID)
@@ -534,19 +534,19 @@ bool XUUID::Set(XUUID& ID)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XUUID::Set(XDWORD data1, XWORD data2, XWORD data3, XBYTE data4, XBYTE data5, XBYTE* data6)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  data1 : 
-* @param[in]  data2 : 
-* @param[in]  data3 : 
-* @param[in]  data4 : 
-* @param[in]  data5 : 
-* @param[in]  data6 : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  data1 : Data1 value.
+* @param[in]  data2 : Data2 value.
+* @param[in]  data3 : Data3 value.
+* @param[in]  data4 : Data4 value.
+* @param[in]  data5 : Data5 value.
+* @param[in]  data6 : Data6 pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::Set(XDWORD data1, XWORD data2, XWORD data3, XBYTE data4, XBYTE data5, XBYTE* data6)
 {
   SetData1(data1);
@@ -565,12 +565,12 @@ bool XUUID::Set(XDWORD data1, XWORD data2, XWORD data3, XBYTE data4, XBYTE data5
 * @fn         bool XUUID::CopyFrom(XUUID& uuid)
 * @brief      Copy from
 * @ingroup    XUTILS
-*
-* @param[in]  uuid : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  uuid : Uuid value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::CopyFrom(XUUID& uuid)
 {
   return Set(uuid.GetData1(), uuid.GetData2(), uuid.GetData3(), uuid.GetData4(), uuid.GetData5(), uuid.GetData6());
@@ -578,15 +578,15 @@ bool XUUID::CopyFrom(XUUID& uuid)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XUUID::CopyTo(XUUID& uuid)
 * @brief      Copy to
 * @ingroup    XUTILS
-*
-* @param[in]  uuid : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  uuid : Uuid value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::CopyTo(XUUID& uuid)
 {
@@ -595,13 +595,13 @@ bool XUUID::CopyTo(XUUID& uuid)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XUUID::GenerateRandom()
 * @brief      Generate random
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::GenerateRandom()
 {
@@ -659,9 +659,9 @@ bool XUUID::GenerateRandom()
 * @brief      Compare
 * @ingroup    XUTILS
 * 
-* @param[in]  uuid : 
+* @param[in]  uuid : Uuid value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XUUID::Compare(XUUID& uuid)
@@ -704,12 +704,12 @@ bool XUUID::Compare(XUUID& uuid)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XUUID::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XUUID::Clean()
 {

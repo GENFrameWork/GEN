@@ -73,7 +73,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMUARTLOCALENUMDEVICES::DIOANDROIDSTREAMUARTLOCALENUMDEVICES()
+* @fn         DIOANDROIDSTREAMUARTLOCALENUMDEVICES::DIOANDROIDSTREAMUARTLOCALENUMDEVICES() : DIOSTREAMUARTLOCALENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -104,7 +104,7 @@ DIOANDROIDSTREAMUARTLOCALENUMDEVICES::~DIOANDROIDSTREAMUARTLOCALENUMDEVICES()
 * @brief      Search
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUARTLOCALENUMDEVICES::Search()
@@ -224,9 +224,9 @@ bool DIOANDROIDSTREAMUARTLOCALENUMDEVICES::Search()
 * @brief      Is device available
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  resource : 
+* @param[in]  resource : Resource pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUARTLOCALENUMDEVICES::IsDeviceAvailable(XCHAR* resource)

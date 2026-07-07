@@ -74,11 +74,11 @@ void    WLanCallback      (WLAN_NOTIFICATION_DATA *scannotificationdata, PVOID c
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES()
+* 
+* @fn         DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES() : DIOSTREAMWIFIREMOTEENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES() : DIOSTREAMWIFIREMOTEENUMDEVICES()
 {
@@ -87,12 +87,12 @@ DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES() :
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::~DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::~DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES()
 {
@@ -103,13 +103,13 @@ DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::~DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::Search()
 {
@@ -270,15 +270,15 @@ bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::Search()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::SetAllConnectionInAutomaticMode(bool automaticmodeactive)
 * @brief      Set all connection in automatic mode
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  automaticmodeactive : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  automaticmodeactive : Automaticmodeactive value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::SetAllConnectionInAutomaticMode(bool automaticmodeactive)
 {
@@ -380,15 +380,15 @@ bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::SetAllConnectionInAutomaticMode(bool
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::SetAllConnectionStatus(bool activate)
 * @brief      Set all connection status
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  activate : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  activate : Activate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::SetAllConnectionStatus(bool activate)
 {
@@ -489,15 +489,15 @@ bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::SetAllConnectionStatus(bool activate
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::StopSearch(bool waitend)
 * @brief      Stop search
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  waitend :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  waitend : Waitend value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::StopSearch(bool waitend)
 {
@@ -508,13 +508,13 @@ bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::StopSearch(bool waitend)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::IsSearching()
 * @brief      Is searching
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::IsSearching()
 {
@@ -523,14 +523,14 @@ bool DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::IsSearching()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::TriggerScan(HANDLE wlanhandle, WLAN_INTERFACE_INFO_LIST* interfaces)
 * @brief      Trigger scan
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  wlanhandle :
-* @param[in]  interfaces :
-*
+* 
+* @param[in]  wlanhandle : Wlanhandle value.
+* @param[in]  interfaces : Interfaces pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::TriggerScan(HANDLE wlanhandle, WLAN_INTERFACE_INFO_LIST* interfaces)
 {
@@ -592,14 +592,14 @@ void DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::TriggerScan(HANDLE wlanhandle, WLAN_
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void WLanCallback(WLAN_NOTIFICATION_DATA*scannotificationdata, PVOID context)
+* 
+* @fn         void WLanCallback(WLAN_NOTIFICATION_DATA *scannotificationdata, PVOID context)
 * @brief      LanCallback
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  WLAN_NOTIFICATION_DATA*scannotificationdata :
-* @param[in]  context :
-*
+* 
+* @param[in]  scannotificationdata : Scannotificationdata pointer to use.
+* @param[in]  context : Context object to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void WLanCallback(WLAN_NOTIFICATION_DATA *scannotificationdata, PVOID context)
 {
@@ -631,12 +631,12 @@ void WLanCallback(WLAN_NOTIFICATION_DATA *scannotificationdata, PVOID context)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMWIFIREMOTEENUMDEVICES::Clean()
 {

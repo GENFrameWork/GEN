@@ -58,11 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DB_SQL_VARIANT::DB_SQL_VARIANT()
+* 
+* @fn         DB_SQL_VARIANT::DB_SQL_VARIANT(): XVARIANT()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT::DB_SQL_VARIANT(): XVARIANT()
 {
@@ -71,13 +71,13 @@ DB_SQL_VARIANT::DB_SQL_VARIANT(): XVARIANT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DB_SQL_VARIANT::DB_SQL_VARIANT(const DB_SQL_VARIANT& variant)
+* 
+* @fn         DB_SQL_VARIANT::DB_SQL_VARIANT(const DB_SQL_VARIANT& variant): XVARIANT()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  const :
-*
+* 
+* @param[in]  XVARIANT : XVARIANT value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT::DB_SQL_VARIANT(const DB_SQL_VARIANT& variant): XVARIANT()
 {
@@ -88,12 +88,12 @@ DB_SQL_VARIANT::DB_SQL_VARIANT(const DB_SQL_VARIANT& variant): XVARIANT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_VARIANT::~DB_SQL_VARIANT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT::~DB_SQL_VARIANT()
 {
@@ -104,13 +104,13 @@ DB_SQL_VARIANT::~DB_SQL_VARIANT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_VARIANT_FLAGS* DB_SQL_VARIANT::GetFlags()
 * @brief      Get flags
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_VARIANT_FLAGS* :
-*
+* 
+* @return     DB_SQL_VARIANT_FLAGS* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT_FLAGS* DB_SQL_VARIANT::GetFlags()
 {
@@ -119,13 +119,13 @@ DB_SQL_VARIANT_FLAGS* DB_SQL_VARIANT::GetFlags()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DB_SQL_VARIANT::SetFlags(DB_SQL_VARIANT_FLAGS flags)
 * @brief      Set flags
 * @ingroup    DATABASE
-*
-* @param[in]  flags :
-*
+* 
+* @param[in]  flags : Flags value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_VARIANT::SetFlags(DB_SQL_VARIANT_FLAGS flags)
 {
@@ -134,12 +134,12 @@ void DB_SQL_VARIANT::SetFlags(DB_SQL_VARIANT_FLAGS flags)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DB_SQL_VARIANT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_VARIANT::Clean()
 {
@@ -153,11 +153,11 @@ void DB_SQL_VARIANT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_ROW::DB_SQL_ROW()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_ROW::DB_SQL_ROW()
 {
@@ -166,12 +166,12 @@ DB_SQL_ROW::DB_SQL_ROW()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_ROW::~DB_SQL_ROW()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_ROW::~DB_SQL_ROW()
 {
@@ -180,15 +180,15 @@ DB_SQL_ROW::~DB_SQL_ROW()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_VARIANT DB_SQL_ROW::Get(int index)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATABASE
-*
-* @param[in]  index :
-*
-* @return     DB_SQL_VARIANT :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     DB_SQL_VARIANT : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT DB_SQL_ROW::Get(int index)
 {
@@ -205,15 +205,15 @@ DB_SQL_VARIANT DB_SQL_ROW::Get(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_ROW::Add(DB_SQL_VARIANT* variant)
-* @brief      Add
+* @brief      Add value
 * @ingroup    DATABASE
-*
-* @param[in]  variant :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  variant : Variant pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_ROW::Add(DB_SQL_VARIANT* variant)
 {
@@ -222,11 +222,11 @@ bool DB_SQL_ROW::Add(DB_SQL_VARIANT* variant)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DB_SQL_ROW::Clear()
 * @brief      Clear
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_ROW::Clear()
 {

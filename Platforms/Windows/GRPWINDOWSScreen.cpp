@@ -31,7 +31,6 @@
 #include "GEN_Defines.h"
 
 
-
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 
@@ -44,6 +43,7 @@
 #include "XSystem.h"
 
 #include "MainProcWINDOWS.h"
+#include "APPFlowGraphics.h"
 
 #include "GRPXEvent.h"
 #include "GRP2DCanvas.h"
@@ -55,28 +55,23 @@
 #endif
 
 
-
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRPWINDOWSSCREEN::GRPWINDOWSSCREEN()
+* 
+* @fn         GRPWINDOWSSCREEN::GRPWINDOWSSCREEN(): GRPSCREEN()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPWINDOWSSCREEN::GRPWINDOWSSCREEN(): GRPSCREEN()
 {
@@ -119,13 +114,13 @@ GRPWINDOWSSCREEN::GRPWINDOWSSCREEN(): GRPSCREEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPWINDOWSSCREEN::~GRPWINDOWSSCREEN()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
-* -------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPWINDOWSSCREEN::~GRPWINDOWSSCREEN()
 {
   Clean();
@@ -133,13 +128,15 @@ GRPWINDOWSSCREEN::~GRPWINDOWSSCREEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPWINDOWSSCREEN::Create(void* handle)
-* @brief      Create
+* 
+* @fn         bool GRPWINDOWSSCREEN::Create(bool show)
+* @brief      Create resource
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  show : Show value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Create(bool show)
 {
@@ -155,13 +152,13 @@ bool GRPWINDOWSSCREEN::Create(bool show)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPWINDOWSSCREEN::Update()
 * @brief      Update
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Update()
 {
@@ -186,15 +183,15 @@ bool GRPWINDOWSSCREEN::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPWINDOWSSCREEN::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  canvas : handle of canvas
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Update(GRP2DCANVAS* canvas)
 {
@@ -237,20 +234,13 @@ bool GRPWINDOWSSCREEN::Update(GRP2DCANVAS* canvas)
 * @brief      Update transparent
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  canvas : 
+* @param[in]  canvas : Canvas object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 {
-  // A transparent screen is a WS_EX_LAYERED window composited with
-  // UpdateLayeredWindow (per-pixel alpha). This path MUST run even when
-  // GRP_OPENGL_ACTIVE is defined: an EGL/ANGLE swap to the HWND is never shown
-  // on a layered window, so OpenGL cannot present a transparent popup. We
-  // therefore always composite the CPU canvas (BGRA + alpha) here via GDI.
-  // The GL blitter is neither created nor used for transparent screens (see
-  // CreateWindow). hdc and hinfo are valid in the GL build too.
   if(!hdc) 
     {
       return false;
@@ -301,13 +291,13 @@ bool GRPWINDOWSSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPWINDOWSSCREEN::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Delete()
 {
@@ -353,10 +343,10 @@ bool GRPWINDOWSSCREEN::Delete()
 * @brief      Get position
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Get_Position(int& x, int& y)
@@ -378,10 +368,10 @@ bool GRPWINDOWSSCREEN::Get_Position(int& x, int& y)
 * @brief      Set position
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Set_Position(int x, int y)
@@ -413,16 +403,16 @@ bool GRPWINDOWSSCREEN::Set_Position(int x, int y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPWINDOWSSCREEN::Resize(int width, int height)
 * @brief      Resize
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  width : GEN_NEW width of the screen
 * @param[in]  height : GEN_NEW height of the screen
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Resize(int width, int height)
 {
@@ -446,15 +436,15 @@ bool GRPWINDOWSSCREEN::Resize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPWINDOWSSCREEN::Show(bool active)
 * @brief      Show
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Show(bool active)
 {
@@ -470,15 +460,15 @@ bool GRPWINDOWSSCREEN::Show(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPWINDOWSSCREEN::ShowCursor(bool active)
 * @brief      Show cursor
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::ShowCursor(bool active)
 {
@@ -490,13 +480,13 @@ bool GRPWINDOWSSCREEN::ShowCursor(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* GRPWINDOWSSCREEN::GetHandle()
 * @brief      Get handle
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPWINDOWSSCREEN::GetHandle()
 {
@@ -506,11 +496,11 @@ void* GRPWINDOWSSCREEN::GetHandle()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPWINDOWSSCREEN::SetHandle(XDWORD handle_window)
+* @fn         void GRPWINDOWSSCREEN::SetHandle(void* handle_window)
 * @brief      Set handle
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  handle_window : 
+* @param[in]  handle_window : Handle window pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPWINDOWSSCREEN::SetHandle(void* handle_window)
@@ -525,7 +515,7 @@ void GRPWINDOWSSCREEN::SetHandle(void* handle_window)
 * @brief      Set focus
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Set_Focus()
@@ -554,9 +544,9 @@ bool GRPWINDOWSSCREEN::Set_Focus()
 * @brief      Minimize
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  active : 
+* @param[in]  active : Active value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Minimize(bool active)
@@ -576,9 +566,9 @@ bool GRPWINDOWSSCREEN::Minimize(bool active)
 * @brief      Maximize
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  active : 
+* @param[in]  active : Active value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Maximize(bool active)
@@ -598,10 +588,10 @@ bool GRPWINDOWSSCREEN::Maximize(bool active)
 * @brief      Capture content
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  rect : 
-* @param[in]  handle_window : 
+* @param[in]  rect : Rectangle to use.
+* @param[in]  handle_window : Handle window pointer to use.
 * 
-* @return     GRPBITMAP* : 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPWINDOWSSCREEN::CaptureContent(GRPRECTINT* rect, void* handle_window)
@@ -690,7 +680,7 @@ GRPBITMAP* GRPWINDOWSSCREEN::CaptureContent(GRPRECTINT* rect, void* handle_windo
 * @brief      Get desktop handle
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     void* : 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPWINDOWSSCREEN::GetDesktopHandle()
@@ -707,7 +697,7 @@ void* GRPWINDOWSSCREEN::GetDesktopHandle()
 * @brief      Get shell handle
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     void* : 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPWINDOWSSCREEN::GetShellHandle()
@@ -719,13 +709,13 @@ void* GRPWINDOWSSCREEN::GetShellHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* GRPWINDOWSSCREEN::GetHDC()
 * @brief      Get HDC
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPWINDOWSSCREEN::GetHDC()
 {
@@ -734,13 +724,13 @@ void* GRPWINDOWSSCREEN::GetHDC()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPWINDOWSSCREEN::SetHDC(HDC hdc)
 * @brief      Set HDC
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  hdc :
-*
+* 
+* @param[in]  hdc : Hdc value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPWINDOWSSCREEN::SetHDC(HDC hdc)
 {
@@ -749,13 +739,13 @@ void GRPWINDOWSSCREEN::SetHDC(HDC hdc)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         BITMAPINFO* GRPWINDOWSSCREEN::GetHInfo()
 * @brief      Get H info
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     BITMAPINFO* : 
-*
+* 
+* @return     BITMAPINFO* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 BITMAPINFO* GRPWINDOWSSCREEN::GetHInfo()
 {
@@ -765,13 +755,13 @@ BITMAPINFO* GRPWINDOWSSCREEN::GetHInfo()
 
 #ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPWINDOWSBLITGLES* GRPWINDOWSSCREEN::GetBlitGLES()
 * @brief      Get OpenGL ES blitter (only present when GRP_OPENGL_ACTIVE is defined)
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     GRPWINDOWSBLITGLES* :
-*
+* 
+* @return     GRPWINDOWSBLITGLES* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPWINDOWSBLITGLES* GRPWINDOWSSCREEN::GetBlitGLES()
 {
@@ -786,7 +776,7 @@ GRPWINDOWSBLITGLES* GRPWINDOWSSCREEN::GetBlitGLES()
 * @brief      Get taskbar height
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPWINDOWSSCREEN::GetTaskbarHeight()
@@ -804,13 +794,15 @@ int GRPWINDOWSSCREEN::GetTaskbarHeight()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPWINDOWSSCREEN::Create_Window(void* handle)
+* 
+* @fn         bool GRPWINDOWSSCREEN::Create_Window(bool show)
 * @brief      Create window
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  show : Show value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Create_Window(bool show)
 {
@@ -884,8 +876,6 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
 
           LONG status = ChangeDisplaySettings(&devmode, CDS_FULLSCREEN);
 
-          //XTRACE_PRINTCOLOR(1, __L("[Screen Windows] ChangeDisplaySettings Status: %ld"), status);
-
           if(status != DISP_CHANGE_SUCCESSFUL) 
             {
               return NULL;
@@ -941,9 +931,6 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
     }
    else
     {          
-      // The native window is created in the (possibly rotated) PRESENTATION size, while the screen
-      // width/height keep the CONTENT size used by the canvas/viewport pipeline. On 0/180 these are
-      // identical; on 90/270 they are swapped (see GRPSCREEN::Rotate / GetPresentationWidth/Height).
       int winw = (int)GetPresentationWidth();
       int winh = (int)GetPresentationHeight();
 
@@ -969,7 +956,7 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
         {
           _style |= WS_OVERLAPPED;  // _exstyle |= WS_EX_TOOLWINDOW;
         }
-       else _style |= WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX; 
+       else _style |= WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 
 
       if(Style_Is(GRPSCREENSTYLE_ONTOP))
@@ -1056,16 +1043,8 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
       if(!Show(show)) return false;
     }
 
-  /*
-  if(!SetForegroundWindow(hwnd))
-    {
-      XTRACE_PRINTCOLOR(4, __L("[Screen Windows] SetForegroundWindow Window: Error!"));
-    }
-  */
-
   if(!SetFocus(hwnd))
     {
-      //XTRACE_PRINTCOLOR(4, __L("[Screen Windows] SetFocus Window: Error!"));
       return false;
     } 
     
@@ -1073,7 +1052,6 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
   hdc = GetDC(hwnd);
   if(!hdc)
     {
-      //XTRACE_PRINTCOLOR(4, __L("[Screen Windows] GetDC Window: Error!"));
       return false;
     }
 
@@ -1090,11 +1068,7 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
   hinfo.bmiHeader.biSizeImage     = (XDWORD)(hinfo.bmiHeader.biWidth*hinfo.bmiHeader.biHeight*hinfo.bmiHeader.biBitCount)/8;
   #endif
 
-  #ifdef GRP_OPENGL_ACTIVE
-  // Transparent screens are composited with UpdateLayeredWindow (see
-  // UpdateTransparent); an EGL/ANGLE surface on a WS_EX_LAYERED window is never
-  // displayed and may fail to create. So only set up the GL blitter for
-  // normal (non-layered) windows.
+  #ifdef GRP_OPENGL_ACTIVE  
   if(!Style_Is(GRPSCREENSTYLE_TRANSPARENT))
     {
       if(!blitgles)
@@ -1126,15 +1100,15 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
 * @fn         LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 * @brief      Base wnd proc
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  hwnd : 
-* @param[in]  msg : 
-* @param[in]  wparam : 
-* @param[in]  lparam : 
 * 
-* @return     LRESULT : 
+* @param[in]  hwnd : Hwnd value.
+* @param[in]  msg : Msg value.
+* @param[in]  wparam : Wparam value.
+* @param[in]  lparam : Lparam value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     LRESULT CALLBACK : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
   switch(msg)
@@ -1170,7 +1144,21 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
                                       }  
                                       break;    
 
-      case WM_DESTROY               : break;
+      case WM_DESTROY               : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
+
+                                        if(screen && mainprocwindows.GetAppMain())
+                                          {
+                                            APPFLOWGRAPHICS* appgraphics = dynamic_cast<APPFLOWGRAPHICS*>(mainprocwindows.GetAppMain()->GetApplication());
+                                            if(appgraphics)
+                                              {
+                                                if(screen == appgraphics->GetMainScreen())
+                                                  {
+                                                    PostQuitMessage(0);
+                                                  }
+                                              }
+                                          }                                        
+                                      }
+                                      break;
 
       case WM_WINDOWPOSCHANGING     : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);                                       
                                         if(screen)
@@ -1194,12 +1182,10 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
       case WM_POWERBROADCAST        : //Computer is suspending
                                       if(wparam == PBT_APMSUSPEND)
                                         {
-                                          #ifdef GRP_MAINPROCCTRL_ACTIVE
                                           if(mainprocwindows.GetAppMain())
                                             {
                                               if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_SUSPEND);
-                                            }
-                                          #endif
+                                            }                                          
                                         }
 
                                       break;
@@ -1207,23 +1193,19 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
       case WM_QUERYENDSESSION       : //Computer is shutting down
                                       if(lparam == 0)
                                         {
-                                          #ifdef GRP_MAINPROCCTRL_ACTIVE
                                           if(mainprocwindows.GetAppMain())
                                             {
                                               if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_REBOOT);
-                                            }
-                                          #endif
+                                            }                                          
                                         }
 
                                       //User is logging off
                                       if((lparam & ENDSESSION_LOGOFF) == ENDSESSION_LOGOFF)
-                                        {
-                                          #ifdef GRP_MAINPROCCTRL_ACTIVE
+                                        {                                          
                                           if(mainprocwindows.GetAppMain())
                                             {
                                               if(mainprocwindows.GetAppMain()->GetApplication()) mainprocwindows.GetAppMain()->GetApplication()->SetSystemChangeStatus(XSYSTEM_CHANGESTATUSTYPE_SESSION_LOGOFF);
-                                            }
-                                          #endif
+                                            }                                         
                                         }
 
                                       break;
@@ -1234,12 +1216,12 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPWINDOWSSCREEN::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPWINDOWSSCREEN::Clean()
 {

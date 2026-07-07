@@ -69,9 +69,7 @@ jmethodID ANDROIDJNI::FindClassMethod;
 * @brief      oid JavaEnvDestructor
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  void* : 
-* 
-* @return     static : 
+* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void JavaEnvDestructor(void*)
@@ -86,8 +84,8 @@ static void JavaEnvDestructor(void*)
 * @brief      Initialize JNI
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  application : 
-* @param[in]  javaversion : 
+* @param[in]  application : Application pointer to use.
+* @param[in]  javaversion : Javaversion value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void ANDROIDJNI::InitializeJNI(android_app* application, jint javaversion)
@@ -121,7 +119,7 @@ void ANDROIDJNI::InitializeJNI(android_app* application, jint javaversion)
 * @brief      Get JNI env
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     JNIEnv* : 
+* @return     JNIEnv* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 JNIEnv* ANDROIDJNI::GetJNIEnv()
@@ -176,13 +174,13 @@ void ANDROIDJNI::DetachJNIEnv()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         jclass ANDROIDJNI::FindJNIClass(const XSTRING & name)
+* @fn         jclass ANDROIDJNI::FindJNIClass(const XSTRING& name)
 * @brief      Find JNI class
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     jclass : 
+* @return     jclass : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 jclass ANDROIDJNI::FindJNIClass(const XSTRING& name)
@@ -204,9 +202,9 @@ jclass ANDROIDJNI::FindJNIClass(const XSTRING& name)
 * @brief      Find JNI class
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     jclass : 
+* @return     jclass : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 jclass ANDROIDJNI::FindJNIClass(XSTRING* name)
@@ -221,9 +219,9 @@ jclass ANDROIDJNI::FindJNIClass(XSTRING* name)
 * @brief      Find JNI class
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     jclass : 
+* @return     jclass : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 jclass ANDROIDJNI::FindJNIClass(XCHAR* name)
@@ -238,9 +236,9 @@ jclass ANDROIDJNI::FindJNIClass(XCHAR* name)
 * @brief      Find JNI class
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     jclass : 
+* @return     jclass : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 jclass ANDROIDJNI::FindJNIClass(const char* name)
@@ -267,9 +265,9 @@ jclass ANDROIDJNI::FindJNIClass(const char* name)
 * @brief      Find JNI env class wrapper
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     jclass : 
+* @return     jclass : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 jclass ANDROIDJNI::FindJNIEnvClassWrapper(const char* name)
@@ -290,7 +288,7 @@ jclass ANDROIDJNI::FindJNIEnvClassWrapper(const char* name)
 * @brief      Check java exception
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool ANDROIDJNI::CheckJavaException()

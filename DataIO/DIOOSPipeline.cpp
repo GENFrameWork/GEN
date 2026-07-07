@@ -58,11 +58,11 @@ DIOOSPIPELINE* DIOOSPIPELINE::instance  = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOOSPIPELINE::DIOOSPIPELINE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOSPIPELINE::DIOOSPIPELINE()
 {
@@ -71,12 +71,12 @@ DIOOSPIPELINE::DIOOSPIPELINE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOOSPIPELINE::~DIOOSPIPELINE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOSPIPELINE::~DIOOSPIPELINE()
 {
@@ -87,14 +87,14 @@ DIOOSPIPELINE::~DIOOSPIPELINE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOOSPIPELINE::GetIsInstanced()
 * @brief      Get is instanced
 * @note       STATIC
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOSPIPELINE::GetIsInstanced()
 {
@@ -103,14 +103,14 @@ bool DIOOSPIPELINE::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOOSPIPELINE& DIOOSPIPELINE::GetInstance()
 * @brief      Get instance
 * @note       STATIC
 * @ingroup    DATAIO
-*
-* @return     DIOOSPIPELINE& :
-*
+* 
+* @return     DIOOSPIPELINE& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOSPIPELINE& DIOOSPIPELINE::GetInstance()
 {
@@ -121,16 +121,16 @@ DIOOSPIPELINE& DIOOSPIPELINE::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOOSPIPELINE::SetInstance(DIOOSPIPELINE* _instance)
 * @brief      Set instance
 * @note       STATIC
 * @ingroup    DATAIO
-*
+* 
 * @param[in]  _instance : GEN_NEW instance
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOSPIPELINE::SetInstance(DIOOSPIPELINE* _instance)
 {
@@ -143,14 +143,14 @@ bool DIOOSPIPELINE::SetInstance(DIOOSPIPELINE* _instance)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOOSPIPELINE::DelInstance()
 * @brief      Del instance
 * @note       STATIC
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOSPIPELINE::DelInstance()
 {
@@ -172,7 +172,7 @@ bool DIOOSPIPELINE::DelInstance()
 * @brief      Open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOSPIPELINE::Open()
@@ -187,7 +187,7 @@ bool DIOOSPIPELINE::Open()
 * @brief      Is open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOSPIPELINE::IsOpen()
@@ -202,9 +202,9 @@ bool DIOOSPIPELINE::IsOpen()
 * @brief      Read
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOSPIPELINE::Read(XBUFFER& buffer)
@@ -219,9 +219,9 @@ bool DIOOSPIPELINE::Read(XBUFFER& buffer)
 * @brief      Write
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOSPIPELINE::Write(XBUFFER& buffer)
@@ -236,7 +236,7 @@ bool DIOOSPIPELINE::Write(XBUFFER& buffer)
 * @brief      Close
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOSPIPELINE::Close()
@@ -246,12 +246,12 @@ bool DIOOSPIPELINE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOOSPIPELINE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOOSPIPELINE::Clean()
 {

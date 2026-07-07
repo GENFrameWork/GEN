@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_LNG_JAVASCRIPT::SCRIPT_LNG_JAVASCRIPT()
+* 
+* @fn         SCRIPT_LNG_JAVASCRIPT::SCRIPT_LNG_JAVASCRIPT() : SCRIPT()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LNG_JAVASCRIPT::SCRIPT_LNG_JAVASCRIPT() : SCRIPT()
 {
@@ -82,12 +82,12 @@ SCRIPT_LNG_JAVASCRIPT::SCRIPT_LNG_JAVASCRIPT() : SCRIPT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LNG_JAVASCRIPT::~SCRIPT_LNG_JAVASCRIPT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LNG_JAVASCRIPT::~SCRIPT_LNG_JAVASCRIPT()
 {
@@ -102,15 +102,15 @@ SCRIPT_LNG_JAVASCRIPT::~SCRIPT_LNG_JAVASCRIPT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_G_ERRORCODE SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
-* @brief      Run
+* 
+* @fn         int SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
+* @brief      Run operation
 * @ingroup    SCRIPT
-*
-* @param[in]  returnval :
-*
-* @return     SCRIPT_G_ERRORCODE :
-*
+* 
+* @param[in]  returnval : Returnval pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
 {
@@ -147,17 +147,17 @@ int SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LNG_JAVASCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY ptrfunction)
 * @brief      Add library function
 * @ingroup    SCRIPT
-*
-* @param[in]  library :
-* @param[in]  name :
-* @param[in]  ptrfunction :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  library : Library pointer to use.
+* @param[in]  name : Name to use.
+* @param[in]  ptrfunction : Ptrfunction value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_JAVASCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY ptrfunction)
 {
@@ -181,15 +181,15 @@ bool SCRIPT_LNG_JAVASCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool SCRIPT_LNG_JAVASCRIPT::HaveError(SCRIPT_G_ERRORCODE errorcode)
+* 
+* @fn         bool SCRIPT_LNG_JAVASCRIPT::HaveError(int _errorcode)
 * @brief      Have error
 * @ingroup    SCRIPT
-*
-* @param[in]  errorcode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  _errorcode : Errorcode value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_JAVASCRIPT::HaveError(int _errorcode)
 {
@@ -233,13 +233,13 @@ bool SCRIPT_LNG_JAVASCRIPT::HaveError(int _errorcode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LNG_JAVASCRIPT::HaveMainFunction()
 * @brief      Have main function
 * @ingroup    SCRIPT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_JAVASCRIPT::HaveMainFunction()
 {
@@ -290,15 +290,15 @@ bool SCRIPT_LNG_JAVASCRIPT::HaveMainFunction()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
 * @brief      Library call back
 * @ingroup    SCRIPT
-*
-* @param[in]  context :
-*
-* @return     duk_ret_t :
-*
+* 
+* @param[in]  context : Context object to use.
+* 
+* @return     duk_ret_t : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
 {
@@ -446,14 +446,14 @@ duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LNG_JAVASCRIPT::FatalErrorHandler(void* udata, const char* msg)
 * @brief      Fatal error handler
 * @ingroup    SCRIPT
-*
-* @param[in]  udata :
-* @param[in]  msg :
-*
+* 
+* @param[in]  udata : Udata pointer to use.
+* @param[in]  msg : Msg value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LNG_JAVASCRIPT::FatalErrorHandler(void* udata, const char* msg)
 {
@@ -469,12 +469,12 @@ void SCRIPT_LNG_JAVASCRIPT::FatalErrorHandler(void* udata, const char* msg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LNG_JAVASCRIPT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LNG_JAVASCRIPT::Clean()
 {
@@ -484,14 +484,25 @@ void SCRIPT_LNG_JAVASCRIPT::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         double __builtin_inf (void)
+* @fn         #if !defined(COMPILER_CLANG_CL) && !defined(COMPILER_CLANG) && !defined(COMPILER_GCC) double __builtin_inf(void)
 * @brief      builtin inf
 * @ingroup    SCRIPT
 * 
-* @return     double : 
+* @param[in]  void : Void value.
+* 
+* @return     #if ! : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #if !defined(COMPILER_CLANG_CL) && !defined(COMPILER_CLANG) && !defined(COMPILER_GCC)
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         double __builtin_inf(void)
+* @brief      Builtin inf
+* @ingroup    SCRIPT
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double __builtin_inf(void)
 {
   return (double)0xFFFFFFFFFFFFFFFF;  

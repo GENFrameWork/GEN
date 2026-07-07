@@ -70,8 +70,8 @@ DIOSTREAMTLS_MSG_INTERFACE::DIOSTREAMTLS_MSG_INTERFACE()
 * 
 * @fn         DIOSTREAMTLS_MSG_INTERFACE::~DIOSTREAMTLS_MSG_INTERFACE()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_INTERFACE::~DIOSTREAMTLS_MSG_INTERFACE()
@@ -86,7 +86,7 @@ DIOSTREAMTLS_MSG_INTERFACE::~DIOSTREAMTLS_MSG_INTERFACE()
 * @brief      get length buffer
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS_MSG_INTERFACE::GetLengthBuffer()
@@ -103,8 +103,8 @@ XDWORD DIOSTREAMTLS_MSG_INTERFACE::GetLengthBuffer()
 * 
 * @fn         void DIOSTREAMTLS_MSG_INTERFACE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_INTERFACE::Clean()

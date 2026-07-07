@@ -186,11 +186,11 @@ bool                  Signal_RunLevel           (XCHAR& previous, XCHAR& actual)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MAINPROCLINUX::MAINPROCLINUX()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MAINPROCLINUX::MAINPROCLINUX()
 {
@@ -199,12 +199,12 @@ MAINPROCLINUX::MAINPROCLINUX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MAINPROCLINUX::~MAINPROCLINUX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MAINPROCLINUX::~MAINPROCLINUX()
 {
@@ -213,16 +213,16 @@ MAINPROCLINUX::~MAINPROCLINUX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCLINUX::Ini(APPFLOWMAIN* appmain, APPFLOWBASE_MODE_TYPE applicationmode)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  appmain :
-* @param[in]  applicationmode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  appmain : Appmain pointer to use.
+* @param[in]  applicationmode : Applicationmode value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCLINUX::Ini(APPFLOWMAIN* appmain, APPFLOWBASE_MODE_TYPE applicationmode)
 {
@@ -279,13 +279,13 @@ bool MAINPROCLINUX::Ini(APPFLOWMAIN* appmain, APPFLOWBASE_MODE_TYPE applicationm
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCLINUX::Update()
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCLINUX::Update()
 {
@@ -318,13 +318,13 @@ bool MAINPROCLINUX::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCLINUX::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCLINUX::End()
 {
@@ -382,13 +382,13 @@ bool MAINPROCLINUX::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCLINUX::Factorys_Ini()
 * @brief      Factorys ini
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCLINUX::Factorys_Ini()
 {
@@ -533,13 +533,13 @@ bool MAINPROCLINUX::Factorys_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCLINUX::Factorys_End()
 * @brief      Factorys end
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCLINUX::Factorys_End()
 {
@@ -674,16 +674,16 @@ void MAINPROCLINUX::Clean()
 #if !defined(APPMODE_LIBRARY_STATIC_ACTIVE) && !defined(APPMODE_LIBRARY_DINAMIC_ACTIVE)
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int main(int argc, char* argv[])
-* @brief      ain
+* @brief      Main
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  argc :
-* @param[in]  argv[] :
-*
-* @return     int :
-*
+* 
+* @param[in]  argc : Argc value.
+* @param[in]  argv : Argv pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int main(int argc, char* argv[])
 {
@@ -760,13 +760,11 @@ int main(int argc, char* argv[])
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void LIBRARY_Ini(void)
 * @brief      LIB Ini
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  void :
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void LIBRARY_Ini(void)
 {
@@ -794,13 +792,11 @@ void LIBRARY_Ini(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void LIBRARY_End(void)
 * @brief      LIB End
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  void :
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void LIBRARY_End(void)
 {
@@ -817,11 +813,11 @@ void LIBRARY_End(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void Signal_Ini(void)
 * @brief      signal ini
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Signal_Ini(void)
 {  
@@ -866,9 +862,9 @@ void Signal_Ini(void)
 * @brief      signal  handler
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  sign : 
+* @param[in]  sign : Sign value.
 * 
-* @return     static : 
+* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void Signal_Handler(int sign)
@@ -1073,18 +1069,18 @@ static void Signal_Handler(int sign)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool Signal_Printf(bool iserror, XCHAR* title, XCHAR* mask, ...)
 * @brief      ignal_Printf
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  iserror :
-* @param[in]  title :
-* @param[in]  mask :
-* @param[in]  ... :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  iserror : Iserror value.
+* @param[in]  title : Title text.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  ... : Variable argument list.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool Signal_Printf(bool iserror, XCHAR* title, XCHAR* mask, ...)
 {
@@ -1134,10 +1130,10 @@ bool Signal_Printf(bool iserror, XCHAR* title, XCHAR* mask, ...)
 * @brief      nline bool  signal  resolve function name
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  addr : 
-* @param[in]  namefunc : 
+* @param[in]  addr : Addr pointer to use.
+* @param[in]  namefunc : Namefunc value.
 * 
-* @return     static : 
+* @return     static inline bool : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static inline bool Signal_ResolveFunctionName(void* addr, XSTRING& namefunc)
@@ -1177,16 +1173,16 @@ static inline bool Signal_ResolveFunctionName(void* addr, XSTRING& namefunc)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         static inline void Signal_PrintfStackTrace(FILE*out, unsigned int max_frames)
+* 
+* @fn         static inline void Signal_PrintfStackTrace(FILE *out, unsigned int max_frames)
 * @brief      nline void Signal_PrintfStackTrace
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  FILE*out :
-* @param[in]  int max_frames :
-*
-* @return     static :
-*
+* 
+* @param[in]  out : Output out.
+* @param[in]  max_frames : Max frames value.
+* 
+* @return     static inline void : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static inline void Signal_PrintfStackTrace(FILE *out, unsigned int max_frames)
 {
@@ -1219,16 +1215,16 @@ static inline void Signal_PrintfStackTrace(FILE *out, unsigned int max_frames)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool Signal_RunLevel(XCHAR& previous, XCHAR& actual)
 * @brief      ignal_RunLevel
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  previous :
-* @param[in]  actual :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  previous : Previous value.
+* @param[in]  actual : Actual value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool Signal_RunLevel(XCHAR& previous, XCHAR& actual)
 {

@@ -54,15 +54,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB_FUNCTION::SCRIPT_LIB_FUNCTION(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY functionlibrary)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
-* @param[in]  library :
-* @param[in]  name :
-* @param[in]  functionlibrary :
-*
+* 
+* @param[in]  library : Library pointer to use.
+* @param[in]  name : Name to use.
+* @param[in]  functionlibrary : Functionlibrary value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_FUNCTION::SCRIPT_LIB_FUNCTION(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY functionlibrary)
 {
@@ -75,15 +75,15 @@ SCRIPT_LIB_FUNCTION::SCRIPT_LIB_FUNCTION(SCRIPT_LIB* library, XCHAR* name, SCRFU
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB_FUNCTION::SCRIPT_LIB_FUNCTION(SCRIPT_LIB* library, XSTRING& name, SCRFUNCIONLIBRARY functionlibrary)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
-* @param[in]  library :
-* @param[in]  name :
-* @param[in]  functionlibrary :
-*
+* 
+* @param[in]  library : Library pointer to use.
+* @param[in]  name : Name to use.
+* @param[in]  functionlibrary : Functionlibrary value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_FUNCTION::SCRIPT_LIB_FUNCTION(SCRIPT_LIB* library, XSTRING& name, SCRFUNCIONLIBRARY functionlibrary)
 {
@@ -96,12 +96,12 @@ SCRIPT_LIB_FUNCTION::SCRIPT_LIB_FUNCTION(SCRIPT_LIB* library, XSTRING& name, SCR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB_FUNCTION::~SCRIPT_LIB_FUNCTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_FUNCTION::~SCRIPT_LIB_FUNCTION()
 {
@@ -110,13 +110,13 @@ SCRIPT_LIB_FUNCTION::~SCRIPT_LIB_FUNCTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB* SCRIPT_LIB_FUNCTION::GetLibrary()
 * @brief      Get library
 * @ingroup    SCRIPT
-*
-* @return     SCRIPT_LIB* :
-*
+* 
+* @return     SCRIPT_LIB* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB* SCRIPT_LIB_FUNCTION::GetLibrary()
 {
@@ -125,15 +125,15 @@ SCRIPT_LIB* SCRIPT_LIB_FUNCTION::GetLibrary()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB_FUNCTION::SetLibrary(SCRIPT_LIB* library)
 * @brief      Set library
 * @ingroup    SCRIPT
-*
-* @param[in]  library :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  library : Library pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_FUNCTION::SetLibrary(SCRIPT_LIB* library)
 {
@@ -144,13 +144,13 @@ bool SCRIPT_LIB_FUNCTION::SetLibrary(SCRIPT_LIB* library)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* SCRIPT_LIB_FUNCTION::GetName()
 * @brief      Get name
 * @ingroup    SCRIPT
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* SCRIPT_LIB_FUNCTION::GetName()
 {
@@ -159,13 +159,13 @@ XSTRING* SCRIPT_LIB_FUNCTION::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRFUNCIONLIBRARY SCRIPT_LIB_FUNCTION::GetFunctionLibrary()
 * @brief      Get function library
 * @ingroup    SCRIPT
-*
-* @return     SCRFUNCIONLIBRARY :
-*
+* 
+* @return     SCRFUNCIONLIBRARY : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRFUNCIONLIBRARY SCRIPT_LIB_FUNCTION::GetFunctionLibrary()
 {
@@ -174,15 +174,15 @@ SCRFUNCIONLIBRARY SCRIPT_LIB_FUNCTION::GetFunctionLibrary()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB_FUNCTION::SetFunctionLibrary(SCRFUNCIONLIBRARY functionlibrary)
 * @brief      Set function library
 * @ingroup    SCRIPT
-*
-* @param[in]  functionlibrary :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  functionlibrary : Functionlibrary value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_FUNCTION::SetFunctionLibrary(SCRFUNCIONLIBRARY functionlibrary)
 {
@@ -192,12 +192,12 @@ bool SCRIPT_LIB_FUNCTION::SetFunctionLibrary(SCRFUNCIONLIBRARY functionlibrary)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LIB_FUNCTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_FUNCTION::Clean()
 {

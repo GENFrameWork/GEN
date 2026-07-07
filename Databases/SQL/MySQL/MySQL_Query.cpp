@@ -63,13 +63,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         MYSQL_QUERY::MYSQL_QUERY(DB_SQL_DATABASE* database)
+* 
+* @fn         MYSQL_QUERY::MYSQL_QUERY(DB_SQL_DATABASE* database): DB_SQL_QUERY(database)
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  DB_SQL_DATABASE* :
-*
+* 
+* @param[in]  database : Database pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_QUERY::MYSQL_QUERY(DB_SQL_DATABASE* database): DB_SQL_QUERY(database)
 {
@@ -78,12 +78,12 @@ MYSQL_QUERY::MYSQL_QUERY(DB_SQL_DATABASE* database): DB_SQL_QUERY(database)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MYSQL_QUERY::~MYSQL_QUERY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_QUERY::~MYSQL_QUERY()
 {
@@ -96,13 +96,13 @@ MYSQL_QUERY::~MYSQL_QUERY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_QUERY::Execute()
 * @brief      Execute
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_QUERY::Execute()
 {
@@ -152,13 +152,13 @@ bool MYSQL_QUERY::Execute()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_QUERY::UnbindAll()
 * @brief      Unbind all
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_QUERY::UnbindAll()
 {
@@ -188,16 +188,16 @@ bool MYSQL_QUERY::UnbindAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_QUERY::Bind(XDWORD ID, DB_SQL_DATETIME& datetime)
 * @brief      Bind
 * @ingroup    DATABASE
-*
-* @param[in]  ID :
-* @param[in]  datetime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  datetime : Datetime value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_QUERY::Bind(XDWORD ID, DB_SQL_DATETIME& datetime)
 {
@@ -211,16 +211,16 @@ bool MYSQL_QUERY::Bind(XDWORD ID, DB_SQL_DATETIME& datetime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
 * @brief      Exec
 * @ingroup    DATABASE
-*
-* @param[in]  db :
-* @param[in]  sql :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  db : Db pointer to use.
+* @param[in]  sql : Sql pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
 {
@@ -356,13 +356,13 @@ bool MYSQL_QUERY::Exec(MYSQL* db,char* sql)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_RESULT* MYSQL_QUERY::ConstructResult()
 * @brief      Construct result
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_RESULT* :
-*
+* 
+* @return     DB_SQL_RESULT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT* MYSQL_QUERY::ConstructResult()
 {
@@ -376,13 +376,13 @@ DB_SQL_RESULT* MYSQL_QUERY::ConstructResult()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_QUERY::BindParametersToQuery()
 * @brief      Bind parameters to query
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_QUERY::BindParametersToQuery()
 {
@@ -486,13 +486,13 @@ bool MYSQL_QUERY::BindParametersToQuery()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_QUERY::BindParametersToResult()
 * @brief      Bind parameters to result
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_QUERY::BindParametersToResult()
 {
@@ -561,12 +561,12 @@ bool MYSQL_QUERY::BindParametersToResult()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void MYSQL_QUERY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void MYSQL_QUERY::Clean()
 {

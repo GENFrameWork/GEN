@@ -91,12 +91,12 @@ APPFLOWGRAPHICS::APPFLOWGRAPHICS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWGRAPHICS::~APPFLOWGRAPHICS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWGRAPHICS::~APPFLOWGRAPHICS()
 {
@@ -105,15 +105,15 @@ APPFLOWGRAPHICS::~APPFLOWGRAPHICS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool APPFLOWGRAPHICS::Ini(XVECTOR<XSTRING*>* execparams, bool haveconsole)
-* @brief      Ini
+* 
+* @fn         bool APPFLOWGRAPHICS::Ini(XVECTOR<XSTRING*>* execparams)
+* @brief      Initialize the object
 * @ingroup    GRAPHIC
-*
-* @param[in]  execparams :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  execparams : Execparams pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWGRAPHICS::Ini(XVECTOR<XSTRING*>* execparams)
 {
@@ -143,13 +143,13 @@ bool APPFLOWGRAPHICS::Ini(XVECTOR<XSTRING*>* execparams)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWGRAPHICS::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWGRAPHICS::End()
 { 
@@ -181,7 +181,7 @@ bool APPFLOWGRAPHICS::End()
 * @brief      Get init options
 * @ingroup    GRAPHIC
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWGRAPHICS::GetInitOptions()
@@ -196,7 +196,7 @@ XDWORD APPFLOWGRAPHICS::GetInitOptions()
 * @brief      Set init options
 * @ingroup    GRAPHIC
 * 
-* @param[in]  initoptions : 
+* @param[in]  initoptions : Initoptions value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWGRAPHICS::SetInitOptions(XDWORD initoptions)
@@ -211,9 +211,9 @@ void APPFLOWGRAPHICS::SetInitOptions(XDWORD initoptions)
 * @brief      Create main screen process
 * @ingroup    GRAPHIC
 * 
-* @param[in]  show : 
+* @param[in]  show : Show value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWGRAPHICS::CreateMainScreenProcess(bool show)
@@ -325,7 +325,7 @@ bool APPFLOWGRAPHICS::CreateMainScreenProcess(bool show)
 * @brief      Delete main screen process
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWGRAPHICS::DeleteMainScreenProcess()
@@ -367,7 +367,7 @@ bool APPFLOWGRAPHICS::DeleteMainScreenProcess()
 * @brief      Get main screen
 * @ingroup    GRAPHIC
 * 
-* @return     GRPSCREEN* : 
+* @return     GRPSCREEN* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREEN* APPFLOWGRAPHICS::GetMainScreen()
@@ -377,13 +377,13 @@ GRPSCREEN* APPFLOWGRAPHICS::GetMainScreen()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWGRAPHICS::SetMainScreen(GRPSCREEN* mainscreen)
 * @brief      Set main screen
 * @ingroup    GRAPHIC
-*
-* @param[in]  mainscreen :
-*
+* 
+* @param[in]  mainscreen : Mainscreen pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWGRAPHICS::SetMainScreen(GRPSCREEN* mainscreen)
 {
@@ -397,10 +397,10 @@ void APPFLOWGRAPHICS::SetMainScreen(GRPSCREEN* mainscreen)
 * @brief      Get screen canvas
 * @ingroup    GRAPHIC
 * 
-* @param[in]  screen : 
-* @param[in]  viewportindex : 
+* @param[in]  screen : Screen object to use.
+* @param[in]  viewportindex : Viewportindex value.
 * 
-* @return     GRP2DCANVAS* : 
+* @return     GRP2DCANVAS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS* APPFLOWGRAPHICS::GetScreenCanvas(GRPSCREEN* screen, int viewportindex)
@@ -431,7 +431,7 @@ GRP2DCANVAS* APPFLOWGRAPHICS::GetScreenCanvas(GRPSCREEN* screen, int viewportind
 * @brief      Get input keyboard
 * @ingroup    GRAPHIC
 * 
-* @return     INPDEVICE* : 
+* @return     INPDEVICE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* APPFLOWGRAPHICS::GetInputKeyboard()
@@ -446,7 +446,7 @@ INPDEVICE* APPFLOWGRAPHICS::GetInputKeyboard()
 * @brief      Get input mouse
 * @ingroup    GRAPHIC
 * 
-* @return     INPDEVICE* : 
+* @return     INPDEVICE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* APPFLOWGRAPHICS::GetInputMouse()
@@ -463,9 +463,9 @@ INPDEVICE* APPFLOWGRAPHICS::GetInputMouse()
 * @brief      App proc before create main screen
 * @ingroup    GRAPHIC
 * 
-* @param[in]  mainscreen : 
+* @param[in]  mainscreen : Mainscreen pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainScreen(GRPSCREEN* mainscreen)
@@ -480,9 +480,9 @@ bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainScreen(GRPSCREEN* mainscreen)
 * @brief      App proc before create main canvas
 * @ingroup    GRAPHIC
 * 
-* @param[in]  maincanvas : 
+* @param[in]  maincanvas : Maincanvas pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWGRAPHICS::AppProc_BeforeCreateMainCanvas(GRP2DCANVAS* maincanvas)

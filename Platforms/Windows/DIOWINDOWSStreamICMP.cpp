@@ -65,7 +65,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMICMP::DIOWINDOWSSTREAMICMP()
+* @fn         DIOWINDOWSSTREAMICMP::DIOWINDOWSSTREAMICMP() : DIOSTREAMICMP(), XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -134,7 +134,7 @@ DIOWINDOWSSTREAMICMP::~DIOWINDOWSSTREAMICMP()
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMICMP::Open()
@@ -179,7 +179,7 @@ bool DIOWINDOWSSTREAMICMP::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMICMP::Disconnect()
@@ -205,7 +205,7 @@ bool DIOWINDOWSSTREAMICMP::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMICMP::Close()
@@ -231,9 +231,9 @@ bool DIOWINDOWSSTREAMICMP::Close()
 * @brief      Is ready connect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWINDOWSSTREAMICMP::IsReadyConnect(SOCKET socket)
@@ -301,7 +301,7 @@ void DIOWINDOWSSTREAMICMP::Clean()
 * @brief      Thread connection
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMICMP::ThreadConnection(void* data)

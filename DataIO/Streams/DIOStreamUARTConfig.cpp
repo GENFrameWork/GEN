@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMUARTCONFIG::DIOSTREAMUARTCONFIG()
+* 
+* @fn         DIOSTREAMUARTCONFIG::DIOSTREAMUARTCONFIG(): DIOSTREAMCONFIG()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUARTCONFIG::DIOSTREAMUARTCONFIG(): DIOSTREAMCONFIG()
 {
@@ -68,12 +68,12 @@ DIOSTREAMUARTCONFIG::DIOSTREAMUARTCONFIG(): DIOSTREAMCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUARTCONFIG::~DIOSTREAMUARTCONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUARTCONFIG::~DIOSTREAMUARTCONFIG()
 {
@@ -82,13 +82,13 @@ DIOSTREAMUARTCONFIG::~DIOSTREAMUARTCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMUARTCONFIG::GetPort()
 * @brief      Get port
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMUARTCONFIG::GetPort()
 {
@@ -97,13 +97,13 @@ int DIOSTREAMUARTCONFIG::GetPort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUARTCONFIG::SetPort(int port)
 * @brief      Set port
 * @ingroup    DATAIO
-*
-* @param[in]  port :
-*
+* 
+* @param[in]  port : Port number to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUARTCONFIG::SetPort(int port)
 {
@@ -112,13 +112,13 @@ void DIOSTREAMUARTCONFIG::SetPort(int port)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMUARTCONFIG::GetLocalDeviceName()
 * @brief      Get local device name
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMUARTCONFIG::GetLocalDeviceName()
 {
@@ -127,13 +127,13 @@ XSTRING* DIOSTREAMUARTCONFIG::GetLocalDeviceName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMUARTCONFIG::GetBaudRate()
 * @brief      Get baud rate
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMUARTCONFIG::GetBaudRate()
 {
@@ -142,13 +142,13 @@ int DIOSTREAMUARTCONFIG::GetBaudRate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUARTCONFIG::SetBaudRate(int baudrate)
 * @brief      Set baud rate
 * @ingroup    DATAIO
-*
-* @param[in]  baudrate :
-*
+* 
+* @param[in]  baudrate : Baudrate value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUARTCONFIG::SetBaudRate(int baudrate)
 {
@@ -157,13 +157,13 @@ void DIOSTREAMUARTCONFIG::SetBaudRate(int baudrate)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUARTDATABITS DIOSTREAMUARTCONFIG::GetDataBits()
 * @brief      Get data bits
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMUARTDATABITS :
-*
+* 
+* @return     DIOSTREAMUARTDATABITS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUARTDATABITS DIOSTREAMUARTCONFIG::GetDataBits()
 {
@@ -172,13 +172,13 @@ DIOSTREAMUARTDATABITS DIOSTREAMUARTCONFIG::GetDataBits()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUARTCONFIG::SetDataBits(DIOSTREAMUARTDATABITS databits)
 * @brief      Set data bits
 * @ingroup    DATAIO
-*
-* @param[in]  databits :
-*
+* 
+* @param[in]  databits : Databits value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUARTCONFIG::SetDataBits(DIOSTREAMUARTDATABITS databits)
 {
@@ -187,13 +187,13 @@ void DIOSTREAMUARTCONFIG::SetDataBits(DIOSTREAMUARTDATABITS databits)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUARTPARITY DIOSTREAMUARTCONFIG::GetParity()
 * @brief      Get parity
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMUARTPARITY :
-*
+* 
+* @return     DIOSTREAMUARTPARITY : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUARTPARITY DIOSTREAMUARTCONFIG::GetParity()
 {
@@ -202,13 +202,13 @@ DIOSTREAMUARTPARITY DIOSTREAMUARTCONFIG::GetParity()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUARTCONFIG::SetParity(DIOSTREAMUARTPARITY parity)
 * @brief      Set parity
 * @ingroup    DATAIO
-*
-* @param[in]  parity :
-*
+* 
+* @param[in]  parity : Parity value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUARTCONFIG::SetParity(DIOSTREAMUARTPARITY parity)
 {
@@ -217,13 +217,13 @@ void DIOSTREAMUARTCONFIG::SetParity(DIOSTREAMUARTPARITY parity)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUARTSTOPBITS DIOSTREAMUARTCONFIG::GetStopBits()
 * @brief      Get stop bits
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMUARTSTOPBITS :
-*
+* 
+* @return     DIOSTREAMUARTSTOPBITS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUARTSTOPBITS DIOSTREAMUARTCONFIG::GetStopBits()
 {
@@ -232,13 +232,13 @@ DIOSTREAMUARTSTOPBITS DIOSTREAMUARTCONFIG::GetStopBits()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUARTCONFIG::SetStopBits(DIOSTREAMUARTSTOPBITS stopbits)
 * @brief      Set stop bits
 * @ingroup    DATAIO
-*
-* @param[in]  stopbits :
-*
+* 
+* @param[in]  stopbits : Stopbits value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUARTCONFIG::SetStopBits(DIOSTREAMUARTSTOPBITS stopbits)
 {
@@ -247,13 +247,13 @@ void DIOSTREAMUARTCONFIG::SetStopBits(DIOSTREAMUARTSTOPBITS stopbits)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUARTFLOWCONTROL DIOSTREAMUARTCONFIG::GetFlowControl()
 * @brief      Get flow control
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMUARTFLOWCONTROL :
-*
+* 
+* @return     DIOSTREAMUARTFLOWCONTROL : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUARTFLOWCONTROL DIOSTREAMUARTCONFIG::GetFlowControl()
 {
@@ -267,7 +267,7 @@ DIOSTREAMUARTFLOWCONTROL DIOSTREAMUARTCONFIG::GetFlowControl()
 * @brief      Set flow control
 * @ingroup    DATAIO
 * 
-* @param[in]  flowcontrol : 
+* @param[in]  flowcontrol : Flowcontrol value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUARTCONFIG::SetFlowControl(DIOSTREAMUARTFLOWCONTROL flowcontrol)
@@ -277,15 +277,15 @@ void DIOSTREAMUARTCONFIG::SetFlowControl(DIOSTREAMUARTFLOWCONTROL flowcontrol)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUARTCONFIG::GetToString(XSTRING* string)
 * @brief      Get to string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUARTCONFIG::GetToString(XSTRING* string)
 {
@@ -342,15 +342,15 @@ bool DIOSTREAMUARTCONFIG::GetToString(XSTRING* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUARTCONFIG::GetToString(XSTRING& string)
 * @brief      Get to string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUARTCONFIG::GetToString(XSTRING& string)
 {
@@ -359,15 +359,15 @@ bool DIOSTREAMUARTCONFIG::GetToString(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUARTCONFIG::SetFromString(XCHAR* string)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUARTCONFIG::SetFromString(XCHAR* string)
 {
@@ -466,15 +466,15 @@ bool DIOSTREAMUARTCONFIG::SetFromString(XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUARTCONFIG::SetFromString(XSTRING* string)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUARTCONFIG::SetFromString(XSTRING* string)
 {
@@ -484,15 +484,15 @@ bool DIOSTREAMUARTCONFIG::SetFromString(XSTRING* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUARTCONFIG::SetFromString(XSTRING& string)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUARTCONFIG::SetFromString(XSTRING& string)
 {
@@ -501,12 +501,12 @@ bool DIOSTREAMUARTCONFIG::SetFromString(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUARTCONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUARTCONFIG::Clean()
 {

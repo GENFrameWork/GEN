@@ -64,13 +64,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSCHEDULERTASK::XSCHEDULERTASK(XSCHEDULER* xscheduler)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  xscheduler :
-*
+* 
+* @param[in]  xscheduler : Xscheduler pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULERTASK::XSCHEDULERTASK(XSCHEDULER* xscheduler)
 {
@@ -103,13 +103,13 @@ XSCHEDULERTASK::~XSCHEDULERTASK()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::IsActive()
 * @brief      Is active
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::IsActive()
 {
@@ -118,15 +118,15 @@ bool XSCHEDULERTASK::IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::SetIsActive(bool active)
 * @brief      Set is active
 * @ingroup    XUTILS
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::SetIsActive(bool active)
 {
@@ -138,13 +138,13 @@ bool XSCHEDULERTASK::SetIsActive(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XSCHEDULERTASK::GetID()
 * @brief      Get ID
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XSCHEDULERTASK::GetID()
 {
@@ -153,13 +153,13 @@ XDWORD XSCHEDULERTASK::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULERTASK::SetID(XDWORD ID)
 * @brief      Set ID
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULERTASK::SetID(XDWORD ID)
 {
@@ -168,13 +168,13 @@ void XSCHEDULERTASK::SetID(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTIMER* XSCHEDULERTASK::GetXTimer()
 * @brief      Get X timer
 * @ingroup    XUTILS
-*
-* @return     XTIMER* :
-*
+* 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* XSCHEDULERTASK::GetXTimer()
 {
@@ -183,13 +183,13 @@ XTIMER* XSCHEDULERTASK::GetXTimer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::IsInValidTimeLimit()
 * @brief      Is in valid time limit
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::IsInValidTimeLimit()
 {
@@ -198,13 +198,13 @@ bool XSCHEDULERTASK::IsInValidTimeLimit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* XSCHEDULERTASK::GetTimeLimitStart()
 * @brief      Get time limit start
 * @ingroup    XUTILS
-*
-* @return     XDATETIME* :
-*
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XSCHEDULERTASK::GetTimeLimitStart()
 {
@@ -213,13 +213,13 @@ XDATETIME* XSCHEDULERTASK::GetTimeLimitStart()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* XSCHEDULERTASK::GetTimeLimitEnd()
 * @brief      Get time limit end
 * @ingroup    XUTILS
-*
-* @return     XDATETIME* :
-*
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XSCHEDULERTASK::GetTimeLimitEnd()
 {
@@ -228,13 +228,13 @@ XDATETIME* XSCHEDULERTASK::GetTimeLimitEnd()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::IsCyclic()
 * @brief      Is cyclic
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::IsCyclic()
 {
@@ -243,13 +243,13 @@ bool XSCHEDULERTASK::IsCyclic()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XSCHEDULERTASK::GetNCyclesTodo()
 * @brief      Get N cycles todo
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSCHEDULERTASK::GetNCyclesTodo()
 {
@@ -258,16 +258,16 @@ int XSCHEDULERTASK::GetNCyclesTodo()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, XDATETIME* xdatetimecadence)
 * @brief      Set N cycles
 * @ingroup    XUTILS
-*
-* @param[in]  ncyclestodo :
-* @param[in]  xdatetimecadence :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ncyclestodo : Ncyclestodo value.
+* @param[in]  xdatetimecadence : Xdatetimecadence pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, XDATETIME* xdatetimecadence)
 {
@@ -283,16 +283,16 @@ bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, XDATETIME* xdatetimecadence)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, XQWORD cadenceinseconds)
 * @brief      Set N cycles
 * @ingroup    XUTILS
-*
-* @param[in]  ncyclestodo :
-* @param[in]  cadenceinseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ncyclestodo : Ncyclestodo value.
+* @param[in]  cadenceinseconds : Cadenceinseconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, XQWORD cadenceinseconds)
 {
@@ -311,16 +311,16 @@ bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, XQWORD cadenceinseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, int cadenceinseconds)
 * @brief      Set N cycles
 * @ingroup    XUTILS
-*
-* @param[in]  ncyclestodo :
-* @param[in]  cadenceinseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ncyclestodo : Ncyclestodo value.
+* @param[in]  cadenceinseconds : Cadenceinseconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, int cadenceinseconds)
 {
@@ -329,13 +329,13 @@ bool XSCHEDULERTASK::SetNCycles(int ncyclestodo, int cadenceinseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::IsStartImmediatelyCycles()
 * @brief      Is start immediately cycles
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::IsStartImmediatelyCycles()
 {
@@ -344,13 +344,13 @@ bool XSCHEDULERTASK::IsStartImmediatelyCycles()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULERTASK::SetIsStartImmediatelyCycles(bool isstartimmediatelycycles)
 * @brief      Set is start immediately cycles
 * @ingroup    XUTILS
-*
-* @param[in]  isstartimmediatelycycles :
-*
+* 
+* @param[in]  isstartimmediatelycycles : Isstartimmediatelycycles value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULERTASK::SetIsStartImmediatelyCycles(bool isstartimmediatelycycles)
 {
@@ -359,16 +359,16 @@ void XSCHEDULERTASK::SetIsStartImmediatelyCycles(bool isstartimmediatelycycles)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::SetTimeLimits(XDATETIME* xdatetimelimitstart, XDATETIME* xdatetimelimitend)
 * @brief      Set time limits
 * @ingroup    XUTILS
-*
-* @param[in]  xdatetimelimitstart :
-* @param[in]  xdatetimelimitend :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xdatetimelimitstart : Xdatetimelimitstart pointer to use.
+* @param[in]  xdatetimelimitend : Xdatetimelimitend pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::SetTimeLimits(XDATETIME* xdatetimelimitstart, XDATETIME* xdatetimelimitend)
 {
@@ -380,13 +380,13 @@ bool XSCHEDULERTASK::SetTimeLimits(XDATETIME* xdatetimelimitstart, XDATETIME* xd
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULERTASK::SetConditionDayWeek(XBYTE mask)
 * @brief      Set condition day week
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-*
+* 
+* @param[in]  mask : Mask value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULERTASK::SetConditionDayWeek(XBYTE mask)
 {
@@ -400,7 +400,7 @@ void XSCHEDULERTASK::SetConditionDayWeek(XBYTE mask)
 * @brief      Reset condition
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::ResetCondition()
@@ -424,7 +424,7 @@ bool XSCHEDULERTASK::ResetCondition()
 * @brief      Start condition immediately
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::StartConditionImmediately()
@@ -441,16 +441,16 @@ bool XSCHEDULERTASK::StartConditionImmediately()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULERTASK::CheckCondition(XDATETIME* xdatetimeactual, XTIMER* xtimeractual)
 * @brief      Check condition
 * @ingroup    XUTILS
-*
-* @param[in]  xdatetimeactual :
-* @param[in]  xtimeractual :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xdatetimeactual : Xdatetimeactual pointer to use.
+* @param[in]  xtimeractual : Xtimeractual pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULERTASK::CheckCondition(XDATETIME* xdatetimeactual, XTIMER* xtimeractual)
 {
@@ -516,15 +516,15 @@ bool XSCHEDULERTASK::CheckCondition(XDATETIME* xdatetimeactual, XTIMER* xtimerac
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE XSCHEDULERTASK::GetDayOfWeekMask(XDATETIME* xtimeactual)
 * @brief      Get day of week mask
 * @ingroup    XUTILS
-*
-* @param[in]  xtimeactual :
-*
-* @return     XBYTE :
-*
+* 
+* @param[in]  xtimeactual : Xtimeactual pointer to use.
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XSCHEDULERTASK::GetDayOfWeekMask(XDATETIME* xtimeactual)
 {
@@ -548,12 +548,12 @@ XBYTE XSCHEDULERTASK::GetDayOfWeekMask(XDATETIME* xtimeactual)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULERTASK::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULERTASK::Clean()
 {
@@ -580,11 +580,11 @@ void XSCHEDULERTASK::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSCHEDULER::XSCHEDULER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULER::XSCHEDULER()
 {
@@ -597,12 +597,12 @@ XSCHEDULER::XSCHEDULER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSCHEDULER::~XSCHEDULER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULER::~XSCHEDULER()
 {
@@ -620,13 +620,13 @@ XSCHEDULER::~XSCHEDULER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULER::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULER::Ini()
 {
@@ -648,13 +648,13 @@ bool XSCHEDULER::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULER::IsActive()
 * @brief      Is active
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULER::IsActive()
 {
@@ -663,13 +663,13 @@ bool XSCHEDULER::IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULER::Activate(bool on)
 * @brief      Activate
 * @ingroup    XUTILS
-*
-* @param[in]  on :
-*
+* 
+* @param[in]  on : On value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULER::Activate(bool on)
 {
@@ -683,7 +683,7 @@ void XSCHEDULER::Activate(bool on)
 * @brief      Get mutex scheduler
 * @ingroup    XUTILS
 * 
-* @return     XMUTEX* : 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* XSCHEDULER::GetMutexScheduler()
@@ -698,7 +698,7 @@ XMUTEX* XSCHEDULER::GetMutexScheduler()
 * @brief      Get date time actual
 * @ingroup    XUTILS
 * 
-* @return     XDATETIME* : 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XSCHEDULER::GetDateTimeActual()
@@ -708,15 +708,15 @@ XDATETIME* XSCHEDULER::GetDateTimeActual()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULER::Task_Add(XSCHEDULERTASK* task)
 * @brief      Task add
 * @ingroup    XUTILS
-*
-* @param[in]  task :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  task : Task pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULER::Task_Add(XSCHEDULERTASK* task)
 {
@@ -735,15 +735,15 @@ bool XSCHEDULER::Task_Add(XSCHEDULERTASK* task)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSCHEDULERTASK* XSCHEDULER::Task_Get(int index)
 * @brief      Task get
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     XSCHEDULERTASK* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XSCHEDULERTASK* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULERTASK* XSCHEDULER::Task_Get(int index)
 {
@@ -754,15 +754,15 @@ XSCHEDULERTASK* XSCHEDULER::Task_Get(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSCHEDULERTASK* XSCHEDULER::Task_GetForID(XDWORD ID)
 * @brief      Task get for ID
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-*
-* @return     XSCHEDULERTASK* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     XSCHEDULERTASK* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULERTASK* XSCHEDULER::Task_GetForID(XDWORD ID)
 {
@@ -791,15 +791,15 @@ XSCHEDULERTASK* XSCHEDULER::Task_GetForID(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULER::Task_Del(int index)
 * @brief      Task del
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULER::Task_Del(int index)
 {
@@ -824,15 +824,15 @@ bool XSCHEDULER::Task_Del(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULER::Task_DelForID(XDWORD ID)
 * @brief      Task del for ID
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULER::Task_DelForID(XDWORD ID)
 {
@@ -864,13 +864,13 @@ bool XSCHEDULER::Task_DelForID(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULER::Task_DelAll()
 * @brief      Task del all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULER::Task_DelAll()
 {
@@ -888,13 +888,13 @@ bool XSCHEDULER::Task_DelAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSCHEDULER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSCHEDULER::End()
 {
@@ -927,13 +927,13 @@ bool XSCHEDULER::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULER::ThreadScheduler(void* data)
 * @brief      Thread scheduler
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULER::ThreadScheduler(void* data)
 {
@@ -997,12 +997,12 @@ void XSCHEDULER::ThreadScheduler(void* data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULER::Clean ()
-* @brief      Clean 
+* @brief      Clean internal state
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULER::Clean ()
 {

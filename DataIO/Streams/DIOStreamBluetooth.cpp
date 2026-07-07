@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMBLUETOOTH::DIOSTREAMBLUETOOTH()
+* 
+* @fn         DIOSTREAMBLUETOOTH::DIOSTREAMBLUETOOTH() : DIOSTREAM()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMBLUETOOTH::DIOSTREAMBLUETOOTH() : DIOSTREAM()
 {
@@ -70,12 +70,12 @@ DIOSTREAMBLUETOOTH::DIOSTREAMBLUETOOTH() : DIOSTREAM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMBLUETOOTH::~DIOSTREAMBLUETOOTH()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMBLUETOOTH::~DIOSTREAMBLUETOOTH()
 {
@@ -84,13 +84,13 @@ DIOSTREAMBLUETOOTH::~DIOSTREAMBLUETOOTH()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMCONFIG* DIOSTREAMBLUETOOTH::GetConfig()
 * @brief      Get config
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMCONFIG* : 
-*
+* 
+* @return     DIOSTREAMCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIG* DIOSTREAMBLUETOOTH::GetConfig()
 {
@@ -99,15 +99,15 @@ DIOSTREAMCONFIG* DIOSTREAMBLUETOOTH::GetConfig()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTH::SetConfig(DIOSTREAMCONFIG* config)
 * @brief      Set config
 * @ingroup    DATAIO
-*
-* @param[in]  config : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  config : Configuration object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTH::SetConfig(DIOSTREAMCONFIG* config)
 {
@@ -120,13 +120,13 @@ bool DIOSTREAMBLUETOOTH::SetConfig(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTH::IsRefusedConnection()
 * @brief      Is refused connection
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTH::IsRefusedConnection()
 {
@@ -135,15 +135,15 @@ bool DIOSTREAMBLUETOOTH::IsRefusedConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMBLUETOOTH::SetIsRefusedConnection(bool isrefused)
 * @brief      Set is refused connection
 * @ingroup    DATAIO
-*
-* @param[in]  isrefused : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  isrefused : Isrefused value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMBLUETOOTH::SetIsRefusedConnection(bool isrefused)
 {
@@ -154,12 +154,12 @@ bool DIOSTREAMBLUETOOTH::SetIsRefusedConnection(bool isrefused)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMBLUETOOTH::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void  DIOSTREAMBLUETOOTH::Clean()
 {

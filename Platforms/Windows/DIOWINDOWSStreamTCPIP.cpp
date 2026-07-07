@@ -72,7 +72,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMTCPIP::DIOWINDOWSSTREAMTCPIP()
+* @fn         DIOWINDOWSSTREAMTCPIP::DIOWINDOWSSTREAMTCPIP() : DIOSTREAMTCPIP() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -144,7 +144,7 @@ DIOWINDOWSSTREAMTCPIP::~DIOWINDOWSSTREAMTCPIP()
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIP::Open()
@@ -171,7 +171,7 @@ bool DIOWINDOWSSTREAMTCPIP::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIP::Disconnect()
@@ -204,7 +204,7 @@ bool DIOWINDOWSSTREAMTCPIP::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIP::Close()
@@ -255,7 +255,7 @@ bool DIOWINDOWSSTREAMTCPIP::Close()
 * @brief      Get handle socket
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     SOCKET : 
+* @return     SOCKET : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SOCKET DIOWINDOWSSTREAMTCPIP::GetHandleSocket()
@@ -270,7 +270,7 @@ SOCKET DIOWINDOWSSTREAMTCPIP::GetHandleSocket()
 * @brief      Set handle socket
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  handlesocket : 
+* @param[in]  handlesocket : Handlesocket value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMTCPIP::SetHandleSocket(SOCKET handlesocket)
@@ -285,12 +285,12 @@ void DIOWINDOWSSTREAMTCPIP::SetHandleSocket(SOCKET handlesocket)
 * @brief      Accept
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  handlesocket : 
-* @param[in]  addr : 
-* @param[in]  addrlen : 
-* @param[in]  usec : 
+* @param[in]  handlesocket : Handlesocket value.
+* @param[in]  addr : Addr pointer to use.
+* @param[in]  addrlen : Addrlen pointer to use.
+* @param[in]  usec : Usec value.
 * 
-* @return     SOCKET : 
+* @return     SOCKET : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SOCKET DIOWINDOWSSTREAMTCPIP::Accept(SOCKET handlesocket, void* addr, void* addrlen, XDWORD usec)
@@ -327,9 +327,9 @@ SOCKET DIOWINDOWSSTREAMTCPIP::Accept(SOCKET handlesocket, void* addr, void* addr
 * @brief      Is ready connect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  handlesocket : 
+* @param[in]  handlesocket : Handlesocket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWINDOWSSTREAMTCPIP::IsReadyConnect(SOCKET handlesocket)
@@ -401,7 +401,7 @@ int DIOWINDOWSSTREAMTCPIP::IsReadyConnect(SOCKET handlesocket)
 * @brief      Get handle server
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIP::GetHandleServer()
@@ -544,7 +544,7 @@ bool DIOWINDOWSSTREAMTCPIP::GetHandleServer()
 * @brief      Get handle client
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIP::GetHandleClient()
@@ -664,7 +664,7 @@ bool DIOWINDOWSSTREAMTCPIP::GetHandleClient()
 * @brief      Thread connection
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMTCPIP::ThreadConnection(void* data)

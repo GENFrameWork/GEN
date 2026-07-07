@@ -76,7 +76,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMTCPIPSERVER::DIOWINDOWSSTREAMTCPIPSERVER()
+* @fn         DIOWINDOWSSTREAMTCPIPSERVER::DIOWINDOWSSTREAMTCPIPSERVER() : DIOSTREAMTCPIPSERVER(), XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -149,7 +149,7 @@ DIOWINDOWSSTREAMTCPIPSERVER::~DIOWINDOWSSTREAMTCPIPSERVER()
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIPSERVER::Open()
@@ -174,7 +174,7 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIPSERVER::Disconnect()
@@ -202,7 +202,7 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIPSERVER::Close()
@@ -241,12 +241,12 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::Close()
 * @brief      Accept
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  handlesocket : 
-* @param[in]  addr : 
-* @param[in]  addrlen : 
-* @param[in]  usec : 
+* @param[in]  handlesocket : Handlesocket value.
+* @param[in]  addr : Addr pointer to use.
+* @param[in]  addrlen : Addrlen pointer to use.
+* @param[in]  usec : Usec value.
 * 
-* @return     SOCKET : 
+* @return     SOCKET : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SOCKET DIOWINDOWSSTREAMTCPIPSERVER::Accept(SOCKET handlesocket, void* addr, void* addrlen, XDWORD usec)
@@ -286,9 +286,9 @@ SOCKET DIOWINDOWSSTREAMTCPIPSERVER::Accept(SOCKET handlesocket, void* addr, void
 * @brief      Is ready connect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  handlesocket : 
+* @param[in]  handlesocket : Handlesocket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWINDOWSSTREAMTCPIPSERVER::IsReadyConnect(SOCKET handlesocket)
@@ -345,7 +345,7 @@ int DIOWINDOWSSTREAMTCPIPSERVER::IsReadyConnect(SOCKET handlesocket)
 * @brief      Create stream
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOWINDOWSSTREAMTCPIPSERVER::CreateStream()
@@ -383,7 +383,7 @@ DIOSTREAM* DIOWINDOWSSTREAMTCPIPSERVER::CreateStream()
 * @brief      Delete all stream disconnected
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStreamDisconnected()
@@ -423,7 +423,7 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStreamDisconnected()
 * @brief      Delete all stream
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStream()
@@ -455,11 +455,13 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::DeleteAllStream()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOWINDOWSSTREAMTCPIPSERVER::GetHandleServer()
+* @fn         bool DIOWINDOWSSTREAMTCPIPSERVER::GetHandleServer(DIOSTREAMTCPIP* diostream)
 * @brief      Get handle server
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  diostream : Diostream pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMTCPIPSERVER::GetHandleServer(DIOSTREAMTCPIP* diostream)
@@ -622,7 +624,7 @@ bool DIOWINDOWSSTREAMTCPIPSERVER::GetHandleServer(DIOSTREAMTCPIP* diostream)
 * @brief      Thread connection
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMTCPIPSERVER::ThreadConnection(void* data)

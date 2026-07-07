@@ -63,11 +63,11 @@ XPUBLISHER*   XPUBLISHER::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPUBLISHERENTRY::XPUBLISHERENTRY()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPUBLISHERENTRY::XPUBLISHERENTRY()
 {
@@ -76,12 +76,12 @@ XPUBLISHERENTRY::XPUBLISHERENTRY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPUBLISHERENTRY::~XPUBLISHERENTRY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPUBLISHERENTRY::~XPUBLISHERENTRY()
 {
@@ -90,12 +90,12 @@ XPUBLISHERENTRY::~XPUBLISHERENTRY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPUBLISHERENTRY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPUBLISHERENTRY::Clean()
 {
@@ -110,13 +110,13 @@ void XPUBLISHERENTRY::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPUBLISHER::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::GetIsInstanced()
 {
@@ -130,7 +130,7 @@ bool XPUBLISHER::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    XUTILS
 * 
-* @return     XPUBLISHER& : 
+* @return     XPUBLISHER& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPUBLISHER& XPUBLISHER::GetInstance()
@@ -142,13 +142,13 @@ XPUBLISHER& XPUBLISHER::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPUBLISHER::DelInstance()
 * @brief      Del instance
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::DelInstance()
 {
@@ -165,16 +165,16 @@ bool XPUBLISHER::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPUBLISHER::RegisterEvent(XDWORD type, XSUBJECT* subject)
 * @brief      Register event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-* @param[in]  subject :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  subject : Subject pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::RegisterEvent(XDWORD type, XSUBJECT* subject)
 {
@@ -214,16 +214,16 @@ bool XPUBLISHER::RegisterEvent(XDWORD type, XSUBJECT* subject)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPUBLISHER::DeRegisterEvent(XDWORD type, XSUBJECT* subject)
 * @brief      De register event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-* @param[in]  subject :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  subject : Subject pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::DeRegisterEvent(XDWORD type, XSUBJECT* subject)
 {
@@ -268,13 +268,13 @@ bool XPUBLISHER::DeRegisterEvent(XDWORD type, XSUBJECT* subject)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPUBLISHER::DeRegisterAllEvents()
 * @brief      De register all events
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::DeRegisterAllEvents()
 {
@@ -292,17 +292,17 @@ bool XPUBLISHER::DeRegisterAllEvents()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPUBLISHER::SubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observer)
 * @brief      Subscribe event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-* @param[in]  subject :
-* @param[in]  observer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  observer : Observer pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::SubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observer)
 {
@@ -363,17 +363,17 @@ bool XPUBLISHER::SubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* obser
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPUBLISHER::UnSubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observer)
 * @brief      Un subscribe event
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-* @param[in]  subject :
-* @param[in]  observer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  observer : Observer pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::UnSubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* observer)
 {
@@ -409,7 +409,7 @@ bool XPUBLISHER::UnSubscribeEvent(XDWORD type, XSUBJECT* subject, XOBSERVER* obs
 * @brief      Active
 * @ingroup    XUTILS
 * 
-* @param[in]  on : 
+* @param[in]  on : On value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPUBLISHER::Active(bool on)
@@ -424,7 +424,7 @@ void XPUBLISHER::Active(bool on)
 * @brief      Is in event
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::IsInEvent()
@@ -434,16 +434,16 @@ bool XPUBLISHER::IsInEvent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPUBLISHER::PostEvent(XEVENT* event, XSUBJECT* subject)
 * @brief      Post event
 * @ingroup    XUTILS
-*
-* @param[in]  event :
-* @param[in]  subject :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  event : Event to process.
+* @param[in]  subject : Subject pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPUBLISHER::PostEvent(XEVENT* event, XSUBJECT* subject)
 {
@@ -484,11 +484,11 @@ bool XPUBLISHER::PostEvent(XEVENT* event, XSUBJECT* subject)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPUBLISHER::XPUBLISHER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPUBLISHER::XPUBLISHER()
 {
@@ -501,12 +501,12 @@ XPUBLISHER::XPUBLISHER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPUBLISHER::~XPUBLISHER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPUBLISHER::~XPUBLISHER()
 {
@@ -519,12 +519,12 @@ XPUBLISHER::~XPUBLISHER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPUBLISHER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPUBLISHER::Clean()
 {

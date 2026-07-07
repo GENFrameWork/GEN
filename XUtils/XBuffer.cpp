@@ -69,7 +69,7 @@ bool XBUFFER::globalhardwareuselittleendian = true;
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  threadsafe : 
+* @param[in]  threadsafe : Threadsafe value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER::XBUFFER(bool threadsafe)
@@ -87,14 +87,14 @@ XBUFFER::XBUFFER(bool threadsafe)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER::XBUFFER(XDWORD size, bool threadsafe)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  size : initial size of the buffer
 * @param[in]  threadsafe : true is thread safe operative buffer
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER::XBUFFER(XDWORD size, bool threadsafe)
 {
@@ -118,7 +118,7 @@ XBUFFER::XBUFFER(XDWORD size, bool threadsafe)
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  xbuffer : 
+* @param[in]  xbuffer : Buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER::XBUFFER(const XBUFFER& xbuffer)
@@ -134,11 +134,11 @@ XBUFFER::XBUFFER(const XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER::~XBUFFER()
 * @brief      Destructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER::~XBUFFER()
 {
@@ -154,13 +154,13 @@ XBUFFER::~XBUFFER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::GetSize()
 * @brief      Get size
 * @ingroup    XUTILS
-*
-* @return     XDWORD : size actual of buffer
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::GetSize()
 {
@@ -175,15 +175,15 @@ XDWORD XBUFFER::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::SetSize(XDWORD size)
 * @brief      Set size
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  size : GEN_NEW size of buffer
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::SetSize(XDWORD size)
 {
@@ -203,9 +203,9 @@ bool XBUFFER::SetSize(XDWORD size)
 * @brief      set add block mem size
 * @ingroup    XUTILS
 * 
-* @param[in]  addblockmemsize : 
+* @param[in]  addblockmemsize : Addblockmemsize value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::SetAddBlockMemSize(XDWORD addblockmemsize)
@@ -224,13 +224,13 @@ bool XBUFFER::SetAddBlockMemSize(XDWORD addblockmemsize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::IsEmpty()
 * @brief      Is empty
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::IsEmpty()
 {
@@ -239,11 +239,11 @@ bool XBUFFER::IsEmpty()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFER::ResetPosition()
 * @brief      Reset position
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFER::ResetPosition()
 {
@@ -252,13 +252,13 @@ void XBUFFER::ResetPosition()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::GetPosition()
 * @brief      Get position
 * @ingroup    XUTILS
-*
-* @return     XDWORD : Pointer position of buffer
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::GetPosition()
 {
@@ -267,15 +267,15 @@ XDWORD XBUFFER::GetPosition()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::SetPosition(XDWORD position)
 * @brief      Set position
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  position : GEN_NEW position of pointer.
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::SetPosition(XDWORD position)
 {
@@ -286,13 +286,13 @@ bool XBUFFER::SetPosition(XDWORD position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::IsBlocked()
 * @brief      Is blocked
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::IsBlocked()
 {
@@ -303,15 +303,15 @@ bool XBUFFER::IsBlocked()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::SetBlocked(bool blocked)
 * @brief      Set blocked
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  blocked : true to blocked buffer.
-*
-* @return     bool : true if is blocked
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::SetBlocked(bool blocked)
 {
@@ -322,16 +322,16 @@ bool XBUFFER::SetBlocked(bool blocked)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(XBYTE* pbuffer, XDWORD psize)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  pbuffer : pointer of bytes to add
 * @param[in]  psize : size of array of bytes
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(XBYTE* pbuffer, XDWORD psize)
 {
@@ -360,15 +360,15 @@ bool XBUFFER::Add(XBYTE* pbuffer, XDWORD psize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(XBUFFER* buffer)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  buffer : pointer of buffer to add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(XBUFFER* buffer)
 {
@@ -377,15 +377,15 @@ bool XBUFFER::Add(XBUFFER* buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(XBUFFER& buffer)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  buffer : buffer to add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(XBUFFER& buffer)
 {
@@ -394,15 +394,15 @@ bool XBUFFER::Add(XBUFFER& buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(XBYTE data)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : byte to add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(XBYTE data)
 {
@@ -411,15 +411,15 @@ bool XBUFFER::Add(XBYTE data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(bool data)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : boolean to add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(bool data)
 {
@@ -430,15 +430,15 @@ bool XBUFFER::Add(bool data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(XWORD data)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : WORD to add.
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(XWORD data)
 {
@@ -449,15 +449,15 @@ bool XBUFFER::Add(XWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(XDWORD data)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : DWORD to Add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(XDWORD data)
 {
@@ -468,15 +468,15 @@ bool XBUFFER::Add(XDWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(XQWORD data)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : QWORD to add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(XQWORD data)
 {
@@ -487,15 +487,15 @@ bool XBUFFER::Add(XQWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(float data)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : float to add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(float data)
 {
@@ -504,15 +504,15 @@ bool XBUFFER::Add(float data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(double data)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : double to add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(double data)
 {
@@ -521,16 +521,16 @@ bool XBUFFER::Add(double data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Add(XSTRING& string, bool normalize)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-* @param[in]  normalize :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  normalize : Normalize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Add(XSTRING& string, bool normalize)
 {
@@ -557,16 +557,16 @@ bool XBUFFER::Add(XSTRING& string, bool normalize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::AddWithMaskArg(XCHAR* mask, va_list& arg)
 * @brief      Add with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::AddWithMaskArg(XCHAR* mask, va_list& arg)
 {
@@ -575,16 +575,16 @@ bool XBUFFER::AddWithMaskArg(XCHAR* mask, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::AddWithMaskArg(XSTRING* mask, va_list& arg)
 * @brief      Add with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::AddWithMaskArg(XSTRING* mask, va_list& arg)
 {
@@ -593,16 +593,16 @@ bool XBUFFER::AddWithMaskArg(XSTRING* mask, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::AddWithMask(XCHAR* mask, ...)
 * @brief      Add with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : pointer XCHAR with a mask to use in add
 * @param[in]  ... : params with a variant data
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::AddWithMask(XCHAR* mask, ...)
 {
@@ -621,16 +621,16 @@ bool XBUFFER::AddWithMask(XCHAR* mask, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::AddWithMask(XSTRING* mask, ...)
 * @brief      Add with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : string with a mask to use in add
 * @param[in]  ... : params with a variant data
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::AddWithMask(XSTRING* mask, ...)
 {
@@ -649,17 +649,17 @@ bool XBUFFER::AddWithMask(XSTRING* mask, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(XBYTE* pbuffer, XDWORD psize, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  pbuffer : pointer to bytes to add
 * @param[in]  psize : size of bytes to add
 * @param[in]  frompos : position in buffer to insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(XBYTE* pbuffer, XDWORD psize, int frompos)
 {
@@ -685,16 +685,16 @@ bool XBUFFER::Insert(XBYTE* pbuffer, XDWORD psize, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(XBUFFER* xbuffer, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xbuffer : pointer of buffer to insert into buffer
 * @param[in]  frompos : position to insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(XBUFFER* xbuffer, int frompos)
 {
@@ -705,16 +705,16 @@ bool XBUFFER::Insert(XBUFFER* xbuffer, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(XBUFFER& xbuffer, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xbuffer : buffer to insert into buffer
 * @param[in]  frompos : position to insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(XBUFFER& xbuffer, int frompos)
 {
@@ -723,16 +723,16 @@ bool XBUFFER::Insert(XBUFFER& xbuffer, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(XBYTE data, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : byte to insert
 * @param[in]  frompos : position of insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(XBYTE data, int frompos)
 {
@@ -741,16 +741,16 @@ bool XBUFFER::Insert(XBYTE data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(bool data, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : boolean to insert
 * @param[in]  frompos : position of insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(bool data, int frompos)
 {
@@ -761,16 +761,16 @@ bool XBUFFER::Insert(bool data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(XWORD data, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : WORD to insert
 * @param[in]  frompos : position of insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(XWORD data, int frompos)
 {
@@ -781,16 +781,16 @@ bool XBUFFER::Insert(XWORD data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(XDWORD data, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : Double word to insert
 * @param[in]  frompos : position of insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(XDWORD data, int frompos)
 {
@@ -801,16 +801,16 @@ bool XBUFFER::Insert(XDWORD data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(XQWORD data, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : Quad word to insert
 * @param[in]  frompos : position of insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(XQWORD data, int frompos)
 {
@@ -821,16 +821,16 @@ bool XBUFFER::Insert(XQWORD data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(float data, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : float to insert
 * @param[in]  frompos : position of insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(float data, int frompos)
 {
@@ -839,16 +839,16 @@ bool XBUFFER::Insert(float data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(double data, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : double to insert
 * @param[in]  frompos : position of insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(double data, int frompos)
 {
@@ -857,16 +857,16 @@ bool XBUFFER::Insert(double data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Insert(XSTRING& string, int frompos)
 * @brief      Insert
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  string : string to insert
 * @param[in]  frompos : position of insert
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Insert(XSTRING& string, int frompos)
 {
@@ -886,17 +886,17 @@ bool XBUFFER::Insert(XSTRING& string, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::InsertWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 * @brief      Insert with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  frompos :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  frompos : Frompos value.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::InsertWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 {
@@ -909,17 +909,17 @@ bool XBUFFER::InsertWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::InsertWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 * @brief      Insert with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  frompos :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  frompos : Frompos value.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::InsertWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 {
@@ -928,17 +928,17 @@ bool XBUFFER::InsertWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::InsertWithMask(XCHAR* mask, int frompos, ...)
 * @brief      Insert with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : pointer XCHAR with a mask to use in insert
 * @param[in]  frompos : position of insert
 * @param[in]  ... : params with a variant data
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::InsertWithMask(XCHAR* mask, int frompos, ...)
 {
@@ -957,17 +957,17 @@ bool XBUFFER::InsertWithMask(XCHAR* mask, int frompos, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::InsertWithMask(XSTRING* mask, int frompos, ...)
 * @brief      Insert with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : string with a mask to use in insert
 * @param[in]  frompos : position of insert
 * @param[in]  ... : params with a variant data
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::InsertWithMask(XSTRING* mask, int frompos, ...)
 {
@@ -986,17 +986,17 @@ bool XBUFFER::InsertWithMask(XSTRING* mask, int frompos, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::Extract(XBYTE* pbuffer, XDWORD ppos, XDWORD psize)
 * @brief      Extract
 * @ingroup    XUTILS
-*
-* @param[out] pbuffer : pointer to array of bytes.
+* 
+* @param[in]  pbuffer : pointer to array of bytes.
 * @param[in]  ppos : position of buffer to extract
 * @param[in]  psize : size bytes to extract
-*
-* @return     XDWORD : number bytes extracted.
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::Extract(XBYTE* pbuffer, XDWORD ppos, XDWORD psize)
 {
@@ -1028,16 +1028,16 @@ XDWORD XBUFFER::Extract(XBYTE* pbuffer, XDWORD ppos, XDWORD psize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Extract(XBYTE& data, XDWORD ppos)
 * @brief      Extract
 * @ingroup    XUTILS
-*
-* @param[out] data : byte extracted
+* 
+* @param[in]  data : byte extracted
 * @param[in]  ppos : position of buffer to extract
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Extract(XBYTE& data, XDWORD ppos)
 {
@@ -1049,16 +1049,16 @@ bool XBUFFER::Extract(XBYTE& data, XDWORD ppos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Extract(bool& data, XDWORD ppos)
 * @brief      Extract
 * @ingroup    XUTILS
-*
-* @param[out] data : boolean extracted
+* 
+* @param[in]  data : boolean extracted
 * @param[in]  ppos : position of buffer to extract
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Extract(bool& data, XDWORD ppos)
 {
@@ -1074,16 +1074,16 @@ bool XBUFFER::Extract(bool& data, XDWORD ppos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Extract(XWORD& data, XDWORD ppos)
 * @brief      Extract
 * @ingroup    XUTILS
-*
-* @param[out] data : WORD extracted
+* 
+* @param[in]  data : WORD extracted
 * @param[in]  ppos : position of buffer to extract
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Extract(XWORD& data, XDWORD ppos)
 {
@@ -1097,16 +1097,16 @@ bool XBUFFER::Extract(XWORD& data, XDWORD ppos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Extract(XDWORD& data, XDWORD ppos)
 * @brief      Extract
 * @ingroup    XUTILS
-*
-* @param[out] data : DWORD extracted
+* 
+* @param[in]  data : DWORD extracted
 * @param[in]  ppos : position of buffer to extract
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Extract(XDWORD& data, XDWORD ppos)
 {
@@ -1120,16 +1120,16 @@ bool XBUFFER::Extract(XDWORD& data, XDWORD ppos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Extract(XQWORD& data, XDWORD ppos)
 * @brief      Extract
 * @ingroup    XUTILS
-*
-* @param[out] data : QWORD extracted
+* 
+* @param[in]  data : QWORD extracted
 * @param[in]  ppos : position of buffer to extract
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Extract(XQWORD& data, XDWORD ppos)
 {
@@ -1143,16 +1143,16 @@ bool XBUFFER::Extract(XQWORD& data, XDWORD ppos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Extract(float& data,XDWORD ppos)
 * @brief      Extract
 * @ingroup    XUTILS
-*
-* @param[out] data : float extracted
+* 
+* @param[in]  data : float extracted
 * @param[in]  ppos : position of buffer to extract
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Extract(float& data,XDWORD ppos)
 {
@@ -1164,16 +1164,16 @@ bool XBUFFER::Extract(float& data,XDWORD ppos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Extract(double& data, XDWORD ppos)
 * @brief      Extract
 * @ingroup    XUTILS
-*
-* @param[out] data : double extracted
+* 
+* @param[in]  data : double extracted
 * @param[in]  ppos : position of buffer to extract
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Extract(double& data, XDWORD ppos)
 {
@@ -1185,17 +1185,17 @@ bool XBUFFER::Extract(double& data, XDWORD ppos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Extract(XSTRING& string, XDWORD ppos, XDWORD psize)
 * @brief      Extract
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  string : string extracted
 * @param[in]  ppos : position of buffer to extract
 * @param[in]  psize : size of string to extract
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Extract(XSTRING& string, XDWORD ppos, XDWORD psize)
 {
@@ -1223,17 +1223,17 @@ bool XBUFFER::Extract(XSTRING& string, XDWORD ppos, XDWORD psize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::ExtractWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 * @brief      Extract with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  frompos :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  frompos : Frompos value.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::ExtractWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 {
@@ -1268,17 +1268,17 @@ bool XBUFFER::ExtractWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::ExtractWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 * @brief      Extract with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  frompos :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  frompos : Frompos value.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::ExtractWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 {
@@ -1287,17 +1287,17 @@ bool XBUFFER::ExtractWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::ExtractWithMask(XCHAR* mask, int frompos, ...)
 * @brief      Extract with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : pointer XCHAR with a mask to use in extract
 * @param[in]  frompos : position of buffer to extract
-* @param[out] ... : params with a variant data
-*
-* @return     bool : true if is succesful.
-*
+* @param[in]  ... : params with a variant data
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::ExtractWithMask(XCHAR* mask, int frompos, ...)
 {
@@ -1316,17 +1316,17 @@ bool XBUFFER::ExtractWithMask(XCHAR* mask, int frompos, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::ExtractWithMask(XSTRING* mask, int frompos, ...)
 * @brief      Extract with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : string with a mask to use in extract
 * @param[in]  frompos : position of buffer to extract
 * @param[in]  ... : params with a variant data
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::ExtractWithMask(XSTRING* mask, int frompos, ...)
 {
@@ -1345,13 +1345,13 @@ bool XBUFFER::ExtractWithMask(XSTRING* mask, int frompos, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XBUFFER::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
-* @return     XBYTE* : Array of bytes of buffer
-*
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XBUFFER::Get()
 {
@@ -1362,15 +1362,15 @@ XBYTE* XBUFFER::Get()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE XBUFFER::GetByte(XDWORD index)
 * @brief      Get byte
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  index : index of byte into buffer
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XBUFFER::GetByte(XDWORD index)
 {
@@ -1395,13 +1395,13 @@ XBYTE XBUFFER::GetByte(XDWORD index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE XBUFFER::GetLastByte()
 * @brief      Get last byte
 * @ingroup    XUTILS
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XBUFFER::GetLastByte()
 {
@@ -1421,7 +1421,7 @@ XBYTE XBUFFER::GetLastByte()
 * @brief      Get ptr char
 * @ingroup    XUTILS
 * 
-* @return     char* : 
+* @return     char* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 char* XBUFFER::GetPtrChar()
@@ -1436,7 +1436,7 @@ char* XBUFFER::GetPtrChar()
 * @brief      Get ptr word
 * @ingroup    XUTILS
 * 
-* @return     XWORD* : 
+* @return     XWORD* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD* XBUFFER::GetPtrWord()
@@ -1446,17 +1446,17 @@ XWORD* XBUFFER::GetPtrWord()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Get(XBYTE* pbuffer,int psize,int frompos)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
-* @param[out] pbuffer : byte array obtained
+* 
+* @param[in]  pbuffer : byte array obtained
 * @param[in]  psize : size of array
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(XBYTE* pbuffer,int psize,int frompos)
 {
@@ -1488,16 +1488,16 @@ bool XBUFFER::Get(XBYTE* pbuffer,int psize,int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Get(XBYTE& data, int frompos)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
-* @param[out] data : byte obtained
+* 
+* @param[in]  data : byte obtained
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(XBYTE& data, int frompos)
 {
@@ -1523,16 +1523,16 @@ bool XBUFFER::Get(XBYTE& data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Get(bool& data, int frompos)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : boolean obtained
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(bool& data, int frompos)
 {
@@ -1548,16 +1548,16 @@ bool XBUFFER::Get(bool& data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Get(XWORD& data, int frompos)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : WORD obtained
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(XWORD& data, int frompos)
 {
@@ -1570,16 +1570,16 @@ bool XBUFFER::Get(XWORD& data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Get(XDWORD& data, int frompos)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : double WORD obtained
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(XDWORD& data, int frompos)
 {
@@ -1592,16 +1592,16 @@ bool XBUFFER::Get(XDWORD& data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Get(XQWORD& data, int frompos)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : quad WORD obtained
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(XQWORD& data, int frompos)
 {
@@ -1614,16 +1614,16 @@ bool XBUFFER::Get(XQWORD& data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Get(float& data, int frompos)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : float obtained
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(float& data, int frompos)
 {
@@ -1634,16 +1634,16 @@ bool XBUFFER::Get(float& data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Get(double& data, int frompos)
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : double obtained.
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(double& data, int frompos)
 {
@@ -1654,17 +1654,17 @@ bool XBUFFER::Get(double& data, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XBUFFER::Get(XSTRING& data,  int psize, int frompos)
-* @brief      Get
+* 
+* @fn         bool XBUFFER::Get(XSTRING& data, int psize, int frompos)
+* @brief      Get value
 * @ingroup    XUTILS
-*
-* @param[out] data : strint obtained
+* 
+* @param[in]  data : strint obtained
 * @param[in]  psize : size n bytes to obtain
 * @param[in]  frompos : position of buffer to get
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Get(XSTRING& data, int psize, int frompos)
 {
@@ -1689,17 +1689,17 @@ bool XBUFFER::Get(XSTRING& data, int psize, int frompos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::GetWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 * @brief      Get with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  frompos :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  frompos : Frompos value.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::GetWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 {
@@ -1718,17 +1718,17 @@ bool XBUFFER::GetWithMaskArg(XCHAR* mask, int frompos, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::GetWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 * @brief      Get with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  frompos :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  frompos : Frompos value.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::GetWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 {
@@ -1739,17 +1739,17 @@ bool XBUFFER::GetWithMaskArg(XSTRING* mask, int frompos, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::GetWithMask(XCHAR* mask, int frompos, ...)
 * @brief      Get with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : pointer to string with a mask to use in get
 * @param[in]  frompos : position of buffer to get
 * @param[in]  ... : params with a variant data
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::GetWithMask(XCHAR* mask, int frompos, ...)
 {
@@ -1768,17 +1768,17 @@ bool XBUFFER::GetWithMask(XCHAR* mask, int frompos, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::GetWithMask(XSTRING* mask, int frompos, ...)
 * @brief      Get with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : pointer to string with a mask to use in get
 * @param[in]  frompos : position of buffer to get
 * @param[in]  ... : params with a variant data
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::GetWithMask(XSTRING* mask, int frompos, ...)
 {
@@ -1797,17 +1797,17 @@ bool XBUFFER::GetWithMask(XSTRING* mask, int frompos, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(XBYTE* pbuffer, int psize, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  pbuffer : pointer of buffer to set
 * @param[in]  psize : size of buffer to set.
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(XBYTE* pbuffer, int psize, int topos)
 {
@@ -1835,16 +1835,16 @@ bool XBUFFER::Set(XBYTE* pbuffer, int psize, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(XBYTE data, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : byte to set
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(XBYTE data, int topos)
 {
@@ -1870,16 +1870,16 @@ bool XBUFFER::Set(XBYTE data, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(bool data, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : boolean to set
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(bool data, int topos)
 {
@@ -1890,16 +1890,16 @@ bool XBUFFER::Set(bool data, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(XWORD data, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : WORD to set
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(XWORD data, int topos)
 {
@@ -1910,16 +1910,16 @@ bool XBUFFER::Set(XWORD data, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(XDWORD data, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : DWORD to set
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(XDWORD data, int topos)
 {
@@ -1930,16 +1930,16 @@ bool XBUFFER::Set(XDWORD data, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(XQWORD data, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : QWORD to set
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(XQWORD data, int topos)
 {
@@ -1950,16 +1950,16 @@ bool XBUFFER::Set(XQWORD data, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(float data, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : float to set
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(float data, int topos)
 {
@@ -1968,16 +1968,16 @@ bool XBUFFER::Set(float data, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(double data, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : double to set
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(double data, int topos)
 {
@@ -1986,16 +1986,16 @@ bool XBUFFER::Set(double data, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Set(XSTRING& data, int topos)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  data : string to set
 * @param[in]  topos : position of buffer to set
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Set(XSTRING& data, int topos)
 {
@@ -2021,17 +2021,17 @@ bool XBUFFER::Set(XSTRING& data, int topos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::SetWithMaskArg(XCHAR* mask, int topos, va_list& arg)
 * @brief      Set with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  topos :
-* @param[in]  arg :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  topos : Topos value.
+* @param[in]  arg : Arg value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::SetWithMaskArg(XCHAR* mask, int topos, va_list& arg)
 {
@@ -2046,17 +2046,17 @@ XDWORD XBUFFER::SetWithMaskArg(XCHAR* mask, int topos, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::SetWithMaskArg(XSTRING* mask, int topos, va_list& arg)
 * @brief      Set with mask arg
 * @ingroup    XUTILS
-*
-* @param[in]  mask :
-* @param[in]  topos :
-* @param[in]  arg :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  topos : Topos value.
+* @param[in]  arg : Arg value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::SetWithMaskArg(XSTRING* mask, int topos, va_list& arg)
 {
@@ -2067,17 +2067,17 @@ XDWORD XBUFFER::SetWithMaskArg(XSTRING* mask, int topos, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::SetWithMask(XCHAR* mask, int topos, ...)
 * @brief      Set with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : pointer XCHAR with a mask to use in extract
 * @param[in]  topos : position of buffer to set
 * @param[in]  ... : params with a variant data
-*
-* @return     XDWORD : size of byte set
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::SetWithMask(XCHAR* mask, int topos, ...)
 {
@@ -2096,17 +2096,17 @@ XDWORD XBUFFER::SetWithMask(XCHAR* mask, int topos, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::SetWithMask(XSTRING* mask, int topos, ...)
 * @brief      Set with mask
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  mask : string with a mask to use in extract
 * @param[in]  topos : position of buffer to set
 * @param[in]  ... : params with a variant data
-*
-* @return     XDWORD : size of byte set
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::SetWithMask(XSTRING* mask, int topos, ...)
 {
@@ -2125,16 +2125,16 @@ XDWORD XBUFFER::SetWithMask(XSTRING* mask, int topos, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Resize(XDWORD newsize, bool setblocked)
 * @brief      Resize
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  newsize : GEN_NEW size of bufffer.
 * @param[in]  setblocked : blocked this operation.
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Resize(XDWORD newsize, bool setblocked)
 {
@@ -2206,15 +2206,15 @@ bool XBUFFER::Resize(XDWORD newsize, bool setblocked)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Delete(bool setblocked)
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  setblocked : blocked this operation.
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Delete(bool setblocked)
 {
@@ -2245,10 +2245,10 @@ bool XBUFFER::Delete(bool setblocked)
 * @brief      Delete byte
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  setblocked : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  setblocked : Setblocked value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::DeleteByte(XBYTE data, bool setblocked)
@@ -2287,15 +2287,15 @@ bool XBUFFER::DeleteByte(XBYTE data, bool setblocked)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::FillBuffer(XBYTE fillchar)
 * @brief      Fill buffer
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  fillchar : byte to fill buffer
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::FillBuffer(XBYTE fillchar)
 {
@@ -2321,7 +2321,7 @@ bool XBUFFER::FillBuffer(XBYTE fillchar)
 * @brief      Empty
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Empty()
@@ -2331,13 +2331,13 @@ bool XBUFFER::Empty()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Swap()
 * @brief      Swap
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Swap()
 {
@@ -2359,16 +2359,16 @@ bool XBUFFER::Swap()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Compare(XBYTE* pbuffer,XDWORD psize)
 * @brief      Compare
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  pbuffer : pointer to buffer to compare
 * @param[in]  psize : size of buffer to compare
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Compare(XBYTE* pbuffer,XDWORD psize)
 {
@@ -2394,15 +2394,15 @@ bool XBUFFER::Compare(XBYTE* pbuffer,XDWORD psize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Compare(XBUFFER* buffer)
 * @brief      Compare
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  buffer : pointer to buffer
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Compare(XBUFFER* buffer)
 {
@@ -2418,9 +2418,9 @@ bool XBUFFER::Compare(XBUFFER* buffer)
 * @brief      Compare
 * @ingroup    XUTILS
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Compare(XBUFFER& buffer)
@@ -2430,16 +2430,16 @@ bool XBUFFER::Compare(XBUFFER& buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XBUFFER::Find(XBUFFER* buffer, int startindex)
 * @brief      Find
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-* @param[in]  startindex :
-*
-* @return     int :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  startindex : Startindex value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XBUFFER::Find(XBUFFER* buffer, int startindex)
 {
@@ -2478,17 +2478,17 @@ int XBUFFER::Find(XBUFFER* buffer, int startindex)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XBUFFER::Find(XSTRING& string, bool normalize, int startindex)
 * @brief      Find
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-* @param[in]  normalize :
-* @param[in]  startindex :
-*
-* @return     int :
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  normalize : Normalize value.
+* @param[in]  startindex : Startindex value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XBUFFER::Find(XSTRING& string, bool normalize, int startindex)
 {
@@ -2503,10 +2503,12 @@ int XBUFFER::Find(XSTRING& string, bool normalize, int startindex)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void XBUFFER::operator = (const XBUFFER& xbuffer)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    XUTILS
 * 
-* @param[in]  xbuffer : 
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     void XBUFFER:: : Requested buffer.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFER::operator = (const XBUFFER& xbuffer)
@@ -2516,15 +2518,15 @@ void XBUFFER::operator = (const XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::operator == (XBUFFER buffer)
-* @brief      operator == 
+* @brief      operator ==
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool XBUFFER:: : Requested buffer.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::operator == (XBUFFER buffer)
 { 
@@ -2533,15 +2535,15 @@ bool XBUFFER::operator == (XBUFFER buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::operator != (XBUFFER buffer)
-* @brief      operator != 
+* @brief      operator !=
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool XBUFFER:: : Requested buffer.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::operator != (XBUFFER buffer)
 { 
@@ -2555,9 +2557,9 @@ bool XBUFFER::operator != (XBUFFER buffer)
 * @brief      Copy from
 * @ingroup    XUTILS
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::CopyFrom(XBUFFER& buffer)
@@ -2576,9 +2578,9 @@ bool XBUFFER::CopyFrom(XBUFFER& buffer)
 * @brief      Copy to
 * @ingroup    XUTILS
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::CopyTo(XBUFFER& buffer)
@@ -2592,16 +2594,16 @@ bool XBUFFER::CopyTo(XBUFFER& buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Padding_Add(XBYTE bitsadjust, XBUFFER_PADDINGTYPE type)
 * @brief      Padding add
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  bitsadjust : n bits of padding
 * @param[in]  type : type of padding
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Padding_Add(XBYTE bitsadjust, XBUFFER_PADDINGTYPE type)
 {
@@ -2669,13 +2671,13 @@ bool XBUFFER::Padding_Add(XBYTE bitsadjust, XBUFFER_PADDINGTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Padding_Has()
 * @brief      Padding has
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Padding_Has()
 {
@@ -2684,13 +2686,13 @@ bool XBUFFER::Padding_Has()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER_PADDINGTYPE XBUFFER::Padding_GetType()
 * @brief      Padding get type
 * @ingroup    XUTILS
-*
-* @return     XBUFFER_PADDINGTYPE : type of padding
-*
+* 
+* @return     XBUFFER_PADDINGTYPE : Requested buffer.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER_PADDINGTYPE XBUFFER::Padding_GetType()
 {
@@ -2699,13 +2701,13 @@ XBUFFER_PADDINGTYPE XBUFFER::Padding_GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE XBUFFER::Padding_GetSize()
 * @brief      Padding get size
 * @ingroup    XUTILS
-*
-* @return     XBYTE : size of padding
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XBUFFER::Padding_GetSize()
 {
@@ -2714,13 +2716,13 @@ XBYTE XBUFFER::Padding_GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Padding_Delete()
 * @brief      Padding delete
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Padding_Delete()
 {
@@ -2741,13 +2743,13 @@ bool XBUFFER::Padding_Delete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE XBUFFER::Bit_GetNBits()
 * @brief      Bit get N bits
 * @ingroup    XUTILS
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XBUFFER::Bit_GetNBits()
 {
@@ -2756,15 +2758,15 @@ XBYTE XBUFFER::Bit_GetNBits()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Bit_SetNBits(int nbits)
 * @brief      Bit set N bits
 * @ingroup    XUTILS
-*
-* @param[in]  nbits :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nbits : Nbits value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Bit_SetNBits(int nbits)
 {
@@ -2777,16 +2779,16 @@ bool XBUFFER::Bit_SetNBits(int nbits)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Bit_AddData(XDWORD data, int nbits)
 * @brief      Bit add data
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-* @param[in]  nbits :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* @param[in]  nbits : Nbits value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Bit_AddData(XDWORD data, int nbits)
 {
@@ -2860,16 +2862,16 @@ bool XBUFFER::Bit_AddData(XDWORD data, int nbits)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::Bit_GetData(int indexbit, int nbits)
 * @brief      Bit get data
 * @ingroup    XUTILS
-*
-* @param[in]  indexbit :
-* @param[in]  nbits :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  indexbit : Indexbit value.
+* @param[in]  nbits : Nbits value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::Bit_GetData(int indexbit, int nbits)
 {
@@ -2915,17 +2917,17 @@ XDWORD XBUFFER::Bit_GetData(int indexbit, int nbits)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Bit_SetData(XDWORD data, int indexbit, int nbits)
 * @brief      Bit set data
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-* @param[in]  indexbit :
-* @param[in]  nbits :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* @param[in]  indexbit : Indexbit value.
+* @param[in]  nbits : Nbits value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Bit_SetData(XDWORD data, int indexbit, int nbits)
 {
@@ -2963,13 +2965,13 @@ bool XBUFFER::Bit_SetData(XDWORD data, int indexbit, int nbits)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE XBUFFER::Bit_GetBitsFree()
 * @brief      Bit get bits free
 * @ingroup    XUTILS
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XBUFFER::Bit_GetBitsFree()
 {
@@ -2978,15 +2980,15 @@ XBYTE XBUFFER::Bit_GetBitsFree()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::Bit_SetBitsFree(XBYTE nbitsfree)
 * @brief      Bit set bits free
 * @ingroup    XUTILS
-*
-* @param[in]  nbitsfree :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nbitsfree : Nbitsfree value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::Bit_SetBitsFree(XBYTE nbitsfree)
 {
@@ -3002,9 +3004,9 @@ bool XBUFFER::Bit_SetBitsFree(XBYTE nbitsfree)
 * @brief      Convert from base64
 * @ingroup    XUTILS
 * 
-* @param[in]  in_stringbase64 : 
+* @param[in]  in_stringbase64 : In stringbase64 value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::ConvertFromBase64(XSTRING& in_stringbase64)
@@ -3019,9 +3021,9 @@ bool XBUFFER::ConvertFromBase64(XSTRING& in_stringbase64)
 * @brief      Convert to base64
 * @ingroup    XUTILS
 * 
-* @param[in]  out_stringbase64 : 
+* @param[in]  out_stringbase64 : Output out stringbase64.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::ConvertToBase64(XSTRING& out_stringbase64)
@@ -3031,16 +3033,16 @@ bool XBUFFER::ConvertToBase64(XSTRING& out_stringbase64)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::DecodeBCD(XDWORD ppos, XDWORD psize)
 * @brief      Decode BCD
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  ppos : position of DWORD
 * @param[in]  psize : size of decode
-*
-* @return     XDWORD : result od decode.
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::DecodeBCD(XDWORD ppos, XDWORD psize)
 {
@@ -3064,16 +3066,16 @@ XDWORD XBUFFER::DecodeBCD(XDWORD ppos, XDWORD psize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD XBUFFER::DecodeBCDLong(XDWORD ppos,XDWORD psize)
 * @brief      Decode BCD long
 * @ingroup    XUTILS
-*
-* @param[in]  ppos :
-* @param[in]  psize :
-*
-* @return     XQWORD :
-*
+* 
+* @param[in]  ppos : Ppos value.
+* @param[in]  psize : Psize value.
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XBUFFER::DecodeBCDLong(XDWORD ppos,XDWORD psize)
 {
@@ -3105,7 +3107,7 @@ XQWORD XBUFFER::DecodeBCDLong(XDWORD ppos,XDWORD psize)
 * @brief      Get global hardware use little endian
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::GetGlobalHardwareUseLittleEndian()
@@ -3120,7 +3122,7 @@ bool XBUFFER::GetGlobalHardwareUseLittleEndian()
 * @brief      Set global hardware use little endian
 * @ingroup    XUTILS
 * 
-* @param[in]  globalhardwareuselittleendian : 
+* @param[in]  globalhardwareuselittleendian : Globalhardwareuselittleendian value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFER::SetGlobalHardwareUseLittleEndian(bool globalhardwareuselittleendian)
@@ -3135,7 +3137,7 @@ void XBUFFER::SetGlobalHardwareUseLittleEndian(bool globalhardwareuselittleendia
 * @brief      Get local hardware use little endian
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::GetLocalHardwareUseLittleEndian()
@@ -3150,7 +3152,7 @@ bool XBUFFER::GetLocalHardwareUseLittleEndian()
 * @brief      Set local hardware use little endian
 * @ingroup    XUTILS
 * 
-* @param[in]  localhardwareuselittleendian : 
+* @param[in]  localhardwareuselittleendian : Localhardwareuselittleendian value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFER::SetLocalHardwareUseLittleEndian(bool localhardwareuselittleendian)
@@ -3160,17 +3162,17 @@ void XBUFFER::SetLocalHardwareUseLittleEndian(bool localhardwareuselittleendian)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::AddXBufferWithMask(XBUFFER& xbuffer, XCHAR* mask, va_list& arg)
 * @brief      Add X buffer with mask
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-* @param[in]  mask :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::AddXBufferWithMask(XBUFFER& xbuffer, XCHAR* mask, va_list& arg)
 {
@@ -3277,17 +3279,17 @@ bool XBUFFER::AddXBufferWithMask(XBUFFER& xbuffer, XCHAR* mask, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::AddXBufferWithMask(XBUFFER& xbuffer, XSTRING* mask, va_list& arg)
 * @brief      Add X buffer with mask
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-* @param[in]  mask :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::AddXBufferWithMask(XBUFFER& xbuffer, XSTRING* mask, va_list& arg)
 {
@@ -3298,18 +3300,18 @@ bool XBUFFER::AddXBufferWithMask(XBUFFER& xbuffer, XSTRING* mask, va_list& arg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFER::CalculeExtractSizeArgWithMask(XBUFFER& xbuffer, int frompos, XCHAR* mask, va_list& arg)
 * @brief      Calcule extract size arg with mask
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-* @param[in]  frompos :
-* @param[in]  mask :
-* @param[in]  arg :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  frompos : Frompos value.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  arg : Arg value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFER::CalculeExtractSizeArgWithMask(XBUFFER& xbuffer, int frompos, XCHAR* mask, va_list& arg)
 {
@@ -3419,17 +3421,17 @@ XDWORD XBUFFER::CalculeExtractSizeArgWithMask(XBUFFER& xbuffer, int frompos, XCH
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::ExtractXBufferWithMask(XBUFFER& xbuffer, XCHAR* mask, va_list& arg)
 * @brief      Extract X buffer with mask
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-* @param[in]  mask :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::ExtractXBufferWithMask(XBUFFER& xbuffer, XCHAR* mask, va_list& arg)
 {
@@ -3539,17 +3541,17 @@ bool XBUFFER::ExtractXBufferWithMask(XBUFFER& xbuffer, XCHAR* mask, va_list& arg
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFER::ExtractXBufferWithMask(XBUFFER& xbuffer, XSTRING* mask, va_list& arg)
 * @brief      Extract X buffer with mask
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer :
-* @param[in]  mask :
-* @param[in]  arg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  arg : Arg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::ExtractXBufferWithMask(XBUFFER& xbuffer, XSTRING* mask, va_list& arg)
 {
@@ -3560,12 +3562,12 @@ bool XBUFFER::ExtractXBufferWithMask(XBUFFER& xbuffer, XSTRING* mask, va_list& a
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFER::Clean()
 {

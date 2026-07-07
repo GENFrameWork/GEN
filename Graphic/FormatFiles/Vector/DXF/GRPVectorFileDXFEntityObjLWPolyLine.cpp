@@ -56,11 +56,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GRPVECTORFILEDXFENTITYOBJLWPOLYLINE(XCHAR* nametype)
+* @fn         GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GRPVECTORFILEDXFENTITYOBJLWPOLYLINE(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ (nametype)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nametype : 
+* @param[in]  nametype : Nametype pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GRPVECTORFILEDXFENTITYOBJLWPOLYLINE(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ (nametype)
@@ -91,7 +91,7 @@ GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::~GRPVECTORFILEDXFENTITYOBJLWPOLYLINE()
 * @brief      Get N vertex
 * @ingroup    GRAPHIC
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetNVertex()
@@ -106,7 +106,7 @@ int GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetNVertex()
 * @brief      Set N vertex
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nvertex : 
+* @param[in]  nvertex : Nvertex value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetNVertex(int nvertex)
@@ -121,7 +121,7 @@ void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetNVertex(int nvertex)
 * @brief      Get poly line flag
 * @ingroup    GRAPHIC
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetPolyLineFlag()
@@ -136,7 +136,7 @@ int GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetPolyLineFlag()
 * @brief      Set poly line flag
 * @ingroup    GRAPHIC
 * 
-* @param[in]  polylineflag : 
+* @param[in]  polylineflag : Polylineflag value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetPolyLineFlag(int polylineflag)
@@ -151,7 +151,7 @@ void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetPolyLineFlag(int polylineflag)
 * @brief      Get constant width
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetConstantWidth()
@@ -166,7 +166,7 @@ double GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetConstantWidth()
 * @brief      Set constant width
 * @ingroup    GRAPHIC
 * 
-* @param[in]  constantwidth : 
+* @param[in]  constantwidth : Constantwidth value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetConstantWidth(double constantwidth)
@@ -181,7 +181,7 @@ void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetConstantWidth(double constantwidth)
 * @brief      Get elevation
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetElevation()
@@ -196,7 +196,7 @@ double GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetElevation()
 * @brief      Set elevation
 * @ingroup    GRAPHIC
 * 
-* @param[in]  elevation : 
+* @param[in]  elevation : Elevation value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetElevation(double elevation)
@@ -211,7 +211,7 @@ void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetElevation(double elevation)
 * @brief      Get thickness
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetThickness()
@@ -226,7 +226,7 @@ double GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetThickness()
 * @brief      Set thickness
 * @ingroup    GRAPHIC
 * 
-* @param[in]  thickness : 
+* @param[in]  thickness : Thickness value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetThickness(double thickness)
@@ -241,7 +241,7 @@ void GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetThickness(double thickness)
 * @brief      Get dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetDirExtrusion()
@@ -256,9 +256,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::GetDirExtru
 * @brief      Set dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @param[in]  dirextrusion : 
+* @param[in]  dirextrusion : Dirextrusion pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetDirExtrusion(GRPVECTORFILEDXFENTITYDEFPOINT* dirextrusion)
@@ -280,9 +280,9 @@ bool GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::SetDirExtrusion(GRPVECTORFILEDXFENTITY
 * @brief      Apply data
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJLWPOLYLINE::ApplyData(GRPVECTORFILEDXFENTITY* entity)

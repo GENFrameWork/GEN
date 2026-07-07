@@ -70,12 +70,12 @@ XLINUXEEPROMMEMORYMANAGER::XLINUXEEPROMMEMORYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXEEPROMMEMORYMANAGER::~XLINUXEEPROMMEMORYMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXEEPROMMEMORYMANAGER::~XLINUXEEPROMMEMORYMANAGER()
 {
@@ -84,13 +84,13 @@ XLINUXEEPROMMEMORYMANAGER::~XLINUXEEPROMMEMORYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Ini()
 {
@@ -99,13 +99,13 @@ bool XLINUXEEPROMMEMORYMANAGER::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::End()
 {
@@ -114,16 +114,16 @@ bool XLINUXEEPROMMEMORYMANAGER::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE& data)
 * @brief      Read
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  offset :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE& data)
 {
@@ -132,16 +132,16 @@ bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XWORD& data)
 * @brief      Read
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  offset :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XWORD& data)
 {
@@ -150,16 +150,16 @@ bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XWORD& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XDWORD& data)
 * @brief      Read
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  offset :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XDWORD& data)
 {
@@ -168,17 +168,17 @@ bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XDWORD& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE* data, XDWORD size)
 * @brief      Read
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  offset :
-* @param[in]  data :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE* data, XDWORD size)
 {
@@ -187,16 +187,16 @@ bool XLINUXEEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE* data, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE data)
 * @brief      Write
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  offset :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE data)
 {
@@ -205,16 +205,16 @@ bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XWORD data)
 * @brief      Write
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  offset :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XWORD data)
 {
@@ -223,16 +223,16 @@ bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XDWORD data)
 * @brief      Write
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  offset :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XDWORD data)
 {
@@ -241,17 +241,17 @@ bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XDWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE* data, XDWORD size)
 * @brief      Write
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  offset :
-* @param[in]  data :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE* data, XDWORD size)
 {
@@ -260,13 +260,13 @@ bool XLINUXEEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE* data, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXEEPROMMEMORYMANAGER::EraseAll()
 * @brief      Erase all
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXEEPROMMEMORYMANAGER::EraseAll()
 {

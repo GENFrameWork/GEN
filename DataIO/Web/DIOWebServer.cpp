@@ -77,11 +77,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_HEADER::DIOWEBSERVER_HEADER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_HEADER::DIOWEBSERVER_HEADER()
 {
@@ -90,12 +90,12 @@ DIOWEBSERVER_HEADER::DIOWEBSERVER_HEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_HEADER::~DIOWEBSERVER_HEADER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_HEADER::~DIOWEBSERVER_HEADER()
 {
@@ -106,13 +106,13 @@ DIOWEBSERVER_HEADER::~DIOWEBSERVER_HEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_HEADER::GetVersion()
 * @brief      Get version
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_HEADER::GetVersion()
 {
@@ -125,13 +125,13 @@ int DIOWEBSERVER_HEADER::GetVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_HEADER::GetSubVersion()
 * @brief      Get sub version
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_HEADER::GetSubVersion()
 {
@@ -144,13 +144,13 @@ int DIOWEBSERVER_HEADER::GetSubVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_HEADER::GetResult()
 * @brief      Get result
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_HEADER::GetResult()
 {
@@ -163,15 +163,15 @@ int DIOWEBSERVER_HEADER::GetResult()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_HEADER::GetResultString(XSTRING& resultstring)
 * @brief      Get result string
 * @ingroup    DATAIO
-*
-* @param[in]  resultstring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  resultstring : Output resultstring.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_HEADER::GetResultString(XSTRING& resultstring)
 {
@@ -182,16 +182,16 @@ bool DIOWEBSERVER_HEADER::GetResultString(XSTRING& resultstring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_HEADER::CreateContentType(XSTRING* resource, XSTRING& contenttype)
 * @brief      Create content type
 * @ingroup    DATAIO
-*
-* @param[in]  resource :
-* @param[in]  contenttype :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  resource : Resource pointer to use.
+* @param[in]  contenttype : Contenttype value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_HEADER::CreateContentType(XSTRING* resource, XSTRING& contenttype)
 {
@@ -225,22 +225,22 @@ bool DIOWEBSERVER_HEADER::CreateContentType(XSTRING* resource, XSTRING& contentt
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_HEADER::Create(XSTRING* resource, int version, int subversion, DIOWEBHEADER_RESULT result, int size, XSTRING* entitytag, bool isplayable, bool password)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    DATAIO
-*
-* @param[in]  resource :
-* @param[in]  version :
-* @param[in]  subversion :
-* @param[in]  result :
-* @param[in]  size :
-* @param[in]  entitytag :
-* @param[in]  isplayable :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  resource : Resource pointer to use.
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  result : Output result.
+* @param[in]  size : Size value.
+* @param[in]  entitytag : Entitytag pointer to use.
+* @param[in]  isplayable : Isplayable value.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_HEADER::Create(XSTRING* resource, int version, int subversion, DIOWEBHEADER_RESULT result, int size, XSTRING* entitytag, bool isplayable, bool password)
 {
@@ -398,10 +398,10 @@ bool DIOWEBSERVER_HEADER::Create(XSTRING* resource, int version, int subversion,
 * @brief      Add web socket key
 * @ingroup    DATAIO
 * 
-* @param[in]  websocketaccept : 
-* @param[in]  websocketprotocol : 
+* @param[in]  websocketaccept : Websocketaccept value.
+* @param[in]  websocketprotocol : Websocketprotocol value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_HEADER::AddWebSocketKey(XSTRING& websocketaccept, XSTRING& websocketprotocol)
@@ -431,10 +431,10 @@ bool DIOWEBSERVER_HEADER::AddWebSocketKey(XSTRING& websocketaccept, XSTRING& web
 * @brief      Get description result
 * @ingroup    DATAIO
 * 
-* @param[in]  result : 
-* @param[in]  description : 
+* @param[in]  result : Output result.
+* @param[in]  description : Description value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_HEADER::GetDescriptionResult(DIOWEBHEADER_RESULT result, XSTRING& description)
@@ -510,12 +510,12 @@ bool DIOWEBSERVER_HEADER::GetDescriptionResult(DIOWEBHEADER_RESULT result, XSTRI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_HEADER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_HEADER::Clean()
 {
@@ -528,11 +528,11 @@ void DIOWEBSERVER_HEADER::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSOCKET_HEADER::DIOWEBSOCKET_HEADER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSOCKET_HEADER::DIOWEBSOCKET_HEADER()
 {
@@ -541,12 +541,12 @@ DIOWEBSOCKET_HEADER::DIOWEBSOCKET_HEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSOCKET_HEADER::~DIOWEBSOCKET_HEADER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSOCKET_HEADER::~DIOWEBSOCKET_HEADER()
 {
@@ -555,12 +555,12 @@ DIOWEBSOCKET_HEADER::~DIOWEBSOCKET_HEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSOCKET_HEADER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSOCKET_HEADER::Clean()
 {
@@ -573,11 +573,11 @@ void DIOWEBSOCKET_HEADER::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_AUTHENTICATION::DIOWEBSERVER_AUTHENTICATION()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_AUTHENTICATION::DIOWEBSERVER_AUTHENTICATION()
 {
@@ -586,12 +586,12 @@ DIOWEBSERVER_AUTHENTICATION::DIOWEBSERVER_AUTHENTICATION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_AUTHENTICATION::~DIOWEBSERVER_AUTHENTICATION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_AUTHENTICATION::~DIOWEBSERVER_AUTHENTICATION()
 {
@@ -600,13 +600,13 @@ DIOWEBSERVER_AUTHENTICATION::~DIOWEBSERVER_AUTHENTICATION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_AUTHENTICATION::GetGuest()
 * @brief      Get guest
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_AUTHENTICATION::GetGuest()
 {
@@ -615,13 +615,13 @@ XSTRING* DIOWEBSERVER_AUTHENTICATION::GetGuest()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_AUTHENTICATION::GetLogin()
 * @brief      Get login
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_AUTHENTICATION::GetLogin()
 {
@@ -630,13 +630,13 @@ XSTRING* DIOWEBSERVER_AUTHENTICATION::GetLogin()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_AUTHENTICATION::GetPassword()
 * @brief      Get password
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_AUTHENTICATION::GetPassword()
 {
@@ -645,16 +645,16 @@ XSTRING* DIOWEBSERVER_AUTHENTICATION::GetPassword()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_AUTHENTICATION::Set(XSTRING& login, XSTRING& password)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
-*
-* @param[in]  login :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  login : Login value.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_AUTHENTICATION::Set(XSTRING& login, XSTRING& password)
 {
@@ -666,17 +666,17 @@ bool DIOWEBSERVER_AUTHENTICATION::Set(XSTRING& login, XSTRING& password)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_AUTHENTICATION::Set(XSTRING& guest, XSTRING& login, XSTRING& password)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
-*
-* @param[in]  guest :
-* @param[in]  login :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  guest : Guest value.
+* @param[in]  login : Login value.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_AUTHENTICATION::Set(XSTRING& guest, XSTRING& login, XSTRING& password)
 {
@@ -689,12 +689,12 @@ bool DIOWEBSERVER_AUTHENTICATION::Set(XSTRING& guest, XSTRING& login, XSTRING& p
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_AUTHENTICATION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_AUTHENTICATION::Clean()
 {
@@ -707,11 +707,11 @@ void DIOWEBSERVER_AUTHENTICATION::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_REQUEST::DIOWEBSERVER_REQUEST()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_REQUEST::DIOWEBSERVER_REQUEST()
 {
@@ -721,12 +721,12 @@ DIOWEBSERVER_REQUEST::DIOWEBSERVER_REQUEST()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_REQUEST::~DIOWEBSERVER_REQUEST()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_REQUEST::~DIOWEBSERVER_REQUEST()
 {
@@ -737,13 +737,13 @@ DIOWEBSERVER_REQUEST::~DIOWEBSERVER_REQUEST()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_TYPE DIOWEBSERVER_REQUEST::GetType()
 * @brief      Get type
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER_TYPE :
-*
+* 
+* @return     DIOWEBSERVER_TYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_TYPE DIOWEBSERVER_REQUEST::GetType()
 {
@@ -752,13 +752,13 @@ DIOWEBSERVER_TYPE DIOWEBSERVER_REQUEST::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_REQUEST::SetType(DIOWEBSERVER_TYPE type)
 * @brief      Set type
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-*
+* 
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_REQUEST::SetType(DIOWEBSERVER_TYPE type)
 {
@@ -767,13 +767,13 @@ void DIOWEBSERVER_REQUEST::SetType(DIOWEBSERVER_TYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBHEADER_METHOD DIOWEBSERVER_REQUEST::GetMethod()
 * @brief      Get method
 * @ingroup    DATAIO
-*
-* @return     DIOWEBHEADER_METHOD :
-*
+* 
+* @return     DIOWEBHEADER_METHOD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBHEADER_METHOD DIOWEBSERVER_REQUEST::GetMethod()
 {
@@ -782,13 +782,13 @@ DIOWEBHEADER_METHOD DIOWEBSERVER_REQUEST::GetMethod()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_REQUEST::SetMethod(DIOWEBHEADER_METHOD method)
 * @brief      Set method
 * @ingroup    DATAIO
-*
-* @param[in]  method :
-*
+* 
+* @param[in]  method : Method descriptor to call.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_REQUEST::SetMethod(DIOWEBHEADER_METHOD method)
 {
@@ -797,13 +797,13 @@ void DIOWEBSERVER_REQUEST::SetMethod(DIOWEBHEADER_METHOD method)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetResource()
 * @brief      Get resource
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetResource()
 {
@@ -812,13 +812,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetResource()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetGuest()
 * @brief      Get guest
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetGuest()
 {
@@ -827,13 +827,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetGuest()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetUserAgent()
 * @brief      Get user agent
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetUserAgent()
 {
@@ -842,13 +842,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetUserAgent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_REQUEST::GetSize()
 * @brief      Get size
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_REQUEST::GetSize()
 {
@@ -857,13 +857,13 @@ int DIOWEBSERVER_REQUEST::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_REQUEST::SetSize(XDWORD size)
 * @brief      Set size
 * @ingroup    DATAIO
-*
-* @param[in]  size :
-*
+* 
+* @param[in]  size : Size value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_REQUEST::SetSize(XDWORD size)
 {
@@ -872,13 +872,13 @@ void DIOWEBSERVER_REQUEST::SetSize(XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetIfNoneMatch()
 * @brief      Get if none match
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetIfNoneMatch()
 {
@@ -887,13 +887,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetIfNoneMatch()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_REQUEST::SetIfNoneMatch(XSTRING& ifnonematch)
 * @brief      Set if none match
 * @ingroup    DATAIO
-*
-* @param[in]  ifnonematch :
-*
+* 
+* @param[in]  ifnonematch : Ifnonematch value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_REQUEST::SetIfNoneMatch(XSTRING& ifnonematch)
 {
@@ -911,13 +911,13 @@ void DIOWEBSERVER_REQUEST::SetIfNoneMatch(XSTRING& ifnonematch)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedCharset()
 * @brief      Get accepted charset
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedCharset()
 {
@@ -926,13 +926,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedCharset()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedControlRequestMethod()
 * @brief      Get accepted control request method
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedControlRequestMethod()
 {
@@ -941,13 +941,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedControlRequestMethod()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedLanguage()
 * @brief      Get accepted language
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedLanguage()
 {
@@ -956,13 +956,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedLanguage()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedAllowHeaders()
 * @brief      Get accepted allow headers
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedAllowHeaders()
 {
@@ -971,13 +971,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetAcceptedAllowHeaders()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_REQUEST::ProcessAcceptedEncodingFlags(XSTRING& string)
 * @brief      Process accepted encoding flags
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
+* 
+* @param[in]  string : String to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_REQUEST::ProcessAcceptedEncodingFlags(XSTRING& string)
 {
@@ -993,13 +993,13 @@ void DIOWEBSERVER_REQUEST::ProcessAcceptedEncodingFlags(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowOrigin()
 * @brief      Get access control allow origin
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowOrigin()
 {
@@ -1008,13 +1008,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowOrigin()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowMethods()
 * @brief      Get access control allow methods
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowMethods()
 {
@@ -1023,13 +1023,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowMethods()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowHeaders()
 * @brief      Get access control allow headers
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowHeaders()
 {
@@ -1038,13 +1038,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetAccessControlAllowHeaders()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetOrigin()
 * @brief      Get origin
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetOrigin()
 {
@@ -1053,13 +1053,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetOrigin()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetConnection()
 * @brief      Get connection
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetConnection()
 {
@@ -1068,13 +1068,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::GetUpgrade()
 * @brief      Get upgrade
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::GetUpgrade()
 {
@@ -1083,13 +1083,13 @@ XSTRING* DIOWEBSERVER_REQUEST::GetUpgrade()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER* DIOWEBSERVER_REQUEST::GetData()
 * @brief      Get data
 * @ingroup    DATAIO
-*
-* @return     XBUFFER* :
-*
+* 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOWEBSERVER_REQUEST::GetData()
 {
@@ -1098,13 +1098,13 @@ XBUFFER* DIOWEBSERVER_REQUEST::GetData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_REQUEST::HaveLoginPassword()
 * @brief      Have login password
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_REQUEST::HaveLoginPassword()
 {
@@ -1113,16 +1113,16 @@ bool DIOWEBSERVER_REQUEST::HaveLoginPassword()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_REQUEST::GetLoginPassword(XSTRING& login, XSTRING& password)
 * @brief      Get login password
 * @ingroup    DATAIO
-*
-* @param[in]  login :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  login : Login value.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_REQUEST::GetLoginPassword(XSTRING& login, XSTRING& password)
 {
@@ -1144,13 +1144,13 @@ bool DIOWEBSERVER_REQUEST::GetLoginPassword(XSTRING& login, XSTRING& password)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_REQUEST::SetLoginPassword(XSTRING& loginpassword)
 * @brief      Set login password
 * @ingroup    DATAIO
-*
-* @param[in]  loginpassword :
-*
+* 
+* @param[in]  loginpassword : Loginpassword value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_REQUEST::SetLoginPassword(XSTRING& loginpassword)
 {
@@ -1159,15 +1159,15 @@ void DIOWEBSERVER_REQUEST::SetLoginPassword(XSTRING& loginpassword)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_REQUEST::ConvertFromWeb(XSTRING& string)
 * @brief      Convert from web
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_REQUEST::ConvertFromWeb(XSTRING& string)
 {
@@ -1200,15 +1200,15 @@ bool DIOWEBSERVER_REQUEST::ConvertFromWeb(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_REQUEST::IsAcceptedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS flag)
 * @brief      Is accepted encoding flag
 * @ingroup    DATAIO
-*
-* @param[in]  flag :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  flag : Flag value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_REQUEST::IsAcceptedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS flag)
 {
@@ -1217,13 +1217,13 @@ bool DIOWEBSERVER_REQUEST::IsAcceptedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS fla
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::WebSocket_GetKey()
 * @brief      Web socket get key
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::WebSocket_GetKey()
 {
@@ -1232,13 +1232,13 @@ XSTRING* DIOWEBSERVER_REQUEST::WebSocket_GetKey()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBSERVER_REQUEST::WebSocket_GetProtocol()
 * @brief      Web socket get protocol
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBSERVER_REQUEST::WebSocket_GetProtocol()
 {
@@ -1247,13 +1247,13 @@ XSTRING* DIOWEBSERVER_REQUEST::WebSocket_GetProtocol()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER_REQUEST::WebSocket_GetVersion()
 * @brief      Web socket get version
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_REQUEST::WebSocket_GetVersion()
 {
@@ -1262,13 +1262,13 @@ int DIOWEBSERVER_REQUEST::WebSocket_GetVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_REQUEST::WebSocket_SetVersion(int version)
 * @brief      Web socket set version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-*
+* 
+* @param[in]  version : Version value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_REQUEST::WebSocket_SetVersion(int version)
 {
@@ -1277,12 +1277,12 @@ void DIOWEBSERVER_REQUEST::WebSocket_SetVersion(int version)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_REQUEST::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_REQUEST::Clean()
 {
@@ -1328,11 +1328,11 @@ void DIOWEBSERVER_REQUEST::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_CONNECTION::DIOWEBSERVER_CONNECTION()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_CONNECTION::DIOWEBSERVER_CONNECTION()
 {
@@ -1341,12 +1341,12 @@ DIOWEBSERVER_CONNECTION::DIOWEBSERVER_CONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_CONNECTION::~DIOWEBSERVER_CONNECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_CONNECTION::~DIOWEBSERVER_CONNECTION()
 {
@@ -1357,16 +1357,16 @@ DIOWEBSERVER_CONNECTION::~DIOWEBSERVER_CONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::Ini(DIOWEBSERVER* webserver, DIOSTREAMTCPIPCONFIG* diostreamcfg)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  webserver :
-* @param[in]  diostreamcfg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  webserver : Webserver pointer to use.
+* @param[in]  diostreamcfg : Diostreamconfiguration pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::Ini(DIOWEBSERVER* webserver, DIOSTREAMTCPIPCONFIG* diostreamcfg)
 {
@@ -1394,13 +1394,13 @@ bool DIOWEBSERVER_CONNECTION::Ini(DIOWEBSERVER* webserver, DIOSTREAMTCPIPCONFIG*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMTCPIP* DIOWEBSERVER_CONNECTION::GetDIOStream()
 * @brief      Get DIO stream
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMTCPIP* :
-*
+* 
+* @return     DIOSTREAMTCPIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIP* DIOWEBSERVER_CONNECTION::GetDIOStream()
 {
@@ -1409,13 +1409,13 @@ DIOSTREAMTCPIP* DIOWEBSERVER_CONNECTION::GetDIOStream()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTIMER* DIOWEBSERVER_CONNECTION::GetTimerConnection()
 * @brief      Get timer connection
 * @ingroup    DATAIO
-*
-* @return     XTIMER* :
-*
+* 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIOWEBSERVER_CONNECTION::GetTimerConnection()
 {
@@ -1424,13 +1424,13 @@ XTIMER* DIOWEBSERVER_CONNECTION::GetTimerConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::IsActive()
 * @brief      Is active
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::IsActive()
 {
@@ -1439,13 +1439,13 @@ bool DIOWEBSERVER_CONNECTION::IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::Activate()
 * @brief      Activate
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::Activate()
 {
@@ -1463,13 +1463,13 @@ bool DIOWEBSERVER_CONNECTION::Activate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::Deactivate()
 * @brief      Deactivate
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::Deactivate()
 {
@@ -1487,13 +1487,13 @@ bool DIOWEBSERVER_CONNECTION::Deactivate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_CONNECTION_MODE DIOWEBSERVER_CONNECTION::GetMode()
 * @brief      Get mode
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER_CONNECTION_MODE :
-*
+* 
+* @return     DIOWEBSERVER_CONNECTION_MODE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_CONNECTION_MODE DIOWEBSERVER_CONNECTION::GetMode()
 {
@@ -1502,13 +1502,13 @@ DIOWEBSERVER_CONNECTION_MODE DIOWEBSERVER_CONNECTION::GetMode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_CONNECTION::SetMode(DIOWEBSERVER_CONNECTION_MODE mode)
 * @brief      Set mode
 * @ingroup    DATAIO
-*
-* @param[in]  mode :
-*
+* 
+* @param[in]  mode : Mode value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_CONNECTION::SetMode(DIOWEBSERVER_CONNECTION_MODE mode)
 {
@@ -1517,17 +1517,17 @@ void DIOWEBSERVER_CONNECTION::SetMode(DIOWEBSERVER_CONNECTION_MODE mode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::Receiver(XBYTE* buffer, XDWORD& size, int timeout)
 * @brief      Receiver
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::Receiver(XBYTE* buffer, XDWORD& size, int timeout)
 {
@@ -1572,17 +1572,17 @@ bool DIOWEBSERVER_CONNECTION::Receiver(XBYTE* buffer, XDWORD& size, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::Send(XBYTE* buffer, XDWORD& size, int timeout)
 * @brief      Send
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::Send(XBYTE* buffer, XDWORD& size, int timeout)
 {
@@ -1600,16 +1600,16 @@ bool DIOWEBSERVER_CONNECTION::Send(XBYTE* buffer, XDWORD& size, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::Send(XBUFFER& xbuffer, int timeout)
 * @brief      Send
 * @ingroup    DATAIO
-*
-* @param[in]  xbuffer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::Send(XBUFFER& xbuffer, int timeout)
 {
@@ -1620,13 +1620,13 @@ bool DIOWEBSERVER_CONNECTION::Send(XBUFFER& xbuffer, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::IsRequestInProgress()
 * @brief      Is request in progress
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::IsRequestInProgress()
 {
@@ -1635,13 +1635,13 @@ bool DIOWEBSERVER_CONNECTION::IsRequestInProgress()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER* DIOWEBSERVER_CONNECTION::GetServer()
 * @brief      Get server
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER* :
-*
+* 
+* @return     DIOWEBSERVER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER* DIOWEBSERVER_CONNECTION::GetServer()
 {
@@ -1650,13 +1650,13 @@ DIOWEBSERVER* DIOWEBSERVER_CONNECTION::GetServer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT_HEADER* DIOWEBSERVER_CONNECTION::GetHeader()
 * @brief      Get header
 * @ingroup    DATAIO
-*
-* @return     DIOWEBCLIENT_HEADER* :
-*
+* 
+* @return     DIOWEBCLIENT_HEADER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_HEADER* DIOWEBSERVER_CONNECTION::GetHeader()
 {
@@ -1665,13 +1665,13 @@ DIOWEBCLIENT_HEADER* DIOWEBSERVER_CONNECTION::GetHeader()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_REQUEST* DIOWEBSERVER_CONNECTION::GetRequest()
 * @brief      Get request
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER_REQUEST* :
-*
+* 
+* @return     DIOWEBSERVER_REQUEST* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_REQUEST* DIOWEBSERVER_CONNECTION::GetRequest()
 {
@@ -1680,13 +1680,13 @@ DIOWEBSERVER_REQUEST* DIOWEBSERVER_CONNECTION::GetRequest()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_ENCODINGFLAGS DIOWEBSERVER_CONNECTION::GetActualEncodingFlag()
 * @brief      Get actual encoding flag
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER_ENCODINGFLAGS :
-*
+* 
+* @return     DIOWEBSERVER_ENCODINGFLAGS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_ENCODINGFLAGS DIOWEBSERVER_CONNECTION::GetActualEncodingFlag()
 {
@@ -1695,15 +1695,15 @@ DIOWEBSERVER_ENCODINGFLAGS DIOWEBSERVER_CONNECTION::GetActualEncodingFlag()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::SetActualEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS actualencodingflag)
 * @brief      Set actual encoding flag
 * @ingroup    DATAIO
-*
-* @param[in]  actualencodingflag :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  actualencodingflag : Actualencodingflag value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::SetActualEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS actualencodingflag)
 {
@@ -1722,16 +1722,16 @@ bool DIOWEBSERVER_CONNECTION::SetActualEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS a
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XCHAR* string, int timeout)
 * @brief      Web socket write
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XCHAR* string, int timeout)
 {
@@ -1752,16 +1752,16 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XCHAR* string, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XSTRING& string, int timeout)
 * @brief      Web socket write
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XSTRING& string, int timeout)
 {
@@ -1770,17 +1770,17 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XSTRING& string, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XBYTE* buffer, XDWORD size, int timeout)
 * @brief      Web socket write
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XBYTE* buffer, XDWORD size, int timeout)
 {
@@ -1795,16 +1795,16 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XBYTE* buffer, XDWORD size, int ti
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XBUFFER& buffer, int timeout)
 * @brief      Web socket write
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XBUFFER& buffer, int timeout)
 {
@@ -1813,17 +1813,17 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_Write(XBUFFER& buffer, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XCHAR* string, int timeout)
 * @brief      Web socket write ping pong
 * @ingroup    DATAIO
-*
-* @param[in]  isping :
-* @param[in]  string :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  isping : Isping value.
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XCHAR* string, int timeout)
 {
@@ -1844,17 +1844,17 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XCHAR* string
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XSTRING& string, int timeout)
 * @brief      Web socket write ping pong
 * @ingroup    DATAIO
-*
-* @param[in]  isping :
-* @param[in]  string :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  isping : Isping value.
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XSTRING& string, int timeout)
 {
@@ -1863,17 +1863,17 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XSTRING& stri
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XBUFFER& data, int timeout)
 * @brief      Web socket write ping pong
 * @ingroup    DATAIO
-*
-* @param[in]  isping :
-* @param[in]  data :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  isping : Isping value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XBUFFER& data, int timeout)
 {
@@ -1888,13 +1888,13 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_WritePingPong(bool isping, XBUFFER& data
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTIMER* DIOWEBSERVER_CONNECTION::GetTimerDisconnection()
 * @brief      Get timer disconnection
 * @ingroup    DATAIO
-*
-* @return     XTIMER* : 
-*
+* 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIOWEBSERVER_CONNECTION::GetTimerDisconnection()
 {
@@ -1903,13 +1903,13 @@ XTIMER* DIOWEBSERVER_CONNECTION::GetTimerDisconnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::End()
 {
@@ -1953,7 +1953,7 @@ bool DIOWEBSERVER_CONNECTION::End()
 * @brief      Read request
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::ReadRequest()
@@ -2091,13 +2091,13 @@ bool DIOWEBSERVER_CONNECTION::ReadRequest()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::SendRequest()
 * @brief      Send request
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::SendRequest()
 {
@@ -2124,16 +2124,16 @@ bool DIOWEBSERVER_CONNECTION::SendRequest()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_CreateAcceptKey(XSTRING* key, XSTRING* result)
+* 
+* @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_CreateAcceptKey(XSTRING& key, XSTRING& result)
 * @brief      Web socket create accept key
 * @ingroup    DATAIO
-*
-* @param[in]  key :
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_CreateAcceptKey(XSTRING& key, XSTRING& result)
 {
@@ -2168,17 +2168,17 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_CreateAcceptKey(XSTRING& key, XSTRING& r
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_CreateHeader(DIOWEBSERVER_WEBSOCKET_OPCODE opcode, XDWORD size, XBUFFER& data)
 * @brief      Web socket create header
 * @ingroup    DATAIO
-*
-* @param[in]  opcode :
-* @param[in]  size :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  opcode : Opcode value.
+* @param[in]  size : Size value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_CreateHeader(DIOWEBSERVER_WEBSOCKET_OPCODE opcode, XDWORD size, XBUFFER& data)
 {
@@ -2218,15 +2218,15 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_CreateHeader(DIOWEBSERVER_WEBSOCKET_OPCO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::Websocket_ResolveConnection(DIOWEBSERVER_REQUEST* request)
 * @brief      Websocket resolve connection
 * @ingroup    DATAIO
-*
-* @param[in]  request :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  request : Request pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::Websocket_ResolveConnection(DIOWEBSERVER_REQUEST* request)
 {
@@ -2246,16 +2246,16 @@ bool DIOWEBSERVER_CONNECTION::Websocket_ResolveConnection(DIOWEBSERVER_REQUEST* 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_ReadRequest(DIOWEBSERVER_WEBSOCKET_OPCODE& opcode, XBUFFER& data)
 * @brief      Web socket read request
 * @ingroup    DATAIO
-*
-* @param[in]  opcode :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  opcode : Opcode value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_ReadRequest(DIOWEBSERVER_WEBSOCKET_OPCODE& opcode, XBUFFER& data)
 {
@@ -2363,13 +2363,13 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_ReadRequest(DIOWEBSERVER_WEBSOCKET_OPCOD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Connected()
 * @brief      Web socket send event connected
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Connected()
 {
@@ -2403,15 +2403,15 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Connected()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_ReadData(XBUFFER& data)
 * @brief      Web socket send event read data
 * @ingroup    DATAIO
-*
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_ReadData(XBUFFER& data)
 {
@@ -2436,15 +2436,15 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_ReadData(XBUFFER& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Pong(XBUFFER& data)
 * @brief      Web socket send event pong
 * @ingroup    DATAIO
-*
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Pong(XBUFFER& data)
 {
@@ -2469,13 +2469,13 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Pong(XBUFFER& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Disconnected()
 * @brief      Web socket send event disconnected
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Disconnected()
 {
@@ -2499,13 +2499,13 @@ bool DIOWEBSERVER_CONNECTION::WebSocket_SendEvent_Disconnected()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_CONNECTION::ThreadRunFunction(void* param)
 * @brief      Thread run function
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_CONNECTION::ThreadRunFunction(void* param)
 {
@@ -2595,12 +2595,12 @@ void DIOWEBSERVER_CONNECTION::ThreadRunFunction(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER_CONNECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_CONNECTION::Clean()
 {
@@ -2627,11 +2627,11 @@ void DIOWEBSERVER_CONNECTION::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER::DIOWEBSERVER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER::DIOWEBSERVER()
 {
@@ -2640,12 +2640,12 @@ DIOWEBSERVER::DIOWEBSERVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER::~DIOWEBSERVER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER::~DIOWEBSERVER()
 {
@@ -2656,18 +2656,18 @@ DIOWEBSERVER::~DIOWEBSERVER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  port : 
-* @param[in]  doinitialconnectitivitytest : 
-* @param[in]  timeoutserverpage : 
-* @param[in]  addrlocal : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  port : Port number to use.
+* @param[in]  doinitialconnectitivitytest : Doinitialconnectitivitytest value.
+* @param[in]  timeoutserverpage : Timeoutserverpage value.
+* @param[in]  addrlocal : Addrlocal pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal)
 {
@@ -2754,13 +2754,13 @@ bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutse
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER::GetPort()
 * @brief      Get port
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER::GetPort()
 {
@@ -2769,13 +2769,13 @@ int DIOWEBSERVER::GetPort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER::GetTimeoutServerPage()
 * @brief      Get timeout server page
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER::GetTimeoutServerPage()
 {
@@ -2784,13 +2784,13 @@ int DIOWEBSERVER::GetTimeoutServerPage()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMTCPIPCONFIG* DIOWEBSERVER::GetDIOStreamCFG()
 * @brief      Get DIO stream CFG
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMTCPIPCONFIG* :
-*
+* 
+* @return     DIOSTREAMTCPIPCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPCONFIG* DIOWEBSERVER::GetDIOStreamCFG()
 {
@@ -2799,13 +2799,13 @@ DIOSTREAMTCPIPCONFIG* DIOWEBSERVER::GetDIOStreamCFG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::IsSendingAnyPage()
 * @brief      Is sending any page
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::IsSendingAnyPage()
 {
@@ -2832,13 +2832,13 @@ bool DIOWEBSERVER::IsSendingAnyPage()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::UnSubscribeAllPages()
 * @brief      Un subscribe all pages
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::UnSubscribeAllPages()
 {
@@ -2860,17 +2860,17 @@ bool DIOWEBSERVER::UnSubscribeAllPages()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOWEBSERVER::AddAuthentication(XSTRING& guest,XSTRING& login,XSTRING& password)
+* 
+* @fn         bool DIOWEBSERVER::AddAuthentication(XSTRING& guest, XSTRING& login, XSTRING& password)
 * @brief      Add authentication
 * @ingroup    DATAIO
-*
-* @param[in]  guest :
-* @param[in]  login :
-* @param[in]  password :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  guest : Guest value.
+* @param[in]  login : Login value.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::AddAuthentication(XSTRING& guest, XSTRING& login, XSTRING& password)
 {
@@ -2894,15 +2894,15 @@ bool DIOWEBSERVER::AddAuthentication(XSTRING& guest, XSTRING& login, XSTRING& pa
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_AUTHENTICATION* DIOWEBSERVER::GetAuthentication(XSTRING& guest)
 * @brief      Get authentication
 * @ingroup    DATAIO
-*
-* @param[in]  guest :
-*
-* @return     DIOWEBSERVER_AUTHENTICATION* :
-*
+* 
+* @param[in]  guest : Guest value.
+* 
+* @return     DIOWEBSERVER_AUTHENTICATION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_AUTHENTICATION* DIOWEBSERVER::GetAuthentication(XSTRING& guest)
 {
@@ -2935,15 +2935,15 @@ DIOWEBSERVER_AUTHENTICATION* DIOWEBSERVER::GetAuthentication(XSTRING& guest)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::DelAuthentication(XSTRING& guest)
 * @brief      Del authentication
 * @ingroup    DATAIO
-*
-* @param[in]  guest :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  guest : Guest value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::DelAuthentication(XSTRING& guest)
 {
@@ -2959,13 +2959,13 @@ bool DIOWEBSERVER::DelAuthentication(XSTRING& guest)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::DelAllAuthentication()
 * @brief      Del all authentication
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::DelAllAuthentication()
 {
@@ -2980,15 +2980,15 @@ bool DIOWEBSERVER::DelAllAuthentication()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::IsPlayablePage(XCHAR* extension)
 * @brief      Is playable page
 * @ingroup    DATAIO
-*
-* @param[in]  extension :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  extension : Extension pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::IsPlayablePage(XCHAR* extension)
 {
@@ -3008,15 +3008,15 @@ bool DIOWEBSERVER::IsPlayablePage(XCHAR* extension)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::IsPlayablePage(XSTRING& extension)
 * @brief      Is playable page
 * @ingroup    DATAIO
-*
-* @param[in]  extension :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  extension : Extension value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::IsPlayablePage(XSTRING& extension)
 {
@@ -3025,15 +3025,15 @@ bool DIOWEBSERVER::IsPlayablePage(XSTRING& extension)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::AddPlayablePageExtension(XCHAR* extension)
 * @brief      Add playable page extension
 * @ingroup    DATAIO
-*
-* @param[in]  extension :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  extension : Extension pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::AddPlayablePageExtension(XCHAR* extension)
 {
@@ -3049,15 +3049,15 @@ bool DIOWEBSERVER::AddPlayablePageExtension(XCHAR* extension)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::AddPlayablePageExtension(XSTRING& extension)
 * @brief      Add playable page extension
 * @ingroup    DATAIO
-*
-* @param[in]  extension :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  extension : Extension value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::AddPlayablePageExtension(XSTRING& extension)
 {
@@ -3071,13 +3071,13 @@ bool DIOWEBSERVER::AddPlayablePageExtension(XSTRING& extension)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::DeleteAllPlayablePageExtensions()
 * @brief      Delete all playable page extensions
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::DeleteAllPlayablePageExtensions()
 {
@@ -3091,13 +3091,13 @@ bool DIOWEBSERVER::DeleteAllPlayablePageExtensions()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER::AddIncludedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS flag)
 * @brief      Add included encoding flag
 * @ingroup    DATAIO
-*
-* @param[in]  flag :
-*
+* 
+* @param[in]  flag : Flag value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER::AddIncludedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS flag)
 {
@@ -3106,15 +3106,15 @@ void DIOWEBSERVER::AddIncludedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS flag)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::IsIncludedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS flag)
 * @brief      Is included encoding flag
 * @ingroup    DATAIO
-*
-* @param[in]  flag :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  flag : Flag value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::IsIncludedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS flag)
 {
@@ -3123,13 +3123,13 @@ bool DIOWEBSERVER::IsIncludedEncodingFlag(DIOWEBSERVER_ENCODINGFLAGS flag)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMUTEX* DIOWEBSERVER::GetMutextConnections()
 * @brief      Get mutext connections
 * @ingroup    DATAIO
-*
-* @return     XMUTEX* :
-*
+* 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIOWEBSERVER::GetMutextConnections()
 {
@@ -3138,13 +3138,13 @@ XMUTEX* DIOWEBSERVER::GetMutextConnections()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<DIOWEBSERVER_CONNECTION*>* DIOWEBSERVER::GetConnections()
 * @brief      Get connections
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<DIOWEBSERVER_CONNECTION*>* :
-*
+* 
+* @return     XVECTOR<DIOWEBSERVER_CONNECTION*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOWEBSERVER_CONNECTION*>* DIOWEBSERVER::GetConnections()
 {
@@ -3153,13 +3153,13 @@ XVECTOR<DIOWEBSERVER_CONNECTION*>* DIOWEBSERVER::GetConnections()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection()
 * @brief      Websocket get connection
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER_CONNECTION* :
-*
+* 
+* @return     DIOWEBSERVER_CONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection()
 {
@@ -3175,15 +3175,15 @@ DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol)
 * @brief      Websocket get connection
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-*
-* @return     DIOWEBSERVER_CONNECTION* :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* 
+* @return     DIOWEBSERVER_CONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol)
 {
@@ -3199,16 +3199,16 @@ DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol, int version)
 * @brief      Websocket get connection
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  version :
-*
-* @return     DIOWEBSERVER_CONNECTION* :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  version : Version value.
+* 
+* @return     DIOWEBSERVER_CONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol, int version)
 {
@@ -3224,17 +3224,17 @@ DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol, int version, XCHAR* resource)
 * @brief      Websocket get connection
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  version :
-* @param[in]  resource :
-*
-* @return     DIOWEBSERVER_CONNECTION* :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  version : Version value.
+* @param[in]  resource : Resource pointer to use.
+* 
+* @return     DIOWEBSERVER_CONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol, int version, XCHAR* resource)
 {
@@ -3250,13 +3250,13 @@ DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection(XCHAR* protocol, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetConnection()
+* 
+* @fn         DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetNextConnection()
 * @brief      Websocket get connection
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER_CONNECTION* :
-*
+* 
+* @return     DIOWEBSERVER_CONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetNextConnection()
 {
@@ -3310,13 +3310,13 @@ DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetNextConnection()
 * @brief      Websocket write
 * @ingroup    DATAIO
 * 
-* @param[in]  string : 
-* @param[in]  timeout : 
-* @param[in]  protocol : 
-* @param[in]  version : 
-* @param[in]  resource : 
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  version : Version value.
+* @param[in]  resource : Resource pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Websocket_Write(XCHAR* string, int timeout, XCHAR* protocol, int version, XCHAR* resource)
@@ -3342,13 +3342,13 @@ bool DIOWEBSERVER::Websocket_Write(XCHAR* string, int timeout, XCHAR* protocol, 
 * @brief      Websocket write
 * @ingroup    DATAIO
 * 
-* @param[in]  string : 
-* @param[in]  timeout : 
-* @param[in]  protocol : 
-* @param[in]  version : 
-* @param[in]  resource : 
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  version : Version value.
+* @param[in]  resource : Resource pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Websocket_Write(XSTRING& string, int timeout, XCHAR* protocol, int version, XCHAR* resource)
@@ -3363,13 +3363,13 @@ bool DIOWEBSERVER::Websocket_Write(XSTRING& string, int timeout, XCHAR* protocol
 * @brief      Websocket write
 * @ingroup    DATAIO
 * 
-* @param[in]  data : 
-* @param[in]  timeout : 
-* @param[in]  protocol : 
-* @param[in]  version : 
-* @param[in]  resource : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  version : Version value.
+* @param[in]  resource : Resource pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Websocket_Write(XBUFFER& data, int timeout, XCHAR* protocol, int version, XCHAR* resource)
@@ -3390,19 +3390,19 @@ bool DIOWEBSERVER::Websocket_Write(XBUFFER& data, int timeout, XCHAR* protocol, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::Websocket_Ping(XCHAR* string, int timeout, XCHAR* protocol, int version, XCHAR* resource)
 * @brief      Websocket ping
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-* @param[in]  timeout :
-* @param[in]  protocol :
-* @param[in]  version :
-* @param[in]  resource :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  version : Version value.
+* @param[in]  resource : Resource pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Websocket_Ping(XCHAR* string, int timeout, XCHAR* protocol, int version, XCHAR* resource)
 {
@@ -3422,19 +3422,19 @@ bool DIOWEBSERVER::Websocket_Ping(XCHAR* string, int timeout, XCHAR* protocol, i
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::Websocket_Ping(XSTRING& string, int timeout, XCHAR* protocol, int version, XCHAR* resource)
 * @brief      Websocket ping
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-* @param[in]  timeout :
-* @param[in]  protocol :
-* @param[in]  version :
-* @param[in]  resource :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  version : Version value.
+* @param[in]  resource : Resource pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Websocket_Ping(XSTRING& string, int timeout, XCHAR* protocol, int version, XCHAR* resource)
 {
@@ -3443,13 +3443,13 @@ bool DIOWEBSERVER::Websocket_Ping(XSTRING& string, int timeout, XCHAR* protocol,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOWEBSERVER_PLUGINSMANAGER DIOWEBSERVER::GetPluginsManager()
+* 
+* @fn         DIOWEBSERVER_PLUGINSMANAGER* DIOWEBSERVER::GetPluginsManager()
 * @brief      Get plugins manager
 * @ingroup    DATAIO
-*
-* @return     DIOWEBSERVER_PLUGINSMANAGER :
-*
+* 
+* @return     DIOWEBSERVER_PLUGINSMANAGER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_PLUGINSMANAGER* DIOWEBSERVER::GetPluginsManager()
 {
@@ -3458,13 +3458,13 @@ DIOWEBSERVER_PLUGINSMANAGER* DIOWEBSERVER::GetPluginsManager()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::IsExit()
 * @brief      Is exit
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::IsExit()
 {
@@ -3473,13 +3473,13 @@ bool DIOWEBSERVER::IsExit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::End()
 {
@@ -3551,13 +3551,13 @@ bool DIOWEBSERVER::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::WaitToSentAllPages()
 * @brief      Wait to sent all pages
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::WaitToSentAllPages()
 {
@@ -3576,13 +3576,13 @@ bool DIOWEBSERVER::WaitToSentAllPages()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOWEBSERVER::Connections_GetNWaiting()
 * @brief      Connections get N waiting
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWEBSERVER::Connections_GetNWaiting()
 {
@@ -3612,13 +3612,13 @@ XDWORD DIOWEBSERVER::Connections_GetNWaiting()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBSERVER::Connections_GetNConnectionsSendingPage()
 * @brief      Connections get N connections sending page
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER::Connections_GetNConnectionsSendingPage()
 {
@@ -3644,13 +3644,13 @@ int DIOWEBSERVER::Connections_GetNConnectionsSendingPage()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::Connections_CreateNew()
 * @brief      Connections create GEN_NEW
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Connections_CreateNew()
 {
@@ -3693,13 +3693,13 @@ bool DIOWEBSERVER::Connections_CreateNew()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::Connections_DeleteUsed()
 * @brief      Connections GEN_DELETE used
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Connections_DeleteUsed()
 {
@@ -3735,13 +3735,13 @@ bool DIOWEBSERVER::Connections_DeleteUsed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::Connections_DeleteWaiting()
 * @brief      Connections GEN_DELETE waiting
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Connections_DeleteWaiting()
 {
@@ -3772,13 +3772,13 @@ bool DIOWEBSERVER::Connections_DeleteWaiting()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBSERVER::Connections_DeleteAll()
 * @brief      Connections GEN_DELETE all
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Connections_DeleteAll()
 {
@@ -3797,14 +3797,14 @@ bool DIOWEBSERVER::Connections_DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
 * @brief      Handle event DIO stream
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* @param[in]  event :
-*
+* 
+* @param[in]  event : Event to process.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
 {
@@ -3855,14 +3855,14 @@ void DIOWEBSERVER::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER::HandleEvent(XEVENT* xevent)
 * @brief      Handle event
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* @param[in]  xevent :
-*
+* 
+* @param[in]  xevent : Xevent pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER::HandleEvent(XEVENT* xevent)
 {
@@ -3882,13 +3882,13 @@ void DIOWEBSERVER::HandleEvent(XEVENT* xevent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER::ThreadRunFunction(void* param)
 * @brief      Thread run function
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER::ThreadRunFunction(void* param)
 {
@@ -3905,12 +3905,12 @@ void DIOWEBSERVER::ThreadRunFunction(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBSERVER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER::Clean()
 {

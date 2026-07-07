@@ -59,8 +59,8 @@
 * @fn         UI_ELEMENT_OPTION::UI_ELEMENT_OPTION()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_OPTION::UI_ELEMENT_OPTION()    
 { 
   Clean();   
@@ -76,8 +76,8 @@ UI_ELEMENT_OPTION::UI_ELEMENT_OPTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_OPTION::~UI_ELEMENT_OPTION()    
 {   
   Clean();                            
@@ -90,7 +90,7 @@ UI_ELEMENT_OPTION::~UI_ELEMENT_OPTION()
 * @brief      Get visible limit type
 * @ingroup    USERINTERFACE
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_ELEMENT_OPTION::GetVisibleLimitType()
@@ -105,7 +105,7 @@ XDWORD UI_ELEMENT_OPTION::GetVisibleLimitType()
 * @brief      Set visible limit type
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  visiblelimittype : 
+* @param[in]  visiblelimittype : Visiblelimittype value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_OPTION::SetVisibleLimitType(XDWORD visiblelimittype)
@@ -119,10 +119,10 @@ void UI_ELEMENT_OPTION::SetVisibleLimitType(XDWORD visiblelimittype)
 * @fn         UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE UI_ELEMENT_OPTION::GetAllocationTextType()
 * @brief      Get allocation text type
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE UI_ELEMENT_OPTION::GetAllocationTextType()
 {
   return allocationtexttype;
@@ -134,10 +134,10 @@ UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE UI_ELEMENT_OPTION::GetAllocationTextType(
 * @fn         void UI_ELEMENT_OPTION::SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE allocationtexttype)
 * @brief      Set allocation text type
 * @ingroup    USERINTERFACE
-*
-* @param[in]  allocationtexttype : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  allocationtexttype : Allocationtexttype value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_OPTION::SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE allocationtexttype)
 {
   this->allocationtexttype = allocationtexttype;
@@ -149,10 +149,10 @@ void UI_ELEMENT_OPTION::SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_
 * @fn         UI_ELEMENT_TEXT* UI_ELEMENT_OPTION::Get_UIText()
 * @brief      Get UI text
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_TEXT* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_TEXT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_TEXT* UI_ELEMENT_OPTION::Get_UIText()
 { 
   return UItext;
@@ -164,12 +164,12 @@ UI_ELEMENT_TEXT* UI_ELEMENT_OPTION::Get_UIText()
 * @fn         bool UI_ELEMENT_OPTION::Set_UIText(UI_ELEMENT_TEXT* elementtext)
 * @brief      Set UI text
 * @ingroup    USERINTERFACE
-*
-* @param[in]  elementtext : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  elementtext : Elementtext pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_OPTION::Set_UIText(UI_ELEMENT_TEXT* elementtext)
 {
   this->UItext = elementtext;
@@ -183,10 +183,10 @@ bool UI_ELEMENT_OPTION::Set_UIText(UI_ELEMENT_TEXT* elementtext)
 * @fn         UI_ELEMENT_ANIMATION* UI_ELEMENT_OPTION::Get_UIAnimation()
 * @brief      Get UI animation
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_ANIMATION* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_ANIMATION* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_ANIMATION* UI_ELEMENT_OPTION::Get_UIAnimation()
 {
   return UIanimation;
@@ -198,12 +198,12 @@ UI_ELEMENT_ANIMATION* UI_ELEMENT_OPTION::Get_UIAnimation()
 * @fn         bool UI_ELEMENT_OPTION::Set_UIAnimation(UI_ELEMENT_ANIMATION* elementanimation)
 * @brief      Set UI animation
 * @ingroup    USERINTERFACE
-*
-* @param[in]  elementanimation : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  elementanimation : Elementanimation pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_OPTION::Set_UIAnimation(UI_ELEMENT_ANIMATION* elementanimation)
 {
   this->UIanimation = elementanimation;
@@ -218,8 +218,8 @@ bool UI_ELEMENT_OPTION::Set_UIAnimation(UI_ELEMENT_ANIMATION* elementanimation)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_OPTION::Clean()
 {  
   visiblelimittype    =  UI_ELEMENT_OPTION_VISIBLE_LIMIT_NONE;

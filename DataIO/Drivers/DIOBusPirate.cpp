@@ -67,7 +67,7 @@
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
+* @param[in]  diostream : Diostream pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOBUSPIRATE::DIOBUSPIRATE(DIOSTREAM* diostream)
@@ -101,12 +101,12 @@ DIOBUSPIRATE::~DIOBUSPIRATE()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOBUSPIRATE::Ini(int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @param[in]  timeout : 
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOBUSPIRATE::Ini(int timeout)
@@ -133,9 +133,9 @@ bool DIOBUSPIRATE::Ini(int timeout)
 * @brief      Get actual protocol
 * @ingroup    DATAIO
 * 
-* @param[in]  timeout : 
+* @param[in]  timeout : Timeout value.
 * 
-* @return     DIOBUSPIRATETYPEPROCOTOL : 
+* @return     DIOBUSPIRATETYPEPROCOTOL : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOBUSPIRATETYPEPROCOTOL DIOBUSPIRATE::GetActualProtocol(int timeout)
@@ -166,13 +166,13 @@ DIOBUSPIRATETYPEPROCOTOL DIOBUSPIRATE::GetActualProtocol(int timeout)
 * @brief      Set mode
 * @ingroup    DATAIO
 * 
-* @param[in]  protocol : 
-* @param[in]  issoftware : 
-* @param[in]  speed : 
-* @param[in]  issniffer : 
-* @param[in]  timeout : 
+* @param[in]  protocol : Protocol value.
+* @param[in]  issoftware : Issoftware value.
+* @param[in]  speed : Speed value.
+* @param[in]  issniffer : Issniffer value.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOBUSPIRATE::SetMode(DIOBUSPIRATETYPEPROCOTOL protocol, bool issoftware, int speed, bool issniffer, int timeout)
@@ -226,10 +226,10 @@ bool DIOBUSPIRATE::SetMode(DIOBUSPIRATETYPEPROCOTOL protocol, bool issoftware, i
 * @brief      Read I2C sniffer command
 * @ingroup    DATAIO
 * 
-* @param[in]  in : 
-* @param[in]  out : 
+* @param[in]  in : In value.
+* @param[in]  out : Output out.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOBUSPIRATE::ReadI2CSnifferCommand(XBUFFER& in, XBUFFER& out)
@@ -275,10 +275,10 @@ bool DIOBUSPIRATE::ReadI2CSnifferCommand(XBUFFER& in, XBUFFER& out)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOBUSPIRATE::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOBUSPIRATE::End()
@@ -295,10 +295,10 @@ bool DIOBUSPIRATE::End()
 * @brief      Read prompt status
 * @ingroup    DATAIO
 * 
-* @param[in]  promptstatus : 
-* @param[in]  timeout : 
+* @param[in]  promptstatus : Promptstatus value.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOBUSPIRATE::ReadPromptStatus(XSTRING& promptstatus, int timeout)
@@ -342,10 +342,10 @@ bool DIOBUSPIRATE::ReadPromptStatus(XSTRING& promptstatus, int timeout)
 * @brief      Write command
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
-* @param[in]  timeout : 
+* @param[in]  command : Command pointer to use.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOBUSPIRATE::WriteCommand(XCHAR* command, int timeout)

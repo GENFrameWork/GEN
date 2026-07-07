@@ -55,13 +55,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEHASH::XFILEHASH(HASH* hash)
+* 
+* @fn         XFILEHASH::XFILEHASH(HASH* hash): XFILECONTAINER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  hash :
-*
+* 
+* @param[in]  XFILECONTAINER : XFILECONTAINER pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEHASH::XFILEHASH(HASH* hash): XFILECONTAINER()
 {
@@ -74,12 +74,12 @@ XFILEHASH::XFILEHASH(HASH* hash): XFILECONTAINER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEHASH::~XFILEHASH()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEHASH::~XFILEHASH()
 {
@@ -92,18 +92,18 @@ XFILEHASH::~XFILEHASH()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::Open(XPATH& pathname, bool readonly, bool checkhash, bool checkversion)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  pathname :
-* @param[in]  readonly :
-* @param[in]  checkhash :
-* @param[in]  checkversion :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pathname : Pathname value.
+* @param[in]  readonly : Readonly value.
+* @param[in]  checkhash : Checkhash value.
+* @param[in]  checkversion : Checkversion value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::Open(XPATH& pathname, bool readonly, bool checkhash, bool checkversion)
 {
@@ -189,16 +189,16 @@ bool XFILEHASH::Open(XPATH& pathname, bool readonly, bool checkhash, bool checkv
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::Create(XPATH& pathname, bool checkHASH)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  pathname :
-* @param[in]  checkHASH :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pathname : Pathname value.
+* @param[in]  checkHASH : Check HASH value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::Create(XPATH& pathname, bool checkHASH)
 {
@@ -245,13 +245,13 @@ bool XFILEHASH::Create(XPATH& pathname, bool checkHASH)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::Close()
 {
@@ -269,13 +269,13 @@ bool XFILEHASH::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD XFILEHASH::GetID()
 * @brief      Get ID
 * @ingroup    XUTILS
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD XFILEHASH::GetID()
 {
@@ -284,13 +284,13 @@ XWORD XFILEHASH::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD XFILEHASH::GetType()
 * @brief      Get type
 * @ingroup    XUTILS
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD XFILEHASH::GetType()
 {
@@ -300,13 +300,13 @@ XWORD XFILEHASH::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD XFILEHASH::GetVersion()
 * @brief      Get version
 * @ingroup    XUTILS
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD XFILEHASH::GetVersion()
 {
@@ -315,13 +315,13 @@ XWORD XFILEHASH::GetVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILEHASH::GetIDString()
 * @brief      Get ID string
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEHASH::GetIDString()
 {
@@ -330,18 +330,18 @@ XSTRING* XFILEHASH::GetIDString()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::Set(XWORD ID, XWORD type, XWORD version, XCHAR* IDstring)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-* @param[in]  type :
-* @param[in]  version :
-* @param[in]  IDstring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  type : Type value.
+* @param[in]  version : Version value.
+* @param[in]  IDstring : I Dstring pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::Set(XWORD ID, XWORD type, XWORD version, XCHAR* IDstring)
 {
@@ -355,15 +355,15 @@ bool XFILEHASH::Set(XWORD ID, XWORD type, XWORD version, XCHAR* IDstring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::SetID(XWORD ID)
 * @brief      Set ID
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::SetID(XWORD ID)
 {
@@ -374,15 +374,15 @@ bool XFILEHASH::SetID(XWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::SetType(XWORD type)
 * @brief      Set type
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::SetType(XWORD type)
 {
@@ -393,15 +393,15 @@ bool XFILEHASH::SetType(XWORD type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::SetVersion(XWORD version)
 * @brief      Set version
 * @ingroup    XUTILS
-*
-* @param[in]  version :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  version : Version value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::SetVersion(XWORD version)
 {
@@ -412,15 +412,15 @@ bool XFILEHASH::SetVersion(XWORD version)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::SetIDString(XCHAR* IDstring)
 * @brief      Set ID string
 * @ingroup    XUTILS
-*
-* @param[in]  IDstring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  IDstring : I Dstring pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::SetIDString(XCHAR* IDstring)
 {
@@ -431,15 +431,15 @@ bool XFILEHASH::SetIDString(XCHAR* IDstring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::SetIDString(XSTRING& IDstring)
 * @brief      Set ID string
 * @ingroup    XUTILS
-*
-* @param[in]  IDstring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  IDstring : I Dstring value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::SetIDString(XSTRING& IDstring)
 {
@@ -450,13 +450,13 @@ bool XFILEHASH::SetIDString(XSTRING& IDstring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int XFILEHASH::GetDataPosition()
+* 
+* @fn         XQWORD XFILEHASH::GetDataPosition()
 * @brief      Get data position
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XFILEHASH::GetDataPosition()
 {
@@ -465,13 +465,13 @@ XQWORD XFILEHASH::GetDataPosition()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEHASH::UpdateHash()
 * @brief      Update hash
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEHASH::UpdateHash()
 {
@@ -497,12 +497,12 @@ bool XFILEHASH::UpdateHash()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEHASH::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEHASH::Clean()
 {

@@ -67,15 +67,15 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_DATABASE* DB_SQL_FACTORY::Create( DB_SQL_DATABASE_TYPE databasetype)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    DATABASE
-*
-* @param[in]  databasetype :
-*
-* @return     DB_SQL_DATABASE* :
-*
+* 
+* @param[in]  databasetype : Databasetype value.
+* 
+* @return     DB_SQL_DATABASE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_DATABASE* DB_SQL_FACTORY::Create( DB_SQL_DATABASE_TYPE databasetype)
 {

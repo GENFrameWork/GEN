@@ -62,8 +62,8 @@
 * @fn         GRP2DCANVAS_VECTORFONT_CONFIG::GRP2DCANVAS_VECTORFONT_CONFIG()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS_VECTORFONT_CONFIG::GRP2DCANVAS_VECTORFONT_CONFIG()
 {
   Clean();    
@@ -77,8 +77,8 @@ GRP2DCANVAS_VECTORFONT_CONFIG::GRP2DCANVAS_VECTORFONT_CONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS_VECTORFONT_CONFIG::~GRP2DCANVAS_VECTORFONT_CONFIG()
 {
   if(color) 
@@ -96,13 +96,13 @@ GRP2DCANVAS_VECTORFONT_CONFIG::~GRP2DCANVAS_VECTORFONT_CONFIG()
 * @fn         bool GRP2DCANVAS_VECTORFONT_CONFIG::GetSize(double& width, double& height)
 * @brief      Get size
 * @ingroup    GRAPHIC
-*
-* @param[in]  width : 
-* @param[in]  height : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS_VECTORFONT_CONFIG::GetSize(double& width, double& height)
 {
   width   = this->width;
@@ -117,13 +117,13 @@ bool GRP2DCANVAS_VECTORFONT_CONFIG::GetSize(double& width, double& height)
 * @fn         bool GRP2DCANVAS_VECTORFONT_CONFIG::SetSize(double width, double height)
 * @brief      Set size
 * @ingroup    GRAPHIC
-*
-* @param[in]  width : 
-* @param[in]  height : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS_VECTORFONT_CONFIG::SetSize(double width, double height)
 {
   this->width   = width;
@@ -138,10 +138,10 @@ bool GRP2DCANVAS_VECTORFONT_CONFIG::SetSize(double width, double height)
 * @fn         double GRP2DCANVAS_VECTORFONT_CONFIG::GetSize()
 * @brief      Get size
 * @ingroup    GRAPHIC
-*
-* @return     double : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS_VECTORFONT_CONFIG::GetSize()
 {
   if(height > width) return height;
@@ -157,12 +157,12 @@ double GRP2DCANVAS_VECTORFONT_CONFIG::GetSize()
 * @fn         bool GRP2DCANVAS_VECTORFONT_CONFIG::SetSize(double size)
 * @brief      Set size
 * @ingroup    GRAPHIC
-*
-* @param[in]  size : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  size : Size value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS_VECTORFONT_CONFIG::SetSize(double size)
 {
   this->width  = size;
@@ -177,10 +177,10 @@ bool GRP2DCANVAS_VECTORFONT_CONFIG::SetSize(double size)
 * @fn         double GRP2DCANVAS_VECTORFONT_CONFIG::GetWidth()
 * @brief      Get width
 * @ingroup    GRAPHIC
-*
-* @return     double : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS_VECTORFONT_CONFIG::GetWidth()                                 
 { 
   return width;               
@@ -192,10 +192,10 @@ double GRP2DCANVAS_VECTORFONT_CONFIG::GetWidth()
 * @fn         void GRP2DCANVAS_VECTORFONT_CONFIG::SetWidth(double width)
 * @brief      Set width
 * @ingroup    GRAPHIC
-*
-* @param[in]  width : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  width : Width value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS_VECTORFONT_CONFIG::SetWidth(double width)                     
 { 
   this->width = width;        
@@ -207,10 +207,10 @@ void GRP2DCANVAS_VECTORFONT_CONFIG::SetWidth(double width)
 * @fn         double GRP2DCANVAS_VECTORFONT_CONFIG::GetHeight()
 * @brief      Get height
 * @ingroup    GRAPHIC
-*
-* @return     double : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS_VECTORFONT_CONFIG::GetHeight()                                 
 { 
   return height;              
@@ -222,10 +222,10 @@ double GRP2DCANVAS_VECTORFONT_CONFIG::GetHeight()
 * @fn         void GRP2DCANVAS_VECTORFONT_CONFIG::SetHeight(double height)
 * @brief      Set height
 * @ingroup    GRAPHIC
-*
-* @param[in]  height : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  height : Height value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS_VECTORFONT_CONFIG::SetHeight(double height)                    
 { 
   this->height = height;      
@@ -237,10 +237,10 @@ void GRP2DCANVAS_VECTORFONT_CONFIG::SetHeight(double height)
 * @fn         GRP2DCOLOR_RGBA8* GRP2DCANVAS_VECTORFONT_CONFIG::GetColor()
 * @brief      Get color
 * @ingroup    GRAPHIC
-*
-* @return     GRP2DCOLOR_RGBA8* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRP2DCOLOR_RGBA8* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR_RGBA8* GRP2DCANVAS_VECTORFONT_CONFIG::GetColor()                                 
 {
   return color;               
@@ -252,10 +252,10 @@ GRP2DCOLOR_RGBA8* GRP2DCANVAS_VECTORFONT_CONFIG::GetColor()
 * @fn         void GRP2DCANVAS_VECTORFONT_CONFIG::SetColor(GRP2DCOLOR_RGBA8* color)
 * @brief      Set color
 * @ingroup    GRAPHIC
-*
-* @param[in]  color : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  color : Color value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS_VECTORFONT_CONFIG::SetColor(GRP2DCOLOR_RGBA8* color)          
 { 
   if(!color) return;
@@ -272,10 +272,10 @@ void GRP2DCANVAS_VECTORFONT_CONFIG::SetColor(GRP2DCOLOR_RGBA8* color)
 * @fn         bool GRP2DCANVAS_VECTORFONT_CONFIG::IsKerning()
 * @brief      Is kerning
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS_VECTORFONT_CONFIG::IsKerning()
 {
   return iskerning;
@@ -287,10 +287,10 @@ bool GRP2DCANVAS_VECTORFONT_CONFIG::IsKerning()
 * @fn         void GRP2DCANVAS_VECTORFONT_CONFIG::SetKerning(bool iskerning)
 * @brief      Set kerning
 * @ingroup    GRAPHIC
-*
-* @param[in]  iskerning : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  iskerning : Iskerning value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS_VECTORFONT_CONFIG::SetKerning(bool iskerning)
 {
   this->iskerning = iskerning;
@@ -303,8 +303,8 @@ void GRP2DCANVAS_VECTORFONT_CONFIG::SetKerning(bool iskerning)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS_VECTORFONT_CONFIG::Clean()
 {
   width       = 0.0f;
@@ -319,11 +319,11 @@ void GRP2DCANVAS_VECTORFONT_CONFIG::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DCANVAS::GRP2DCANVAS()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS::GRP2DCANVAS()
 {
@@ -332,12 +332,12 @@ GRP2DCANVAS::GRP2DCANVAS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DCANVAS::~GRP2DCANVAS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS::~GRP2DCANVAS()
 {
@@ -354,7 +354,7 @@ GRP2DCANVAS::~GRP2DCANVAS()
 * @brief      Buffer create
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::Buffer_Create()
@@ -372,7 +372,7 @@ bool GRP2DCANVAS::Buffer_Create()
 * @brief      Buffer get
 * @ingroup    GRAPHIC
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* GRP2DCANVAS::Buffer_Get()
@@ -387,7 +387,7 @@ XBYTE* GRP2DCANVAS::Buffer_Get()
 * @brief      Buffer get size
 * @ingroup    GRAPHIC
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRP2DCANVAS::Buffer_GetSize()
@@ -402,7 +402,7 @@ XDWORD GRP2DCANVAS::Buffer_GetSize()
 * @brief      Buffer set to zero
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::Buffer_SetToZero()
@@ -424,7 +424,7 @@ bool GRP2DCANVAS::Buffer_SetToZero()
 * @brief      Buffer delete
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::Buffer_Delete()
@@ -449,7 +449,7 @@ bool GRP2DCANVAS::Buffer_Delete()
 * @brief      Clear
 * @ingroup    GRAPHIC
 * 
-* @param[in]  color : 
+* @param[in]  color : Color value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::Clear(const GRP2DCOLOR* color)
@@ -463,13 +463,13 @@ void GRP2DCANVAS::Clear(const GRP2DCOLOR* color)
 * @fn         void GRP2DCANVAS::GetClipBox(double& x1, double& y1, double& x2, double& y2)
 * @brief      Get clip box
 * @ingroup    GRAPHIC
-*
-* @param[in]  x1 : 
-* @param[in]  y1 : 
-* @param[in]  x2 : 
-* @param[in]  y2 : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::GetClipBox(double& x1, double& y1, double& x2, double& y2)
 {
   x1 = lastcliprect.x1;
@@ -484,10 +484,10 @@ void GRP2DCANVAS::GetClipBox(double& x1, double& y1, double& x2, double& y2)
 * @fn         void GRP2DCANVAS::GetClipBox(XRECT& rect)
 * @brief      Get clip box
 * @ingroup    GRAPHIC
-*
-* @param[in]  rect : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  rect : Rectangle to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::GetClipBox(XRECT& rect)
 {
   rect.CopyFrom(lastcliprect);   
@@ -499,10 +499,10 @@ void GRP2DCANVAS::GetClipBox(XRECT& rect)
 * @fn         XRECT& GRP2DCANVAS::GetClipBox()
 * @brief      Get clip box
 * @ingroup    GRAPHIC
-*
-* @return     XRECT& : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XRECT& : Reference to the requested object.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XRECT& GRP2DCANVAS::GetClipBox()
 {
   return lastcliprect;
@@ -514,13 +514,13 @@ XRECT& GRP2DCANVAS::GetClipBox()
 * @fn         void GRP2DCANVAS::SetClipBox(double x1, double y1, double x2, double y2)
 * @brief      Set clip box
 * @ingroup    GRAPHIC
-*
-* @param[in]  x1 : 
-* @param[in]  y1 : 
-* @param[in]  x2 : 
-* @param[in]  y2 : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void  GRP2DCANVAS::SetClipBox(double x1, double y1, double x2, double y2)
 {
   lastcliprect.x1 = x1;
@@ -535,10 +535,10 @@ void  GRP2DCANVAS::SetClipBox(double x1, double y1, double x2, double y2)
 * @fn         void GRP2DCANVAS::SetClipBox(XRECT& rect)
 * @brief      Set clip box
 * @ingroup    GRAPHIC
-*
-* @param[in]  rect : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  rect : Rectangle to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::SetClipBox(XRECT& rect)
 {
   lastcliprect.CopyFrom(rect);
@@ -546,16 +546,16 @@ void GRP2DCANVAS::SetClipBox(XRECT& rect)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DCOLOR* GRP2DCANVAS::GetPixel(double x, double y)
 * @brief      Get pixel
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : x pos of pixel
 * @param[in]  y : y pos of pixel
-*
-* @return     GRP2DCOLOR* : color of pixel
-*
+* 
+* @return     GRP2DCOLOR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR* GRP2DCANVAS::GetPixel(double x, double y)
 {
@@ -564,15 +564,15 @@ GRP2DCOLOR* GRP2DCANVAS::GetPixel(double x, double y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::PutPixel(double x, double y, const GRP2DCOLOR* color)
 * @brief      Put pixel
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : x pos to put pixel
 * @param[in]  y : y pos to put pixel
 * @param[in]  color : color to put
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PutPixel(double x, double y, const GRP2DCOLOR* color)
 {
@@ -581,16 +581,16 @@ void GRP2DCANVAS::PutPixel(double x, double y, const GRP2DCOLOR* color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::PutBlendPixel(double x, double y, const GRP2DCOLOR* color, double alpha)
 * @brief      Put blend pixel
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : x pos to put pixel
 * @param[in]  y : y pos to put pixel
 * @param[in]  color : color to put
 * @param[in]  alpha : alpha to put pixel
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PutBlendPixel(double x, double y, const GRP2DCOLOR* color, double alpha)
 {
@@ -599,13 +599,13 @@ void GRP2DCANVAS::PutBlendPixel(double x, double y, const GRP2DCOLOR* color, dou
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DCOLOR* GRP2DCANVAS::GetFillColor()
 * @brief      Get fill color
 * @ingroup    GRAPHIC
-*
-* @return     GRP2DCOLOR* : color of fill
-*
+* 
+* @return     GRP2DCOLOR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR* GRP2DCANVAS::GetFillColor()
 {
@@ -614,13 +614,13 @@ GRP2DCOLOR* GRP2DCANVAS::GetFillColor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::SetFillColor(const GRP2DCOLOR* color)
 * @brief      Set fill color
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  color : color to fill
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::SetFillColor(const GRP2DCOLOR* color)
 {
@@ -629,13 +629,13 @@ void GRP2DCANVAS::SetFillColor(const GRP2DCOLOR* color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DCOLOR* GRP2DCANVAS::GetLineColor()
 * @brief      Get line color
 * @ingroup    GRAPHIC
-*
-* @return     GRP2DCOLOR* : color of line
-*
+* 
+* @return     GRP2DCOLOR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR* GRP2DCANVAS::GetLineColor()
 {
@@ -644,13 +644,13 @@ GRP2DCOLOR* GRP2DCANVAS::GetLineColor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::SetLineColor(const GRP2DCOLOR* color)
 * @brief      Set line color
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  color : color to lines
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::SetLineColor(const GRP2DCOLOR* color)
 {
@@ -659,13 +659,13 @@ void GRP2DCANVAS::SetLineColor(const GRP2DCOLOR* color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRP2DCANVAS::GetLineWidth()
 * @brief      Get line width
 * @ingroup    GRAPHIC
-*
-* @return     double : line width
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS::GetLineWidth()
 {
@@ -674,13 +674,13 @@ double GRP2DCANVAS::GetLineWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::SetLineWidth(double linewidth)
 * @brief      Set line width
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  linewidth : GEN_NEW line width
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::SetLineWidth(double linewidth)
 {
@@ -689,13 +689,13 @@ void GRP2DCANVAS::SetLineWidth(double linewidth)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRP2DCANVAS::GetDashLength()
 * @brief      Get dash length
 * @ingroup    GRAPHIC
-*
-* @return     double : dash length
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS::GetDashLength()
 {
@@ -704,13 +704,13 @@ double GRP2DCANVAS::GetDashLength()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::SetDashLenght(double dashlength)
 * @brief      Set dash lenght
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  dashlength : GEN_NEW dash lenght
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::SetDashLenght(double dashlength)
 {
@@ -719,16 +719,16 @@ void GRP2DCANVAS::SetDashLenght(double dashlength)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::Line(double x1, double y1, double x2, double y2)
 * @brief      Line
 * @ingroup    GRAPHIC
-*
-* @param[in]  x1 :
-* @param[in]  y1 :
-* @param[in]  x2 :
-* @param[in]  y2 :
-*
+* 
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::Line(double x1, double y1, double x2, double y2)
 {
@@ -737,17 +737,17 @@ void GRP2DCANVAS::Line(double x1, double y1, double x2, double y2)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::Rectangle(double x1, double y1, double x2, double y2, bool isfill)
 * @brief      Rectangle
 * @ingroup    GRAPHIC
-*
-* @param[in]  x1 :
-* @param[in]  y1 :
-* @param[in]  x2 :
-* @param[in]  y2 :
-* @param[in]  isfill :
-*
+* 
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* @param[in]  isfill : Isfill value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::Rectangle(double x1, double y1, double x2, double y2, bool isfill)
 {
@@ -756,16 +756,16 @@ void GRP2DCANVAS::Rectangle(double x1, double y1, double x2, double y2, bool isf
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::Circle(double x, double y, double radius, bool isfill)
 * @brief      Circle
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : x center position
 * @param[in]  y : y center position
 * @param[in]  radius : radius of circle
 * @param[in]  isfill : is fill
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::Circle(double x, double y, double radius, bool isfill)
 {
@@ -774,17 +774,17 @@ void GRP2DCANVAS::Circle(double x, double y, double radius, bool isfill)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::Ellipse(double x, double y, double rx, double ry, bool isfill)
 * @brief      Ellipse
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : x center position
 * @param[in]  y : y center position
 * @param[in]  rx : x radius of ellipse
 * @param[in]  ry : y radius of ellipse
 * @param[in]  isfill : is fill
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::Ellipse(double x, double y, double rx, double ry, bool isfill)
 {
@@ -793,14 +793,14 @@ void GRP2DCANVAS::Ellipse(double x, double y, double rx, double ry, bool isfill)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void GRP2DCANVAS::Polygon(XVECTOR* vertex, bool isfill)
+* 
+* @fn         void GRP2DCANVAS::Polygon(GRP2DVERTEXS& vertexs, bool isfill)
 * @brief      Polygon
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  vertexs : vector of vertex
 * @param[in]  isfill : is fill
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::Polygon(GRP2DVERTEXS& vertexs, bool isfill)
 {
@@ -813,10 +813,10 @@ void GRP2DCANVAS::Polygon(GRP2DVERTEXS& vertexs, bool isfill)
 * @fn         void GRP2DCANVAS::Path(GRP2DPATH& path, bool isfill)
 * @brief      Path
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  path : path with the segments
 * @param[in]  isfill : is fill
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::Path(GRP2DPATH& path, bool isfill)
 {
@@ -825,20 +825,20 @@ void GRP2DCANVAS::Path(GRP2DPATH& path, bool isfill)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::PathGradientLinear(GRP2DPATH& path, bool evenodd, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops)
 * @brief      Path gradient linear (base : nothing; implemented by the AGG canvas)
 * @ingroup    GRAPHIC
-*
-* @param[in]  path :
-* @param[in]  evenodd :
-* @param[in]  x1 :
-* @param[in]  y1 :
-* @param[in]  x2 :
-* @param[in]  y2 :
-* @param[in]  stops :
-* @param[in]  nstops :
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  evenodd : Evenodd value.
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* @param[in]  stops : Stops pointer to use.
+* @param[in]  nstops : Nstops value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PathGradientLinear(GRP2DPATH& path, bool evenodd, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops)
 {
@@ -847,19 +847,19 @@ void GRP2DCANVAS::PathGradientLinear(GRP2DPATH& path, bool evenodd, double x1, d
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::PathGradientRadial(GRP2DPATH& path, bool evenodd, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops)
 * @brief      Path gradient radial (base : nothing; implemented by the AGG canvas)
 * @ingroup    GRAPHIC
-*
-* @param[in]  path :
-* @param[in]  evenodd :
-* @param[in]  cx :
-* @param[in]  cy :
-* @param[in]  r :
-* @param[in]  stops :
-* @param[in]  nstops :
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  evenodd : Evenodd value.
+* @param[in]  cx : Cx value.
+* @param[in]  cy : Cy value.
+* @param[in]  r : R value.
+* @param[in]  stops : Stops pointer to use.
+* @param[in]  nstops : Nstops value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PathGradientRadial(GRP2DPATH& path, bool evenodd, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops)
 {
@@ -868,10 +868,20 @@ void GRP2DCANVAS::PathGradientRadial(GRP2DPATH& path, bool evenodd, double cx, d
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::PathGradientLinearStroke(GRP2DPATH& path, double linewidth, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops)
 * @brief      Path gradient linear stroke (base : nothing; implemented by the AGG canvas)
 * @ingroup    GRAPHIC
+* 
+* @param[in]  path : Path to use.
+* @param[in]  linewidth : Linewidth value.
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* @param[in]  stops : Stops pointer to use.
+* @param[in]  nstops : Nstops value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PathGradientLinearStroke(GRP2DPATH& path, double linewidth, double x1, double y1, double x2, double y2, GRP2DGRADIENTSTOP* stops, int nstops)
 {
@@ -880,10 +890,19 @@ void GRP2DCANVAS::PathGradientLinearStroke(GRP2DPATH& path, double linewidth, do
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::PathGradientRadialStroke(GRP2DPATH& path, double linewidth, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops)
 * @brief      Path gradient radial stroke (base : nothing; implemented by the AGG canvas)
 * @ingroup    GRAPHIC
+* 
+* @param[in]  path : Path to use.
+* @param[in]  linewidth : Linewidth value.
+* @param[in]  cx : Cx value.
+* @param[in]  cy : Cy value.
+* @param[in]  r : R value.
+* @param[in]  stops : Stops pointer to use.
+* @param[in]  nstops : Nstops value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PathGradientRadialStroke(GRP2DPATH& path, double linewidth, double cx, double cy, double r, GRP2DGRADIENTSTOP* stops, int nstops)
 {
@@ -892,18 +911,18 @@ void GRP2DCANVAS::PathGradientRadialStroke(GRP2DPATH& path, double linewidth, do
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::RoundRect(double x1, double y1, double x2, double y2, double radius, bool isfill)
 * @brief      Round rect
 * @ingroup    GRAPHIC
-*
-* @param[in]  x1 :
-* @param[in]  y1 :
-* @param[in]  x2 :
-* @param[in]  y2 :
-* @param[in]  radius :
-* @param[in]  isfill :
-*
+* 
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* @param[in]  radius : Radius value.
+* @param[in]  isfill : Isfill value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::RoundRect(double x1, double y1, double x2, double y2, double radius, bool isfill)
 {
@@ -912,18 +931,18 @@ void GRP2DCANVAS::RoundRect(double x1, double y1, double x2, double y2, double r
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRP2DCANVAS::GetBitmap(double x, double y, double width, double height)
 * @brief      Get bitmap
 * @ingroup    GRAPHIC
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRP2DCANVAS::GetBitmap(double x, double y, double width, double height)
 {
@@ -932,15 +951,15 @@ GRPBITMAP* GRP2DCANVAS::GetBitmap(double x, double y, double width, double heigh
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP* bitmap)
 * @brief      Put bitmap no alpha
 * @ingroup    GRAPHIC
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  bitmap :
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  bitmap : Bitmap pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP* bitmap)
 {
@@ -949,15 +968,15 @@ void GRP2DCANVAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP* bitmap)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::PutBitmap(double x, double y, GRPBITMAP* bitmap)
 * @brief      Put bitmap
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : x pos of bitmap
 * @param[in]  y : y pos of bitmap
 * @param[in]  bitmap : bitmap class to draw
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PutBitmap(double x, double y, GRPBITMAP* bitmap)
 {
@@ -966,16 +985,16 @@ void GRP2DCANVAS::PutBitmap(double x, double y, GRPBITMAP* bitmap)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void GRP2DCANVAS::PutBitmapAlpha(double x, double y, GRPBITMAP* bitmap, double alpha = 100)
+* 
+* @fn         void GRP2DCANVAS::PutBitmapAlpha(double x, double y, GRPBITMAP* bitmap, double alpha)
 * @brief      Put bitmap alpha
 * @ingroup    GRAPHIC
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  bitmap :
-* @param[in]  alpha :
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  bitmap : Bitmap pointer to use.
+* @param[in]  alpha : Alpha value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PutBitmapAlpha(double x, double y, GRPBITMAP* bitmap, double alpha)
 {
@@ -984,16 +1003,16 @@ void GRP2DCANVAS::PutBitmapAlpha(double x, double y, GRPBITMAP* bitmap, double a
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void GRP2DCANVAS::PutBitmapFrame(double x, double y, GRPBITMAPFRAME* bitmapframe)
+* 
+* @fn         void GRP2DCANVAS::PutBitmapFrame(double x, double y, GRPBITMAPFRAME* bitmapframe, double alpha)
 * @brief      Put bitmap frame
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : x pos of bitmap
 * @param[in]  y : y pos of bitmap
 * @param[in]  bitmapframe : bitmap frame class to draw
 * @param[in]  alpha : bitmap frame class to draw
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::PutBitmapFrame(double x, double y, GRPBITMAPFRAME* bitmapframe, double alpha)
 {
@@ -1007,15 +1026,15 @@ void GRP2DCANVAS::PutBitmapFrame(double x, double y, GRPBITMAPFRAME* bitmapframe
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DCANVAS::RasterFont_Select(XCHAR* fontname)
 * @brief      Raster font select
 * @ingroup    GRAPHIC
-*
-* @param[in]  fontname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  fontname : Fontname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::RasterFont_Select(XCHAR* fontname)
 {
@@ -1029,9 +1048,9 @@ bool GRP2DCANVAS::RasterFont_Select(XCHAR* fontname)
 * @brief      Raster font select
 * @ingroup    GRAPHIC
 * 
-* @param[in]  fontname : 
+* @param[in]  fontname : Fontname pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::RasterFont_Select(XSTRING* fontname)
@@ -1041,13 +1060,13 @@ bool GRP2DCANVAS::RasterFont_Select(XSTRING* fontname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DCOLOR* GRP2DCANVAS::RasterFont_GetColor()
 * @brief      Raster font get color
 * @ingroup    GRAPHIC
-*
-* @return     GRP2DCOLOR* :
-*
+* 
+* @return     GRP2DCOLOR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR* GRP2DCANVAS::RasterFont_GetColor()
 {
@@ -1056,13 +1075,13 @@ GRP2DCOLOR* GRP2DCANVAS::RasterFont_GetColor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void GRP2DCANVAS::RasterFont_SetColor(const GRP2DCOLOR* color)
+* 
+* @fn         void GRP2DCANVAS::RasterFont_SetColor(const GRP2DCOLOR* c)
 * @brief      Raster font set color
 * @ingroup    GRAPHIC
-*
-* @param[in]  color :
-*
+* 
+* @param[in]  c : C value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::RasterFont_SetColor(const GRP2DCOLOR* c)
 {
@@ -1071,15 +1090,15 @@ void GRP2DCANVAS::RasterFont_SetColor(const GRP2DCOLOR* c)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRP2DCANVAS::RasterFont_GetWidth(XCHAR* string)
 * @brief      Raster font get width
 * @ingroup    GRAPHIC
-*
-* @param[in]  string :
-*
-* @return     double :
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS::RasterFont_GetWidth(XCHAR* string)
 {
@@ -1088,13 +1107,13 @@ double GRP2DCANVAS::RasterFont_GetWidth(XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double GRP2DCANVAS::RasterFont_GetHeight()
 * @brief      Raster font get height
 * @ingroup    GRAPHIC
-*
-* @return     double :
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS::RasterFont_GetHeight()
 {
@@ -1107,15 +1126,15 @@ double GRP2DCANVAS::RasterFont_GetHeight()
 * @fn         bool GRP2DCANVAS::RasterFont_Printf(double x, double y, XCHAR* mask, ...)
 * @brief      Raster font printf
 * @ingroup    GRAPHIC
-*
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  mask : 
-* @param[in]  ... : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  ... : Variable argument list.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::RasterFont_Printf(double x, double y, XCHAR* mask, ...)
 {
   return false;
@@ -1127,12 +1146,12 @@ bool GRP2DCANVAS::RasterFont_Printf(double x, double y, XCHAR* mask, ...)
 * @fn         bool GRP2DCANVAS::VectorFont_Load(XCHAR* fontnamefile)
 * @brief      Vector font load
 * @ingroup    GRAPHIC
-*
-* @param[in]  fontnamefile : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  fontnamefile : Fontnamefile pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::VectorFont_Load(XCHAR* fontnamefile)
 {
   XPATH fnamefile;
@@ -1148,12 +1167,12 @@ bool GRP2DCANVAS::VectorFont_Load(XCHAR* fontnamefile)
 * @fn         bool GRP2DCANVAS::VectorFont_Load(XPATH& fontnamefile)
 * @brief      Vector font load
 * @ingroup    GRAPHIC
-*
-* @param[in]  fontnamefile : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  fontnamefile : Fontnamefile value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::VectorFont_Load(XPATH& fontnamefile)
 {
   return false;
@@ -1165,10 +1184,10 @@ bool GRP2DCANVAS::VectorFont_Load(XPATH& fontnamefile)
 * @fn         GRP2DCANVAS_VECTORFONT_CONFIG* GRP2DCANVAS::Vectorfont_GetConfig()
 * @brief      Vectorfont get config
 * @ingroup    GRAPHIC
-*
-* @return     GRP2DCANVAS_VECTORFONT_CONFIG* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRP2DCANVAS_VECTORFONT_CONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS_VECTORFONT_CONFIG* GRP2DCANVAS::Vectorfont_GetConfig()
 {
   return &vectorfont_config;
@@ -1180,10 +1199,10 @@ GRP2DCANVAS_VECTORFONT_CONFIG* GRP2DCANVAS::Vectorfont_GetConfig()
 * @fn         XPATH* GRP2DCANVAS::VectorFont_GetPathFile()
 * @brief      Vector font get path file
 * @ingroup    GRAPHIC
-*
-* @return     XPATH* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XPATH* GRP2DCANVAS::VectorFont_GetPathFile()
 {
   return &vectorfont_pathfile;
@@ -1195,12 +1214,12 @@ XPATH* GRP2DCANVAS::VectorFont_GetPathFile()
 * @fn         bool GRP2DCANVAS::VectorFont_CopyFrom(GRP2DCANVAS* canvas)
 * @brief      Vector font copy from another canvas
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  canvas : source canvas
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::VectorFont_CopyFrom(GRP2DCANVAS* canvas)
 {
   if(!canvas) return false;
@@ -1234,9 +1253,9 @@ bool GRP2DCANVAS::VectorFont_CopyFrom(GRP2DCANVAS* canvas)
 * @brief      Vector font get width
 * @ingroup    GRAPHIC
 * 
-* @param[in]  string : 
+* @param[in]  string : String to use.
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS::VectorFont_GetWidth(XCHAR* string)
@@ -1250,12 +1269,12 @@ double GRP2DCANVAS::VectorFont_GetWidth(XCHAR* string)
 * @fn         double GRP2DCANVAS::VectorFont_GetHeight(XCHAR* string)
 * @brief      Vector font get height
 * @ingroup    GRAPHIC
-*
-* @param[in]  string : 
 * 
-* @return     double : 
+* @param[in]  string : String to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS::VectorFont_GetHeight(XCHAR* string)
 {
   return 0.0f;
@@ -1267,10 +1286,10 @@ double GRP2DCANVAS::VectorFont_GetHeight(XCHAR* string)
 * @fn         double GRP2DCANVAS::VectorFont_GetHeight()
 * @brief      Vector font get height
 * @ingroup    GRAPHIC
-*
-* @return     double : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DCANVAS::VectorFont_GetHeight()
 {
   return 0.0f;
@@ -1282,14 +1301,14 @@ double GRP2DCANVAS::VectorFont_GetHeight()
 * @fn         bool GRP2DCANVAS::VectorFont_Print(double x, double y, XCHAR* outstring)
 * @brief      Vector font print
 * @ingroup    GRAPHIC
-*
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  outstring : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  outstring : Output outstring.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::VectorFont_Print(double x, double y, XCHAR* outstring)
 {
   return false;
@@ -1301,15 +1320,15 @@ bool GRP2DCANVAS::VectorFont_Print(double x, double y, XCHAR* outstring)
 * @fn         bool GRP2DCANVAS::VectorFont_Printf(double x, double y, XCHAR* mask, ...)
 * @brief      Vector font printf
 * @ingroup    GRAPHIC
-*
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  mask : 
-* @param[in]  ... : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  ... : Variable argument list.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::VectorFont_Printf(double x, double y, XCHAR* mask, ...)
 {
   return false;
@@ -1322,9 +1341,9 @@ bool GRP2DCANVAS::VectorFont_Printf(double x, double y, XCHAR* mask, ...)
 * @brief      Copy buffer render to screen
 * @ingroup    GRAPHIC
 * 
-* @param[in]  screen : 
+* @param[in]  screen : Screen object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::CopyBufferRenderToScreen(GRPSCREEN* screen)
@@ -1334,18 +1353,18 @@ bool GRP2DCANVAS::CopyBufferRenderToScreen(GRPSCREEN* screen)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DCANVAS::CopyBufferRenderToBufferScreen(XBYTE* buffer, XDWORD width, XDWORD height, bool isinverse)
 * @brief      Copy buffer render to buffer screen
 * @ingroup    GRAPHIC
-*
-* @param[in]  buffer :
-* @param[in]  width :
-* @param[in]  height :
-* @param[in]  isinverse :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* @param[in]  isinverse : Isinverse value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::CopyBufferRenderToBufferScreen(XBYTE* buffer, XDWORD width, XDWORD height, bool isinverse)
 {
@@ -1354,15 +1373,15 @@ bool GRP2DCANVAS::CopyBufferRenderToBufferScreen(XBYTE* buffer, XDWORD width, XD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DCANVAS::CopyBufferRenderFromViewport(GRPVIEWPORT* viewport)
 * @brief      Copy buffer render from viewport
 * @ingroup    GRAPHIC
-*
-* @param[in]  viewport :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  viewport : Viewport pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::CopyBufferRenderFromViewport(GRPVIEWPORT* viewport)
 {
@@ -1375,10 +1394,10 @@ bool GRP2DCANVAS::CopyBufferRenderFromViewport(GRPVIEWPORT* viewport)
 * @fn         bool GRP2DCANVAS::ReleaseDrawFramerate()
 * @brief      Release draw framerate
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::ReleaseDrawFramerate()
 {
   return false;
@@ -1391,11 +1410,11 @@ bool GRP2DCANVAS::ReleaseDrawFramerate()
 * @brief      Draw framerate
 * @ingroup    GRAPHIC
 * 
-* @param[in]  screen : 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  screen : Screen object to use.
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DCANVAS::DrawFramerate(GRPSCREEN* screen, double x, double y)
@@ -1405,12 +1424,12 @@ bool GRP2DCANVAS::DrawFramerate(GRPSCREEN* screen, double x, double y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DCANVAS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DCANVAS::Clean()
 {

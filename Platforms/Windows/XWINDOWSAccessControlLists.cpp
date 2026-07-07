@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSACCESSCONTROLLISTS::XWINDOWSACCESSCONTROLLISTS()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSACCESSCONTROLLISTS::XWINDOWSACCESSCONTROLLISTS()
 {
@@ -74,12 +74,12 @@ XWINDOWSACCESSCONTROLLISTS::XWINDOWSACCESSCONTROLLISTS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSACCESSCONTROLLISTS::~XWINDOWSACCESSCONTROLLISTS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSACCESSCONTROLLISTS::~XWINDOWSACCESSCONTROLLISTS()
 {
@@ -88,15 +88,15 @@ XWINDOWSACCESSCONTROLLISTS::~XWINDOWSACCESSCONTROLLISTS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForAdmin(XCHAR* filename)
 * @brief      Set file only permission for admin
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  filename :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filename : File name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForAdmin(XCHAR* filename)
 {
@@ -169,15 +169,15 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForAdmin(XCHAR* filename)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForSystemUser(XCHAR* filename)
 * @brief      Set file only permission for system user
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  filename :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filename : File name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForSystemUser(XCHAR* filename)
 {
@@ -237,9 +237,9 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForSystemUser(XCHAR* filen
 * @brief      set file only permission for admin user
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  filename : 
+* @param[in]  filename : File name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForAdminUser(XCHAR* filename)
@@ -295,15 +295,15 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFileOnlyPermissionForAdminUser(XCHAR* filena
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSACCESSCONTROLLISTS::SetFilePermissionForEveryone(XCHAR* filename)
 * @brief      Set file permission for everyone
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  filename :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filename : File name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSACCESSCONTROLLISTS::SetFilePermissionForEveryone(XCHAR* filename)
 {
@@ -353,12 +353,12 @@ bool XWINDOWSACCESSCONTROLLISTS::SetFilePermissionForEveryone(XCHAR* filename)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSACCESSCONTROLLISTS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSACCESSCONTROLLISTS::Clean()
 {

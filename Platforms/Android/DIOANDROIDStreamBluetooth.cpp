@@ -66,11 +66,9 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMBLUETOOTH::DIOANDROIDSTREAMBLUETOOTH( )
+* @fn         DIOANDROIDSTREAMBLUETOOTH::DIOANDROIDSTREAMBLUETOOTH( ) : DIOSTREAMBLUETOOTH() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-* 
-* @param[in]    : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOANDROIDSTREAMBLUETOOTH::DIOANDROIDSTREAMBLUETOOTH( ) : DIOSTREAMBLUETOOTH() , XFSMACHINE(0)
@@ -139,7 +137,7 @@ DIOANDROIDSTREAMBLUETOOTH::~DIOANDROIDSTREAMBLUETOOTH()
 * @brief      Open
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTH::Open()
@@ -161,7 +159,7 @@ bool DIOANDROIDSTREAMBLUETOOTH::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTH::Disconnect()
@@ -187,7 +185,7 @@ bool DIOANDROIDSTREAMBLUETOOTH::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTH::Close()
@@ -226,9 +224,9 @@ bool DIOANDROIDSTREAMBLUETOOTH::Close()
 * @brief      Is ready connect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOANDROIDSTREAMBLUETOOTH::IsReadyConnect(int socket)
@@ -273,12 +271,12 @@ int DIOANDROIDSTREAMBLUETOOTH::IsReadyConnect(int socket)
 * @brief      SDP register service
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  service_name : 
-* @param[in]  service_dsc : 
-* @param[in]  service_prov : 
-* @param[in]  rfcomm_channel : 
+* @param[in]  service_name : Service name pointer to use.
+* @param[in]  service_dsc : Service dsc pointer to use.
+* @param[in]  service_prov : Service prov pointer to use.
+* @param[in]  rfcomm_channel : Rfcomm channel value.
 * 
-* @return     sdp_session_t* : 
+* @return     sdp_session_t* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 sdp_session_t* DIOANDROIDSTREAMBLUETOOTH::SDP_RegisterService(char* service_name,char* service_dsc,char* service_prov,int rfcomm_channel)
@@ -358,12 +356,12 @@ sdp_session_t* DIOANDROIDSTREAMBLUETOOTH::SDP_RegisterService(char* service_name
 * @brief      Management of PIN
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  active : 
-* @param[in]  &localMACstring : 
-* @param[in]  &remoteMACstring : 
-* @param[in]  PIN : 
+* @param[in]  active : Active value.
+* @param[in]  localMACstring : Local MA Cstring value.
+* @param[in]  remoteMACstring : Remote MA Cstring value.
+* @param[in]  PIN : PIN value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACstring, XSTRING &remoteMACstring, XSTRING& PIN)
@@ -470,7 +468,7 @@ bool DIOANDROIDSTREAMBLUETOOTH::ManagementOfPIN(bool active, XSTRING &localMACst
 * @brief      Thread run function
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMBLUETOOTH::ThreadRunFunction(void* param)

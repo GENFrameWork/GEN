@@ -56,11 +56,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILEDXFENTITYOBJPOLYLINE::GRPVECTORFILEDXFENTITYOBJPOLYLINE(XCHAR* nametype)
+* @fn         GRPVECTORFILEDXFENTITYOBJPOLYLINE::GRPVECTORFILEDXFENTITYOBJPOLYLINE(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ(nametype)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nametype : 
+* @param[in]  nametype : Nametype pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJPOLYLINE::GRPVECTORFILEDXFENTITYOBJPOLYLINE(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ(nametype)
@@ -91,7 +91,7 @@ GRPVECTORFILEDXFENTITYOBJPOLYLINE::~GRPVECTORFILEDXFENTITYOBJPOLYLINE()
 * @brief      Get thickness
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJPOLYLINE::GetThickness()
@@ -106,7 +106,7 @@ double GRPVECTORFILEDXFENTITYOBJPOLYLINE::GetThickness()
 * @brief      Set thickness
 * @ingroup    GRAPHIC
 * 
-* @param[in]  thickness : 
+* @param[in]  thickness : Thickness value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJPOLYLINE::SetThickness(double thickness)
@@ -121,7 +121,7 @@ void GRPVECTORFILEDXFENTITYOBJPOLYLINE::SetThickness(double thickness)
 * @brief      Get dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJPOLYLINE::GetDirExtrusion()
@@ -136,9 +136,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJPOLYLINE::GetDirExtrusi
 * @brief      Set dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @param[in]  dirextrusion : 
+* @param[in]  dirextrusion : Dirextrusion pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJPOLYLINE::SetDirExtrusion(GRPVECTORFILEDXFENTITYDEFPOINT* dirextrusion)
@@ -157,9 +157,9 @@ bool GRPVECTORFILEDXFENTITYOBJPOLYLINE::SetDirExtrusion(GRPVECTORFILEDXFENTITYDE
 * @brief      Apply data
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJPOLYLINE::ApplyData(GRPVECTORFILEDXFENTITY* entity)

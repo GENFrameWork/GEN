@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XANDROIDFILE::XANDROIDFILE()
+* 
+* @fn         XANDROIDFILE::XANDROIDFILE(): XLINUXFILE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDFILE::XANDROIDFILE(): XLINUXFILE()
 {
@@ -68,12 +68,12 @@ XANDROIDFILE::XANDROIDFILE(): XLINUXFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDFILE::~XANDROIDFILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDFILE::~XANDROIDFILE()
 {

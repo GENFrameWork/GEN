@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XESP32SYSTEM::XESP32SYSTEM()
+* 
+* @fn         XESP32SYSTEM::XESP32SYSTEM() : XSYSTEM()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32SYSTEM::XESP32SYSTEM() : XSYSTEM()
 {
@@ -70,12 +70,12 @@ XESP32SYSTEM::XESP32SYSTEM() : XSYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32SYSTEM::~XESP32SYSTEM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32SYSTEM::~XESP32SYSTEM()
 {
@@ -84,15 +84,15 @@ XESP32SYSTEM::~XESP32SYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSYSTEM_HARDWARETYPE XESP32SYSTEM::GetTypeHardware(int* revision)
 * @brief      Get type hardware
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  revision :
-*
-* @return     XSYSTEM_HARDWARETYPE :
-*
+* 
+* @param[in]  revision : Revision pointer to use.
+* 
+* @return     XSYSTEM_HARDWARETYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_HARDWARETYPE XESP32SYSTEM::GetTypeHardware(int* revision)
 {
@@ -105,12 +105,12 @@ XSYSTEM_HARDWARETYPE XESP32SYSTEM::GetTypeHardware(int* revision)
 * @fn         XSYSTEM_PLATFORM XESP32SYSTEM::GetPlatform(XSTRING* namestring)
 * @brief      Get platform
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  namestring : 
 * 
-* @return     XSYSTEM_PLATFORM : 
+* @param[in]  namestring : Namestring pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSYSTEM_PLATFORM : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_PLATFORM XESP32SYSTEM::GetPlatform(XSTRING* namestring)
 {
   if(namestring)  namestring->Set(__L("ESP32"));
@@ -126,16 +126,16 @@ XSYSTEM_PLATFORM XESP32SYSTEM::GetPlatform(XSTRING* namestring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32SYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 * @brief      Get memory info
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  total :
-* @param[in]  free :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  total : Total value.
+* @param[in]  free : Free value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32SYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 {
@@ -147,15 +147,15 @@ bool XESP32SYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32SYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 * @brief      Shut down
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  type :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32SYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 {
@@ -172,12 +172,12 @@ bool XESP32SYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32SYSTEM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32SYSTEM::Clean()
 {

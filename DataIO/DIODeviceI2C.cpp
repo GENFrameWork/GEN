@@ -63,8 +63,8 @@
 * @fn         DIODEVICEI2C::DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIODEVICEI2C::DIODEVICEI2C()
 {
   Clean();
@@ -79,8 +79,8 @@ DIODEVICEI2C::DIODEVICEI2C()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIODEVICEI2C::~DIODEVICEI2C()
 {
   End();
@@ -92,16 +92,16 @@ DIODEVICEI2C::~DIODEVICEI2C()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODEVICEI2C::Ini(XCHAR* localdevicename, int remotedeviceaddress, int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  localdevicename : 
-* @param[in]  remotedeviceaddress : 
-* @param[in]  timeout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  localdevicename : Localdevicename pointer to use.
+* @param[in]  remotedeviceaddress : Remotedeviceaddress value.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICEI2C::Ini(XCHAR* localdevicename, int remotedeviceaddress, int timeout)
 {
   if(!xtimerout) return false;
@@ -118,16 +118,16 @@ bool DIODEVICEI2C::Ini(XCHAR* localdevicename, int remotedeviceaddress, int time
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODEVICEI2C::Ini(int port, int remotedeviceaddress, int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  port : 
-* @param[in]  remotedeviceaddress : 
-* @param[in]  timeout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  port : Port number to use.
+* @param[in]  remotedeviceaddress : Remotedeviceaddress value.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICEI2C::Ini(int port, int remotedeviceaddress, int timeout)
 {
   if(!xtimerout) return false;
@@ -146,13 +146,13 @@ bool DIODEVICEI2C::Ini(int port, int remotedeviceaddress, int timeout)
 * @fn         DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(XCHAR* localdevicename, int remotedeviceaddress)
 * @brief      Create config
 * @ingroup    DATAIO
-*
-* @param[in]  localdevicename : 
-* @param[in]  remotedeviceaddress : 
 * 
-* @return     DIOSTREAMI2CCONFIG* : 
+* @param[in]  localdevicename : Localdevicename pointer to use.
+* @param[in]  remotedeviceaddress : Remotedeviceaddress value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSTREAMI2CCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(XCHAR* localdevicename, int remotedeviceaddress)
 {
   DIOSTREAMI2CCONFIG* diostreamcfg = GEN_NEW DIOSTREAMI2CCONFIG();
@@ -171,13 +171,13 @@ DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(XCHAR* localdevicename, int remot
 * @fn         DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(int port, int remotedeviceaddress)
 * @brief      Create config
 * @ingroup    DATAIO
-*
-* @param[in]  port : 
-* @param[in]  remotedeviceaddress : 
 * 
-* @return     DIOSTREAMI2CCONFIG* : 
+* @param[in]  port : Port number to use.
+* @param[in]  remotedeviceaddress : Remotedeviceaddress value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSTREAMI2CCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(int port, int remotedeviceaddress)
 {
   DIOSTREAMI2CCONFIG* diostreamcfg = GEN_NEW DIOSTREAMI2CCONFIG();
@@ -199,7 +199,7 @@ DIOSTREAMI2CCONFIG* DIODEVICEI2C::CreateConfig(int port, int remotedeviceaddress
 * @brief      Ini device
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICEI2C::IniDevice()
@@ -217,12 +217,12 @@ bool DIODEVICEI2C::IniDevice()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODEVICEI2C::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICEI2C::End()
 {
   if(xtimerout) 
@@ -257,8 +257,8 @@ bool DIODEVICEI2C::End()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIODEVICEI2C::Clean()
 {
   timeout       = 0;

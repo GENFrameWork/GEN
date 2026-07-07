@@ -31,7 +31,6 @@
 #include "GEN_Defines.h"
 
 
-
 #ifdef LINUX_X11_ACTIVE
 
 
@@ -46,13 +45,15 @@
 #include "GRP2DCanvas.h"
 #include "GRPDesktopManager.h"
 
+#include "MainProcLINUX.h"
+#include "APPFlowGraphics.h"
+
 
 #ifdef GRP_OPENGL_ACTIVE
 #include "GRPLINUXBlitGLES.h"
 #include <stdio.h>
 #include <string.h>
 #endif
-
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -71,19 +72,13 @@
 
 #ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         static bool IsRunningOnWSL()
 * @brief      Detect WSL/WSLg at runtime by reading /proc/version.
-*
-*             On WSLg the X server (Xwayland) runs in a separate mount namespace from the
-*             user distro, so MIT-SHM cannot be shared and EGL→X11 presentation fails
-*             ("MESA: error: Failed to attach to x11 shm"). There is also no real GPU for
-*             GLES (only llvmpipe software). OpenGL therefore brings no benefit on WSL and
-*             cannot present — so we skip it and use the X11 (XPutImage) software path,
-*             which works perfectly. On real Linux / Raspberry Pi this returns false and
-*             the normal hardware OpenGL ES path is used.
 * @ingroup    PLATFORM_LINUX
-*
+* 
+* @return     static bool : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static bool IsRunningOnWSL()
 {
@@ -100,11 +95,11 @@ static bool IsRunningOnWSL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRPLINUXSCREENX11::GRPLINUXSCREENX11()
+* 
+* @fn         GRPLINUXSCREENX11::GRPLINUXSCREENX11(): GRPSCREEN()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPLINUXSCREENX11::GRPLINUXSCREENX11(): GRPSCREEN()
 {
@@ -146,12 +141,12 @@ GRPLINUXSCREENX11::GRPLINUXSCREENX11(): GRPSCREEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPLINUXSCREENX11::~GRPLINUXSCREENX11()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPLINUXSCREENX11::~GRPLINUXSCREENX11()
 {
@@ -171,15 +166,15 @@ GRPLINUXSCREENX11::~GRPLINUXSCREENX11()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENX11::Create(bool show)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  show :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  show : Show value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Create(bool show)
 {
@@ -195,15 +190,15 @@ bool GRPLINUXSCREENX11::Create(bool show)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  canvas : canvas handle
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
 {
@@ -215,6 +210,36 @@ bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
   if(!window)  
     {
       return false;
+    }
+
+  if(wmdeletewindow != None)
+    {
+      XEvent event;
+
+      if(XCheckTypedWindowEvent(display, window, ClientMessage, &event))
+        {
+          if((Atom)event.xclient.data.l[0] == wmdeletewindow)
+            {
+              if(CanClose())
+                {
+                  if(mainproclinux.GetAppMain())
+                    {
+                      APPFLOWGRAPHICS* appgraphics = dynamic_cast<APPFLOWGRAPHICS*>(mainproclinux.GetAppMain()->GetApplication());
+                      if(appgraphics)
+                        {
+                          if((GRPSCREEN*)this == appgraphics->GetMainScreen())
+                            {
+                              appgraphics->SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
+                            }
+                           else
+                            {
+                              Delete();
+                            }
+                        }
+                    }                  
+                }
+            }
+        }
     }
 
 
@@ -230,20 +255,48 @@ bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
     }
   #endif
 
-  // X11 software path — always compiled, used as fallback when blitgles is NULL
-  // (WSL, EGL init failure, or GRP_OPENGL_ACTIVE not defined)
+
   GC gc = XCreateGC(display, window, 0, NULL);
   if(gc)
     {
       XSync(display, false);
 
-      XImage* image = CreateXImageFromBuffer(display, DefaultScreen(display), (XBYTE*)canvas->Buffer_Get(), width, height);
+      int neww = (int)width;
+      int newh = (int)height;
+
+      XWindowAttributes wattr;
+      if(XGetWindowAttributes(display, window, &wattr))
+        {
+          neww = wattr.width;
+          newh = wattr.height;
+        }
+
+      XBYTE* srcbuffer  = (XBYTE*)canvas->Buffer_Get();
+      XBYTE* blitbuffer = srcbuffer;
+      bool   scaled     = false;
+
+      if(srcbuffer && ((neww != (int)width) || (newh != (int)height)) && (neww > 0) && (newh > 0))
+        {
+          XBYTE* scaledbuffer = ScaleBufferNearestLetterbox(srcbuffer, (int)width, (int)height, neww, newh);
+          if(scaledbuffer)
+            {
+              blitbuffer = scaledbuffer;
+              scaled     = true;
+            }
+        }
+
+      int blitw = scaled ? neww   : (int)width;
+      int blith = scaled ? newh   : (int)height;
+
+      XImage* image = CreateXImageFromBuffer(display, DefaultScreen(display), blitbuffer, blitw, blith);
       if(image)
         {
-          XPutImage(display, window, gc, image, 0, 0, 0, 0, width, height);
+          XPutImage(display, window, gc, image, 0, 0, 0, 0, blitw, blith);
           XDestroyImage(image);
         }
-       
+
+      if(scaled) free(blitbuffer);
+
       XFreeGC(display, gc);
     }
 
@@ -260,9 +313,9 @@ bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
 * @brief      Update transparent
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  canvas : 
+* @param[in]  canvas : Canvas object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::UpdateTransparent(GRP2DCANVAS* canvas)
@@ -273,13 +326,13 @@ bool GRPLINUXSCREENX11::UpdateTransparent(GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENX11::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Delete()
 {
@@ -302,16 +355,16 @@ bool GRPLINUXSCREENX11::Delete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENX11::Resize(int width, int height)
 * @brief      Resize
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Resize(int width, int height)
 {
@@ -322,15 +375,15 @@ bool GRPLINUXSCREENX11::Resize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENX11::Show(bool active)
 * @brief      Show
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Show(bool active)
 {
@@ -341,15 +394,15 @@ bool GRPLINUXSCREENX11::Show(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENX11::ShowCursor(bool active)
 * @brief      Show cursor
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::ShowCursor(bool active)
 {
@@ -381,13 +434,13 @@ bool GRPLINUXSCREENX11::ShowCursor(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* GRPLINUXSCREENX11::GetHandle()
 * @brief      Get handle
 * @ingroup    PLATFORM_LINUX
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPLINUXSCREENX11::GetHandle()
 {
@@ -402,7 +455,7 @@ void* GRPLINUXSCREENX11::GetHandle()
 * @brief      Is desktop
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool  GRPLINUXSCREENX11::IsDesktop()
@@ -412,13 +465,13 @@ bool  GRPLINUXSCREENX11::IsDesktop()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPLINUXSCREENX11::SetIsDesktop(bool isdesktop)
 * @brief      Set is desktop
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  isdesktop : set is run in desktop
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPLINUXSCREENX11::SetIsDesktop(bool isdesktop)
 {
@@ -427,13 +480,13 @@ void GRPLINUXSCREENX11::SetIsDesktop(bool isdesktop)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXSCREENX11::HasFocus()
 * @brief      Has focus
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::HasFocus()
 {
@@ -449,13 +502,13 @@ bool GRPLINUXSCREENX11::HasFocus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         Display* GRPLINUXSCREENX11::GetDisplay()
 * @brief      Get display
 * @ingroup    PLATFORM_LINUX
-*
-* @return     Display* :
-*
+* 
+* @return     Display* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 Display* GRPLINUXSCREENX11::GetDisplay()
 {
@@ -464,13 +517,13 @@ Display* GRPLINUXSCREENX11::GetDisplay()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         Window* GRPLINUXSCREENX11::GetWindow()
 * @brief      Get window
 * @ingroup    PLATFORM_LINUX
-*
-* @return     Window* :
-*
+* 
+* @return     Window* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 Window* GRPLINUXSCREENX11::GetWindow()
 {
@@ -484,7 +537,7 @@ Window* GRPLINUXSCREENX11::GetWindow()
 * @brief      Get window root
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     Window* : 
+* @return     Window* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 Window* GRPLINUXSCREENX11::GetWindowRoot()
@@ -499,7 +552,7 @@ Window* GRPLINUXSCREENX11::GetWindowRoot()
 * @brief      Get visual info
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     XVisualInfo* : 
+* @return     XVisualInfo* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVisualInfo* GRPLINUXSCREENX11::GetVisualInfo()
@@ -510,13 +563,13 @@ XVisualInfo* GRPLINUXSCREENX11::GetVisualInfo()
 
 #ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPLINUXBLITGLES* GRPLINUXSCREENX11::GetBlitGLES()
 * @brief      Get OpenGL ES blitter (only present when GRP_OPENGL_ACTIVE is defined)
 * @ingroup    PLATFORM_LINUX
-*
-* @return     GRPLINUXBLITGLES* :
-*
+* 
+* @return     GRPLINUXBLITGLES* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPLINUXBLITGLES* GRPLINUXSCREENX11::GetBlitGLES()
 {
@@ -531,9 +584,9 @@ GRPLINUXBLITGLES* GRPLINUXSCREENX11::GetBlitGLES()
 * @brief      Create window
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  show : 
+* @param[in]  show : Show value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Create_Window(bool show)
@@ -563,8 +616,6 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
 
   root = DefaultRootWindow(display);    
 
-  //ShowDebugNetSupportedPropertys();
-
   if(screenselected == GRPSCREENTYPE_DESKTOP_ALL)
     {
       alldesktoprect = GetDesktopManager()->GetDesktopMonitors()->GetCombinedRect(); 
@@ -578,10 +629,7 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
     {
       return false;          
     }            
-            
-   // The native window is created in the (possibly rotated) PRESENTATION size, while the screen
-   // width/height keep the CONTENT size used by the canvas/viewport pipeline. On 0/180 these are
-   // identical; on 90/270 they are swapped (see GRPSCREEN::Rotate / GetPresentationWidth/Height).
+   
    int winw = (int)GetPresentationWidth();
    int winh = (int)GetPresentationHeight();
 
@@ -615,7 +663,6 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
             }
         }                      
 
-      // Fullscreen always covers the physical screen; the window size follows width/height as-is.
       winw = (int)width;
       winh = (int)height;
     }
@@ -650,8 +697,6 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
 
   #else
 
-  // Try EGL visual. On WSL we skip OpenGL entirely (no GPU + EGL→X11 presentation
-  // is broken there); everywhere else we try EGL and fall back if anything fails.
   bool opengl_visual_ok = false;
 
   if(IsRunningOnWSL())
@@ -705,9 +750,6 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
   #ifdef GRP_OPENGL_ACTIVE
   if(blitgles)
     {
-      // OpenGL path: do NOT set CWBackPixel. The X server would repaint the window
-      // white on every expose event, overwriting the EGL/GL-rendered content.
-      // CWBackPixmap=None tells X "don't paint any background, GL handles it".
       attr.background_pixmap = None;
       window = XCreateWindow(display, root, posx, posy, winw, winh, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixmap, &attr);
     }
@@ -717,21 +759,12 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
       attr.background_pixel = Style_Is(GRPSCREENSTYLE_TRANSPARENT)?0x00000000:0xFFFFFFFF;
       window = XCreateWindow(display, root, posx, posy, winw, winh, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixel, &attr);        
     }
-  
-  //window =  XCreateSimpleWindow(display, root, posx, posy, width, height, 0,  BlackPixel(display, 0), WhitePixel(display, 0));          
+ 
   if(!window) 
     {
       return false;
     }      
 
-  // Transparent popups: ask the compositor not to draw a drop shadow around the
-  // window. The window is already undecorated (_MOTIF_WM_HINTS decorations=0),
-  // so window managers that tie shadows to decorations (Mutter, KWin) won't
-  // shadow it; but standalone compositors (picom/compton, common on Openbox /
-  // Raspberry Pi / lightweight desktops) shadow undecorated windows by their own
-  // rules. picom/compton honor the per-window property _COMPTON_SHADOW (CARDINAL):
-  // a value of 0 disables the shadow for this window. Harmless where it is not
-  // read. (If your compositor ignores it, see the README for alternatives.)
   if(Style_Is(GRPSCREENSTYLE_TRANSPARENT))
     {
       Atom comptonshadow = XInternAtom(display, "_COMPTON_SHADOW", False);  // create if absent so we can set it
@@ -739,25 +772,16 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
         {
           long shadowoff = 0;
           XChangeProperty(display, window, comptonshadow, XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&shadowoff, 1);
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] _COMPTON_SHADOW=0 set (no compositor shadow on transparent window)"));
+          
+          //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] _COMPTON_SHADOW=0 set (no compositor shadow on transparent window)"));
         }
-
-      // WSLg / generic overlay: under WSLg there is NO X11 compositor (no picom),
-      // so _COMPTON_SHADOW is ignored; the shadow is drawn by the WSLg/Windows
-      // window-integration (RAIL) layer around each managed Linux window. To stop
-      // that (and any X11 compositor frame shadow on a real desktop), mark the
-      // transparent popup override-redirect: it bypasses the window manager and
-      // the WSLg integration decoration entirely (no border, no shadow, no
-      // taskbar entry). Must be set BEFORE the window is mapped (Show() maps it).
-      // Trade-off: the WM no longer manages focus for this window; mouse input
-      // still works (events go to the window under the pointer); keyboard focus
-      // may need XSetInputFocus if the popup uses the keyboard.
-      {
+     
         XSetWindowAttributes swa;
         swa.override_redirect = True;
         XChangeWindowAttributes(display, window, CWOverrideRedirect, &swa);
-        XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] override_redirect set on transparent window (no WM/WSLg frame shadow)"));
-      }
+        
+        //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] override_redirect set on transparent window (no WM/WSLg frame shadow)"));
+      
     }
 
   /*
@@ -904,42 +928,31 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
       */
     }
   
+  
+  wmdeletewindow = XInternAtom(display, "WM_DELETE_WINDOW", False);
+  if(wmdeletewindow != None)
+    {
+      XSetWMProtocols(display, window, &wmdeletewindow, 1);
+    }
+
   XMapWindow(display , window);
   XMoveWindow(display, window, posx, posy);    
 
   #ifdef GRP_OPENGL_ACTIVE
-  // EGL context is created now that the X window exists.
-  // If it fails, we silently fall back to the X11 software path.
+ 
   if(blitgles && !blitgles->Create(this))
     {
       XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] BlitGLES create failed; falling back to X11 software path"));
       GEN_DELETE blitgles;
       blitgles = NULL;
     }
-
-  // VERTICAL FLIP CORRECTION (Linux/Mesa + EGL-to-X11 only)
-  //
-  // Root cause: glTexImage2D places row 0 of the canvas buffer at UV.y = 0
-  // (the OpenGL "bottom" of the texture). The quad vertex layout maps
-  // NDC bottom (y=-1) → UV.y=0 and NDC top (y=+1) → UV.y=1. So the canvas
-  // renders upside down: row 0 (top of canvas) appears at the bottom of the
-  // window.
-  //
-  // On Windows, ANGLE/D3D11 internally converts the GL bottom-left coordinate
-  // convention to D3D11's top-left convention, which incidentally flips the
-  // presentation and cancels the texture inversion.
-  // On Android, SurfaceFlinger's compositor does the same.
-  // On Linux + Mesa + EGL/X11, neither correction applies → inverted image.
-  //
-  // Fix: SetFlipY(true) negates the model-matrix Y scale (sy = -1.0f in
-  // BuildModelMatrix), which flips the rendered quad vertically and restores
-  // the correct orientation. Letterboxing (lboxsy) is applied on top of sy,
-  // so aspect-ratio correction is unaffected.
+    
   if(blitgles)
     {
       blitgles->SetFlipY(true);
       XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] BlitGLES SetFlipY(true) — correcting Mesa EGL-to-X11 vertical flip"));
     }
+    
   #endif
 
   return true;
@@ -952,10 +965,10 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
 * @brief      Change screen resolution
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  width : 
-* @param[in]  height : 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::ChangeScreenResolution(int width, int height)
@@ -994,19 +1007,19 @@ bool GRPLINUXSCREENX11::ChangeScreenResolution(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XImage* GRPLINUXSCREENX11::CreateXImageFromBuffer(Display* display, int screen, XBYTE* buffer, int width, int height)
 * @brief      Create X image from buffer
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  display :
-* @param[in]  screen :
-* @param[in]  buffer :
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     XImage* :
-*
+* 
+* @param[in]  display : Display pointer to use.
+* @param[in]  screen : Screen object to use.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     XImage* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XImage* GRPLINUXSCREENX11::CreateXImageFromBuffer(Display* display, int screen, XBYTE* buffer, int width, int height)
 {
@@ -1099,11 +1112,81 @@ XImage* GRPLINUXSCREENX11::CreateXImageFromBuffer(Display* display, int screen, 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XBYTE* GRPLINUXSCREENX11::ScaleBufferNearestLetterbox(XBYTE* src, int srcw, int srch, int dstw, int dsth)
+* @brief      Nearest-neighbor scale of a 4-bytes-per-pixel buffer to a new size, letterboxed
+*             (black bars) to preserve the source aspect ratio. Used by the X11 software blit
+*             path (no GPU) so a resize/maximize scales the image the same way the GL path does,
+*             instead of pasting it 1:1 in a corner.
+* @note       INTERNAL
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  src : Source buffer, srcw x srch, 4 bytes per pixel. Channel order does not matter,
+*                   pixels are copied whole.
+* @param[in]  srcw : Source width.
+* @param[in]  srch : Source height.
+* @param[in]  dstw : Destination width.
+* @param[in]  dsth : Destination height.
+* 
+* @return     XBYTE* : Newly malloc'd dstw x dsth x 4 buffer (caller must free()); NULL on error.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XBYTE* GRPLINUXSCREENX11::ScaleBufferNearestLetterbox(XBYTE* src, int srcw, int srch, int dstw, int dsth)
+{
+  if(!src || (srcw <= 0) || (srch <= 0) || (dstw <= 0) || (dsth <= 0))
+    {
+      return NULL;
+    }
+
+  size_t dstbytes = (size_t)dstw * (size_t)dsth * 4;
+
+  XBYTE* dst = (XBYTE*)malloc(dstbytes);
+  if(!dst)
+    {
+      return NULL;
+    }
+
+  memset(dst, 0, dstbytes);   // black letterbox bars
+
+  float scalex = (float)dstw / (float)srcw;
+  float scaley = (float)dsth / (float)srch;
+  float scale  = (scalex < scaley) ? scalex : scaley;
+
+  int draww = (int)((float)srcw * scale);
+  int drawh = (int)((float)srch * scale);
+  if(draww < 1) draww = 1;
+  if(drawh < 1) drawh = 1;
+
+  int offsetx = (dstw - draww) / 2;
+  int offsety = (dsth - drawh) / 2;
+
+  for(int y=0; y<drawh; y++)
+    {
+      int srcy = (int)((float)y / scale);
+      if(srcy >= srch) srcy = srch - 1;
+
+      XBYTE* dstrow    = dst + ((size_t)(y + offsety) * (size_t)dstw + (size_t)offsetx) * 4;
+      XBYTE* srcrowbase = src + (size_t)srcy * (size_t)srcw * 4;
+
+      for(int x=0; x<draww; x++)
+        {
+          int srcx = (int)((float)x / scale);
+          if(srcx >= srcw) srcx = srcw - 1;
+
+          memcpy(dstrow + (size_t)x * 4, srcrowbase + (size_t)srcx * 4, 4);
+        }
+    }
+
+  return dst;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int GRPLINUXSCREENX11::GetTaskBarHeight()
 * @brief      Get task bar height
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPLINUXSCREENX11::GetTaskBarHeight()
@@ -1116,7 +1199,7 @@ int GRPLINUXSCREENX11::GetTaskBarHeight()
   Atom atomworkarea = XInternAtom(display, "_NET_WORKAREA", True);
   if(atomworkarea == None) 
     {
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen X11] Error Atom WORKAREA (Get Taskbar height)"));      
+      //XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen X11] Error Atom WORKAREA (Get Taskbar height)"));      
       return 0;
     }
 
@@ -1129,7 +1212,7 @@ int GRPLINUXSCREENX11::GetTaskBarHeight()
   int status = XGetWindowProperty(display, root, atomworkarea, 0, 4 * sizeof(long), False, XA_CARDINAL, &actual_type, &actual_format, &nitems, &bytes_after, &data);
   if(status != Success || !data) 
     {
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen X11] Error XGetWindowProperty (Get Taskbar height)"));     
+      //XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen X11] Error XGetWindowProperty (Get Taskbar height)"));     
       return 0;
     }
     
@@ -1150,12 +1233,11 @@ int GRPLINUXSCREENX11::GetTaskBarHeight()
 * @brief      Show debug net supported propertys
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::ShowDebugNetSupportedPropertys()
 {
-  // Get the atom for _NET_SUPPORTED
   Atom netsupported = XInternAtom(display, "_NET_SUPPORTED", True);
   if(netsupported == None) 
     {
@@ -1163,7 +1245,6 @@ bool GRPLINUXSCREENX11::ShowDebugNetSupportedPropertys()
       return false;
     }
 
-  // Get the _NET_SUPPORTED property from the root window
   Atom            type;
   int             format;
   unsigned long   nitems;
@@ -1183,8 +1264,8 @@ bool GRPLINUXSCREENX11::ShowDebugNetSupportedPropertys()
       return 1;
     }
 
-  // Print the list of supported atoms
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] _NET_SUPPORTED Atoms [%d]: "), nitems);
+
+  //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] _NET_SUPPORTED Atoms [%d]: "), nitems);
 
   for(unsigned long c=0; c<nitems; ++c) 
     {
@@ -1211,7 +1292,7 @@ bool GRPLINUXSCREENX11::ShowDebugNetSupportedPropertys()
 * @brief      Get byte order
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPLINUXSCREENX11::GetByteOrder()
@@ -1241,10 +1322,10 @@ int GRPLINUXSCREENX11::GetByteOrder()
 * @brief      Error handler
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  display : 
-* @param[in]  errorevent : 
+* @param[in]  display : Display pointer to use.
+* @param[in]  errorevent : Errorevent pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPLINUXSCREENX11::ErrorHandler(Display* display, XErrorEvent* errorevent)
@@ -1257,25 +1338,26 @@ int GRPLINUXSCREENX11::ErrorHandler(Display* display, XErrorEvent* errorevent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPLINUXSCREENX11::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPLINUXSCREENX11::Clean()
 {
-  display   = NULL;
-  window    = 0;
+  display        = NULL;
+  window         = 0;
 
-  isdesktop = false;
+  wmdeletewindow = None;
+
+  isdesktop      = false;
 
   #ifdef GRP_OPENGL_ACTIVE
   blitgles  = NULL;
   #endif
 }
-
 
 
 

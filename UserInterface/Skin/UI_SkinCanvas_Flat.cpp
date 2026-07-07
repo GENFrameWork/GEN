@@ -71,12 +71,12 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_SKINCANVAS_FLAT::UI_SKINCANVAS_FLAT(GRPSCREEN* screen, int viewportindex)
+* @fn         UI_SKINCANVAS_FLAT::UI_SKINCANVAS_FLAT(GRPSCREEN* screen, int viewportindex) : UI_SKINCANVAS(screen, viewportindex)
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  screen : 
-* @param[in]  viewportindex : 
+* @param[in]  screen : Screen object to use.
+* @param[in]  viewportindex : Viewportindex value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_SKINCANVAS_FLAT::UI_SKINCANVAS_FLAT(GRPSCREEN* screen, int viewportindex) : UI_SKINCANVAS(screen, viewportindex)
@@ -93,8 +93,8 @@ UI_SKINCANVAS_FLAT::UI_SKINCANVAS_FLAT(GRPSCREEN* screen, int viewportindex) : U
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKINCANVAS_FLAT::~UI_SKINCANVAS_FLAT()    
 { 
   Clean();                            
@@ -106,12 +106,12 @@ UI_SKINCANVAS_FLAT::~UI_SKINCANVAS_FLAT()
 * @fn         bool UI_SKINCANVAS_FLAT::Draw_Form(UI_ELEMENT* element)
 * @brief      Draw form
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS_FLAT::Draw_Form(UI_ELEMENT* element)  
 {  
   if(!screen)  return false;
@@ -171,8 +171,8 @@ bool UI_SKINCANVAS_FLAT::Draw_Form(UI_ELEMENT* element)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKINCANVAS_FLAT::Clean()
 {
   

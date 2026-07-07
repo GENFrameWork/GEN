@@ -54,13 +54,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SNDFACTORY_XEVENT::SNDFACTORY_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* @fn         SNDFACTORY_XEVENT::SNDFACTORY_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    SOUND
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDFACTORY_XEVENT::SNDFACTORY_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
@@ -88,7 +88,7 @@ SNDFACTORY_XEVENT::~SNDFACTORY_XEVENT()
 * @brief      Get item
 * @ingroup    SOUND
 * 
-* @return     SNDITEM* : 
+* @return     SNDITEM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDITEM* SNDFACTORY_XEVENT::GetItem()
@@ -103,7 +103,7 @@ SNDITEM* SNDFACTORY_XEVENT::GetItem()
 * @brief      Set item
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDFACTORY_XEVENT::SetItem(SNDITEM* item)

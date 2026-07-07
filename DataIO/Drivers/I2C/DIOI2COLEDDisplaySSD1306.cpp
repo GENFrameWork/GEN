@@ -61,14 +61,14 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOI2COLEDDISPLAYSSD1306::DIOI2COLEDDISPLAYSSD1306(XBYTE* buffer, XDWORD width, XDWORD height): DIODEVICEI2C()
+* 
+* @fn         DIOI2COLEDDISPLAYSSD1306::DIOI2COLEDDISPLAYSSD1306( XDWORD width, XDWORD height): DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  width :
-* @param[in]  height :
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  DIODEVICEI2C : DIODEVICEI2 C value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2COLEDDISPLAYSSD1306::DIOI2COLEDDISPLAYSSD1306( XDWORD width, XDWORD height): DIODEVICEI2C()
 {
@@ -82,12 +82,12 @@ DIOI2COLEDDISPLAYSSD1306::DIOI2COLEDDISPLAYSSD1306( XDWORD width, XDWORD height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2COLEDDISPLAYSSD1306::~DIOI2COLEDDISPLAYSSD1306()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2COLEDDISPLAYSSD1306::~DIOI2COLEDDISPLAYSSD1306()
 {
@@ -98,15 +98,15 @@ DIOI2COLEDDISPLAYSSD1306::~DIOI2COLEDDISPLAYSSD1306()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::SetBuffer(XBYTE* buffer)
 * @brief      Set buffer
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::SetBuffer(XBYTE* buffer)
 {
@@ -119,13 +119,13 @@ bool DIOI2COLEDDISPLAYSSD1306::SetBuffer(XBYTE* buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::IniDevice()
 {
@@ -191,9 +191,9 @@ bool DIOI2COLEDDISPLAYSSD1306::IniDevice()
 * @brief      Clear
 * @ingroup    DATAIO
 * 
-* @param[in]  color : 
+* @param[in]  color : Color value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::Clear(XBYTE color)
@@ -227,15 +227,15 @@ bool DIOI2COLEDDISPLAYSSD1306::Clear(XBYTE color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::Update(XBYTE* buffer)
 * @brief      Update
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::Update(XBYTE* buffer)
 {
@@ -265,17 +265,17 @@ bool DIOI2COLEDDISPLAYSSD1306::Update(XBYTE* buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::PutPixel(XWORD x, XWORD y, bool color)
 * @brief      Put pixel
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  color :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  color : Color value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::PutPixel(XWORD x, XWORD y, bool color)
 {
@@ -302,13 +302,13 @@ bool DIOI2COLEDDISPLAYSSD1306::PutPixel(XWORD x, XWORD y, bool color)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::End()
 {
@@ -321,15 +321,15 @@ bool DIOI2COLEDDISPLAYSSD1306::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::Activate(bool active)
 * @brief      Activate
 * @ingroup    DATAIO
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::Activate(bool active)
 {
@@ -338,13 +338,13 @@ bool DIOI2COLEDDISPLAYSSD1306::Activate(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2COLEDDISPLAYSSD1306::SetContrast(XBYTE contrast)
 * @brief      Set contrast
 * @ingroup    DATAIO
-*
-* @param[in]  contrast :
-*
+* 
+* @param[in]  contrast : Contrast value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2COLEDDISPLAYSSD1306::SetContrast(XBYTE contrast)
 {
@@ -354,13 +354,13 @@ void DIOI2COLEDDISPLAYSSD1306::SetContrast(XBYTE contrast)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOI2COLEDDISPLAYSSD1306::GetX()
 * @brief      Get x
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOI2COLEDDISPLAYSSD1306::GetX()
 {
@@ -369,13 +369,13 @@ XBYTE DIOI2COLEDDISPLAYSSD1306::GetX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOI2COLEDDISPLAYSSD1306::GetY()
 * @brief      Get y
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOI2COLEDDISPLAYSSD1306::GetY()
 {
@@ -384,15 +384,15 @@ XBYTE DIOI2COLEDDISPLAYSSD1306::GetY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::SetX(XBYTE x)
 * @brief      Set x
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::SetX(XBYTE x)
 {
@@ -405,15 +405,15 @@ bool DIOI2COLEDDISPLAYSSD1306::SetX(XBYTE x)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::SetY(XBYTE y)
 * @brief      Set y
 * @ingroup    DATAIO
-*
-* @param[in]  y :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  y : Y coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::SetY(XBYTE y)
 {
@@ -426,16 +426,16 @@ bool DIOI2COLEDDISPLAYSSD1306::SetY(XBYTE y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::SetXY(XBYTE x, XBYTE y)
 * @brief      Set XY
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::SetXY(XBYTE x, XBYTE y)
 {
@@ -447,15 +447,15 @@ bool DIOI2COLEDDISPLAYSSD1306::SetXY(XBYTE x, XBYTE y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::SendCommand(XBYTE command)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  command :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  command : Command value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::SendCommand(XBYTE command)
 {
@@ -464,16 +464,16 @@ bool DIOI2COLEDDISPLAYSSD1306::SendCommand(XBYTE command)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::SendData(XBYTE* data, int size)
 * @brief      Send data
 * @ingroup    DATAIO
-*
-* @param[in]  data :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::SendData(XBYTE* data, int size)
 {
@@ -482,17 +482,17 @@ bool DIOI2COLEDDISPLAYSSD1306::SendData(XBYTE* data, int size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2COLEDDISPLAYSSD1306::Send(XBYTE control, XBYTE* data, int sizedata)
 * @brief      Send
 * @ingroup    DATAIO
-*
-* @param[in]  control :
-* @param[in]  data :
-* @param[in]  sizedata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  control : Control value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizedata : Sizedata value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2COLEDDISPLAYSSD1306::Send(XBYTE control, XBYTE* data, int sizedata)
 {
@@ -511,12 +511,12 @@ bool DIOI2COLEDDISPLAYSSD1306::Send(XBYTE control, XBYTE* data, int sizedata)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2COLEDDISPLAYSSD1306::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2COLEDDISPLAYSSD1306::Clean()
 {

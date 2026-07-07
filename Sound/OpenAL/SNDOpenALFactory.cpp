@@ -93,10 +93,10 @@ SNDOPENALFACTORY::~SNDOPENALFACTORY()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool SNDOPENALFACTORY::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Ini()
@@ -158,7 +158,7 @@ bool SNDOPENALFACTORY::Ini()
 * @brief      Update
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Update()
@@ -374,10 +374,10 @@ bool SNDOPENALFACTORY::Update()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool SNDOPENALFACTORY::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::End()
@@ -430,11 +430,11 @@ bool SNDOPENALFACTORY::End()
 * @brief      Sound play
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
-* @param[in]  playCFG : 
-* @param[in]  ntimestoplay : 
+* @param[in]  item : Item pointer to use.
+* @param[in]  playCFG : Play configuration pointer to use.
+* @param[in]  ntimestoplay : Ntimestoplay value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Sound_Play(SNDITEM* item, SNDPLAYCFG* playCFG, int ntimestoplay)
@@ -507,9 +507,9 @@ bool SNDOPENALFACTORY::Sound_Play(SNDITEM* item, SNDPLAYCFG* playCFG, int ntimes
 * @brief      Sound pause
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Sound_Pause(SNDITEM* item)
@@ -562,9 +562,9 @@ bool SNDOPENALFACTORY::Sound_Pause(SNDITEM* item)
 * @brief      Sound stop
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Sound_Stop(SNDITEM* item)
@@ -607,7 +607,7 @@ bool SNDOPENALFACTORY::Sound_Stop(SNDITEM* item)
 * @brief      Sound stop all
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Sound_StopAll()
@@ -640,11 +640,11 @@ bool SNDOPENALFACTORY::Sound_StopAll()
 * @brief      Sound wait to end
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
-* @param[in]  maxtimeout : 
-* @param[in]  waitfunction : 
+* @param[in]  item : Item pointer to use.
+* @param[in]  maxtimeout : Maxtimeout value.
+* @param[in]  waitfunction : Waitfunction value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Sound_WaitToEnd(SNDITEM* item, int maxtimeout, SNDFACTORY_WAITFUNCTION waitfunction)
@@ -715,10 +715,10 @@ bool SNDOPENALFACTORY::Sound_WaitToEnd(SNDITEM* item, int maxtimeout, SNDFACTORY
 * @brief      Sound wait all to end
 * @ingroup    SOUND
 * 
-* @param[in]  maxtimeout : 
-* @param[in]  waitfunction : 
+* @param[in]  maxtimeout : Maxtimeout value.
+* @param[in]  waitfunction : Waitfunction value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Sound_WaitAllToEnd(int maxtimeout, SNDFACTORY_WAITFUNCTION waitfunction)
@@ -784,9 +784,9 @@ bool SNDOPENALFACTORY::Sound_WaitAllToEnd(int maxtimeout, SNDFACTORY_WAITFUNCTIO
 * @brief      Sound get volume
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SNDOPENALFACTORY::Sound_GetVolume(SNDITEM* item)
@@ -816,10 +816,10 @@ int SNDOPENALFACTORY::Sound_GetVolume(SNDITEM* item)
 * @brief      Sound set volume
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
-* @param[in]  volume : 
+* @param[in]  item : Item pointer to use.
+* @param[in]  volume : Volume value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Sound_SetVolume(SNDITEM* item, int volume)
@@ -849,9 +849,9 @@ bool SNDOPENALFACTORY::Sound_SetVolume(SNDITEM* item, int volume)
 * @brief      Sound get pitch
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float SNDOPENALFACTORY::Sound_GetPitch(SNDITEM* item)
@@ -881,10 +881,10 @@ float SNDOPENALFACTORY::Sound_GetPitch(SNDITEM* item)
 * @brief      Sound set pitch
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
-* @param[in]  pitch : 
+* @param[in]  item : Item pointer to use.
+* @param[in]  pitch : Pitch value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::Sound_SetPitch(SNDITEM* item, float pitch)
@@ -915,7 +915,7 @@ bool SNDOPENALFACTORY::Sound_SetPitch(SNDITEM* item, float pitch)
 * @brief      Delete all items
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::DeleteAllItems()
@@ -940,7 +940,7 @@ bool SNDOPENALFACTORY::DeleteAllItems()
 * @brief      Get play mutex
 * @ingroup    SOUND
 * 
-* @return     XMUTEX* : 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* SNDOPENALFACTORY::GetPlayMutex()
@@ -955,7 +955,7 @@ XMUTEX* SNDOPENALFACTORY::GetPlayMutex()
 * @brief      Get sound play items
 * @ingroup    SOUND
 * 
-* @return     XVECTOR<SNDOPENALPLAYITEM*>* : 
+* @return     XVECTOR<SNDOPENALPLAYITEM*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<SNDOPENALPLAYITEM*>* SNDOPENALFACTORY::GetSoundPlayItems()
@@ -970,9 +970,9 @@ XVECTOR<SNDOPENALPLAYITEM*>* SNDOPENALFACTORY::GetSoundPlayItems()
 * @brief      Get play item from item
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
-* @return     SNDOPENALPLAYITEM* : 
+* @return     SNDOPENALPLAYITEM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDOPENALPLAYITEM* SNDOPENALFACTORY::GetPlayItemFromItem(SNDITEM* item)
@@ -1005,10 +1005,10 @@ SNDOPENALPLAYITEM* SNDOPENALFACTORY::GetPlayItemFromItem(SNDITEM* item)
 * @brief      Generate buffer
 * @ingroup    SOUND
 * 
-* @param[in]  playitem : 
-* @param[in]  soundnote : 
+* @param[in]  playitem : Playitem pointer to use.
+* @param[in]  soundnote : Soundnote pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::GenerateBuffer(SNDOPENALPLAYITEM* playitem, SNDNOTE* soundnote)
@@ -1049,10 +1049,10 @@ bool SNDOPENALFACTORY::GenerateBuffer(SNDOPENALPLAYITEM* playitem, SNDNOTE* soun
 * @brief      Generate buffer
 * @ingroup    SOUND
 * 
-* @param[in]  playitem : 
-* @param[in]  soundfile : 
+* @param[in]  playitem : Playitem pointer to use.
+* @param[in]  soundfile : Soundfile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALFACTORY::GenerateBuffer(SNDOPENALPLAYITEM* playitem, SNDFILE* soundfile)
@@ -1084,7 +1084,7 @@ bool SNDOPENALFACTORY::GenerateBuffer(SNDOPENALPLAYITEM* playitem, SNDFILE* soun
 * @brief      Thread play
 * @ingroup    SOUND
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDOPENALFACTORY::ThreadPlay(void* param)

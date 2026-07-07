@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XANDROIDCONSOLE::XANDROIDCONSOLE()
+* 
+* @fn         XANDROIDCONSOLE::XANDROIDCONSOLE(): XLINUXCONSOLE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDCONSOLE::XANDROIDCONSOLE(): XLINUXCONSOLE()
 {
@@ -66,12 +66,12 @@ XANDROIDCONSOLE::XANDROIDCONSOLE(): XLINUXCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDCONSOLE::~XANDROIDCONSOLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDCONSOLE::~XANDROIDCONSOLE()
 {

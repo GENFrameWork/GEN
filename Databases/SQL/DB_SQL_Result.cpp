@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_RESULT::DB_SQL_RESULT()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT::DB_SQL_RESULT()
 {
@@ -69,12 +69,12 @@ DB_SQL_RESULT::DB_SQL_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_RESULT::~DB_SQL_RESULT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT::~DB_SQL_RESULT()
 {
@@ -88,13 +88,13 @@ DB_SQL_RESULT::~DB_SQL_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_ROW* DB_SQL_RESULT::GetRow()
 * @brief      Get row
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_ROW* :
-*
+* 
+* @return     DB_SQL_ROW* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_ROW* DB_SQL_RESULT::GetRow()
 {
@@ -103,13 +103,13 @@ DB_SQL_ROW* DB_SQL_RESULT::GetRow()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_ROWHEADER* DB_SQL_RESULT::GetHeader()
 * @brief      Get header
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_ROWHEADER* :
-*
+* 
+* @return     DB_SQL_ROWHEADER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_ROWHEADER* DB_SQL_RESULT::GetHeader()
 {
@@ -118,13 +118,13 @@ DB_SQL_ROWHEADER* DB_SQL_RESULT::GetHeader()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DB_SQL_RESULT::GetCurrentRowIndex()
 * @brief      Get current row index
 * @ingroup    DATABASE
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DB_SQL_RESULT::GetCurrentRowIndex()
 {
@@ -133,12 +133,12 @@ XDWORD DB_SQL_RESULT::GetCurrentRowIndex()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DB_SQL_RESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_RESULT::Clean()
 {

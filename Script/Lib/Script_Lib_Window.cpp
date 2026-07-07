@@ -84,9 +84,11 @@ APPFLOWGRAPHICS*   SCRIPT_LIB_WINDOW::appgraphics = NULL;
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn        SCRIPT_LIB_WINDOW::SCRIPT_LIB_WINDOW()
+* @fn         SCRIPT_LIB_WINDOW::SCRIPT_LIB_WINDOW() : SCRIPT_LIB(SCRIPT_LIB_NAME_WINDOW)
 * @brief      Constructor
 * @ingroup    SCRIPT
+* 
+* @param[in]  SCRIPT_LIB_NAME_WINDOW : SCRIPT LIB NAME WINDOW value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_WINDOW::SCRIPT_LIB_WINDOW() : SCRIPT_LIB(SCRIPT_LIB_NAME_WINDOW)
@@ -100,7 +102,7 @@ SCRIPT_LIB_WINDOW::SCRIPT_LIB_WINDOW() : SCRIPT_LIB(SCRIPT_LIB_NAME_WINDOW)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn        SCRIPT_LIB_WINDOW::~SCRIPT_LIB_WINDOW()
+* @fn         SCRIPT_LIB_WINDOW::~SCRIPT_LIB_WINDOW()
 * @brief      Destructor
 * @note       VIRTUAL
 * @ingroup    SCRIPT
@@ -118,9 +120,9 @@ SCRIPT_LIB_WINDOW::~SCRIPT_LIB_WINDOW()
 * @brief      Add library functions
 * @ingroup    SCRIPT
 * 
-* @param[in]  script : 
+* @param[in]  script : Script pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_WINDOW::AddLibraryFunctions(SCRIPT* script)
@@ -148,7 +150,7 @@ bool SCRIPT_LIB_WINDOW::AddLibraryFunctions(SCRIPT* script)
 * @brief      Bmp find CFG get diff limit percent
 * @ingroup    SCRIPT
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE SCRIPT_LIB_WINDOW::BmpFindCFG_GetDiffLimitPercent()
@@ -163,7 +165,7 @@ XBYTE SCRIPT_LIB_WINDOW::BmpFindCFG_GetDiffLimitPercent()
 * @brief      Bmp find CFG set diff limit percent
 * @ingroup    SCRIPT
 * 
-* @param[in]  difflimitpercent : 
+* @param[in]  difflimitpercent : Difflimitpercent value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_WINDOW::BmpFindCFG_SetDiffLimitPercent(XBYTE difflimitpercent)
@@ -178,7 +180,7 @@ void SCRIPT_LIB_WINDOW::BmpFindCFG_SetDiffLimitPercent(XBYTE difflimitpercent)
 * @brief      Bmp find CFG get pixel margin
 * @ingroup    SCRIPT
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE SCRIPT_LIB_WINDOW::BmpFindCFG_GetPixelMargin()
@@ -193,7 +195,7 @@ XBYTE SCRIPT_LIB_WINDOW::BmpFindCFG_GetPixelMargin()
 * @brief      Bmp find CFG set pixel margin
 * @ingroup    SCRIPT
 * 
-* @param[in]  pixelmargin : 
+* @param[in]  pixelmargin : Pixelmargin value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_WINDOW::BmpFindCFG_SetPixelMargin(XBYTE pixelmargin)
@@ -210,7 +212,7 @@ void SCRIPT_LIB_WINDOW::BmpFindCFG_SetPixelMargin(XBYTE pixelmargin)
 * @brief      Get app graphics
 * @ingroup    SCRIPT
 * 
-* @return     APPFLOWGRAPHICS* : 
+* @return     APPFLOWGRAPHICS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWGRAPHICS* SCRIPT_LIB_WINDOW::GetAppGraphics()
@@ -221,11 +223,11 @@ APPFLOWGRAPHICS* SCRIPT_LIB_WINDOW::GetAppGraphics()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void SCRIPT_LIB_WINDOW::SetAppGraphics(APPFLOWGRAPHICS* appgraphics)
+* @fn         void SCRIPT_LIB_WINDOW::SetAppGraphics(APPFLOWGRAPHICS* _appgraphics)
 * @brief      Set app graphics
 * @ingroup    SCRIPT
 * 
-* @param[in]  _appgraphics : 
+* @param[in]  _appgraphics : Appgraphics pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_WINDOW::SetAppGraphics(APPFLOWGRAPHICS* _appgraphics)
@@ -266,10 +268,10 @@ void SCRIPT_LIB_WINDOW::Clean()
 * @brief      all_Window_GetPosX
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Window_GetPosX(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -435,10 +437,10 @@ void Call_Window_GetPosX(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
 * @brief      Call_Window_GetPosY
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Window_GetPosY(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -466,10 +468,10 @@ void Call_Window_GetPosY(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
 * @brief      all_Window_SetBmpFindCFG
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Window_SetBmpFindCFG(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -512,10 +514,10 @@ void Call_Window_SetBmpFindCFG(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVAR
 * @brief      all_Window_SetFocus
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Window_SetFocus(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -581,10 +583,10 @@ void Call_Window_SetFocus(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 * @brief      all_Window_SetPosition
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Window_SetPosition(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -655,10 +657,10 @@ void Call_Window_SetPosition(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIA
 * @brief      all_Window_Resize
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Window_Resize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -729,10 +731,10 @@ void Call_Window_Resize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>*
 * @brief      all_Window_Minimize
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Window_Minimize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -799,10 +801,10 @@ void Call_Window_Minimize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 * @brief      Call_Window_Maximize
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Window_Maximize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -871,11 +873,11 @@ void Call_Window_Maximize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 * @brief      ifferencesPerCent
 * @ingroup    SCRIPT
 * 
-* @param[in]  ndiff : 
-* @param[in]  max : 
-* @param[in]  limit : 
+* @param[in]  ndiff : Ndiff value.
+* @param[in]  max : Max value.
+* @param[in]  limit : Limit value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DifferencesPerCent(XDWORD ndiff, XDWORD max, int limit)
@@ -894,11 +896,11 @@ bool DifferencesPerCent(XDWORD ndiff, XDWORD max, int limit)
 * @brief      sSimilarPixel
 * @ingroup    SCRIPT
 * 
-* @param[in]  origin : 
-* @param[in]  target : 
-* @param[in]  margin : 
+* @param[in]  origin : Origin value.
+* @param[in]  target : Target value.
+* @param[in]  margin : Margin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool IsSimilarPixel(XDWORD origin, XDWORD target, XBYTE margin)
@@ -932,14 +934,14 @@ bool IsSimilarPixel(XDWORD origin, XDWORD target, XBYTE margin)
 * @brief      indSubBitmap
 * @ingroup    SCRIPT
 * 
-* @param[in]  bitmapscreen : 
-* @param[in]  bitmapref : 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  difflimitpercent : 
-* @param[in]  pixelmargin : 
+* @param[in]  bitmapscreen : Bitmapscreen pointer to use.
+* @param[in]  bitmapref : Bitmapref pointer to use.
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  difflimitpercent : Difflimitpercent value.
+* @param[in]  pixelmargin : Pixelmargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool FindSubBitmap(GRPBITMAP* bitmapscreen, GRPBITMAP* bitmapref, int& x, int& y, XBYTE difflimitpercent, XBYTE pixelmargin)
@@ -1096,11 +1098,11 @@ bool FindSubBitmap(GRPBITMAP* bitmapscreen, GRPBITMAP* bitmapref, int& x, int& y
 * @brief      utBitmap
 * @ingroup    SCRIPT
 * 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  bitmap : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  bitmap : Bitmap pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool PutBitmap(int x, int y, GRPBITMAP* bitmap)
@@ -1133,12 +1135,12 @@ bool PutBitmap(int x, int y, GRPBITMAP* bitmap)
 * @brief      etBitmap
 * @ingroup    SCRIPT
 * 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  sizex : 
-* @param[in]  sizey : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  sizex : Sizex value.
+* @param[in]  sizey : Sizey value.
 * 
-* @return     GRPBITMAP* : 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GetBitmap(int x, int y, int sizex, int sizey)
@@ -1172,11 +1174,11 @@ GRPBITMAP* GetBitmap(int x, int y, int sizex, int sizey)
 * @brief      illLineDebug
 * @ingroup    SCRIPT
 * 
-* @param[in]  bitmapscreen : 
-* @param[in]  bufferscreen : 
-* @param[in]  scrpos : 
-* @param[in]  linesize : 
-* @param[in]  color : 
+* @param[in]  bitmapscreen : Bitmapscreen pointer to use.
+* @param[in]  bufferscreen : Bufferscreen pointer to use.
+* @param[in]  scrpos : Scrpos value.
+* @param[in]  linesize : Linesize value.
+* @param[in]  color : Color value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void FillLineDebug(GRPBITMAP* bitmapscreen, XDWORD*  bufferscreen, XDWORD scrpos, XDWORD linesize, XDWORD color)

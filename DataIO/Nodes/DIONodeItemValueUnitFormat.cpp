@@ -85,7 +85,7 @@ DIONODEITEMVALUEUNITFORMAT::~DIONODEITEMVALUEUNITFORMAT()
 * @brief      Get type
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIONODEITEMVALUEUNITFORMAT::GetType()
@@ -100,7 +100,7 @@ XDWORD DIONODEITEMVALUEUNITFORMAT::GetType()
 * @brief      Set type
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMVALUEUNITFORMAT::SetType(XDWORD type)
@@ -118,7 +118,7 @@ void DIONODEITEMVALUEUNITFORMAT::SetType(XDWORD type)
 * @brief      Get name
 * @ingroup    DATAIO
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* DIONODEITEMVALUEUNITFORMAT::GetName()
@@ -133,7 +133,7 @@ XVARIANT* DIONODEITEMVALUEUNITFORMAT::GetName()
 * @brief      Get symbol
 * @ingroup    DATAIO
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* DIONODEITEMVALUEUNITFORMAT::GetSymbol()
@@ -148,7 +148,7 @@ XVARIANT* DIONODEITEMVALUEUNITFORMAT::GetSymbol()
 * @brief      Serialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUEUNITFORMAT::Serialize()
@@ -167,7 +167,7 @@ bool DIONODEITEMVALUEUNITFORMAT::Serialize()
 * @brief      Deserialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUEUNITFORMAT::Deserialize()

@@ -72,7 +72,7 @@ APPFLOWALERTS* APPFLOWALERTS::instance = NULL;
 * @brief      Get is instanced
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWALERTS::GetIsInstanced()
@@ -87,7 +87,7 @@ bool APPFLOWALERTS::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    APPFLOW
 * 
-* @return     APPFLOWALERTS& : 
+* @return     APPFLOWALERTS& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWALERTS& APPFLOWALERTS::GetInstance()
@@ -104,7 +104,7 @@ APPFLOWALERTS& APPFLOWALERTS::GetInstance()
 * @brief      Del instance
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWALERTS::DelInstance()
@@ -122,21 +122,21 @@ bool APPFLOWALERTS::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool APPFLOWALERTS::Ini(APPFLOWCFG* cfg, XCHAR* applicationname, int appversion, int appsubversion, int appsubversionerror, bool* status, DIOSTREAM* streamSMS)
-* @brief      Ini
+* 
+* @fn         bool APPFLOWALERTS::Ini(APPFLOWCFG* cfg, XCHAR* applicationname, int appversion, int appsubversion, int appsubversionerror, int status[APPFLOW_ALERT_TYPE_MAX], DIOSTREAM* streamSMS)
+* @brief      Initialize the object
 * @ingroup    APPFLOW
-*
-* @param[in]  cfg : 
-* @param[in]  applicationname : 
-* @param[in]  appversion : 
-* @param[in]  appsubversion : 
-* @param[in]  appsubversionerror : 
-* @param[in]  status : 
-* @param[in]  streamSMS : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  cfg : Configuration object to use.
+* @param[in]  applicationname : Application name.
+* @param[in]  appversion : Application major version.
+* @param[in]  appsubversion : Application minor version.
+* @param[in]  appsubversionerror : Application error subversion.
+* @param[in]  status : Status value to read or update.
+* @param[in]  streamSMS : SMS stream to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWALERTS::Ini(APPFLOWCFG* cfg, XCHAR* applicationname, int appversion, int appsubversion, int appsubversionerror, int status[APPFLOW_ALERT_TYPE_MAX], DIOSTREAM* streamSMS)
 {
@@ -349,19 +349,19 @@ bool APPFLOWALERTS::Ini(APPFLOWCFG* cfg, XCHAR* applicationname, int appversion,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int APPFLOWALERTS::Send(XDWORD senders, XDWORD condition, DIOALERTLEVEL level, XCHAR* title, XCHAR* message)
 * @brief      Send
 * @ingroup    APPFLOW
-*
-* @param[in]  senders : 
-* @param[in]  condition : 
-* @param[in]  level : 
-* @param[in]  title : 
-* @param[in]  message : 
-*
-* @return     int : 
-*
+* 
+* @param[in]  senders : Sender mask to use.
+* @param[in]  condition : Condition mask to evaluate.
+* @param[in]  level : Level value.
+* @param[in]  title : Title text.
+* @param[in]  message : Message text.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWALERTS::Send(XDWORD senders, XDWORD condition, DIOALERTLEVEL level, XCHAR* title, XCHAR* message)
 {
@@ -379,13 +379,13 @@ int APPFLOWALERTS::Send(XDWORD senders, XDWORD condition, DIOALERTLEVEL level, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWALERTS::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWALERTS::End()
 {
@@ -398,11 +398,11 @@ bool APPFLOWALERTS::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWALERTS::APPFLOWALERTS()
 * @brief      Constructor of class
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWALERTS::APPFLOWALERTS()
 {
@@ -411,12 +411,12 @@ APPFLOWALERTS::APPFLOWALERTS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWALERTS::~APPFLOWALERTS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWALERTS::~APPFLOWALERTS()
 {
@@ -427,12 +427,12 @@ APPFLOWALERTS::~APPFLOWALERTS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWALERTS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWALERTS::Clean()
 {

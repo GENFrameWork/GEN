@@ -69,7 +69,7 @@
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nametype : 
+* @param[in]  nametype : Nametype pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJ::GRPVECTORFILEDXFENTITYOBJ(XCHAR* nametype)
@@ -102,9 +102,9 @@ GRPVECTORFILEDXFENTITYOBJ::~GRPVECTORFILEDXFENTITYOBJ()
 * @brief      Create instance
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     GRPVECTORFILEDXFENTITYOBJ* : 
+* @return     GRPVECTORFILEDXFENTITYOBJ* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJ* GRPVECTORFILEDXFENTITYOBJ::CreateInstance(GRPVECTORFILEDXFENTITY* entity)
@@ -173,7 +173,7 @@ GRPVECTORFILEDXFENTITYOBJ* GRPVECTORFILEDXFENTITYOBJ::CreateInstance(GRPVECTORFI
 * @brief      Get type
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYOBJTYPE : 
+* @return     GRPVECTORFILEDXFENTITYOBJTYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJTYPE GRPVECTORFILEDXFENTITYOBJ::GetType()
@@ -188,7 +188,7 @@ GRPVECTORFILEDXFENTITYOBJTYPE GRPVECTORFILEDXFENTITYOBJ::GetType()
 * @brief      Get name type
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILEDXFENTITYOBJ::GetNameType()
@@ -203,7 +203,7 @@ XSTRING* GRPVECTORFILEDXFENTITYOBJ::GetNameType()
 * @brief      Get layer name
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILEDXFENTITYOBJ::GetLayerName()
@@ -218,7 +218,7 @@ XSTRING* GRPVECTORFILEDXFENTITYOBJ::GetLayerName()
 * @brief      Get line color
 * @ingroup    GRAPHIC
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILEDXFENTITYOBJ::GetLineColor()
@@ -233,7 +233,7 @@ int GRPVECTORFILEDXFENTITYOBJ::GetLineColor()
 * @brief      Set line color
 * @ingroup    GRAPHIC
 * 
-* @param[in]  linecolor : 
+* @param[in]  linecolor : Linecolor value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJ::SetLineColor(int linecolor)
@@ -248,7 +248,7 @@ void GRPVECTORFILEDXFENTITYOBJ::SetLineColor(int linecolor)
 * @brief      Get line type name
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILEDXFENTITYOBJ::GetLineTypeName()
@@ -263,7 +263,7 @@ XSTRING* GRPVECTORFILEDXFENTITYOBJ::GetLineTypeName()
 * @brief      Get type space
 * @ingroup    GRAPHIC
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILEDXFENTITYOBJ::GetTypeSpace()
@@ -274,11 +274,11 @@ int GRPVECTORFILEDXFENTITYOBJ::GetTypeSpace()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPVECTORFILEDXFENTITYOBJ::SetTypeSpace(int typeSpace)
+* @fn         void GRPVECTORFILEDXFENTITYOBJ::SetTypeSpace(int typespace)
 * @brief      Set type space
 * @ingroup    GRAPHIC
 * 
-* @param[in]  typeSpace : 
+* @param[in]  typespace : Typespace value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJ::SetTypeSpace(int typespace)
@@ -293,7 +293,7 @@ void GRPVECTORFILEDXFENTITYOBJ::SetTypeSpace(int typespace)
 * @brief      Get visibility
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJ::GetVisibility()
@@ -308,7 +308,7 @@ bool GRPVECTORFILEDXFENTITYOBJ::GetVisibility()
 * @brief      Set visibility
 * @ingroup    GRAPHIC
 * 
-* @param[in]  visibility : 
+* @param[in]  visibility : Visibility value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJ::SetVisibility(bool visibility)
@@ -323,9 +323,9 @@ void GRPVECTORFILEDXFENTITYOBJ::SetVisibility(bool visibility)
 * @brief      Apply data
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJ::ApplyData(GRPVECTORFILEDXFENTITY* entity)
@@ -372,10 +372,10 @@ bool GRPVECTORFILEDXFENTITYOBJ::ApplyData(GRPVECTORFILEDXFENTITY* entity)
 * @brief      Get data value
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
-* @param[in]  entity : 
+* @param[in]  type : Type value.
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     GRPVECTORFILEDXFVALUE* : 
+* @return     GRPVECTORFILEDXFVALUE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFVALUE* GRPVECTORFILEDXFENTITYOBJ::GetDataValue(int type, GRPVECTORFILEDXFENTITY* entity)
@@ -407,10 +407,10 @@ GRPVECTORFILEDXFVALUE* GRPVECTORFILEDXFENTITYOBJ::GetDataValue(int type, GRPVECT
 * @brief      Get data value
 * @ingroup    GRAPHIC
 * 
-* @param[in]  name : 
-* @param[in]  entity : 
+* @param[in]  name : Name to use.
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     GRPVECTORFILEDXFVALUE* : 
+* @return     GRPVECTORFILEDXFVALUE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFVALUE* GRPVECTORFILEDXFENTITYOBJ::GetDataValue(XCHAR* name, GRPVECTORFILEDXFENTITY* entity)

@@ -102,7 +102,7 @@ DIOOBEXPUSHFILE::~DIOOBEXPUSHFILE()
 * @brief      Get ID
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOOBEXPUSHFILE::GetID()
@@ -117,7 +117,7 @@ XDWORD DIOOBEXPUSHFILE::GetID()
 * @brief      Get X path
 * @ingroup    DATAIO
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* DIOOBEXPUSHFILE::GetXPath()
@@ -132,7 +132,7 @@ XPATH* DIOOBEXPUSHFILE::GetXPath()
 * @brief      Get name send
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOOBEXPUSHFILE::GetNameSend()
@@ -147,7 +147,7 @@ XSTRING* DIOOBEXPUSHFILE::GetNameSend()
 * @brief      Is send
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSHFILE::IsSend()
@@ -162,7 +162,7 @@ bool DIOOBEXPUSHFILE::IsSend()
 * @brief      Get send percent
 * @ingroup    DATAIO
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOOBEXPUSHFILE::GetSendPercent()
@@ -177,7 +177,7 @@ XBYTE DIOOBEXPUSHFILE::GetSendPercent()
 * @brief      Get send time elapsed
 * @ingroup    DATAIO
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOOBEXPUSHFILE::GetSendTimeElapsed()
@@ -192,7 +192,7 @@ XQWORD DIOOBEXPUSHFILE::GetSendTimeElapsed()
 * @brief      Get error
 * @ingroup    DATAIO
 * 
-* @return     DIOOBEXPUSHERROR : 
+* @return     DIOOBEXPUSHERROR : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOBEXPUSHERROR DIOOBEXPUSHFILE::GetError()
@@ -207,9 +207,9 @@ DIOOBEXPUSHERROR DIOOBEXPUSHFILE::GetError()
 * @brief      Set ID
 * @ingroup    DATAIO
 * 
-* @param[in]  ID : 
+* @param[in]  ID : Identifier to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSHFILE::SetID(XDWORD ID)
@@ -226,9 +226,9 @@ bool DIOOBEXPUSHFILE::SetID(XDWORD ID)
 * @brief      Set is send
 * @ingroup    DATAIO
 * 
-* @param[in]  issend : 
+* @param[in]  issend : Issend value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSHFILE::SetIsSend(bool issend)
@@ -245,9 +245,9 @@ bool DIOOBEXPUSHFILE::SetIsSend(bool issend)
 * @brief      Set send percent
 * @ingroup    DATAIO
 * 
-* @param[in]  percent : 
+* @param[in]  percent : Percent value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSHFILE::SetSendPercent(XBYTE percent)
@@ -264,9 +264,9 @@ bool DIOOBEXPUSHFILE::SetSendPercent(XBYTE percent)
 * @brief      Set send time elapsed
 * @ingroup    DATAIO
 * 
-* @param[in]  sendtimeelapsed : 
+* @param[in]  sendtimeelapsed : Sendtimeelapsed value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSHFILE::SetSendTimeElapsed(XQWORD sendtimeelapsed)
@@ -283,9 +283,9 @@ bool DIOOBEXPUSHFILE::SetSendTimeElapsed(XQWORD sendtimeelapsed)
 * @brief      Set error
 * @ingroup    DATAIO
 * 
-* @param[in]  error : 
+* @param[in]  error : Error value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSHFILE::SetError(DIOOBEXPUSHERROR error)
@@ -320,12 +320,12 @@ void DIOOBEXPUSHFILE::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOOBEXPUSH::DIOOBEXPUSH(DIOSTREAM* diostream, bool inlittleendian)
+* @fn         DIOOBEXPUSH::DIOOBEXPUSH(DIOSTREAM* diostream, bool inlittleendian) : XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
-* @param[in]  inlittleendian : 
+* @param[in]  diostream : Diostream pointer to use.
+* @param[in]  XFSMACHINE : XFSMACHINE value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOBEXPUSH::DIOOBEXPUSH(DIOSTREAM* diostream, bool inlittleendian) : XFSMACHINE(0)
@@ -407,12 +407,12 @@ DIOOBEXPUSH::~DIOOBEXPUSH()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOOBEXPUSH::Ini(int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @param[in]  timeout : 
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::Ini(int timeout)
@@ -463,7 +463,7 @@ bool DIOOBEXPUSH::Ini(int timeout)
 * @brief      Is sending
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::IsSending()
@@ -482,9 +482,9 @@ bool DIOOBEXPUSH::IsSending()
 * @brief      Set is sending
 * @ingroup    DATAIO
 * 
-* @param[in]  issending : 
+* @param[in]  issending : Issending value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::SetIsSending(bool issending)
@@ -501,12 +501,12 @@ bool DIOOBEXPUSH::SetIsSending(bool issending)
 * @brief      Send file
 * @ingroup    DATAIO
 * 
-* @param[in]  xpath : 
-* @param[in]  namesend : 
-* @param[in]  ID : 
-* @param[in]  timeoutask : 
+* @param[in]  xpath : Path to use.
+* @param[in]  namesend : Namesend value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  timeoutask : Timeoutask value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::SendFile(XPATH& xpath,XSTRING& namesend,XDWORD ID,int timeoutask)
@@ -524,9 +524,9 @@ bool DIOOBEXPUSH::SendFile(XPATH& xpath,XSTRING& namesend,XDWORD ID,int timeouta
 * @brief      Send files
 * @ingroup    DATAIO
 * 
-* @param[in]  asktimeout : 
+* @param[in]  asktimeout : Asktimeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::SendFiles(int asktimeout)
@@ -554,7 +554,7 @@ bool DIOOBEXPUSH::SendFiles(int asktimeout)
 * @brief      Get X timer
 * @ingroup    DATAIO
 * 
-* @return     XTIMER* : 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIOOBEXPUSH::GetXTimer()
@@ -569,7 +569,7 @@ XTIMER* DIOOBEXPUSH::GetXTimer()
 * @brief      Get ask time elapsed
 * @ingroup    DATAIO
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOOBEXPUSH::GetAskTimeElapsed()
@@ -584,11 +584,11 @@ XQWORD DIOOBEXPUSH::GetAskTimeElapsed()
 * @brief      Send file list add file
 * @ingroup    DATAIO
 * 
-* @param[in]  xpath : 
-* @param[in]  namesend : 
-* @param[in]  ID : 
+* @param[in]  xpath : Path to use.
+* @param[in]  namesend : Namesend value.
+* @param[in]  ID : Identifier to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::SendFileList_AddFile(XPATH& xpath,XSTRING& namesend,XDWORD ID)
@@ -637,9 +637,9 @@ bool DIOOBEXPUSH::SendFileList_AddFile(XPATH& xpath,XSTRING& namesend,XDWORD ID)
 * @brief      Send file list get file
 * @ingroup    DATAIO
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
-* @return     DIOOBEXPUSHFILE* : 
+* @return     DIOOBEXPUSHFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOBEXPUSHFILE* DIOOBEXPUSH::SendFileList_GetFile(int index)
@@ -657,7 +657,7 @@ DIOOBEXPUSHFILE* DIOOBEXPUSH::SendFileList_GetFile(int index)
 * @brief      Send file list get actual file
 * @ingroup    DATAIO
 * 
-* @return     DIOOBEXPUSHFILE* : 
+* @return     DIOOBEXPUSHFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOBEXPUSHFILE* DIOOBEXPUSH::SendFileList_GetActualFile()
@@ -675,7 +675,7 @@ DIOOBEXPUSHFILE* DIOOBEXPUSH::SendFileList_GetActualFile()
 * @brief      Send file list GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::SendFileList_DeleteAll()
@@ -696,7 +696,7 @@ bool DIOOBEXPUSH::SendFileList_DeleteAll()
 * @brief      Send file list get index
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOOBEXPUSH::SendFileList_GetIndex()
@@ -714,7 +714,7 @@ int DIOOBEXPUSH::SendFileList_GetIndex()
 * @brief      Send file list get size
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOOBEXPUSH::SendFileList_GetSize()
@@ -726,10 +726,10 @@ int DIOOBEXPUSH::SendFileList_GetSize()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOOBEXPUSH::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::End()
@@ -780,7 +780,7 @@ bool DIOOBEXPUSH::End()
 * @brief      Get DIO stream
 * @ingroup    DATAIO
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOOBEXPUSH::GetDIOStream()
@@ -795,7 +795,7 @@ DIOSTREAM* DIOOBEXPUSH::GetDIOStream()
 * @brief      Get file name send
 * @ingroup    DATAIO
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* DIOOBEXPUSH::GetFileNameSend()
@@ -810,9 +810,9 @@ XPATH* DIOOBEXPUSH::GetFileNameSend()
 * @brief      Generate file ID
 * @ingroup    DATAIO
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOOBEXPUSH::GenerateFileID(XPATH& xpath)
@@ -833,7 +833,7 @@ XDWORD DIOOBEXPUSH::GenerateFileID(XPATH& xpath)
 * @brief      Check sending
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::CheckSending()
@@ -1138,9 +1138,9 @@ bool DIOOBEXPUSH::CheckSending()
 * @brief      Read answer
 * @ingroup    DATAIO
 * 
-* @param[in]  xbuffer : 
+* @param[in]  xbuffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOOBEXPUSH::ReadAnswer(XBUFFER& xbuffer)
@@ -1164,7 +1164,7 @@ bool DIOOBEXPUSH::ReadAnswer(XBUFFER& xbuffer)
 * @brief      Thread send
 * @ingroup    DATAIO
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOOBEXPUSH::ThreadSend(void* data)

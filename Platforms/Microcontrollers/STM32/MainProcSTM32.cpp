@@ -81,11 +81,11 @@ MAINPROCSTM32    mainprocstm32;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MAINPROCSTM32::MAINPROCSTM32()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MAINPROCSTM32::MAINPROCSTM32()
 {
@@ -95,12 +95,12 @@ MAINPROCSTM32::MAINPROCSTM32()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MAINPROCSTM32::~MAINPROCSTM32()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MAINPROCSTM32::~MAINPROCSTM32()
 {
@@ -110,15 +110,15 @@ MAINPROCSTM32::~MAINPROCSTM32()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCSTM32::Ini(APPFLOWMAIN* appmain)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  appmain :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  appmain : Appmain pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCSTM32::Ini(APPFLOWMAIN* appmain)
 {
@@ -152,13 +152,13 @@ bool MAINPROCSTM32::Ini(APPFLOWMAIN* appmain)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCSTM32::Update()
 * @brief      Update
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCSTM32::Update()
 {
@@ -180,13 +180,13 @@ bool MAINPROCSTM32::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCSTM32::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCSTM32::End()
 {
@@ -235,15 +235,13 @@ bool MAINPROCSTM32::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool MAINPROCSTM32::Factorys_Ini(XSTRING* xpath)
+* 
+* @fn         bool MAINPROCSTM32::Factorys_Ini()
 * @brief      Factorys ini
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  xpath : always NULL in this platform
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCSTM32::Factorys_Ini()
 {
@@ -284,13 +282,13 @@ bool MAINPROCSTM32::Factorys_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCSTM32::Factorys_End()
 * @brief      Factorys end
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCSTM32::Factorys_End()
 {
@@ -343,12 +341,12 @@ bool MAINPROCSTM32::Factorys_End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void MAINPROCSTM32::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void MAINPROCSTM32::Clean()
 {
@@ -369,13 +367,13 @@ void MAINPROCSTM32::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int main()
 * @brief      main
 * @ingroup    PLATFORM_STM32
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
  int main()
 {

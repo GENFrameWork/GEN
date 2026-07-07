@@ -123,14 +123,14 @@ DIOLINUXPING::~DIOLINUXPING()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXPING::Do(XDWORD nretries, XDWORD timebetweenchecks, bool exitfirstgoodreply)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  nretries : 
-* @param[in]  timebetweenchecks : 
-* @param[in]  exitfirstgoodreply : 
+* @param[in]  nretries : Nretries value.
+* @param[in]  timebetweenchecks : Timebetweenchecks value.
+* @param[in]  exitfirstgoodreply : Exitfirstgoodreply value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXPING::Do(XDWORD nretries, XDWORD timebetweenchecks, bool exitfirstgoodreply)

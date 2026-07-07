@@ -58,7 +58,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSTREAMTCPIPCONFIG::DIOSTREAMTCPIPCONFIG()
+* @fn         DIOSTREAMTCPIPCONFIG::DIOSTREAMTCPIPCONFIG() : DIOSTREAMCONFIG(), DIOSTREAMCONFIGSTRING()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
@@ -74,12 +74,12 @@ DIOSTREAMTCPIPCONFIG::DIOSTREAMTCPIPCONFIG() : DIOSTREAMCONFIG(), DIOSTREAMCONFI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMTCPIPCONFIG::~DIOSTREAMTCPIPCONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPCONFIG::~DIOSTREAMTCPIPCONFIG()
 {
@@ -90,13 +90,13 @@ DIOSTREAMTCPIPCONFIG::~DIOSTREAMTCPIPCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOIP* DIOSTREAMTCPIPCONFIG ::GetLocalIP()
 * @brief      Get local IP
 * @ingroup    DATAIO
-*
-* @return     DIOIP* :
-*
+* 
+* @return     DIOIP* DIOSTREAMTCPIPCONFIG :: : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIOSTREAMTCPIPCONFIG ::GetLocalIP()
 {
@@ -105,13 +105,13 @@ DIOIP* DIOSTREAMTCPIPCONFIG ::GetLocalIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOURL* DIOSTREAMTCPIPCONFIG ::GetRemoteURL()
 * @brief      Get remote URL
 * @ingroup    DATAIO
-*
-* @return     DIOURL* :
-*
+* 
+* @return     DIOURL* DIOSTREAMTCPIPCONFIG :: : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOSTREAMTCPIPCONFIG ::GetRemoteURL()
 {
@@ -120,13 +120,13 @@ DIOURL* DIOSTREAMTCPIPCONFIG ::GetRemoteURL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMTCPIPCONFIG ::GetRemotePort()
 * @brief      Get remote port
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int DIOSTREAMTCPIPCONFIG :: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMTCPIPCONFIG ::GetRemotePort()
 {
@@ -135,15 +135,15 @@ int DIOSTREAMTCPIPCONFIG ::GetRemotePort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMTCPIPCONFIG ::SetRemotePort(int port)
 * @brief      Set remote port
 * @ingroup    DATAIO
-*
-* @param[in]  port :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  port : Port number to use.
+* 
+* @return     bool DIOSTREAMTCPIPCONFIG :: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTCPIPCONFIG ::SetRemotePort(int port)
 {
@@ -154,13 +154,13 @@ bool DIOSTREAMTCPIPCONFIG ::SetRemotePort(int port)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMTCPIPCONFIG::GetCounterMultiServer()
 * @brief      Get counter multi server
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMTCPIPCONFIG::GetCounterMultiServer()
 {
@@ -169,13 +169,13 @@ int DIOSTREAMTCPIPCONFIG::GetCounterMultiServer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMTCPIPCONFIG::SetCounterMultiServer(int countermultiserver)
 * @brief      Set counter multi server
 * @ingroup    DATAIO
-*
-* @param[in]  countermultiserver :
-*
+* 
+* @param[in]  countermultiserver : Countermultiserver value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTCPIPCONFIG::SetCounterMultiServer(int countermultiserver)
 {
@@ -184,13 +184,13 @@ void DIOSTREAMTCPIPCONFIG::SetCounterMultiServer(int countermultiserver)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMUTEX* DIOSTREAMTCPIPCONFIG::GetXMutexMultiServer()
 * @brief      Get X mutex multi server
 * @ingroup    DATAIO
-*
-* @return     XMUTEX* :
-*
+* 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIOSTREAMTCPIPCONFIG::GetXMutexMultiServer()
 {
@@ -199,13 +199,13 @@ XMUTEX* DIOSTREAMTCPIPCONFIG::GetXMutexMultiServer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMTCPIPCONFIG::GetHandleMultiServer()
 * @brief      Get handle multi server
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMTCPIPCONFIG::GetHandleMultiServer()
 {
@@ -214,13 +214,13 @@ int DIOSTREAMTCPIPCONFIG::GetHandleMultiServer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMTCPIPCONFIG::SetHandleMultiServer(int handlemultiserver)
 * @brief      Set handle multi server
 * @ingroup    DATAIO
-*
-* @param[in]  handlemultiserver :
-*
+* 
+* @param[in]  handlemultiserver : Handlemultiserver value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTCPIPCONFIG::SetHandleMultiServer(int handlemultiserver)
 {
@@ -229,12 +229,12 @@ void DIOSTREAMTCPIPCONFIG::SetHandleMultiServer(int handlemultiserver)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMTCPIPCONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTCPIPCONFIG::Clean()
 {

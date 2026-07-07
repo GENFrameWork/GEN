@@ -101,7 +101,7 @@ INPWINDOWSCAPTURE::~INPWINDOWSCAPTURE()
 * @brief      Activate
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSCAPTURE::Activate()
@@ -133,7 +133,7 @@ bool INPWINDOWSCAPTURE::Activate()
 * @brief      Deactivate
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSCAPTURE::Deactivate()
@@ -163,11 +163,11 @@ bool INPWINDOWSCAPTURE::Deactivate()
 * @brief      Low level keyboard proc
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  ncode : 
-* @param[in]  wparam : 
-* @param[in]  lparam : 
+* @param[in]  ncode : Ncode value.
+* @param[in]  wparam : Wparam value.
+* @param[in]  lparam : Lparam value.
 * 
-* @return     LRESULT : 
+* @return     LRESULT CALLBACK : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 LRESULT CALLBACK INPWINDOWSCAPTURE::LowLevelKeyboardProc(int ncode, WPARAM wparam, LPARAM lparam)

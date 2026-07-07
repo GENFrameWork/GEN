@@ -98,7 +98,7 @@ APPFLOWMAIN::~APPFLOWMAIN()
 * @brief      Get application
 * @ingroup    APPFLOW
 * 
-* @return     APPFLOWBASE* : 
+* @return     APPFLOWBASE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWBASE* APPFLOWMAIN::GetApplication()
@@ -108,13 +108,13 @@ APPFLOWBASE* APPFLOWMAIN::GetApplication()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWMAIN::Create()
-* @brief      Create
+* @brief      Create resource
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWMAIN::Create()
 {
@@ -126,16 +126,16 @@ bool APPFLOWMAIN::Create()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWMAIN::Ini(MAINPROC* mainproc, APPFLOWBASE_MODE_TYPE applicationmode)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    APPFLOW
-*
-* @param[in]  mainproc :
-* @param[in]  applicationmode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mainproc : Mainproc pointer to use.
+* @param[in]  applicationmode : Applicationmode value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWMAIN::Ini(MAINPROC* mainproc, APPFLOWBASE_MODE_TYPE applicationmode)
 {
@@ -207,7 +207,7 @@ bool APPFLOWMAIN::Ini(MAINPROC* mainproc, APPFLOWBASE_MODE_TYPE applicationmode)
 * @brief      Update
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWMAIN::Update()
@@ -234,10 +234,10 @@ bool APPFLOWMAIN::Update()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool APPFLOWMAIN::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWMAIN::End()
@@ -257,13 +257,13 @@ bool APPFLOWMAIN::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWMAIN::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWMAIN::Delete()
 {

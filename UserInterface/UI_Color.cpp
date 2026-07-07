@@ -59,8 +59,8 @@
 * @fn         UI_COLOR::UI_COLOR()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR::UI_COLOR()    
 { 
   Clean();                            
@@ -73,7 +73,7 @@ UI_COLOR::UI_COLOR()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  string : 
+* @param[in]  string : String to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR::UI_COLOR(XCHAR* string)
@@ -90,7 +90,7 @@ UI_COLOR::UI_COLOR(XCHAR* string)
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  string : 
+* @param[in]  string : String to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR::UI_COLOR(XSTRING& string)
@@ -107,8 +107,8 @@ UI_COLOR::UI_COLOR(XSTRING& string)
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR::~UI_COLOR()    
 { 
   Clean();                            
@@ -121,7 +121,7 @@ UI_COLOR::~UI_COLOR()
 * @brief      Is valid
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLOR::IsValid()
@@ -136,9 +136,9 @@ bool UI_COLOR::IsValid()
 * @brief      Set valid
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  valid : 
+* @param[in]  valid : Valid value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLOR::SetValid(bool valid)
@@ -171,10 +171,10 @@ void UI_COLOR::SetInvalid()
 * @fn         int UI_COLOR::GetRed()
 * @brief      Get red
 * @ingroup    USERINTERFACE
-*
-* @return     int : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_COLOR::GetRed() 
 {
   return red;
@@ -186,10 +186,10 @@ int UI_COLOR::GetRed()
 * @fn         void UI_COLOR::SetRed(int red)
 * @brief      Set red
 * @ingroup    USERINTERFACE
-*
-* @param[in]  red : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  red : Red value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_COLOR::SetRed(int red)  
 {
   this->red = red;
@@ -201,10 +201,10 @@ void UI_COLOR::SetRed(int red)
 * @fn         int UI_COLOR::GetGreen()
 * @brief      Get green
 * @ingroup    USERINTERFACE
-*
-* @return     int : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_COLOR::GetGreen()
 {
   return green;
@@ -216,10 +216,10 @@ int UI_COLOR::GetGreen()
 * @fn         void UI_COLOR::SetGreen(int green)
 * @brief      Set green
 * @ingroup    USERINTERFACE
-*
-* @param[in]  green : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  green : Green value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_COLOR::SetGreen(int green)
 {
   this->green = green;
@@ -231,10 +231,10 @@ void UI_COLOR::SetGreen(int green)
 * @fn         int UI_COLOR::GetBlue()
 * @brief      Get blue
 * @ingroup    USERINTERFACE
-*
-* @return     int : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_COLOR::GetBlue()
 {
   return blue;
@@ -246,10 +246,10 @@ int UI_COLOR::GetBlue()
 * @fn         void UI_COLOR::SetBlue(int blue)
 * @brief      Set blue
 * @ingroup    USERINTERFACE
-*
-* @param[in]  blue : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  blue : Blue value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_COLOR::SetBlue(int blue)
 {
   this->blue = blue;
@@ -261,10 +261,10 @@ void UI_COLOR::SetBlue(int blue)
 * @fn         int UI_COLOR::GetAlpha()
 * @brief      Get alpha
 * @ingroup    USERINTERFACE
-*
-* @return     int : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_COLOR::GetAlpha()
 {
   return alpha;
@@ -276,10 +276,10 @@ int UI_COLOR::GetAlpha()
 * @fn         void UI_COLOR::SetAlpha(int alpha)
 * @brief      Set alpha
 * @ingroup    USERINTERFACE
-*
-* @param[in]  alpha : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  alpha : Alpha value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_COLOR::SetAlpha(int alpha)
 {
   this->alpha = alpha;
@@ -291,12 +291,12 @@ void UI_COLOR::SetAlpha(int alpha)
 * @fn         bool UI_COLOR::SetFromString(XCHAR* string)
 * @brief      Set from string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  string : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  string : String to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLOR::SetFromString(XCHAR* string)
 {
   SetInvalid();
@@ -384,12 +384,12 @@ bool UI_COLOR::SetFromString(XCHAR* string)
 * @fn         bool UI_COLOR::SetFromString(XSTRING& string)
 * @brief      Set from string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  string : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  string : String to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLOR::SetFromString(XSTRING& string)
 {
   return SetFromString(string.Get());
@@ -401,12 +401,12 @@ bool UI_COLOR::SetFromString(XSTRING& string)
 * @fn         bool UI_COLOR::CopyFrom(UI_COLOR* color)
 * @brief      Copy from
 * @ingroup    USERINTERFACE
-*
-* @param[in]  color : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  color : Color value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLOR::CopyFrom(UI_COLOR* color)
 {
   if(!color) 
@@ -429,12 +429,12 @@ bool UI_COLOR::CopyFrom(UI_COLOR* color)
 * @fn         bool UI_COLOR::CopyTo(UI_COLOR* color)
 * @brief      Copy to
 * @ingroup    USERINTERFACE
-*
-* @param[in]  color : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  color : Color value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLOR::CopyTo(UI_COLOR* color)
 {
   if(!color) 
@@ -457,12 +457,12 @@ bool UI_COLOR::CopyTo(UI_COLOR* color)
 * @fn         int UI_COLOR::GetAlphaForPercent(int percent)
 * @brief      Get alpha for percent
 * @ingroup    USERINTERFACE
-*
-* @param[in]  percent : 
 * 
-* @return     int : 
+* @param[in]  percent : Percent value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_COLOR::GetAlphaForPercent(int percent)
 {
   int _percent = percent;
@@ -480,8 +480,8 @@ int UI_COLOR::GetAlphaForPercent(int percent)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_COLOR::Clean()
 {
   valid = false;

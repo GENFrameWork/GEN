@@ -82,7 +82,7 @@ GRPSTATISTICSCHARTBUILDERSVG::~GRPSTATISTICSCHARTBUILDERSVG()
 * @brief      Get format
 * @ingroup    GRAPHIC
 * 
-* @return     GRPSTATISTICSCHARTOUTPUTFORMAT : output format produced by this backend
+* @return     GRPSTATISTICSCHARTOUTPUTFORMAT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSTATISTICSCHARTOUTPUTFORMAT GRPSTATISTICSCHARTBUILDERSVG::GetFormat()
@@ -97,7 +97,7 @@ GRPSTATISTICSCHARTOUTPUTFORMAT GRPSTATISTICSCHARTBUILDERSVG::GetFormat()
 * @brief      Get vector file type to render the result
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILETYPE : vector file type
+* @return     GRPVECTORFILETYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILETYPE GRPSTATISTICSCHARTBUILDERSVG::GetVectorFileType()
@@ -112,10 +112,10 @@ GRPVECTORFILETYPE GRPSTATISTICSCHARTBUILDERSVG::GetVectorFileType()
 * @brief      Begin document : open the SVG root element
 * @ingroup    GRAPHIC
 * 
-* @param[in]  width  : document width
+* @param[in]  width : document width
 * @param[in]  height : document height
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTBUILDERSVG::BeginDocument(double width, double height)
@@ -144,7 +144,7 @@ bool GRPSTATISTICSCHARTBUILDERSVG::BeginDocument(double width, double height)
 * @brief      End document : close the SVG root element
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTBUILDERSVG::EndDocument()
@@ -161,13 +161,13 @@ bool GRPSTATISTICSCHARTBUILDERSVG::EndDocument()
 * @brief      Draw rectangle
 * @ingroup    GRAPHIC
 * 
-* @param[in]  x      : left
-* @param[in]  y      : top
-* @param[in]  width  : width
+* @param[in]  x : left
+* @param[in]  y : top
+* @param[in]  width : width
 * @param[in]  height : height
-* @param[in]  style  : fill / stroke style
+* @param[in]  style : fill / stroke style
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTBUILDERSVG::DrawRect(double x, double y, double width, double height, GRPSTATISTICSCHARTSTYLE& style)
@@ -196,13 +196,13 @@ bool GRPSTATISTICSCHARTBUILDERSVG::DrawRect(double x, double y, double width, do
 * @brief      Draw line
 * @ingroup    GRAPHIC
 * 
-* @param[in]  x1    : start x
-* @param[in]  y1    : start y
-* @param[in]  x2    : end x
-* @param[in]  y2    : end y
+* @param[in]  x1 : start x
+* @param[in]  y1 : start y
+* @param[in]  x2 : end x
+* @param[in]  y2 : end y
 * @param[in]  style : stroke style
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTBUILDERSVG::DrawLine(double x1, double y1, double x2, double y2, GRPSTATISTICSCHARTSTYLE& style)
@@ -235,12 +235,12 @@ bool GRPSTATISTICSCHARTBUILDERSVG::DrawLine(double x1, double y1, double x2, dou
 * @brief      Draw text
 * @ingroup    GRAPHIC
 * 
-* @param[in]  x     : anchor x
-* @param[in]  y     : anchor y (text baseline)
-* @param[in]  text  : text to draw
+* @param[in]  x : anchor x
+* @param[in]  y : anchor y (text baseline)
+* @param[in]  text : text to draw
 * @param[in]  style : text style
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTBUILDERSVG::DrawText(double x, double y, XCHAR* text, GRPSTATISTICSCHARTTEXTSTYLE& style)
@@ -293,11 +293,11 @@ bool GRPSTATISTICSCHARTBUILDERSVG::DrawText(double x, double y, XCHAR* text, GRP
 * @brief      Draw polygon : a closed filled / stroked shape from an interleaved point array
 * @ingroup    GRAPHIC
 * 
-* @param[in]  xy      : interleaved point coordinates [x0, y0, x1, y1, ...] (2 * npoints values)
+* @param[in]  xy : interleaved point coordinates [x0, y0, x1, y1, ...] (2 * npoints values)
 * @param[in]  npoints : number of points
-* @param[in]  style   : fill / stroke style
+* @param[in]  style : fill / stroke style
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTBUILDERSVG::DrawPolygon(const double* xy, XDWORD npoints, GRPSTATISTICSCHARTSTYLE& style)
@@ -331,9 +331,9 @@ bool GRPSTATISTICSCHARTBUILDERSVG::DrawPolygon(const double* xy, XDWORD npoints,
 * @brief      Get result : the serialized SVG XML
 * @ingroup    GRAPHIC
 * 
-* @param[out] result : SVG XML string
+* @param[in]  result : SVG XML string
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTBUILDERSVG::GetResult(XSTRING& result)
@@ -347,7 +347,7 @@ bool GRPSTATISTICSCHARTBUILDERSVG::GetResult(XSTRING& result)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPSTATISTICSCHARTBUILDERSVG::Clean()
-* @brief      Clean
+* @brief      Clean internal state
 * @ingroup    GRAPHIC
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -363,7 +363,7 @@ void GRPSTATISTICSCHARTBUILDERSVG::Clean()
 * @brief      Append number : format a number with a locale independent decimal point
 * @ingroup    GRAPHIC
 * 
-* @param[in]  out   : output string
+* @param[in]  out : output string
 * @param[in]  value : number to append
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -384,7 +384,7 @@ void GRPSTATISTICSCHARTBUILDERSVG::AppendNumber(XSTRING& out, double value)
 * @brief      Append fill and stroke attributes from a style
 * @ingroup    GRAPHIC
 * 
-* @param[in]  out   : output string
+* @param[in]  out : output string
 * @param[in]  style : style to serialize
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -422,7 +422,7 @@ void GRPSTATISTICSCHARTBUILDERSVG::AppendFillAndStroke(XSTRING& out, GRPSTATISTI
 * @brief      Append color as a SVG rgb() function
 * @ingroup    GRAPHIC
 * 
-* @param[in]  out   : output string
+* @param[in]  out : output string
 * @param[in]  color : color to serialize
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -442,9 +442,9 @@ void GRPSTATISTICSCHARTBUILDERSVG::AppendColor(XSTRING& out, GRPSTATISTICSCHARTC
 * @brief      Append an opacity attribute only when the color is not fully opaque
 * @ingroup    GRAPHIC
 * 
-* @param[in]  out       : output string
+* @param[in]  out : output string
 * @param[in]  attribute : opacity attribute name (fill-opacity / stroke-opacity)
-* @param[in]  color     : color carrying the alpha
+* @param[in]  color : color carrying the alpha
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHARTBUILDERSVG::AppendOpacity(XSTRING& out, XCHAR* attribute, GRPSTATISTICSCHARTCOLOR& color)
@@ -467,7 +467,7 @@ void GRPSTATISTICSCHARTBUILDERSVG::AppendOpacity(XSTRING& out, XCHAR* attribute,
 * 
 * @param[in]  anchor : text anchor
 * 
-* @return     XCHAR* : SVG text-anchor value
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* GRPSTATISTICSCHARTBUILDERSVG::AnchorToString(GRPSTATISTICSCHARTTEXTANCHOR anchor)
@@ -489,7 +489,7 @@ XCHAR* GRPSTATISTICSCHARTBUILDERSVG::AnchorToString(GRPSTATISTICSCHARTTEXTANCHOR
 * @ingroup    GRAPHIC
 * 
 * @param[in]  text : raw text
-* @param[out] out  : escaped text
+* @param[in]  out : escaped text
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHARTBUILDERSVG::EscapeXML(XCHAR* text, XSTRING& out)

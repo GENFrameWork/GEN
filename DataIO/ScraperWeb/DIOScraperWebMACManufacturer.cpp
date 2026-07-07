@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMACMANUFACTURED_RESULT::DIOMACMANUFACTURED_RESULT()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMACMANUFACTURED_RESULT::DIOMACMANUFACTURED_RESULT()
 {
@@ -70,12 +70,12 @@ DIOMACMANUFACTURED_RESULT::DIOMACMANUFACTURED_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMACMANUFACTURED_RESULT::~DIOMACMANUFACTURED_RESULT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMACMANUFACTURED_RESULT::~DIOMACMANUFACTURED_RESULT()
 {
@@ -84,13 +84,13 @@ DIOMACMANUFACTURED_RESULT::~DIOMACMANUFACTURED_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOMACMANUFACTURED_RESULT::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOMACMANUFACTURED_RESULT::Get()
 {
@@ -99,12 +99,12 @@ XSTRING* DIOMACMANUFACTURED_RESULT::Get()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOMACMANUFACTURED_RESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOMACMANUFACTURED_RESULT::Clean()
 {
@@ -117,11 +117,11 @@ void DIOMACMANUFACTURED_RESULT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSCRAPERWEBMACMANUFACTURER::DIOSCRAPERWEBMACMANUFACTURER()
+* 
+* @fn         DIOSCRAPERWEBMACMANUFACTURER::DIOSCRAPERWEBMACMANUFACTURER(): DIOSCRAPERWEB()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBMACMANUFACTURER::DIOSCRAPERWEBMACMANUFACTURER(): DIOSCRAPERWEB()
 {
@@ -130,12 +130,12 @@ DIOSCRAPERWEBMACMANUFACTURER::DIOSCRAPERWEBMACMANUFACTURER(): DIOSCRAPERWEB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSCRAPERWEBMACMANUFACTURER::~DIOSCRAPERWEBMACMANUFACTURER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBMACMANUFACTURER::~DIOSCRAPERWEBMACMANUFACTURER()
 {
@@ -144,16 +144,16 @@ DIOSCRAPERWEBMACMANUFACTURER::~DIOSCRAPERWEBMACMANUFACTURER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBMACMANUFACTURER::ChangeURL(XCHAR* maskurl, DIOURL& url)
 * @brief      Change URL
 * @ingroup    DATAIO
-*
-* @param[in]  maskurl :
-* @param[in]  url :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  maskurl : Maskurl pointer to use.
+* @param[in]  url : URL to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBMACMANUFACTURER::ChangeURL(XCHAR* maskurl, DIOURL& url)
 {
@@ -168,19 +168,19 @@ bool DIOSCRAPERWEBMACMANUFACTURER::ChangeURL(XCHAR* maskurl, DIOURL& url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSCRAPERWEBMACMANUFACTURER::Get(DIOMAC& MAC, XSTRING& manufactured, int timeoutforurl, XSTRING* localIP, bool usecache)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  MAC :
-* @param[in]  manufactured :
-* @param[in]  timeoutforurl :
-* @param[in]  localIP :
-* @param[in]  usecache :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  MAC : MAC value.
+* @param[in]  manufactured : Manufactured value.
+* @param[in]  timeoutforurl : Timeoutforurl value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  usecache : Usecache value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSCRAPERWEBMACMANUFACTURER::Get(DIOMAC& MAC, XSTRING& manufactured, int timeoutforurl, XSTRING* localIP, bool usecache)
 {

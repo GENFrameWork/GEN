@@ -85,7 +85,7 @@ DIOCOREPROTOCOL_CFG::~DIOCOREPROTOCOL_CFG()
 * @brief      Get is server
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CFG::GetIsServer()
@@ -100,7 +100,7 @@ bool DIOCOREPROTOCOL_CFG::GetIsServer()
 * @brief      Set is server
 * @ingroup    DATAIO
 * 
-* @param[in]  isserver : 
+* @param[in]  isserver : Isserver value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetIsServer(bool isserver)
@@ -115,7 +115,7 @@ void DIOCOREPROTOCOL_CFG::SetIsServer(bool isserver)
 * @brief      get is compress header
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CFG::GetIsCompressHeader()
@@ -130,7 +130,7 @@ bool DIOCOREPROTOCOL_CFG::GetIsCompressHeader()
 * @brief      set is compress header
 * @ingroup    DATAIO
 * 
-* @param[in]  iscompressheader : 
+* @param[in]  iscompressheader : Iscompressheader value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetIsCompressHeader(bool iscompressheader)
@@ -145,7 +145,7 @@ void DIOCOREPROTOCOL_CFG::SetIsCompressHeader(bool iscompressheader)
 * @brief      get is compress content
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CFG::GetIsCompressContent()
@@ -160,7 +160,7 @@ bool DIOCOREPROTOCOL_CFG::GetIsCompressContent()
 * @brief      set is compress content
 * @ingroup    DATAIO
 * 
-* @param[in]  iscompresscontent : 
+* @param[in]  iscompresscontent : Iscompresscontent value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetIsCompressContent(bool iscompresscontent)
@@ -175,7 +175,7 @@ void DIOCOREPROTOCOL_CFG::SetIsCompressContent(bool iscompresscontent)
 * @brief      get is encapsulated base64
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CFG::GetIsEncapsulatedBase64()
@@ -190,7 +190,7 @@ bool DIOCOREPROTOCOL_CFG::GetIsEncapsulatedBase64()
 * @brief      set is encapsulated base64
 * @ingroup    DATAIO
 * 
-* @param[in]  isencapsulatedbase64 : 
+* @param[in]  isencapsulatedbase64 : Isencapsulatedbase64 value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetIsEncapsulatedBase64(bool isencapsulatedbase64)
@@ -205,7 +205,7 @@ void DIOCOREPROTOCOL_CFG::SetIsEncapsulatedBase64(bool isencapsulatedbase64)
 * @brief      Get min size compress content
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_CFG::GetMinSizeCompressContent()
@@ -220,7 +220,7 @@ XDWORD DIOCOREPROTOCOL_CFG::GetMinSizeCompressContent()
 * @brief      Set min size compress content
 * @ingroup    DATAIO
 * 
-* @param[in]  minsizecompresscontent : 
+* @param[in]  minsizecompresscontent : Minsizecompresscontent value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetMinSizeCompressContent(XDWORD minsizecompresscontent)
@@ -235,7 +235,7 @@ void DIOCOREPROTOCOL_CFG::SetMinSizeCompressContent(XDWORD minsizecompressconten
 * @brief      Get is cipher
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CFG::GetIsCipher()
@@ -250,7 +250,7 @@ bool DIOCOREPROTOCOL_CFG::GetIsCipher()
 * @brief      Set is cipher
 * @ingroup    DATAIO
 * 
-* @param[in]  iscipher : 
+* @param[in]  iscipher : Iscipher value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetIsCipher(bool iscipher)
@@ -265,7 +265,7 @@ void DIOCOREPROTOCOL_CFG::SetIsCipher(bool iscipher)
 * @brief      Get time out no response
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_CFG::GetTimeOutNoResponse()
@@ -280,7 +280,7 @@ XDWORD DIOCOREPROTOCOL_CFG::GetTimeOutNoResponse()
 * @brief      Set time out no response
 * @ingroup    DATAIO
 * 
-* @param[in]  timeoutnoresponse : 
+* @param[in]  timeoutnoresponse : Timeoutnoresponse value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetTimeOutNoResponse(XDWORD timeoutnoresponse)
@@ -295,7 +295,7 @@ void DIOCOREPROTOCOL_CFG::SetTimeOutNoResponse(XDWORD timeoutnoresponse)
 * @brief      Get time to eliminate connection disconnect
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_CFG::GetTimeToEliminateConnectionDisconnect()
@@ -310,7 +310,7 @@ XDWORD DIOCOREPROTOCOL_CFG::GetTimeToEliminateConnectionDisconnect()
 * @brief      Set time to eliminate connection disconnect
 * @ingroup    DATAIO
 * 
-* @param[in]  timetoeliminateconnectiondisconnect : 
+* @param[in]  timetoeliminateconnectiondisconnect : Timetoeliminateconnectiondisconnect value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetTimeToEliminateConnectionDisconnect(XDWORD timetoeliminateconnectiondisconnect)
@@ -325,7 +325,7 @@ void DIOCOREPROTOCOL_CFG::SetTimeToEliminateConnectionDisconnect(XDWORD timetoel
 * @brief      Get time to check connection
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_CFG::GetTimeToCheckConnection()
@@ -340,7 +340,7 @@ XDWORD DIOCOREPROTOCOL_CFG::GetTimeToCheckConnection()
 * @brief      Set time to check connection
 * @ingroup    DATAIO
 * 
-* @param[in]  timetocheckconnection : 
+* @param[in]  timetocheckconnection : Timetocheckconnection value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetTimeToCheckConnection(XDWORD timetocheckconnection)
@@ -355,7 +355,7 @@ void DIOCOREPROTOCOL_CFG::SetTimeToCheckConnection(XDWORD timetocheckconnection)
 * @brief      Get N trys to check connection
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_CFG::GetNTrysToCheckConnection()
@@ -370,7 +370,7 @@ XDWORD DIOCOREPROTOCOL_CFG::GetNTrysToCheckConnection()
 * @brief      Set N trys to check connection
 * @ingroup    DATAIO
 * 
-* @param[in]  ntrystocheckconnection : 
+* @param[in]  ntrystocheckconnection : Ntrystocheckconnection value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CFG::SetNTrysToCheckConnection(XDWORD ntrystocheckconnection)
@@ -385,11 +385,11 @@ void DIOCOREPROTOCOL_CFG::SetNTrysToCheckConnection(XDWORD ntrystocheckconnectio
 * @brief      bus mode  activate
 * @ingroup    DATAIO
 * 
-* @param[in]  activate : 
-* @param[in]  timeoutbusfree : 
-* @param[in]  timeoutsenddata : 
+* @param[in]  activate : Activate value.
+* @param[in]  timeoutbusfree : Timeoutbusfree value.
+* @param[in]  timeoutsenddata : Timeoutsenddata value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CFG::BusMode_Activate(bool activate, XDWORD timeoutbusfree, XDWORD timeoutsenddata)
@@ -408,7 +408,7 @@ bool DIOCOREPROTOCOL_CFG::BusMode_Activate(bool activate, XDWORD timeoutbusfree,
 * @brief      bus mode  is active
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CFG::BusMode_IsActive()
@@ -423,7 +423,7 @@ bool DIOCOREPROTOCOL_CFG::BusMode_IsActive()
 * @brief      bus mode  get time out bus free
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_CFG::BusMode_GetTimeOutBusFree()
@@ -438,7 +438,7 @@ XDWORD DIOCOREPROTOCOL_CFG::BusMode_GetTimeOutBusFree()
 * @brief      bus mode  get time out send data
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_CFG::BusMode_GetTimeOutSendData()

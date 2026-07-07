@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XANDROIDSYSTEM::XANDROIDSYSTEM()
+* 
+* @fn         XANDROIDSYSTEM::XANDROIDSYSTEM(): XLINUXSYSTEM()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDSYSTEM::XANDROIDSYSTEM(): XLINUXSYSTEM()
 {
@@ -66,12 +66,12 @@ XANDROIDSYSTEM::XANDROIDSYSTEM(): XLINUXSYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDSYSTEM::~XANDROIDSYSTEM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDSYSTEM::~XANDROIDSYSTEM()
 {
@@ -80,15 +80,15 @@ XANDROIDSYSTEM::~XANDROIDSYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSYSTEM_HARDWARETYPE XANDROIDSYSTEM::GetTypeHardware(int* revision)
 * @brief      Get type hardware
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[out] revision : revision if is possible
-*
-* @return     XSYSTEM_HARDWARETYPE :
-*
+* 
+* @param[in]  revision : revision if is possible
+* 
+* @return     XSYSTEM_HARDWARETYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_HARDWARETYPE XANDROIDSYSTEM::GetTypeHardware(int* revision)
 {
@@ -101,12 +101,12 @@ XSYSTEM_HARDWARETYPE XANDROIDSYSTEM::GetTypeHardware(int* revision)
 * @fn         XSYSTEM_PLATFORM XANDROIDSYSTEM::GetPlatform(XSTRING* namestring)
 * @brief      Get platform
 * @ingroup    PLATFORM_ANDROID
-*
-* @param[in]  namestring : 
 * 
-* @return     XSYSTEM_PLATFORM : 
+* @param[in]  namestring : Namestring pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSYSTEM_PLATFORM : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_PLATFORM XANDROIDSYSTEM::GetPlatform(XSTRING* namestring)
 {
   if(namestring)  namestring->Set(__L("Android"));

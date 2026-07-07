@@ -54,7 +54,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERKEYPUBLICRSA::CIPHERKEYPUBLICRSA()
+* @fn         CIPHERKEYPUBLICRSA::CIPHERKEYPUBLICRSA() : CIPHERKEY()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -90,13 +90,13 @@ CIPHERKEYPUBLICRSA::~CIPHERKEYPUBLICRSA()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool CIPHERKEYPUBLICRSA::Get(XMPINTEGER& modulus, XMPINTEGER& exponent)
-* @brief      Get
+* @brief      Get value
 * @ingroup    CIPHER
 * 
-* @param[in]  modulus : 
-* @param[in]  exponent : 
+* @param[in]  modulus : Modulus value.
+* @param[in]  exponent : Exponent value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYPUBLICRSA::Get(XMPINTEGER& modulus, XMPINTEGER& exponent)
@@ -111,13 +111,13 @@ bool CIPHERKEYPUBLICRSA::Get(XMPINTEGER& modulus, XMPINTEGER& exponent)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool CIPHERKEYPUBLICRSA::Set(XMPINTEGER& modulus, XMPINTEGER& exponent)
-* @brief      Set
+* @brief      Set value
 * @ingroup    CIPHER
 * 
-* @param[in]  modulus : 
-* @param[in]  exponent : 
+* @param[in]  modulus : Modulus value.
+* @param[in]  exponent : Exponent value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYPUBLICRSA::Set(XMPINTEGER& modulus, XMPINTEGER& exponent)
@@ -135,7 +135,7 @@ bool CIPHERKEYPUBLICRSA::Set(XMPINTEGER& modulus, XMPINTEGER& exponent)
 * @brief      Get size in bytes
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERKEYPUBLICRSA::GetSizeInBytes()
@@ -150,9 +150,9 @@ int CIPHERKEYPUBLICRSA::GetSizeInBytes()
 * @brief      Copy from
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYPUBLICRSA::CopyFrom(CIPHERKEYPUBLICRSA* key)
@@ -171,7 +171,7 @@ bool CIPHERKEYPUBLICRSA::CopyFrom(CIPHERKEYPUBLICRSA* key)
 * @brief      Check
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYPUBLICRSA::Check()

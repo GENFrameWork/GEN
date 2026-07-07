@@ -89,7 +89,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMUDP::DIOANDROIDSTREAMUDP()
+* @fn         DIOANDROIDSTREAMUDP::DIOANDROIDSTREAMUDP() : DIOSTREAMUDP() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -161,7 +161,7 @@ DIOANDROIDSTREAMUDP::~DIOANDROIDSTREAMUDP()
 * @brief      Open
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUDP::Open()
@@ -189,7 +189,7 @@ bool DIOANDROIDSTREAMUDP::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUDP::Disconnect()
@@ -215,7 +215,7 @@ bool DIOANDROIDSTREAMUDP::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUDP::Close()
@@ -241,9 +241,9 @@ bool DIOANDROIDSTREAMUDP::Close()
 * @brief      Is ready connect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOANDROIDSTREAMUDP::IsReadyConnect(int socket)
@@ -295,7 +295,7 @@ int DIOANDROIDSTREAMUDP::IsReadyConnect(int socket)
 * @brief      Thread run function
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  thread : 
+* @param[in]  thread : Thread pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMUDP::ThreadRunFunction(void* thread)

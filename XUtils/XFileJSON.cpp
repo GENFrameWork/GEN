@@ -96,11 +96,11 @@ static long long XFILEJSON_ConvertStringToLongLong(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONVALUE::XFILEJSONVALUE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONVALUE::XFILEJSONVALUE()
 {
@@ -109,12 +109,12 @@ XFILEJSONVALUE::XFILEJSONVALUE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONVALUE::~XFILEJSONVALUE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONVALUE::~XFILEJSONVALUE()
 {
@@ -125,13 +125,13 @@ XFILEJSONVALUE::~XFILEJSONVALUE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONVALUETYPE XFILEJSONVALUE::GetType()
 * @brief      Get type
 * @ingroup    XUTILS
-*
-* @return     XFILEJSONVALUETYPE :
-*
+* 
+* @return     XFILEJSONVALUETYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONVALUETYPE XFILEJSONVALUE::GetType()
 {
@@ -140,13 +140,13 @@ XFILEJSONVALUETYPE XFILEJSONVALUE::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEJSONVALUE::SetType(XFILEJSONVALUETYPE type)
 * @brief      Set type
 * @ingroup    XUTILS
-*
-* @param[in]  type : 
-*
+* 
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEJSONVALUE::SetType(XFILEJSONVALUETYPE type)
 {
@@ -155,13 +155,13 @@ void XFILEJSONVALUE::SetType(XFILEJSONVALUETYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILEJSONVALUE::GetName()
 * @brief      Get name
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEJSONVALUE::GetName()
 {
@@ -170,15 +170,15 @@ XSTRING* XFILEJSONVALUE::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONVALUE::SetName(XSTRING& name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::SetName(XSTRING& name)
 {
@@ -192,15 +192,15 @@ bool XFILEJSONVALUE::SetName(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONVALUE::SetName(XCHAR* name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::SetName(XCHAR* name)
 {
@@ -219,7 +219,7 @@ bool XFILEJSONVALUE::SetName(XCHAR* name)
 * @brief      Get value
 * @ingroup    XUTILS
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* XFILEJSONVALUE::GetValue()
@@ -229,13 +229,13 @@ XVARIANT* XFILEJSONVALUE::GetValue()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONVALUE::GetValueBoolean()
 * @brief      Get value boolean
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::GetValueBoolean()
 {
@@ -249,7 +249,7 @@ bool XFILEJSONVALUE::GetValueBoolean()
 * @brief      Get value short
 * @ingroup    XUTILS
 * 
-* @return     short : 
+* @return     short : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 short XFILEJSONVALUE::GetValueShort()
@@ -264,7 +264,7 @@ short XFILEJSONVALUE::GetValueShort()
 * @brief      Get value word
 * @ingroup    XUTILS
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD XFILEJSONVALUE::GetValueWord()
@@ -274,13 +274,13 @@ XWORD XFILEJSONVALUE::GetValueWord()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEJSONVALUE::GetValueInteger()
 * @brief      Get value integer
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEJSONVALUE::GetValueInteger()
 {
@@ -290,11 +290,11 @@ int XFILEJSONVALUE::GetValueInteger()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         long XFILEJSONVALUE::GetValueDoubleInteger()
+* @fn         XDWORD XFILEJSONVALUE::GetValueDWord()
 * @brief      Get value double integer
 * @ingroup    XUTILS
 * 
-* @return     long : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILEJSONVALUE::GetValueDWord()
@@ -309,7 +309,7 @@ XDWORD XFILEJSONVALUE::GetValueDWord()
 * @brief      Get value double integer
 * @ingroup    XUTILS
 * 
-* @return     long : 
+* @return     long long : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 long long XFILEJSONVALUE::GetValueDoubleInteger()
@@ -324,7 +324,7 @@ long long XFILEJSONVALUE::GetValueDoubleInteger()
 * @brief      Get value Q word
 * @ingroup    XUTILS
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XFILEJSONVALUE::GetValueQWord()
@@ -334,13 +334,13 @@ XQWORD XFILEJSONVALUE::GetValueQWord()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float XFILEJSONVALUE::GetValueFloating()
 * @brief      Get value floating
 * @ingroup    XUTILS
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XFILEJSONVALUE::GetValueFloating()
 {
@@ -354,7 +354,7 @@ float XFILEJSONVALUE::GetValueFloating()
 * @brief      Get value double float
 * @ingroup    XUTILS
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double XFILEJSONVALUE::GetValueDoubleFloat()
@@ -365,11 +365,11 @@ double XFILEJSONVALUE::GetValueDoubleFloat()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XSTRING* XFILEJSONVALUE::GetValueString()
+* @fn         XSTRING XFILEJSONVALUE::GetValueString()
 * @brief      Get value string
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING XFILEJSONVALUE::GetValueString()
@@ -385,10 +385,10 @@ XSTRING XFILEJSONVALUE::GetValueString()
 * @fn         XFILEJSONOBJECT* XFILEJSONVALUE::GetValueObject()
 * @brief      Get value object
 * @ingroup    XUTILS
-*
-* @return     XFILEJSONOBJECT* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEJSONOBJECT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XFILEJSONVALUE::GetValueObject()
 {
   return (XFILEJSONOBJECT*)GetValuePointer();
@@ -400,10 +400,10 @@ XFILEJSONOBJECT* XFILEJSONVALUE::GetValueObject()
 * @fn         XFILEJSONARRAY* XFILEJSONVALUE::GetValueArray()
 * @brief      Get value array
 * @ingroup    XUTILS
-*
-* @return     XFILEJSONARRAY* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEJSONARRAY* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONARRAY* XFILEJSONVALUE::GetValueArray()
 {
   return (XFILEJSONARRAY*)GetValuePointer();
@@ -411,13 +411,13 @@ XFILEJSONARRAY* XFILEJSONVALUE::GetValueArray()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* XFILEJSONVALUE::GetValuePointer()
 * @brief      Get value pointer
 * @ingroup    XUTILS
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XFILEJSONVALUE::GetValuePointer()
 {
@@ -428,10 +428,10 @@ void* XFILEJSONVALUE::GetValuePointer()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(void)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(void)
@@ -443,15 +443,15 @@ bool XFILEJSONVALUE::Set(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONVALUE::Set(bool boolean)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  boolean :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  boolean : Boolean value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(bool boolean)
 {
@@ -465,12 +465,12 @@ bool XFILEJSONVALUE::Set(bool boolean)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(short number)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  number : 
+* @param[in]  number : Number value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(short number)
@@ -485,12 +485,12 @@ bool XFILEJSONVALUE::Set(short number)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(XWORD number)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  number : 
+* @param[in]  number : Number value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(XWORD number)
@@ -503,15 +503,15 @@ bool XFILEJSONVALUE::Set(XWORD number)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONVALUE::Set(int number)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  number :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  number : Number value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(int number)
 {
@@ -525,12 +525,12 @@ bool XFILEJSONVALUE::Set(int number)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(XDWORD number)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  number : 
+* @param[in]  number : Number value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(XDWORD number)
@@ -545,12 +545,12 @@ bool XFILEJSONVALUE::Set(XDWORD number)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(long long number)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  number : 
+* @param[in]  number : Number value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(long long number)
@@ -565,12 +565,12 @@ bool XFILEJSONVALUE::Set(long long number)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(XQWORD number)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  number : 
+* @param[in]  number : Number value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(XQWORD number)
@@ -585,12 +585,12 @@ bool XFILEJSONVALUE::Set(XQWORD number)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(float number)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  number : 
+* @param[in]  number : Number value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(float number)
@@ -605,12 +605,12 @@ bool XFILEJSONVALUE::Set(float number)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(double number)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  number : 
+* @param[in]  number : Number value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(double number)
@@ -625,12 +625,12 @@ bool XFILEJSONVALUE::Set(double number)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(XSTRING& string)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  string : 
+* @param[in]  string : String to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(XSTRING& string)
@@ -642,12 +642,12 @@ bool XFILEJSONVALUE::Set(XSTRING& string)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(XCHAR* string)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  string : 
+* @param[in]  string : String to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(XCHAR* string)
@@ -662,12 +662,12 @@ bool XFILEJSONVALUE::Set(XCHAR* string)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(XFILEJSONOBJECT* object)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  object : 
+* @param[in]  object : Object pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(XFILEJSONOBJECT* object)
@@ -684,12 +684,12 @@ bool XFILEJSONVALUE::Set(XFILEJSONOBJECT* object)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(XFILEJSONARRAY* array)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  array : 
+* @param[in]  array : Array pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(XFILEJSONARRAY* array)
@@ -706,12 +706,12 @@ bool XFILEJSONVALUE::Set(XFILEJSONARRAY* array)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEJSONVALUE::Set(XVARIANT* variant)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
 * 
-* @param[in]  variant : 
+* @param[in]  variant : Variant pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(XVARIANT* variant)
@@ -809,13 +809,13 @@ bool XFILEJSONVALUE::Set(XVARIANT* variant)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONVALUE::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Delete()
 {
@@ -869,13 +869,13 @@ bool XFILEJSONVALUE::Delete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONVALUE* XFILEJSONVALUE::Clone()
 * @brief      Clone
 * @ingroup    XUTILS
-*
-* @return     XFILEJSONVALUE* : 
-*
+* 
+* @return     XFILEJSONVALUE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONVALUE* XFILEJSONVALUE::Clone()
 {
@@ -892,12 +892,12 @@ XFILEJSONVALUE* XFILEJSONVALUE::Clone()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEJSONVALUE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEJSONVALUE::Clean()
 {
@@ -911,11 +911,11 @@ void XFILEJSONVALUE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONOBJECT::XFILEJSONOBJECT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT::XFILEJSONOBJECT()
 {
@@ -924,12 +924,12 @@ XFILEJSONOBJECT::XFILEJSONOBJECT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONOBJECT::~XFILEJSONOBJECT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT::~XFILEJSONOBJECT()
 {
@@ -939,6 +939,15 @@ XFILEJSONOBJECT::~XFILEJSONOBJECT()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XFILEJSONOBJECT::IsArray()
+* @brief      Check if array
+* @ingroup    XUTILS
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONOBJECT::IsArray()
 {
   return isarray;
@@ -946,13 +955,13 @@ bool XFILEJSONOBJECT::IsArray()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEJSONOBJECT::SetIsArray(bool isarray)
 * @brief      Set is array
 * @ingroup    XUTILS
-*
-* @param[in]  isarray : 
-*
+* 
+* @param[in]  isarray : Isarray value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEJSONOBJECT::SetIsArray(bool isarray)
 {
@@ -961,15 +970,15 @@ void XFILEJSONOBJECT::SetIsArray(bool isarray)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONOBJECT::Add(XFILEJSONVALUE* value)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONOBJECT::Add(XFILEJSONVALUE* value)
 {
@@ -982,16 +991,16 @@ bool XFILEJSONOBJECT::Add(XFILEJSONVALUE* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILEJSONOBJECT::Add(XCHAR* name,XFILEJSONARRAY* array)
-* @brief      Add
+* 
+* @fn         bool XFILEJSONOBJECT::Add(XCHAR* name, XFILEJSONARRAY* array)
+* @brief      Add value
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  array :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  array : Array pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONOBJECT::Add(XCHAR* name, XFILEJSONARRAY* array)
 {
@@ -1012,16 +1021,16 @@ bool XFILEJSONOBJECT::Add(XCHAR* name, XFILEJSONARRAY* array)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILEJSONOBJECT::Add(XSTRING& name,XFILEJSONARRAY* array)
-* @brief      Add
+* 
+* @fn         bool XFILEJSONOBJECT::Add(XSTRING& name, XFILEJSONARRAY* array)
+* @brief      Add value
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  array :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  array : Array pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONOBJECT::Add(XSTRING& name, XFILEJSONARRAY* array)
 {
@@ -1030,16 +1039,16 @@ bool XFILEJSONOBJECT::Add(XSTRING& name, XFILEJSONARRAY* array)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILEJSONOBJECT::Add(XCHAR* name,XFILEJSONOBJECT* object)
-* @brief      Add
+* 
+* @fn         bool XFILEJSONOBJECT::Add(XCHAR* name, XFILEJSONOBJECT* object)
+* @brief      Add value
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  object :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  object : Object pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONOBJECT::Add(XCHAR* name, XFILEJSONOBJECT* object)
 {
@@ -1060,16 +1069,16 @@ bool XFILEJSONOBJECT::Add(XCHAR* name, XFILEJSONOBJECT* object)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONOBJECT::Add(XSTRING& name, XFILEJSONOBJECT* object)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  object :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  object : Object pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONOBJECT::Add(XSTRING& name, XFILEJSONOBJECT* object)
 {
@@ -1083,7 +1092,7 @@ bool XFILEJSONOBJECT::Add(XSTRING& name, XFILEJSONOBJECT* object)
 * @brief      Get father
 * @ingroup    XUTILS
 * 
-* @return     XFILEJSONOBJECT* : 
+* @return     XFILEJSONOBJECT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XFILEJSONOBJECT::GetFather()
@@ -1098,7 +1107,7 @@ XFILEJSONOBJECT* XFILEJSONOBJECT::GetFather()
 * @brief      Set father
 * @ingroup    XUTILS
 * 
-* @param[in]  father : 
+* @param[in]  father : Father pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEJSONOBJECT::SetFather(XFILEJSONOBJECT* father)
@@ -1108,13 +1117,13 @@ void XFILEJSONOBJECT::SetFather(XFILEJSONOBJECT* father)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<XFILEJSONVALUE*>* XFILEJSONOBJECT::GetValues()
 * @brief      Get values
 * @ingroup    XUTILS
-*
-* @return     XVECTOR<XFILEJSONVALUE*>* :
-*
+* 
+* @return     XVECTOR<XFILEJSONVALUE*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XFILEJSONVALUE*>* XFILEJSONOBJECT::GetValues()
 {
@@ -1123,13 +1132,13 @@ XVECTOR<XFILEJSONVALUE*>* XFILEJSONOBJECT::GetValues()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONOBJECT::DeleteAllValues()
 * @brief      Delete all values
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONOBJECT::DeleteAllValues()
 {
@@ -1143,13 +1152,13 @@ bool XFILEJSONOBJECT::DeleteAllValues()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONOBJECT* XFILEJSONOBJECT::Clone()
 * @brief      Clone
 * @ingroup    XUTILS
-*
-* @return     XFILEJSONOBJECT* : 
-*
+* 
+* @return     XFILEJSONOBJECT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XFILEJSONOBJECT::Clone()
 {
@@ -1176,12 +1185,12 @@ XFILEJSONOBJECT* XFILEJSONOBJECT::Clone()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEJSONOBJECT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEJSONOBJECT::Clean()
 {
@@ -1196,7 +1205,7 @@ void XFILEJSONOBJECT::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XFILEJSONARRAY::XFILEJSONARRAY()
+* @fn         XFILEJSONARRAY::XFILEJSONARRAY() : XFILEJSONOBJECT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
@@ -1210,12 +1219,12 @@ XFILEJSONARRAY::XFILEJSONARRAY() : XFILEJSONOBJECT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONARRAY::~XFILEJSONARRAY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONARRAY::~XFILEJSONARRAY()
 {
@@ -1226,13 +1235,13 @@ XFILEJSONARRAY::~XFILEJSONARRAY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILEJSONARRAY::GetName()
 * @brief      Get name
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEJSONARRAY::GetName()
 {
@@ -1241,15 +1250,15 @@ XSTRING* XFILEJSONARRAY::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONARRAY::SetName(XSTRING& name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONARRAY::SetName(XSTRING& name)
 {
@@ -1260,15 +1269,15 @@ bool XFILEJSONARRAY::SetName(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSONARRAY::SetName(XCHAR* name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONARRAY::SetName(XCHAR* name)
 {
@@ -1284,7 +1293,7 @@ bool XFILEJSONARRAY::SetName(XCHAR* name)
 * @brief      Clone
 * @ingroup    XUTILS
 * 
-* @return     XFILEJSONARRAY* : 
+* @return     XFILEJSONARRAY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONARRAY* XFILEJSONARRAY::Clone()
@@ -1299,12 +1308,12 @@ XFILEJSONARRAY* XFILEJSONARRAY::Clone()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEJSONARRAY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEJSONARRAY::Clean()
 {
@@ -1317,11 +1326,11 @@ void XFILEJSONARRAY::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEJSON::XFILEJSON()
+* 
+* @fn         XFILEJSON::XFILEJSON(): XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSON::XFILEJSON(): XFILETXT()
 {
@@ -1330,12 +1339,12 @@ XFILEJSON::XFILEJSON(): XFILETXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSON::~XFILEJSON()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSON::~XFILEJSON()
 {
@@ -1348,13 +1357,13 @@ XFILEJSON::~XFILEJSON()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONOBJECT* XFILEJSON::GetRoot()
 * @brief      Get root
 * @ingroup    XUTILS
-*
-* @return     XFILEJSONOBJECT* :
-*
+* 
+* @return     XFILEJSONOBJECT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XFILEJSON::GetRoot()
 {
@@ -1363,15 +1372,15 @@ XFILEJSONOBJECT* XFILEJSON::GetRoot()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::SetRoot(XFILEJSONOBJECT* root)
 * @brief      Set root
 * @ingroup    XUTILS
-*
-* @param[in]  root :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  root : Root pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::SetRoot(XFILEJSONOBJECT* root)
 {
@@ -1384,13 +1393,13 @@ bool XFILEJSON::SetRoot(XFILEJSONOBJECT* root)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::DecodeAllLines()
 * @brief      Decode all lines
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::DecodeAllLines()
 {
@@ -1434,15 +1443,15 @@ bool XFILEJSON::DecodeAllLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::EncodeAllLines(bool istabulatedline)
 * @brief      Encode all lines
 * @ingroup    XUTILS
-*
-* @param[in]  istabulatedline :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  istabulatedline : Istabulatedline value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::EncodeAllLines(bool istabulatedline)
 {
@@ -1455,13 +1464,13 @@ bool XFILEJSON::EncodeAllLines(bool istabulatedline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::ReadAndDecodeAllLines()
 * @brief      Read and decode all lines
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::ReadAndDecodeAllLines()
 {
@@ -1474,17 +1483,17 @@ bool XFILEJSON::ReadAndDecodeAllLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::WriteAndEncodeAllLines(bool istabulatedline,XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF)
 * @brief      Write and encode all lines
 * @ingroup    XUTILS
-*
-* @param[in]  istabulatedline :
-* @param[in]  formatchar :
-* @param[in]  typeLF :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  istabulatedline : Istabulatedline value.
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  typeLF : Type LF value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::WriteAndEncodeAllLines(bool istabulatedline,XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF)
 {
@@ -1496,15 +1505,15 @@ bool XFILEJSON::WriteAndEncodeAllLines(bool istabulatedline,XFILETXTFORMATCHAR f
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::WriteAndEncodeAllLines(bool istabulatedline)
 * @brief      Write and encode all lines
 * @ingroup    XUTILS
-*
-* @param[in]  istabulatedline :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  istabulatedline : Istabulatedline value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::WriteAndEncodeAllLines(bool istabulatedline)
 {
@@ -1521,13 +1530,13 @@ bool XFILEJSON::WriteAndEncodeAllLines(bool istabulatedline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::DeleteAllObjects()
 * @brief      Delete all objects
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::DeleteAllObjects()
 {
@@ -1541,16 +1550,16 @@ bool XFILEJSON::DeleteAllObjects()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONOBJECT* XFILEJSON::GetObj(XCHAR* name, XFILEJSONOBJECT* startobject)
 * @brief      Get obj
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  startobject :
-*
-* @return     XFILEJSONOBJECT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  startobject : Startobject pointer to use.
+* 
+* @return     XFILEJSONOBJECT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XFILEJSON::GetObj(XCHAR* name, XFILEJSONOBJECT* startobject)
 {  
@@ -1616,10 +1625,10 @@ XFILEJSONOBJECT* XFILEJSON::GetObj(XCHAR* name, XFILEJSONOBJECT* startobject)
 * @brief      Get obj
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
-* @param[in]  startobject : 
+* @param[in]  name : Name to use.
+* @param[in]  startobject : Startobject pointer to use.
 * 
-* @return     XFILEJSONOBJECT* : 
+* @return     XFILEJSONOBJECT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XFILEJSON::GetObj(XSTRING& name, XFILEJSONOBJECT* startobject)
@@ -1629,16 +1638,16 @@ XFILEJSONOBJECT* XFILEJSON::GetObj(XSTRING& name, XFILEJSONOBJECT* startobject)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONVALUE* XFILEJSON::GetValue(XCHAR* name, XFILEJSONOBJECT* startobject)
 * @brief      Get value
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  startobject :
-*
-* @return     XFILEJSONVALUE* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  startobject : Startobject pointer to use.
+* 
+* @return     XFILEJSONVALUE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONVALUE* XFILEJSON::GetValue(XCHAR* name, XFILEJSONOBJECT* startobject)
 {
@@ -1673,16 +1682,16 @@ XFILEJSONVALUE* XFILEJSON::GetValue(XCHAR* name, XFILEJSONOBJECT* startobject)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONVALUE* XFILEJSON::GetValue(XSTRING& name, XFILEJSONOBJECT* startobject)
 * @brief      Get value
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  startobject :
-*
-* @return     XFILEJSONVALUE* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  startobject : Startobject pointer to use.
+* 
+* @return     XFILEJSONVALUE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONVALUE* XFILEJSON::GetValue(XSTRING& name, XFILEJSONOBJECT* startobject)
 {
@@ -1696,10 +1705,10 @@ XFILEJSONVALUE* XFILEJSON::GetValue(XSTRING& name, XFILEJSONOBJECT* startobject)
 * @brief      Get value
 * @ingroup    XUTILS
 * 
-* @param[in]  index : 
-* @param[in]  startobject : 
+* @param[in]  index : Index value.
+* @param[in]  startobject : Startobject pointer to use.
 * 
-* @return     XFILEJSONVALUE* : 
+* @return     XFILEJSONVALUE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONVALUE* XFILEJSON::GetValue(int index, XFILEJSONOBJECT* startobject)
@@ -1715,14 +1724,14 @@ XFILEJSONVALUE* XFILEJSON::GetValue(int index, XFILEJSONOBJECT* startobject)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XFILEJSON::ShowTraceJSON(XBYTE color, bool istabulatedline, XFILETXTTYPELF typeLF)
+* @fn         bool XFILEJSON::ShowTraceJSON(XBYTE color, bool istabulatedline)
 * @brief      Show trace JSON
 * @ingroup    XUTILS
 * 
-* @param[in]  color : 
-* @param[in]  istabulatedline : 
+* @param[in]  color : Color value.
+* @param[in]  istabulatedline : Istabulatedline value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::ShowTraceJSON(XBYTE color, bool istabulatedline)
@@ -1745,16 +1754,16 @@ bool XFILEJSON::ShowTraceJSON(XBYTE color, bool istabulatedline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONOBJECT* XFILEJSON::GetObjSubValue(XCHAR* name, XFILEJSONVALUE* value)
 * @brief      Get obj sub value
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     XFILEJSONOBJECT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
+* 
+* @return     XFILEJSONOBJECT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONOBJECT* XFILEJSON::GetObjSubValue(XCHAR* name, XFILEJSONVALUE* value)
 {
@@ -1804,17 +1813,17 @@ XFILEJSONOBJECT* XFILEJSON::GetObjSubValue(XCHAR* name, XFILEJSONVALUE* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* object)
 * @brief      Decode object
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-* @param[in]  isobject :
-* @param[in]  object :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* @param[in]  isobject : Isobject value.
+* @param[in]  object : Object pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* object)
 {
@@ -2071,15 +2080,15 @@ bool XFILEJSON::DecodeObject(int& position, bool isobject, XFILEJSONOBJECT* obje
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONCONTROLCHAR XFILEJSON::CheckControlCharacter(XCHAR character)
 * @brief      Check control character
 * @ingroup    XUTILS
-*
-* @param[in]  character :
-*
-* @return     XFILEJSONCONTROLCHAR :
-*
+* 
+* @param[in]  character : Character value.
+* 
+* @return     XFILEJSONCONTROLCHAR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONCONTROLCHAR XFILEJSON::CheckControlCharacter(XCHAR character)
 {
@@ -2126,15 +2135,15 @@ XFILEJSONCONTROLCHAR XFILEJSON::CheckControlCharacter(XCHAR character)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR XFILEJSON::GetControlCharacter(XFILEJSONCONTROLCHAR ctrlchar)
 * @brief      Get control character
 * @ingroup    XUTILS
-*
-* @param[in]  ctrlchar :
-*
-* @return     XCHAR :
-*
+* 
+* @param[in]  ctrlchar : Ctrlchar value.
+* 
+* @return     XCHAR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR XFILEJSON::GetControlCharacter(XFILEJSONCONTROLCHAR ctrlchar)
 {
@@ -2156,16 +2165,16 @@ XCHAR XFILEJSON::GetControlCharacter(XFILEJSONCONTROLCHAR ctrlchar)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::AddControlCharacter(XFILEJSONCONTROLCHAR ctrlchar, XSTRING& line)
 * @brief      Add control character
 * @ingroup    XUTILS
-*
-* @param[in]  ctrlchar :
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ctrlchar : Ctrlchar value.
+* @param[in]  line : Line value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::AddControlCharacter(XFILEJSONCONTROLCHAR ctrlchar, XSTRING& line)
 {
@@ -2181,15 +2190,15 @@ bool XFILEJSON::AddControlCharacter(XFILEJSONCONTROLCHAR ctrlchar, XSTRING& line
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEJSONCONTROLCHAR XFILEJSON::SearchNextControlCharacter(int& position)
 * @brief      Search next control character
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-*
-* @return     XFILEJSONCONTROLCHAR :
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     XFILEJSONCONTROLCHAR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSONCONTROLCHAR XFILEJSON::SearchNextControlCharacter(int& position)
 {
@@ -2212,16 +2221,16 @@ XFILEJSONCONTROLCHAR XFILEJSON::SearchNextControlCharacter(int& position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILEJSON::SearchControlCharacter(XFILEJSONCONTROLCHAR ctrlchar,int& position)
+* 
+* @fn         bool XFILEJSON::SearchControlCharacter(XFILEJSONCONTROLCHAR ctrlchar, int& position)
 * @brief      Search control character
 * @ingroup    XUTILS
-*
-* @param[in]  ctrlchar :
-* @param[in]  position :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ctrlchar : Ctrlchar value.
+* @param[in]  position : Position value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::SearchControlCharacter(XFILEJSONCONTROLCHAR ctrlchar, int& position)
 {
@@ -2243,17 +2252,17 @@ bool XFILEJSON::SearchControlCharacter(XFILEJSONCONTROLCHAR ctrlchar, int& posit
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILEJSON::GetNumber(int& position,XSTRING& string,bool& special)
+* 
+* @fn         bool XFILEJSON::GetNumber(int& position, XSTRING& string, bool& special)
 * @brief      Get number
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-* @param[in]  string :
-* @param[in]  special :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* @param[in]  string : String to use.
+* @param[in]  special : Special value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::GetNumber(int& position, XSTRING& string, bool& special)
 {
@@ -2284,16 +2293,16 @@ bool XFILEJSON::GetNumber(int& position, XSTRING& string, bool& special)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILEJSON::GetText(int& position,XSTRING& string)
+* 
+* @fn         bool XFILEJSON::GetText(int& position, XSTRING& string)
 * @brief      Get text
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::GetText(int& position, XSTRING& string)
 {
@@ -2320,16 +2329,16 @@ bool XFILEJSON::GetText(int& position, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::GetString(int& position, XSTRING& string)
 * @brief      Get string
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::GetString(int& position, XSTRING& string)
 {
@@ -2378,17 +2387,17 @@ bool XFILEJSON::GetString(int& position, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::AddTabs(int level, int spacetabs, XSTRING& string)
 * @brief      Add tabs
 * @ingroup    XUTILS
-*
-* @param[in]  level :
-* @param[in]  spacetabs :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  level : Level value.
+* @param[in]  spacetabs : Spacetabs value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::AddTabs(int level, int spacetabs, XSTRING& string)
 {
@@ -2407,17 +2416,17 @@ bool XFILEJSON::AddTabs(int level, int spacetabs, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEJSON::EncodeObject(bool isobject, XFILEJSONOBJECT* object, bool istabulatedline)
 * @brief      Encode object
 * @ingroup    XUTILS
-*
-* @param[in]  isobject :
-* @param[in]  object :
-* @param[in]  istabulatedline :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  isobject : Isobject value.
+* @param[in]  object : Object pointer to use.
+* @param[in]  istabulatedline : Istabulatedline value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSON::EncodeObject(bool isobject, XFILEJSONOBJECT* object, bool istabulatedline)
 {
@@ -2542,12 +2551,12 @@ bool XFILEJSON::EncodeObject(bool isobject, XFILEJSONOBJECT* object, bool istabu
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEJSON::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEJSON::Clean()
 {

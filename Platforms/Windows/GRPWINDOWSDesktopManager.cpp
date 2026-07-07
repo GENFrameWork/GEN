@@ -55,7 +55,7 @@
    
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPWINDOWSDESKTOPMONITORS::GRPWINDOWSDESKTOPMONITORS()
+* @fn         GRPWINDOWSDESKTOPMONITORS::GRPWINDOWSDESKTOPMONITORS() : GRPDESKTOPMONITORS()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -87,16 +87,16 @@ GRPWINDOWSDESKTOPMONITORS::~GRPWINDOWSDESKTOPMONITORS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         static BOOL CALLBACK GRPWINDOWSDESKTOPMONITORS::MonitorEnum(HMONITOR hmon,HDC hdc,LPRECT rectmonitor,LPARAM pdata)
+* @fn         BOOL CALLBACK GRPWINDOWSDESKTOPMONITORS::MonitorEnum(HMONITOR hmon,HDC hdc,LPRECT rectmonitor,LPARAM pdata)
 * @brief      Monitor enum
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  hmon : 
-* @param[in]  hdc : 
-* @param[in]  rectmonitor : 
-* @param[in]  pdata : 
+* @param[in]  hmon : Hmon value.
+* @param[in]  hdc : Hdc value.
+* @param[in]  rectmonitor : Rectmonitor value.
+* @param[in]  pdata : Pdata value.
 * 
-* @return     static : 
+* @return     BOOL CALLBACK : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL CALLBACK GRPWINDOWSDESKTOPMONITORS::MonitorEnum(HMONITOR hmon,HDC hdc,LPRECT rectmonitor,LPARAM pdata)
@@ -179,11 +179,11 @@ GRPWINDOWSDESKTOPMANAGER::~GRPWINDOWSDESKTOPMANAGER()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPWINDOWSDESKTOPMONITORS* GRPWINDOWSDESKTOPMANAGER::GetDesktopMonitors()
+* @fn         GRPDESKTOPMONITORS* GRPWINDOWSDESKTOPMANAGER::GetDesktopMonitors()
 * @brief      Get desktop monitors
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XDESKTOPMONITORS* : 
+* @return     GRPDESKTOPMONITORS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPDESKTOPMONITORS* GRPWINDOWSDESKTOPMANAGER::GetDesktopMonitors()

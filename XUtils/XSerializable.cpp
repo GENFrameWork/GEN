@@ -90,13 +90,13 @@ XSERIALIZABLE::~XSERIALIZABLE()
 #ifdef XSERIALIZABLE_BINARY_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XSERIALIZATIONMETHOD* XSERIALIZATIONMETHOD::CreateInstance(XBUFFER& databinary)
+* @fn         XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XBUFFER& databinary)
 * @brief      Create instance
 * @ingroup    XUTILS
 * 
-* @param[in]  databinary : 
+* @param[in]  databinary : Databinary value.
 * 
-* @return     XSERIALIZATIONMETHOD* : 
+* @return     XSERIALIZATIONMETHOD* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XBUFFER& databinary)
@@ -119,9 +119,9 @@ XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XBUFFER& databinary)
 * @brief      Create instance
 * @ingroup    XUTILS
 * 
-* @param[in]  fileJSON : 
+* @param[in]  fileJSON : File JSON value.
 * 
-* @return     XSERIALIZATIONMETHOD* : 
+* @return     XSERIALIZATIONMETHOD* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XFILEJSON& fileJSON)
@@ -163,7 +163,7 @@ XSERIALIZATIONMETHOD* XSERIALIZABLE::CreateInstance(XFILEJSON& fileJSON)
 * @brief      Get serialization method
 * @ingroup    XUTILS
 * 
-* @return     XSERIALIZATIONMETHOD* : 
+* @return     XSERIALIZATIONMETHOD* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSERIALIZATIONMETHOD* XSERIALIZABLE::GetSerializationMethod()
@@ -178,7 +178,7 @@ XSERIALIZATIONMETHOD* XSERIALIZABLE::GetSerializationMethod()
 * @brief      Set serialization method
 * @ingroup    XUTILS
 * 
-* @param[in]  serializationmethod : 
+* @param[in]  serializationmethod : Serializationmethod pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSERIALIZABLE::SetSerializationMethod(XSERIALIZATIONMETHOD* serializationmethod)
@@ -193,7 +193,7 @@ void XSERIALIZABLE::SetSerializationMethod(XSERIALIZATIONMETHOD* serializationme
 * @brief      Do deserialize
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZABLE::DoDeserialize()
@@ -213,7 +213,7 @@ bool XSERIALIZABLE::DoDeserialize()
 * @brief      Do serialize
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZABLE::DoSerialize()
@@ -233,9 +233,9 @@ bool XSERIALIZABLE::DoSerialize()
 * @brief      Do serialize
 * @ingroup    XUTILS
 * 
-* @param[in]  serializationmethod : 
+* @param[in]  serializationmethod : Serializationmethod pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZABLE::DoSerialize(XSERIALIZATIONMETHOD* serializationmethod)
@@ -257,9 +257,9 @@ bool XSERIALIZABLE::DoSerialize(XSERIALIZATIONMETHOD* serializationmethod)
 * @brief      Do deserialize
 * @ingroup    XUTILS
 * 
-* @param[in]  serializationmethod : 
+* @param[in]  serializationmethod : Serializationmethod pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZABLE::DoDeserialize(XSERIALIZATIONMETHOD* serializationmethod)
@@ -281,7 +281,7 @@ bool XSERIALIZABLE::DoDeserialize(XSERIALIZATIONMETHOD* serializationmethod)
 * @brief      Has been changed
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZABLE::HasBeenChanged()
@@ -326,7 +326,7 @@ bool XSERIALIZABLE::HasBeenChanged()
 * @brief      Set has been changed
 * @ingroup    XUTILS
 * 
-* @param[in]  hasbeenchanged : 
+* @param[in]  hasbeenchanged : Hasbeenchanged value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSERIALIZABLE::SetHasBeenChanged(bool hasbeenchanged)
@@ -341,7 +341,7 @@ void XSERIALIZABLE::SetHasBeenChanged(bool hasbeenchanged)
 * @brief      Serialize
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZABLE::Serialize()
@@ -358,7 +358,7 @@ bool XSERIALIZABLE::Serialize()
 * @brief      Deserialize
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZABLE::Deserialize()

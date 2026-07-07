@@ -50,11 +50,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32LEDNEOPIXELWS2812B::DIOSTM32LEDNEOPIXELWS2812B()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32LEDNEOPIXELWS2812B::DIOSTM32LEDNEOPIXELWS2812B()
 {
@@ -63,12 +63,12 @@ DIOSTM32LEDNEOPIXELWS2812B::DIOSTM32LEDNEOPIXELWS2812B()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32LEDNEOPIXELWS2812B::~DIOSTM32LEDNEOPIXELWS2812B()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32LEDNEOPIXELWS2812B::~DIOSTM32LEDNEOPIXELWS2812B()
 {
@@ -78,13 +78,13 @@ DIOSTM32LEDNEOPIXELWS2812B::~DIOSTM32LEDNEOPIXELWS2812B()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32LEDNEOPIXELWS2812B::Send()
 * @brief      Send
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32LEDNEOPIXELWS2812B::Send()
 {   
@@ -210,12 +210,12 @@ bool DIOSTM32LEDNEOPIXELWS2812B::Send()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32LEDNEOPIXELWS2812B::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32LEDNEOPIXELWS2812B::Clean()
 {

@@ -53,15 +53,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOCOREPROTOCOL_XEVENT::DIOCOREPROTOCOL_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         DIOCOREPROTOCOL_XEVENT::DIOCOREPROTOCOL_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  subject :
-* @param[in]  family :
-* @param[in]  type :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_XEVENT::DIOCOREPROTOCOL_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 {
@@ -70,12 +70,12 @@ DIOCOREPROTOCOL_XEVENT::DIOCOREPROTOCOL_XEVENT(XSUBJECT* subject, XDWORD type, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCOREPROTOCOL_XEVENT::~DIOCOREPROTOCOL_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_XEVENT::~DIOCOREPROTOCOL_XEVENT()
 {
@@ -84,13 +84,13 @@ DIOCOREPROTOCOL_XEVENT::~DIOCOREPROTOCOL_XEVENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOPROTOCOL* DIOCOREPROTOCOL_XEVENT::GetProtocol()
+* 
+* @fn         DIOCOREPROTOCOL* DIOCOREPROTOCOL_XEVENT::GetProtocol()
 * @brief      Get protocol
 * @ingroup    DATAIO
-*
-* @return     DIOPROTOCOL* :
-*
+* 
+* @return     DIOCOREPROTOCOL* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL* DIOCOREPROTOCOL_XEVENT::GetProtocol()
 {
@@ -99,15 +99,15 @@ DIOCOREPROTOCOL* DIOCOREPROTOCOL_XEVENT::GetProtocol()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOCOREPROTOCOL_XEVENT::SetProtocol(DIOPROTOCOL* protocol)
+* 
+* @fn         bool DIOCOREPROTOCOL_XEVENT::SetProtocol(DIOCOREPROTOCOL* protocol)
 * @brief      Set protocol
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_XEVENT::SetProtocol(DIOCOREPROTOCOL* protocol)
 {
@@ -119,12 +119,12 @@ bool DIOCOREPROTOCOL_XEVENT::SetProtocol(DIOCOREPROTOCOL* protocol)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCOREPROTOCOL_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_XEVENT::Clean()
 {

@@ -137,7 +137,7 @@ const XBYTE* HASHCOMP128V1::table[5]      =   {  table0,
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         HASHCOMP128V1::HASHCOMP128V1()
+* @fn         HASHCOMP128V1::HASHCOMP128V1() : HASH()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -168,11 +168,11 @@ HASHCOMP128V1::~HASHCOMP128V1()
 * @brief      Set input
 * @ingroup    CIPHER
 * 
-* @param[in]  rand : 
-* @param[in]  ki : 
-* @param[in]  xbuffer : 
+* @param[in]  rand : Rand pointer to use.
+* @param[in]  ki : Ki pointer to use.
+* @param[in]  xbuffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCOMP128V1::SetInput(XBYTE* rand, XBYTE* ki,XBUFFER& xbuffer)
@@ -187,13 +187,13 @@ bool HASHCOMP128V1::SetInput(XBYTE* rand, XBYTE* ki,XBUFFER& xbuffer)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASHCOMP128V1::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCOMP128V1::Do(XBYTE* input, XQWORD size)
@@ -219,7 +219,7 @@ bool HASHCOMP128V1::Do(XBYTE* input, XQWORD size)
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASHCOMP128V1::GetDefaultSize()
@@ -234,9 +234,9 @@ int HASHCOMP128V1::GetDefaultSize()
 * @brief      Get SRES
 * @ingroup    CIPHER
 * 
-* @param[in]  SRES : 
+* @param[in]  SRES : SRES value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCOMP128V1::GetSRES(XBUFFER& SRES)
@@ -257,9 +257,9 @@ bool HASHCOMP128V1::GetSRES(XBUFFER& SRES)
 * @brief      Get kc
 * @ingroup    CIPHER
 * 
-* @param[in]  Kc : 
+* @param[in]  Kc : Kc value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCOMP128V1::GetKc(XBUFFER& Kc)
@@ -280,7 +280,7 @@ bool HASHCOMP128V1::GetKc(XBUFFER& Kc)
 * @brief      Make
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
+* @param[in]  input : Input pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHCOMP128V1::Make(XBYTE* input)

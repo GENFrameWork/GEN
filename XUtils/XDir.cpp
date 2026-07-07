@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDIRELEMENT::XDIRELEMENT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIRELEMENT::XDIRELEMENT()
 {
@@ -74,12 +74,12 @@ XDIRELEMENT::XDIRELEMENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDIRELEMENT::~XDIRELEMENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIRELEMENT::~XDIRELEMENT()
 {
@@ -89,13 +89,13 @@ XDIRELEMENT::~XDIRELEMENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDIRELEMENTTYPE XDIRELEMENT::GetType()
 * @brief      Get type
 * @ingroup    XUTILS
-*
-* @return     XDIRELEMENTTYPE :
-*
+* 
+* @return     XDIRELEMENTTYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIRELEMENTTYPE XDIRELEMENT::GetType()
 {
@@ -104,13 +104,13 @@ XDIRELEMENTTYPE XDIRELEMENT::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDIRELEMENT::SetType(XDIRELEMENTTYPE type)
 * @brief      Set type
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-*
+* 
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDIRELEMENT::SetType(XDIRELEMENTTYPE type)
 {
@@ -119,13 +119,13 @@ void XDIRELEMENT::SetType(XDIRELEMENTTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* XDIRELEMENT::GetPathSearch()
 * @brief      Get path search
 * @ingroup    XUTILS
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* XDIRELEMENT::GetPathSearch()
 {
@@ -134,13 +134,13 @@ XPATH* XDIRELEMENT::GetPathSearch()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XDIRELEMENT::GetPatternSearch()
 * @brief      Get pattern search
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XDIRELEMENT::GetPatternSearch()
 {
@@ -149,13 +149,13 @@ XSTRING* XDIRELEMENT::GetPatternSearch()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* XDIRELEMENT::GetNameFile()
 * @brief      Get name file
 * @ingroup    XUTILS
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* XDIRELEMENT::GetNameFile()
 {
@@ -168,10 +168,10 @@ XPATH* XDIRELEMENT::GetNameFile()
 * @fn         XDATETIME* XDIRELEMENT::GetDateTimeFile_Created()
 * @brief      Get date time file created
 * @ingroup    XUTILS
-*
-* @return     XDATETIME* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XDIRELEMENT::GetDateTimeFile_Created()
 {
   return &datetime_created;
@@ -183,10 +183,10 @@ XDATETIME* XDIRELEMENT::GetDateTimeFile_Created()
 * @fn         XDATETIME* XDIRELEMENT::GetDateTimeFile_Modificated()
 * @brief      Get date time file modificated
 * @ingroup    XUTILS
-*
-* @return     XDATETIME* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XDIRELEMENT::GetDateTimeFile_Modificated()
 {
   return &datetime_modificated;
@@ -198,10 +198,10 @@ XDATETIME* XDIRELEMENT::GetDateTimeFile_Modificated()
 * @fn         XDATETIME* XDIRELEMENT::GetDateTimeFile_LastAccess()
 * @brief      Get date time file last access
 * @ingroup    XUTILS
-*
-* @return     XDATETIME* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XDIRELEMENT::GetDateTimeFile_LastAccess()
 {
   return &datetime_lastaccess;
@@ -209,13 +209,13 @@ XDATETIME* XDIRELEMENT::GetDateTimeFile_LastAccess()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* XDIRELEMENT::GetHandle()
 * @brief      Get handle
 * @ingroup    XUTILS
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XDIRELEMENT::GetHandle()
 {
@@ -224,13 +224,13 @@ void* XDIRELEMENT::GetHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDIRELEMENT::SetHandle(void* handle)
 * @brief      Set handle
 * @ingroup    XUTILS
-*
-* @param[in]  handle :
-*
+* 
+* @param[in]  handle : Handle pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDIRELEMENT::SetHandle(void* handle)
 {
@@ -239,13 +239,13 @@ void XDIRELEMENT::SetHandle(void* handle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* XDIRELEMENT::GetFindFileData()
 * @brief      Get find file data
 * @ingroup    XUTILS
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XDIRELEMENT::GetFindFileData()
 {
@@ -254,13 +254,13 @@ void* XDIRELEMENT::GetFindFileData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDIRELEMENT::SetFindFileData(void* findfiledata)
 * @brief      Set find file data
 * @ingroup    XUTILS
-*
-* @param[in]  findfiledata :
-*
+* 
+* @param[in]  findfiledata : Findfiledata pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDIRELEMENT::SetFindFileData(void* findfiledata)
 {
@@ -269,13 +269,13 @@ void XDIRELEMENT::SetFindFileData(void* findfiledata)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIRELEMENT::DeleteFindFileData()
 * @brief      Delete find file data
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIRELEMENT::DeleteFindFileData()
 {
@@ -290,12 +290,12 @@ bool XDIRELEMENT::DeleteFindFileData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDIRELEMENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDIRELEMENT::Clean()
 {
@@ -311,11 +311,11 @@ void XDIRELEMENT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDIR::XDIR()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIR::XDIR()
 {
@@ -324,12 +324,12 @@ XDIR::XDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDIR::~XDIR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIR::~XDIR()
 {
@@ -338,15 +338,15 @@ XDIR::~XDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::Exist(XPATH& xpath)
 * @brief      Exist
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::Exist(XPATH& xpath)
 {
@@ -359,13 +359,13 @@ bool XDIR::Exist(XPATH& xpath)
 * @fn         bool XDIR::Make(XPATH& xpath, bool recursive)
 * @brief      Make
 * @ingroup    XUTILS
-*
-* @param[in]  xpath : 
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  xpath : Path to use.
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::Make(XPATH& xpath, bool recursive)
 {
   return Make(xpath.Get(), recursive);
@@ -373,15 +373,15 @@ bool XDIR::Make(XPATH& xpath, bool recursive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::ChangeTo(XPATH& xpath)
 * @brief      Change to
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::ChangeTo(XPATH& xpath)
 {
@@ -390,16 +390,16 @@ bool XDIR::ChangeTo(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::Delete(XPATH& xpath,bool all)
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  all :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  all : All value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::Delete(XPATH& xpath,bool all)
 {
@@ -408,17 +408,17 @@ bool XDIR::Delete(XPATH& xpath,bool all)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::FirstSearch(XPATH& xpath,XSTRING& patternsearch,XDIRELEMENT* searchelement)
 * @brief      First search
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  patternsearch :
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  patternsearch : Patternsearch value.
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::FirstSearch(XPATH& xpath,XSTRING& patternsearch,XDIRELEMENT* searchelement)
 {
@@ -427,17 +427,17 @@ bool XDIR::FirstSearch(XPATH& xpath,XSTRING& patternsearch,XDIRELEMENT* searchel
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::FirstSearch(XPATH& xpath,XCHAR* patternsearch,XDIRELEMENT* searchelement)
 * @brief      First search
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  patternsearch :
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  patternsearch : Patternsearch pointer to use.
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::FirstSearch(XPATH& xpath,XCHAR* patternsearch,XDIRELEMENT* searchelement)
 {
@@ -446,17 +446,17 @@ bool XDIR::FirstSearch(XPATH& xpath,XCHAR* patternsearch,XDIRELEMENT* searchelem
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::FirstSearch(XCHAR* xpath,XSTRING& patternsearch,XDIRELEMENT* searchelement)
 * @brief      First search
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  patternsearch :
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  patternsearch : Patternsearch value.
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::FirstSearch(XCHAR* xpath,XSTRING& patternsearch,XDIRELEMENT* searchelement)
 {
@@ -465,16 +465,16 @@ bool XDIR::FirstSearch(XCHAR* xpath,XSTRING& patternsearch,XDIRELEMENT* searchel
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::Copy(XPATH& xpathsource,XPATH& xpathtarget)
 * @brief      Copy
 * @ingroup    XUTILS
-*
-* @param[in]  xpathsource :
-* @param[in]  xpathtarget :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathsource : Xpathsource value.
+* @param[in]  xpathtarget : Xpathtarget value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::Copy(XPATH& xpathsource,XPATH& xpathtarget)
 {
@@ -527,16 +527,16 @@ bool XDIR::Copy(XPATH& xpathsource,XPATH& xpathtarget)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::Copy(XCHAR* xpathsource,XPATH& xpathtarget)
 * @brief      Copy
 * @ingroup    XUTILS
-*
-* @param[in]  xpathsource :
-* @param[in]  xpathtarget :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathsource : Xpathsource pointer to use.
+* @param[in]  xpathtarget : Xpathtarget value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::Copy(XCHAR* xpathsource,XPATH& xpathtarget)
 {
@@ -549,16 +549,16 @@ bool XDIR::Copy(XCHAR* xpathsource,XPATH& xpathtarget)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::Copy(XPATH& xpathsource,XCHAR* xpathtarget)
 * @brief      Copy
 * @ingroup    XUTILS
-*
-* @param[in]  xpathsource :
-* @param[in]  xpathtarget :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathsource : Xpathsource value.
+* @param[in]  xpathtarget : Xpathtarget pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::Copy(XPATH& xpathsource,XCHAR* xpathtarget)
 {
@@ -571,16 +571,16 @@ bool XDIR::Copy(XPATH& xpathsource,XCHAR* xpathtarget)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XDIR::Copy(XCHAR* xpathsource,XCHAR* xpathtarget)
 * @brief      Copy
 * @ingroup    XUTILS
-*
-* @param[in]  xpathsource :
-* @param[in]  xpathtarget :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathsource : Xpathsource pointer to use.
+* @param[in]  xpathtarget : Xpathtarget pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XDIR::Copy(XCHAR* xpathsource,XCHAR* xpathtarget)
 {
@@ -595,12 +595,12 @@ bool XDIR::Copy(XCHAR* xpathsource,XCHAR* xpathtarget)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDIR::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDIR::Clean()
 {

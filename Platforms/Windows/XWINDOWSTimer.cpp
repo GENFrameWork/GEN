@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSTIMER::XWINDOWSTIMER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSTIMER::XWINDOWSTIMER()
 {
@@ -81,12 +81,12 @@ XWINDOWSTIMER::XWINDOWSTIMER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSTIMER::~XWINDOWSTIMER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSTIMER::~XWINDOWSTIMER()
 {
@@ -95,13 +95,13 @@ XWINDOWSTIMER::~XWINDOWSTIMER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD XWINDOWSTIMER::GetMicroSecondsTickCounter()
 * @brief      Get micro seconds tick counter
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XWINDOWSTIMER::GetMicroSecondsTickCounter()
 {
@@ -125,12 +125,12 @@ XQWORD XWINDOWSTIMER::GetMicroSecondsTickCounter()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSTIMER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSTIMER::Clean()
 {

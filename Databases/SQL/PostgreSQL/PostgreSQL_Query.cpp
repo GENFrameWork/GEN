@@ -63,13 +63,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         POSTGRESQL_QUERY::POSTGRESQL_QUERY(DB_SQL_DATABASE* database)
+* 
+* @fn         POSTGRESQL_QUERY::POSTGRESQL_QUERY(DB_SQL_DATABASE* database): DB_SQL_QUERY(database)
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  DB_SQL_DATABASE* :
-*
+* 
+* @param[in]  database : Database pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 POSTGRESQL_QUERY::POSTGRESQL_QUERY(DB_SQL_DATABASE* database): DB_SQL_QUERY(database)
 {
@@ -80,12 +80,12 @@ POSTGRESQL_QUERY::POSTGRESQL_QUERY(DB_SQL_DATABASE* database): DB_SQL_QUERY(data
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         POSTGRESQL_QUERY::~POSTGRESQL_QUERY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 POSTGRESQL_QUERY::~POSTGRESQL_QUERY()
 {
@@ -122,13 +122,13 @@ POSTGRESQL_QUERY::~POSTGRESQL_QUERY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool POSTGRESQL_QUERY::Execute()
 * @brief      Execute
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool POSTGRESQL_QUERY::Execute()
 {
@@ -273,13 +273,13 @@ bool POSTGRESQL_QUERY::Execute()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool POSTGRESQL_QUERY::ClearCursor()
 * @brief      Clear cursor
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool POSTGRESQL_QUERY::ClearCursor()
 {
@@ -303,13 +303,13 @@ bool POSTGRESQL_QUERY::ClearCursor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_RESULT* POSTGRESQL_QUERY::ConstructResult()
 * @brief      Construct result
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_RESULT* :
-*
+* 
+* @return     DB_SQL_RESULT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT* POSTGRESQL_QUERY::ConstructResult()
 {
@@ -321,13 +321,13 @@ DB_SQL_RESULT* POSTGRESQL_QUERY::ConstructResult()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool POSTGRESQL_QUERY::BindParametersToQuery()
 * @brief      Bind parameters to query
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool POSTGRESQL_QUERY::BindParametersToQuery()
 {
@@ -425,13 +425,13 @@ bool POSTGRESQL_QUERY::BindParametersToQuery()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool POSTGRESQL_QUERY::BindParametersToResult()
 * @brief      Bind parameters to result
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool POSTGRESQL_QUERY::BindParametersToResult()
 {
@@ -440,12 +440,12 @@ bool POSTGRESQL_QUERY::BindParametersToResult()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void POSTGRESQL_QUERY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void POSTGRESQL_QUERY::Clean()
 {

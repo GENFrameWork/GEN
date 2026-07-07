@@ -88,10 +88,10 @@ DIONODEMANAGER::~DIONODEMANAGER()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIONODEMANAGER::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEMANAGER::Ini()
@@ -109,10 +109,10 @@ bool DIONODEMANAGER::Ini()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIONODEMANAGER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEMANAGER::End()
@@ -144,7 +144,7 @@ bool DIONODEMANAGER::End()
 * @brief      Get nodes
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIONODE*>* : 
+* @return     XVECTOR<DIONODE*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIONODE*>* DIONODEMANAGER::GetNodes()
@@ -159,7 +159,7 @@ XVECTOR<DIONODE*>* DIONODEMANAGER::GetNodes()
 * @brief      Thread nodes
 * @ingroup    DATAIO
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEMANAGER::ThreadNodes(void* data)

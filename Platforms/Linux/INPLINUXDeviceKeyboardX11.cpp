@@ -75,11 +75,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPLINUXDEVICEKEYBOARDX11::INPLINUXDEVICEKEYBOARDX11()
+* 
+* @fn         INPLINUXDEVICEKEYBOARDX11::INPLINUXDEVICEKEYBOARDX11(): INPDEVICE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPLINUXDEVICEKEYBOARDX11::INPLINUXDEVICEKEYBOARDX11(): INPDEVICE()
 {
@@ -94,12 +94,12 @@ INPLINUXDEVICEKEYBOARDX11::INPLINUXDEVICEKEYBOARDX11(): INPDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPLINUXDEVICEKEYBOARDX11::~INPLINUXDEVICEKEYBOARDX11()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPLINUXDEVICEKEYBOARDX11::~INPLINUXDEVICEKEYBOARDX11()
 {
@@ -113,13 +113,13 @@ INPLINUXDEVICEKEYBOARDX11::~INPLINUXDEVICEKEYBOARDX11()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEKEYBOARDX11::Update()
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEKEYBOARDX11::Update()
 {
@@ -193,15 +193,15 @@ bool INPLINUXDEVICEKEYBOARDX11::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEKEYBOARDX11::SetScreen(void* screenhandle)
 * @brief      Set screen
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  screenhandle : handle to screen
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEKEYBOARDX11::SetScreen(void* screenhandle)
 {
@@ -215,12 +215,12 @@ bool INPLINUXDEVICEKEYBOARDX11::SetScreen(void* screenhandle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPLINUXDEVICEKEYBOARDX11::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPLINUXDEVICEKEYBOARDX11::Clean()
 {
@@ -229,14 +229,14 @@ void INPLINUXDEVICEKEYBOARDX11::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEKEYBOARDX11::CreateAllButtons()
 * @brief      Create all buttons
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEKEYBOARDX11::CreateAllButtons()
 {

@@ -704,7 +704,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                       AGG_SOLIDFILL_END
                                                                                     }
 
-                                                                                  if(linewidth > 0.0)
+                                                                                  else if(linewidth > 0.0)
                                                                                     {
                                                                                       AGG_SOLIDFILL_INI
 

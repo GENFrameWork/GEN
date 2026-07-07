@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMBLUETOOTHDEVICES::DIOSTREAMENUMBLUETOOTHDEVICES()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMBLUETOOTHDEVICES::DIOSTREAMENUMBLUETOOTHDEVICES()
 {
@@ -68,12 +68,12 @@ DIOSTREAMENUMBLUETOOTHDEVICES::DIOSTREAMENUMBLUETOOTHDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMBLUETOOTHDEVICES::~DIOSTREAMENUMBLUETOOTHDEVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMBLUETOOTHDEVICES::~DIOSTREAMENUMBLUETOOTHDEVICES()
 {  
@@ -82,13 +82,13 @@ DIOSTREAMENUMBLUETOOTHDEVICES::~DIOSTREAMENUMBLUETOOTHDEVICES()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMAC* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceSelect()
 * @brief      Get device select
 * @ingroup    DATAIO
-*
-* @return     DIOMAC* : 
-*
+* 
+* @return     DIOMAC* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMAC* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceSelect()
 {
@@ -97,15 +97,15 @@ DIOMAC* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceSelect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XBYTE* MAC)
 * @brief      Set device select
 * @ingroup    DATAIO
-*
-* @param[in]  MAC : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  MAC : MAC pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XBYTE* MAC)
 {
@@ -114,15 +114,15 @@ bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XBYTE* MAC)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XCHAR* MAC)
 * @brief      Set device select
 * @ingroup    DATAIO
-*
-* @param[in]  MAC : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  MAC : MAC pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XCHAR* MAC)
 {
@@ -135,15 +135,15 @@ bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XCHAR* MAC)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XSTRING& MAC)
 * @brief      Set device select
 * @ingroup    DATAIO
-*
-* @param[in]  MAC : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  MAC : MAC value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XSTRING& MAC)
 {
@@ -152,15 +152,15 @@ bool DIOSTREAMENUMBLUETOOTHDEVICES::SetDeviceSelect(XSTRING& MAC)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEBLUETOOTH* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceByMAC(XCHAR* MAC)
 * @brief      Get device by MAC
 * @ingroup    DATAIO
-*
-* @param[in]  MAC : 
-*
-* @return     DIOSTREAMDEVICEBLUETOOTH* : 
-*
+* 
+* @param[in]  MAC : MAC pointer to use.
+* 
+* @return     DIOSTREAMDEVICEBLUETOOTH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEBLUETOOTH* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceByMAC(XCHAR* MAC)
 { 
@@ -193,15 +193,15 @@ DIOSTREAMDEVICEBLUETOOTH* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceByMAC(XCHAR* M
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEBLUETOOTH* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceByMAC(DIOMAC* MAC)
 * @brief      Get device by MAC
 * @ingroup    DATAIO
-*
-* @param[in]  MAC : 
-*
-* @return     DIOSTREAMDEVICEBLUETOOTH* : 
-*
+* 
+* @param[in]  MAC : MAC pointer to use.
+* 
+* @return     DIOSTREAMDEVICEBLUETOOTH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEBLUETOOTH* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceByMAC(DIOMAC* MAC)
 {
@@ -227,12 +227,12 @@ DIOSTREAMDEVICEBLUETOOTH* DIOSTREAMENUMBLUETOOTHDEVICES::GetDeviceByMAC(DIOMAC* 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMENUMBLUETOOTHDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMENUMBLUETOOTHDEVICES::Clean()
 {

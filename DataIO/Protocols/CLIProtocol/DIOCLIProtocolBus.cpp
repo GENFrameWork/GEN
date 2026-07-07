@@ -99,14 +99,14 @@ DIOCLIPROTOCOLBUS::~DIOCLIPROTOCOLBUS()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCLIPROTOCOLBUS::Ini(DIOSTREAM* diostream, XCHAR* ID, int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
-* @param[in]  ID : 
-* @param[in]  timeout : 
+* @param[in]  diostream : Diostream pointer to use.
+* @param[in]  ID : Identifier to use.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOLBUS::Ini(DIOSTREAM* diostream, XCHAR* ID, int timeout)
@@ -140,11 +140,11 @@ bool DIOCLIPROTOCOLBUS::Ini(DIOSTREAM* diostream, XCHAR* ID, int timeout)
 * @brief      Get version
 * @ingroup    DATAIO
 * 
-* @param[in]  version : 
-* @param[in]  subversion : 
-* @param[in]  subversionerror : 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerror : Subversionerror value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOLBUS::GetVersion(XDWORD& version, XDWORD& subversion, XDWORD& subversionerror)
@@ -165,9 +165,9 @@ bool DIOCLIPROTOCOLBUS::GetVersion(XDWORD& version, XDWORD& subversion, XDWORD& 
 * @brief      Set version
 * @ingroup    DATAIO
 * 
-* @param[in]  version : 
-* @param[in]  subversion : 
-* @param[in]  subversionerror : 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerror : Subversionerror value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCLIPROTOCOLBUS::SetVersion(XDWORD version, XDWORD subversion, XDWORD subversionerror)
@@ -184,10 +184,10 @@ void DIOCLIPROTOCOLBUS::SetVersion(XDWORD version, XDWORD subversion, XDWORD sub
 * @brief      Enum remote devices
 * @ingroup    DATAIO
 * 
-* @param[in]  remotedevices : 
-* @param[in]  maxtime : 
+* @param[in]  remotedevices : Remotedevices pointer to use.
+* @param[in]  maxtime : Maxtime value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOLBUS::EnumRemoteDevices(XVECTOR<XSTRING*>* remotedevices, XDWORD maxtime)
@@ -228,9 +228,9 @@ bool DIOCLIPROTOCOLBUS::EnumRemoteDevices(XVECTOR<XSTRING*>* remotedevices, XDWO
 * @brief      Get enum remote devices
 * @ingroup    DATAIO
 * 
-* @param[in]  remotedevices : 
+* @param[in]  remotedevices : Remotedevices pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOLBUS::GetEnumRemoteDevices(XVECTOR<XSTRING*>& remotedevices)
@@ -260,7 +260,7 @@ bool DIOCLIPROTOCOLBUS::GetEnumRemoteDevices(XVECTOR<XSTRING*>& remotedevices)
 * @brief      Get N retries
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCLIPROTOCOLBUS::GetNRetries()
@@ -275,7 +275,7 @@ int DIOCLIPROTOCOLBUS::GetNRetries()
 * @brief      Set N retries
 * @ingroup    DATAIO
 * 
-* @param[in]  nretries : 
+* @param[in]  nretries : Nretries value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCLIPROTOCOLBUS::SetNRetries(int nretries)
@@ -291,13 +291,13 @@ void DIOCLIPROTOCOLBUS::SetNRetries(int nretries)
 * @brief      Send command
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
-* @param[in]  target : 
-* @param[in]  answer : 
-* @param[in]  timeoutanswer : 
-* @param[in]  ... : 
+* @param[in]  command : Command pointer to use.
+* @param[in]  target : Target pointer to use.
+* @param[in]  answer : Answer pointer to use.
+* @param[in]  timeoutanswer : Timeoutanswer value.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOLBUS::SendCommand(XCHAR* command, XSTRING* target, XSTRING* answer, int timeoutanswer, ...)
@@ -326,12 +326,12 @@ bool DIOCLIPROTOCOLBUS::SendCommand(XCHAR* command, XSTRING* target, XSTRING* an
 * @brief      Received command
 * @ingroup    DATAIO
 * 
-* @param[in]  originID : 
-* @param[in]  command : 
-* @param[in]  params : 
-* @param[in]  answer : 
+* @param[in]  originID : Origin ID value.
+* @param[in]  command : Command value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  answer : Answer value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOLBUS::ReceivedCommand(XSTRING& originID, XSTRING& command, XVECTOR<XSTRING*>& params, XSTRING& answer)
@@ -401,7 +401,7 @@ bool DIOCLIPROTOCOLBUS::ReceivedCommand(XSTRING& originID, XSTRING& command, XVE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOCLIPROTOCOLBUS::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -453,7 +453,7 @@ void DIOCLIPROTOCOLBUS::End()
 * @brief      Thread received command
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCLIPROTOCOLBUS::ThreadReceivedCommand(void* param)
@@ -476,7 +476,7 @@ void DIOCLIPROTOCOLBUS::ThreadReceivedCommand(void* param)
 * @brief      Thread send enum request
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCLIPROTOCOLBUS::ThreadSendEnumRequest(void* param)

@@ -65,8 +65,8 @@
 * @fn         UI_ELEMENT_MENU_OPTION_CFG::UI_ELEMENT_MENU_OPTION_CFG()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_MENU_OPTION_CFG::UI_ELEMENT_MENU_OPTION_CFG()
 {
   Clean();
@@ -79,8 +79,8 @@ UI_ELEMENT_MENU_OPTION_CFG::UI_ELEMENT_MENU_OPTION_CFG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_MENU_OPTION_CFG::~UI_ELEMENT_MENU_OPTION_CFG()
 {
   Clean();
@@ -93,8 +93,8 @@ UI_ELEMENT_MENU_OPTION_CFG::~UI_ELEMENT_MENU_OPTION_CFG()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_MENU_OPTION_CFG::Clean()
 {
   index         = 0; 
@@ -121,8 +121,8 @@ void UI_ELEMENT_MENU_OPTION_CFG::Clean()
 * @fn         UI_ELEMENT_MENU::UI_ELEMENT_MENU()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_MENU::UI_ELEMENT_MENU()    
 { 
   Clean();   
@@ -139,8 +139,8 @@ UI_ELEMENT_MENU::UI_ELEMENT_MENU()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_MENU::~UI_ELEMENT_MENU()    
 { 
   Clean();                            
@@ -152,12 +152,12 @@ UI_ELEMENT_MENU::~UI_ELEMENT_MENU()
 * @fn         UI_ELEMENT_OPTION* UI_ELEMENT_MENU::Option_AddText(UI_ELEMENT_MENU_OPTION_CFG& option_cfg)
 * @brief      Option add text
 * @ingroup    USERINTERFACE
-*
-* @param[in]  option_cfg : 
 * 
-* @return     UI_ELEMENT_OPTION* : 
+* @param[in]  option_cfg : Option configuration value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_OPTION* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_OPTION* UI_ELEMENT_MENU::Option_AddText(UI_ELEMENT_MENU_OPTION_CFG& option_cfg)
 {  
   UI_ELEMENT_OPTION* element_option = GEN_NEW UI_ELEMENT_OPTION();
@@ -212,8 +212,8 @@ UI_ELEMENT_OPTION* UI_ELEMENT_MENU::Option_AddText(UI_ELEMENT_MENU_OPTION_CFG& o
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_MENU::Clean()
 {
   

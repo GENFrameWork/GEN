@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE()
 {
@@ -75,13 +75,13 @@ XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XSTRING& name)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
+* 
+* @param[in]  name : Name to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XSTRING& name)
 {
@@ -92,13 +92,13 @@ XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XCHAR* name)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
+* 
+* @param[in]  name : Name to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XCHAR* name)
 {
@@ -109,14 +109,14 @@ XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XSTRING& name,XSTRING& value)
+* 
+* @fn         XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XSTRING& name, XSTRING& value)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XSTRING& name, XSTRING& value)
 {
@@ -133,8 +133,8 @@ XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XSTRING& name, XSTRING& value)
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
-* @param[in]  value : 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XCHAR* name, XCHAR* value)
@@ -147,12 +147,12 @@ XFILEXMLATTRIBUTE::XFILEXMLATTRIBUTE(XCHAR* name, XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLATTRIBUTE::~XFILEXMLATTRIBUTE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE::~XFILEXMLATTRIBUTE()
 {
@@ -161,13 +161,13 @@ XFILEXMLATTRIBUTE::~XFILEXMLATTRIBUTE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING& XFILEXMLATTRIBUTE::GetName()
 * @brief      Get name
 * @ingroup    XUTILS
-*
-* @return     XSTRING& :
-*
+* 
+* @return     XSTRING& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING& XFILEXMLATTRIBUTE::GetName()
 {
@@ -176,15 +176,15 @@ XSTRING& XFILEXMLATTRIBUTE::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLATTRIBUTE::SetName(XSTRING& name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLATTRIBUTE::SetName(XSTRING& name)
 {
@@ -195,15 +195,15 @@ bool XFILEXMLATTRIBUTE::SetName(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLATTRIBUTE::SetName(XCHAR* name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLATTRIBUTE::SetName(XCHAR* name)
 {
@@ -214,13 +214,13 @@ bool XFILEXMLATTRIBUTE::SetName(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING& XFILEXMLATTRIBUTE::GetValue()
 * @brief      Get value
 * @ingroup    XUTILS
-*
-* @return     XSTRING& :
-*
+* 
+* @return     XSTRING& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING& XFILEXMLATTRIBUTE::GetValue()
 {
@@ -229,15 +229,15 @@ XSTRING& XFILEXMLATTRIBUTE::GetValue()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLATTRIBUTE::SetValue(XSTRING& value)
 * @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLATTRIBUTE::SetValue(XSTRING& value)
 {
@@ -248,15 +248,15 @@ bool XFILEXMLATTRIBUTE::SetValue(XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLATTRIBUTE::SetValue(XCHAR* value)
 * @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLATTRIBUTE::SetValue(XCHAR* value)
 {
@@ -267,12 +267,12 @@ bool XFILEXMLATTRIBUTE::SetValue(XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEXMLATTRIBUTE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEXMLATTRIBUTE::Clean()
 {
@@ -286,11 +286,11 @@ void XFILEXMLATTRIBUTE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT::XFILEXMLELEMENT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT::XFILEXMLELEMENT()
 {
@@ -304,8 +304,8 @@ XFILEXMLELEMENT::XFILEXMLELEMENT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT::XFILEXMLELEMENT(XSTRING& name, XFILEXMLELEMENTTYPE type)
@@ -318,14 +318,14 @@ XFILEXMLELEMENT::XFILEXMLELEMENT(XSTRING& name, XFILEXMLELEMENTTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT::XFILEXMLELEMENT(XCHAR* name, XFILEXMLELEMENTTYPE type)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  type :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT::XFILEXMLELEMENT(XCHAR* name, XFILEXMLELEMENTTYPE type)
 {
@@ -337,15 +337,15 @@ XFILEXMLELEMENT::XFILEXMLELEMENT(XCHAR* name, XFILEXMLELEMENTTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT::XFILEXMLELEMENT(XSTRING& name,XSTRING& value, XFILEXMLELEMENTTYPE type)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-* @param[in]  type :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT::XFILEXMLELEMENT(XSTRING& name,XSTRING& value, XFILEXMLELEMENTTYPE type)
 {
@@ -358,15 +358,15 @@ XFILEXMLELEMENT::XFILEXMLELEMENT(XSTRING& name,XSTRING& value, XFILEXMLELEMENTTY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT::XFILEXMLELEMENT(XCHAR* name,XCHAR* value, XFILEXMLELEMENTTYPE type)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-* @param[in]  type :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT::XFILEXMLELEMENT(XCHAR* name,XCHAR* value, XFILEXMLELEMENTTYPE type)
 {
@@ -379,12 +379,12 @@ XFILEXMLELEMENT::XFILEXMLELEMENT(XCHAR* name,XCHAR* value, XFILEXMLELEMENTTYPE t
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT::~XFILEXMLELEMENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT::~XFILEXMLELEMENT()
 {
@@ -396,13 +396,13 @@ XFILEXMLELEMENT::~XFILEXMLELEMENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING& XFILEXMLELEMENT::GetName()
 * @brief      Get name
 * @ingroup    XUTILS
-*
-* @return     XSTRING& :
-*
+* 
+* @return     XSTRING& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING& XFILEXMLELEMENT::GetName()
 {
@@ -411,15 +411,15 @@ XSTRING& XFILEXMLELEMENT::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::SetName(XSTRING& name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::SetName(XSTRING& name)
 {
@@ -430,15 +430,15 @@ bool XFILEXMLELEMENT::SetName(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::SetName(XCHAR* name)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::SetName(XCHAR* name)
 {
@@ -449,16 +449,16 @@ bool XFILEXMLELEMENT::SetName(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XSTRING& name, XSTRING& value)
 * @brief      Add atribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     XFILEXMLATTRIBUTE* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
+* 
+* @return     XFILEXMLATTRIBUTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XSTRING& name, XSTRING& value)
 {
@@ -472,16 +472,16 @@ XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XSTRING& name, XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XCHAR* name, XCHAR* value)
 * @brief      Add atribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     XFILEXMLATTRIBUTE* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
+* 
+* @return     XFILEXMLATTRIBUTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XCHAR* name, XCHAR* value)
 {
@@ -495,13 +495,13 @@ XFILEXMLATTRIBUTE* XFILEXMLELEMENT::AddAtribute(XCHAR* name, XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEXMLELEMENT::GetNAttributes()
 * @brief      Get N attributes
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEXMLELEMENT::GetNAttributes()
 {
@@ -510,15 +510,15 @@ int XFILEXMLELEMENT::GetNAttributes()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLATTRIBUTE* XFILEXMLELEMENT::GetAttribute(int index)
 * @brief      Get attribute
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     XFILEXMLATTRIBUTE* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XFILEXMLATTRIBUTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLATTRIBUTE* XFILEXMLELEMENT::GetAttribute(int index)
 {
@@ -530,15 +530,15 @@ XFILEXMLATTRIBUTE* XFILEXMLELEMENT::GetAttribute(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* XFILEXMLELEMENT::GetValueAttribute(XSTRING& name)
 * @brief      Get value attribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     XCHAR* :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XFILEXMLELEMENT::GetValueAttribute(XSTRING& name)
 {
@@ -547,15 +547,15 @@ XCHAR* XFILEXMLELEMENT::GetValueAttribute(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* XFILEXMLELEMENT::GetValueAttribute(XCHAR* name)
 * @brief      Get value attribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     XCHAR* :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XFILEXMLELEMENT::GetValueAttribute(XCHAR* name)
 {
@@ -578,16 +578,16 @@ XCHAR* XFILEXMLELEMENT::GetValueAttribute(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::GetValueAttribute(XSTRING& name, XSTRING& value)
 * @brief      Get value attribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::GetValueAttribute(XSTRING& name, XSTRING& value)
 {
@@ -596,16 +596,16 @@ bool XFILEXMLELEMENT::GetValueAttribute(XSTRING& name, XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::GetValueAttribute(XCHAR* name,XSTRING& value)
 * @brief      Get value attribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::GetValueAttribute(XCHAR* name,XSTRING& value)
 {
@@ -628,15 +628,15 @@ bool XFILEXMLELEMENT::GetValueAttribute(XCHAR* name,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEXMLELEMENT::GetIntValueAttribute(XSTRING& name)
 * @brief      Get int value attribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     int :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEXMLELEMENT::GetIntValueAttribute(XSTRING& name)
 {
@@ -645,15 +645,15 @@ int XFILEXMLELEMENT::GetIntValueAttribute(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEXMLELEMENT::GetIntValueAttribute(XCHAR* name)
 * @brief      Get int value attribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     int :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEXMLELEMENT::GetIntValueAttribute(XCHAR* name)
 {
@@ -666,15 +666,15 @@ int XFILEXMLELEMENT::GetIntValueAttribute(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::GetBoolValueAttribute(XCHAR* name)
 * @brief      Get bool value attribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::GetBoolValueAttribute(XCHAR* name)
 {
@@ -688,15 +688,15 @@ bool XFILEXMLELEMENT::GetBoolValueAttribute(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double XFILEXMLELEMENT::GetFloatValueAttribute(XCHAR* name)
 * @brief      Get float value attribute
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     double :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double XFILEXMLELEMENT::GetFloatValueAttribute(XCHAR* name)
 {
@@ -710,15 +710,15 @@ double XFILEXMLELEMENT::GetFloatValueAttribute(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::DeleteAtribute(int index)
 * @brief      Delete atribute
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::DeleteAtribute(int index)
 {
@@ -734,13 +734,13 @@ bool XFILEXMLELEMENT::DeleteAtribute(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::DeleteAllAtributes()
 * @brief      Delete all atributes
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::DeleteAllAtributes()
 {
@@ -755,13 +755,13 @@ bool XFILEXMLELEMENT::DeleteAllAtributes()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING& XFILEXMLELEMENT::GetValue()
 * @brief      Get value
 * @ingroup    XUTILS
-*
-* @return     XSTRING& :
-*
+* 
+* @return     XSTRING& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING& XFILEXMLELEMENT::GetValue()
 {
@@ -770,15 +770,15 @@ XSTRING& XFILEXMLELEMENT::GetValue()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::SetValue(XSTRING& value)
 * @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::SetValue(XSTRING& value)
 {
@@ -789,15 +789,15 @@ bool XFILEXMLELEMENT::SetValue(XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::SetValue(XCHAR* value)
 * @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::SetValue(XCHAR* value)
 {
@@ -808,13 +808,13 @@ bool XFILEXMLELEMENT::SetValue(XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement()
 * @brief      Add element
 * @ingroup    XUTILS
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement()
 {
@@ -830,15 +830,15 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name)
 * @brief      Add element
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name)
 {
@@ -854,15 +854,15 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name)
 * @brief      Add element
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name)
 {
@@ -878,16 +878,16 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name,XSTRING& value)
 * @brief      Add element
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name,XSTRING& value)
 {
@@ -903,16 +903,16 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XSTRING& name,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name,XCHAR* value)
 * @brief      Add element
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  value :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name,XCHAR* value)
 {
@@ -929,13 +929,13 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::AddElement(XCHAR* name,XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEXMLELEMENT::GetNElements()
 * @brief      Get N elements
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEXMLELEMENT::GetNElements()
 {
@@ -944,15 +944,15 @@ int XFILEXMLELEMENT::GetNElements()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXMLELEMENT::GetElement(int index)
 * @brief      Get element
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::GetElement(int index)
 {
@@ -964,15 +964,15 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::GetElement(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::DeleteElement(int index)
 * @brief      Delete element
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::DeleteElement(int index)
 {
@@ -988,13 +988,13 @@ bool XFILEXMLELEMENT::DeleteElement(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::DeleteAllElements()
 * @brief      Delete all elements
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::DeleteAllElements()
 {
@@ -1008,13 +1008,13 @@ bool XFILEXMLELEMENT::DeleteAllElements()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXMLELEMENT::GetFather()
 * @brief      Get father
 * @ingroup    XUTILS
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXMLELEMENT::GetFather()
 {
@@ -1023,15 +1023,15 @@ XFILEXMLELEMENT* XFILEXMLELEMENT::GetFather()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::SetFather(XFILEXMLELEMENT* father)
 * @brief      Set father
 * @ingroup    XUTILS
-*
-* @param[in]  father :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  father : Father pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::SetFather(XFILEXMLELEMENT* father)
 {
@@ -1042,13 +1042,13 @@ bool XFILEXMLELEMENT::SetFather(XFILEXMLELEMENT* father)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENTTYPE XFILEXMLELEMENT::GetType()
 * @brief      Get type
 * @ingroup    XUTILS
-*
-* @return     XFILEXMLELEMENTTYPE :
-*
+* 
+* @return     XFILEXMLELEMENTTYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENTTYPE XFILEXMLELEMENT::GetType()
 {
@@ -1057,15 +1057,15 @@ XFILEXMLELEMENTTYPE XFILEXMLELEMENT::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXMLELEMENT::SetType(XFILEXMLELEMENTTYPE type)
 * @brief      Set type
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXMLELEMENT::SetType(XFILEXMLELEMENTTYPE type)
 {
@@ -1076,12 +1076,12 @@ bool XFILEXMLELEMENT::SetType(XFILEXMLELEMENTTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEXMLELEMENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEXMLELEMENT::Clean()
 {
@@ -1097,11 +1097,11 @@ void XFILEXMLELEMENT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEXML::XFILEXML()
+* 
+* @fn         XFILEXML::XFILEXML() : XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXML::XFILEXML() : XFILETXT()
 {
@@ -1110,12 +1110,12 @@ XFILEXML::XFILEXML() : XFILETXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXML::~XFILEXML()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXML::~XFILEXML()
 {
@@ -1128,13 +1128,13 @@ XFILEXML::~XFILEXML()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXML::GetRoot()
 * @brief      Get root
 * @ingroup    XUTILS
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXML::GetRoot()
 {
@@ -1143,15 +1143,15 @@ XFILEXMLELEMENT* XFILEXML::GetRoot()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::SetRoot(XFILEXMLELEMENT* root)
 * @brief      Set root
 * @ingroup    XUTILS
-*
-* @param[in]  root :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  root : Root pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::SetRoot(XFILEXMLELEMENT* root)
 {
@@ -1164,15 +1164,15 @@ bool XFILEXML::SetRoot(XFILEXMLELEMENT* root)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::EncodeAllLines(bool istabulatedline)
 * @brief      Encode all lines
 * @ingroup    XUTILS
-*
-* @param[in]  istabulatedline :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  istabulatedline : Istabulatedline value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::EncodeAllLines(bool istabulatedline)
 {
@@ -1194,13 +1194,13 @@ bool XFILEXML::EncodeAllLines(bool istabulatedline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::DecodeAllLines()
 * @brief      Decode all lines
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::DecodeAllLines()
 {
@@ -1265,13 +1265,13 @@ bool XFILEXML::DecodeAllLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::ReadAndDecodeAllLines()
 * @brief      Read and decode all lines
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::ReadAndDecodeAllLines()
 {
@@ -1286,17 +1286,17 @@ bool XFILEXML::ReadAndDecodeAllLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILEXML::WriteAndEncodeAllLines(bool istabulatedline,XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF)
+* 
+* @fn         bool XFILEXML::WriteAndEncodeAllLines(bool istabulatedline, XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF)
 * @brief      Write and encode all lines
 * @ingroup    XUTILS
-*
-* @param[in]  istabulatedline :
-* @param[in]  formatchar :
-* @param[in]  typeLF :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  istabulatedline : Istabulatedline value.
+* @param[in]  formatchar : Formatchar value.
+* @param[in]  typeLF : Type LF value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::WriteAndEncodeAllLines(bool istabulatedline, XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF  typeLF)
 {
@@ -1308,15 +1308,15 @@ bool XFILEXML::WriteAndEncodeAllLines(bool istabulatedline, XFILETXTFORMATCHAR f
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::WriteAndEncodeAllLines(bool istabulatedline)
 * @brief      Write and encode all lines
 * @ingroup    XUTILS
-*
-* @param[in]  istabulatedline :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  istabulatedline : Istabulatedline value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::WriteAndEncodeAllLines(bool istabulatedline)
 {
@@ -1333,16 +1333,16 @@ bool XFILEXML::WriteAndEncodeAllLines(bool istabulatedline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXML::SearchChild(XCHAR* name, XFILEXMLELEMENT* father)
 * @brief      Search child
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  father :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  father : Father pointer to use.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXML::SearchChild(XCHAR* name, XFILEXMLELEMENT* father)
 {
@@ -1364,17 +1364,17 @@ XFILEXMLELEMENT* XFILEXML::SearchChild(XCHAR* name, XFILEXMLELEMENT* father)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXML::SearchElement(XSTRING& name, int& index, XFILEXMLELEMENT* father)
 * @brief      Search element
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  index :
-* @param[in]  father :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  index : Index value.
+* @param[in]  father : Father pointer to use.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXML::SearchElement(XSTRING& name, int& index, XFILEXMLELEMENT* father)
 {
@@ -1383,17 +1383,17 @@ XFILEXMLELEMENT* XFILEXML::SearchElement(XSTRING& name, int& index, XFILEXMLELEM
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XFILEXMLELEMENT* father)
 * @brief      Search element
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  index :
-* @param[in]  father :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  index : Index value.
+* @param[in]  father : Father pointer to use.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XFILEXMLELEMENT* father)
 {
@@ -1428,17 +1428,17 @@ XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XFILEXMLELEMEN
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XSTRING& namefather)
 * @brief      Search element
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  index :
-* @param[in]  namefather :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  index : Index value.
+* @param[in]  namefather : Namefather value.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XSTRING& namefather)
 {
@@ -1447,17 +1447,17 @@ XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XSTRING& namef
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XCHAR* namefather)
 * @brief      Search element
 * @ingroup    XUTILS
-*
-* @param[in]  name :
-* @param[in]  index :
-* @param[in]  namefather :
-*
-* @return     XFILEXMLELEMENT* :
-*
+* 
+* @param[in]  name : Name to use.
+* @param[in]  index : Index value.
+* @param[in]  namefather : Namefather pointer to use.
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XCHAR* namefather)
 {
@@ -1470,17 +1470,17 @@ XFILEXMLELEMENT* XFILEXML::SearchElement(XCHAR* name, int& index, XCHAR* namefat
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::SearchAttributeValue(XFILEXMLELEMENT* element, XSTRING& nameattribute, XSTRING& value)
 * @brief      Search attribute value
 * @ingroup    XUTILS
-*
-* @param[in]  element :
-* @param[in]  nameattribute :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  element : Element to process.
+* @param[in]  nameattribute : Nameattribute value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::SearchAttributeValue(XFILEXMLELEMENT* element, XSTRING& nameattribute, XSTRING& value)
 {
@@ -1489,17 +1489,17 @@ bool XFILEXML::SearchAttributeValue(XFILEXMLELEMENT* element, XSTRING& nameattri
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::SearchAttributeValue(XFILEXMLELEMENT* element,XCHAR* nameattribute,XSTRING& value)
 * @brief      Search attribute value
 * @ingroup    XUTILS
-*
-* @param[in]  element :
-* @param[in]  nameattribute :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  element : Element to process.
+* @param[in]  nameattribute : Nameattribute pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::SearchAttributeValue(XFILEXMLELEMENT* element,XCHAR* nameattribute,XSTRING& value)
 {
@@ -1525,13 +1525,13 @@ bool XFILEXML::SearchAttributeValue(XFILEXMLELEMENT* element,XCHAR* nameattribut
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<XFILEXMLATTRIBUTE*>* XFILEXML::GetCFGAtributes()
 * @brief      Get CFG atributes
 * @ingroup    XUTILS
-*
-* @return     XVECTOR<XFILEXMLATTRIBUTE*>* :
-*
+* 
+* @return     XVECTOR<XFILEXMLATTRIBUTE*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XFILEXMLATTRIBUTE*>* XFILEXML::GetCFGAtributes()
 {
@@ -1540,13 +1540,13 @@ XVECTOR<XFILEXMLATTRIBUTE*>* XFILEXML::GetCFGAtributes()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::DeleteAllCFGAtributes()
 * @brief      Delete all CFG atributes
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::DeleteAllCFGAtributes()
 {
@@ -1560,13 +1560,13 @@ bool XFILEXML::DeleteAllCFGAtributes()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::DeleteAllElements()
 * @brief      Delete all elements
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::DeleteAllElements()
 {
@@ -1583,16 +1583,16 @@ bool XFILEXML::DeleteAllElements()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int XFILEXML::DecodeLine(XSTRING& string, bool iselement)
+* 
+* @fn         int XFILEXML::DecodeLine(XSTRING& string,bool iselement)
 * @brief      Decode line
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-* @param[in]  iselement :
-*
-* @return     int :
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  iselement : Iselement value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEXML::DecodeLine(XSTRING& string,bool iselement)
 {
@@ -1663,15 +1663,15 @@ int XFILEXML::DecodeLine(XSTRING& string,bool iselement)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::DecodeConfig(XSTRING& string)
 * @brief      Decode config
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::DecodeConfig(XSTRING& string)
 {
@@ -1705,15 +1705,15 @@ bool XFILEXML::DecodeConfig(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::DecodeComent(XSTRING& string)
 * @brief      Decode coment
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::DecodeComent(XSTRING& string)
 {
@@ -1735,15 +1735,15 @@ bool XFILEXML::DecodeComent(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::DecodeCDATA(XSTRING& string)
 * @brief      Decode CDATA
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::DecodeCDATA(XSTRING& string)
 {
@@ -1764,16 +1764,16 @@ bool XFILEXML::DecodeCDATA(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::DecodeElement(XSTRING& string, XFILEXMLELEMENTTYPELINE typeline)
 * @brief      Decode element
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-* @param[in]  typeline :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  typeline : Typeline value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::DecodeElement(XSTRING& string, XFILEXMLELEMENTTYPELINE typeline)
 {
@@ -1849,17 +1849,17 @@ bool XFILEXML::DecodeElement(XSTRING& string, XFILEXMLELEMENTTYPELINE typeline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::AddTabs(int level,int spacetabs,XSTRING& string)
 * @brief      Add tabs
 * @ingroup    XUTILS
-*
-* @param[in]  level :
-* @param[in]  spacetabs :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  level : Level value.
+* @param[in]  spacetabs : Spacetabs value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::AddTabs(int level,int spacetabs,XSTRING& string)
 {
@@ -1878,15 +1878,15 @@ bool XFILEXML::AddTabs(int level,int spacetabs,XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::EncodeConfig(XSTRING& string)
 * @brief      Encode config
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::EncodeConfig(XSTRING& string)
 {
@@ -1913,16 +1913,16 @@ bool XFILEXML::EncodeConfig(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXML::EncodeElements(bool istabulatedline, XFILEXMLELEMENT* element)
 * @brief      Encode elements
 * @ingroup    XUTILS
-*
-* @param[in]  istabulatedline :
-* @param[in]  element :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  istabulatedline : Istabulatedline value.
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXML::EncodeElements(bool istabulatedline, XFILEXMLELEMENT* element)
 {
@@ -2032,12 +2032,12 @@ bool XFILEXML::EncodeElements(bool istabulatedline, XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEXML::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEXML::Clean()
 {

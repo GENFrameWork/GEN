@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMTCPIP::DIOSTREAMTCPIP()
+* 
+* @fn         DIOSTREAMTCPIP::DIOSTREAMTCPIP(): DIOSTREAM()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIP::DIOSTREAMTCPIP(): DIOSTREAM()
 {
@@ -68,12 +68,12 @@ DIOSTREAMTCPIP::DIOSTREAMTCPIP(): DIOSTREAM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMTCPIP::~DIOSTREAMTCPIP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIP::~DIOSTREAMTCPIP()
 {
@@ -82,13 +82,13 @@ DIOSTREAMTCPIP::~DIOSTREAMTCPIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMCONFIG* DIOSTREAMTCPIP::GetConfig()
 * @brief      Get config
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMCONFIG* :
-*
+* 
+* @return     DIOSTREAMCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIG* DIOSTREAMTCPIP::GetConfig()
 {
@@ -97,15 +97,15 @@ DIOSTREAMCONFIG* DIOSTREAMTCPIP::GetConfig()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMTCPIP::SetConfig(DIOSTREAMCONFIG* config)
 * @brief      Set config
 * @ingroup    DATAIO
-*
-* @param[in]  config :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  config : Configuration object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTCPIP::SetConfig(DIOSTREAMCONFIG* config)
 {
@@ -117,13 +117,13 @@ bool DIOSTREAMTCPIP::SetConfig(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOIP* DIOSTREAMTCPIP::GetClientIP()
 * @brief      Get client IP
 * @ingroup    DATAIO
-*
-* @return     DIOIP* :
-*
+* 
+* @return     DIOIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIOSTREAMTCPIP::GetClientIP()
 {
@@ -132,13 +132,13 @@ DIOIP* DIOSTREAMTCPIP::GetClientIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMSERVERS* DIOSTREAMTCPIP::GetEnumServers()
 * @brief      Get enum servers
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMENUMSERVERS* :
-*
+* 
+* @return     DIOSTREAMENUMSERVERS* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMSERVERS* DIOSTREAMTCPIP::GetEnumServers()
 {
@@ -147,15 +147,15 @@ DIOSTREAMENUMSERVERS* DIOSTREAMTCPIP::GetEnumServers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMTCPIP::SetEnumServers(DIOSTREAMENUMSERVERS* enumservers)
 * @brief      Set enum servers
 * @ingroup    DATAIO
-*
-* @param[in]  enumservers :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  enumservers : Enumservers pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTCPIP::SetEnumServers(DIOSTREAMENUMSERVERS* enumservers)
 {
@@ -166,12 +166,12 @@ bool DIOSTREAMTCPIP::SetEnumServers(DIOSTREAMENUMSERVERS* enumservers)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMTCPIP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTCPIP::Clean()
 {

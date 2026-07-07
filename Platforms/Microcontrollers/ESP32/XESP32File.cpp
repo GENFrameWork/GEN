@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XESP32FILE::XESP32FILE()
+* 
+* @fn         XESP32FILE::XESP32FILE(): XFILE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32FILE::XESP32FILE(): XFILE()
 {
@@ -72,12 +72,12 @@ XESP32FILE::XESP32FILE(): XFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32FILE::~XESP32FILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32FILE::~XESP32FILE()
 {
@@ -86,15 +86,15 @@ XESP32FILE::~XESP32FILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::Exist(XCHAR* path)
 * @brief      Exist
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Exist(XCHAR* path)
 {  
@@ -105,16 +105,16 @@ bool XESP32FILE::Exist(XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XESP32FILE::Open(XCHAR* xpath, bool isreadonly)
+* 
+* @fn         bool XESP32FILE::Open(XCHAR* path, bool isreadonly)
 * @brief      Open
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  xpath :
-* @param[in]  isreadonly :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  isreadonly : Isreadonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Open(XCHAR* path, bool isreadonly)
 {
@@ -125,15 +125,15 @@ bool XESP32FILE::Open(XCHAR* path, bool isreadonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XESP32FILE::Create(XCHAR* xpath)
-* @brief      Create
+* 
+* @fn         bool XESP32FILE::Create(XCHAR* path)
+* @brief      Create resource
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Create(XCHAR* path)
 {
@@ -144,15 +144,15 @@ bool XESP32FILE::Create(XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::SetSize(XQWORD size)
 * @brief      Set size
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::SetSize(XQWORD size)
 {
@@ -163,15 +163,15 @@ bool XESP32FILE::SetSize(XQWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::GetPosition(XQWORD& position)
 * @brief      Get position
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  position :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::GetPosition(XQWORD& position)
 {
@@ -182,15 +182,15 @@ bool XESP32FILE::GetPosition(XQWORD& position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::SetPosition(XQWORD position)
 * @brief      Set position
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  position :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::SetPosition(XQWORD position)
 {  
@@ -201,17 +201,17 @@ bool XESP32FILE::SetPosition(XQWORD position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 * @brief      Read
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  cipher :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 {
@@ -222,17 +222,17 @@ bool XESP32FILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 * @brief      Read
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  cipher :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 { 
@@ -243,17 +243,17 @@ bool XESP32FILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 * @brief      Write
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  cipher :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 {
@@ -264,13 +264,13 @@ bool XESP32FILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::Flush()
 * @brief      Flush
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Flush()
 {  
@@ -281,13 +281,13 @@ bool XESP32FILE::Flush()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::Close()
 * @brief      Close
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Close()
 {  
@@ -296,16 +296,16 @@ bool XESP32FILE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XESP32FILE::Erase(XCHAR* path,bool overwrite)
+* 
+* @fn         bool XESP32FILE::Erase(XCHAR* path, bool overwrite)
 * @brief      Erase
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  path :
-* @param[in]  overwrite :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  overwrite : Overwrite value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Erase(XCHAR* path, bool overwrite)
 {
@@ -317,16 +317,16 @@ bool XESP32FILE::Erase(XCHAR* path, bool overwrite)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32FILE::Rename(XCHAR* pathold, XCHAR* pathnew)
 * @brief      Rename
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  pathold :
-* @param[in]  pathnew :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pathold : Pathold pointer to use.
+* @param[in]  pathnew : Pathnew pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::Rename(XCHAR* pathold, XCHAR* pathnew)
 {  
@@ -341,10 +341,10 @@ bool XESP32FILE::Rename(XCHAR* pathold, XCHAR* pathnew)
 * @fn         FILE* XESP32FILE::CreateStructHandle()
 * @brief      Create struct handle
 * @ingroup    PLATFORM_ESP32
-*
-* @return     FILE* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     FILE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 FILE* XESP32FILE::CreateStructHandle()
 {
   return NULL;
@@ -356,10 +356,10 @@ FILE* XESP32FILE::CreateStructHandle()
 * @fn         bool XESP32FILE::DeleteStructHandle()
 * @brief      Delete struct handle
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::DeleteStructHandle()
 {
   return false;
@@ -372,10 +372,10 @@ bool XESP32FILE::DeleteStructHandle()
 * @fn         bool XESP32FILE::ActualizeSize()
 * @brief      Actualize size
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32FILE::ActualizeSize()
 {
   return Exist(xpathnamefile.Get());
@@ -383,12 +383,12 @@ bool XESP32FILE::ActualizeSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32FILE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32FILE::Clean()
 {

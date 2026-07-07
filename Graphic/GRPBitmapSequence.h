@@ -35,9 +35,7 @@
 #include "GRPBitmap.h"
 
 
-
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-
 
 enum GRPBITMAPSEQUENCESTATUS
 {
@@ -52,8 +50,6 @@ enum GRPBITMAPSEQUENCESTATUS
 
 #define GRPBITMAPSEQUENCE_INFINITE      0
 #define GRPBITMAPSEQUENCE_FRAMESSECOND  12
-
-
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/

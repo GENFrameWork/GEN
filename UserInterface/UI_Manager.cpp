@@ -114,10 +114,10 @@ UI_MANAGER* UI_MANAGER::instance = NULL;
 * @fn         bool UI_MANAGER::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetIsInstanced()
 {
   return instance!=NULL;
@@ -129,10 +129,10 @@ bool UI_MANAGER::GetIsInstanced()
 * @fn         UI_MANAGER& UI_MANAGER::GetInstance()
 * @brief      Get instance
 * @ingroup    USERINTERFACE
-*
-* @return     UI_MANAGER& : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_MANAGER& : Reference to the requested object.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_MANAGER& UI_MANAGER::GetInstance()
 {
   if(!instance) 
@@ -149,10 +149,10 @@ UI_MANAGER& UI_MANAGER::GetInstance()
 * @fn         bool UI_MANAGER::DelInstance()
 * @brief      Del instance
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::DelInstance()
 {
   if(instance)
@@ -177,11 +177,11 @@ bool UI_MANAGER::DelInstance()
 * @brief      Load
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  pathfile : 
-* @param[in]  screen : 
-* @param[in]  viewportindex : 
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  screen : Screen object to use.
+* @param[in]  viewportindex : Viewportindex value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
@@ -254,11 +254,11 @@ bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
 * @brief      Load layout
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  pathfile : 
-* @param[in]  screen : 
-* @param[in]  viewportindex : 
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  screen : Screen object to use.
+* @param[in]  viewportindex : Viewportindex value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::LoadLayout(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
@@ -285,7 +285,7 @@ bool UI_MANAGER::LoadLayout(XPATH& pathfile, GRPSCREEN* screen, int viewportinde
 * @brief      Is zipped file
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::IsZippedFile()
@@ -305,7 +305,7 @@ bool UI_MANAGER::IsZippedFile()
 * @brief      Get unzip path file
 * @ingroup    USERINTERFACE
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* UI_MANAGER::GetUnzipPathFile()
@@ -320,7 +320,7 @@ XPATH* UI_MANAGER::GetUnzipPathFile()
 * @brief      Get unzip file
 * @ingroup    USERINTERFACE
 * 
-* @return     XFILEUNZIP* : 
+* @return     XFILEUNZIP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEUNZIP* UI_MANAGER::GetUnzipFile()
@@ -335,9 +335,9 @@ XFILEUNZIP* UI_MANAGER::GetUnzipFile()
 * @brief      Delete temporal un zip file
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  pathfile : 
+* @param[in]  pathfile : Pathfile value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::DeleteTemporalUnZipFile(XPATH& pathfile)
@@ -362,7 +362,7 @@ bool UI_MANAGER::DeleteTemporalUnZipFile(XPATH& pathfile)
 * @brief      Close un zip file
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::CloseUnZipFile()
@@ -386,12 +386,12 @@ bool UI_MANAGER::CloseUnZipFile()
 * @fn         bool UI_MANAGER::Layouts_Add(UI_LAYOUT* layout)
 * @brief      Layouts add
 * @ingroup    USERINTERFACE
-*
-* @param[in]  layout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  layout : Layout pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layouts_Add(UI_LAYOUT* layout)
 {
   if(!layout) 
@@ -411,7 +411,7 @@ bool UI_MANAGER::Layouts_Add(UI_LAYOUT* layout)
 * @brief      Layouts get all
 * @ingroup    USERINTERFACE
 * 
-* @return     XVECTOR<UI_LAYOUT*>* : 
+* @return     XVECTOR<UI_LAYOUT*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<UI_LAYOUT*>* UI_MANAGER::Layouts_GetAll()
@@ -425,12 +425,12 @@ XVECTOR<UI_LAYOUT*>* UI_MANAGER::Layouts_GetAll()
 * @fn         UI_LAYOUT* UI_MANAGER::Layouts_Get(int index)
 * @brief      Layouts get
 * @ingroup    USERINTERFACE
-*
-* @param[in]  index : 
 * 
-* @return     UI_LAYOUT* : 
+* @param[in]  index : Index value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT* UI_MANAGER::Layouts_Get(int index)
 {
   if(layouts.IsEmpty())                     
@@ -452,12 +452,12 @@ UI_LAYOUT* UI_MANAGER::Layouts_Get(int index)
 * @fn         UI_LAYOUT* UI_MANAGER::Layouts_Get(XCHAR* name)
 * @brief      Layouts get
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
 * 
-* @return     UI_LAYOUT* : 
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT* UI_MANAGER::Layouts_Get(XCHAR* name)
 {
   if(layouts.IsEmpty()) 
@@ -486,12 +486,12 @@ UI_LAYOUT* UI_MANAGER::Layouts_Get(XCHAR* name)
 * @fn         UI_LAYOUT* UI_MANAGER::Layouts_Get(XSTRING& name)
 * @brief      Layouts get
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
 * 
-* @return     UI_LAYOUT* : 
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT* UI_MANAGER::Layouts_Get(XSTRING& name)
 {
   return Layouts_Get(name.Get());
@@ -503,10 +503,10 @@ UI_LAYOUT* UI_MANAGER::Layouts_Get(XSTRING& name)
 * @fn         bool UI_MANAGER::Layouts_DeleteAll()
 * @brief      Layouts GEN_DELETE all
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layouts_DeleteAll()
 {
   if(layouts.IsEmpty())  return false;
@@ -524,7 +524,7 @@ bool UI_MANAGER::Layouts_DeleteAll()
 * @brief      Layouts get common layout
 * @ingroup    USERINTERFACE
 * 
-* @return     UI_LAYOUT* : 
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT* UI_MANAGER::Layouts_GetCommonLayout()
@@ -549,9 +549,9 @@ UI_LAYOUT* UI_MANAGER::Layouts_GetCommonLayout()
 * @brief      Layout put background
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layoutname : 
+* @param[in]  layoutname : Layoutname pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layout_PutBackground(XCHAR* layoutname)
@@ -574,9 +574,9 @@ bool UI_MANAGER::Layout_PutBackground(XCHAR* layoutname)
 * @brief      Layout put background color
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layoutname : 
+* @param[in]  layoutname : Layoutname pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layout_PutBackgroundColor(XCHAR* layoutname)
@@ -634,9 +634,9 @@ bool UI_MANAGER::Layout_PutBackgroundColor(XCHAR* layoutname)
 * @brief      Layout put background bitmap
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layoutname : 
+* @param[in]  layoutname : Layoutname pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layout_PutBackgroundBitmap(XCHAR* layoutname)
@@ -691,9 +691,9 @@ bool UI_MANAGER::Layout_PutBackgroundBitmap(XCHAR* layoutname)
 * @brief      Layout put background
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  scale : 
+* @param[in]  scale : Scale value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layout_PutBackground(bool scale)
@@ -716,7 +716,7 @@ bool UI_MANAGER::Layout_PutBackground(bool scale)
 * @brief      Layout put background color
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layout_PutBackgroundColor()
@@ -776,9 +776,9 @@ bool UI_MANAGER::Layout_PutBackgroundColor()
 * @brief      Layout put background bitmap
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  scale : 
+* @param[in]  scale : Scale value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layout_PutBackgroundBitmap(bool scale)
@@ -838,9 +838,9 @@ bool UI_MANAGER::Layout_PutBackgroundBitmap(bool scale)
 * @brief      Update
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layout : 
+* @param[in]  layout : Layout pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Update(UI_LAYOUT* layout)
@@ -892,13 +892,15 @@ bool UI_MANAGER::Update(UI_LAYOUT* layout)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_MANAGER::Update()
+* @fn         bool UI_MANAGER::Update(XCHAR* layoutname)
 * @brief      Update
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  layoutname : Layoutname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Update(XCHAR* layoutname)
 {
   UI_LAYOUT*  layout = NULL;
@@ -954,7 +956,7 @@ bool UI_MANAGER::Update(XCHAR* layoutname)
 * @brief      Update
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Update()
@@ -984,11 +986,11 @@ bool UI_MANAGER::Update()
 * @brief      Element get
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layoutname : 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  layoutname : Layoutname pointer to use.
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::Element_Get(XCHAR* layoutname, XCHAR* name, UI_ELEMENT_TYPE type)
@@ -1027,11 +1029,11 @@ UI_ELEMENT* UI_MANAGER::Element_Get(XCHAR* layoutname, XCHAR* name, UI_ELEMENT_T
 * @brief      Element get
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layoutname : 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  layoutname : Layoutname pointer to use.
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::Element_Get(XCHAR* layoutname, XSTRING& name, UI_ELEMENT_TYPE type)
@@ -1046,10 +1048,10 @@ UI_ELEMENT* UI_MANAGER::Element_Get(XCHAR* layoutname, XSTRING& name, UI_ELEMENT
 * @brief      Element get
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::Element_Get(XCHAR* name, UI_ELEMENT_TYPE type)
@@ -1084,10 +1086,10 @@ UI_ELEMENT* UI_MANAGER::Element_Get(XCHAR* name, UI_ELEMENT_TYPE type)
 * @brief      Element get
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::Element_Get(XSTRING& name, UI_ELEMENT_TYPE type)
@@ -1102,9 +1104,9 @@ UI_ELEMENT* UI_MANAGER::Element_Get(XSTRING& name, UI_ELEMENT_TYPE type)
 * @brief      Element get layout
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     UI_LAYOUT* : 
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT* UI_MANAGER::Element_GetLayout(UI_ELEMENT* element)
@@ -1162,10 +1164,10 @@ UI_LAYOUT* UI_MANAGER::Element_GetLayout(UI_ELEMENT* element)
 * @brief      Element get layout
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
-* @return     UI_LAYOUT* : 
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT* UI_MANAGER::Element_GetLayout(XCHAR* name, UI_ELEMENT_TYPE type)
@@ -1200,10 +1202,10 @@ UI_LAYOUT* UI_MANAGER::Element_GetLayout(XCHAR* name, UI_ELEMENT_TYPE type)
 * @brief      Element get layout
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
-* @return     UI_LAYOUT* : 
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT* UI_MANAGER::Element_GetLayout(XSTRING& name, UI_ELEMENT_TYPE type)
@@ -1218,9 +1220,9 @@ UI_LAYOUT* UI_MANAGER::Element_GetLayout(XSTRING& name, UI_ELEMENT_TYPE type)
 * @brief      Element put to last position layout
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Element_PutToLastPositionLayout(UI_ELEMENT* element)
@@ -1280,10 +1282,10 @@ bool UI_MANAGER::Element_PutToLastPositionLayout(UI_ELEMENT* element)
 * @brief      Element put to last position layout
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Element_PutToLastPositionLayout(XCHAR* name, UI_ELEMENT_TYPE type)
@@ -1347,10 +1349,10 @@ bool UI_MANAGER::Element_PutToLastPositionLayout(XCHAR* name, UI_ELEMENT_TYPE ty
 * @brief      Element put to last position layout
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  name : 
-* @param[in]  type : 
+* @param[in]  name : Name to use.
+* @param[in]  type : Type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Element_PutToLastPositionLayout(XSTRING& name, UI_ELEMENT_TYPE type)
@@ -1365,9 +1367,9 @@ bool UI_MANAGER::Element_PutToLastPositionLayout(XSTRING& name, UI_ELEMENT_TYPE 
 * @brief      Element set modal
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element_modal : 
+* @param[in]  element_modal : Element modal pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Element_SetModal(UI_ELEMENT* element_modal)
@@ -1399,7 +1401,7 @@ bool UI_MANAGER::Element_SetModal(UI_ELEMENT* element_modal)
 * @brief      Elements set to redraw
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_SetToRedraw()
@@ -1425,10 +1427,10 @@ bool UI_MANAGER::Elements_SetToRedraw()
 * @brief      Elements set to redraw
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  recursive : 
+* @param[in]  element : Element to process.
+* @param[in]  recursive : Recursive value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
@@ -1479,7 +1481,7 @@ bool UI_MANAGER::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 * @brief      Elements rebuild draw areas
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_RebuildDrawAreas()
@@ -1523,9 +1525,9 @@ bool UI_MANAGER::Elements_RebuildDrawAreas()
 * @brief      Elements rebuild draw areas
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layout : 
+* @param[in]  layout : Layout pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_RebuildDrawAreas(UI_LAYOUT* layout)
@@ -1569,10 +1571,10 @@ bool UI_MANAGER::Elements_RebuildDrawAreas(UI_LAYOUT* layout)
 * @brief      Elements rebuild draw areas
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layout : 
-* @param[in]  element : 
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_RebuildDrawAreas(UI_LAYOUT* layout, UI_ELEMENT* element)
@@ -1616,9 +1618,9 @@ bool UI_MANAGER::Elements_RebuildDrawAreas(UI_LAYOUT* layout, UI_ELEMENT* elemen
 * @brief      Elements rebuild draw areas
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layoutname : 
+* @param[in]  layoutname : Layoutname pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_RebuildDrawAreas(XCHAR* layoutname)
@@ -1641,10 +1643,10 @@ bool UI_MANAGER::Elements_RebuildDrawAreas(XCHAR* layoutname)
 * @brief      Elements rebuild draw areas
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layoutname : 
-* @param[in]  element : 
+* @param[in]  layoutname : Layoutname pointer to use.
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_RebuildDrawAreas(XCHAR* layoutname, UI_ELEMENT* element)
@@ -1666,14 +1668,14 @@ bool UI_MANAGER::Elements_RebuildDrawAreas(XCHAR* layoutname, UI_ELEMENT* elemen
 * @fn         int UI_MANAGER::GetOutputTextChangeID(XSTRING* text, int start, XSTRING& value)
 * @brief      Get output text change ID
 * @ingroup    USERINTERFACE
-*
-* @param[in]  text : 
-* @param[in]  start : 
-* @param[in]  value : 
 * 
-* @return     int : 
+* @param[in]  text : Text to use.
+* @param[in]  start : Start value.
+* @param[in]  value : Value value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_MANAGER::GetOutputTextChangeID(XSTRING* text, int start, XSTRING& value)
 {
   if(!text) 
@@ -1706,12 +1708,12 @@ int UI_MANAGER::GetOutputTextChangeID(XSTRING* text, int start, XSTRING& value)
 * @brief      Get or add animation cache
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  drawmode : 
-* @param[in]  grppropertymode : 
-* @param[in]  name : 
-* @param[in]  resource : 
+* @param[in]  drawmode : Drawmode value.
+* @param[in]  grppropertymode : Grppropertymode value.
+* @param[in]  name : Name to use.
+* @param[in]  resource : Resource pointer to use.
 * 
-* @return     UI_ANIMATION* : 
+* @return     UI_ANIMATION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, XCHAR* name, XCHAR* resource)
@@ -1772,14 +1774,14 @@ UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPP
 * @fn         bool UI_MANAGER::SetLevelAuto(UI_ELEMENT* element, UI_ELEMENT* father, XDWORD addlevel)
 * @brief      Set level auto
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  father : 
-* @param[in]  addlevel : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  father : Father pointer to use.
+* @param[in]  addlevel : Addlevel value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SetLevelAuto(UI_ELEMENT* element, UI_ELEMENT* father, XDWORD addlevel)
 {
   if(father)
@@ -1800,12 +1802,12 @@ bool UI_MANAGER::SetLevelAuto(UI_ELEMENT* element, UI_ELEMENT* father, XDWORD ad
 * @fn         bool UI_MANAGER::SetPreselectElement(UI_ELEMENT* element)
 * @brief      Set preselect element
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SetPreselectElement(UI_ELEMENT* element)
 {
   preselect_element = element;
@@ -1820,7 +1822,7 @@ bool UI_MANAGER::SetPreselectElement(UI_ELEMENT* element)
 * @brief      Reset preselect
 * @ingroup    USERINTERFACE
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::ResetPreselect()
@@ -1842,16 +1844,16 @@ bool UI_MANAGER::ResetPreselect()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_MANAGER::SendEvent(UI_XEVENT_TYPE event, ...)
+* @fn         bool UI_MANAGER::SendEvent(int event, ...)
 * @brief      Send event
 * @ingroup    USERINTERFACE
-*
-* @param[in]  event : 
-* @param[in]  ... : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  event : Event to process.
+* @param[in]  ... : Variable argument list.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SendEvent(int event, ...)
 {
   UI_XEVENT xevent(this, event);
@@ -2000,11 +2002,11 @@ bool UI_MANAGER::SendEvent(int event, ...)
 * @brief      Change automatic text element value
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  maskvalue : 
-* @param[in]  maskresolved : 
+* @param[in]  element : Element to process.
+* @param[in]  maskvalue : Maskvalue pointer to use.
+* @param[in]  maskresolved : Maskresolved pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::ChangeAutomaticTextElementValue(UI_ELEMENT* element, XSTRING* maskvalue, XSTRING* maskresolved)
@@ -2049,14 +2051,14 @@ bool UI_MANAGER::ChangeAutomaticTextElementValue(UI_ELEMENT* element, XSTRING* m
 * @fn         bool UI_MANAGER::ChangeTextElementValue(UI_ELEMENT* element, XSTRING* text, XSTRING& value)
 * @brief      Change text element value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  text : 
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  text : Text to use.
+* @param[in]  value : Value value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::ChangeTextElementValue(UI_ELEMENT* element, XSTRING* text, XSTRING& value)
 {
   XSTRING  maskvalue;
@@ -2114,10 +2116,10 @@ bool UI_MANAGER::ChangeTextElementValue(UI_ELEMENT* element, XSTRING* text, XSTR
 * @brief      Change text element value
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layout : 
-* @param[in]  element : 
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
@@ -2251,12 +2253,12 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
 * @fn         bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout)
 * @brief      Change text element value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  layout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  layout : Layout pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
  bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout)
 {
   if(!layout) 
@@ -2283,9 +2285,9 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
 * @brief      Subscribe input events
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  active : 
+* @param[in]  active : Active value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SubscribeInputEvents(bool active)
@@ -2311,14 +2313,14 @@ bool UI_MANAGER::SubscribeInputEvents(bool active)
 * @fn         bool UI_MANAGER::SubscribeOutputEvents(bool active, XOBSERVER* observer, XSUBJECT* subject)
 * @brief      Subscribe output events
 * @ingroup    USERINTERFACE
-*
-* @param[in]  active : 
-* @param[in]  observer : 
-* @param[in]  subject : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  active : Active value.
+* @param[in]  observer : Observer pointer to use.
+* @param[in]  subject : Subject pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SubscribeOutputEvents(bool active, XOBSERVER* observer, XSUBJECT* subject)
 {
   UI_XEVENT_TYPE eventtype[] = {  UI_XEVENT_TYPE_OUTPUT_SELECTED          ,                              
@@ -2343,10 +2345,10 @@ bool UI_MANAGER::SubscribeOutputEvents(bool active, XOBSERVER* observer, XSUBJEC
 * @brief      Creater virtual keyboard
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layout : 
-* @param[in]  screen : 
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  screen : Screen object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::CreaterVirtualKeyboard(UI_LAYOUT* layout, GRPSCREEN* screen)
@@ -2383,10 +2385,10 @@ bool UI_MANAGER::CreaterVirtualKeyboard(UI_LAYOUT* layout, GRPSCREEN* screen)
 * @fn         bool UI_MANAGER::DeleteVirtualKeyboard()
 * @brief      Delete virtual keyboard
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::DeleteVirtualKeyboard()
 {
   if(!virtualkeyboard)
@@ -2410,8 +2412,8 @@ bool UI_MANAGER::DeleteVirtualKeyboard()
 * @fn         UI_MANAGER::UI_MANAGER()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_MANAGER::UI_MANAGER()    
 { 
   Clean();   
@@ -2429,8 +2431,8 @@ UI_MANAGER::UI_MANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_MANAGER::~UI_MANAGER()    
 { 
   RegisterEvents(false); 
@@ -2463,16 +2465,16 @@ UI_MANAGER::~UI_MANAGER()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_SKIN* UI_MANAGER::Skin_Create(XCHAR* name, UI_SKIN_DRAWMODE drawmode, GRPSCREEN* screen, int viewportindex)
+* @fn         UI_SKIN* UI_MANAGER::Skin_Create(XSTRING& skintypename, UI_SKIN_DRAWMODE drawmode, GRPSCREEN* screen, int viewportindex)
 * @brief      Skin create
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  name : 
-* @param[in]  drawmode : 
-* @param[in]  screen : 
-* @param[in]  viewportindex : 
+* @param[in]  skintypename : Skintypename value.
+* @param[in]  drawmode : Drawmode value.
+* @param[in]  screen : Screen object to use.
+* @param[in]  viewportindex : Viewportindex value.
 * 
-* @return     UI_SKIN* : 
+* @return     UI_SKIN* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN* UI_MANAGER::Skin_Create(XSTRING& skintypename, UI_SKIN_DRAWMODE drawmode, GRPSCREEN* screen, int viewportindex)
@@ -2518,11 +2520,11 @@ UI_SKIN* UI_MANAGER::Skin_Create(XSTRING& skintypename, UI_SKIN_DRAWMODE drawmod
 * @brief      Get layout element value
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  leyend : 
-* @param[in]  value : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  leyend : Leyend pointer to use.
+* @param[in]  value : Value value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetLayoutElementValue(XFILEXMLELEMENT* node, XCHAR* leyend, double& value)
@@ -2549,11 +2551,11 @@ bool UI_MANAGER::GetLayoutElementValue(XFILEXMLELEMENT* node, XCHAR* leyend, dou
 * @brief      Get layout element value
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  leyend : 
-* @param[in]  value : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  leyend : Leyend pointer to use.
+* @param[in]  value : Value value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetLayoutElementValue(XFILEXMLELEMENT* node, XCHAR* leyend, XSTRING& value)
@@ -2573,14 +2575,15 @@ bool UI_MANAGER::GetLayoutElementValue(XFILEXMLELEMENT* node, XCHAR* leyend, XST
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_MANAGER::GetLayoutElement_CalculateBoundaryLine(UI_ELEMENT* element, bool adjustsizemargin)
+* @fn         bool UI_MANAGER::GetLayoutElement_CalculateBoundaryLine(UI_LAYOUT* layout, UI_ELEMENT* element, bool adjustsizemargin)
 * @brief      Get layout element calculate boundary line
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetLayoutElement_CalculateBoundaryLine(UI_LAYOUT* layout, UI_ELEMENT* element, bool adjustsizemargin)
@@ -2627,10 +2630,10 @@ bool UI_MANAGER::GetLayoutElement_CalculateBoundaryLine(UI_LAYOUT* layout, UI_EL
 * @brief      Get parent size font
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  sizefont : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  sizefont : Sizefont value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
@@ -2654,12 +2657,12 @@ bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
 * @brief      Get layout element base
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  element : 
-* @param[in]  adjusttoparent : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  element : Element to process.
+* @param[in]  adjusttoparent : Adjusttoparent value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
@@ -2675,19 +2678,19 @@ bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
 * @brief      Get layout element base from a neutral style bag (source-format independent).
 * @ingroup    USERINTERFACE
-*
-* @param[in]  style :
-* @param[in]  fathertagname :
-* @param[in]  layout :
-* @param[in]  element :
-* @param[in]  adjusttoparent :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  style : Style value.
+* @param[in]  fathertagname : Fathertagname value.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  element : Element to process.
+* @param[in]  adjusttoparent : Adjusttoparent value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
 {
@@ -2822,12 +2825,12 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
 * @brief      Get layout element text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -2972,12 +2975,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* 
 * @brief      Get layout element text box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3104,17 +3107,18 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+* @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 * @brief      Get layout element image
 * @ingroup    USERINTERFACE
-*
-* @param[in]  node : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
 * 
-* @return     UI_ELEMENT* : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {
   XPATH             xpathimg;
@@ -3196,12 +3200,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
 * @brief      Get layout element animation
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3359,12 +3363,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
 * @brief      Get layout element option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Option(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3482,12 +3486,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Option(XFILEXMLELEMENT* node, UI_LAYOUT
 * @brief      Get layout element multi option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_MultiOption(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3547,12 +3551,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_MultiOption(XFILEXMLELEMENT* node, UI_L
 * @brief      Get layout element button
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Button(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3564,6 +3568,20 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Button(XFILEXMLELEMENT* node, UI_LAYOUT
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_CheckBox(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+* @brief      Get layout element check box
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
+* 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_CheckBox(XFILEXMLELEMENT* node, UI_LAYOUT* layout,  UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {  
   UI_ELEMENT_CHECKBOX* element_checkbox = GEN_NEW UI_ELEMENT_CHECKBOX();
@@ -3579,12 +3597,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_CheckBox(XFILEXMLELEMENT* node, UI_LAYO
 * @brief      Get layout element edit text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_EditText(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3602,12 +3620,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_EditText(XFILEXMLELEMENT* node, UI_LAYO
 * @brief      Get layout element form
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3714,12 +3732,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* 
 * @brief      Get layout element menu
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_Menu(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3737,12 +3755,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Menu(XFILEXMLELEMENT* node, UI_LAYOUT* 
 * @brief      Get layout element list box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_ListBox(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3784,12 +3802,12 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ListBox(XFILEXMLELEMENT* node, UI_LAYOU
 * @brief      Get layout element progress bar
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  node : 
-* @param[in]  layout : 
-* @param[in]  father : 
-* @param[in]  element_legacy : 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
@@ -3969,19 +3987,19 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressRadial(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 * @brief      Get layout element radial progress
 * @ingroup    USERINTERFACE
-*
-* @param[in]  node :
-* @param[in]  layout :
-* @param[in]  father :
-* @param[in]  element_legacy :
-*
-* @return     UI_ELEMENT* : the created (or reused) element, NULL on error.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
+* 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressRadial(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {
   double                    value         = 0.0f;
@@ -4081,14 +4099,19 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressRadial(XFILEXMLELEMENT* node, U
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 * @brief      Get layout element progress image
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT* : the created (or reused) element, NULL on error.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
+* 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
 {
   double                      value                 = 0.0f;
@@ -4220,11 +4243,11 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI
 * @brief      Create partial layout
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  nodeelement : 
-* @param[in]  layout : 
-* @param[in]  father : 
+* @param[in]  nodeelement : Nodeelement pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAYOUT* layout, UI_ELEMENT* father)
@@ -4321,11 +4344,11 @@ UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAY
 * @brief      Create layouts
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  xml : 
-* @param[in]  screen : 
-* @param[in]  viewportindex : 
+* @param[in]  xml : XML value.
+* @param[in]  screen : Screen object to use.
+* @param[in]  viewportindex : Viewportindex value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportindex)
@@ -4515,10 +4538,10 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
 * @brief      Load background bitmap
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  namefilebitmap : 
-* @param[in]  mode : 
+* @param[in]  namefilebitmap : Namefilebitmap value.
+* @param[in]  mode : Mode value.
 * 
-* @return     GRPBITMAP* : 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTYMODE mode)
@@ -4579,12 +4602,12 @@ GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTY
 * @brief      Create cache elements
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  nodeelement : 
-* @param[in]  drawmode : 
-* @param[in]  grppropertymode : 
-* @param[in]  recursive : 
+* @param[in]  nodeelement : Nodeelement pointer to use.
+* @param[in]  drawmode : Drawmode value.
+* @param[in]  grppropertymode : Grppropertymode value.
+* @param[in]  recursive : Recursive value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::CreateCacheElements(XFILEXMLELEMENT* nodeelement, UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, bool recursive)
@@ -4662,12 +4685,12 @@ bool UI_MANAGER::CreateCacheElements(XFILEXMLELEMENT* nodeelement, UI_SKIN_DRAWM
 * @fn         bool UI_MANAGER::RegisterEvents(bool active)
 * @brief      Register events
 * @ingroup    USERINTERFACE
-*
-* @param[in]  active : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  active : Active value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::RegisterEvents(bool active)
 {
   UI_XEVENT_TYPE eventtype[] = {  UI_XEVENT_TYPE_INPUT_CURSOR_MOVE            ,
@@ -4691,16 +4714,15 @@ bool UI_MANAGER::RegisterEvents(bool active)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_LAYOUT* layout, UI_ELEMENT* element, int x, int y)
+* @fn         UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_ELEMENT* element, int x, int y)
 * @brief      Pre select element
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layout : 
-* @param[in]  element : 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  element : Element to process.
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     UI_ELEMENT* : 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_ELEMENT* element, int x, int y)
@@ -4827,9 +4849,9 @@ UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_ELEMENT* element, int x, int y)
 * @brief      Select element
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SelectElement(UI_ELEMENT* element)
@@ -4866,14 +4888,13 @@ bool UI_MANAGER::SelectElement(UI_ELEMENT* element)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_MANAGER::SelectedElement(UI_LAYOUT* layout, UI_ELEMENT* element)
+* @fn         bool UI_MANAGER::SelectedElement(UI_ELEMENT* element)
 * @brief      Selected element
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  layout : 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SelectedElement(UI_ELEMENT* element)
@@ -4956,9 +4977,9 @@ bool UI_MANAGER::SelectedElement(UI_ELEMENT* element)
 * @brief      Un selected element
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::UnSelectedElement(UI_ELEMENT* element)
@@ -5010,10 +5031,10 @@ bool UI_MANAGER::UnSelectedElement(UI_ELEMENT* element)
 * @fn         bool UI_MANAGER::UnSelectedElement()
 * @brief      Un selected element
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::UnSelectedElement()
 {
   for(XDWORD d=0; d<layouts.GetSize(); d++)
@@ -5042,10 +5063,10 @@ bool UI_MANAGER::UnSelectedElement()
 * @brief      Use motion in element
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  cursormotion : 
+* @param[in]  element : Element to process.
+* @param[in]  cursormotion : Cursormotion pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::UseMotionInElement(UI_ELEMENT* element, INPCURSORMOTION* cursormotion)
@@ -5126,12 +5147,12 @@ bool UI_MANAGER::UseMotionInElement(UI_ELEMENT* element, INPCURSORMOTION* cursor
 * @fn         bool UI_MANAGER::UseMotion(INPCURSORMOTION* cursormotion)
 * @brief      Use motion
 * @ingroup    USERINTERFACE
-*
-* @param[in]  cursormotion : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  cursormotion : Cursormotion pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::UseMotion(INPCURSORMOTION* cursormotion)
 {
   if(!cursormotion) 
@@ -5160,22 +5181,19 @@ bool UI_MANAGER::UseMotion(INPCURSORMOTION* cursormotion)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_MANAGER::SelectScrollBarInElement(UI_ELEMENT* element, int x, int y)
 * @brief      Hit-tests the overlay scrollbar(s) of a scrollable container (and its children) against a pointer.
 * @note       Interactive scrollbar: a SELECCTION/touch on the bar track sets the scroll position proportionally to
-*             the pointer (absolute). On touch the per-frame SELECCTION stream makes the thumb follow the finger
-*             (drag); on mouse it is a click-to-position. The track is hit-tested in the same screen space and box
-*             convention as PreSelectElement (GetXPositionWithScroll / GetYPositionWithScroll + IsWithin).
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-* @param[in]  x :
-* @param[in]  y :
-*
-* @return     bool : true if the pointer was consumed by a scrollbar.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  element : Element to process.
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SelectScrollBarInElement(UI_ELEMENT* element, int x, int y)
 {
   if(!element) return false;
@@ -5251,17 +5269,17 @@ bool UI_MANAGER::SelectScrollBarInElement(UI_ELEMENT* element, int x, int y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_MANAGER::SelectScrollBar(int x, int y)
 * @brief      Hit-tests all layouts' scrollbars against a pointer; applies proportional scroll if hit.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  x :
-* @param[in]  y :
-*
-* @return     bool : true if the pointer was consumed by a scrollbar.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SelectScrollBar(int x, int y)
 {
   for(int d=0; d<layouts.GetSize(); d++)
@@ -5287,10 +5305,10 @@ bool UI_MANAGER::SelectScrollBar(int x, int y)
 * @brief      Handle event UI
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* @param[in]  event : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  event : Event to process.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
 {
   switch(event->GetEventType())
@@ -5419,10 +5437,10 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
 * @brief      Handle event
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* @param[in]  xevent : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  xevent : Xevent pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_MANAGER::HandleEvent(XEVENT* xevent)
 {
   if(!xevent) return;
@@ -5445,8 +5463,8 @@ void UI_MANAGER::HandleEvent(XEVENT* xevent)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_MANAGER::Clean()
 {  
   iszippedfile        = false;

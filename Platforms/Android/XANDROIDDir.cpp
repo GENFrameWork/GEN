@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XANDROIDDIR::XANDROIDDIR()
+* 
+* @fn         XANDROIDDIR::XANDROIDDIR(): XLINUXDIR()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDDIR::XANDROIDDIR(): XLINUXDIR()
 {
@@ -66,12 +66,12 @@ XANDROIDDIR::XANDROIDDIR(): XLINUXDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDDIR::~XANDROIDDIR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDDIR::~XANDROIDDIR()
 {

@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSPITOUCHSCREENSTMPE610::DIOSPITOUCHSCREENSTMPE610()
+* 
+* @fn         DIOSPITOUCHSCREENSTMPE610::DIOSPITOUCHSCREENSTMPE610(): DIODEVICE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPITOUCHSCREENSTMPE610::DIOSPITOUCHSCREENSTMPE610(): DIODEVICE()
 {
@@ -79,12 +79,12 @@ DIOSPITOUCHSCREENSTMPE610::DIOSPITOUCHSCREENSTMPE610(): DIODEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSPITOUCHSCREENSTMPE610::~DIOSPITOUCHSCREENSTMPE610()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPITOUCHSCREENSTMPE610::~DIOSPITOUCHSCREENSTMPE610()
 {
@@ -107,16 +107,16 @@ DIOSPITOUCHSCREENSTMPE610::~DIOSPITOUCHSCREENSTMPE610()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITOUCHSCREENSTMPE610::IniDevice(int chipselect, int timeout)
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @param[in]  chipselect :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  chipselect : Chipselect value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITOUCHSCREENSTMPE610::IniDevice(int chipselect, int timeout)
 {
@@ -156,13 +156,13 @@ bool DIOSPITOUCHSCREENSTMPE610::IniDevice(int chipselect, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOSPITOUCHSCREENSTMPE610::GetVersion()
 * @brief      Get version
 * @ingroup    DATAIO
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSPITOUCHSCREENSTMPE610::GetVersion()
 {
@@ -183,13 +183,13 @@ XWORD DIOSPITOUCHSCREENSTMPE610::GetVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITOUCHSCREENSTMPE610::IsTouched()
 * @brief      Is touched
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITOUCHSCREENSTMPE610::IsTouched()
 {
@@ -207,13 +207,13 @@ bool DIOSPITOUCHSCREENSTMPE610::IsTouched()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITOUCHSCREENSTMPE610::IsBufferEmpty()
 * @brief      Is buffer empty
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITOUCHSCREENSTMPE610::IsBufferEmpty()
 {
@@ -231,13 +231,13 @@ bool DIOSPITOUCHSCREENSTMPE610::IsBufferEmpty()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSPITOUCHSCREENSTMPE610::GetBufferSize()
 * @brief      Get buffer size
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSPITOUCHSCREENSTMPE610::GetBufferSize()
 {
@@ -252,17 +252,17 @@ XBYTE DIOSPITOUCHSCREENSTMPE610::GetBufferSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITOUCHSCREENSTMPE610::ReadPosition(XWORD& x, XWORD& y, XBYTE& z)
 * @brief      Read position
 * @ingroup    DATAIO
-*
-* @param[in]  x :
-* @param[in]  y :
-* @param[in]  z :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  z : Z coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITOUCHSCREENSTMPE610::ReadPosition(XWORD& x, XWORD& y, XBYTE& z)
 {
@@ -309,13 +309,13 @@ bool DIOSPITOUCHSCREENSTMPE610::ReadPosition(XWORD& x, XWORD& y, XBYTE& z)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITOUCHSCREENSTMPE610::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITOUCHSCREENSTMPE610::End()
 {
@@ -343,13 +343,13 @@ bool DIOSPITOUCHSCREENSTMPE610::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSPI* DIOSPITOUCHSCREENSTMPE610::GetDIOStreamSPI()
 * @brief      Get DIO stream SPI
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMSPI* :
-*
+* 
+* @return     DIOSTREAMSPI* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSPI* DIOSPITOUCHSCREENSTMPE610::GetDIOStreamSPI()
 {
@@ -358,13 +358,13 @@ DIOSTREAMSPI* DIOSPITOUCHSCREENSTMPE610::GetDIOStreamSPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSPITOUCHSCREENSTMPE610::SetDIOStreamSPI(DIOSTREAMSPI* diostreamSPI)
 * @brief      Set DIO stream SPI
 * @ingroup    DATAIO
-*
-* @param[in]  diostreamSPI :
-*
+* 
+* @param[in]  diostreamSPI : Diostream SPI pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPITOUCHSCREENSTMPE610::SetDIOStreamSPI(DIOSTREAMSPI* diostreamSPI)
 {
@@ -374,13 +374,13 @@ void DIOSPITOUCHSCREENSTMPE610::SetDIOStreamSPI(DIOSTREAMSPI* diostreamSPI)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITOUCHSCREENSTMPE610::TouchScreen_Ini()
 * @brief      Touch screen ini
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITOUCHSCREENSTMPE610::TouchScreen_Ini()
 {
@@ -413,16 +413,16 @@ bool DIOSPITOUCHSCREENSTMPE610::TouchScreen_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITOUCHSCREENSTMPE610::ReadRegister(XBYTE reg, XBYTE& data)
 * @brief      Read register
 * @ingroup    DATAIO
-*
-* @param[in]  reg :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITOUCHSCREENSTMPE610::ReadRegister(XBYTE reg, XBYTE& data)
 {
@@ -444,16 +444,16 @@ bool DIOSPITOUCHSCREENSTMPE610::ReadRegister(XBYTE reg, XBYTE& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSPITOUCHSCREENSTMPE610::WriteRegister(XBYTE reg, XBYTE data)
 * @brief      Write register
 * @ingroup    DATAIO
-*
-* @param[in]  reg :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  reg : Reg value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSPITOUCHSCREENSTMPE610::WriteRegister(XBYTE reg, XBYTE data)
 {
@@ -471,12 +471,12 @@ bool DIOSPITOUCHSCREENSTMPE610::WriteRegister(XBYTE reg, XBYTE data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSPITOUCHSCREENSTMPE610::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSPITOUCHSCREENSTMPE610::Clean()
 {

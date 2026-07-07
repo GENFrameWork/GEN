@@ -91,7 +91,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMICMP::DIOANDROIDSTREAMICMP()
+* @fn         DIOANDROIDSTREAMICMP::DIOANDROIDSTREAMICMP() : DIOSTREAMICMP() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -163,7 +163,7 @@ DIOANDROIDSTREAMICMP::~DIOANDROIDSTREAMICMP()
 * @brief      Open
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMICMP::Open()
@@ -191,7 +191,7 @@ bool DIOANDROIDSTREAMICMP::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMICMP::Disconnect()
@@ -217,7 +217,7 @@ bool DIOANDROIDSTREAMICMP::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMICMP::Close()
@@ -243,9 +243,9 @@ bool DIOANDROIDSTREAMICMP::Close()
 * @brief      Is ready connect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOANDROIDSTREAMICMP::IsReadyConnect(int socket)
@@ -297,7 +297,7 @@ int DIOANDROIDSTREAMICMP::IsReadyConnect(int socket)
 * @brief      Thread run function
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  thread : 
+* @param[in]  thread : Thread pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMICMP::ThreadRunFunction(void* thread)

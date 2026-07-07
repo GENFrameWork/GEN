@@ -60,13 +60,13 @@ INPMANAGER* INPMANAGER::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPMANAGER::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::GetIsInstanced()
 {
@@ -75,13 +75,13 @@ bool INPMANAGER::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPMANAGER& INPMANAGER::GetInstance()
 * @brief      Get instance
 * @ingroup    INPUT
-*
-* @return     INPMANAGER& : inpmanager instance
-*
+* 
+* @return     INPMANAGER& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPMANAGER& INPMANAGER::GetInstance()
 {
@@ -92,13 +92,13 @@ INPMANAGER& INPMANAGER::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPMANAGER::DelInstance()
 * @brief      Del instance
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::DelInstance()
 {
@@ -115,15 +115,15 @@ bool INPMANAGER::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPMANAGER::AddDevice(INPDEVICE* device)
 * @brief      Add device
 * @ingroup    INPUT
-*
+* 
 * @param[in]  device : device to add
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::AddDevice(INPDEVICE* device)
 {
@@ -154,15 +154,15 @@ bool INPMANAGER::AddDevice(INPDEVICE* device)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPMANAGER::DelDevice(INPDEVICE* device)
 * @brief      Del device
 * @ingroup    INPUT
-*
+* 
 * @param[in]  device : device to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::DelDevice(INPDEVICE* device)
 {
@@ -194,13 +194,13 @@ bool INPMANAGER::DelDevice(INPDEVICE* device)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPMANAGER::DeleteAllDevices()
 * @brief      Delete all devices
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::DeleteAllDevices()
 {
@@ -227,13 +227,13 @@ bool INPMANAGER::DeleteAllDevices()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int INPMANAGER::GetNDevices()
 * @brief      Get N devices
 * @ingroup    INPUT
-*
-* @return     int : Number of Devices
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int INPMANAGER::GetNDevices()
 {
@@ -242,15 +242,15 @@ int INPMANAGER::GetNDevices()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPDEVICE* INPMANAGER::GetDevice(int index)
 * @brief      Get device
 * @ingroup    INPUT
-*
+* 
 * @param[in]  index : index of device
-*
-* @return     INPDEVICE* : device obtain
-*
+* 
+* @return     INPDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* INPMANAGER::GetDevice(int index)
 {
@@ -276,15 +276,15 @@ INPDEVICE* INPMANAGER::GetDevice(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPDEVICE* INPMANAGER::GetDevice(INPDEVICE_TYPE type)
 * @brief      Get device
 * @ingroup    INPUT
-*
+* 
 * @param[in]  type : type of device
-*
-* @return     INPDEVICE* : device obtain
-*
+* 
+* @return     INPDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* INPMANAGER::GetDevice(INPDEVICE_TYPE type)
 {
@@ -316,13 +316,13 @@ INPDEVICE* INPMANAGER::GetDevice(INPDEVICE_TYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPMANAGER::Update()
 * @brief      Update
 * @ingroup    INPUT
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPMANAGER::Update()
 {
@@ -355,11 +355,11 @@ bool INPMANAGER::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPMANAGER::INPMANAGER()
 * @brief      Constructor of class
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPMANAGER::INPMANAGER()
 {
@@ -370,12 +370,12 @@ INPMANAGER::INPMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPMANAGER::~INPMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPMANAGER::~INPMANAGER()
 {
@@ -391,12 +391,12 @@ INPMANAGER::~INPMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    INPUT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPMANAGER::Clean()
 {

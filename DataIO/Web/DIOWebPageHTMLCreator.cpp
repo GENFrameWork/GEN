@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBPAGEHTMLCREATOR::DIOWEBPAGEHTMLCREATOR()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBPAGEHTMLCREATOR::DIOWEBPAGEHTMLCREATOR()
 {
@@ -76,12 +76,12 @@ DIOWEBPAGEHTMLCREATOR::DIOWEBPAGEHTMLCREATOR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBPAGEHTMLCREATOR::~DIOWEBPAGEHTMLCREATOR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBPAGEHTMLCREATOR::~DIOWEBPAGEHTMLCREATOR()
 {
@@ -92,13 +92,15 @@ DIOWEBPAGEHTMLCREATOR::~DIOWEBPAGEHTMLCREATOR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator = (const char* htlmpage)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (const char* htlmpage)
 {
@@ -107,13 +109,15 @@ void DIOWEBPAGEHTMLCREATOR::operator = (const char* htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator = (const XCHAR* htlmpage)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (const XCHAR* htlmpage)
 {
@@ -122,13 +126,15 @@ void DIOWEBPAGEHTMLCREATOR::operator = (const XCHAR* htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator = (DIOWEBPAGEHTMLCREATOR& htlmpage)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (DIOWEBPAGEHTMLCREATOR& htlmpage)
 {
@@ -137,13 +143,15 @@ void DIOWEBPAGEHTMLCREATOR::operator = (DIOWEBPAGEHTMLCREATOR& htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator = (XSTRING& string)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (XSTRING& string)
 {
@@ -152,13 +160,15 @@ void DIOWEBPAGEHTMLCREATOR::operator = (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator = (XWORD* htlmpage)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
+* 
+* @param[in]  htlmpage : Htlmpage pointer to use.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (XWORD* htlmpage)
 {
@@ -167,13 +177,15 @@ void DIOWEBPAGEHTMLCREATOR::operator = (XWORD* htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator += (const char* htlmpage)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (const char* htlmpage)
 {
@@ -182,13 +194,15 @@ void DIOWEBPAGEHTMLCREATOR::operator += (const char* htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator += (const XCHAR* htlmpage)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (const XCHAR* htlmpage)
 {
@@ -197,13 +211,15 @@ void DIOWEBPAGEHTMLCREATOR::operator += (const XCHAR* htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator += (XPATH& htlmpage)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (XPATH& htlmpage)
 {
@@ -212,13 +228,15 @@ void DIOWEBPAGEHTMLCREATOR::operator += (XPATH& htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator += (XSTRING& string)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (XSTRING& string)
 {
@@ -227,13 +245,15 @@ void DIOWEBPAGEHTMLCREATOR::operator += (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBPAGEHTMLCREATOR::operator += (XCHAR htlmpage)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (XCHAR htlmpage)
 {
@@ -242,15 +262,15 @@ void DIOWEBPAGEHTMLCREATOR::operator += (XCHAR htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator < (DIOWEBPAGEHTMLCREATOR& htlmpage)
-* @brief      operator < 
+* @brief      operator <
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator <  (DIOWEBPAGEHTMLCREATOR& htlmpage)
 {
@@ -259,15 +279,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator <  (DIOWEBPAGEHTMLCREATOR& htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator > (DIOWEBPAGEHTMLCREATOR& htlmpage)
-* @brief      operator > 
+* @brief      operator >
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator >  (DIOWEBPAGEHTMLCREATOR& htlmpage)
 {
@@ -276,15 +296,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator >  (DIOWEBPAGEHTMLCREATOR& htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator <= (DIOWEBPAGEHTMLCREATOR& htlmpage)
-* @brief      operator <= 
+* @brief      operator <=
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator <= (DIOWEBPAGEHTMLCREATOR& htlmpage)
 {
@@ -293,15 +313,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator <= (DIOWEBPAGEHTMLCREATOR& htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator >= (DIOWEBPAGEHTMLCREATOR& htlmpage)
-* @brief      operator >= 
+* @brief      operator >=
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator >= (DIOWEBPAGEHTMLCREATOR& htlmpage)
 {
@@ -310,15 +330,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator >= (DIOWEBPAGEHTMLCREATOR& htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator == (DIOWEBPAGEHTMLCREATOR& htlmpage)
-* @brief      operator == 
+* @brief      operator ==
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator == (DIOWEBPAGEHTMLCREATOR& htlmpage)
 {
@@ -327,15 +347,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator == (DIOWEBPAGEHTMLCREATOR& htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator != (DIOWEBPAGEHTMLCREATOR& htlmpage)
-* @brief      operator != 
+* @brief      operator !=
 * @ingroup    DATAIO
-*
-* @param[in]  htlmpage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  htlmpage : Htlmpage value.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator != (DIOWEBPAGEHTMLCREATOR& htlmpage)
 {
@@ -344,15 +364,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator != (DIOWEBPAGEHTMLCREATOR& htlmpage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator < (XSTRING& string)
-* @brief      operator < 
+* @brief      operator <
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator <  (XSTRING& string)
 {
@@ -361,15 +381,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator <  (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator > (XSTRING& string)
-* @brief      operator > 
+* @brief      operator >
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator >  (XSTRING& string)
 {
@@ -378,15 +398,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator >  (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator <= (XSTRING& string)
-* @brief      operator <= 
+* @brief      operator <=
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator <= (XSTRING& string)
 {
@@ -395,15 +415,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator <= (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator >= (XSTRING& string)
-* @brief      operator >= 
+* @brief      operator >=
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator >= (XSTRING& string)
 {
@@ -412,15 +432,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator >= (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator == (XSTRING& string)
-* @brief      operator == 
+* @brief      operator ==
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator == (XSTRING& string)
 {
@@ -429,15 +449,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator == (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::operator != (XSTRING& string)
-* @brief      operator != 
+* @brief      operator !=
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::operator != (XSTRING& string)
 {
@@ -446,15 +466,15 @@ bool DIOWEBPAGEHTMLCREATOR::operator != (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR DIOWEBPAGEHTMLCREATOR::operator [] (int position)
-* @brief      operator [] 
+* @brief      operator []
 * @ingroup    DATAIO
-*
-* @param[in]  position :
-*
-* @return     XCHAR :
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     XCHAR DIOWEBPAGEHTMLCREATOR:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR DIOWEBPAGEHTMLCREATOR::operator [] (int position)
 {
@@ -466,16 +486,16 @@ XCHAR DIOWEBPAGEHTMLCREATOR::operator [] (int position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::Printf(XCHAR* mask,...)
 * @brief      Printf
 * @ingroup    DATAIO
-*
-* @param[in]  mask :
-* @param[in]  ... :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  ... : Variable argument list.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::Printf(XCHAR* mask,...)
 {
@@ -502,15 +522,15 @@ bool DIOWEBPAGEHTMLCREATOR::Printf(XCHAR* mask,...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::Print(XCHAR* text)
 * @brief      Print
 * @ingroup    DATAIO
-*
-* @param[in]  text :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  text : Text to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::Print(XCHAR* text)
 {
@@ -532,10 +552,10 @@ bool DIOWEBPAGEHTMLCREATOR::Print(XCHAR* text)
 * @brief      Table ini
 * @ingroup    DATAIO
 * 
-* @param[in]  border : 
-* @param[in]  addstyle : 
+* @param[in]  border : Border value.
+* @param[in]  addstyle : Addstyle pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::Table_Ini(int border, XCHAR* addstyle)
@@ -549,16 +569,16 @@ bool DIOWEBPAGEHTMLCREATOR::Table_Ini(int border, XCHAR* addstyle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::Table_Line(int ncolumns, ...)
 * @brief      Table line
 * @ingroup    DATAIO
-*
-* @param[in]  ncolumns :
-* @param[in]  ... :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ncolumns : Ncolumns value.
+* @param[in]  ... : Variable argument list.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::Table_Line(int ncolumns, ...)
 {
@@ -606,11 +626,11 @@ bool DIOWEBPAGEHTMLCREATOR::Table_Line(int ncolumns, ...)
 * @brief      Table line
 * @ingroup    DATAIO
 * 
-* @param[in]  colorbackground : 
-* @param[in]  ncolumns : 
-* @param[in]  ... : 
+* @param[in]  colorbackground : Colorbackground pointer to use.
+* @param[in]  ncolumns : Ncolumns value.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::Table_Line(XCHAR* colorbackground, int ncolumns, ...)
@@ -665,16 +685,16 @@ bool DIOWEBPAGEHTMLCREATOR::Table_Line(XCHAR* colorbackground, int ncolumns, ...
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOWEBPAGEHTMLCREATOR::Table_LineColor(int columns, ...)
+* 
+* @fn         bool DIOWEBPAGEHTMLCREATOR::Table_LineColor(int ncolumns, ...)
 * @brief      Table line color
 * @ingroup    DATAIO
-*
-* @param[in]  columns :
-* @param[in]  ... :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ncolumns : Ncolumns value.
+* @param[in]  ... : Variable argument list.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::Table_LineColor(int ncolumns, ...)
 {
@@ -718,13 +738,13 @@ bool DIOWEBPAGEHTMLCREATOR::Table_LineColor(int ncolumns, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::Table_End()
 * @brief      Table end
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::Table_End()
 {
@@ -734,16 +754,16 @@ bool DIOWEBPAGEHTMLCREATOR::Table_End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::AddAutoRefresh(int refresh, XSTRING* url)
 * @brief      Add auto refresh
 * @ingroup    DATAIO
-*
-* @param[in]  refresh :
-* @param[in]  url :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  refresh : Refresh value.
+* @param[in]  url : URL to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::AddAutoRefresh(int refresh, XSTRING* url)
 {
@@ -762,15 +782,15 @@ bool DIOWEBPAGEHTMLCREATOR::AddAutoRefresh(int refresh, XSTRING* url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBPAGEHTMLCREATOR::AddFile(XPATH& xpath)
 * @brief      Add file
 * @ingroup    DATAIO
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBPAGEHTMLCREATOR::AddFile(XPATH& xpath)
 {
@@ -849,18 +869,18 @@ bool DIOWEBPAGEHTMLCREATOR::AddFile(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBPAGEHTMLCREATORTAGXENGINESTATUS DIOWEBPAGEHTMLCREATOR::CheckXTAG(XSTRING* originalline,bool& intag, XSTRING& inioutputline,XSTRING& endoutputline)
 * @brief      Check XTAG
 * @ingroup    DATAIO
-*
-* @param[in]  originalline :
-* @param[in]  intag :
-* @param[in]  inioutputline :
-* @param[in]  endoutputline :
-*
-* @return     DIOWEBPAGEHTMLCREATORTAGXENGINESTATUS :
-*
+* 
+* @param[in]  originalline : Originalline pointer to use.
+* @param[in]  intag : Intag value.
+* @param[in]  inioutputline : Inioutputline value.
+* @param[in]  endoutputline : Endoutputline value.
+* 
+* @return     DIOWEBPAGEHTMLCREATORTAGXENGINESTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBPAGEHTMLCREATORTAGXENGINESTATUS DIOWEBPAGEHTMLCREATOR::CheckXTAG(XSTRING* originalline,bool& intag, XSTRING& inioutputline,XSTRING& endoutputline)
 {

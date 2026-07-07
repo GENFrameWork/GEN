@@ -77,7 +77,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXSTREAMUSB::DIOLINUXSTREAMUSB()
+* @fn         DIOLINUXSTREAMUSB::DIOLINUXSTREAMUSB() : DIOSTREAMUSB(), XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -137,7 +137,7 @@ DIOLINUXSTREAMUSB::~DIOLINUXSTREAMUSB()
 * @brief      Get status
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     DIOSTREAMSTATUS : 
+* @return     DIOSTREAMSTATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOLINUXSTREAMUSB::GetStatus()
@@ -155,7 +155,7 @@ DIOSTREAMSTATUS DIOLINUXSTREAMUSB::GetStatus()
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUSB::Open()
@@ -189,7 +189,7 @@ bool DIOLINUXSTREAMUSB::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUSB::Disconnect()                                
@@ -204,7 +204,7 @@ bool DIOLINUXSTREAMUSB::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUSB::Close()
@@ -232,7 +232,7 @@ bool DIOLINUXSTREAMUSB::Close()
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUSB::CleanBuffers()
@@ -249,7 +249,7 @@ bool DIOLINUXSTREAMUSB::CleanBuffers()
 * @brief      Thread connection
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMUSB::ThreadConnection(void* data)
@@ -352,10 +352,10 @@ void DIOLINUXSTREAMUSB::ThreadConnection(void* data)
 * @brief      Read buffer
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOLINUXSTREAMUSB::ReadBuffer(XBYTE* buffer,XDWORD size)
@@ -393,10 +393,10 @@ XDWORD DIOLINUXSTREAMUSB::ReadBuffer(XBYTE* buffer,XDWORD size)
 * @brief      Write buffer
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOLINUXSTREAMUSB::WriteBuffer(XBYTE* buffer, XDWORD size)

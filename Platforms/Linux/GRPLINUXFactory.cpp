@@ -67,13 +67,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPSCREEN* GRPLINUXFACTORY::CreateScreen()
 * @brief      Create screen
 * @ingroup    PLATFORM_LINUX
-*
-* @return     GRPSCREEN* :
-*
+* 
+* @return     GRPSCREEN* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREEN* GRPLINUXFACTORY::CreateScreen()
 {
@@ -90,15 +90,15 @@ GRPSCREEN* GRPLINUXFACTORY::CreateScreen()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPLINUXFACTORY::DeleteScreen(GRPSCREEN* screen)
 * @brief      Delete screen
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  screen :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  screen : Screen object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXFACTORY::DeleteScreen(GRPSCREEN* screen)
 {

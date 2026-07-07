@@ -63,11 +63,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SQLITE_DATABASE::SQLITE_DATABASE()
+* 
+* @fn         SQLITE_DATABASE::SQLITE_DATABASE() : DB_SQL_DATABASE()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SQLITE_DATABASE::SQLITE_DATABASE() : DB_SQL_DATABASE()
 {
@@ -78,12 +78,12 @@ SQLITE_DATABASE::SQLITE_DATABASE() : DB_SQL_DATABASE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SQLITE_DATABASE::~SQLITE_DATABASE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SQLITE_DATABASE::~SQLITE_DATABASE()
 {
@@ -92,13 +92,13 @@ SQLITE_DATABASE::~SQLITE_DATABASE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_DATABASE_TYPE SQLITE_DATABASE::GetType()
 * @brief      Get type
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_DATABASE_TYPE :
-*
+* 
+* @return     DB_SQL_DATABASE_TYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_DATABASE_TYPE SQLITE_DATABASE::GetType()
 {
@@ -107,13 +107,13 @@ DB_SQL_DATABASE_TYPE SQLITE_DATABASE::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* SQLITE_DATABASE::GetTypeName()
 * @brief      Get type name
 * @ingroup    DATABASE
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* SQLITE_DATABASE::GetTypeName()
 {
@@ -122,13 +122,13 @@ XCHAR* SQLITE_DATABASE::GetTypeName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_DATABASE::Transaction()
 * @brief      Transaction
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_DATABASE::Transaction()
 {
@@ -141,13 +141,13 @@ bool SQLITE_DATABASE::Transaction()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_DATABASE::Commit()
 * @brief      Commit
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_DATABASE::Commit()
 {
@@ -165,15 +165,15 @@ bool SQLITE_DATABASE::Commit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_DATABASE::Rollback(XCHAR* savepoint)
 * @brief      Rollback
 * @ingroup    DATABASE
-*
-* @param[in]  savepoint :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  savepoint : Savepoint pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_DATABASE::Rollback(XCHAR* savepoint)
 {
@@ -206,15 +206,15 @@ bool SQLITE_DATABASE::Rollback(XCHAR* savepoint)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_DATABASE::Savepoint(XCHAR* savepoint)
 * @brief      Savepoint
 * @ingroup    DATABASE
-*
-* @param[in]  savepoint :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  savepoint : Savepoint pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_DATABASE::Savepoint(XCHAR* savepoint)
 {
@@ -231,15 +231,15 @@ bool SQLITE_DATABASE::Savepoint(XCHAR* savepoint)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_DATABASE::ReleaseSavepoint(XCHAR* savepoint)
 * @brief      Release savepoint
 * @ingroup    DATABASE
-*
-* @param[in]  savepoint :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  savepoint : Savepoint pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_DATABASE::ReleaseSavepoint(XCHAR* savepoint)
 {
@@ -256,13 +256,13 @@ bool SQLITE_DATABASE::ReleaseSavepoint(XCHAR* savepoint)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_QUERY* SQLITE_DATABASE::CreateQuery()
 * @brief      Create query
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_QUERY* :
-*
+* 
+* @return     DB_SQL_QUERY* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_QUERY* SQLITE_DATABASE::CreateQuery()
 {
@@ -277,13 +277,13 @@ DB_SQL_QUERY* SQLITE_DATABASE::CreateQuery()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_CONNECTION* SQLITE_DATABASE::CreateConnection()
 * @brief      Create connection
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_CONNECTION* :
-*
+* 
+* @return     DB_SQL_CONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_CONNECTION* SQLITE_DATABASE::CreateConnection()
 {
@@ -293,13 +293,13 @@ DB_SQL_CONNECTION* SQLITE_DATABASE::CreateConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_DATABASE::GetTables()
 * @brief      Get tables
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_DATABASE::GetTables()
 {
@@ -353,13 +353,13 @@ bool SQLITE_DATABASE::GetTables()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_DATABASE_ENCODING SQLITE_DATABASE::GetDatabaseEncoding()
 * @brief      Get database encoding
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_DATABASE_ENCODING :
-*
+* 
+* @return     DB_SQL_DATABASE_ENCODING : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_DATABASE_ENCODING SQLITE_DATABASE::GetDatabaseEncoding()
 {
@@ -368,15 +368,15 @@ DB_SQL_DATABASE_ENCODING SQLITE_DATABASE::GetDatabaseEncoding()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_DATABASE::SetDatabaseEncoding(DB_SQL_DATABASE_ENCODING encodingtouse)
 * @brief      Set database encoding
 * @ingroup    DATABASE
-*
-* @param[in]  encodingtouse :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  encodingtouse : Encodingtouse value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_DATABASE::SetDatabaseEncoding(DB_SQL_DATABASE_ENCODING encodingtouse)
 {
@@ -447,12 +447,12 @@ bool SQLITE_DATABASE::SetDatabaseEncoding(DB_SQL_DATABASE_ENCODING encodingtouse
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SQLITE_DATABASE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SQLITE_DATABASE::Clean()
 {

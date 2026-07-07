@@ -58,9 +58,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJLINE::GRPVECTORFILESVGOBJLINE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJLINE::GRPVECTORFILESVGOBJLINE()
 {
@@ -69,10 +71,12 @@ GRPVECTORFILESVGOBJLINE::GRPVECTORFILESVGOBJLINE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJLINE::~GRPVECTORFILESVGOBJLINE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJLINE::~GRPVECTORFILESVGOBJLINE()
 {
@@ -81,11 +85,15 @@ GRPVECTORFILESVGOBJLINE::~GRPVECTORFILESVGOBJLINE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJLINE::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read the common attributes and the line geometry (x1, y1, x2, y2)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJLINE::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -103,11 +111,15 @@ bool GRPVECTORFILESVGOBJLINE::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJLINE::BuildPath(GRP2DPATH& path)
 * @brief      Build path : emit the line (open sub path, only stroked)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  path : output path
-* @return     bool : true if geometry was emitted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJLINE::BuildPath(GRP2DPATH& path)
 {
@@ -119,46 +131,60 @@ bool GRPVECTORFILESVGOBJLINE::BuildPath(GRP2DPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJLINE::GetX1()
 * @brief      Get x1
 * @ingroup    GRAPHIC
-* @return     double : x1
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJLINE::GetX1()   { return x1; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJLINE::GetY1()
 * @brief      Get y1
 * @ingroup    GRAPHIC
-* @return     double : y1
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJLINE::GetY1()   { return y1; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJLINE::GetX2()
 * @brief      Get x2
 * @ingroup    GRAPHIC
-* @return     double : x2
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJLINE::GetX2()   { return x2; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJLINE::GetY2()
 * @brief      Get y2
 * @ingroup    GRAPHIC
-* @return     double : y2
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJLINE::GetY2()   { return y2; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJLINE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJLINE::Clean()
 {

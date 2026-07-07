@@ -69,11 +69,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XLINUXFILE::XLINUXFILE()
+* 
+* @fn         XLINUXFILE::XLINUXFILE(): XFILE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXFILE::XLINUXFILE(): XFILE()
 {
@@ -82,12 +82,12 @@ XLINUXFILE::XLINUXFILE(): XFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXFILE::~XLINUXFILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXFILE::~XLINUXFILE()
 {
@@ -98,15 +98,15 @@ XLINUXFILE::~XLINUXFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Exist(XCHAR* xpath)
 * @brief      Exist
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  xpath : path to file
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Exist(XCHAR* xpath)
 {
@@ -118,16 +118,16 @@ bool XLINUXFILE::Exist(XCHAR* xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Open(XCHAR* xpath, bool isreadonly)
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  xpath : path to file
 * @param[in]  isreadonly : is open with read only
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Open(XCHAR* xpath, bool isreadonly)
 {
@@ -136,15 +136,15 @@ bool XLINUXFILE::Open(XCHAR* xpath, bool isreadonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Create(XCHAR* xpath)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  xpath : path to file
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Create(XCHAR* xpath)
 {
@@ -153,15 +153,15 @@ bool XLINUXFILE::Create(XCHAR* xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XLINUXFILE::SetSize(XDWORD size)
+* 
+* @fn         bool XLINUXFILE::SetSize(XQWORD size)
 * @brief      Set size
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  size : GEN_NEW size
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::SetSize(XQWORD size)
 {
@@ -177,15 +177,15 @@ bool XLINUXFILE::SetSize(XQWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XLINUXFILE::GetPosition(XDWORD& position)
+* 
+* @fn         bool XLINUXFILE::GetPosition(XQWORD& position)
 * @brief      Get position
 * @ingroup    PLATFORM_LINUX
-*
-* @param[out] position : position of the file
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : position of the file
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::GetPosition(XQWORD& position)
 {
@@ -200,15 +200,15 @@ bool XLINUXFILE::GetPosition(XQWORD& position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XLINUXFILE::SetPosition(XDWORD position)
+* 
+* @fn         bool XLINUXFILE::SetPosition(XQWORD position)
 * @brief      Set position
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  position : GEN_NEW position of file
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::SetPosition(XQWORD position)
 {
@@ -228,17 +228,17 @@ bool XLINUXFILE::SetPosition(XQWORD position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 * @brief      Read
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  buffer : buffer where to read
 * @param[in]  size : size to read
 * @param[in]  cipher : cipher class uncipher buffer
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 {
@@ -257,17 +257,17 @@ bool XLINUXFILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 * @brief      Read
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  buffer : buffer where to read
-* @param[out] size : size to read
+* @param[in]  size : size to read
 * @param[in]  cipher : cipher class uncipher buffer
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 {
@@ -297,17 +297,17 @@ bool XLINUXFILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 * @brief      Write
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  buffer : buffer where to read
 * @param[in]  size : size to read
 * @param[in]  cipher : cipher class to cipher buffer
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 {
@@ -331,13 +331,13 @@ bool XLINUXFILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Flush()
 * @brief      Flush
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Flush()
 {
@@ -351,13 +351,13 @@ bool XLINUXFILE::Flush()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Close()
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Close()
 {
@@ -383,16 +383,16 @@ bool XLINUXFILE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Erase(XCHAR* xpath,bool overwrite)
 * @brief      Erase
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  xpath : path of file
 * @param[in]  overwrite : overwrite file
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Erase(XCHAR* xpath,bool overwrite)
 {
@@ -416,16 +416,16 @@ bool XLINUXFILE::Erase(XCHAR* xpath,bool overwrite)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::Rename(XCHAR* xpathold, XCHAR* xpathnew)
 * @brief      Rename
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  xpathold : xpath origin
 * @param[in]  xpathnew : GEN_NEW xpath
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Rename(XCHAR* xpathold, XCHAR* xpathnew)
 {
@@ -455,13 +455,13 @@ bool XLINUXFILE::Rename(XCHAR* xpathold, XCHAR* xpathnew)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         FILE* XLINUXFILE::CreateStructHandle()
 * @brief      Create struct handle
 * @ingroup    PLATFORM_LINUX
-*
-* @return     FILE* : 
-*
+* 
+* @return     FILE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 FILE* XLINUXFILE::CreateStructHandle()
 { 
@@ -470,13 +470,13 @@ FILE* XLINUXFILE::CreateStructHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::DeleteStructHandle()
 * @brief      Delete struct handle
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::DeleteStructHandle()
 {
@@ -485,13 +485,13 @@ bool XLINUXFILE::DeleteStructHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXFILE::ChangeAttributes(XCHAR* attributes)
 * @brief      Change attributes
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  attributes : GEN_NEW atributes
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXFILE::ChangeAttributes(XCHAR* attributes)
 {
@@ -515,13 +515,13 @@ void XLINUXFILE::ChangeAttributes(XCHAR* attributes)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::ActualizeSize()
 * @brief      Actualize size
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::ActualizeSize()
 {
@@ -541,12 +541,12 @@ bool XLINUXFILE::ActualizeSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXFILE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXFILE::Clean()
 {
@@ -555,17 +555,17 @@ void XLINUXFILE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFILE::ExtendedOpen(XCHAR* xpath, XCHAR* mode)
 * @brief      Extended open
 * @note       INTERN
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  xpath : xpath of file
 * @param[in]  mode : mode attributes to open
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::ExtendedOpen(XCHAR* xpath, XCHAR* mode)
 {

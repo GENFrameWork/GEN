@@ -70,7 +70,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOCOREPROTOCOL_CONNECTION::DIOCOREPROTOCOL_CONNECTION()
+* @fn         DIOCOREPROTOCOL_CONNECTION::DIOCOREPROTOCOL_CONNECTION() : XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
@@ -158,7 +158,7 @@ DIOCOREPROTOCOL_CONNECTION::~DIOCOREPROTOCOL_CONNECTION()
 * @brief      Init FS machine
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::InitFSMachine()
@@ -217,7 +217,7 @@ bool DIOCOREPROTOCOL_CONNECTION::InitFSMachine()
 * @brief      Is server
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::IsServer()
@@ -242,7 +242,7 @@ bool DIOCOREPROTOCOL_CONNECTION::IsServer()
 * @brief      Get ID connection
 * @ingroup    DATAIO
 * 
-* @return     XUUID* : 
+* @return     XUUID* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID* DIOCOREPROTOCOL_CONNECTION::GetIDConnection()
@@ -257,7 +257,7 @@ XUUID* DIOCOREPROTOCOL_CONNECTION::GetIDConnection()
 * @brief      Get core protocol
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL* : 
+* @return     DIOCOREPROTOCOL* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL* DIOCOREPROTOCOL_CONNECTION::GetCoreProtocol()
@@ -272,9 +272,9 @@ DIOCOREPROTOCOL* DIOCOREPROTOCOL_CONNECTION::GetCoreProtocol()
 * @brief      Set core protocol
 * @ingroup    DATAIO
 * 
-* @param[in]  protocol : 
+* @param[in]  protocol : Protocol pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::SetCoreProtocol(DIOCOREPROTOCOL* protocol)
@@ -291,7 +291,7 @@ bool DIOCOREPROTOCOL_CONNECTION::SetCoreProtocol(DIOCOREPROTOCOL* protocol)
 * @brief      Get authentication challenge
 * @ingroup    DATAIO
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOCOREPROTOCOL_CONNECTION::GetAuthenticationChallenge()
@@ -306,7 +306,7 @@ XBUFFER* DIOCOREPROTOCOL_CONNECTION::GetAuthenticationChallenge()
 * @brief      Get authentication response
 * @ingroup    DATAIO
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOCOREPROTOCOL_CONNECTION::GetAuthenticationResponse()
@@ -321,7 +321,7 @@ XBUFFER* DIOCOREPROTOCOL_CONNECTION::GetAuthenticationResponse()
 * @brief      Get cipher key
 * @ingroup    DATAIO
 * 
-* @return     CIPHERKEYSYMMETRICAL* : 
+* @return     CIPHERKEYSYMMETRICAL* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEYSYMMETRICAL* DIOCOREPROTOCOL_CONNECTION::GetCipherKey()
@@ -336,7 +336,7 @@ CIPHERKEYSYMMETRICAL* DIOCOREPROTOCOL_CONNECTION::GetCipherKey()
 * @brief      Status get
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_CONNECTION_STATUS : 
+* @return     DIOCOREPROTOCOL_CONNECTION_STATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION_STATUS DIOCOREPROTOCOL_CONNECTION::Status_Get()
@@ -351,7 +351,7 @@ DIOCOREPROTOCOL_CONNECTION_STATUS DIOCOREPROTOCOL_CONNECTION::Status_Get()
 * @brief      Status set
 * @ingroup    DATAIO
 * 
-* @param[in]  status : 
+* @param[in]  status : Status value to read or update.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTION::Status_Set(DIOCOREPROTOCOL_CONNECTION_STATUS status)
@@ -381,10 +381,10 @@ void DIOCOREPROTOCOL_CONNECTION::Status_Set(DIOCOREPROTOCOL_CONNECTION_STATUS st
 * @brief      Status get string
 * @ingroup    DATAIO
 * 
-* @param[in]  status : 
-* @param[in]  statusstring : 
+* @param[in]  status : Status value to read or update.
+* @param[in]  statusstring : Statusstring value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Status_GetString(DIOCOREPROTOCOL_CONNECTION_STATUS status, XSTRING& statusstring)
@@ -419,9 +419,9 @@ bool DIOCOREPROTOCOL_CONNECTION::Status_GetString(DIOCOREPROTOCOL_CONNECTION_STA
 * @brief      Status get string
 * @ingroup    DATAIO
 * 
-* @param[in]  statusstring : 
+* @param[in]  statusstring : Statusstring value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Status_GetString(XSTRING& statusstring)
@@ -436,7 +436,7 @@ bool DIOCOREPROTOCOL_CONNECTION::Status_GetString(XSTRING& statusstring)
 * @brief      Get X timer status
 * @ingroup    DATAIO
 * 
-* @return     XTIMER* : 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIOCOREPROTOCOL_CONNECTION::GetXTimerStatus()
@@ -451,7 +451,7 @@ XTIMER* DIOCOREPROTOCOL_CONNECTION::GetXTimerStatus()
 * @brief      Get X timer without connexion
 * @ingroup    DATAIO
 * 
-* @return     XTIMER* : 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIOCOREPROTOCOL_CONNECTION::GetXTimerWithoutConnexion()
@@ -466,7 +466,7 @@ XTIMER* DIOCOREPROTOCOL_CONNECTION::GetXTimerWithoutConnexion()
 * @brief      Messages get all
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_MESSAGES* : 
+* @return     DIOCOREPROTOCOL_MESSAGES* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_MESSAGES* DIOCOREPROTOCOL_CONNECTION::Messages_GetAll()
@@ -481,11 +481,11 @@ DIOCOREPROTOCOL_MESSAGES* DIOCOREPROTOCOL_CONNECTION::Messages_GetAll()
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XBUFFER& result, XDWORD timeout)
@@ -500,11 +500,11 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XBUFFER& result
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XSTRING& result, XDWORD timeout)
@@ -519,11 +519,11 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XSTRING& result
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XFILEJSON& result, XDWORD timeout)
@@ -538,12 +538,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XFILEJSON& resu
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XBUFFER* params, XBUFFER& result, XDWORD timeout)
@@ -558,12 +558,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XBUFFER* params
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XSTRING* params, XBUFFER& result, XDWORD timeout)
@@ -578,12 +578,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XSTRING* params
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XFILEJSON* params, XBUFFER& result, XDWORD timeout)
@@ -598,12 +598,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XFILEJSON* para
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XBUFFER* params, XSTRING& result, XDWORD timeout)
@@ -618,12 +618,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XBUFFER* params
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XSTRING* params, XSTRING& result, XDWORD timeout)
@@ -638,12 +638,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XSTRING* params
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XFILEJSON* params, XSTRING& result, XDWORD timeout)
@@ -658,12 +658,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XFILEJSON* para
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XBUFFER* params, XFILEJSON& result, XDWORD timeout)
@@ -678,12 +678,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XBUFFER* params
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XSTRING* params, XFILEJSON& result, XDWORD timeout)
@@ -698,12 +698,12 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XSTRING* params
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  command_type : 
-* @param[in]  params : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XFILEJSON* params, XFILEJSON& result, XDWORD timeout)
@@ -718,10 +718,10 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XDWORD command_type, XFILEJSON* para
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  command_type : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  command_type : Command type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XUUID* ID_message, XDWORD command_type)
@@ -770,11 +770,11 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XUUID* ID_message, XDWORD command_ty
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  command_type : 
-* @param[in]  params : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XUUID* ID_message, XDWORD command_type, XBUFFER* params)
@@ -823,11 +823,11 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XUUID* ID_message, XDWORD command_ty
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  command_type : 
-* @param[in]  params : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XUUID* ID_message, XDWORD command_type, XSTRING* params)
@@ -876,11 +876,11 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XUUID* ID_message, XDWORD command_ty
 * @brief      command  do
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  command_type : 
-* @param[in]  params : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  command_type : Command type value.
+* @param[in]  params : Params pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XUUID* ID_message, XDWORD command_type, XFILEJSON* params)
@@ -929,11 +929,11 @@ bool DIOCOREPROTOCOL_CONNECTION::Command_Do(XUUID* ID_message, XDWORD command_ty
 * @brief      update class  do
 * @ingroup    DATAIO
 * 
-* @param[in]  classname : 
-* @param[in]  classserializable : 
-* @param[in]  timeout : 
+* @param[in]  classname : Classname pointer to use.
+* @param[in]  classserializable : Classserializable pointer to use.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XCHAR* classname, XSERIALIZABLE* classserializable, XDWORD timeout)
@@ -985,11 +985,11 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XCHAR* classname, XSERIALIZABLE*
 * @brief      update class  do ask
 * @ingroup    DATAIO
 * 
-* @param[in]  classname : 
-* @param[in]  classserializable : 
-* @param[in]  timeout : 
+* @param[in]  classname : Classname pointer to use.
+* @param[in]  classserializable : Classserializable pointer to use.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XCHAR* classname, XSERIALIZABLE* classserializable, XDWORD timeout)
@@ -1035,11 +1035,11 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XCHAR* classname, XSERIALIZAB
 * @brief      update class  do
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  classname : 
-* @param[in]  classcontent : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  classname : Classname pointer to use.
+* @param[in]  classcontent : Classcontent pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XUUID* ID_message, XCHAR* classname, XFILEJSON* classcontent)
@@ -1071,11 +1071,11 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_Do(XUUID* ID_message, XCHAR* classn
 * @brief      update class  do ask
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  classname : 
-* @param[in]  classcontent : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  classname : Classname pointer to use.
+* @param[in]  classcontent : Classcontent pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XUUID* ID_message, XCHAR* classname, XSTRING* classcontent)
@@ -1107,11 +1107,11 @@ bool DIOCOREPROTOCOL_CONNECTION::UpdateClass_DoAsk(XUUID* ID_message, XCHAR* cla
 * @brief      get result
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::GetResult(XUUID* ID_message, XBUFFER& result, XDWORD timeout)
@@ -1158,11 +1158,11 @@ bool DIOCOREPROTOCOL_CONNECTION::GetResult(XUUID* ID_message, XBUFFER& result, X
 * @brief      get result
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::GetResult(XUUID* ID_message, XSTRING& result, XDWORD timeout)
@@ -1210,11 +1210,11 @@ bool DIOCOREPROTOCOL_CONNECTION::GetResult(XUUID* ID_message, XSTRING& result, X
 * @brief      get result
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  result : 
-* @param[in]  timeout : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  result : Output result.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::GetResult(XUUID* ID_message, XFILEJSON& result, XDWORD timeout)
@@ -1263,7 +1263,7 @@ bool DIOCOREPROTOCOL_CONNECTION::GetResult(XUUID* ID_message, XFILEJSON& result,
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Update()
@@ -1642,7 +1642,7 @@ bool DIOCOREPROTOCOL_CONNECTION::Update()
 * @brief      Get heart bets counter
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_CONNECTION::GetHeartBetsCounter()
@@ -1657,7 +1657,7 @@ XDWORD DIOCOREPROTOCOL_CONNECTION::GetHeartBetsCounter()
 * @brief      Set heart bets counter
 * @ingroup    DATAIO
 * 
-* @param[in]  heartbetscounter : 
+* @param[in]  heartbetscounter : Heartbetscounter value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTION::SetHeartBetsCounter(XDWORD heartbetscounter)
@@ -1672,7 +1672,7 @@ void DIOCOREPROTOCOL_CONNECTION::SetHeartBetsCounter(XDWORD heartbetscounter)
 * @brief      Get register data
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_REGISTERDATA* : 
+* @return     DIOCOREPROTOCOL_REGISTERDATA* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_REGISTERDATA* DIOCOREPROTOCOL_CONNECTION::GetRegisterData()
@@ -1687,7 +1687,7 @@ DIOCOREPROTOCOL_REGISTERDATA* DIOCOREPROTOCOL_CONNECTION::GetRegisterData()
 * @brief      Set register data
 * @ingroup    DATAIO
 * 
-* @param[in]  registerdata : 
+* @param[in]  registerdata : Registerdata pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTION::SetRegisterData(DIOCOREPROTOCOL_REGISTERDATA* registerdata)
@@ -1702,7 +1702,7 @@ void DIOCOREPROTOCOL_CONNECTION::SetRegisterData(DIOCOREPROTOCOL_REGISTERDATA* r
 * @brief      completed initial update classes
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::CompletedInitialUpdateClasses()
@@ -1717,7 +1717,7 @@ bool DIOCOREPROTOCOL_CONNECTION::CompletedInitialUpdateClasses()
 * @brief      set completed initial update classes
 * @ingroup    DATAIO
 * 
-* @param[in]  completedinitialupdateclasses : 
+* @param[in]  completedinitialupdateclasses : Completedinitialupdateclasses value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTION::SetCompletedInitialUpdateClasses(bool completedinitialupdateclasses)
@@ -1732,7 +1732,7 @@ void DIOCOREPROTOCOL_CONNECTION::SetCompletedInitialUpdateClasses(bool completed
 * @brief      disconnect
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Disconnect()
@@ -1757,7 +1757,7 @@ bool DIOCOREPROTOCOL_CONNECTION::Disconnect()
 * @brief      remote disconnect
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::RemoteDisconnect()
@@ -1777,7 +1777,7 @@ bool DIOCOREPROTOCOL_CONNECTION::RemoteDisconnect()
 * @brief      get operation mutex
 * @ingroup    DATAIO
 * 
-* @return     XMUTEX* : 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIOCOREPROTOCOL_CONNECTION::GetOperationMutex()
@@ -1792,7 +1792,7 @@ XMUTEX* DIOCOREPROTOCOL_CONNECTION::GetOperationMutex()
 * @brief      get inside command mutex
 * @ingroup    DATAIO
 * 
-* @return     XMUTEX* : 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIOCOREPROTOCOL_CONNECTION::GetInsideCommandMutex()
@@ -1807,10 +1807,10 @@ XMUTEX* DIOCOREPROTOCOL_CONNECTION::GetInsideCommandMutex()
 * @brief      mutex  activate
 * @ingroup    DATAIO
 * 
-* @param[in]  mutex : 
-* @param[in]  activate : 
+* @param[in]  mutex : Mutex pointer to use.
+* @param[in]  activate : Activate value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Mutex_Activate(XMUTEX* mutex, bool activate)
@@ -1858,9 +1858,9 @@ bool DIOCOREPROTOCOL_CONNECTION::Mutex_Activate(XMUTEX* mutex, bool activate)
 * @brief      mutex  is active
 * @ingroup    DATAIO
 * 
-* @param[in]  mutex : 
+* @param[in]  mutex : Mutex pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::Mutex_IsActive(XMUTEX* mutex)
@@ -1897,9 +1897,9 @@ bool DIOCOREPROTOCOL_CONNECTION::Mutex_IsActive(XMUTEX* mutex)
 * @brief      Create ID connection
 * @ingroup    DATAIO
 * 
-* @param[in]  ID : 
+* @param[in]  ID : Identifier to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::CreateIDConnection(XUUID& ID)
@@ -1975,11 +1975,11 @@ bool DIOCOREPROTOCOL_CONNECTION::CreateIDConnection(XUUID& ID)
 * @brief      Send msg
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param)
@@ -2060,12 +2060,12 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
 * @brief      Send msg
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  content : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  content : Content pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, XBUFFER* content)
@@ -2146,12 +2146,12 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
 * @brief      Send msg
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  content : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  content : Content pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, XSTRING* content)
@@ -2232,12 +2232,12 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
 * @brief      send msg
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  content : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  content : Content pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, XFILEJSON* content)
@@ -2326,13 +2326,13 @@ bool DIOCOREPROTOCOL_CONNECTION::SendMsg(XUUID* ID_message, DIOCOREPROTOCOL_HEAD
 * @brief      get msg
 * @ingroup    DATAIO
 * 
-* @param[in]  isrequest : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  header : 
-* @param[in]  content : 
+* @param[in]  isrequest : Isrequest value.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  header : Header value.
+* @param[in]  content : Content value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::GetMsg(bool isrequest, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, DIOCOREPROTOCOL_HEADER& header, XBUFFER& content)
@@ -2385,13 +2385,13 @@ bool DIOCOREPROTOCOL_CONNECTION::GetMsg(bool isrequest, DIOCOREPROTOCOL_HEADER_O
 * @brief      get msg
 * @ingroup    DATAIO
 * 
-* @param[in]  isrequest : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  header : 
-* @param[in]  content : 
+* @param[in]  isrequest : Isrequest value.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  header : Header value.
+* @param[in]  content : Content value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::GetMsg(bool isrequest, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, DIOCOREPROTOCOL_HEADER& header, XSTRING& content)
@@ -2445,13 +2445,13 @@ bool DIOCOREPROTOCOL_CONNECTION::GetMsg(bool isrequest, DIOCOREPROTOCOL_HEADER_O
 * @brief      get msg
 * @ingroup    DATAIO
 * 
-* @param[in]  isrequest : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  header : 
-* @param[in]  content : 
+* @param[in]  isrequest : Isrequest value.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  header : Header value.
+* @param[in]  content : Content value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTION::GetMsg(bool isrequest, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, DIOCOREPROTOCOL_HEADER& header, XFILEJSON& content)

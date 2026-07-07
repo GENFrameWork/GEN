@@ -290,10 +290,10 @@ CIPHERDES::~CIPHERDES()
 * @brief      Cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERDES::Cipher(XBYTE* input,XDWORD size)
@@ -336,10 +336,10 @@ bool CIPHERDES::Cipher(XBYTE* input,XDWORD size)
 * @brief      Uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERDES::Uncipher(XBYTE* input,XDWORD size)
@@ -379,7 +379,7 @@ bool CIPHERDES::Uncipher(XBYTE* input,XDWORD size)
 * @brief      DES key set parity
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERDES::DESKeySetParity(XBYTE key[CIPHERDES_KEYSIZE])
@@ -397,9 +397,9 @@ void CIPHERDES::DESKeySetParity(XBYTE key[CIPHERDES_KEYSIZE])
 * @brief      DES key check key parity
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERDES::DESKeyCheckKeyParity(XBYTE key[CIPHERDES_KEYSIZE])
@@ -419,9 +419,9 @@ int CIPHERDES::DESKeyCheckKeyParity(XBYTE key[CIPHERDES_KEYSIZE])
 * @brief      DES key check weak
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERDES::DESKeyCheckWeak(XBYTE key[CIPHERDES_KEYSIZE])
@@ -441,8 +441,8 @@ int CIPHERDES::DESKeyCheckWeak(XBYTE key[CIPHERDES_KEYSIZE])
 * @brief      DES set key
 * @ingroup    CIPHER
 * 
-* @param[in]  SK : 
-* @param[in]  key : 
+* @param[in]  SK : SK value.
+* @param[in]  key : Key value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERDES::DESSetKey(XDWORD SK[32], XBYTE key[CIPHERDES_KEYSIZE])
@@ -516,10 +516,10 @@ void CIPHERDES::DESSetKey(XDWORD SK[32], XBYTE key[CIPHERDES_KEYSIZE])
 * @brief      DES set key cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  key : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERDES::DESSetKeyCipher(CIPHERDES_CONTEXT* ctx, XBYTE key[CIPHERDES_KEYSIZE])
@@ -536,10 +536,10 @@ int CIPHERDES::DESSetKeyCipher(CIPHERDES_CONTEXT* ctx, XBYTE key[CIPHERDES_KEYSI
 * @brief      DES set key uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  key : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERDES::DESSetKeyUncipher(CIPHERDES_CONTEXT* ctx, XBYTE key[CIPHERDES_KEYSIZE])
@@ -562,11 +562,11 @@ int CIPHERDES::DESSetKeyUncipher(CIPHERDES_CONTEXT* ctx, XBYTE key[CIPHERDES_KEY
 * @brief      DES cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  input : Input value.
+* @param[in]  output : Output output.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERDES::DESCipher(CIPHERDES_CONTEXT* ctx, XBYTE input[8], XBYTE output[8])
@@ -604,14 +604,14 @@ int CIPHERDES::DESCipher(CIPHERDES_CONTEXT* ctx, XBYTE input[8], XBYTE output[8]
 * @brief      DES cipher ECB
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  length : 
-* @param[in]  iv : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  length : Length value.
+* @param[in]  iv : Iv value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERDES::DESCipher_ECB(CIPHERDES_CONTEXT* ctx, int mode, size_t length, XBYTE iv[8], XBYTE* input, XBYTE* output)
@@ -659,14 +659,14 @@ bool CIPHERDES::DESCipher_ECB(CIPHERDES_CONTEXT* ctx, int mode, size_t length, X
 * @brief      DES cipher CBC
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  length : 
-* @param[in]  iv : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  length : Length value.
+* @param[in]  iv : Iv value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERDES::DESCipher_CBC(CIPHERDES_CONTEXT* ctx, int mode, size_t length, XBYTE iv[8], XBYTE* input, XBYTE* output)

@@ -81,11 +81,11 @@ DIONODEITEMHANDLER_ENTRYGPIO::DIONODEITEMHANDLER_ENTRYGPIO()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  entryID : 
-* @param[in]  writemode : 
-* @param[in]  GPIO : 
-* @param[in]  pin : 
-* @param[in]  description : 
+* @param[in]  entryID : Entry ID value.
+* @param[in]  writemode : Writemode value.
+* @param[in]  GPIO : GPIO value.
+* @param[in]  pin : Pin value.
+* @param[in]  description : Description pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEMHANDLER_ENTRYGPIO::DIONODEITEMHANDLER_ENTRYGPIO(XDWORD entryID, bool writemode, int GPIO, int pin, XCHAR* description)
@@ -127,7 +127,7 @@ DIONODEITEMHANDLER_ENTRYGPIO::~DIONODEITEMHANDLER_ENTRYGPIO()
 * @brief      Get entry ID
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIONODEITEMHANDLER_ENTRYGPIO::GetEntryID()
@@ -142,7 +142,7 @@ XDWORD DIONODEITEMHANDLER_ENTRYGPIO::GetEntryID()
 * @brief      Set entry ID
 * @ingroup    DATAIO
 * 
-* @param[in]  entryID : 
+* @param[in]  entryID : Entry ID value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMHANDLER_ENTRYGPIO::SetEntryID(XDWORD entryID)
@@ -157,7 +157,7 @@ void DIONODEITEMHANDLER_ENTRYGPIO::SetEntryID(XDWORD entryID)
 * @brief      Get write mode
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_ENTRYGPIO::GetWriteMode()
@@ -172,7 +172,7 @@ bool DIONODEITEMHANDLER_ENTRYGPIO::GetWriteMode()
 * @brief      Set write mode
 * @ingroup    DATAIO
 * 
-* @param[in]  writemode : 
+* @param[in]  writemode : Writemode value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMHANDLER_ENTRYGPIO::SetWriteMode(bool writemode)
@@ -187,7 +187,7 @@ void DIONODEITEMHANDLER_ENTRYGPIO::SetWriteMode(bool writemode)
 * @brief      Get GPIO
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIONODEITEMHANDLER_ENTRYGPIO::GetGPIO() 
@@ -202,7 +202,7 @@ int DIONODEITEMHANDLER_ENTRYGPIO::GetGPIO()
 * @brief      Set GPIO
 * @ingroup    DATAIO
 * 
-* @param[in]  GPIO : 
+* @param[in]  GPIO : GPIO value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMHANDLER_ENTRYGPIO::SetGPIO(int GPIO)
@@ -217,7 +217,7 @@ void DIONODEITEMHANDLER_ENTRYGPIO::SetGPIO(int GPIO)
 * @brief      Get pin
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIONODEITEMHANDLER_ENTRYGPIO::GetPin()
@@ -232,7 +232,7 @@ int DIONODEITEMHANDLER_ENTRYGPIO::GetPin()
 * @brief      Set pin
 * @ingroup    DATAIO
 * 
-* @param[in]  pin : 
+* @param[in]  pin : Pin value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMHANDLER_ENTRYGPIO::SetPin(int pin)
@@ -247,7 +247,7 @@ void DIONODEITEMHANDLER_ENTRYGPIO::SetPin(int pin)
 * @brief      Get description
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIONODEITEMHANDLER_ENTRYGPIO::GetDescription()
@@ -262,7 +262,7 @@ XSTRING* DIONODEITEMHANDLER_ENTRYGPIO::GetDescription()
 * @brief      Get time last activation
 * @ingroup    DATAIO
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIONODEITEMHANDLER_ENTRYGPIO::GetTimeLastActivation()
@@ -277,7 +277,7 @@ XQWORD DIONODEITEMHANDLER_ENTRYGPIO::GetTimeLastActivation()
 * @brief      Get time last deactivation
 * @ingroup    DATAIO
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIONODEITEMHANDLER_ENTRYGPIO::GetTimeLastDeactivation()
@@ -292,9 +292,9 @@ XQWORD DIONODEITEMHANDLER_ENTRYGPIO::GetTimeLastDeactivation()
 * @brief      Copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  entryGPIO : 
+* @param[in]  entryGPIO : Entry GPIO pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_ENTRYGPIO::CopyFrom(DIONODEITEMHANDLER_ENTRYGPIO* entryGPIO)
@@ -323,9 +323,9 @@ bool DIONODEITEMHANDLER_ENTRYGPIO::CopyFrom(DIONODEITEMHANDLER_ENTRYGPIO* entryG
 * @brief      Copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  entryGPIO : 
+* @param[in]  entryGPIO : Entry GPIO pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_ENTRYGPIO::CopyTo(DIONODEITEMHANDLER_ENTRYGPIO* entryGPIO)
@@ -354,7 +354,7 @@ bool DIONODEITEMHANDLER_ENTRYGPIO::CopyTo(DIONODEITEMHANDLER_ENTRYGPIO* entryGPI
 * @brief      Adjust time in change
 * @ingroup    DATAIO
 * 
-* @param[in]  boolean_status : 
+* @param[in]  boolean_status : Boolean status value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMHANDLER_ENTRYGPIO::AdjustTimeInChange(bool boolean_status)
@@ -404,7 +404,7 @@ void DIONODEITEMHANDLER_ENTRYGPIO::Clean()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  entrysGPIO : 
+* @param[in]  entrysGPIO : Entrys GPIO pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEMHANDLER_GPIODIGITAL::DIONODEITEMHANDLER_GPIODIGITAL(XLIST<DIONODEITEMHANDLER_ENTRYGPIO*>* entrysGPIO)
@@ -467,7 +467,7 @@ DIONODEITEMHANDLER_GPIODIGITAL::~DIONODEITEMHANDLER_GPIODIGITAL()
 * @brief      Open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_GPIODIGITAL::Open()
@@ -496,7 +496,7 @@ bool DIONODEITEMHANDLER_GPIODIGITAL::Open()
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_GPIODIGITAL::Update()
@@ -589,7 +589,7 @@ bool DIONODEITEMHANDLER_GPIODIGITAL::Update()
 * @brief      Close
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_GPIODIGITAL::Close()
@@ -607,9 +607,9 @@ bool DIONODEITEMHANDLER_GPIODIGITAL::Close()
 * @brief      Set node item
 * @ingroup    DATAIO
 * 
-* @param[in]  nodeitem : 
+* @param[in]  nodeitem : Nodeitem pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMHANDLER_GPIODIGITAL::SetNodeItem(DIONODEITEM* nodeitem)

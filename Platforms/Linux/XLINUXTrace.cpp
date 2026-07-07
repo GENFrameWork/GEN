@@ -76,11 +76,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXTRACE::XLINUXTRACE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXTRACE::XLINUXTRACE()
 {
@@ -94,12 +94,12 @@ XLINUXTRACE::XLINUXTRACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXTRACE::~XLINUXTRACE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXTRACE::~XLINUXTRACE()
 {
@@ -124,15 +124,15 @@ XLINUXTRACE::~XLINUXTRACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XLINUXTRACE::PrintSpecial(XDEBUGTRACETARGET* target, XBYTE level, XCHAR* string)
+* 
+* @fn         void XLINUXTRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 * @brief      Print special
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  target : target to print the debug
 * @param[in]  level : level of debug
 * @param[in]  string : string with the line
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXTRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 {
@@ -188,15 +188,15 @@ void XLINUXTRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXTRACE::PrintFile(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 * @brief      Print file
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  target : target to print the debug
 * @param[in]  level : level of debug
 * @param[in]  string : string with the line
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXTRACE::PrintFile(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 {
@@ -270,15 +270,15 @@ void XLINUXTRACE::PrintFile(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXTRACE::PrintNet(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 * @brief      Print net
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  target : target to print the debug
 * @param[in]  level : level of debug
 * @param[in]  string : string with the line
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXTRACE::PrintNet(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 {
@@ -311,15 +311,15 @@ void XLINUXTRACE::PrintNet(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXTRACE::GetHandleNet(XTRACE_TARGET* target)
 * @brief      Get handle net
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  target : target of debug
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXTRACE::GetHandleNet(XTRACE_TARGET* target)
 {
@@ -363,15 +363,15 @@ bool XLINUXTRACE::GetHandleNet(XTRACE_TARGET* target)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XLINUXTRACE::CloseHandleNet(XDEBUGTRACETARGET* target)
+* 
+* @fn         bool XLINUXTRACE::CloseHandleNet(XTRACE_TARGET* target)
 * @brief      Close handle net
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  target : target of debug
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXTRACE::CloseHandleNet(XTRACE_TARGET* target)
 {
@@ -390,13 +390,13 @@ bool XLINUXTRACE::CloseHandleNet(XTRACE_TARGET* target)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXTRACE::Lock()
 * @brief      Lock
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXTRACE::Lock()
 {
@@ -408,13 +408,13 @@ bool XLINUXTRACE::Lock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXTRACE::UnLock()
 * @brief      Un lock
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXTRACE::UnLock()
 {

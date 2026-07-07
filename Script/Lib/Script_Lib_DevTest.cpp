@@ -55,11 +55,13 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_LIB_DEVTEST::SCRIPT_LIB_DEVTEST()
+* 
+* @fn         SCRIPT_LIB_DEVTEST::SCRIPT_LIB_DEVTEST() : SCRIPT_LIB(SCRIPT_LIB_NAME_DEVTEST)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
+* 
+* @param[in]  SCRIPT_LIB_NAME_DEVTEST : SCRIPT LIB NAME DEVTEST value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_DEVTEST::SCRIPT_LIB_DEVTEST() : SCRIPT_LIB(SCRIPT_LIB_NAME_DEVTEST)
 {
@@ -68,12 +70,12 @@ SCRIPT_LIB_DEVTEST::SCRIPT_LIB_DEVTEST() : SCRIPT_LIB(SCRIPT_LIB_NAME_DEVTEST)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB_DEVTEST::~SCRIPT_LIB_DEVTEST()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_DEVTEST::~SCRIPT_LIB_DEVTEST()
 {
@@ -82,15 +84,15 @@ SCRIPT_LIB_DEVTEST::~SCRIPT_LIB_DEVTEST()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB_DEVTEST::AddLibraryFunctions(SCRIPT* script)
 * @brief      Add library functions
 * @ingroup    SCRIPT
-*
-* @param[in]  script :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  script : Script pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_DEVTEST::AddLibraryFunctions(SCRIPT* script)
 {
@@ -106,12 +108,12 @@ bool SCRIPT_LIB_DEVTEST::AddLibraryFunctions(SCRIPT* script)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LIB_DEVTEST::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_DEVTEST::Clean()
 {
@@ -131,10 +133,10 @@ void SCRIPT_LIB_DEVTEST::Clean()
 * @brief      all  dev test  func1
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_DevTest_Func1(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)

@@ -55,13 +55,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILE_XEVENT::GRPVECTORFILE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* @fn         GRPVECTORFILE_XEVENT::GRPVECTORFILE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILE_XEVENT::GRPVECTORFILE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
@@ -90,7 +90,7 @@ GRPVECTORFILE_XEVENT::~GRPVECTORFILE_XEVENT()
 * @brief      Get type
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILETYPE : 
+* @return     GRPVECTORFILETYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILETYPE GRPVECTORFILE_XEVENT::GetType()
@@ -105,7 +105,7 @@ GRPVECTORFILETYPE GRPVECTORFILE_XEVENT::GetType()
 * @brief      Set type
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILE_XEVENT::SetType(GRPVECTORFILETYPE type)
@@ -120,7 +120,7 @@ void GRPVECTORFILE_XEVENT::SetType(GRPVECTORFILETYPE type)
 * @brief      Get path
 * @ingroup    GRAPHIC
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* GRPVECTORFILE_XEVENT::GetPath()
@@ -135,7 +135,7 @@ XPATH* GRPVECTORFILE_XEVENT::GetPath()
 * @brief      Get msg
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILE_XEVENT::GetMsg()

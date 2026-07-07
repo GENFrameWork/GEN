@@ -71,7 +71,7 @@ GRPVECTORFILEDXFENTITYDEFVERTEX::GRPVECTORFILEDXFENTITYDEFVERTEX()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  vertex : 
+* @param[in]  vertex : Vertex pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFVERTEX::GRPVECTORFILEDXFENTITYDEFVERTEX(GRPVECTORFILEDXFENTITYDEFVERTEX* vertex)
@@ -99,10 +99,12 @@ GRPVECTORFILEDXFENTITYDEFVERTEX::~GRPVECTORFILEDXFENTITYDEFVERTEX()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILEDXFENTITYDEFVERTEX::operator = (GRPVECTORFILEDXFENTITYDEFVERTEX* vertex)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    GRAPHIC
 * 
-* @param[in]  vertex : 
+* @param[in]  vertex : Vertex pointer to use.
+* 
+* @return     void GRPVECTORFILEDXFENTITYDEFVERTEX:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFVERTEX::operator =  (GRPVECTORFILEDXFENTITYDEFVERTEX* vertex)
@@ -114,10 +116,12 @@ void GRPVECTORFILEDXFENTITYDEFVERTEX::operator =  (GRPVECTORFILEDXFENTITYDEFVERT
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILEDXFENTITYDEFVERTEX::operator = (GRPVECTORFILEDXFENTITYDEFVERTEX vertex)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    GRAPHIC
 * 
-* @param[in]  vertex : 
+* @param[in]  vertex : Vertex value.
+* 
+* @return     void GRPVECTORFILEDXFENTITYDEFVERTEX:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFVERTEX::operator =  (GRPVECTORFILEDXFENTITYDEFVERTEX vertex)
@@ -132,7 +136,7 @@ void GRPVECTORFILEDXFENTITYDEFVERTEX::operator =  (GRPVECTORFILEDXFENTITYDEFVERT
 * @brief      Get point
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYDEFVERTEX::GetPoint()
@@ -147,9 +151,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYDEFVERTEX::GetPoint()
 * @brief      Set point
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYDEFVERTEX::SetPoint(GRPVECTORFILEDXFENTITYDEFPOINT* point)
@@ -168,7 +172,7 @@ bool GRPVECTORFILEDXFENTITYDEFVERTEX::SetPoint(GRPVECTORFILEDXFENTITYDEFPOINT* p
 * @brief      Get ini width
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYDEFVERTEX::GetIniWidth()
@@ -180,10 +184,10 @@ double GRPVECTORFILEDXFENTITYDEFVERTEX::GetIniWidth()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILEDXFENTITYDEFVERTEX::SetIniWidth (double iniwidth)
-* @brief      Set ini width 
+* @brief      Set ini width
 * @ingroup    GRAPHIC
 * 
-* @param[in]  iniwidth : 
+* @param[in]  iniwidth : Iniwidth value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFVERTEX::SetIniWidth (double iniwidth)
@@ -198,7 +202,7 @@ void GRPVECTORFILEDXFENTITYDEFVERTEX::SetIniWidth (double iniwidth)
 * @brief      Get end width
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYDEFVERTEX::GetEndWidth()
@@ -213,7 +217,7 @@ double GRPVECTORFILEDXFENTITYDEFVERTEX::GetEndWidth()
 * @brief      Set end width
 * @ingroup    GRAPHIC
 * 
-* @param[in]  endwidth : 
+* @param[in]  endwidth : Endwidth value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFVERTEX::SetEndWidth(double endwidth)
@@ -228,7 +232,7 @@ void GRPVECTORFILEDXFENTITYDEFVERTEX::SetEndWidth(double endwidth)
 * @brief      Get bulge
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYDEFVERTEX::GetBulge()
@@ -243,7 +247,7 @@ double GRPVECTORFILEDXFENTITYDEFVERTEX::GetBulge()
 * @brief      Set bulge
 * @ingroup    GRAPHIC
 * 
-* @param[in]  bulge : 
+* @param[in]  bulge : Bulge value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFVERTEX::SetBulge(double bulge)
@@ -258,9 +262,9 @@ void GRPVECTORFILEDXFENTITYDEFVERTEX::SetBulge(double bulge)
 * @brief      Copy to
 * @ingroup    GRAPHIC
 * 
-* @param[in]  vertex : 
+* @param[in]  vertex : Vertex pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYDEFVERTEX::CopyTo(GRPVECTORFILEDXFENTITYDEFVERTEX* vertex)
@@ -285,9 +289,9 @@ bool GRPVECTORFILEDXFENTITYDEFVERTEX::CopyTo(GRPVECTORFILEDXFENTITYDEFVERTEX* ve
 * @brief      Copy from
 * @ingroup    GRAPHIC
 * 
-* @param[in]  vertex : 
+* @param[in]  vertex : Vertex pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYDEFVERTEX::CopyFrom(GRPVECTORFILEDXFENTITYDEFVERTEX* vertex)

@@ -57,8 +57,8 @@
 * @fn         UI_ELEMENT_MULTIOPTION::UI_ELEMENT_MULTIOPTION()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_MULTIOPTION::UI_ELEMENT_MULTIOPTION()    
 { 
   Clean();   
@@ -75,8 +75,8 @@ UI_ELEMENT_MULTIOPTION::UI_ELEMENT_MULTIOPTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_MULTIOPTION::~UI_ELEMENT_MULTIOPTION()    
 { 
   Clean();                            
@@ -89,8 +89,8 @@ UI_ELEMENT_MULTIOPTION::~UI_ELEMENT_MULTIOPTION()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_MULTIOPTION::Clean()
 {
   

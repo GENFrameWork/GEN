@@ -104,7 +104,7 @@ SNDOPENALSOURCE::~SNDOPENALSOURCE()
 * @brief      Get buffer
 * @ingroup    SOUND
 * 
-* @return     SNDOPENALBUFFER* : 
+* @return     SNDOPENALBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDOPENALBUFFER* SNDOPENALSOURCE::GetBuffer()
@@ -160,7 +160,7 @@ void SNDOPENALSOURCE::UnPause()
 * @brief      Is P laying
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALSOURCE::IsPLaying()
@@ -188,7 +188,7 @@ bool SNDOPENALSOURCE::IsPLaying()
 * @brief      Is stopped
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALSOURCE::IsStopped()
@@ -206,7 +206,7 @@ bool SNDOPENALSOURCE::IsStopped()
 * @brief      Is paused
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALSOURCE::IsPaused()
@@ -225,7 +225,7 @@ bool SNDOPENALSOURCE::IsPaused()
 * @brief      Set in loop
 * @ingroup    SOUND
 * 
-* @param[in]  inloop : 
+* @param[in]  inloop : Inloop value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDOPENALSOURCE::SetInLoop(bool inloop)
@@ -240,7 +240,7 @@ void SNDOPENALSOURCE::SetInLoop(bool inloop)
 * @brief      Get volume
 * @ingroup    SOUND
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SNDOPENALSOURCE::GetVolume()
@@ -261,11 +261,13 @@ int SNDOPENALSOURCE::GetVolume()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void SNDOPENALSOURCE::SetVolume(int volume)
+* @fn         bool SNDOPENALSOURCE::SetVolume(int volume)
 * @brief      Set volume
 * @ingroup    SOUND
 * 
-* @param[in]  volume : 
+* @param[in]  volume : Volume value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALSOURCE::SetVolume(int volume)
@@ -285,7 +287,7 @@ bool SNDOPENALSOURCE::SetVolume(int volume)
 * @brief      Get pitch
 * @ingroup    SOUND
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float SNDOPENALSOURCE::GetPitch()
@@ -304,7 +306,7 @@ float SNDOPENALSOURCE::GetPitch()
 * @brief      Set pitch
 * @ingroup    SOUND
 * 
-* @param[in]  pitch : 
+* @param[in]  pitch : Pitch value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDOPENALSOURCE::SetPitch(float pitch)
@@ -351,7 +353,7 @@ void SNDOPENALSOURCE::ResetPlay()
 * @brief      Set seconds offset
 * @ingroup    SOUND
 * 
-* @param[in]  seconds : 
+* @param[in]  seconds : Seconds value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDOPENALSOURCE::SetSecondsOffset(float seconds)
@@ -374,7 +376,7 @@ void SNDOPENALSOURCE::SetSecondsOffset(float seconds)
 * @brief      Set samples offset
 * @ingroup    SOUND
 * 
-* @param[in]  samples : 
+* @param[in]  samples : Samples value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDOPENALSOURCE::SetSamplesOffset(int samples)
@@ -399,7 +401,7 @@ void SNDOPENALSOURCE::SetSamplesOffset(int samples)
 * @brief      Set aquired
 * @ingroup    SOUND
 * 
-* @param[in]  aquired : 
+* @param[in]  aquired : Aquired value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDOPENALSOURCE::SetAquired(bool aquired)
@@ -414,7 +416,7 @@ void SNDOPENALSOURCE::SetAquired(bool aquired)
 * @brief      Is aquired
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALSOURCE::IsAquired()
@@ -487,7 +489,7 @@ void SNDOPENALSOURCE::UnQueue()
 * @brief      Get queue length
 * @ingroup    SOUND
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SNDOPENALSOURCE::GetQueueLength()
@@ -504,7 +506,7 @@ int SNDOPENALSOURCE::GetQueueLength()
 * @brief      Get processed buffers
 * @ingroup    SOUND
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SNDOPENALSOURCE::GetProcessedBuffers()

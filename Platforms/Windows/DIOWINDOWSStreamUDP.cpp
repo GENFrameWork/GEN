@@ -63,7 +63,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMUDP::DIOWINDOWSSTREAMUDP()
+* @fn         DIOWINDOWSSTREAMUDP::DIOWINDOWSSTREAMUDP() : DIOSTREAMUDP() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -135,7 +135,7 @@ DIOWINDOWSSTREAMUDP::~DIOWINDOWSSTREAMUDP()
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUDP::Open()
@@ -184,7 +184,7 @@ bool DIOWINDOWSSTREAMUDP::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUDP::Disconnect()
@@ -218,7 +218,7 @@ bool DIOWINDOWSSTREAMUDP::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMUDP::Close()
@@ -244,9 +244,9 @@ bool DIOWINDOWSSTREAMUDP::Close()
 * @brief      Is ready connect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWINDOWSSTREAMUDP::IsReadyConnect(SOCKET socket)
@@ -316,7 +316,7 @@ void DIOWINDOWSSTREAMUDP::Clean()
 * @brief      Thread connection
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMUDP::ThreadConnection(void* data)

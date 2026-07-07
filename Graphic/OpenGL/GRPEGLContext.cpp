@@ -7,6 +7,22 @@
 * @ingroup    GRAPHIC
 *
 * @copyright  EndoraSoft. All rights reserved.
+* 
+* @cond
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+* documentation files(the "Software"), to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
+* and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+* the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+* THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* @endcond
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
@@ -54,11 +70,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         static const XCHAR* EGLErrorToString(EGLint err)
 * @brief      Translates an EGL error code to a human-readable string for logging.
 * @ingroup    GRAPHIC
-*
+* 
+* @param[in]  err : Err value.
+* 
+* @return     static const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static const XCHAR* EGLErrorToString(EGLint err)
 {
@@ -88,11 +108,11 @@ static const XCHAR* EGLErrorToString(EGLint err)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPEGLCONTEXT::GRPEGLCONTEXT()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPEGLCONTEXT::GRPEGLCONTEXT()
 {
@@ -101,11 +121,11 @@ GRPEGLCONTEXT::GRPEGLCONTEXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPEGLCONTEXT::~GRPEGLCONTEXT()
 * @brief      Destructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPEGLCONTEXT::~GRPEGLCONTEXT()
 {
@@ -115,19 +135,17 @@ GRPEGLCONTEXT::~GRPEGLCONTEXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPEGLCONTEXT::ChooseConfig(EGLNativeDisplayType, bool, EGLint&)
-* @brief      Open EGL display, pick a config and return the associated native visual id.
-*             Used by Linux X11 to create the window with the matching visual BEFORE
-*             creating the surface.
+* 
+* @fn         bool GRPEGLCONTEXT::ChooseConfig(EGLNativeDisplayType native_display, bool with_alpha, EGLint& out_native_visual_id)
+* @brief      Open EGL display, pick a config and return the associated native visual id. Used by Linux X11 to create the window with the matching visual BEFORE creating the surface.
 * @ingroup    GRAPHIC
-*
-* @param[in]  native_display       : platform native display handle
-* @param[in]  with_alpha           : request 8-bit alpha channel
-* @param[out] out_native_visual_id : EGL_NATIVE_VISUAL_ID of the chosen config
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  native_display : platform native display handle
+* @param[in]  with_alpha : request 8-bit alpha channel
+* @param[in]  out_native_visual_id : EGL_NATIVE_VISUAL_ID of the chosen config
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::ChooseConfig(EGLNativeDisplayType native_display, bool with_alpha, EGLint& out_native_visual_id)
 {
@@ -351,13 +369,17 @@ bool GRPEGLCONTEXT::ChooseConfig(EGLNativeDisplayType native_display, bool with_
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPEGLCONTEXT::Create(EGLNativeDisplayType, EGLNativeWindowType, bool)
+* 
+* @fn         bool GRPEGLCONTEXT::Create(EGLNativeDisplayType native_display, EGLNativeWindowType native_window, bool with_alpha)
 * @brief      Create surface + context. If ChooseConfig has not been called yet, it is called here.
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  native_display : Native display handle.
+* @param[in]  native_window : Native window value.
+* @param[in]  with_alpha : With alpha value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::Create(EGLNativeDisplayType native_display, EGLNativeWindowType native_window, bool with_alpha)
 {
@@ -416,16 +438,15 @@ bool GRPEGLCONTEXT::Create(EGLNativeDisplayType native_display, EGLNativeWindowT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPEGLCONTEXT::RecreateSurface(EGLNativeWindowType)
-* @brief      Destroy the current window surface and create a new one on the (possibly resized)
-*             native window, then make it current again. Used on Android when the device rotates
-*             and the ANativeWindow changes size: the old surface keeps its creation-time size,
-*             so it must be recreated to match the new window dimensions.
+* 
+* @fn         bool GRPEGLCONTEXT::RecreateSurface(EGLNativeWindowType native_window)
+* @brief      Destroy the current window surface and create a new one on the (possibly resized) native window, then make it current again. Used on Android when the device rotates and the ANativeWindow changes size: the old surface keeps its creation-time size, so it must be recreated to match the new window dimensions.
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  native_window : Native window value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::RecreateSurface(EGLNativeWindowType native_window)
 {
@@ -461,12 +482,13 @@ bool GRPEGLCONTEXT::RecreateSurface(EGLNativeWindowType native_window)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPEGLCONTEXT::MakeCurrent()
+* @brief      Make Current
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::MakeCurrent()
 {
@@ -477,12 +499,13 @@ bool GRPEGLCONTEXT::MakeCurrent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPEGLCONTEXT::Release()
+* @brief      Release
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::Release()
 {
@@ -492,12 +515,13 @@ bool GRPEGLCONTEXT::Release()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPEGLCONTEXT::SwapBuffers()
+* @brief      Swap Buffers
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::SwapBuffers()
 {
@@ -507,14 +531,15 @@ bool GRPEGLCONTEXT::SwapBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPEGLCONTEXT::SetSwapInterval(int)
+* 
+* @fn         bool GRPEGLCONTEXT::SetSwapInterval(int interval)
+* @brief      Set swap interval
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  interval : 0=no vsync, 1=vsync, n=every n refreshes
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::SetSwapInterval(int interval)
 {
@@ -524,12 +549,13 @@ bool GRPEGLCONTEXT::SetSwapInterval(int interval)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPEGLCONTEXT::Destroy()
+* @brief      Destroy resource
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::Destroy()
 {
@@ -549,10 +575,13 @@ bool GRPEGLCONTEXT::Destroy()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPEGLCONTEXT::IsValid()
+* @brief      Check if valid
 * @ingroup    GRAPHIC
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::IsValid()
 {
@@ -561,12 +590,13 @@ bool GRPEGLCONTEXT::IsValid()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         EGLint GRPEGLCONTEXT::GetClientVersion()
+* @brief      Get client version
 * @ingroup    GRAPHIC
-*
-* @return     EGLint : 2 or 3
-*
+* 
+* @return     EGLint : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 EGLint GRPEGLCONTEXT::GetClientVersion()
 {
@@ -575,14 +605,15 @@ EGLint GRPEGLCONTEXT::GetClientVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPEGLCONTEXT::HasExtension(const char*)
-* @brief      Check if an EGL extension is supported.
-*             Note: for GL extensions use glGetString(GL_EXTENSIONS) from the blitter.
+* 
+* @fn         bool GRPEGLCONTEXT::HasExtension(const char* name)
+* @brief      Check if an EGL extension is supported. Note: for GL extensions use glGetString(GL_EXTENSIONS) from the blitter.
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPEGLCONTEXT::HasExtension(const char* name)
 {
@@ -593,17 +624,54 @@ bool GRPEGLCONTEXT::HasExtension(const char* name)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         EGLDisplay GRPEGLCONTEXT::GetEGLDisplay()
+* @brief      Get egl display
+* @ingroup    GRAPHIC
+* 
+* @return     EGLDisplay : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 EGLDisplay GRPEGLCONTEXT::GetEGLDisplay() { return display; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         EGLContext GRPEGLCONTEXT::GetEGLContext()
+* @brief      Get egl context
+* @ingroup    GRAPHIC
+* 
+* @return     EGLContext : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 EGLContext GRPEGLCONTEXT::GetEGLContext() { return context; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         EGLSurface GRPEGLCONTEXT::GetEGLSurface()
+* @brief      Get egl surface
+* @ingroup    GRAPHIC
+* 
+* @return     EGLSurface : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 EGLSurface GRPEGLCONTEXT::GetEGLSurface() { return surface; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         EGLConfig GRPEGLCONTEXT::GetEGLConfig()
+* @brief      Get egl config
+* @ingroup    GRAPHIC
+* 
+* @return     EGLConfig : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 EGLConfig  GRPEGLCONTEXT::GetEGLConfig()  { return config;  }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPEGLCONTEXT::Clean()
+* @brief      Clean internal state
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPEGLCONTEXT::Clean()
 {

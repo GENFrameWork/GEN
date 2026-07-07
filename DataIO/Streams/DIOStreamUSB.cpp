@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMUSB::DIOSTREAMUSB()
+* 
+* @fn         DIOSTREAMUSB::DIOSTREAMUSB() : DIOSTREAM()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUSB::DIOSTREAMUSB() : DIOSTREAM()
 {
@@ -68,12 +68,12 @@ DIOSTREAMUSB::DIOSTREAMUSB() : DIOSTREAM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUSB::~DIOSTREAMUSB()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUSB::~DIOSTREAMUSB()
 {
@@ -82,13 +82,13 @@ DIOSTREAMUSB::~DIOSTREAMUSB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMCONFIG* DIOSTREAMUSB::GetConfig()
 * @brief      Get config
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMCONFIG* :
-*
+* 
+* @return     DIOSTREAMCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIG* DIOSTREAMUSB::GetConfig()
 {
@@ -97,15 +97,15 @@ DIOSTREAMCONFIG* DIOSTREAMUSB::GetConfig()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSB::SetConfig(DIOSTREAMCONFIG* config)
 * @brief      Set config
 * @ingroup    DATAIO
-*
-* @param[in]  config :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  config : Configuration object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSB::SetConfig(DIOSTREAMCONFIG* config)
 {
@@ -118,13 +118,13 @@ bool DIOSTREAMUSB::SetConfig(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSTATUS DIOSTREAMUSB::GetStatus()
 * @brief      Get status
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMSTATUS :
-*
+* 
+* @return     DIOSTREAMSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOSTREAMUSB::GetStatus()
 {
@@ -133,13 +133,13 @@ DIOSTREAMSTATUS DIOSTREAMUSB::GetStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSB::Open()
 * @brief      Open
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSB::Open()
 {
@@ -148,13 +148,13 @@ bool DIOSTREAMUSB::Open()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSB::Close()
 * @brief      Close
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSB::Close()
 {
@@ -163,14 +163,14 @@ bool DIOSTREAMUSB::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUSB::CleanBuffers()
 * @brief      Clean buffers
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUSB::CleanBuffers()
 {
@@ -179,12 +179,12 @@ bool DIOSTREAMUSB::CleanBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUSB::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUSB::Clean()
 {

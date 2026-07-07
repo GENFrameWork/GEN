@@ -81,12 +81,12 @@ GRPSTATISTICSCHARTBARS3D::~GRPSTATISTICSCHARTBARS3D()
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  x       : plot area left
-* @param[in]  y       : plot area top
-* @param[in]  width   : plot area width
-* @param[in]  height  : plot area height
+* @param[in]  x : plot area left
+* @param[in]  y : plot area top
+* @param[in]  width : plot area width
+* @param[in]  height : plot area height
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTBARS3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
@@ -246,13 +246,13 @@ bool GRPSTATISTICSCHARTBARS3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, doub
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  px      : front left of the box
-* @param[in]  py      : front top of the box
-* @param[in]  pw      : box width
-* @param[in]  ph      : box height
-* @param[in]  depthx  : depth offset on X
-* @param[in]  depthy  : depth offset on Y (applied upwards)
-* @param[in]  color   : base (front) color
+* @param[in]  px : front left of the box
+* @param[in]  py : front top of the box
+* @param[in]  pw : box width
+* @param[in]  ph : box height
+* @param[in]  depthx : depth offset on X
+* @param[in]  depthy : depth offset on Y (applied upwards)
+* @param[in]  color : base (front) color
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHARTBARS3D::DrawPrism(GRPSTATISTICSCHARTBUILDER& builder, double px, double py, double pw, double ph, double depthx, double depthy, GRPSTATISTICSCHARTCOLOR& color)
@@ -298,10 +298,10 @@ void GRPSTATISTICSCHARTBARS3D::DrawPrism(GRPSTATISTICSCHARTBUILDER& builder, dou
 * @brief      Make shade : scale a color by a factor (>1 lighter, <1 darker), clamped to 0..255
 * @ingroup    GRAPHIC
 * 
-* @param[in]  color  : base color
+* @param[in]  color : base color
 * @param[in]  factor : brightness factor
 * 
-* @return     GRPSTATISTICSCHARTCOLOR : the shaded color
+* @return     GRPSTATISTICSCHARTCOLOR : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSTATISTICSCHARTCOLOR GRPSTATISTICSCHARTBARS3D::MakeShade(GRPSTATISTICSCHARTCOLOR& color, double factor)

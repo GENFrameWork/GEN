@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMUDPCONFIG::DIOSTREAMUDPCONFIG()
+* 
+* @fn         DIOSTREAMUDPCONFIG::DIOSTREAMUDPCONFIG() : DIOSTREAMCONFIG(), DIOSTREAMCONFIGSTRING()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUDPCONFIG::DIOSTREAMUDPCONFIG() : DIOSTREAMCONFIG(), DIOSTREAMCONFIGSTRING()
 {
@@ -68,12 +68,12 @@ DIOSTREAMUDPCONFIG::DIOSTREAMUDPCONFIG() : DIOSTREAMCONFIG(), DIOSTREAMCONFIGSTR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUDPCONFIG::~DIOSTREAMUDPCONFIG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUDPCONFIG::~DIOSTREAMUDPCONFIG()
 {
@@ -82,13 +82,13 @@ DIOSTREAMUDPCONFIG::~DIOSTREAMUDPCONFIG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOIP* DIOSTREAMUDPCONFIG::GetLocalIP()
 * @brief      Get local IP
 * @ingroup    DATAIO
-*
-* @return     DIOIP* :
-*
+* 
+* @return     DIOIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOIP* DIOSTREAMUDPCONFIG::GetLocalIP()
 {
@@ -97,13 +97,13 @@ DIOIP* DIOSTREAMUDPCONFIG::GetLocalIP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOURL* DIOSTREAMUDPCONFIG::GetRemoteURL()
 * @brief      Get remote URL
 * @ingroup    DATAIO
-*
-* @return     DIOURL* :
-*
+* 
+* @return     DIOURL* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOSTREAMUDPCONFIG::GetRemoteURL()
 {
@@ -117,7 +117,7 @@ DIOURL* DIOSTREAMUDPCONFIG::GetRemoteURL()
 * @brief      Get resolved remote URL
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMUDPCONFIG::GetResolvedRemoteURL()
@@ -127,13 +127,13 @@ XSTRING* DIOSTREAMUDPCONFIG::GetResolvedRemoteURL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMUDPCONFIG::GetRemotePort()
 * @brief      Get remote port
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMUDPCONFIG::GetRemotePort()
 {
@@ -142,15 +142,15 @@ int DIOSTREAMUDPCONFIG::GetRemotePort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUDPCONFIG::SetRemotePort(int port)
 * @brief      Set remote port
 * @ingroup    DATAIO
-*
-* @param[in]  port :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  port : Port number to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPCONFIG::SetRemotePort(int port)
 {
@@ -161,13 +161,13 @@ bool DIOSTREAMUDPCONFIG::SetRemotePort(int port)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUDPCONFIG::IsUsedDatagrams()
 * @brief      Is used datagrams
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPCONFIG::IsUsedDatagrams()
 {
@@ -176,13 +176,13 @@ bool DIOSTREAMUDPCONFIG::IsUsedDatagrams()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUDPCONFIG::SetIsUsedDatagrams(bool active)
 * @brief      Set is used datagrams
 * @ingroup    DATAIO
-*
-* @param[in]  active :
-*
+* 
+* @param[in]  active : Active value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUDPCONFIG::SetIsUsedDatagrams(bool active)
 {
@@ -191,13 +191,13 @@ void DIOSTREAMUDPCONFIG::SetIsUsedDatagrams(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUDPCONFIG::IsBroadcastModeActive()
 * @brief      Is broadcast mode active
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUDPCONFIG::IsBroadcastModeActive()
 {
@@ -206,13 +206,13 @@ bool DIOSTREAMUDPCONFIG::IsBroadcastModeActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUDPCONFIG::SetBroadcastModeActive(bool active)
 * @brief      Set broadcast mode active
 * @ingroup    DATAIO
-*
-* @param[in]  active :
-*
+* 
+* @param[in]  active : Active value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUDPCONFIG::SetBroadcastModeActive(bool active)
 {
@@ -221,12 +221,12 @@ void DIOSTREAMUDPCONFIG::SetBroadcastModeActive(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUDPCONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUDPCONFIG::Clean()
 {

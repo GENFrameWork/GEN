@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEWIFI::DIOSTREAMDEVICEWIFI()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEWIFI::DIOSTREAMDEVICEWIFI()
 {
@@ -69,12 +69,12 @@ DIOSTREAMDEVICEWIFI::DIOSTREAMDEVICEWIFI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEWIFI::~DIOSTREAMDEVICEWIFI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEWIFI::~DIOSTREAMDEVICEWIFI()
 {
@@ -83,13 +83,13 @@ DIOSTREAMDEVICEWIFI::~DIOSTREAMDEVICEWIFI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEWIFI::HasSecurity()
 * @brief      Has security
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEWIFI::HasSecurity()
 {
@@ -98,13 +98,13 @@ bool DIOSTREAMDEVICEWIFI::HasSecurity()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEWIFI::SetHasSecurity(bool hassecurity)
 * @brief      Set has security
 * @ingroup    DATAIO
-*
-* @param[in]  hassecurity :
-*
+* 
+* @param[in]  hassecurity : Hassecurity value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEWIFI::SetHasSecurity(bool hassecurity)
 {
@@ -113,13 +113,13 @@ void DIOSTREAMDEVICEWIFI::SetHasSecurity(bool hassecurity)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOSTREAMDEVICEWIFI::GetTransmisionPower()
 * @brief      Get transmision power
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMDEVICEWIFI::GetTransmisionPower()
 {
@@ -128,13 +128,13 @@ int DIOSTREAMDEVICEWIFI::GetTransmisionPower()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEWIFI::SetTransmisionPower(int transmisionpower)
 * @brief      Set transmision power
 * @ingroup    DATAIO
-*
-* @param[in]  transmisionpower :
-*
+* 
+* @param[in]  transmisionpower : Transmisionpower value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEWIFI::SetTransmisionPower(int transmisionpower)
 {
@@ -143,13 +143,13 @@ void DIOSTREAMDEVICEWIFI::SetTransmisionPower(int transmisionpower)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEWIFI::DebugPrintInfo()
 * @brief      Debug print info
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEWIFI::DebugPrintInfo()
 {
@@ -165,12 +165,12 @@ bool DIOSTREAMDEVICEWIFI::DebugPrintInfo()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEWIFI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEWIFI::Clean()
 {

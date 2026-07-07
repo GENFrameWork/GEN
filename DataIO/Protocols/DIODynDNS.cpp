@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODYNDNS::DIODYNDNS()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODYNDNS::DIODYNDNS()
 {
@@ -74,12 +74,12 @@ DIODYNDNS::DIODYNDNS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODYNDNS::~DIODYNDNS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODYNDNS::~DIODYNDNS()
 {
@@ -90,13 +90,13 @@ DIODYNDNS::~DIODYNDNS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIODYNDNS::GetLogin()
 * @brief      Get login
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIODYNDNS::GetLogin()
 {
@@ -105,13 +105,13 @@ XSTRING* DIODYNDNS::GetLogin()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIODYNDNS::GetPassword()
 * @brief      Get password
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIODYNDNS::GetPassword()
 {
@@ -120,17 +120,17 @@ XSTRING* DIODYNDNS::GetPassword()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODYNDNS::GetPublicIP(DIOIP& publicIP, int timeout, XSTRING* IPlocal)
 * @brief      Get public IP
 * @ingroup    DATAIO
-*
-* @param[in]  publicIP :
-* @param[in]  timeout :
-* @param[in]  IPlocal :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  publicIP : Public IP value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  IPlocal : I Plocal pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODYNDNS::GetPublicIP(DIOIP& publicIP, int timeout, XSTRING* IPlocal)
 {
@@ -177,19 +177,19 @@ bool DIODYNDNS::GetPublicIP(DIOIP& publicIP, int timeout, XSTRING* IPlocal)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIODYNDNS::IsChangedPublicIP(DIOURL& url, bool& ischanged, DIOIP* newpublicip, int timeout, XSTRING* IPlocal)
 * @brief      Is changed public IP
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  ischanged :
-* @param[in]  newpublicip :
-* @param[in]  timeout :
-* @param[in]  IPlocal :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  ischanged : Ischanged value.
+* @param[in]  newpublicip : Newpublicip pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  IPlocal : I Plocal pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODYNDNS::IsChangedPublicIP(DIOURL& url, bool& ischanged, DIOIP* newpublicip, int timeout, XSTRING* IPlocal)
 {
@@ -229,18 +229,18 @@ bool DIODYNDNS::IsChangedPublicIP(DIOURL& url, bool& ischanged, DIOIP* newpublic
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODYNDNS_STATUSCODE DIODYNDNS::Update(DIOURL& url, DIOIP& newpublicip, int timeout, XSTRING* IPlocal)
 * @brief      Update
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  newpublicip :
-* @param[in]  timeout :
-* @param[in]  IPlocal :
-*
-* @return     DIODYNDNS_STATUSCODE :
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  newpublicip : Newpublicip value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  IPlocal : I Plocal pointer to use.
+* 
+* @return     DIODYNDNS_STATUSCODE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODYNDNS_STATUSCODE DIODYNDNS::Update(DIOURL& url, DIOIP& newpublicip, int timeout, XSTRING* IPlocal)
 {
@@ -266,15 +266,15 @@ DIODYNDNS_STATUSCODE DIODYNDNS::Update(DIOURL& url, DIOIP& newpublicip, int time
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIODYNDNS_STATUSCODE DIODYNDNS::GetError(XSTRING& result)
 * @brief      Get error
 * @ingroup    DATAIO
-*
-* @param[in]  result :
-*
-* @return     DIODYNDNS_STATUSCODE :
-*
+* 
+* @param[in]  result : Output result.
+* 
+* @return     DIODYNDNS_STATUSCODE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIODYNDNS_STATUSCODE DIODYNDNS::GetError(XSTRING& result)
 {
@@ -325,12 +325,12 @@ DIODYNDNS_STATUSCODE DIODYNDNS::GetError(XSTRING& result)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIODYNDNS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIODYNDNS::Clean()
 {

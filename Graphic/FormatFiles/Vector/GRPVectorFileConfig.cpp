@@ -85,9 +85,9 @@ GRPVECTORFILECONFIG::~GRPVECTORFILECONFIG()
 * @brief      Create file
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namefile : 
+* @param[in]  namefile : Namefile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILECONFIG::Create_File(XCHAR* namefile)
@@ -102,9 +102,9 @@ bool GRPVECTORFILECONFIG::Create_File(XCHAR* namefile)
 * @brief      Load file
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namefile : 
+* @param[in]  namefile : Namefile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILECONFIG::Load_File(XCHAR* namefile)

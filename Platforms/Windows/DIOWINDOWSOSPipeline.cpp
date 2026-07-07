@@ -56,7 +56,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSOSPIPELINE::DIOWINDOWSOSPIPELINE()
+* @fn         DIOWINDOWSOSPIPELINE::DIOWINDOWSOSPIPELINE() : DIOOSPIPELINE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -68,12 +68,12 @@ DIOWINDOWSOSPIPELINE::DIOWINDOWSOSPIPELINE() : DIOOSPIPELINE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWINDOWSOSPIPELINE::~DIOWINDOWSOSPIPELINE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSOSPIPELINE::~DIOWINDOWSOSPIPELINE()
 {  
@@ -89,7 +89,7 @@ DIOWINDOWSOSPIPELINE::~DIOWINDOWSOSPIPELINE()
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSOSPIPELINE::Open()
@@ -109,7 +109,7 @@ bool DIOWINDOWSOSPIPELINE::Open()
 * @brief      Is open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSOSPIPELINE::IsOpen()
@@ -129,9 +129,9 @@ bool DIOWINDOWSOSPIPELINE::IsOpen()
 * @brief      Read
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSOSPIPELINE::Read(XBUFFER& buffer)
@@ -160,9 +160,9 @@ bool DIOWINDOWSOSPIPELINE::Read(XBUFFER& buffer)
 * @brief      Write
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSOSPIPELINE::Write(XBUFFER& buffer)
@@ -191,7 +191,7 @@ bool DIOWINDOWSOSPIPELINE::Write(XBUFFER& buffer)
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSOSPIPELINE::Close()
@@ -204,12 +204,12 @@ bool DIOWINDOWSOSPIPELINE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSOSPIPELINE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSOSPIPELINE::Clean()
 {

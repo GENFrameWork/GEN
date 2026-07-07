@@ -56,11 +56,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILEDXFENTITYOBJARC::GRPVECTORFILEDXFENTITYOBJARC(XCHAR* nametype)
+* @fn         GRPVECTORFILEDXFENTITYOBJARC::GRPVECTORFILEDXFENTITYOBJARC(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ(nametype)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nametype : 
+* @param[in]  nametype : Nametype pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJARC::GRPVECTORFILEDXFENTITYOBJARC(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ(nametype)
@@ -91,7 +91,7 @@ GRPVECTORFILEDXFENTITYOBJARC::~GRPVECTORFILEDXFENTITYOBJARC()
 * @brief      Get center
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJARC::GetCenter()
@@ -106,9 +106,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJARC::GetCenter()
 * @brief      Set center
 * @ingroup    GRAPHIC
 * 
-* @param[in]  center : 
+* @param[in]  center : Center pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJARC::SetCenter(GRPVECTORFILEDXFENTITYDEFPOINT* center)
@@ -130,7 +130,7 @@ bool GRPVECTORFILEDXFENTITYOBJARC::SetCenter(GRPVECTORFILEDXFENTITYDEFPOINT* cen
 * @brief      Get ini angle
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJARC::GetIniAngle()
@@ -145,7 +145,7 @@ double GRPVECTORFILEDXFENTITYOBJARC::GetIniAngle()
 * @brief      Set ini angle
 * @ingroup    GRAPHIC
 * 
-* @param[in]  angle : 
+* @param[in]  angle : Angle value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJARC::SetIniAngle(double angle)
@@ -160,7 +160,7 @@ void GRPVECTORFILEDXFENTITYOBJARC::SetIniAngle(double angle)
 * @brief      Get end angle
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJARC::GetEndAngle()
@@ -175,7 +175,7 @@ double GRPVECTORFILEDXFENTITYOBJARC::GetEndAngle()
 * @brief      Set end angle
 * @ingroup    GRAPHIC
 * 
-* @param[in]  angle : 
+* @param[in]  angle : Angle value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJARC::SetEndAngle(double angle)
@@ -190,7 +190,7 @@ void GRPVECTORFILEDXFENTITYOBJARC::SetEndAngle(double angle)
 * @brief      Get radius
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJARC::GetRadius()
@@ -205,7 +205,7 @@ double GRPVECTORFILEDXFENTITYOBJARC::GetRadius()
 * @brief      Set radius
 * @ingroup    GRAPHIC
 * 
-* @param[in]  radius : 
+* @param[in]  radius : Radius value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJARC::SetRadius(double radius)
@@ -220,7 +220,7 @@ void GRPVECTORFILEDXFENTITYOBJARC::SetRadius(double radius)
 * @brief      Get thickness
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYOBJARC::GetThickness()
@@ -235,7 +235,7 @@ double GRPVECTORFILEDXFENTITYOBJARC::GetThickness()
 * @brief      Set thickness
 * @ingroup    GRAPHIC
 * 
-* @param[in]  thickness : 
+* @param[in]  thickness : Thickness value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYOBJARC::SetThickness(double thickness)
@@ -250,7 +250,7 @@ void GRPVECTORFILEDXFENTITYOBJARC::SetThickness(double thickness)
 * @brief      Get dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : 
+* @return     GRPVECTORFILEDXFENTITYDEFPOINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJARC::GetDirExtrusion()
@@ -265,9 +265,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT* GRPVECTORFILEDXFENTITYOBJARC::GetDirExtrusion()
 * @brief      Set dir extrusion
 * @ingroup    GRAPHIC
 * 
-* @param[in]  dirextrusion : 
+* @param[in]  dirextrusion : Dirextrusion pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJARC::SetDirExtrusion(GRPVECTORFILEDXFENTITYDEFPOINT* dirextrusion)
@@ -289,9 +289,9 @@ bool GRPVECTORFILEDXFENTITYOBJARC::SetDirExtrusion(GRPVECTORFILEDXFENTITYDEFPOIN
 * @brief      Apply data
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJARC::ApplyData(GRPVECTORFILEDXFENTITY* entity)

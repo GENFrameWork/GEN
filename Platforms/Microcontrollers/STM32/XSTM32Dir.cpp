@@ -51,11 +51,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTM32DIR::XSTM32DIR()
+* 
+* @fn         XSTM32DIR::XSTM32DIR(): XDIR()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32DIR::XSTM32DIR(): XDIR()
 {
@@ -75,12 +75,12 @@ XSTM32DIR::XSTM32DIR(): XDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32DIR::~XSTM32DIR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32DIR::~XSTM32DIR()
 {
@@ -90,15 +90,15 @@ XSTM32DIR::~XSTM32DIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR::Exist(XCHAR* path)
 * @brief      Exist
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR::Exist(XCHAR* path)
 {   
@@ -128,13 +128,13 @@ bool XSTM32DIR::Exist(XCHAR* path)
 * @fn         bool XSTM32DIR::Make(XCHAR* path, bool recursive)
 * @brief      Make
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  path : 
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  path : Path to use.
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR::Make(XCHAR* path, bool recursive)
 {
   if(!path)   return false;
@@ -199,15 +199,15 @@ bool XSTM32DIR::Make(XCHAR* path, bool recursive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR::ChangeTo(XCHAR* path)
 * @brief      Change to
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR::ChangeTo(XCHAR* path)
 {  
@@ -233,16 +233,16 @@ bool XSTM32DIR::ChangeTo(XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XSTM32DIR::Delete(XCHAR* path,bool all)
-* @brief      Delete
+* 
+* @fn         bool XSTM32DIR::Delete(XCHAR* path, bool all)
+* @brief      Delete resource
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  path :
-* @param[in]  all :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  all : All value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR::Delete(XCHAR* path, bool all)
 {
@@ -297,15 +297,15 @@ bool XSTM32DIR::Delete(XCHAR* path, bool all)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR::GetActual(XPATH& xpath)
 * @brief      Get actual
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR::GetActual(XPATH& xpath)
 {   
@@ -326,17 +326,17 @@ bool XSTM32DIR::GetActual(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* searchelement)
 * @brief      First search
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  xpath :
-* @param[in]  patternsearch :
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  patternsearch : Patternsearch pointer to use.
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* searchelement)
 {  
@@ -397,15 +397,15 @@ bool XSTM32DIR::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* sea
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DIR::NextSearch(XDIRELEMENT* searchelement)
 * @brief      Next search
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR::NextSearch(XDIRELEMENT* searchelement)
 {
@@ -447,10 +447,10 @@ bool XSTM32DIR::NextSearch(XDIRELEMENT* searchelement)
 * @brief      Reconvert search data
 * @ingroup    PLATFORM_STM32
 * 
-* @param[in]  searchelement : 
-* @param[in]  fileinfo : 
+* @param[in]  searchelement : Searchelement pointer to use.
+* @param[in]  fileinfo : Fileinfo pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DIR::ReconvertSearchData(XDIRELEMENT* searchelement, FILINFO* fileinfo)
@@ -492,12 +492,12 @@ bool XSTM32DIR::ReconvertSearchData(XDIRELEMENT* searchelement, FILINFO* fileinf
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSTM32DIR::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSTM32DIR::Clean()
 {

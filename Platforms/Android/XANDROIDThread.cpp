@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDMUTEX::XANDROIDMUTEX()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDMUTEX::XANDROIDMUTEX()
 {
@@ -68,12 +68,12 @@ XANDROIDMUTEX::XANDROIDMUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDMUTEX::~XANDROIDMUTEX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDMUTEX::~XANDROIDMUTEX()
 {
@@ -86,16 +86,16 @@ XANDROIDMUTEX::~XANDROIDMUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XANDROIDTHREAD::XANDROIDTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
+* 
+* @fn         XANDROIDTHREAD::XANDROIDTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param) : XLINUXTHREAD(groupID, ID, function, param)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * @param[in]  groupID : group ID of threads
 * @param[in]  ID : ID for thread
 * @param[in]  function : callback to thread
 * @param[in]  param : param to callback
-**
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDTHREAD::XANDROIDTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param) : XLINUXTHREAD(groupID, ID, function, param)
 {
@@ -104,12 +104,12 @@ XANDROIDTHREAD::XANDROIDTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTIO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XANDROIDTHREAD::~XANDROIDTHREAD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XANDROIDTHREAD::~XANDROIDTHREAD()
 {

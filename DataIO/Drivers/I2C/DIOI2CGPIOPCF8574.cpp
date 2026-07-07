@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOI2CGPIOPCF8574::DIOI2CGPIOPCF8574()
+* 
+* @fn         DIOI2CGPIOPCF8574::DIOI2CGPIOPCF8574(): DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CGPIOPCF8574::DIOI2CGPIOPCF8574(): DIODEVICEI2C()
 {
@@ -74,12 +74,12 @@ DIOI2CGPIOPCF8574::DIOI2CGPIOPCF8574(): DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CGPIOPCF8574::~DIOI2CGPIOPCF8574()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CGPIOPCF8574::~DIOI2CGPIOPCF8574()
 {
@@ -90,15 +90,15 @@ DIOI2CGPIOPCF8574::~DIOI2CGPIOPCF8574()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOPCF8574::Read(XBYTE& value)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOPCF8574::Read(XBYTE& value)
 {
@@ -115,15 +115,15 @@ bool DIOI2CGPIOPCF8574::Read(XBYTE& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOPCF8574::Write(XBYTE value)
 * @brief      Write
 * @ingroup    DATAIO
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOPCF8574::Write(XBYTE value)
 {
@@ -139,13 +139,13 @@ bool DIOI2CGPIOPCF8574::Write(XBYTE value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOPCF8574::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOPCF8574::End()
 {
@@ -156,13 +156,13 @@ bool DIOI2CGPIOPCF8574::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOPCF8574::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOPCF8574::IniDevice()
 {
@@ -182,12 +182,12 @@ bool DIOI2CGPIOPCF8574::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CGPIOPCF8574::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CGPIOPCF8574::Clean()
 {

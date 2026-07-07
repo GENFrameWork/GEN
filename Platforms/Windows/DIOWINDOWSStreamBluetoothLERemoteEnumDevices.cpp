@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
+* 
+* @fn         DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES(): DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES(): DIOSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 {
@@ -69,12 +69,12 @@ DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::DIOWINDOWSSTREAMBLUETOOTHLEREMOTEE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::~DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::~DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES()
 {
@@ -85,13 +85,13 @@ DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::~DIOWINDOWSSTREAMBLUETOOTHLEREMOTE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Search()
 {
@@ -100,15 +100,15 @@ bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Search()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::StopSearch(bool waitend)
 * @brief      Stop search
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  waitend : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  waitend : Waitend value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::StopSearch(bool waitend)
 {
@@ -117,13 +117,13 @@ bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::StopSearch(bool waitend)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsSearching()
 * @brief      Is searching
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsSearching()
 {
@@ -132,12 +132,12 @@ bool DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::IsSearching()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMBLUETOOTHLEREMOTEENUMDEVICES::Clean()
 {

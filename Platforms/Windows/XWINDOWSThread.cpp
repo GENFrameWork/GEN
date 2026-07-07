@@ -65,11 +65,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSMUTEX::XWINDOWSMUTEX()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSMUTEX::XWINDOWSMUTEX()
 {
@@ -80,12 +80,12 @@ XWINDOWSMUTEX::XWINDOWSMUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSMUTEX::~XWINDOWSMUTEX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSMUTEX::~XWINDOWSMUTEX()
 {
@@ -99,13 +99,13 @@ XWINDOWSMUTEX::~XWINDOWSMUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSMUTEX::Lock()
 * @brief      Lock
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSMUTEX::Lock()
 {
@@ -124,13 +124,13 @@ bool XWINDOWSMUTEX::Lock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSMUTEX::UnLock()
 * @brief      Un lock
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSMUTEX::UnLock()
 {
@@ -151,12 +151,12 @@ bool XWINDOWSMUTEX::UnLock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSMUTEX::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSMUTEX::Clean()
 {
@@ -165,16 +165,16 @@ void XWINDOWSMUTEX::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XWINDOWSTHREAD::XWINDOWSTHREAD(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* data)
+* 
+* @fn         XWINDOWSTHREAD::XWINDOWSTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* data) : XTHREAD(groupID, ID,function,data)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  groupID :
-* @param[in]  ID :
-* @param[in]  function :
-* @param[in]  data :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  data : Data buffer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSTHREAD::XWINDOWSTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* data) : XTHREAD(groupID, ID,function,data)
 {
@@ -187,12 +187,12 @@ XWINDOWSTHREAD::XWINDOWSTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTIO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSTHREAD::~XWINDOWSTHREAD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSTHREAD::~XWINDOWSTHREAD()
 {
@@ -203,15 +203,15 @@ XWINDOWSTHREAD::~XWINDOWSTHREAD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSTHREAD::Ini(bool run)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  run :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  run : Run value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSTHREAD::Ini(bool run)
 {
@@ -248,15 +248,15 @@ bool XWINDOWSTHREAD::Ini(bool run)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSTHREAD::Wait(int miliseconds)
 * @brief      Wait
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  miliseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  miliseconds : Miliseconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSTHREAD::Wait(int miliseconds)
 {
@@ -269,13 +269,13 @@ bool XWINDOWSTHREAD::Wait(int miliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSTHREAD::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSTHREAD::End()
 {
@@ -299,15 +299,15 @@ bool XWINDOWSTHREAD::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DWORD WINAPI XWINDOWSTHREAD::Callback(LPVOID thread)
 * @brief      Callback
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  thread :
-*
-* @return     DWORD :
-*
+* 
+* @param[in]  thread : Thread value.
+* 
+* @return     DWORD WINAPI : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DWORD WINAPI XWINDOWSTHREAD::Callback(LPVOID thread)
 {
@@ -377,12 +377,12 @@ DWORD WINAPI XWINDOWSTHREAD::Callback(LPVOID thread)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSTHREAD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSTHREAD::Clean()
 {

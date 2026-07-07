@@ -97,12 +97,12 @@ COMPRESSMANAGER::~COMPRESSMANAGER()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         COMPRESSBASE* COMPRESSMANAGER::Create(COMPRESSBASE_TYPE type)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    COMPRESS
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     COMPRESSBASE* : 
+* @return     COMPRESSBASE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 COMPRESSBASE* COMPRESSMANAGER::Create(COMPRESSBASE_TYPE type)
@@ -145,7 +145,7 @@ COMPRESSBASE* COMPRESSMANAGER::Create(COMPRESSBASE_TYPE type)
 * @brief      Get instance
 * @ingroup    COMPRESS
 * 
-* @return     COMPRESSMANAGER* : 
+* @return     COMPRESSMANAGER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 COMPRESSMANAGER* COMPRESSMANAGER::GetInstance()

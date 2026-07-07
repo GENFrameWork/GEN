@@ -70,8 +70,8 @@ DIOSTREAMTLS_MSG_EXTENSION::DIOSTREAMTLS_MSG_EXTENSION()
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION::~DIOSTREAMTLS_MSG_EXTENSION()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION::~DIOSTREAMTLS_MSG_EXTENSION()
@@ -86,7 +86,7 @@ DIOSTREAMTLS_MSG_EXTENSION::~DIOSTREAMTLS_MSG_EXTENSION()
 * @brief      get type
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION::GetType()
@@ -101,7 +101,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION::GetType()
 * @brief      set type
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION::SetType(XWORD type)
@@ -116,7 +116,7 @@ void DIOSTREAMTLS_MSG_EXTENSION::SetType(XWORD type)
 * @brief      get length
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION::GetLength()
@@ -131,7 +131,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION::GetLength()
 * @brief      set length
 * @ingroup    DATAIO
 * 
-* @param[in]  length : 
+* @param[in]  length : Length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION::SetLength(XWORD length)
@@ -146,10 +146,10 @@ void DIOSTREAMTLS_MSG_EXTENSION::SetLength(XWORD length)
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer, bool showdebug)
@@ -167,10 +167,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(XBUFFER& buffer, bool showdebug)
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer, bool showdebug)
@@ -186,8 +186,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 * 
 * @fn         void DIOSTREAMTLS_MSG_EXTENSION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION::Clean()
@@ -218,8 +218,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVER
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::~DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::~DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME()
@@ -234,7 +234,7 @@ DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::~DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVE
 * @brief      name  get type
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetType()
@@ -249,7 +249,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetType()
 * @brief      name  set type
 * @ingroup    DATAIO
 * 
-* @param[in]  name_type : 
+* @param[in]  name_type : Name type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_SetType(XWORD name_type)
@@ -264,7 +264,7 @@ void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_SetType(XWORD name_type)
 * @brief      name  get length
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetLength()
@@ -279,7 +279,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetLength()
 * @brief      name  set length
 * @ingroup    DATAIO
 * 
-* @param[in]  name_length : 
+* @param[in]  name_length : Name length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_SetLength(XWORD name_length)
@@ -294,7 +294,7 @@ void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_SetLength(XWORD name_length
 * @brief      name  get host
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetHost()
@@ -309,9 +309,9 @@ XSTRING* DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Name_GetHost()
 * @brief      copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  servername : 
+* @param[in]  servername : Servername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
@@ -335,9 +335,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyTo(DIOSTREAMTLS_MSG_EXTENSIO
 * @brief      copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  servername : 
+* @param[in]  servername : Servername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
@@ -361,10 +361,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::CopyFrom(DIOSTREAMTLS_MSG_EXTENS
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer, bool showdebug)
@@ -393,10 +393,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::SetToBuffer(XBUFFER& buffer, boo
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer, bool showdebug)
@@ -418,8 +418,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::GetFromBuffer(XBUFFER& buffer, b
 * 
 * @fn         void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME::Clean()
@@ -452,8 +452,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SNI::DIOSTREAMTLS_MSG_EXTENSION_SNI()
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_SNI::~DIOSTREAMTLS_MSG_EXTENSION_SNI()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_SNI::~DIOSTREAMTLS_MSG_EXTENSION_SNI()
@@ -470,7 +470,7 @@ DIOSTREAMTLS_MSG_EXTENSION_SNI::~DIOSTREAMTLS_MSG_EXTENSION_SNI()
 * @brief      list  get length
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI::List_GetLength()
@@ -485,7 +485,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION_SNI::List_GetLength()
 * @brief      list  set length
 * @ingroup    DATAIO
 * 
-* @param[in]  list_length : 
+* @param[in]  list_length : List length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_SNI::List_SetLength(XWORD list_length)
@@ -500,7 +500,7 @@ void DIOSTREAMTLS_MSG_EXTENSION_SNI::List_SetLength(XWORD list_length)
 * @brief      list  get
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>* : 
+* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>* DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Get()
@@ -515,9 +515,9 @@ XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME*>* DIOSTREAMTLS_MSG_EXTENSION_
 * @brief      list  add
 * @ingroup    DATAIO
 * 
-* @param[in]  servername : 
+* @param[in]  servername : Servername pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Add(DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME* servername)
@@ -561,7 +561,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_Add(DIOSTREAMTLS_MSG_EXTENSION_SNI_SER
 * @brief      list  GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_DeleteAll()
@@ -586,9 +586,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::List_DeleteAll()
 * @brief      copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* extension)
@@ -630,9 +630,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_SNI* exte
 * @brief      copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* extension)
@@ -674,10 +674,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_SNI* ex
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer, bool showdebug)
@@ -705,10 +705,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::SetToBuffer(XBUFFER& buffer, bool showdebug
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer, bool showdebug)
@@ -739,8 +739,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_SNI::GetFromBuffer(XBUFFER& buffer, bool showdeb
 * 
 * @fn         void DIOSTREAMTLS_MSG_EXTENSION_SNI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_SNI::Clean()
@@ -770,8 +770,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS::DIOSTREAMTLS_MSG_EXTENSION_SUPPORTED
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS()
@@ -801,8 +801,8 @@ DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS::DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFOR
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS::~DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS::~DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS()
@@ -832,8 +832,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::DIOSTREAMTLS_MSG_EXTENSION_SIGNA
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::~DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::~DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS()
@@ -865,8 +865,8 @@ DIOSTREAMTLS_MSG_EXTENSION_ALPN::DIOSTREAMTLS_MSG_EXTENSION_ALPN()
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_ALPN::~DIOSTREAMTLS_MSG_EXTENSION_ALPN()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_ALPN::~DIOSTREAMTLS_MSG_EXTENSION_ALPN()
@@ -883,7 +883,7 @@ DIOSTREAMTLS_MSG_EXTENSION_ALPN::~DIOSTREAMTLS_MSG_EXTENSION_ALPN()
 * @brief      list  get length
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetLength()
@@ -898,7 +898,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetLength()
 * @brief      list  set length
 * @ingroup    DATAIO
 * 
-* @param[in]  list_length : 
+* @param[in]  list_length : List length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_SetLength(XWORD list_length)
@@ -913,7 +913,7 @@ void DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_SetLength(XWORD list_length)
 * @brief      list  get buffer
 * @ingroup    DATAIO
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetBuffer()
@@ -928,9 +928,9 @@ XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetBuffer()
 * @brief      list  add
 * @ingroup    DATAIO
 * 
-* @param[in]  alpn_type : 
+* @param[in]  alpn_type : Alpn type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
@@ -973,7 +973,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
 * @brief      list  GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_DeleteAll()
@@ -988,9 +988,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_DeleteAll()
 * @brief      copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension)
@@ -1017,9 +1017,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_ALPN* ex
 * @brief      copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension)
@@ -1046,10 +1046,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_ALPN* 
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer, bool showdebug)
@@ -1070,10 +1070,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::SetToBuffer(XBUFFER& buffer, bool showdebu
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::GetFromBuffer(XBUFFER& buffer, bool showdebug)
@@ -1094,8 +1094,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::GetFromBuffer(XBUFFER& buffer, bool showde
 * 
 * @fn         void DIOSTREAMTLS_MSG_EXTENSION_ALPN::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_ALPN::Clean()
@@ -1129,8 +1129,8 @@ DIOSTREAMTLS_MSG_EXTENSION_EMS::DIOSTREAMTLS_MSG_EXTENSION_EMS()
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_EMS::~DIOSTREAMTLS_MSG_EXTENSION_EMS()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_EMS::~DIOSTREAMTLS_MSG_EXTENSION_EMS()
@@ -1145,9 +1145,9 @@ DIOSTREAMTLS_MSG_EXTENSION_EMS::~DIOSTREAMTLS_MSG_EXTENSION_EMS()
 * @brief      copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_EMS* extension)
@@ -1170,9 +1170,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_EMS* exte
 * @brief      copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_EMS* extension)
@@ -1195,10 +1195,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_EMS::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_EMS* ex
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer, bool showdebug)
@@ -1215,10 +1215,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_EMS::SetToBuffer(XBUFFER& buffer, bool showdebug
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_EMS::GetFromBuffer(XBUFFER& buffer, bool showdebug)
@@ -1233,8 +1233,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_EMS::GetFromBuffer(XBUFFER& buffer, bool showdeb
 * 
 * @fn         void DIOSTREAMTLS_MSG_EXTENSION_EMS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_EMS::Clean()
@@ -1264,8 +1264,8 @@ DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS::DIOSTREAMTLS_MSG_EXTENSION_SUPPORT
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS::~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS()
@@ -1295,8 +1295,8 @@ DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::DIOSTREAMTLS_MSG_EXTENSION_PSKKE
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::~DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES::~DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES()
@@ -1326,8 +1326,8 @@ DIOSTREAMTLS_MSG_EXTENSION_KEY::DIOSTREAMTLS_MSG_EXTENSION_KEY()
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_KEY::~DIOSTREAMTLS_MSG_EXTENSION_KEY()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_KEY::~DIOSTREAMTLS_MSG_EXTENSION_KEY()
@@ -1342,7 +1342,7 @@ DIOSTREAMTLS_MSG_EXTENSION_KEY::~DIOSTREAMTLS_MSG_EXTENSION_KEY()
 * @brief      get key type
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetKeyType()
@@ -1357,7 +1357,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetKeyType()
 * @brief      set key type
 * @ingroup    DATAIO
 * 
-* @param[in]  keytype : 
+* @param[in]  keytype : Keytype value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetKeyType(XWORD keytype)
@@ -1372,7 +1372,7 @@ void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetKeyType(XWORD keytype)
 * @brief      get length key data
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetLengthKeyData()
@@ -1387,7 +1387,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION_KEY::GetLengthKeyData()
 * @brief      set length key data
 * @ingroup    DATAIO
 * 
-* @param[in]  lengthkeydata : 
+* @param[in]  lengthkeydata : Lengthkeydata value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetLengthKeyData(XWORD lengthkeydata)
@@ -1402,7 +1402,7 @@ void DIOSTREAMTLS_MSG_EXTENSION_KEY::SetLengthKeyData(XWORD lengthkeydata)
 * @brief      get key data
 * @ingroup    DATAIO
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_KEY::GetKeyData()
@@ -1417,9 +1417,9 @@ XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_KEY::GetKeyData()
 * @brief      copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
@@ -1441,9 +1441,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
 * @brief      copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
@@ -1465,10 +1465,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEY* ke
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer, bool showdebug)
@@ -1488,10 +1488,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::SetToBuffer(XBUFFER& buffer, bool showdebug
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer, bool showdebug)
@@ -1511,8 +1511,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer, bool showdeb
 * 
 * @fn         void DIOSTREAMTLS_MSG_EXTENSION_KEY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_KEY::Clean()
@@ -1546,8 +1546,8 @@ DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE()
 * 
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::~DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE()
 * @brief      Destructor of class
-* @ingroup    DATAIO
 * @note       VIRTUAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::~DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE()
@@ -1562,7 +1562,7 @@ DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::~DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE()
 * @brief      list  get length
 * @ingroup    DATAIO
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_GetLength()
@@ -1577,7 +1577,7 @@ XWORD DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_GetLength()
 * @brief      list  set length
 * @ingroup    DATAIO
 * 
-* @param[in]  list_length : 
+* @param[in]  list_length : List length value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_SetLength(XWORD list_length)
@@ -1592,7 +1592,7 @@ void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_SetLength(XWORD list_length)
 * @brief      list  get
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>* : 
+* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>* DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Get()
@@ -1607,9 +1607,9 @@ XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_KEY*>* DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::L
 * @brief      list  add
 * @ingroup    DATAIO
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Add(DIOSTREAMTLS_MSG_EXTENSION_KEY* key)
@@ -1653,7 +1653,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_Add(DIOSTREAMTLS_MSG_EXTENSION_KE
 * @brief      list  GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_DeleteAll()
@@ -1678,9 +1678,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::List_DeleteAll()
 * @brief      copy to
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension)
@@ -1721,9 +1721,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_KEYS
 * @brief      copy from
 * @ingroup    DATAIO
 * 
-* @param[in]  extension : 
+* @param[in]  extension : Extension pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension)
@@ -1765,10 +1765,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_KE
 * @brief      set to buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer, bool showdebug)
@@ -1796,10 +1796,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::SetToBuffer(XBUFFER& buffer, bool show
 * @brief      get from buffer
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
-* @param[in]  showdebug : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer, bool showdebug)
@@ -1830,8 +1830,8 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer, bool sh
 * 
 * @fn         void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    DATAIO
 * @note       INTERNAL
+* @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::Clean()

@@ -64,8 +64,8 @@
 * @fn         UI_ELEMENT::UI_ELEMENT()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT::UI_ELEMENT()    
 { 
   Clean();     
@@ -86,8 +86,8 @@ UI_ELEMENT::UI_ELEMENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT::~UI_ELEMENT()    
 { 
   if(blink_xtimer)
@@ -107,10 +107,10 @@ UI_ELEMENT::~UI_ELEMENT()
 * @fn         XSTRING* UI_ELEMENT::GetName()
 * @brief      Get name
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_ELEMENT::GetName()
 {
   return &name;
@@ -122,10 +122,10 @@ XSTRING* UI_ELEMENT::GetName()
 * @fn         UI_ELEMENT_TYPE UI_ELEMENT::GetType()
 * @brief      Get type
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_TYPE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_TYPE UI_ELEMENT::GetType()
 {
   return type;
@@ -137,10 +137,10 @@ UI_ELEMENT_TYPE UI_ELEMENT::GetType()
 * @fn         void UI_ELEMENT::SetType(UI_ELEMENT_TYPE type)
 * @brief      Set type
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  type : Type value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetType(UI_ELEMENT_TYPE type)
 {
   this->type = type;
@@ -152,10 +152,10 @@ void UI_ELEMENT::SetType(UI_ELEMENT_TYPE type)
 * @fn         XSTRING* UI_ELEMENT::GetTypeString()
 * @brief      Get type string
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_ELEMENT::GetTypeString()
 {
   return &type_string;
@@ -167,10 +167,10 @@ XSTRING* UI_ELEMENT::GetTypeString()
 * @fn         UI_ELEMENT* UI_ELEMENT::GetFather()
 * @brief      Get father
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_ELEMENT::GetFather()
 {
   return father;
@@ -182,10 +182,10 @@ UI_ELEMENT* UI_ELEMENT::GetFather()
 * @fn         void UI_ELEMENT::SetFather(UI_ELEMENT* father)
 * @brief      Set father
 * @ingroup    USERINTERFACE
-*
-* @param[in]  father : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  father : Father pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetFather(UI_ELEMENT* father)
 {
   this->father = father;
@@ -197,10 +197,10 @@ void UI_ELEMENT::SetFather(UI_ELEMENT* father)
 * @fn         bool UI_ELEMENT::IsDetached()
 * @brief      Is detached
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::IsDetached()
 {
   return isdetached;
@@ -209,13 +209,13 @@ bool UI_ELEMENT::IsDetached()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void UI_ELEMENT::SetIsDetached(bool hasfather)
+* @fn         void UI_ELEMENT::SetIsDetached(bool isdetached)
 * @brief      Set is detached
 * @ingroup    USERINTERFACE
-*
-* @param[in]  hasfather : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  isdetached : Isdetached value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetIsDetached(bool isdetached)
 {
   this->isdetached = isdetached;
@@ -227,10 +227,10 @@ void UI_ELEMENT::SetIsDetached(bool isdetached)
 * @fn         UI_COLOR* UI_ELEMENT::GetColor()
 * @brief      Get color
 * @ingroup    USERINTERFACE
-*
-* @return     UI_COLOR* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_COLOR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR* UI_ELEMENT::GetColor()
 {
   return &color;
@@ -242,10 +242,10 @@ UI_COLOR* UI_ELEMENT::GetColor()
 * @fn         UI_COLOR* UI_ELEMENT::GetBackgroundColor()
 * @brief      Get background color
 * @ingroup    USERINTERFACE
-*
-* @return     UI_COLOR* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_COLOR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR* UI_ELEMENT::GetBackgroundColor()
 {
   return &backgroundcolor;
@@ -257,10 +257,10 @@ UI_COLOR* UI_ELEMENT::GetBackgroundColor()
 * @fn         double UI_ELEMENT::GetXPosition()
 * @brief      Get X position
 * @ingroup    USERINTERFACE
-*
-* @return     double : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetXPosition()
 {
   return x_position;
@@ -272,12 +272,12 @@ double UI_ELEMENT::GetXPosition()
 * @fn         bool UI_ELEMENT::SetXPosition(double x_position)
 * @brief      Set X position
 * @ingroup    USERINTERFACE
-*
-* @param[in]  x_position : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  x_position : X position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::SetXPosition(double x_position)   
 {
   this->x_position = x_position;
@@ -291,10 +291,10 @@ bool UI_ELEMENT::SetXPosition(double x_position)
 * @fn         double UI_ELEMENT::GetYPosition()
 * @brief      Get Y position
 * @ingroup    USERINTERFACE
-*
-* @return     double : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetYPosition()
 {
   return y_position;  
@@ -306,12 +306,12 @@ double UI_ELEMENT::GetYPosition()
 * @fn         bool UI_ELEMENT::SetYPosition(double y_position)
 * @brief      Set Y position
 * @ingroup    USERINTERFACE
-*
-* @param[in]  y_position : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  y_position : Y position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::SetYPosition(double y_position)
 {
   this->y_position = y_position;
@@ -325,10 +325,10 @@ bool UI_ELEMENT::SetYPosition(double y_position)
 * @fn         XDWORD UI_ELEMENT::GetZLevel()
 * @brief      Get Z level
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_ELEMENT::GetZLevel()
 {
   return z_level;
@@ -340,12 +340,12 @@ XDWORD UI_ELEMENT::GetZLevel()
 * @fn         bool UI_ELEMENT::SetZLevel(XDWORD z_level)
 * @brief      Set Z level
 * @ingroup    USERINTERFACE
-*
-* @param[in]  z_level : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  z_level : Z level value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::SetZLevel(XDWORD z_level)
 {
   this->z_level = z_level;
@@ -359,10 +359,10 @@ bool UI_ELEMENT::SetZLevel(XDWORD z_level)
 * @fn         UI_ELEMENT_TYPE_DIRECTION UI_ELEMENT::GetDirection()
 * @brief      Get direction
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_TYPE_DIRECTION : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_TYPE_DIRECTION : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_TYPE_DIRECTION UI_ELEMENT::GetDirection()
 {
   return direction;
@@ -374,12 +374,12 @@ UI_ELEMENT_TYPE_DIRECTION UI_ELEMENT::GetDirection()
 * @fn         bool UI_ELEMENT::SetDirection(UI_ELEMENT_TYPE_DIRECTION direction)
 * @brief      Set direction
 * @ingroup    USERINTERFACE
-*
-* @param[in]  direction : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  direction : Direction value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::SetDirection(UI_ELEMENT_TYPE_DIRECTION direction)
 {
   this->direction = direction;
@@ -393,10 +393,10 @@ bool UI_ELEMENT::SetDirection(UI_ELEMENT_TYPE_DIRECTION direction)
 * @fn         double UI_ELEMENT::GetXPositionWithScroll()
 * @brief      Get X position with scroll
 * @ingroup    USERINTERFACE
-*
-* @return     double : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetXPositionWithScroll()
 {
   return x_positionwithscroll;
@@ -408,12 +408,12 @@ double UI_ELEMENT::GetXPositionWithScroll()
 * @fn         bool UI_ELEMENT::SetXPositionWithScroll(double x_positionwithscroll)
 * @brief      Set X position with scroll
 * @ingroup    USERINTERFACE
-*
-* @param[in]  x_positionwithscroll : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  x_positionwithscroll : X positionwithscroll value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::SetXPositionWithScroll(double x_positionwithscroll)
 {
   this->x_positionwithscroll = x_positionwithscroll;
@@ -427,10 +427,10 @@ bool UI_ELEMENT::SetXPositionWithScroll(double x_positionwithscroll)
 * @fn         double UI_ELEMENT::GetYPositionWithScroll()
 * @brief      Get Y position with scroll
 * @ingroup    USERINTERFACE
-*
-* @return     double : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetYPositionWithScroll()
 {
   return y_positionwithscroll;
@@ -442,12 +442,12 @@ double UI_ELEMENT::GetYPositionWithScroll()
 * @fn         bool UI_ELEMENT::SetYPositionWithScroll(double y_positionwithscroll)
 * @brief      Set Y position with scroll
 * @ingroup    USERINTERFACE
-*
-* @param[in]  y_positionwithscroll : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  y_positionwithscroll : Y positionwithscroll value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::SetYPositionWithScroll(double y_positionwithscroll)
 {
   this->y_positionwithscroll = y_positionwithscroll;
@@ -461,10 +461,10 @@ bool UI_ELEMENT::SetYPositionWithScroll(double y_positionwithscroll)
 * @fn         UI_BOUNDARYLINE* UI_ELEMENT::GetBoundaryLine()
 * @brief      Get boundary line
 * @ingroup    USERINTERFACE
-*
-* @return     UI_BOUNDARYLINE* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_BOUNDARYLINE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_BOUNDARYLINE* UI_ELEMENT::GetBoundaryLine()
 {
   return &boundaryline;
@@ -473,13 +473,13 @@ UI_BOUNDARYLINE* UI_ELEMENT::GetBoundaryLine()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void UI_ELEMENT::SetBoundaryLine(XRECT& boundaryline)
+* @fn         void UI_ELEMENT::SetBoundaryLine(UI_BOUNDARYLINE& boundaryline)
 * @brief      Set boundary line
 * @ingroup    USERINTERFACE
-*
-* @param[in]  boundaryline : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  boundaryline : Boundaryline value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetBoundaryLine(UI_BOUNDARYLINE& boundaryline)
 {
   this->boundaryline.CopyFrom(boundaryline);
@@ -487,13 +487,13 @@ void UI_ELEMENT::SetBoundaryLine(UI_BOUNDARYLINE& boundaryline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double UI_ELEMENT::GetLeftX()
 * @brief      Resolved left screen edge from the stored position (single coordinate conversion point).
 * @ingroup    USERINTERFACE
-*
-* @return     double :
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetLeftX()
 {
@@ -502,13 +502,13 @@ double UI_ELEMENT::GetLeftX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double UI_ELEMENT::GetRightX()
 * @brief      Resolved right screen edge from the stored position (single coordinate conversion point).
 * @ingroup    USERINTERFACE
-*
-* @return     double :
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetRightX()
 {
@@ -517,13 +517,13 @@ double UI_ELEMENT::GetRightX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double UI_ELEMENT::GetTopY()
 * @brief      Resolved top screen edge from the stored position (single coordinate conversion point).
 * @ingroup    USERINTERFACE
-*
-* @return     double :
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetTopY()
 {
@@ -532,13 +532,13 @@ double UI_ELEMENT::GetTopY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double UI_ELEMENT::GetBottomY()
 * @brief      Resolved bottom screen edge from the stored position (single coordinate conversion point).
 * @ingroup    USERINTERFACE
-*
-* @return     double :
-*
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetBottomY()
 {
@@ -551,12 +551,12 @@ double UI_ELEMENT::GetBottomY()
 * @fn         double UI_ELEMENT::GetMargin(UI_ELEMENT_TYPE_ALIGN position)
 * @brief      Get margin
 * @ingroup    USERINTERFACE
-*
-* @param[in]  position : 
 * 
-* @return     double : 
+* @param[in]  position : Position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_ELEMENT::GetMargin(UI_ELEMENT_TYPE_ALIGN position)
 {
   switch((int)position)
@@ -576,11 +576,11 @@ double UI_ELEMENT::GetMargin(UI_ELEMENT_TYPE_ALIGN position)
 * @fn         void UI_ELEMENT::SetMargin(UI_ELEMENT_TYPE_ALIGN position, double value)
 * @brief      Set margin
 * @ingroup    USERINTERFACE
-*
-* @param[in]  position : 
-* @param[in]  value : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  position : Position value.
+* @param[in]  value : Value value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetMargin(UI_ELEMENT_TYPE_ALIGN position, double value)
 {
   switch((int)position)
@@ -598,10 +598,10 @@ void UI_ELEMENT::SetMargin(UI_ELEMENT_TYPE_ALIGN position, double value)
 * @fn         bool UI_ELEMENT::IsActive()
 * @brief      Is active
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::IsActive()
 {
   return isactive;
@@ -613,10 +613,10 @@ bool UI_ELEMENT::IsActive()
 * @fn         void UI_ELEMENT::SetActive(bool isactive)
 * @brief      Set active
 * @ingroup    USERINTERFACE
-*
-* @param[in]  isactive : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  isactive : Isactive value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetActive(bool isactive)
 {
   this->isactive = isactive;
@@ -628,10 +628,10 @@ void UI_ELEMENT::SetActive(bool isactive)
 * @fn         bool UI_ELEMENT::IsPreSelect()
 * @brief      Is pre select
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::IsPreSelect()
 {
   return ispreselect;
@@ -643,10 +643,10 @@ bool UI_ELEMENT::IsPreSelect()
 * @fn         void UI_ELEMENT::SetPreSelect(bool ispreselect)
 * @brief      Set pre select
 * @ingroup    USERINTERFACE
-*
-* @param[in]  ispreselect : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  ispreselect : Ispreselect value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetPreSelect(bool ispreselect)
 {
   this->ispreselect = ispreselect;
@@ -658,10 +658,10 @@ void UI_ELEMENT::SetPreSelect(bool ispreselect)
 * @fn         bool UI_ELEMENT::IsSelected()
 * @brief      Is selected
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::IsSelected()
 {  
   return isselected;
@@ -673,10 +673,10 @@ bool UI_ELEMENT::IsSelected()
 * @fn         void UI_ELEMENT::SetSelected(bool isselected)
 * @brief      Set selected
 * @ingroup    USERINTERFACE
-*
-* @param[in]  isselected : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  isselected : Isselected value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetSelected(bool isselected)
 {
   this->isselected = isselected;
@@ -688,10 +688,10 @@ void UI_ELEMENT::SetSelected(bool isselected)
 * @fn         bool UI_ELEMENT::IsVisible()
 * @brief      Is visible
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::IsVisible()
 {
   return isvisible;
@@ -703,10 +703,10 @@ bool UI_ELEMENT::IsVisible()
 * @fn         void UI_ELEMENT::SetVisible(bool isvisible)
 * @brief      Set visible
 * @ingroup    USERINTERFACE
-*
-* @param[in]  isvisible : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  isvisible : Isvisible value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetVisible(bool isvisible)
 {
   if(this->isvisible != isvisible) 
@@ -724,10 +724,10 @@ void UI_ELEMENT::SetVisible(bool isvisible)
 * @fn         XDWORD UI_ELEMENT::GetRoundRect()
 * @brief      Get round rect
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_ELEMENT::GetRoundRect()
 {
   return roundrect;
@@ -739,10 +739,10 @@ XDWORD UI_ELEMENT::GetRoundRect()
 * @fn         void UI_ELEMENT::SetRoundRect(XDWORD roundrect)
 * @brief      Set round rect
 * @ingroup    USERINTERFACE
-*
-* @param[in]  roundrect : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  roundrect : Roundrect value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetRoundRect(XDWORD roundrect)
 {
   this->roundrect = roundrect;
@@ -754,10 +754,10 @@ void UI_ELEMENT::SetRoundRect(XDWORD roundrect)
 * @fn         XDWORD UI_ELEMENT::IsBlinking()
 * @brief      Is blinking
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_ELEMENT::IsBlinking()
 {
   return blink_time;
@@ -769,12 +769,12 @@ XDWORD UI_ELEMENT::IsBlinking()
 * @fn         bool UI_ELEMENT::SetBlink(XDWORD blink_time)
 * @brief      Set blink
 * @ingroup    USERINTERFACE
-*
-* @param[in]  blink_time : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  blink_time : Blink time value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::SetBlink(XDWORD blink_time)
 {
   if(!blink_xtimer) return false;
@@ -794,10 +794,10 @@ bool UI_ELEMENT::SetBlink(XDWORD blink_time)
 * @fn         bool UI_ELEMENT::GetStateBlink()
 * @brief      Get state blink
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::GetStateBlink()
 {
   return blink_state;
@@ -809,10 +809,10 @@ bool UI_ELEMENT::GetStateBlink()
 * @fn         bool UI_ELEMENT::SwitchStateBlink()
 * @brief      Swicth state blink
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::SwitchStateBlink()
 {
   if(!blink_nchanges)
@@ -838,10 +838,10 @@ bool UI_ELEMENT::SwitchStateBlink()
 * @fn         XTIMER* UI_ELEMENT::GetTimerBlink()
 * @brief      Get timer blink
 * @ingroup    USERINTERFACE
-*
-* @return     XTIMER* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* UI_ELEMENT::GetTimerBlink()
 {
   return blink_xtimer;
@@ -853,10 +853,10 @@ XTIMER* UI_ELEMENT::GetTimerBlink()
 * @fn         UI_ELEMENT_TRANSITION_STATE_SHOW UI_ELEMENT::GetTransitionStateShow()
 * @brief      Get transition state show
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_TRANSITION_STATE_SHOW : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_TRANSITION_STATE_SHOW : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_TRANSITION_STATE_SHOW UI_ELEMENT::GetTransitionStateShow()
 {
   return transitionstateshow;
@@ -868,10 +868,10 @@ UI_ELEMENT_TRANSITION_STATE_SHOW UI_ELEMENT::GetTransitionStateShow()
 * @fn         void UI_ELEMENT::SetTransitionStateShow(UI_ELEMENT_TRANSITION_STATE_SHOW transitionstateshow)
 * @brief      Set transition state show
 * @ingroup    USERINTERFACE
-*
-* @param[in]  transitionstateshow : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  transitionstateshow : Transitionstateshow value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetTransitionStateShow(UI_ELEMENT_TRANSITION_STATE_SHOW transitionstateshow)
 {
   this->transitionstateshow = transitionstateshow;
@@ -883,10 +883,10 @@ void UI_ELEMENT::SetTransitionStateShow(UI_ELEMENT_TRANSITION_STATE_SHOW transit
 * @fn         bool UI_ELEMENT::HasScroll()
 * @brief      Has scroll
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::HasScroll()
 {
   return hasscroll;
@@ -898,10 +898,10 @@ bool UI_ELEMENT::HasScroll()
 * @fn         void UI_ELEMENT::SetHasScroll(bool hasscroll)
 * @brief      Set has scroll
 * @ingroup    USERINTERFACE
-*
-* @param[in]  hasscroll : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  hasscroll : Hasscroll value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetHasScroll(bool hasscroll)
 {
   this->hasscroll = hasscroll;
@@ -913,10 +913,10 @@ void UI_ELEMENT::SetHasScroll(bool hasscroll)
 * @fn         XSTRING* UI_ELEMENT::GetExtra()
 * @brief      Get extra
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_ELEMENT::GetExtra()
 {
   return &extra;
@@ -928,10 +928,10 @@ XSTRING* UI_ELEMENT::GetExtra()
 * @fn         bool UI_ELEMENT::MustReDraw()
 * @brief      Must re draw
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::MustReDraw()
 {
   return mustredraw;
@@ -943,10 +943,10 @@ bool UI_ELEMENT::MustReDraw()
 * @fn         void UI_ELEMENT::SetMustReDraw(bool mustredraw)
 * @brief      Set must re draw
 * @ingroup    USERINTERFACE
-*
-* @param[in]  mustredraw : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  mustredraw : Mustredraw value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::SetMustReDraw(bool mustredraw)
 {
   this->mustredraw = mustredraw;
@@ -958,10 +958,10 @@ void UI_ELEMENT::SetMustReDraw(bool mustredraw)
 * @fn         XVECTOR<UI_ELEMENT*>* UI_ELEMENT::GetComposeElements()
 * @brief      Get compose elements
 * @ingroup    USERINTERFACE
-*
-* @return     XVECTOR<UI_ELEMENT*>* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XVECTOR<UI_ELEMENT*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<UI_ELEMENT*>* UI_ELEMENT::GetComposeElements()
 {
   return &compose_elements;
@@ -973,10 +973,10 @@ XVECTOR<UI_ELEMENT*>* UI_ELEMENT::GetComposeElements()
 * @fn         bool UI_ELEMENT::DeleteAllComposeElements()
 * @brief      Delete all compose elements
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT::DeleteAllComposeElements()
 {
   if(compose_elements.IsEmpty()) return false;
@@ -994,8 +994,8 @@ bool UI_ELEMENT::DeleteAllComposeElements()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT::Clean()
 {
   type                    = UI_ELEMENT_TYPE_UNKNOWN;

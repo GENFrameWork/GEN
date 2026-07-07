@@ -81,12 +81,12 @@ GRPSTATISTICSCHARTCOLUMNS3D::~GRPSTATISTICSCHARTCOLUMNS3D()
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  x       : plot area left
-* @param[in]  y       : plot area top
-* @param[in]  width   : plot area width
-* @param[in]  height  : plot area height
+* @param[in]  x : plot area left
+* @param[in]  y : plot area top
+* @param[in]  width : plot area width
+* @param[in]  height : plot area height
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTCOLUMNS3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
@@ -250,13 +250,13 @@ bool GRPSTATISTICSCHARTCOLUMNS3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, d
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  colx    : front left of the column
-* @param[in]  topy    : front top of the column
-* @param[in]  colw    : column width
-* @param[in]  basey   : front bottom of the column
-* @param[in]  depthx  : depth offset on X
-* @param[in]  depthy  : depth offset on Y (applied upwards)
-* @param[in]  color   : base (front) color
+* @param[in]  colx : front left of the column
+* @param[in]  topy : front top of the column
+* @param[in]  colw : column width
+* @param[in]  basey : front bottom of the column
+* @param[in]  depthx : depth offset on X
+* @param[in]  depthy : depth offset on Y (applied upwards)
+* @param[in]  color : base (front) color
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSTATISTICSCHARTCOLUMNS3D::DrawPrism(GRPSTATISTICSCHARTBUILDER& builder, double colx, double topy, double colw, double basey, double depthx, double depthy, GRPSTATISTICSCHARTCOLOR& color)
@@ -302,10 +302,10 @@ void GRPSTATISTICSCHARTCOLUMNS3D::DrawPrism(GRPSTATISTICSCHARTBUILDER& builder, 
 * @brief      Make shade : scale a color by a factor (>1 lighter, <1 darker), clamped to 0..255
 * @ingroup    GRAPHIC
 * 
-* @param[in]  color  : base color
+* @param[in]  color : base color
 * @param[in]  factor : brightness factor
 * 
-* @return     GRPSTATISTICSCHARTCOLOR : the shaded color
+* @return     GRPSTATISTICSCHARTCOLOR : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSTATISTICSCHARTCOLOR GRPSTATISTICSCHARTCOLUMNS3D::MakeShade(GRPSTATISTICSCHARTCOLOR& color, double factor)

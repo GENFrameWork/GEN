@@ -56,13 +56,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB::SCRIPT_LIB(XCHAR* ID)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
-* @param[in]  ID :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB::SCRIPT_LIB(XCHAR* ID)
 {
@@ -73,12 +73,12 @@ SCRIPT_LIB::SCRIPT_LIB(XCHAR* ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB::~SCRIPT_LIB()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB::~SCRIPT_LIB()
 {
@@ -87,13 +87,13 @@ SCRIPT_LIB::~SCRIPT_LIB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* SCRIPT_LIB::GetID()
 * @brief      Get ID
 * @ingroup    SCRIPT
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* SCRIPT_LIB::GetID()
 {
@@ -102,15 +102,15 @@ XSTRING* SCRIPT_LIB::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB::AddLibraryFunctions(SCRIPT* script)
 * @brief      Add library functions
 * @ingroup    SCRIPT
-*
-* @param[in]  script :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  script : Script pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB::AddLibraryFunctions(SCRIPT* script)
 {
@@ -124,10 +124,10 @@ bool SCRIPT_LIB::AddLibraryFunctions(SCRIPT* script)
 * @brief      Get param converted
 * @ingroup    SCRIPT
 * 
-* @param[in]  variant : 
-* @param[in]  value : 
+* @param[in]  variant : Variant pointer to use.
+* @param[in]  value : Value value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, bool& value)
@@ -167,16 +167,16 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, bool& value)
 }
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, int& value)
 * @brief      Get param converted
 * @ingroup    SCRIPT
-*
-* @param[in]  variant :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  variant : Variant pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, int& value)
 {
@@ -218,16 +218,16 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, int& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, XDWORD& value)
 * @brief      Get param converted
 * @ingroup    SCRIPT
-*
-* @param[in]  variant :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  variant : Variant pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, XDWORD& value)
 {
@@ -241,16 +241,16 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, XDWORD& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, float& value)
 * @brief      Get param converted
 * @ingroup    SCRIPT
-*
-* @param[in]  variant :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  variant : Variant pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, float& value)
 {
@@ -290,16 +290,16 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, float& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, double& value)
 * @brief      Get param converted
 * @ingroup    SCRIPT
-*
-* @param[in]  variant :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  variant : Variant pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, double& value)
 {
@@ -344,10 +344,10 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, double& value)
 * @brief      Get param converted
 * @ingroup    SCRIPT
 * 
-* @param[in]  variant : 
-* @param[in]  value : 
+* @param[in]  variant : Variant pointer to use.
+* @param[in]  value : Value value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, XSTRING& value)
@@ -382,12 +382,12 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LIB::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB::Clean()
 {

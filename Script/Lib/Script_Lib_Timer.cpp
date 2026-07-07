@@ -59,11 +59,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_LIB_TIMER::SCRIPT_LIB_TIMER()
+* 
+* @fn         SCRIPT_LIB_TIMER::SCRIPT_LIB_TIMER() : SCRIPT_LIB(SCRIPT_LIB_NAME_TIMER)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
+* 
+* @param[in]  SCRIPT_LIB_NAME_TIMER : SCRIPT LIB NAME TIMER value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_TIMER::SCRIPT_LIB_TIMER() : SCRIPT_LIB(SCRIPT_LIB_NAME_TIMER)
 {
@@ -72,12 +74,12 @@ SCRIPT_LIB_TIMER::SCRIPT_LIB_TIMER() : SCRIPT_LIB(SCRIPT_LIB_NAME_TIMER)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB_TIMER::~SCRIPT_LIB_TIMER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_TIMER::~SCRIPT_LIB_TIMER()
 {
@@ -86,15 +88,15 @@ SCRIPT_LIB_TIMER::~SCRIPT_LIB_TIMER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB_TIMER::AddLibraryFunctions(SCRIPT* script)
 * @brief      Add library functions
 * @ingroup    SCRIPT
-*
-* @param[in]  script :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  script : Script pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_TIMER::AddLibraryFunctions(SCRIPT* script)
 {
@@ -109,12 +111,12 @@ bool SCRIPT_LIB_TIMER::AddLibraryFunctions(SCRIPT* script)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LIB_TIMER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_TIMER::Clean()
 {
@@ -128,16 +130,16 @@ void SCRIPT_LIB_TIMER::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void Call_Sleep(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 * @brief      all_Sleep
 * @ingroup    SCRIPT
-*
-* @param[in]  library :
-* @param[in]  script :
-* @param[in]  params :
-* @param[in]  returnvalue :
-*
+* 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Sleep(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {

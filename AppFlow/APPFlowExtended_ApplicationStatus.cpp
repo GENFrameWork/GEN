@@ -71,7 +71,7 @@
 * @brief      Constructor of class
 * @ingroup    APPFLOW
 * 
-* @param[in]  cfg : 
+* @param[in]  DIOWEBSERVER_RESOLVEENDPOINT : DIOWEBSERVER RESOLVEENDPOINT pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED_APPLICATIONSTATUS::APPFLOWEXTENDED_APPLICATIONSTATUS(APPFLOWCFG* cfg) : DIOWEBSERVER_RESOLVEENDPOINT()
@@ -122,11 +122,11 @@ APPFLOWEXTENDED_APPLICATIONSTATUS::~APPFLOWEXTENDED_APPLICATIONSTATUS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         APPCHECKRESOURCESHARDWARE* APPFLOWEXTENDED_APPLICATIONSTATUS::GetCheckResourcesHardware()
+* @fn         APPFLOWCHECKRESOURCESHARDWARE* APPFLOWEXTENDED_APPLICATIONSTATUS::GetCheckResourcesHardware()
 * @brief      Get check resources hardware
 * @ingroup    APPFLOW
 * 
-* @return     APPCHECKRESOURCESHARDWARE* : 
+* @return     APPFLOWCHECKRESOURCESHARDWARE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCHECKRESOURCESHARDWARE* APPFLOWEXTENDED_APPLICATIONSTATUS::GetCheckResourcesHardware()
@@ -141,7 +141,7 @@ APPFLOWCHECKRESOURCESHARDWARE* APPFLOWEXTENDED_APPLICATIONSTATUS::GetCheckResour
 * @brief      Get OS version
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetOSVersion()
@@ -156,7 +156,7 @@ XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetOSVersion()
 * @brief      Get app version
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetAppVersion()
@@ -171,7 +171,7 @@ XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetAppVersion()
 * @brief      Get memory total
 * @ingroup    APPFLOW
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWEXTENDED_APPLICATIONSTATUS::GetMemoryTotal()
@@ -186,7 +186,7 @@ XDWORD APPFLOWEXTENDED_APPLICATIONSTATUS::GetMemoryTotal()
 * @brief      Set memory total
 * @ingroup    APPFLOW
 * 
-* @param[in]  memory_total : 
+* @param[in]  memory_total : Memory total value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWEXTENDED_APPLICATIONSTATUS::SetMemoryTotal(XDWORD memory_total)
@@ -201,7 +201,7 @@ void APPFLOWEXTENDED_APPLICATIONSTATUS::SetMemoryTotal(XDWORD memory_total)
 * @brief      Get memory free
 * @ingroup    APPFLOW
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWEXTENDED_APPLICATIONSTATUS::GetMemoryFree()
@@ -216,7 +216,7 @@ XDWORD APPFLOWEXTENDED_APPLICATIONSTATUS::GetMemoryFree()
 * @brief      Set memory free
 * @ingroup    APPFLOW
 * 
-* @param[in]  memory_free : 
+* @param[in]  memory_free : Memory free value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWEXTENDED_APPLICATIONSTATUS::SetMemoryFree(XDWORD memory_free)
@@ -231,7 +231,7 @@ void APPFLOWEXTENDED_APPLICATIONSTATUS::SetMemoryFree(XDWORD memory_free)
 * @brief      Get memory free percent
 * @ingroup    APPFLOW
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWEXTENDED_APPLICATIONSTATUS::GetMemoryFreePercent()
@@ -246,7 +246,7 @@ XDWORD APPFLOWEXTENDED_APPLICATIONSTATUS::GetMemoryFreePercent()
 * @brief      Set memory free percent
 * @ingroup    APPFLOW
 * 
-* @param[in]  memory_freepercent : 
+* @param[in]  memory_freepercent : Memory freepercent value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWEXTENDED_APPLICATIONSTATUS::SetMemoryFreePercent(XDWORD memory_freepercent)
@@ -261,7 +261,7 @@ void APPFLOWEXTENDED_APPLICATIONSTATUS::SetMemoryFreePercent(XDWORD memory_freep
 * @brief      Get averange
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetAverange()
@@ -276,7 +276,7 @@ XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetAverange()
 * @brief      Get current date
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetCurrentDate()
@@ -291,7 +291,7 @@ XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetCurrentDate()
 * @brief      Get operating time
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetOperatingTime()
@@ -306,7 +306,7 @@ XSTRING* APPFLOWEXTENDED_APPLICATIONSTATUS::GetOperatingTime()
 * @brief      Update
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_APPLICATIONSTATUS::Update()
@@ -378,9 +378,9 @@ bool APPFLOWEXTENDED_APPLICATIONSTATUS::Update()
 * @brief      Show
 * @ingroup    APPFLOW
 * 
-* @param[in]  console : 
+* @param[in]  console : Console pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_APPLICATIONSTATUS::Show(XCONSOLE* console)
@@ -427,7 +427,7 @@ bool APPFLOWEXTENDED_APPLICATIONSTATUS::Show(XCONSOLE* console)
 * @brief      Serialize
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_APPLICATIONSTATUS::Serialize()
@@ -454,7 +454,7 @@ bool APPFLOWEXTENDED_APPLICATIONSTATUS::Serialize()
 * @brief      Deserialize
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_APPLICATIONSTATUS::Deserialize()

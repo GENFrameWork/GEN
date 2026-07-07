@@ -71,8 +71,8 @@ GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::GRPVECTORFILEDXFENTITYDEFSTRINGVALUE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  value : 
-* @param[in]  string : 
+* @param[in]  value : Value value.
+* @param[in]  string : String to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::GRPVECTORFILEDXFENTITYDEFSTRINGVALUE(int value, XCHAR* string)
@@ -87,7 +87,7 @@ GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::GRPVECTORFILEDXFENTITYDEFSTRINGVALUE(int v
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  stringvalue : 
+* @param[in]  stringvalue : Stringvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::GRPVECTORFILEDXFENTITYDEFSTRINGVALUE(GRPVECTORFILEDXFENTITYDEFSTRINGVALUE* stringvalue)
@@ -115,10 +115,12 @@ GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::~GRPVECTORFILEDXFENTITYDEFSTRINGVALUE()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::operator = (GRPVECTORFILEDXFENTITYDEFSTRINGVALUE* point)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point pointer to use.
+* 
+* @return     void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::operator =  (GRPVECTORFILEDXFENTITYDEFSTRINGVALUE* point)
@@ -130,10 +132,12 @@ void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::operator =  (GRPVECTORFILEDXFENTITYDE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::operator = (GRPVECTORFILEDXFENTITYDEFSTRINGVALUE point)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point value.
+* 
+* @return     void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::operator =  (GRPVECTORFILEDXFENTITYDEFSTRINGVALUE point)
@@ -148,7 +152,7 @@ void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::operator =  (GRPVECTORFILEDXFENTITYDE
 * @brief      Get value
 * @ingroup    GRAPHIC
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::GetValue() 
@@ -163,7 +167,7 @@ int GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::GetValue()
 * @brief      Set value
 * @ingroup    GRAPHIC
 * 
-* @param[in]  value : 
+* @param[in]  value : Value value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::SetValue(int value) 
@@ -178,7 +182,7 @@ void GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::SetValue(int value)
 * @brief      Get string
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::GetString() 
@@ -193,9 +197,9 @@ XSTRING* GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::GetString()
 * @brief      Copy to
 * @ingroup    GRAPHIC
 * 
-* @param[in]  stringvalue : 
+* @param[in]  stringvalue : Stringvalue pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::CopyTo(GRPVECTORFILEDXFENTITYDEFSTRINGVALUE* stringvalue)
@@ -218,9 +222,9 @@ bool GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::CopyTo(GRPVECTORFILEDXFENTITYDEFSTRIN
 * @brief      Copy from
 * @ingroup    GRAPHIC
 * 
-* @param[in]  stringvalue : 
+* @param[in]  stringvalue : Stringvalue pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYDEFSTRINGVALUE::CopyFrom(GRPVECTORFILEDXFENTITYDEFSTRINGVALUE* stringvalue)

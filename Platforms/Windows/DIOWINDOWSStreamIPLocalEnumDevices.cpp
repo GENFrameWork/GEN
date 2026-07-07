@@ -61,7 +61,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMIPLOCALENUMDEVICES::DIOWINDOWSSTREAMIPLOCALENUMDEVICES()
+* @fn         DIOWINDOWSSTREAMIPLOCALENUMDEVICES::DIOWINDOWSSTREAMIPLOCALENUMDEVICES() : DIOSTREAMIPLOCALENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -88,14 +88,23 @@ DIOWINDOWSSTREAMIPLOCALENUMDEVICES::~DIOWINDOWSSTREAMIPLOCALENUMDEVICES()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         #ifdef BUILDER bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
+* @brief      Search
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     #ifdef BUILDER bool : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+#ifdef BUILDER
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-#ifdef BUILDER
 bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
 {
   DelAllDevices();
@@ -153,6 +162,15 @@ bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
   return true;
 }
 #else
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
+* @brief      Search
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
 {
   PIP_ADAPTER_ADDRESSES               adapter_addresses;
@@ -274,7 +292,7 @@ bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL

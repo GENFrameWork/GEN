@@ -88,9 +88,9 @@ DIOCOREPROTOCOL_REGISTERDATA::~DIOCOREPROTOCOL_REGISTERDATA()
 * @brief      Initialize data
 * @ingroup    DATAIO
 * 
-* @param[in]  isserver : 
+* @param[in]  isserver : Isserver value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_REGISTERDATA::InitializeData(bool isserver)
@@ -117,7 +117,7 @@ bool DIOCOREPROTOCOL_REGISTERDATA::InitializeData(bool isserver)
 * @brief      Get ID mmachine
 * @ingroup    DATAIO
 * 
-* @return     XUUID* : 
+* @return     XUUID* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID* DIOCOREPROTOCOL_REGISTERDATA::GetIDMmachine()
@@ -132,7 +132,7 @@ XUUID* DIOCOREPROTOCOL_REGISTERDATA::GetIDMmachine()
 * @brief      Get ID connection
 * @ingroup    DATAIO
 * 
-* @return     XUUID* : 
+* @return     XUUID* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID* DIOCOREPROTOCOL_REGISTERDATA::GetIDConnection()
@@ -147,7 +147,7 @@ XUUID* DIOCOREPROTOCOL_REGISTERDATA::GetIDConnection()
 * @brief      Get plataform name
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetPlataformName()
@@ -162,7 +162,7 @@ XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetPlataformName()
 * @brief      Get SO identifier
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetSOIdentifier()
@@ -177,7 +177,7 @@ XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetSOIdentifier()
 * @brief      Get user
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetUser()
@@ -192,7 +192,7 @@ XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetUser()
 * @brief      Get domain
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetDomain()
@@ -207,7 +207,7 @@ XSTRING* DIOCOREPROTOCOL_REGISTERDATA::GetDomain()
 * @brief      Serialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_REGISTERDATA::Serialize()
@@ -241,7 +241,7 @@ bool DIOCOREPROTOCOL_REGISTERDATA::Serialize()
 * @brief      Deserialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_REGISTERDATA::Deserialize()
@@ -274,9 +274,9 @@ bool DIOCOREPROTOCOL_REGISTERDATA::Deserialize()
 * @brief      Create ID machine
 * @ingroup    DATAIO
 * 
-* @param[in]  ID : 
+* @param[in]  ID : Identifier to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_REGISTERDATA::CreateIDMachine(XUUID& ID)
@@ -341,7 +341,7 @@ bool DIOCOREPROTOCOL_REGISTERDATA::CreateIDMachine(XUUID& ID)
 * @brief      Show debug
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_REGISTERDATA::ShowDebug()

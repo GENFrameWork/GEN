@@ -100,23 +100,23 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         static void UI_SkinCanvas_ProgressRadial_AppendArc(GRP2DPATH& path, double cx, double cy, double r, double startdeg, double spandeg, bool& firstpoint)
-* @brief      Append a circular arc to a path as a short-segment polyline (~2 deg per step). Uses only MoveTo/LineTo,
-*             which are fully exercised by the canvas stroke pipeline; this deliberately avoids GRP2DPATH::ArcTo
-*             (the SVG elliptical-arc command), whose AGG arc_to conversion is not used anywhere else and produces
-*             no geometry here. Angles are degrees; a positive span advances clockwise in this y-down canvas.
+* @brief      Append a circular arc to a path as a short-segment polyline (~2 deg per step). Uses only MoveTo/LineTo, which are fully exercised by the canvas stroke pipeline; this deliberately avoids GRP2DPATH::ArcTo (the SVG elliptical-arc command), whose AGG arc_to conversion is not used anywhere else and produces no geometry here. Angles are degrees; a positive span advances clockwise in this y-down canvas.
 * @note       INTERNAL / FILE LOCAL
 * @ingroup    USERINTERFACE
-*
-* @param[in]      path       : destination path.
-* @param[in]      cx, cy     : ring center.
-* @param[in]      r          : ring radius (to the stroke centerline).
-* @param[in]      startdeg   : start angle in degrees.
-* @param[in]      spandeg    : signed span in degrees.
-* @param[in,out]  firstpoint : true on the first append (emits a MoveTo); set to false afterwards.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  path : destination path.
+* @param[in]  cx : Cx value.
+* @param[in]  cy : Cy value.
+* @param[in]  r : ring radius (to the stroke centerline).
+* @param[in]  startdeg : start angle in degrees.
+* @param[in]  spandeg : signed span in degrees.
+* @param[in]  firstpoint : true on the first append (emits a MoveTo); set to false afterwards.
+* 
+* @return     static void : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressRadial_AppendArc(GRP2DPATH& path, double cx, double cy, double r, double startdeg, double spandeg, bool& firstpoint)
 {
   if(r <= 0.0) return;
@@ -147,6 +147,22 @@ static void UI_SkinCanvas_ProgressRadial_AppendArc(GRP2DPATH& path, double cx, d
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void DrawScrollPill(GRP2DCANVAS* canvas, double a, double b, double c, double d, double formradius)
+* @brief      Draw Scroll Pill
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* @param[in]  formradius : Formradius value.
+* 
+* @return     static void : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void DrawScrollPill(GRP2DCANVAS* canvas, double a, double b, double c, double d, double formradius)
 {
   // Normalize coords (the edge/clip convention can give either order). The bar follows the form: it is rounded only
@@ -164,15 +180,22 @@ static void DrawScrollPill(GRP2DCANVAS* canvas, double a, double b, double c, do
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius)
-* @brief      Draw a filled rect, rounded when radius > 0. The radius is clamped to half the smaller side so a
-*             capsule (roundcap) stays valid even when the progress fill is narrower than the bar thickness
-*             (agg::rounded_rect does not self-normalize the radius).
+* @brief      Draw a filled rect, rounded when radius > 0. The radius is clamped to half the smaller side so a capsule (roundcap) stays valid even when the progress fill is narrower than the bar thickness (agg::rounded_rect does not self-normalize the radius).
 * @note       INTERNAL / FILE LOCAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* @param[in]  radius : Radius value.
+* 
+* @return     static void : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius)
 {
   if(!canvas) return;
@@ -217,10 +240,22 @@ static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, d
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         static void UI_SkinCanvas_AppendRoundRectPath(...)
+* 
+* @fn         static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, double miny, double maxx, double maxy, double r)
 * @brief      Builds a (optionally rounded) rectangle outline into a path with MoveTo/LineTo so it can be gradient-filled.
 * @note       INTERNAL / FILE LOCAL. Inputs are already normalized (minx<=maxx, miny<=maxy) and r clamped by the caller.
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  path : Path to use.
+* @param[in]  minx : Minx value.
+* @param[in]  miny : Miny value.
+* @param[in]  maxx : Maxx value.
+* @param[in]  maxy : Maxy value.
+* @param[in]  r : R value.
+* 
+* @return     static void : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, double miny, double maxx, double maxy, double r)
 {
   if(r <= 0.0)
@@ -253,11 +288,27 @@ static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, doub
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         static void UI_SkinCanvas_ProgressBar_DrawGradientRect(...)
+* 
+* @fn         static void UI_SkinCanvas_ProgressBar_DrawGradientRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius, GRP2DGRADIENTSTOP* stops, double gx1, double gy1, double gx2, double gy2)
 * @brief      Fills a (optionally rounded) rect with a linear gradient along (gx1,gy1)->(gx2,gy2).
 * @note       INTERNAL / FILE LOCAL. Used only when gradientcolor is set; the solid DrawRect path is left untouched.
-*             At narrow widths the radius is clamped to w/2 (a smaller capsule nested inside the frame, never poking out).
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  x1 : X1 value.
+* @param[in]  y1 : Y1 value.
+* @param[in]  x2 : X2 value.
+* @param[in]  y2 : Y2 value.
+* @param[in]  radius : Radius value.
+* @param[in]  stops : Stops pointer to use.
+* @param[in]  gx1 : Gx1 value.
+* @param[in]  gy1 : Gy1 value.
+* @param[in]  gx2 : Gx2 value.
+* @param[in]  gy2 : Gy2 value.
+* 
+* @return     static void : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressBar_DrawGradientRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius,
                                                        GRP2DGRADIENTSTOP* stops, double gx1, double gy1, double gx2, double gy2)
 {
@@ -287,8 +338,8 @@ static void UI_SkinCanvas_ProgressBar_DrawGradientRect(GRP2DCANVAS* canvas, doub
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  screen : 
-* @param[in]  viewportindex : 
+* @param[in]  screen : Screen object to use.
+* @param[in]  viewportindex : Viewportindex value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_SKINCANVAS_REBUILDAREAS::UI_SKINCANVAS_REBUILDAREAS(GRPSCREEN* screen, int viewportindex)
@@ -319,8 +370,8 @@ UI_SKINCANVAS_REBUILDAREAS::UI_SKINCANVAS_REBUILDAREAS(GRPSCREEN* screen, int vi
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKINCANVAS_REBUILDAREAS::~UI_SKINCANVAS_REBUILDAREAS()
 {
   Clean();
@@ -332,10 +383,10 @@ UI_SKINCANVAS_REBUILDAREAS::~UI_SKINCANVAS_REBUILDAREAS()
 * @fn         bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
 * @brief      Rebuild all areas
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
 {   
   XDWORD max_z_level = 0;
@@ -397,12 +448,12 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
 * @fn         bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_LAYOUT* layout)
 * @brief      Rebuild all areas
 * @ingroup    USERINTERFACE
-*
-* @param[in]  layout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  layout : Layout pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_LAYOUT* layout)
 { 
   if(!layout) return false;
@@ -419,12 +470,12 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_LAYOUT* layout)
 * @fn         bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_ELEMENT* element)
 * @brief      Rebuild all areas
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_ELEMENT* element)
 { 
   XDWORD max_z_level = 0;
@@ -496,16 +547,16 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_ELEMENT* element)
 * @fn         bool UI_SKINCANVAS_REBUILDAREAS::CreateRebuildArea(double x, double y, double width, double height, UI_ELEMENT* element)
 * @brief      Create rebuild area
 * @ingroup    USERINTERFACE
-*
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  width : 
-* @param[in]  height : 
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS_REBUILDAREAS::CreateRebuildArea(double x, double y, double width, double height, UI_ELEMENT* element)
 {  
   return GRP2DREBUILDAREAS::CreateRebuildArea(x, y, width+1, height+1, (void*)element);
@@ -517,15 +568,15 @@ bool UI_SKINCANVAS_REBUILDAREAS::CreateRebuildArea(double x, double y, double wi
 * @fn         GRPBITMAP* UI_SKINCANVAS_REBUILDAREAS::GetBitmap(double x, double y, double width, double height)
 * @brief      Get bitmap
 * @ingroup    USERINTERFACE
-*
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  width : 
-* @param[in]  height : 
 * 
-* @return     GRPBITMAP* : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_SKINCANVAS_REBUILDAREAS::GetBitmap(double x, double y, double width, double height)
 {
   if(!canvas) return NULL;
@@ -539,12 +590,12 @@ GRPBITMAP* UI_SKINCANVAS_REBUILDAREAS::GetBitmap(double x, double y, double widt
 * @fn         void UI_SKINCANVAS_REBUILDAREAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP* bitmap)
 * @brief      Put bitmap no alpha
 * @ingroup    USERINTERFACE
-*
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  bitmap : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  bitmap : Bitmap pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKINCANVAS_REBUILDAREAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP* bitmap)
 {
   if(!canvas) return;
@@ -558,12 +609,12 @@ void UI_SKINCANVAS_REBUILDAREAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP*
 * @fn         GRP2DREBUILDAREA* UI_SKINCANVAS_REBUILDAREAS::GetRebuildAreaByElement(UI_ELEMENT* element)
 * @brief      Get rebuild area by element
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     GRP2DREBUILDAREA* : 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRP2DREBUILDAREA* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRP2DREBUILDAREA* UI_SKINCANVAS_REBUILDAREAS::GetRebuildAreaByElement(UI_ELEMENT* element)
 {
   for(XDWORD c=0; c<GetRebuildAreas()->GetSize(); c++)
@@ -589,7 +640,7 @@ GRP2DREBUILDAREA* UI_SKINCANVAS_REBUILDAREAS::GetRebuildAreaByElement(UI_ELEMENT
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKINCANVAS_REBUILDAREAS::Clean()
 {
@@ -605,12 +656,13 @@ void UI_SKINCANVAS_REBUILDAREAS::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_SKINCANVAS::UI_SKINCANVAS(GRPSCREEN* screen, int viewportindex)
+* @fn         UI_SKINCANVAS::UI_SKINCANVAS(GRPSCREEN* screen, int viewportindex) : UI_SKIN(), UI_SKINCANVAS_REBUILDAREAS(screen)
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  screen : 
-* @param[in]  viewportindex : 
+* @param[in]  screen : Screen object to use.
+* @param[in]  UI_SKIN : UI SKIN value.
+* @param[in]  screen : Screen object to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_SKINCANVAS::UI_SKINCANVAS(GRPSCREEN* screen,  int viewportindex) : UI_SKIN(),  UI_SKINCANVAS_REBUILDAREAS(screen)
@@ -630,8 +682,8 @@ UI_SKINCANVAS::UI_SKINCANVAS(GRPSCREEN* screen,  int viewportindex) : UI_SKIN(),
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKINCANVAS::~UI_SKINCANVAS()    
 { 
   if(!fontpathfile.IsEmpty())
@@ -650,10 +702,10 @@ UI_SKINCANVAS::~UI_SKINCANVAS()
 * @fn         GRPSCREEN* UI_SKINCANVAS::GetScreen()
 * @brief      Get screen
 * @ingroup    USERINTERFACE
-*
-* @return     GRPSCREEN* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPSCREEN* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREEN* UI_SKINCANVAS::GetScreen()
 {
   return screen;
@@ -665,10 +717,10 @@ GRPSCREEN* UI_SKINCANVAS::GetScreen()
 * @fn         GRP2DCANVAS* UI_SKINCANVAS::GetCanvas()
 * @brief      Get canvas
 * @ingroup    USERINTERFACE
-*
-* @return     GRP2DCANVAS* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRP2DCANVAS* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS* UI_SKINCANVAS::GetCanvas()
 {
   if(!screen)                   
@@ -690,10 +742,10 @@ GRP2DCANVAS* UI_SKINCANVAS::GetCanvas()
 * @fn         bool UI_SKINCANVAS::LoadFonts()
 * @brief      Load fonts
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::LoadFonts()
 {
   XPATH  xpath;
@@ -761,14 +813,14 @@ bool UI_SKINCANVAS::LoadFonts()
 * @fn         bool UI_SKINCANVAS::GetFatherSize(UI_ELEMENT* element, double& width, double& height)
 * @brief      Get father size
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  width : 
-* @param[in]  height : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::GetFatherSize(UI_ELEMENT* element, double& width, double& height)
 {
   GRP2DCANVAS* canvas = GetCanvas();
@@ -797,12 +849,12 @@ bool UI_SKINCANVAS::GetFatherSize(UI_ELEMENT* element, double& width, double& he
 * @fn         double UI_SKINCANVAS::GetPositionWithoutDefine(double position)
 * @brief      Get position without define
 * @ingroup    USERINTERFACE
-*
-* @param[in]  position : 
 * 
-* @return     double : 
+* @param[in]  position : Position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_SKINCANVAS::GetPositionWithoutDefine(double position)
 { 
   switch((int)position)
@@ -824,12 +876,12 @@ double UI_SKINCANVAS::GetPositionWithoutDefine(double position)
 * @fn         bool UI_SKINCANVAS::SetAroundFromSubElements(UI_ELEMENT* element)
 * @brief      Set around from sub elements
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::SetAroundFromSubElements(UI_ELEMENT* element)
 {
   if(!element) return false;
@@ -885,12 +937,12 @@ bool UI_SKINCANVAS::SetAroundFromSubElements(UI_ELEMENT* element)
 * @fn         bool UI_SKINCANVAS::AddPositionSubElements(UI_ELEMENT* element)
 * @brief      Add position sub elements
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::AddPositionSubElements(UI_ELEMENT* element)
 {
   if(!element) return false;   
@@ -915,12 +967,12 @@ bool UI_SKINCANVAS::AddPositionSubElements(UI_ELEMENT* element)
 * @brief      Calcule position
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  fatherwidth : 
-* @param[in]  fatherheight : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  fatherwidth : Fatherwidth value.
+* @param[in]  fatherheight : Fatherheight value.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculePosition(UI_ELEMENT* element, double fatherwidth, double fatherheight, bool adjustsizemargin)
@@ -1021,13 +1073,13 @@ bool UI_SKINCANVAS::CalculePosition(UI_ELEMENT* element, double fatherwidth, dou
 * @fn         double UI_SKINCANVAS::GetWidthString(XCHAR* string, XDWORD sizefont)
 * @brief      Get with string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  string : 
-* @param[in]  sizefont : 
 * 
-* @return     double : 
+* @param[in]  string : String to use.
+* @param[in]  sizefont : Sizefont value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_SKINCANVAS::GetWidthString(XCHAR* string,  XDWORD sizefont)
 {
   XDWORD width  = 0;
@@ -1045,13 +1097,13 @@ double UI_SKINCANVAS::GetWidthString(XCHAR* string,  XDWORD sizefont)
 * @fn         double UI_SKINCANVAS::GetHeightString(XCHAR* string, XDWORD sizefont)
 * @brief      Get height string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  string : 
-* @param[in]  sizefont : 
 * 
-* @return     double : 
+* @param[in]  string : String to use.
+* @param[in]  sizefont : Sizefont value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double  UI_SKINCANVAS::GetHeightString(XCHAR* string, XDWORD sizefont)
 {
   XDWORD width  = 0;
@@ -1070,10 +1122,10 @@ double  UI_SKINCANVAS::GetHeightString(XCHAR* string, XDWORD sizefont)
 * @brief      Calculate boundary line scroll
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_Scroll(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1088,10 +1140,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Scroll(UI_ELEMENT* element, bool adjus
 * @brief      Calculate boundary line text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_Text(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1160,10 +1212,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Text(UI_ELEMENT* element, bool adjusts
 * @brief      Calculate boundary line text box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_TextBox(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1202,10 +1254,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_TextBox(UI_ELEMENT* element, bool adju
 * @brief      Calculate boundary line image
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_Image(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1244,10 +1296,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Image(UI_ELEMENT* element, bool adjust
 * @brief      Calculate boundary line animation
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_Animation(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1319,10 +1371,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Animation(UI_ELEMENT* element, bool ad
 * @brief      Calculate boundary line option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_Option(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1430,10 +1482,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Option(UI_ELEMENT* element, bool adjus
 * @brief      Calculate boundary line multi option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_MultiOption(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1496,10 +1548,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_MultiOption(UI_ELEMENT* element, bool 
 * @brief      Calculate boundary line button
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_Button(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1514,10 +1566,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Button(UI_ELEMENT* element, bool adjus
 * @brief      Calculate boundary line check box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_CheckBox(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1532,10 +1584,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_CheckBox(UI_ELEMENT* element, bool adj
 * @brief      Calculate boundary line edit text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_EditText(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1591,10 +1643,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_EditText(UI_ELEMENT* element, bool adj
 * @brief      Calculate boundary line form
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_Form(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1659,10 +1711,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Form(UI_ELEMENT* element, bool adjusts
 * @brief      Calculate boundary line menu
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_Menu(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1677,10 +1729,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Menu(UI_ELEMENT* element, bool adjusts
 * @brief      Calculate boundary line list box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_ListBox(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1736,10 +1788,10 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ListBox(UI_ELEMENT* element, bool adju
 * @brief      Calculate boundary line progress bar
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool adjustsizemargin)
@@ -1872,16 +1924,16 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bool adjustsizemargin)
 * @brief      Calculate boundary line radial progress
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-* @param[in]  adjustsizemargin :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bool adjustsizemargin)
 {
@@ -1921,29 +1973,48 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bo
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, bool adjustsizemargin)
+* 
+* @fn         static void UI_SkinCanvas_ProgressImage_Layout(int allocation, double imgw, double imgh, double textw, double texth, double gap, double& bw, double& bh, double& ox, double& oy, double& tx, double& ty)
 * @brief      Calculate boundary line progress image
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-* @param[in]  adjustsizemargin :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  allocation : Allocation value.
+* @param[in]  imgw : Imgw value.
+* @param[in]  imgh : Imgh value.
+* @param[in]  textw : Textw value.
+* @param[in]  texth : Texth value.
+* @param[in]  gap : Gap value.
+* @param[in]  bw : Bw value.
+* @param[in]  bh : Bh value.
+* @param[in]  ox : Ox value.
+* @param[in]  oy : Oy value.
+* @param[in]  tx : Tx value.
+* @param[in]  ty : Ty value.
+* 
+* @return     static void : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         static void UI_SkinCanvas_ProgressImage_Layout(...)
+* 
+* @fn         static void UI_SkinCanvas_ProgressImage_Layout(int allocation, double imgw, double imgh, double textw, double texth, double gap, double& bw, double& bh, double& ox, double& oy, double& tx, double& ty)
 * @brief      Computes the ProgressImage caption layout for the current allocationtext.
-*
-*             Outputs are in top-left relative coordinates (0,0 = boundary top-left, y down). No element members are
-*             stored: both CalculateBoundaryLine_ProgressImage and Draw_ProgressImage call this helper so the boundary,
-*             the image draw position and the caption position always stay in sync.
-*
-*             For RIGHT/UP and CENTER/NONE the image offset is (0,0), so the image keeps its current position and only
-*             the caption (and boundary) move; LEFT/DOWN shift the image to make room for the caption.
-*
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  allocation : Allocation value.
+* @param[in]  imgw : Imgw value.
+* @param[in]  imgh : Imgh value.
+* @param[in]  textw : Textw value.
+* @param[in]  texth : Texth value.
+* @param[in]  gap : Gap value.
+* @param[in]  bw : Bw value.
+* @param[in]  bh : Bh value.
+* @param[in]  ox : Ox value.
+* @param[in]  oy : Oy value.
+* @param[in]  tx : Tx value.
+* @param[in]  ty : Ty value.
+* 
+* @return     static void : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressImage_Layout(int allocation, double imgw, double imgh, double textw, double texth, double gap,
                                                double& bw, double& bh, double& ox, double& oy, double& tx, double& ty)
@@ -1987,6 +2058,18 @@ static void UI_SkinCanvas_ProgressImage_Layout(int allocation, double imgw, doub
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, bool adjustsizemargin)
+* @brief      Calculate Boundary Line Progress Image
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, bool adjustsizemargin)
 {
   UI_ELEMENT_PROGRESS_IMAGE* element_progressimage = (UI_ELEMENT_PROGRESS_IMAGE*)element;
@@ -2061,14 +2144,14 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, boo
 * @fn         bool UI_SKINCANVAS::SetElementPosition(UI_ELEMENT* element, double x_position, double y_position)
 * @brief      Set element position
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  x_position : 
-* @param[in]  y_position : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::SetElementPosition(UI_ELEMENT* element, double x_position, double y_position)
 {
   if(!element) return false;
@@ -2095,12 +2178,12 @@ bool UI_SKINCANVAS::SetElementPosition(UI_ELEMENT* element, double x_position, d
 * @fn         bool UI_SKINCANVAS::Draw_Scroll(UI_ELEMENT* element)
 * @brief      Draw scroll
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_Scroll(UI_ELEMENT* element)  
 {
   return true;
@@ -2113,9 +2196,9 @@ bool UI_SKINCANVAS::Draw_Scroll(UI_ELEMENT* element)
 * @brief      Draw text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_Text(UI_ELEMENT* element)  
@@ -2157,9 +2240,9 @@ bool UI_SKINCANVAS::Draw_Text(UI_ELEMENT* element)
 * @brief      Draw text box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_TextBox(UI_ELEMENT* element)  
@@ -2246,9 +2329,9 @@ bool UI_SKINCANVAS::Draw_TextBox(UI_ELEMENT* element)
 * @brief      Draw image
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_Image(UI_ELEMENT* element)  
@@ -2285,9 +2368,9 @@ bool UI_SKINCANVAS::Draw_Image(UI_ELEMENT* element)
 * @brief      Draw animation
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_Animation(UI_ELEMENT* element)  
@@ -2371,9 +2454,9 @@ bool UI_SKINCANVAS::Draw_Animation(UI_ELEMENT* element)
 * @brief      Draw option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_Option(UI_ELEMENT* element)  
@@ -2535,9 +2618,9 @@ bool UI_SKINCANVAS::Draw_Option(UI_ELEMENT* element)
 * @brief      Draw multi option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_MultiOption(UI_ELEMENT* element)
@@ -2606,9 +2689,9 @@ bool UI_SKINCANVAS::Draw_MultiOption(UI_ELEMENT* element)
 * @brief      Draw button
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_Button(UI_ELEMENT* element)  
@@ -2623,9 +2706,9 @@ bool UI_SKINCANVAS::Draw_Button(UI_ELEMENT* element)
 * @brief      Draw check box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_CheckBox(UI_ELEMENT* element)  
@@ -2648,9 +2731,9 @@ bool UI_SKINCANVAS::Draw_CheckBox(UI_ELEMENT* element)
 * @brief      Draw edit text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_EditText(UI_ELEMENT* element)  
@@ -2749,9 +2832,9 @@ bool UI_SKINCANVAS::Draw_EditText(UI_ELEMENT* element)
 * @brief      Draw form
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
@@ -2824,9 +2907,9 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
 * @brief      Draw menu
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_Menu(UI_ELEMENT* element)
@@ -2840,12 +2923,12 @@ bool UI_SKINCANVAS::Draw_Menu(UI_ELEMENT* element)
 * @fn         bool UI_SKINCANVAS::Draw_ListBox(UI_ELEMENT* element)
 * @brief      Draw list box
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_ListBox(UI_ELEMENT* element)
 {
   if(!element) return false;  
@@ -2912,12 +2995,12 @@ bool UI_SKINCANVAS::Draw_ListBox(UI_ELEMENT* element)
 * @fn         bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
 * @brief      Draw progress bar
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
 {
   if(!element) return false;  
@@ -3131,16 +3214,16 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_SKINCANVAS::Draw_ProgressRadial(UI_ELEMENT* element)
 * @brief      Draw radial progress (track ring + gradient value arc + centered caption)
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-*
-* @return     bool : true if is succesful.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_ProgressRadial(UI_ELEMENT* element)
 {
   if(!element) return false;
@@ -3326,16 +3409,16 @@ bool UI_SKINCANVAS::Draw_ProgressRadial(UI_ELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_SKINCANVAS::Draw_ProgressImage(UI_ELEMENT* element)
 * @brief      Draw progress image: empty (0%) graphic first, then full (100%) clipped to the level by direction.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-*
-* @return     bool : true if is succesful.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Draw_ProgressImage(UI_ELEMENT* element)
 {
   if(!element) return false;
@@ -3447,14 +3530,14 @@ bool UI_SKINCANVAS::Draw_ProgressImage(UI_ELEMENT* element)
 * @fn         bool UI_SKINCANVAS::GetFontSize(XCHAR* text, XDWORD& width, XDWORD& height)
 * @brief      Get font size
 * @ingroup    USERINTERFACE
-*
-* @param[in]  text : 
-* @param[in]  width : 
-* @param[in]  height : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  text : Text to use.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::GetFontSize(XCHAR* text, XDWORD& width, XDWORD& height)
 {
   GRP2DCANVAS* canvas = GetCanvas();
@@ -3472,12 +3555,12 @@ bool UI_SKINCANVAS::GetFontSize(XCHAR* text, XDWORD& width, XDWORD& height)
 * @fn         bool UI_SKINCANVAS::SetFontSize(XDWORD size)
 * @brief      Set font size
 * @ingroup    USERINTERFACE
-*
-* @param[in]  size : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  size : Size value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::SetFontSize(XDWORD size)
 {
   GRP2DCANVAS* canvas = GetCanvas();
@@ -3494,15 +3577,15 @@ bool UI_SKINCANVAS::SetFontSize(XDWORD size)
 * @fn         bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRP2DCANVAS* canvas, double x_position, double y_position)
 * @brief      Draw background color
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  canvas : 
-* @param[in]  x_position : 
-* @param[in]  y_position : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRP2DCANVAS* canvas, double x_position, double y_position)
 {
   if(!element->GetBackgroundColor()->GetAlpha()) return false;
@@ -3528,20 +3611,22 @@ bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRP2DCANVAS* canvas
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge)
+* @fn         static void UI_SkinCanvas_ContentExtent(UI_ELEMENT* element, bool vx, bool vy, double margin, double& minx, double& maxx, double& miny, double& maxy)
 * @brief      Pre draw function
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  canvas : 
-* @param[in]  clip_rect : 
-* @param[in]  x_position : 
-* @param[in]  y_position : 
-* @param[in]  edge : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  vx : Vx value.
+* @param[in]  vy : Vy value.
+* @param[in]  margin : Margin value.
+* @param[in]  minx : Minx value.
+* @param[in]  maxx : Maxx value.
+* @param[in]  miny : Miny value.
+* @param[in]  maxy : Maxy value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     static void : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 
 // Accumulate the screen bounding box of an element's descendants, but only on the axes flagged (vx/vy). Used to size a
 // scrollable container's rebuild area so it covers content that overflows on a non-clipped (VISIBLE) axis. Descendants
@@ -3587,6 +3672,22 @@ static void UI_SkinCanvas_ContentExtent(UI_ELEMENT* element, bool vx, bool vy, d
     }
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge)
+* @brief      Pre Draw Function
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : Element to process.
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  clip_rect : Clip rect value.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
+* @param[in]  edge : Edge value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge)
 {
   if(!canvas) return false;
@@ -3701,16 +3802,16 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XR
 * @fn         bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double x_position, double y_position)
 * @brief      Post draw function
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  canvas : 
-* @param[in]  clip_rect : 
-* @param[in]  x_position : 
-* @param[in]  y_position : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  clip_rect : Clip rect value.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double x_position, double y_position)
 {  
   bool redrew = element->MustReDraw();           // capture before clearing: true only when the area was just repainted
@@ -3740,18 +3841,16 @@ bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_SKINCANVAS::GetScrollViewportSize(UI_ELEMENT* element, double& width, double& height)
-* @brief      Returns the scroll viewport SIZE for an element. For a Form (or Menu) with a defined visiblerect this is
-*             the visible window; otherwise (and for non-Form scrolleables) it is the element boundary line. The box
-*             POSITION is left to each call site (it already tracks scroll), so only the size needs to change.
+* @brief      Returns the scroll viewport SIZE for an element. For a Form (or Menu) with a defined visiblerect this is the visible window; otherwise (and for non-Form scrolleables) it is the element boundary line. The box POSITION is left to each call site (it already tracks scroll), so only the size needs to change.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[out] width : 
-* @param[out] height : 
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  element : Element to process.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKINCANVAS::GetScrollViewportSize(UI_ELEMENT* element, double& width, double& height)
 {
   width  = 0.0f;
@@ -3773,21 +3872,18 @@ void UI_SKINCANVAS::GetScrollViewportSize(UI_ELEMENT* element, double& width, do
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_SKINCANVAS::ResolveScrollPolicy(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable)
 * @brief      Measures the content extent of a scrollable container and resolves its scroll policy (active/visible/limit).
 * @note       Called at draw time (not only at layout) because children can be added after the layout pass (e.g. menu
-*             options created from code). The content extent is the bounding SPAN of the children rectangles
-*             (max far edge - min near edge), which is robust to the per-element y/x convention (a constant offset
-*             cancels out) and to whether children stack upward or downward.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-* @param[in]  scrolleable :
-*
-* @return     bool : true if is succesful.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  element : Element to process.
+* @param[in]  scrolleable : Scrolleable pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::ResolveScrollPolicy(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable)
 {
   if(!element || !scrolleable) return false;
@@ -3875,24 +3971,21 @@ bool UI_SKINCANVAS::ResolveScrollPolicy(UI_ELEMENT* element, UI_PROPERTY_SCROLLE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRP2DCANVAS* canvas, double x_position, double y_position)
 * @brief      Draws the overlay scrollbars (track + proportional thumb) of a scrollable container.
 * @note       Overlay model: drawn after the content clip is restored and pinned to the container viewport (it does
-*             NOT receive the container's own scroll displacement). The thumb length is the visible fraction of the
-*             content (viewport / contentextent) and its position is displacement / limit. Read-only for now;
-*             interaction (drag/paging) is added in the next layer without changing this geometry.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-* @param[in]  scrolleable :
-* @param[in]  canvas :
-* @param[in]  x_position :
-* @param[in]  y_position :
-*
-* @return     bool : true if is succesful.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  element : Element to process.
+* @param[in]  scrolleable : Scrolleable pointer to use.
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE* scrolleable, GRP2DCANVAS* canvas, double x_position, double y_position)
 {
   if(!element || !scrolleable || !canvas) return false;
@@ -3999,16 +4092,16 @@ bool UI_SKINCANVAS::DrawScrollBars(UI_ELEMENT* element, UI_PROPERTY_SCROLLEABLE*
 * @brief      Text box size line
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element_textbox : 
-* @param[in]  canvas : 
-* @param[in]  x_position : 
-* @param[in]  y_position : 
-* @param[in]  nline : 
-* @param[in]  characterstr : 
-* @param[in]  index_char : 
-* @param[in]  parts : 
+* @param[in]  element_textbox : Element textbox pointer to use.
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
+* @param[in]  nline : Nline value.
+* @param[in]  characterstr : Characterstr value.
+* @param[in]  index_char : Index char value.
+* @param[in]  parts : Parts pointer to use.
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, int nline, XSTRING& characterstr, XDWORD index_char, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
@@ -4038,6 +4131,27 @@ double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRP2
 
 #define UI_SKINCANVAS_TEXTBOX_MAXINLINEIMAGES   32
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void UI_SkinCanvas_TextObstacle(double x, double ltop, double lbot, const double* ol, const double* orr, const double* ot, const double* ob, int n, double& jumpx, double& aheadleft, double& aheadright)
+* @brief      UI Skin Canvas Text Obstacle
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  ltop : Ltop value.
+* @param[in]  lbot : Lbot value.
+* @param[in]  ol : Ol value.
+* @param[in]  orr : Orr value.
+* @param[in]  ot : Ot value.
+* @param[in]  ob : Ob value.
+* @param[in]  n : N value.
+* @param[in]  jumpx : Jumpx value.
+* @param[in]  aheadleft : Aheadleft value.
+* @param[in]  aheadright : Aheadright value.
+* 
+* @return     static void : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 // Inline-image obstacle resolver for the text box. Active images are rectangles the running text must flow around.
 // For a line whose vertical band [ltop,lbot] overlaps an image, this advances the cursor past any image it currently
 // sits inside (jumpx), and reports the nearest image edge still ahead on that line (aheadleft/aheadright) so a word is
@@ -4079,16 +4193,16 @@ static void UI_SkinCanvas_TextObstacle(double x, double ltop, double lbot,
 * @fn         bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
 * @brief      Text box generate lines
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element_textbox : 
-* @param[in]  canvas : 
-* @param[in]  x_position : 
-* @param[in]  y_position : 
-* @param[in]  parts : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element_textbox : Element textbox pointer to use.
+* @param[in]  canvas : Canvas object to use.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
+* @param[in]  parts : Parts pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, GRP2DCANVAS* canvas, double x_position, double y_position, XVECTOR<UI_SKIN_TEXTBOX_PART*>& parts)
 {
   double                  x_text_position = x_position;
@@ -4537,14 +4651,14 @@ bool UI_SKINCANVAS::TextBox_GenerateLines(UI_ELEMENT_TEXTBOX* element_textbox, G
 * @fn         bool UI_SKINCANVAS::Debug_Draw(UI_ELEMENT* element, double x_position, double y_position)
 * @brief      Debug draw
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  x_position : 
-* @param[in]  y_position : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::Debug_Draw(UI_ELEMENT* element, double x_position, double y_position)
 {  
   GRP2DCANVAS* canvas = GetCanvas();
@@ -4574,8 +4688,8 @@ bool UI_SKINCANVAS::Debug_Draw(UI_ELEMENT* element, double x_position, double y_
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKINCANVAS::Clean()
 {
   fontsize        = 0;

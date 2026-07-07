@@ -54,13 +54,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         APPFLOWINTERNETSERVICES_XEVENT::APPFLOWINTERNETSERVICES_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* @fn         APPFLOWINTERNETSERVICES_XEVENT::APPFLOWINTERNETSERVICES_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    APPFLOW
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWINTERNETSERVICES_XEVENT::APPFLOWINTERNETSERVICES_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
@@ -88,10 +88,10 @@ APPFLOWINTERNETSERVICES_XEVENT::~APPFLOWINTERNETSERVICES_XEVENT()
 * @fn         APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE APPFLOWINTERNETSERVICES_XEVENT::GetInternetConnexionState()
 * @brief      Get internet connexion state
 * @ingroup    APPFLOW
-*
-* @return     APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE APPFLOWINTERNETSERVICES_XEVENT::GetInternetConnexionState()
 {
   return internetconnexionstate;
@@ -103,10 +103,10 @@ APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE APPFLOWINTERNETSERVICES_XEV
 * @fn         void APPFLOWINTERNETSERVICES_XEVENT::SetInternetConnexionState(APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE internetconnexionstate)
 * @brief      Set internet connexion state
 * @ingroup    APPFLOW
-*
-* @param[in]  internetconnexionstate : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  internetconnexionstate : Internetconnexionstate value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES_XEVENT::SetInternetConnexionState(APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE internetconnexionstate)
 {
   this->internetconnexionstate = internetconnexionstate;
@@ -118,10 +118,10 @@ void APPFLOWINTERNETSERVICES_XEVENT::SetInternetConnexionState(APPFLOWINTERNETSE
 * @fn         DIOCHECKTCPIPCONNECTION_CUT* APPFLOWINTERNETSERVICES_XEVENT::GetInternetConnextionCut()
 * @brief      Get internet connextion cut
 * @ingroup    APPFLOW
-*
-* @return     DIOCHECKTCPIPCONNECTION_CUT* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOCHECKTCPIPCONNECTION_CUT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION_CUT* APPFLOWINTERNETSERVICES_XEVENT::GetInternetConnextionCut()
 {
   return internetconnectioncut;
@@ -133,10 +133,10 @@ DIOCHECKTCPIPCONNECTION_CUT* APPFLOWINTERNETSERVICES_XEVENT::GetInternetConnexti
 * @fn         void APPFLOWINTERNETSERVICES_XEVENT::SetInternetConnextionCut(DIOCHECKTCPIPCONNECTION_CUT* internetconnectioncut)
 * @brief      Set internet connextion cut
 * @ingroup    APPFLOW
-*
-* @param[in]  internetconnectioncut : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  internetconnectioncut : Internetconnectioncut pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES_XEVENT::SetInternetConnextionCut(DIOCHECKTCPIPCONNECTION_CUT* internetconnectioncut)
 {
   this->internetconnectioncut  = internetconnectioncut;
@@ -149,7 +149,7 @@ void APPFLOWINTERNETSERVICES_XEVENT::SetInternetConnextionCut(DIOCHECKTCPIPCONNE
 * @brief      Is change public IP
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES_XEVENT::IsChangePublicIP()
@@ -165,7 +165,7 @@ bool APPFLOWINTERNETSERVICES_XEVENT::IsChangePublicIP()
 * @brief      Set is change public IP
 * @ingroup    APPFLOW
 * 
-* @param[in]  ischangepublicIP : 
+* @param[in]  ischangepublicIP : Ischangepublic IP value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES_XEVENT::SetIsChangePublicIP(bool ischangepublicIP)
@@ -179,10 +179,10 @@ void APPFLOWINTERNETSERVICES_XEVENT::SetIsChangePublicIP(bool ischangepublicIP)
 * @fn         bool APPFLOWINTERNETSERVICES_XEVENT::IsChangeLocalIP()
 * @brief      Is change local IP
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWINTERNETSERVICES_XEVENT::IsChangeLocalIP()
 {
   return ischangelocalIP;
@@ -194,10 +194,10 @@ bool APPFLOWINTERNETSERVICES_XEVENT::IsChangeLocalIP()
 * @fn         void APPFLOWINTERNETSERVICES_XEVENT::SetIsChangeLocalIP(bool ischangelocalIP)
 * @brief      Set is change local IP
 * @ingroup    APPFLOW
-*
-* @param[in]  ischangelocalIP : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  ischangelocalIP : Ischangelocal IP value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES_XEVENT::SetIsChangeLocalIP(bool ischangelocalIP)
 {
   this->ischangelocalIP = ischangelocalIP;
@@ -210,7 +210,7 @@ void APPFLOWINTERNETSERVICES_XEVENT::SetIsChangeLocalIP(bool ischangelocalIP)
 * @brief      Get change public IP
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWINTERNETSERVICES_XEVENT::GetChangePublicIP()
@@ -225,7 +225,7 @@ XSTRING* APPFLOWINTERNETSERVICES_XEVENT::GetChangePublicIP()
 * @brief      Get change local IP
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWINTERNETSERVICES_XEVENT::GetChangeLocalIP()
@@ -240,7 +240,7 @@ XSTRING* APPFLOWINTERNETSERVICES_XEVENT::GetChangeLocalIP()
 * @brief      Get N changes IP
 * @ingroup    APPFLOW
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWINTERNETSERVICES_XEVENT::GetNChangesIP()
@@ -255,7 +255,7 @@ XDWORD APPFLOWINTERNETSERVICES_XEVENT::GetNChangesIP()
 * @brief      Set N changes IP
 * @ingroup    APPFLOW
 * 
-* @param[in]  nchangesIP : 
+* @param[in]  nchangesIP : Nchanges IP value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES_XEVENT::SetNChangesIP(XDWORD nchangesIP)
@@ -270,7 +270,7 @@ void APPFLOWINTERNETSERVICES_XEVENT::SetNChangesIP(XDWORD nchangesIP)
 * @brief      Get N changes local IP
 * @ingroup    APPFLOW
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWINTERNETSERVICES_XEVENT::GetNChangesLocalIP()
@@ -285,7 +285,7 @@ XDWORD APPFLOWINTERNETSERVICES_XEVENT::GetNChangesLocalIP()
 * @brief      Set N changes local IP
 * @ingroup    APPFLOW
 * 
-* @param[in]  nchangeslocalIP : 
+* @param[in]  nchangeslocalIP : Nchangeslocal IP value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES_XEVENT::SetNChangesLocalIP(XDWORD nchangeslocalIP)
@@ -300,7 +300,7 @@ void APPFLOWINTERNETSERVICES_XEVENT::SetNChangesLocalIP(XDWORD nchangeslocalIP)
 * @brief      Get N changes public IP
 * @ingroup    APPFLOW
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWINTERNETSERVICES_XEVENT::GetNChangesPublicIP()
@@ -315,7 +315,7 @@ XDWORD APPFLOWINTERNETSERVICES_XEVENT::GetNChangesPublicIP()
 * @brief      Set N changes public IP
 * @ingroup    APPFLOW
 * 
-* @param[in]  nchangespublicIP : 
+* @param[in]  nchangespublicIP : Nchangespublic IP value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWINTERNETSERVICES_XEVENT::SetNChangesPublicIP(XDWORD nchangespublicIP)

@@ -60,13 +60,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_CONNECTION::DB_SQL_CONNECTION(DB_SQL_DATABASE* database)
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  DB_SQL_DATABASE* :
-*
+* 
+* @param[in]  database : Database pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_CONNECTION::DB_SQL_CONNECTION(DB_SQL_DATABASE* database)
 {
@@ -81,12 +81,12 @@ DB_SQL_CONNECTION::DB_SQL_CONNECTION(DB_SQL_DATABASE* database)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_CONNECTION::~DB_SQL_CONNECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_CONNECTION::~DB_SQL_CONNECTION()
 {
@@ -100,16 +100,16 @@ DB_SQL_CONNECTION::~DB_SQL_CONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_CONNECTION::SetOption(XCHAR* key, XCHAR* value)
 * @brief      Set option
 * @ingroup    DATABASE
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_CONNECTION::SetOption(XCHAR* key, XCHAR* value)
 {
@@ -133,16 +133,16 @@ bool DB_SQL_CONNECTION::SetOption(XCHAR* key, XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_CONNECTION::FindOption(XCHAR* key, DB_SQL_STRING* result)
 * @brief      Find option
 * @ingroup    DATABASE
-*
-* @param[in]  key :
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key pointer to use.
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_CONNECTION::FindOption(XCHAR* key, DB_SQL_STRING* result)
 {
@@ -161,11 +161,11 @@ bool DB_SQL_CONNECTION::FindOption(XCHAR* key, DB_SQL_STRING* result)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_CONNECTION::DB_SQL_CONNECTION()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_CONNECTION::DB_SQL_CONNECTION()
 {
@@ -174,12 +174,12 @@ DB_SQL_CONNECTION::DB_SQL_CONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DB_SQL_CONNECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_CONNECTION::Clean()
 {

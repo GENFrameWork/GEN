@@ -54,11 +54,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILEDXFENTITYOBJMTEXT::GRPVECTORFILEDXFENTITYOBJMTEXT(XCHAR* nametype)
+* @fn         GRPVECTORFILEDXFENTITYOBJMTEXT::GRPVECTORFILEDXFENTITYOBJMTEXT(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ (nametype)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nametype : 
+* @param[in]  nametype : Nametype pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJMTEXT::GRPVECTORFILEDXFENTITYOBJMTEXT(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ (nametype)
@@ -89,9 +89,9 @@ GRPVECTORFILEDXFENTITYOBJMTEXT::~GRPVECTORFILEDXFENTITYOBJMTEXT()
 * @brief      Apply data
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJMTEXT::ApplyData(GRPVECTORFILEDXFENTITY* entity)

@@ -92,8 +92,8 @@ XDWORD XFILEDFU::CRCtable[256] =   {  0x00000000, 0x77073096, 0xee0e612c, 0x9909
 * @fn         XFILEDFU_PREFIX::XFILEDFU_PREFIX()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_PREFIX::XFILEDFU_PREFIX()
 {
   Clean();
@@ -106,8 +106,8 @@ XFILEDFU_PREFIX::XFILEDFU_PREFIX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_PREFIX::~XFILEDFU_PREFIX()
 {
   Clean();
@@ -120,8 +120,8 @@ XFILEDFU_PREFIX::~XFILEDFU_PREFIX()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XFILEDFU_PREFIX::Clean()
 {
   memset(signature, 0, XFILEDFU_PREFIX_SIGNATUREPREXIF_MAX);  // DfuSe
@@ -140,8 +140,8 @@ void XFILEDFU_PREFIX::Clean()
 * @fn         XFILEDFU_IMAGE::XFILEDFU_IMAGE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_IMAGE::XFILEDFU_IMAGE()
 {
   Clean();
@@ -154,8 +154,8 @@ XFILEDFU_IMAGE::XFILEDFU_IMAGE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_IMAGE::~XFILEDFU_IMAGE()
 {
   elements.DeleteContents();
@@ -171,8 +171,8 @@ XFILEDFU_IMAGE::~XFILEDFU_IMAGE()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XFILEDFU_IMAGE::Clean()
 {
   memset(signature, 0, XFILEDFU_PREFIX_SIGNATUREIMAGE_MAX);
@@ -195,8 +195,8 @@ void XFILEDFU_IMAGE::Clean()
 * @fn         XFILEDFU_ELEMENT::XFILEDFU_ELEMENT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_ELEMENT::XFILEDFU_ELEMENT()
 {
   Clean();
@@ -209,8 +209,8 @@ XFILEDFU_ELEMENT::XFILEDFU_ELEMENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_ELEMENT::~XFILEDFU_ELEMENT()
 {
   Clean();
@@ -223,8 +223,8 @@ XFILEDFU_ELEMENT::~XFILEDFU_ELEMENT()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XFILEDFU_ELEMENT::Clean()
 {
   address = 0;
@@ -241,8 +241,8 @@ void XFILEDFU_ELEMENT::Clean()
 * @fn         XFILEDFU_SUFFIX::XFILEDFU_SUFFIX()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_SUFFIX::XFILEDFU_SUFFIX()
 {
   Clean();
@@ -255,8 +255,8 @@ XFILEDFU_SUFFIX::XFILEDFU_SUFFIX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_SUFFIX::~XFILEDFU_SUFFIX()
 {
   Clean();
@@ -269,8 +269,8 @@ XFILEDFU_SUFFIX::~XFILEDFU_SUFFIX()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XFILEDFU_SUFFIX::Clean()
 {
   BCDdevice   = 0;   
@@ -290,11 +290,11 @@ void XFILEDFU_SUFFIX::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDFU::XFILEDFU()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU::XFILEDFU()
 {
@@ -305,12 +305,12 @@ XFILEDFU::XFILEDFU()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDFU::~XFILEDFU()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU::~XFILEDFU()
 {
@@ -328,13 +328,13 @@ XFILEDFU::~XFILEDFU()
 * @fn         bool XFILEDFU::Open(XCHAR* xpath, bool isreadonly)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  xpath : 
-* @param[in]  isreadonly : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  xpath : Path to use.
+* @param[in]  isreadonly : Isreadonly value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDFU::Open(XCHAR* xpath, bool isreadonly)
 {
   if(!xfilebase) return false;
@@ -348,10 +348,10 @@ bool XFILEDFU::Open(XCHAR* xpath, bool isreadonly)
 * @fn         bool XFILEDFU::ReadAll()
 * @brief      Read all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDFU::ReadAll()
 {
   if(!xfilebase) return false;
@@ -406,10 +406,10 @@ bool XFILEDFU::ReadAll()
 * @fn         XFILEDFU_PREFIX* XFILEDFU::GetPrefix()
 * @brief      Get prefix
 * @ingroup    XUTILS
-*
-* @return     XFILEDFU_PREFIX* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEDFU_PREFIX* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_PREFIX* XFILEDFU::GetPrefix()
 {
   return &prefix;
@@ -421,10 +421,10 @@ XFILEDFU_PREFIX* XFILEDFU::GetPrefix()
 * @fn         XVECTOR<XFILEDFU_IMAGE*>* XFILEDFU::GetImages()
 * @brief      Get images
 * @ingroup    XUTILS
-*
-* @return     XVECTOR<XFILEDFU_IMAGE*>* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XVECTOR<XFILEDFU_IMAGE*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XFILEDFU_IMAGE*>*  XFILEDFU::GetImages()
 {
   return &images;
@@ -437,10 +437,10 @@ XVECTOR<XFILEDFU_IMAGE*>*  XFILEDFU::GetImages()
 * @fn         XFILEDFU_SUFFIX* XFILEDFU::GetSuffix()
 * @brief      Get suffix
 * @ingroup    XUTILS
-*
-* @return     XFILEDFU_SUFFIX* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEDFU_SUFFIX* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_SUFFIX* XFILEDFU::GetSuffix()
 {
   return &suffix;
@@ -452,10 +452,10 @@ XFILEDFU_SUFFIX* XFILEDFU::GetSuffix()
 * @fn         bool XFILEDFU::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDFU::Close()
 {
   if(!xfilebase) return false;
@@ -469,10 +469,10 @@ bool XFILEDFU::Close()
 * @fn         XFILEDFU_IMAGE* XFILEDFU::Read_Image()
 * @brief      Read image
 * @ingroup    XUTILS
-*
-* @return     XFILEDFU_IMAGE* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEDFU_IMAGE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_IMAGE* XFILEDFU::Read_Image()
 {
   XFILEDFU_IMAGE* image = GEN_NEW XFILEDFU_IMAGE();
@@ -509,7 +509,7 @@ XFILEDFU_IMAGE* XFILEDFU::Read_Image()
 * @brief      Read element
 * @ingroup    XUTILS
 * 
-* @return     XFILEDFU_ELEMENT* : 
+* @return     XFILEDFU_ELEMENT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDFU_ELEMENT* XFILEDFU::Read_Element()
@@ -546,10 +546,10 @@ XFILEDFU_ELEMENT* XFILEDFU::Read_Element()
 * @fn         bool XFILEDFU::CheckCRC()
 * @brief      Check CRC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDFU::CheckCRC()
 {
   XBUFFER buffer;

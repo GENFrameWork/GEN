@@ -77,11 +77,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWINDOWSWIFIMANAGERMODE::DIOWINDOWSWIFIMANAGERMODE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSWIFIMANAGERMODE::DIOWINDOWSWIFIMANAGERMODE()    
 { 
@@ -90,12 +90,12 @@ DIOWINDOWSWIFIMANAGERMODE::DIOWINDOWSWIFIMANAGERMODE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWINDOWSWIFIMANAGERMODE::~DIOWINDOWSWIFIMANAGERMODE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSWIFIMANAGERMODE::~DIOWINDOWSWIFIMANAGERMODE()    
 { 
@@ -108,14 +108,14 @@ DIOWINDOWSWIFIMANAGERMODE::~DIOWINDOWSWIFIMANAGERMODE()
 * @fn         bool DIOWINDOWSWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, bool serialize)
 * @brief      Set mode client
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  SSID : SSID pointer to use.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, bool serialize)
 {
   HANDLE                        handleclient      = NULL;
@@ -250,10 +250,10 @@ bool DIOWINDOWSWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, boo
 * @fn         bool DIOWINDOWSWIFIMANAGERMODE::IsDisconnected()
 * @brief      Is disconnected
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWIFIMANAGERMODE::IsDisconnected()
 {
   HANDLE                        handleclient      = NULL;
@@ -317,10 +317,10 @@ bool DIOWINDOWSWIFIMANAGERMODE::IsDisconnected()
 * @fn         bool DIOWINDOWSWIFIMANAGERMODE::Disconnect()
 * @brief      Disconnect
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWIFIMANAGERMODE::Disconnect()
 {
   HANDLE                        handleclient      = NULL;
@@ -362,10 +362,10 @@ bool DIOWINDOWSWIFIMANAGERMODE::Disconnect()
 * @fn         bool DIOWINDOWSWIFIMANAGERMODE::IsConnected()
 * @brief      Is connected
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSWIFIMANAGERMODE::IsConnected()
 {
   HANDLE                        handleclient      = NULL;
@@ -425,12 +425,12 @@ bool DIOWINDOWSWIFIMANAGERMODE::IsConnected()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSWIFIMANAGERMODE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSWIFIMANAGERMODE::Clean()
 {

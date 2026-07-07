@@ -66,11 +66,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXSHAREDMEMORYMANAGER::XLINUXSHAREDMEMORYMANAGER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXSHAREDMEMORYMANAGER::XLINUXSHAREDMEMORYMANAGER()
 {
@@ -79,12 +79,12 @@ XLINUXSHAREDMEMORYMANAGER::XLINUXSHAREDMEMORYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXSHAREDMEMORYMANAGER::~XLINUXSHAREDMEMORYMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXSHAREDMEMORYMANAGER::~XLINUXSHAREDMEMORYMANAGER()
 {
@@ -93,17 +93,17 @@ XLINUXSHAREDMEMORYMANAGER::~XLINUXSHAREDMEMORYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XLINUXSHAREDMEMORYMANAGER::Create(XCHAR* ID, XDWORD size, bool ispublic)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  ID :
-* @param[in]  size :
-* @param[in]  ispublic :
-*
-* @return     XBYTE* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  size : Size value.
+* @param[in]  ispublic : Ispublic value.
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XLINUXSHAREDMEMORYMANAGER::Create(XCHAR* ID, XDWORD size, bool ispublic)
 {
@@ -144,10 +144,10 @@ XBYTE* XLINUXSHAREDMEMORYMANAGER::Create(XCHAR* ID, XDWORD size, bool ispublic)
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  ID : 
-* @param[in]  size : 
+* @param[in]  ID : Identifier to use.
+* @param[in]  size : Size value.
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XLINUXSHAREDMEMORYMANAGER::Open(XCHAR* ID, XDWORD& size)
@@ -188,13 +188,13 @@ XBYTE* XLINUXSHAREDMEMORYMANAGER::Open(XCHAR* ID, XDWORD& size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XLINUXSHAREDMEMORYMANAGER::Close
+* 
+* @fn         bool XLINUXSHAREDMEMORYMANAGER::Close()
 * @brief      Close Shared Memory for this instance
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSHAREDMEMORYMANAGER::Close()
 {
@@ -222,12 +222,12 @@ bool XLINUXSHAREDMEMORYMANAGER::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXSHAREDMEMORYMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXSHAREDMEMORYMANAGER::Clean()
 {

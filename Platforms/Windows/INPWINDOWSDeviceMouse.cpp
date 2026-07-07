@@ -60,11 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPWINDOWSDEVICEMOUSE::INPWINDOWSDEVICEMOUSE()
+* 
+* @fn         INPWINDOWSDEVICEMOUSE::INPWINDOWSDEVICEMOUSE(): INPDEVICE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPWINDOWSDEVICEMOUSE::INPWINDOWSDEVICEMOUSE(): INPDEVICE()
 {
@@ -85,12 +85,12 @@ INPWINDOWSDEVICEMOUSE::INPWINDOWSDEVICEMOUSE(): INPDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPWINDOWSDEVICEMOUSE::~INPWINDOWSDEVICEMOUSE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPWINDOWSDEVICEMOUSE::~INPWINDOWSDEVICEMOUSE()
 {
@@ -105,13 +105,13 @@ INPWINDOWSDEVICEMOUSE::~INPWINDOWSDEVICEMOUSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPWINDOWSDEVICEMOUSE::Update()
 * @brief      Update
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSDEVICEMOUSE::Update()
 {
@@ -208,12 +208,12 @@ bool INPWINDOWSDEVICEMOUSE::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPWINDOWSDEVICEMOUSE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPWINDOWSDEVICEMOUSE::Clean()
 {
@@ -222,19 +222,19 @@ void INPWINDOWSDEVICEMOUSE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPWINDOWSDEVICEMOUSE::GetWindowPosition(int& screenx,int& screeny,int& screenw,int& screenh)
 * @brief      Get window position
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[out]  screenx : x position of screen
-* @param[out]  screeny : y position of screen
-* @param[out]  screenw : width of screen
-* @param[out]  screenh : height of screen
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  screenx : x position of screen
+* @param[in]  screeny : y position of screen
+* @param[in]  screenw : width of screen
+* @param[in]  screenh : height of screen
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSDEVICEMOUSE::GetWindowPosition(int& screenx,int& screeny,int& screenw,int& screenh)
 {
@@ -255,14 +255,14 @@ bool INPWINDOWSDEVICEMOUSE::GetWindowPosition(int& screenx,int& screeny,int& scr
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPWINDOWSDEVICEMOUSE::CreateAllButtons()
 * @brief      Create all buttons
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSDEVICEMOUSE::CreateAllButtons()
 { 
@@ -275,14 +275,14 @@ bool INPWINDOWSDEVICEMOUSE::CreateAllButtons()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPWINDOWSDEVICEMOUSE::CreateAllCursors()
 * @brief      Create all cursors
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSDEVICEMOUSE::CreateAllCursors()
 {

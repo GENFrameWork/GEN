@@ -67,11 +67,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XWINDOWSFILE::XWINDOWSFILE()
+* 
+* @fn         XWINDOWSFILE::XWINDOWSFILE(): XFILE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSFILE::XWINDOWSFILE(): XFILE()
 {
@@ -80,12 +80,12 @@ XWINDOWSFILE::XWINDOWSFILE(): XFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSFILE::~XWINDOWSFILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSFILE::~XWINDOWSFILE()
 {
@@ -96,15 +96,15 @@ XWINDOWSFILE::~XWINDOWSFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Exist(XCHAR* xpath)
 * @brief      Exist
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Exist(XCHAR* xpath)
 {
@@ -117,16 +117,16 @@ bool XWINDOWSFILE::Exist(XCHAR* xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Open(XCHAR* xpath, bool isreadonly)
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-* @param[in]  isreadonly :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  isreadonly : Isreadonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Open(XCHAR* xpath, bool isreadonly)
 {
@@ -137,15 +137,15 @@ bool XWINDOWSFILE::Open(XCHAR* xpath, bool isreadonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Create(XCHAR* xpath)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Create(XCHAR* xpath)
 {
@@ -156,15 +156,15 @@ bool XWINDOWSFILE::Create(XCHAR* xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::SetSize(XQWORD size)
 * @brief      Set size
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::SetSize(XQWORD size)
 {
@@ -180,15 +180,15 @@ bool XWINDOWSFILE::SetSize(XQWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::GetPosition(XQWORD& position)
 * @brief      Get position
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  position :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::GetPosition(XQWORD& position)
 {
@@ -203,15 +203,15 @@ bool XWINDOWSFILE::GetPosition(XQWORD& position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::SetPosition(XQWORD position)
 * @brief      Set position
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  position :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::SetPosition(XQWORD position)
 {
@@ -235,17 +235,17 @@ bool XWINDOWSFILE::SetPosition(XQWORD position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 * @brief      Read
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  cipher :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 {
@@ -264,17 +264,17 @@ bool XWINDOWSFILE::Read(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 * @brief      Read
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  cipher :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 {
@@ -308,17 +308,17 @@ bool XWINDOWSFILE::Read(XBYTE* buffer, XDWORD* size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 * @brief      Write
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  cipher :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  cipher : Cipher pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 {
@@ -346,13 +346,13 @@ bool XWINDOWSFILE::Write(XBYTE* buffer, XDWORD size, CIPHER* cipher)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Flush()
 * @brief      Flush
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Flush()
 {
@@ -366,13 +366,13 @@ bool XWINDOWSFILE::Flush()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Close()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Close()
 {
@@ -402,16 +402,16 @@ bool XWINDOWSFILE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Erase(XCHAR* xpath,bool overwrite)
 * @brief      Erase
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-* @param[in]  overwrite :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  overwrite : Overwrite value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Erase(XCHAR* xpath,bool overwrite)
 {
@@ -442,16 +442,16 @@ bool XWINDOWSFILE::Erase(XCHAR* xpath,bool overwrite)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::Rename(XCHAR* xpathold, XCHAR* xpathnew)
 * @brief      Rename
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpathold :
-* @param[in]  xpathnew :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathold : Xpathold pointer to use.
+* @param[in]  xpathnew : Xpathnew pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::Rename(XCHAR* xpathold, XCHAR* xpathnew)
 {
@@ -462,13 +462,13 @@ bool XWINDOWSFILE::Rename(XCHAR* xpathold, XCHAR* xpathnew)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         FILE* XWINDOWSFILE::CreateStructHandle()
 * @brief      Create struct handle
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     FILE* : 
-*
+* 
+* @return     FILE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 FILE* XWINDOWSFILE::CreateStructHandle()
 {
@@ -497,13 +497,13 @@ FILE* XWINDOWSFILE::CreateStructHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::DeleteStructHandle()
 * @brief      Delete struct handle
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::DeleteStructHandle()
 {  
@@ -516,13 +516,13 @@ bool XWINDOWSFILE::DeleteStructHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::ActualizeSize()
 * @brief      Actualize size
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::ActualizeSize()
 {
@@ -546,16 +546,16 @@ bool XWINDOWSFILE::ActualizeSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSFILE::ExtendedOpen(XCHAR* xpath, XWINDOWSFILEMODE mode)
 * @brief      Extended open
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-* @param[in]  mode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  mode : Mode value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSFILE::ExtendedOpen(XCHAR* xpath, XWINDOWSFILEMODE mode)
 {
@@ -593,12 +593,12 @@ bool XWINDOWSFILE::ExtendedOpen(XCHAR* xpath, XWINDOWSFILEMODE mode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSFILE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSFILE::Clean()
 {

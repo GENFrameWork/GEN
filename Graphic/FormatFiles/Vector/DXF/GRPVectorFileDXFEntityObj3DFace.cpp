@@ -55,11 +55,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILEDXFENTITYOBJ3DFACE::GRPVECTORFILEDXFENTITYOBJ3DFACE(XCHAR* nametype)
+* @fn         GRPVECTORFILEDXFENTITYOBJ3DFACE::GRPVECTORFILEDXFENTITYOBJ3DFACE(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ (nametype)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nametype : 
+* @param[in]  nametype : Nametype pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYOBJ3DFACE::GRPVECTORFILEDXFENTITYOBJ3DFACE(XCHAR* nametype) : GRPVECTORFILEDXFENTITYOBJ (nametype)
@@ -90,9 +90,9 @@ GRPVECTORFILEDXFENTITYOBJ3DFACE::~GRPVECTORFILEDXFENTITYOBJ3DFACE()
 * @brief      Apply data
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYOBJ3DFACE::ApplyData(GRPVECTORFILEDXFENTITY* entity)

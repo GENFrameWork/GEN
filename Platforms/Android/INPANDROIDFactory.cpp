@@ -55,16 +55,16 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPDEVICE* INPANDROIDFACTORY::CreateDevice(XCHAR* devicename, void* param)
+* 
+* @fn         INPDEVICE* INPANDROIDFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 * @brief      Create device
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * @param[in]  type : device type of the input device
 * @param[in]  param : param to create device (in windows need handle to windows)
-*
-* @return     INPDEVICE* : device input created
-*
+* 
+* @return     INPDEVICE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPDEVICE* INPANDROIDFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 {
@@ -99,15 +99,15 @@ INPDEVICE* INPANDROIDFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPANDROIDFACTORY::DeleteDevice(INPDEVICE* device)
 * @brief      Delete device
 * @ingroup    PLATFORM_ANDROID
-*
+* 
 * @param[in]  device : device to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPANDROIDFACTORY::DeleteDevice(INPDEVICE* device)
 {

@@ -101,12 +101,12 @@ MAINPROCESP32::MAINPROCESP32()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MAINPROCESP32::~MAINPROCESP32()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MAINPROCESP32::~MAINPROCESP32()
 {
@@ -115,15 +115,15 @@ MAINPROCESP32::~MAINPROCESP32()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCESP32::Ini(APPFLOWMAIN* appmain)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  appmain :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  appmain : Appmain pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCESP32::Ini(APPFLOWMAIN* appmain)
 {
@@ -156,13 +156,13 @@ bool MAINPROCESP32::Ini(APPFLOWMAIN* appmain)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCESP32::Update()
 * @brief      Update
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCESP32::Update()
 {
@@ -183,13 +183,13 @@ bool MAINPROCESP32::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCESP32::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCESP32::End()
 {
@@ -237,15 +237,13 @@ bool MAINPROCESP32::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool MAINPROCESP32::Factorys_Ini(XSTRING* xpath)
+* 
+* @fn         bool MAINPROCESP32::Factorys_Ini()
 * @brief      Factorys ini
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  xpath : always NULL in this platform
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCESP32::Factorys_Ini()
 {
@@ -286,13 +284,13 @@ bool MAINPROCESP32::Factorys_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MAINPROCESP32::Factorys_End()
 * @brief      Factorys end
 * @ingroup    PLATFORM_ESP32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MAINPROCESP32::Factorys_End()
 {
@@ -347,12 +345,12 @@ bool MAINPROCESP32::Factorys_End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void MAINPROCESP32::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void MAINPROCESP32::Clean()
 {
@@ -365,13 +363,13 @@ void MAINPROCESP32::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int main()
 * @brief      main
 * @ingroup    PLATFORM_ESP32
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int main()
 {

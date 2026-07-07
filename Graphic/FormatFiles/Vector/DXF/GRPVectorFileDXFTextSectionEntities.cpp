@@ -539,9 +539,9 @@ GRPVECTORFILEDXFTEXTSECTIONENTITIES::~GRPVECTORFILEDXFTEXTSECTIONENTITIES()
 * @brief      Is known entity
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
+* @param[in]  namevar : Namevar value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::IsKnownEntity(XSTRING& namevar)
@@ -568,10 +568,10 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::IsKnownEntity(XSTRING& namevar)
 * @brief      Is known type value
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
-* @param[in]  type : 
+* @param[in]  namevar : Namevar value.
+* @param[in]  type : Type value.
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTIONENTITYDEFTYPE* : 
+* @return     GRPVECTORFILEDXFTEXTSECTIONENTITYDEFTYPE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTIONENTITYDEFTYPE* GRPVECTORFILEDXFTEXTSECTIONENTITIES::IsKnownTypeValue(XSTRING& namevar, int type)
@@ -608,9 +608,9 @@ GRPVECTORFILEDXFTEXTSECTIONENTITYDEFTYPE* GRPVECTORFILEDXFTEXTSECTIONENTITIES::I
 * @brief      Add entity
 * @ingroup    GRAPHIC
 * 
-* @param[in]  entity : 
+* @param[in]  entity : Entity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::AddEntity(GRPVECTORFILEDXFENTITY* entity)
@@ -640,7 +640,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::AddEntity(GRPVECTORFILEDXFENTITY* enti
 * @brief      Get entities
 * @ingroup    GRAPHIC
 * 
-* @return     XVECTOR<GRPVECTORFILEDXFENTITY*>* : 
+* @return     XVECTOR<GRPVECTORFILEDXFENTITY*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVECTORFILEDXFENTITY*>* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEntities()
@@ -652,13 +652,13 @@ XVECTOR<GRPVECTORFILEDXFENTITY*>* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEntiti
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         GRPVECTORFILEDXFENTITY* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEntity (XCHAR* nameentity, XDWORD index)
-* @brief      Get entity 
+* @brief      Get entity
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameentity : 
-* @param[in]  index : 
+* @param[in]  nameentity : Nameentity pointer to use.
+* @param[in]  index : Index value.
 * 
-* @return     GRPVECTORFILEDXFENTITY* : 
+* @return     GRPVECTORFILEDXFENTITY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITY* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEntity (XCHAR* nameentity, XDWORD index)
@@ -697,10 +697,10 @@ GRPVECTORFILEDXFENTITY* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEntity (XCHAR* n
 * @brief      Delete entity
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameentity : 
-* @param[in]  index : 
+* @param[in]  nameentity : Nameentity pointer to use.
+* @param[in]  index : Index value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteEntity(XCHAR* nameentity, XDWORD index)
@@ -731,9 +731,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteEntity(XCHAR* nameentity, XDWORD
 * @brief      Delete all entities
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameentity : 
+* @param[in]  nameentity : Nameentity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteAllEntities(XCHAR* nameentity)
@@ -768,7 +768,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteAllEntities(XCHAR* nameentity)
 * @brief      Delete all entities
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteAllEntities()
@@ -794,7 +794,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteAllEntities()
 * @brief      Get enum entitys
 * @ingroup    GRAPHIC
 * 
-* @return     XMAP<XSTRING*, : 
+* @return     XMAP<XSTRING*, int>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMAP<XSTRING*, int>* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEnumEntitys()
@@ -809,9 +809,9 @@ XMAP<XSTRING*, int>* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEnumEntitys()
 * @brief      Get N entitys
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameentity : 
+* @param[in]  nameentity : Nameentity pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetNEntitys(XCHAR* nameentity)
@@ -834,7 +834,7 @@ int GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetNEntitys(XCHAR* nameentity)
 * @brief      Get entities obj
 * @ingroup    GRAPHIC
 * 
-* @return     XVECTOR<GRPVECTORFILEDXFENTITYOBJ*>* : 
+* @return     XVECTOR<GRPVECTORFILEDXFENTITYOBJ*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVECTORFILEDXFENTITYOBJ*>* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEntitiesObj()
@@ -849,7 +849,7 @@ XVECTOR<GRPVECTORFILEDXFENTITYOBJ*>* GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEnt
 * @brief      Delete all entities obj
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteAllEntitiesObj()
@@ -872,9 +872,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::DeleteAllEntitiesObj()
 * @brief      Parser text section
 * @ingroup    GRAPHIC
 * 
-* @param[in]  fileTXT : 
+* @param[in]  fileTXT : File TXT pointer to use.
 * 
-* @return     GRPVECTORFILERESULT : 
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILETXT* fileTXT)
@@ -1122,9 +1122,9 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONENTITIES::ParserTextSection(XFILE
 * @brief      Get entity enum index
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameentity : 
+* @param[in]  nameentity : Nameentity pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEntityEnumIndex(XCHAR* nameentity)
@@ -1148,9 +1148,9 @@ int GRPVECTORFILEDXFTEXTSECTIONENTITIES::GetEntityEnumIndex(XCHAR* nameentity)
 * @brief      Add entity enum
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameentity : 
+* @param[in]  nameentity : Nameentity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::AddEntityEnum(XCHAR* nameentity)
@@ -1184,9 +1184,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::AddEntityEnum(XCHAR* nameentity)
 * @brief      Subtract entity enum
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameentity : 
+* @param[in]  nameentity : Nameentity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::SubtractEntityEnum(XCHAR* nameentity)
@@ -1218,9 +1218,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::SubtractEntityEnum(XCHAR* nameentity)
 * @brief      Set zero entity enum
 * @ingroup    GRAPHIC
 * 
-* @param[in]  nameentity : 
+* @param[in]  nameentity : Nameentity pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::SetZeroEntityEnum(XCHAR* nameentity)
@@ -1251,7 +1251,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::SetZeroEntityEnum(XCHAR* nameentity)
 * @brief      Show trace all entities
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONENTITIES::ShowTraceAllEntities()

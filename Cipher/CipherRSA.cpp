@@ -99,7 +99,7 @@ CIPHERRSA_CONTEXT::~CIPHERRSA_CONTEXT()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHERRSA_CONTEXT::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -126,7 +126,7 @@ void CIPHERRSA_CONTEXT::Ini()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHERRSA_CONTEXT::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -172,7 +172,7 @@ void CIPHERRSA_CONTEXT::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERRSA::CIPHERRSA()
+* @fn         CIPHERRSA::CIPHERRSA() : CIPHER()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -211,10 +211,10 @@ CIPHERRSA::~CIPHERRSA()
 * @brief      Set key
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
-* @param[in]  integritycheck : 
+* @param[in]  key : Key pointer to use.
+* @param[in]  integritycheck : Integritycheck value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::SetKey(CIPHERKEY* key, bool integritycheck)
@@ -269,12 +269,12 @@ bool CIPHERRSA::SetKey(CIPHERKEY* key, bool integritycheck)
 * @brief      Cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
-* @param[in]  keytouse : 
-* @param[in]  pkcs1version : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  keytouse : Keytouse value.
+* @param[in]  pkcs1version : Pkcs1version value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::Cipher(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, CIPHERRSAPKCS1VERSION pkcs1version)
@@ -328,11 +328,11 @@ bool CIPHERRSA::Cipher(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, CIPHER
 * @brief      Cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  keytouse : 
-* @param[in]  pkcs1version : 
+* @param[in]  input : Input value.
+* @param[in]  keytouse : Keytouse value.
+* @param[in]  pkcs1version : Pkcs1version value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::Cipher(XBUFFER& input, CIPHERKEYTYPE keytouse, CIPHERRSAPKCS1VERSION pkcs1version)
@@ -347,12 +347,12 @@ bool CIPHERRSA::Cipher(XBUFFER& input, CIPHERKEYTYPE keytouse, CIPHERRSAPKCS1VER
 * @brief      Uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
-* @param[in]  keytouse : 
-* @param[in]  pkcs1version : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  keytouse : Keytouse value.
+* @param[in]  pkcs1version : Pkcs1version value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::Uncipher(XBYTE* input,XDWORD size, CIPHERKEYTYPE keytouse, CIPHERRSAPKCS1VERSION pkcs1version)
@@ -406,11 +406,11 @@ bool CIPHERRSA::Uncipher(XBYTE* input,XDWORD size, CIPHERKEYTYPE keytouse, CIPHE
 * @brief      Uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  keytouse : 
-* @param[in]  pkcs1version : 
+* @param[in]  input : Input value.
+* @param[in]  keytouse : Keytouse value.
+* @param[in]  pkcs1version : Pkcs1version value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::Uncipher(XBUFFER& input, CIPHERKEYTYPE keytouse, CIPHERRSAPKCS1VERSION pkcs1version)
@@ -425,13 +425,13 @@ bool CIPHERRSA::Uncipher(XBUFFER& input, CIPHERKEYTYPE keytouse, CIPHERRSAPKCS1V
 * @brief      Sign
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
-* @param[in]  keytouse : 
-* @param[in]  hash : 
-* @param[in]  pkcs1version : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  keytouse : Keytouse value.
+* @param[in]  hash : Hash pointer to use.
+* @param[in]  pkcs1version : Pkcs1version value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::Sign(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version)
@@ -478,12 +478,12 @@ bool CIPHERRSA::Sign(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* ha
 * @brief      Sign
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  keytouse : 
-* @param[in]  hash : 
-* @param[in]  pkcs1version : 
+* @param[in]  input : Input value.
+* @param[in]  keytouse : Keytouse value.
+* @param[in]  hash : Hash pointer to use.
+* @param[in]  pkcs1version : Pkcs1version value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::Sign(XBUFFER& input, CIPHERKEYTYPE keytouse, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version)
@@ -498,7 +498,7 @@ bool CIPHERRSA::Sign(XBUFFER& input, CIPHERKEYTYPE keytouse, HASH* hash, CIPHERR
 * @brief      Get instance
 * @ingroup    CIPHER
 * 
-* @return     CIPHERRSA* : 
+* @return     CIPHERRSA* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERRSA* CIPHERRSA::GetInstance()
@@ -513,7 +513,7 @@ CIPHERRSA* CIPHERRSA::GetInstance()
 * @brief      Get X rand
 * @ingroup    CIPHER
 * 
-* @return     XRAND* : 
+* @return     XRAND* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XRAND* CIPHERRSA::GetXRand()
@@ -528,14 +528,14 @@ XRAND* CIPHERRSA::GetXRand()
 * @brief      Generate keys
 * @ingroup    CIPHER
 * 
-* @param[in]  nbits : 
-* @param[in]  exponent : 
-* @param[in]  publickey : 
-* @param[in]  privatekey : 
-* @param[in]  funcrandom : 
-* @param[in]  paramrandom : 
+* @param[in]  nbits : Nbits value.
+* @param[in]  exponent : Exponent value.
+* @param[in]  publickey : Publickey value.
+* @param[in]  privatekey : Privatekey value.
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::GenerateKeys(XDWORD nbits, int exponent, CIPHERKEYPUBLICRSA& publickey, CIPHERKEYPRIVATERSA& privatekey, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
@@ -616,7 +616,7 @@ bool CIPHERRSA::GenerateKeys(XDWORD nbits, int exponent, CIPHERKEYPUBLICRSA& pub
 * @brief      Check context public key
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::CheckContextPublicKey()
@@ -636,7 +636,7 @@ bool CIPHERRSA::CheckContextPublicKey()
 * @brief      Check context private key
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::CheckContextPrivateKey()
@@ -717,15 +717,15 @@ bool CIPHERRSA::CheckContextPrivateKey()
 * @brief      Cipher PKCS1V15
 * @ingroup    CIPHER
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
-* @param[in]  output : 
-* @param[in]  keytypetouse : 
-* @param[in]  pkcs1version : 
-* @param[in]  funcrandom : 
-* @param[in]  paramrandom : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  output : Output output.
+* @param[in]  keytypetouse : Keytypetouse value.
+* @param[in]  pkcs1version : Pkcs1version value.
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::Cipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, CIPHERKEYTYPE keytypetouse, CIPHERRSAPKCS1VERSION pkcs1version,  XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
@@ -793,15 +793,15 @@ bool CIPHERRSA::Cipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, CI
 * @brief      Uncipher PKCS1V15
 * @ingroup    CIPHER
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
-* @param[in]  output : 
-* @param[in]  keytypetouse : 
-* @param[in]  pkcs1version : 
-* @param[in]  funcrandom : 
-* @param[in]  paramrandom : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  output : Output output.
+* @param[in]  keytypetouse : Keytypetouse value.
+* @param[in]  pkcs1version : Pkcs1version value.
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::Uncipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, CIPHERKEYTYPE keytypetouse, CIPHERRSAPKCS1VERSION pkcs1version,  XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
@@ -864,10 +864,10 @@ bool CIPHERRSA::Uncipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, 
 * @brief      Do RSA public operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  input : Input value.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::DoRSAPublicOperation(XBUFFER& input, XBUFFER& output)
@@ -897,12 +897,12 @@ bool CIPHERRSA::DoRSAPublicOperation(XBUFFER& input, XBUFFER& output)
 * @brief      Do RSA private operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  output : 
-* @param[in]  funcrandom : 
-* @param[in]  paramrandom : 
+* @param[in]  input : Input value.
+* @param[in]  output : Output output.
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::DoRSAPrivateOperation(XBUFFER& input, XBUFFER& output, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
@@ -982,12 +982,12 @@ bool CIPHERRSA::DoRSAPrivateOperation(XBUFFER& input, XBUFFER& output, XMPINTEGE
 * @brief      Prepare blinding
 * @ingroup    CIPHER
 * 
-* @param[in]  Vi : 
-* @param[in]  Vf : 
-* @param[in]  funcrandom : 
-* @param[in]  paramrandom : 
+* @param[in]  Vi : Vi pointer to use.
+* @param[in]  Vf : Vf pointer to use.
+* @param[in]  funcrandom : Funcrandom value.
+* @param[in]  paramrandom : Paramrandom pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::PrepareBlinding(XMPINTEGER* Vi, XMPINTEGER* Vf, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom)
@@ -1037,9 +1037,9 @@ bool CIPHERRSA::PrepareBlinding(XMPINTEGER* Vi, XMPINTEGER* Vf, XMPINTEGER_FUNCR
 * @brief      Get key size in bytes
 * @ingroup    CIPHER
 * 
-* @param[in]  keytouse : 
+* @param[in]  keytouse : Keytouse value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERRSA::GetKeySizeInBytes(CIPHERKEYTYPE keytouse)
@@ -1061,11 +1061,11 @@ int CIPHERRSA::GetKeySizeInBytes(CIPHERKEYTYPE keytouse)
 * @brief      Generate random
 * @ingroup    CIPHER
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
-* @param[in]  param : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  param : Param pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::GenerateRandom(XBYTE* buffer, XDWORD size, void* param)

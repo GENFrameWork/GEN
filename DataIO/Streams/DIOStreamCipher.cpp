@@ -62,14 +62,14 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMCIPHER::DIOSTREAMCIPHER(DIOSTREAMCONFIG* config, CIPHER* cipher)
+* 
+* @fn         DIOSTREAMCIPHER::DIOSTREAMCIPHER(DIOSTREAMCONFIG* config, CIPHER* cipher): DIOSTREAM()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  config :
-* @param[in]  cipher :
-*
+* 
+* @param[in]  config : Configuration object to use.
+* @param[in]  DIOSTREAM : DIOSTREAM pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCIPHER::DIOSTREAMCIPHER(DIOSTREAMCONFIG* config, CIPHER* cipher): DIOSTREAM()
 {
@@ -99,12 +99,12 @@ DIOSTREAMCIPHER::DIOSTREAMCIPHER(DIOSTREAMCONFIG* config, CIPHER* cipher): DIOST
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMCIPHER::~DIOSTREAMCIPHER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCIPHER::~DIOSTREAMCIPHER()
 {
@@ -126,13 +126,13 @@ DIOSTREAMCIPHER::~DIOSTREAMCIPHER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMCONFIG* DIOSTREAMCIPHER::GetConfig()
 * @brief      Get config
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMCONFIG* :
-*
+* 
+* @return     DIOSTREAMCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIG* DIOSTREAMCIPHER::GetConfig()
 {
@@ -141,15 +141,15 @@ DIOSTREAMCONFIG* DIOSTREAMCIPHER::GetConfig()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCIPHER::SetConfig(DIOSTREAMCONFIG* config)
 * @brief      Set config
 * @ingroup    DATAIO
-*
-* @param[in]  config :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  config : Configuration object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCIPHER::SetConfig(DIOSTREAMCONFIG* config)
 {
@@ -159,13 +159,13 @@ bool DIOSTREAMCIPHER::SetConfig(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSTATUS DIOSTREAMCIPHER::GetStatus()
 * @brief      Get status
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMSTATUS :
-*
+* 
+* @return     DIOSTREAMSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOSTREAMCIPHER::GetStatus()
 {
@@ -179,13 +179,13 @@ DIOSTREAMSTATUS DIOSTREAMCIPHER::GetStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCIPHER::Open()
 * @brief      Open
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCIPHER::Open()
 {
@@ -195,13 +195,13 @@ bool DIOSTREAMCIPHER::Open()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCIPHER::Disconnect()
 * @brief      Disconnect
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCIPHER::Disconnect()
 {
@@ -211,13 +211,13 @@ bool DIOSTREAMCIPHER::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCIPHER::Close()
 * @brief      Close
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCIPHER::Close()
 {
@@ -227,16 +227,16 @@ bool DIOSTREAMCIPHER::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMCIPHER::Read(XBYTE* buffer, XDWORD size)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMCIPHER::Read(XBYTE* buffer, XDWORD size)
 {
@@ -251,16 +251,16 @@ XDWORD DIOSTREAMCIPHER::Read(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMCIPHER::Write(XBYTE* buffer, XDWORD size)
 * @brief      Write
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMCIPHER::Write(XBYTE* buffer, XDWORD size)
 {
@@ -275,13 +275,13 @@ XDWORD DIOSTREAMCIPHER::Write(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAM* DIOSTREAMCIPHER::GetDIOStreamBase()
 * @brief      Get DIO stream base
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAM* :
-*
+* 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOSTREAMCIPHER::GetDIOStreamBase()
 {
@@ -290,13 +290,13 @@ DIOSTREAM* DIOSTREAMCIPHER::GetDIOStreamBase()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         CIPHER* DIOSTREAMCIPHER::GetCipher()
 * @brief      Get cipher
 * @ingroup    DATAIO
-*
-* @return     CIPHER* :
-*
+* 
+* @return     CIPHER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHER* DIOSTREAMCIPHER::GetCipher()
 {
@@ -305,13 +305,13 @@ CIPHER* DIOSTREAMCIPHER::GetCipher()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMCIPHER::ThreadRunFunction(void* param)
 * @brief      Thread run function
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMCIPHER::ThreadRunFunction(void* param)
 {
@@ -400,12 +400,12 @@ void DIOSTREAMCIPHER::ThreadRunFunction(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMCIPHER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMCIPHER::Clean()
 {

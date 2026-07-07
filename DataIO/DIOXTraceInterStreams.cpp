@@ -60,8 +60,8 @@
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  DIOstream : 
-* @param[in]  iswithlog : 
+* @param[in]  DIOstream : DI Ostream pointer to use.
+* @param[in]  iswithlog : Iswithlog value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOXTRACEINTERSTREAMS::DIOXTRACEINTERSTREAMS(DIOSTREAM* DIOstream, bool iswithlog)
@@ -93,7 +93,7 @@ DIOXTRACEINTERSTREAMS::~DIOXTRACEINTERSTREAMS()
 * @brief      Process
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOXTRACEINTERSTREAMS::Process()

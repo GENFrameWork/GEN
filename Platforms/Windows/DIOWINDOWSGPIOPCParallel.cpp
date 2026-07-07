@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOWINDOWSGPIOPCPARALLEL::DIOWINDOWSGPIOPCPARALLEL()
+* 
+* @fn         DIOWINDOWSGPIOPCPARALLEL::DIOWINDOWSGPIOPCPARALLEL(): DIOGPIO()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSGPIOPCPARALLEL::DIOWINDOWSGPIOPCPARALLEL(): DIOGPIO()
 {
@@ -68,12 +68,12 @@ DIOWINDOWSGPIOPCPARALLEL::DIOWINDOWSGPIOPCPARALLEL(): DIOGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWINDOWSGPIOPCPARALLEL::~DIOWINDOWSGPIOPCPARALLEL()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWINDOWSGPIOPCPARALLEL::~DIOWINDOWSGPIOPCPARALLEL()
 {
@@ -87,7 +87,7 @@ DIOWINDOWSGPIOPCPARALLEL::~DIOWINDOWSGPIOPCPARALLEL()
 * @brief      Get path
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* DIOWINDOWSGPIOPCPARALLEL::GetPath()
@@ -97,13 +97,13 @@ XPATH* DIOWINDOWSGPIOPCPARALLEL::GetPath()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSGPIOPCPARALLEL::SetPath(XPATH* xpath)
 * @brief      Set path
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSGPIOPCPARALLEL::SetPath(XPATH* xpath)
 {
@@ -116,10 +116,10 @@ void DIOWINDOWSGPIOPCPARALLEL::SetPath(XPATH* xpath)
 * @fn         XWORD DIOWINDOWSGPIOPCPARALLEL::GetParallelPort()
 * @brief      Get parallel port
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     XWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOWINDOWSGPIOPCPARALLEL::GetParallelPort()
 {
   return port;
@@ -131,10 +131,10 @@ XWORD DIOWINDOWSGPIOPCPARALLEL::GetParallelPort()
 * @fn         void DIOWINDOWSGPIOPCPARALLEL::SetParallelPort(XWORD port)
 * @brief      Set parallel port
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  port : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  port : Port number to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSGPIOPCPARALLEL::SetParallelPort(XWORD port)
 {
   this->port = port;
@@ -144,10 +144,10 @@ void DIOWINDOWSGPIOPCPARALLEL::SetParallelPort(XWORD port)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOWINDOWSGPIOPCPARALLEL::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSGPIOPCPARALLEL::Ini()
@@ -194,12 +194,12 @@ bool DIOWINDOWSGPIOPCPARALLEL::Ini()
 * @fn         XWORD DIOWINDOWSGPIOPCPARALLEL::GetMode(DIOGPIO_ENTRY* entry)
 * @brief      Get mode
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  entry : 
 * 
-* @return     XWORD : 
+* @param[in]  entry : Entry pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOWINDOWSGPIOPCPARALLEL::GetMode(DIOGPIO_ENTRY* entry)
 {
   return (DIOGPIO_MODE_INPUT | DIOGPIO_MODE_OUTPUT);
@@ -211,13 +211,13 @@ XWORD DIOWINDOWSGPIOPCPARALLEL::GetMode(DIOGPIO_ENTRY* entry)
 * @fn         bool DIOWINDOWSGPIOPCPARALLEL::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 * @brief      Set mode
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  entry : 
-* @param[in]  mode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
+* @param[in]  mode : Mode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSGPIOPCPARALLEL::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 {
   return true;
@@ -229,12 +229,12 @@ bool DIOWINDOWSGPIOPCPARALLEL::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 * @fn         bool DIOWINDOWSGPIOPCPARALLEL::GetValue(DIOGPIO_ENTRY* entry)
 * @brief      Get value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  entry : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSGPIOPCPARALLEL::GetValue(DIOGPIO_ENTRY* entry)
 {
   if(!entry) return false;
@@ -250,13 +250,13 @@ bool DIOWINDOWSGPIOPCPARALLEL::GetValue(DIOGPIO_ENTRY* entry)
 * @fn         bool DIOWINDOWSGPIOPCPARALLEL::SetValue(DIOGPIO_ENTRY* entry, bool value)
 * @brief      Set value
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  entry : 
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
+* @param[in]  value : Value value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSGPIOPCPARALLEL::SetValue(DIOGPIO_ENTRY* entry, bool value)
 {
   if(!entry) return false;
@@ -269,13 +269,13 @@ bool DIOWINDOWSGPIOPCPARALLEL::SetValue(DIOGPIO_ENTRY* entry, bool value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSGPIOPCPARALLEL::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSGPIOPCPARALLEL::End()
 {
@@ -287,16 +287,16 @@ bool DIOWINDOWSGPIOPCPARALLEL::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSGPIOPCPARALLEL::PC_Get(XDWORD nport, XBYTE& data)
 * @brief      PC get
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  nport :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nport : Nport value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSGPIOPCPARALLEL::PC_Get(XDWORD nport, XBYTE& data)
 {
@@ -311,16 +311,16 @@ bool DIOWINDOWSGPIOPCPARALLEL::PC_Get(XDWORD nport, XBYTE& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWINDOWSGPIOPCPARALLEL::PC_Set(XDWORD nport, XBYTE data)
 * @brief      PC set
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  nport :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nport : Nport value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSGPIOPCPARALLEL::PC_Set(XDWORD nport, XBYTE data)
 {
@@ -335,12 +335,12 @@ bool DIOWINDOWSGPIOPCPARALLEL::PC_Set(XDWORD nport, XBYTE data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWINDOWSGPIOPCPARALLEL::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSGPIOPCPARALLEL::Clean()
 { 

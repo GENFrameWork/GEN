@@ -61,11 +61,11 @@ DIOFACTORY* DIOFACTORY::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOFACTORY::DIOFACTORY()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOFACTORY::DIOFACTORY()
 {
@@ -74,12 +74,12 @@ DIOFACTORY::DIOFACTORY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOFACTORY::~DIOFACTORY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOFACTORY::~DIOFACTORY()
 {
@@ -93,7 +93,7 @@ DIOFACTORY::~DIOFACTORY()
 * @brief      Get is instanced
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::GetIsInstanced()
@@ -108,7 +108,7 @@ bool DIOFACTORY::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    DATAIO
 * 
-* @return     DIOFACTORY& : 
+* @return     DIOFACTORY& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOFACTORY& DIOFACTORY::GetInstance()
@@ -125,9 +125,9 @@ DIOFACTORY& DIOFACTORY::GetInstance()
 * @brief      Set instance
 * @ingroup    DATAIO
 * 
-* @param[in]  _instance : 
+* @param[in]  _instance : Instance pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::SetInstance(DIOFACTORY* _instance)
@@ -146,7 +146,7 @@ bool DIOFACTORY::SetInstance(DIOFACTORY* _instance)
 * @brief      Del instance
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::DelInstance()
@@ -163,16 +163,16 @@ bool DIOFACTORY::DelInstance()
 #ifdef ANYTYPEOFDIOSTREAMIO
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMDEVICES* DIOFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE type)
 * @brief      Create stream enum devices
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * @param[in]  type : type of enum devices (DIOSTREAMENUMTYPE)
-*
-* @return     DIOSTREAMENUMDEVICES* : enum created
-*
+* 
+* @return     DIOSTREAMENUMDEVICES* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMDEVICES* DIOFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE type)
 {
@@ -181,16 +181,16 @@ DIOSTREAMENUMDEVICES* DIOFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE type
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
 * @brief      Delete stream enum devices
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * @param[in]  enumdevices : enum to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
 {
@@ -200,14 +200,13 @@ bool DIOFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSTREAM* DIOFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config, bool multisocketserver)
+* @fn         DIOSTREAM* DIOFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 * @brief      Create stream IO
 * @ingroup    DATAIO
 * 
-* @param[in]  config : 
-* @param[in]  multisocketserver : 
+* @param[in]  config : Configuration object to use.
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
@@ -217,16 +216,16 @@ DIOSTREAM* DIOFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOFACTORY::DeleteStreamIO(DIOSTREAM* streamio)
 * @brief      Delete stream IO
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * @param[in]  streamio : stream IO to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::DeleteStreamIO(DIOSTREAM* streamio)
 {
@@ -240,13 +239,13 @@ bool DIOFACTORY::DeleteStreamIO(DIOSTREAM* streamio)
 #ifdef DIO_WIFIMANAGERMODE_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWIFIMANAGERMODE* DIOFACTORY::CreateWifiManagerMode()
 * @brief      Create wifi manager mode
 * @ingroup    DATAIO
-*
-* @return     DIOWIFIMANAGERMODE* : 
-*
+* 
+* @return     DIOWIFIMANAGERMODE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWIFIMANAGERMODE* DIOFACTORY::CreateWifiManagerMode()
 {
@@ -255,15 +254,15 @@ DIOWIFIMANAGERMODE* DIOFACTORY::CreateWifiManagerMode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOFACTORY::DeleteWifiManagerMode(DIOWIFIMANAGERMODE* wifimanagermode)
 * @brief      Delete wifi manager mode
 * @ingroup    DATAIO
-*
-* @param[in]  wifimanagermode : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  wifimanagermode : Wifimanagermode pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::DeleteWifiManagerMode(DIOWIFIMANAGERMODE* wifimanagermode)
 {
@@ -277,14 +276,14 @@ bool DIOFACTORY::DeleteWifiManagerMode(DIOWIFIMANAGERMODE* wifimanagermode)
 #ifdef DIO_PCAP_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPCAP* DIOFACTORY::CreatePCap()
 * @brief      Create P cap
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* @return     DIOPCAP* : PCap created
-*
+* 
+* @return     DIOPCAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP* DIOFACTORY::CreatePCap()
 {
@@ -293,16 +292,16 @@ DIOPCAP* DIOFACTORY::CreatePCap()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOFACTORY::DeletePCap(DIOPCAP* pcap)
 * @brief      Delete P cap
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * @param[in]  pcap : pcap to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::DeletePCap(DIOPCAP* pcap)
 {
@@ -313,13 +312,13 @@ bool DIOFACTORY::DeletePCap(DIOPCAP* pcap)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIONOTIFICATIONSMANAGER* DIOFACTORY::CreateNotificationsManager()
 * @brief      Create notifications manager
 * @ingroup    DATAIO
-*
-* @return     DIONOTIFICATIONSMANAGER* :
-*
+* 
+* @return     DIONOTIFICATIONSMANAGER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONOTIFICATIONSMANAGER* DIOFACTORY::CreateNotificationsManager()
 {
@@ -328,15 +327,15 @@ DIONOTIFICATIONSMANAGER* DIOFACTORY::CreateNotificationsManager()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOFACTORY::DeleteNotificationsManager(DIONOTIFICATIONSMANAGER* notificationsmanager)
 * @brief      Delete notifications manager
 * @ingroup    DATAIO
-*
-* @param[in]  notificationsmanager :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  notificationsmanager : Notificationsmanager pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::DeleteNotificationsManager(DIONOTIFICATIONSMANAGER* notificationsmanager)
 {
@@ -351,10 +350,10 @@ bool DIOFACTORY::DeleteNotificationsManager(DIONOTIFICATIONSMANAGER* notificatio
 * @fn         DIOLEDNEOPIXELWS2812B* DIOFACTORY::CreateLedNeopixelWS2812B()
 * @brief      Create led neopixel WS2812B
 * @ingroup    DATAIO
-*
-* @return     DIOLEDNEOPIXELWS2812B* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOLEDNEOPIXELWS2812B* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLEDNEOPIXELWS2812B* DIOFACTORY::CreateLedNeopixelWS2812B()
 {
   DIOLEDNEOPIXELWS2812B* ledneopixelws2812b = GEN_NEW DIOLEDNEOPIXELWS2812B();
@@ -368,12 +367,12 @@ DIOLEDNEOPIXELWS2812B* DIOFACTORY::CreateLedNeopixelWS2812B()
 * @fn         bool DIOFACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixelws2812b)
 * @brief      Delete led neopixel WS2812B
 * @ingroup    DATAIO
-*
-* @param[in]  ledneopixelws2812b : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  ledneopixelws2812b : Ledneopixelws2812b pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOFACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixelws2812b)
 {
   if(!ledneopixelws2812b) return false;
@@ -389,12 +388,12 @@ bool DIOFACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixelws28
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOFACTORY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOFACTORY::Clean()
 {

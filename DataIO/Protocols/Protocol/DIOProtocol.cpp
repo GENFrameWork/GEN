@@ -80,15 +80,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_ANSWER::DIOPROTOCOL_ANSWER(XDWORD type, XDWORD ID, XBUFFER& xbuffer)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  ID :
-* @param[in]  xbuffer :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  xbuffer : Buffer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_ANSWER::DIOPROTOCOL_ANSWER(XDWORD type, XDWORD ID, XBUFFER& xbuffer)
 {
@@ -116,13 +116,13 @@ DIOPROTOCOL_ANSWER::~DIOPROTOCOL_ANSWER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOPROTOCOL_ANSWER::GetType()
 * @brief      Get type
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPROTOCOL_ANSWER::GetType()
 {
@@ -136,7 +136,7 @@ XDWORD DIOPROTOCOL_ANSWER::GetType()
 * @brief      Get ID
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPROTOCOL_ANSWER::GetID()
@@ -146,13 +146,13 @@ XDWORD DIOPROTOCOL_ANSWER::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER& DIOPROTOCOL_ANSWER::GetBuffer()
 * @brief      Get buffer
 * @ingroup    DATAIO
-*
-* @return     XBUFFER& :
-*
+* 
+* @return     XBUFFER& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER& DIOPROTOCOL_ANSWER::GetBuffer()
 {
@@ -161,12 +161,12 @@ XBUFFER& DIOPROTOCOL_ANSWER::GetBuffer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_ANSWER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_ANSWER::Clean()
 {
@@ -181,17 +181,17 @@ void DIOPROTOCOL_ANSWER::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_COMMAND::DIOPROTOCOL_COMMAND(XDWORD type, XCHAR* inmask, XCHAR* outmask, DIOPROTOCOL_RECEIVEDFUNC receivedfunc, XCHAR* description)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  inmask :
-* @param[in]  outmask :
-* @param[in]  receivedfunc :
-* @param[in]  description :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  inmask : Inmask pointer to use.
+* @param[in]  outmask : Output outmask.
+* @param[in]  receivedfunc : Receivedfunc value.
+* @param[in]  description : Description pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_COMMAND::DIOPROTOCOL_COMMAND(XDWORD type, XCHAR* inmask, XCHAR* outmask, DIOPROTOCOL_RECEIVEDFUNC receivedfunc, XCHAR* description)
 {
@@ -221,13 +221,13 @@ DIOPROTOCOL_COMMAND::~DIOPROTOCOL_COMMAND()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOPROTOCOL_COMMAND::GetType()
 * @brief      Get type
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPROTOCOL_COMMAND::GetType()
 {
@@ -236,13 +236,13 @@ XDWORD DIOPROTOCOL_COMMAND::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOPROTOCOL_COMMAND::GetINMask()
 * @brief      Get IN mask
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOPROTOCOL_COMMAND::GetINMask()
 {
@@ -251,13 +251,13 @@ XCHAR* DIOPROTOCOL_COMMAND::GetINMask()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOPROTOCOL_COMMAND::GetOUTMask()
 * @brief      Get OUT mask
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOPROTOCOL_COMMAND::GetOUTMask()
 {
@@ -266,13 +266,13 @@ XCHAR* DIOPROTOCOL_COMMAND::GetOUTMask()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_RECEIVEDFUNC DIOPROTOCOL_COMMAND::GetReceivedFunc()
 * @brief      Get received func
 * @ingroup    DATAIO
-*
-* @return     DIOPROTOCOL_RECEIVEDFUNC :
-*
+* 
+* @return     DIOPROTOCOL_RECEIVEDFUNC : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_RECEIVEDFUNC DIOPROTOCOL_COMMAND::GetReceivedFunc()
 {
@@ -281,13 +281,13 @@ DIOPROTOCOL_RECEIVEDFUNC DIOPROTOCOL_COMMAND::GetReceivedFunc()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOPROTOCOL_COMMAND::GetDescription()
 * @brief      Get description
 * @ingroup    DATAIO
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOPROTOCOL_COMMAND::GetDescription()
 {
@@ -296,13 +296,13 @@ XCHAR* DIOPROTOCOL_COMMAND::GetDescription()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOPROTOCOL_COMMAND::GetSINMask()
 * @brief      Get SIN mask
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPROTOCOL_COMMAND::GetSINMask()
 {
@@ -311,13 +311,13 @@ XSTRING* DIOPROTOCOL_COMMAND::GetSINMask()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOPROTOCOL_COMMAND::GetSOUTMask()
 * @brief      Get SOUT mask
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPROTOCOL_COMMAND::GetSOUTMask()
 {
@@ -326,13 +326,13 @@ XSTRING* DIOPROTOCOL_COMMAND::GetSOUTMask()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOPROTOCOL_COMMAND::GetSDescription()
 * @brief      Get S description
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPROTOCOL_COMMAND::GetSDescription()
 {
@@ -341,12 +341,12 @@ XSTRING* DIOPROTOCOL_COMMAND::GetSDescription()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_COMMAND::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_COMMAND::Clean()
 {
@@ -366,11 +366,11 @@ void DIOPROTOCOL_COMMAND::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_FILE::DIOPROTOCOL_FILE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_FILE::DIOPROTOCOL_FILE()
 {
@@ -381,12 +381,12 @@ DIOPROTOCOL_FILE::DIOPROTOCOL_FILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_FILE::~DIOPROTOCOL_FILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_FILE::~DIOPROTOCOL_FILE()
 {
@@ -397,13 +397,13 @@ DIOPROTOCOL_FILE::~DIOPROTOCOL_FILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL_FILE::IsActive()
 * @brief      Is active
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL_FILE::IsActive()
 {
@@ -412,13 +412,13 @@ bool DIOPROTOCOL_FILE::IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_FILE::SetActive(bool isactive)
 * @brief      Set active
 * @ingroup    DATAIO
-*
-* @param[in]  isactive :
-*
+* 
+* @param[in]  isactive : Isactive value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::SetActive(bool isactive)
 {
@@ -427,13 +427,13 @@ void DIOPROTOCOL_FILE::SetActive(bool isactive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_DIRECTION DIOPROTOCOL_FILE::GetDirection()
 * @brief      Get direction
 * @ingroup    DATAIO
-*
-* @return     DIOPROTOCOL_DIRECTION :
-*
+* 
+* @return     DIOPROTOCOL_DIRECTION : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_DIRECTION DIOPROTOCOL_FILE::GetDirection()
 {
@@ -442,13 +442,13 @@ DIOPROTOCOL_DIRECTION DIOPROTOCOL_FILE::GetDirection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_FILE::SetDirection(DIOPROTOCOL_DIRECTION direction)
 * @brief      Set direction
 * @ingroup    DATAIO
-*
-* @param[in]  direction :
-*
+* 
+* @param[in]  direction : Direction value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::SetDirection(DIOPROTOCOL_DIRECTION direction)
 {
@@ -457,13 +457,13 @@ void DIOPROTOCOL_FILE::SetDirection(DIOPROTOCOL_DIRECTION direction)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* DIOPROTOCOL_FILE::GetSourceName()
 * @brief      Get source name
 * @ingroup    DATAIO
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* DIOPROTOCOL_FILE::GetSourceName()
 {
@@ -472,15 +472,15 @@ XPATH* DIOPROTOCOL_FILE::GetSourceName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL_FILE::SetSourceName(XCHAR* sourcename)
 * @brief      Set source name
 * @ingroup    DATAIO
-*
-* @param[in]  sourcename :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sourcename : Sourcename pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL_FILE::SetSourceName(XCHAR* sourcename)
 {
@@ -491,15 +491,15 @@ bool DIOPROTOCOL_FILE::SetSourceName(XCHAR* sourcename)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL_FILE::SetSourceName(XSTRING& sourcename)
 * @brief      Set source name
 * @ingroup    DATAIO
-*
-* @param[in]  sourcename :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sourcename : Sourcename value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL_FILE::SetSourceName(XSTRING& sourcename)
 {
@@ -508,13 +508,13 @@ bool DIOPROTOCOL_FILE::SetSourceName(XSTRING& sourcename)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* DIOPROTOCOL_FILE::GetTargetName()
 * @brief      Get target name
 * @ingroup    DATAIO
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* DIOPROTOCOL_FILE::GetTargetName()
 {
@@ -523,15 +523,15 @@ XPATH* DIOPROTOCOL_FILE::GetTargetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL_FILE::SetTargetName(XCHAR* targetname)
 * @brief      Set target name
 * @ingroup    DATAIO
-*
-* @param[in]  targetname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  targetname : Targetname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL_FILE::SetTargetName(XCHAR* targetname)
 {
@@ -542,15 +542,15 @@ bool DIOPROTOCOL_FILE::SetTargetName(XCHAR* targetname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL_FILE::SetTargetName(XSTRING& targetname)
 * @brief      Set target name
 * @ingroup    DATAIO
-*
-* @param[in]  targetname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  targetname : Targetname value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL_FILE::SetTargetName(XSTRING& targetname)
 {
@@ -559,13 +559,13 @@ bool DIOPROTOCOL_FILE::SetTargetName(XSTRING& targetname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD DIOPROTOCOL_FILE::GetSize()
+* 
+* @fn         XQWORD DIOPROTOCOL_FILE::GetSize()
 * @brief      Get size
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOPROTOCOL_FILE::GetSize()
 {
@@ -574,13 +574,13 @@ XQWORD DIOPROTOCOL_FILE::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOPROTOCOL_FILE::SetSize(XDWORD size)
+* 
+* @fn         void DIOPROTOCOL_FILE::SetSize(XQWORD size)
 * @brief      Set size
 * @ingroup    DATAIO
-*
-* @param[in]  size :
-*
+* 
+* @param[in]  size : Size value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::SetSize(XQWORD size)
 {
@@ -589,13 +589,13 @@ void DIOPROTOCOL_FILE::SetSize(XQWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOPROTOCOL_FILE::GetCRC32()
 * @brief      Get CRC32
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPROTOCOL_FILE::GetCRC32()
 {
@@ -604,13 +604,13 @@ XDWORD DIOPROTOCOL_FILE::GetCRC32()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_FILE::SetCRC32(XDWORD crc32)
 * @brief      Set CRC32
 * @ingroup    DATAIO
-*
-* @param[in]  crc32 :
-*
+* 
+* @param[in]  crc32 : Crc32 value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::SetCRC32(XDWORD crc32)
 {
@@ -619,13 +619,13 @@ void DIOPROTOCOL_FILE::SetCRC32(XDWORD crc32)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL_FILE::GetSizeBlock()
 * @brief      Get size block
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL_FILE::GetSizeBlock()
 {
@@ -634,13 +634,13 @@ int DIOPROTOCOL_FILE::GetSizeBlock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_FILE::SetSizeBlock(XDWORD sizeblock)
 * @brief      Set size block
 * @ingroup    DATAIO
-*
-* @param[in]  sizeblock :
-*
+* 
+* @param[in]  sizeblock : Sizeblock value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::SetSizeBlock(XDWORD sizeblock)
 {
@@ -649,13 +649,13 @@ void DIOPROTOCOL_FILE::SetSizeBlock(XDWORD sizeblock)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int DIOPROTOCOL_FILE::GetPosition()
+* 
+* @fn         XQWORD DIOPROTOCOL_FILE::GetPosition()
 * @brief      Get position
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOPROTOCOL_FILE::GetPosition()
 {
@@ -664,13 +664,13 @@ XQWORD DIOPROTOCOL_FILE::GetPosition()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOPROTOCOL_FILE::SetPosition(int position)
+* 
+* @fn         void DIOPROTOCOL_FILE::SetPosition(XQWORD position)
 * @brief      Set position
 * @ingroup    DATAIO
-*
-* @param[in]  position :
-*
+* 
+* @param[in]  position : Position value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::SetPosition(XQWORD position)
 {
@@ -679,13 +679,13 @@ void DIOPROTOCOL_FILE::SetPosition(XQWORD position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOPROTOCOL_FILE::GetPercent()
 * @brief      Get percent
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOPROTOCOL_FILE::GetPercent()
 {
@@ -694,13 +694,13 @@ XBYTE DIOPROTOCOL_FILE::GetPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_FILE::SetPercent(XBYTE percent)
 * @brief      Set percent
 * @ingroup    DATAIO
-*
-* @param[in]  percent :
-*
+* 
+* @param[in]  percent : Percent value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::SetPercent(XBYTE percent)
 {
@@ -709,15 +709,15 @@ void DIOPROTOCOL_FILE::SetPercent(XBYTE percent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL_FILE::ReadBlock(XBYTE* buffer)
 * @brief      Read block
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL_FILE::ReadBlock(XBYTE* buffer)
 {
@@ -754,9 +754,9 @@ bool DIOPROTOCOL_FILE::ReadBlock(XBYTE* buffer)
 * @brief      Write block
 * @ingroup    DATAIO
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL_FILE::WriteBlock(XBYTE* buffer)
@@ -802,7 +802,7 @@ bool DIOPROTOCOL_FILE::WriteBlock(XBYTE* buffer)
 * @brief      Erase
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL_FILE::Erase()
@@ -817,11 +817,11 @@ bool DIOPROTOCOL_FILE::Erase()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_FILE::Reset()
 * @brief      Reset
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::Reset()
 {
@@ -835,12 +835,12 @@ void DIOPROTOCOL_FILE::Reset()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL_FILE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL_FILE::Clean()
 {
@@ -862,13 +862,13 @@ void DIOPROTOCOL_FILE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL::DIOPROTOCOL(DIOSTREAM* diostream)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  diostream :
-*
+* 
+* @param[in]  diostream : Diostream pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL::DIOPROTOCOL(DIOSTREAM* diostream)
 {
@@ -944,12 +944,12 @@ DIOPROTOCOL::DIOPROTOCOL(DIOSTREAM* diostream)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL::~DIOPROTOCOL()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL::~DIOPROTOCOL()
 {
@@ -1003,7 +1003,7 @@ DIOPROTOCOL::~DIOPROTOCOL()
 * @brief      Get description
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPROTOCOL::GetDescription()
@@ -1018,7 +1018,7 @@ XSTRING* DIOPROTOCOL::GetDescription()
 * @brief      Connect
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::Connect()
@@ -1038,7 +1038,7 @@ bool DIOPROTOCOL::Connect()
 * @brief      Disconnect
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::Disconnect()
@@ -1057,7 +1057,7 @@ bool DIOPROTOCOL::Disconnect()
 * @brief      Reset
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::Reset()
@@ -1074,7 +1074,7 @@ bool DIOPROTOCOL::Reset()
 * @brief      Is connected
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::IsConnected()
@@ -1092,7 +1092,7 @@ bool DIOPROTOCOL::IsConnected()
 * @brief      Is connecting
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::IsConnecting()
@@ -1110,7 +1110,7 @@ bool DIOPROTOCOL::IsConnecting()
 * @brief      Is disconnected
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::IsDisconnected()
@@ -1128,7 +1128,7 @@ bool DIOPROTOCOL::IsDisconnected()
 * @brief      Is initialized
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::IsInitialized()
@@ -1143,7 +1143,7 @@ bool DIOPROTOCOL::IsInitialized()
 * @brief      Set is initialized
 * @ingroup    DATAIO
 * 
-* @param[in]  isinitialized : 
+* @param[in]  isinitialized : Isinitialized value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::SetIsInitialized(bool isinitialized)
@@ -1158,7 +1158,7 @@ void DIOPROTOCOL::SetIsInitialized(bool isinitialized)
 * @brief      Is server initialized
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::IsServerInitialized()
@@ -1173,7 +1173,7 @@ bool DIOPROTOCOL::IsServerInitialized()
 * @brief      Is operational
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::IsOperational()
@@ -1186,13 +1186,13 @@ bool DIOPROTOCOL::IsOperational()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOPROTOCOL::GetMaskID()
 * @brief      Get mask ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPROTOCOL::GetMaskID()
 {
@@ -1201,15 +1201,15 @@ XDWORD DIOPROTOCOL::GetMaskID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::SetMaskID(XDWORD maskID)
 * @brief      Set mask ID
 * @ingroup    DATAIO
-*
-* @param[in]  maskID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  maskID : Mask ID value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::SetMaskID(XDWORD maskID)
 {
@@ -1219,13 +1219,13 @@ bool DIOPROTOCOL::SetMaskID(XDWORD maskID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* DIOPROTOCOL::GetConnectionsManager()
 * @brief      Get connections manager
 * @ingroup    DATAIO
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* DIOPROTOCOL::GetConnectionsManager()
 {
@@ -1234,13 +1234,13 @@ void* DIOPROTOCOL::GetConnectionsManager()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::SetConnectionsManager(void* connectionsmanager)
 * @brief      Set connections manager
 * @ingroup    DATAIO
-*
-* @param[in]  connectionsmanager :
-*
+* 
+* @param[in]  connectionsmanager : Connectionsmanager pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::SetConnectionsManager(void* connectionsmanager)
 {
@@ -1249,13 +1249,13 @@ void DIOPROTOCOL::SetConnectionsManager(void* connectionsmanager)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* DIOPROTOCOL::GetConnection()
 * @brief      Get connection
 * @ingroup    DATAIO
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* DIOPROTOCOL::GetConnection()
 {
@@ -1264,13 +1264,13 @@ void* DIOPROTOCOL::GetConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::SetConnection(void* connection)
 * @brief      Set connection
 * @ingroup    DATAIO
-*
-* @param[in]  connection :
-*
+* 
+* @param[in]  connection : Connection pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::SetConnection(void* connection)
 {
@@ -1279,13 +1279,13 @@ void DIOPROTOCOL::SetConnection(void* connection)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* DIOPROTOCOL::GetApplicationData()
 * @brief      Get application data
 * @ingroup    DATAIO
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* DIOPROTOCOL::GetApplicationData()
 {
@@ -1294,13 +1294,13 @@ void* DIOPROTOCOL::GetApplicationData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::SetApplicationData(void* applicationdata)
 * @brief      Set application data
 * @ingroup    DATAIO
-*
-* @param[in]  applicationdata :
-*
+* 
+* @param[in]  applicationdata : Applicationdata pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::SetApplicationData(void* applicationdata)
 {
@@ -1309,13 +1309,13 @@ void DIOPROTOCOL::SetApplicationData(void* applicationdata)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::IsOwnApplicationData()
 * @brief      Is own application data
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::IsOwnApplicationData()
 {
@@ -1324,13 +1324,13 @@ bool DIOPROTOCOL::IsOwnApplicationData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::SetIsOwnApplicationData(bool isownapplicationdata)
 * @brief      Set is own application data
 * @ingroup    DATAIO
-*
-* @param[in]  isownapplicationdata :
-*
+* 
+* @param[in]  isownapplicationdata : Isownapplicationdata value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::SetIsOwnApplicationData(bool isownapplicationdata)
 {
@@ -1339,13 +1339,13 @@ void DIOPROTOCOL::SetIsOwnApplicationData(bool isownapplicationdata)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAM* DIOPROTOCOL::GetDIOStream()
 * @brief      Get DIO stream
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAM* :
-*
+* 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOPROTOCOL::GetDIOStream()
 {
@@ -1354,13 +1354,13 @@ DIOSTREAM* DIOPROTOCOL::GetDIOStream()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* DIOPROTOCOL::GetDateTime()
 * @brief      Get date time
 * @ingroup    DATAIO
-*
-* @return     XDATETIME* :
-*
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* DIOPROTOCOL::GetDateTime()
 {
@@ -1369,19 +1369,19 @@ XDATETIME* DIOPROTOCOL::GetDateTime()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOPROTOCOL::AddCommand(XDWORD type,XCHAR* inmask,XCHAR* outmask,DIOPROTOCOL_RECEIVEDFUNC receivedfunc,XCHAR* description)
+* 
+* @fn         bool DIOPROTOCOL::AddCommand(XDWORD type, XCHAR* inmask, XCHAR* outmask, DIOPROTOCOL_RECEIVEDFUNC receivedfunc, XCHAR* description)
 * @brief      Add command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  inmask :
-* @param[in]  outmask :
-* @param[in]  receivedfunc :
-* @param[in]  description :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  inmask : Inmask pointer to use.
+* @param[in]  outmask : Output outmask.
+* @param[in]  receivedfunc : Receivedfunc value.
+* @param[in]  description : Description pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::AddCommand(XDWORD type, XCHAR* inmask, XCHAR* outmask, DIOPROTOCOL_RECEIVEDFUNC receivedfunc, XCHAR* description)
 {
@@ -1395,15 +1395,15 @@ bool DIOPROTOCOL::AddCommand(XDWORD type, XCHAR* inmask, XCHAR* outmask, DIOPROT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_COMMAND* DIOPROTOCOL::GetCommand(XDWORD type)
 * @brief      Get command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-*
-* @return     DIOPROTOCOL_COMMAND* :
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     DIOPROTOCOL_COMMAND* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_COMMAND* DIOPROTOCOL::GetCommand(XDWORD type)
 {
@@ -1421,17 +1421,17 @@ DIOPROTOCOL_COMMAND* DIOPROTOCOL::GetCommand(XDWORD type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_ANSWER* DIOPROTOCOL::AddAnswer(XDWORD type, XDWORD ID, XBUFFER& xbuffer)
 * @brief      Add answer
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  ID :
-* @param[in]  xbuffer :
-*
-* @return     DIOPROTOCOL_ANSWER* :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     DIOPROTOCOL_ANSWER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_ANSWER* DIOPROTOCOL::AddAnswer(XDWORD type, XDWORD ID, XBUFFER& xbuffer)
 {
@@ -1447,16 +1447,16 @@ DIOPROTOCOL_ANSWER* DIOPROTOCOL::AddAnswer(XDWORD type, XDWORD ID, XBUFFER& xbuf
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_ANSWER* DIOPROTOCOL::GetAnswer(XDWORD type, XDWORD ID)
 * @brief      Get answer
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  ID :
-*
-* @return     DIOPROTOCOL_ANSWER* :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  ID : Identifier to use.
+* 
+* @return     DIOPROTOCOL_ANSWER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_ANSWER* DIOPROTOCOL::GetAnswer(XDWORD type, XDWORD ID)
 {
@@ -1480,16 +1480,16 @@ DIOPROTOCOL_ANSWER* DIOPROTOCOL::GetAnswer(XDWORD type, XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::DeleteAnswer(XDWORD type, XDWORD ID)
 * @brief      Delete answer
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::DeleteAnswer(XDWORD type, XDWORD ID)
 {
@@ -1517,13 +1517,13 @@ bool DIOPROTOCOL::DeleteAnswer(XDWORD type, XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::DeleteAllAnswers()
 * @brief      Delete all answers
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::DeleteAllAnswers()
 {
@@ -1546,17 +1546,17 @@ bool DIOPROTOCOL::DeleteAllAnswers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_ANSWER* DIOPROTOCOL::AddAsk(XDWORD type, XDWORD ID, XBUFFER& xbuffer)
 * @brief      Add ask
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  ID :
-* @param[in]  xbuffer :
-*
-* @return     DIOPROTOCOL_ANSWER* :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     DIOPROTOCOL_ANSWER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_ANSWER* DIOPROTOCOL::AddAsk(XDWORD type, XDWORD ID, XBUFFER& xbuffer)
 {
@@ -1572,15 +1572,15 @@ DIOPROTOCOL_ANSWER* DIOPROTOCOL::AddAsk(XDWORD type, XDWORD ID, XBUFFER& xbuffer
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_ANSWER* DIOPROTOCOL::GetAsk(XDWORD index)
 * @brief      Get ask
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     DIOPROTOCOL_ANSWER* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     DIOPROTOCOL_ANSWER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_ANSWER* DIOPROTOCOL::GetAsk(XDWORD index)
 {
@@ -1595,15 +1595,15 @@ DIOPROTOCOL_ANSWER* DIOPROTOCOL::GetAsk(XDWORD index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::DeleteAsk(XDWORD index)
 * @brief      Delete ask
 * @ingroup    DATAIO
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::DeleteAsk(XDWORD index)
 {
@@ -1623,13 +1623,13 @@ bool DIOPROTOCOL::DeleteAsk(XDWORD index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::DeleteAllAsks()
 * @brief      Delete all asks
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::DeleteAllAsks()
 {
@@ -1652,17 +1652,17 @@ bool DIOPROTOCOL::DeleteAllAsks()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::ReadCommand(XDWORD& type, XDWORD& ID, XBUFFER& xbuffer)
 * @brief      Read command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  ID :
-* @param[in]  xbuffer :
-*
-* @return     int :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::ReadCommand(XDWORD& type, XDWORD& ID, XBUFFER& xbuffer)
 {
@@ -1741,13 +1741,13 @@ int DIOPROTOCOL::ReadCommand(XDWORD& type, XDWORD& ID, XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_RESULT DIOPROTOCOL::Received()
 * @brief      Received
 * @ingroup    DATAIO
-*
-* @return     DIOPROTOCOL_RESULT :
-*
+* 
+* @return     DIOPROTOCOL_RESULT : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_RESULT DIOPROTOCOL::Received()
 {
@@ -1800,17 +1800,17 @@ DIOPROTOCOL_RESULT DIOPROTOCOL::Received()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_RESULT DIOPROTOCOL::ReceivedHandle(XDWORD type, XDWORD ID, XBUFFER& xbuffer)
 * @brief      Received handle
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  ID :
-* @param[in]  xbuffer :
-*
-* @return     DIOPROTOCOL_RESULT :
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     DIOPROTOCOL_RESULT : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_RESULT DIOPROTOCOL::ReceivedHandle(XDWORD type, XDWORD ID, XBUFFER& xbuffer)
 {
@@ -1852,17 +1852,17 @@ DIOPROTOCOL_RESULT DIOPROTOCOL::ReceivedHandle(XDWORD type, XDWORD ID, XBUFFER& 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::SendCommand(XDWORD type, XDWORD& ID, XBUFFER& xbuffer)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  ID :
-* @param[in]  xbuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::SendCommand(XDWORD type, XDWORD& ID, XBUFFER& xbuffer)
 {
@@ -1935,17 +1935,17 @@ bool DIOPROTOCOL::SendCommand(XDWORD type, XDWORD& ID, XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::Command(XDWORD type, XBUFFER& xbuffer, int timeout)
 * @brief      Command
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  xbuffer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::Command(XDWORD type, XBUFFER& xbuffer, int timeout)
 {
@@ -2034,16 +2034,16 @@ bool DIOPROTOCOL::Command(XDWORD type, XBUFFER& xbuffer, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::SendEvent(DIOPROTOCOL_XEVENT_TYPE type, DIOPROTOCOL* protocol)
 * @brief      Send event
 * @ingroup    DATAIO
-*
-* @param[in]  type :
-* @param[in]  protocol :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  protocol : Protocol pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::SendEvent(DIOPROTOCOL_XEVENT_TYPE type, DIOPROTOCOL* protocol)
 {
@@ -2057,20 +2057,20 @@ bool DIOPROTOCOL::SendEvent(DIOPROTOCOL_XEVENT_TYPE type, DIOPROTOCOL* protocol)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::SendEventCommand(DIOPROTOCOL* protocol, DIOPROTOCOL_DIRECTION direction, XDWORD type, bool result, void* param1, XDWORD param2)
 * @brief      Send event command
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  direction :
-* @param[in]  type :
-* @param[in]  result :
-* @param[in]  param1 :
-* @param[in]  param2 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  direction : Direction value.
+* @param[in]  type : Type value.
+* @param[in]  result : Output result.
+* @param[in]  param1 : Param1 pointer to use.
+* @param[in]  param2 : Param2 value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::SendEventCommand(DIOPROTOCOL* protocol, DIOPROTOCOL_DIRECTION direction, XDWORD type, bool result, void* param1, XDWORD param2)
 {
@@ -2091,20 +2091,20 @@ bool DIOPROTOCOL::SendEventCommand(DIOPROTOCOL* protocol, DIOPROTOCOL_DIRECTION 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::SendEventFileBlock(DIOPROTOCOL_FILESTATUS filestatus, bool fileissend, XPATH* filesource, XPATH* filetarget, int filepercent, void* param)
 * @brief      Send event file block
 * @ingroup    DATAIO
-*
-* @param[in]  filestatus :
-* @param[in]  fileissend :
-* @param[in]  filesource :
-* @param[in]  filetarget :
-* @param[in]  filepercent :
-* @param[in]  param :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filestatus : Filestatus value.
+* @param[in]  fileissend : Fileissend value.
+* @param[in]  filesource : Filesource pointer to use.
+* @param[in]  filetarget : Filetarget pointer to use.
+* @param[in]  filepercent : Filepercent value.
+* @param[in]  param : Param pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::SendEventFileBlock(DIOPROTOCOL_FILESTATUS filestatus, bool fileissend, XPATH* filesource, XPATH* filetarget, int filepercent, void* param)
 {
@@ -2125,15 +2125,15 @@ bool DIOPROTOCOL::SendEventFileBlock(DIOPROTOCOL_FILESTATUS filestatus, bool fil
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::GetProtocolVersion(XDWORD& version, XDWORD& subversion, XDWORD& subversionerr)
 * @brief      Get protocol version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-* @param[in]  subversion :
-* @param[in]  subversionerr :
-*
+* 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerr : Subversionerr value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::GetProtocolVersion(XDWORD& version, XDWORD& subversion, XDWORD& subversionerr)
 {
@@ -2144,15 +2144,15 @@ void DIOPROTOCOL::GetProtocolVersion(XDWORD& version, XDWORD& subversion, XDWORD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::SetProtocolVersion(XDWORD version, XDWORD subversion, XDWORD subversionerr)
 * @brief      Set protocol version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-* @param[in]  subversion :
-* @param[in]  subversionerr :
-*
+* 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerr : Subversionerr value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::SetProtocolVersion(XDWORD version, XDWORD subversion, XDWORD subversionerr)
 {
@@ -2163,15 +2163,15 @@ void DIOPROTOCOL::SetProtocolVersion(XDWORD version, XDWORD subversion, XDWORD s
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::Application_GetVersion(XDWORD& version, XDWORD& subversion, XDWORD& subversionerr)
 * @brief      Application get version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-* @param[in]  subversion :
-* @param[in]  subversionerr :
-*
+* 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerr : Subversionerr value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::Application_GetVersion(XDWORD& version, XDWORD& subversion, XDWORD& subversionerr)
 {
@@ -2182,15 +2182,15 @@ void DIOPROTOCOL::Application_GetVersion(XDWORD& version, XDWORD& subversion, XD
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::Application_SetVersion(XDWORD version, XDWORD subversion, XDWORD subversionerr)
 * @brief      Application set version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-* @param[in]  subversion :
-* @param[in]  subversionerr :
-*
+* 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerr : Subversionerr value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::Application_SetVersion(XDWORD version, XDWORD subversion, XDWORD subversionerr)
 {
@@ -2201,13 +2201,13 @@ void DIOPROTOCOL::Application_SetVersion(XDWORD version, XDWORD subversion, XDWO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOPROTOCOL::Application_GetName()
 * @brief      Application get name
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOPROTOCOL::Application_GetName()
 {
@@ -2216,18 +2216,18 @@ XSTRING* DIOPROTOCOL::Application_GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::SetFileProgress(DIOPROTOCOL_DIRECTION direction, XPATH& sourcename, XPATH& targetname, XDWORD CRC32)
 * @brief      Set file progress
 * @ingroup    DATAIO
-*
-* @param[in]  direction :
-* @param[in]  sourcename :
-* @param[in]  targetname :
-* @param[in]  CRC32 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  direction : Direction value.
+* @param[in]  sourcename : Sourcename value.
+* @param[in]  targetname : Targetname value.
+* @param[in]  CRC32 : CRC32 value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::SetFileProgress(DIOPROTOCOL_DIRECTION direction, XPATH& sourcename, XPATH& targetname, XDWORD CRC32)
 {
@@ -2254,13 +2254,13 @@ bool DIOPROTOCOL::SetFileProgress(DIOPROTOCOL_DIRECTION direction, XPATH& source
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOPROTOCOL_FILE* DIOPROTOCOL::GetFileProgress()
 * @brief      Get file progress
 * @ingroup    DATAIO
-*
-* @return     DIOPROTOCOL_FILE* :
-*
+* 
+* @return     DIOPROTOCOL_FILE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPROTOCOL_FILE* DIOPROTOCOL::GetFileProgress()
 {
@@ -2269,13 +2269,13 @@ DIOPROTOCOL_FILE* DIOPROTOCOL::GetFileProgress()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* DIOPROTOCOL::GetPathSearch()
 * @brief      Get path search
 * @ingroup    DATAIO
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* DIOPROTOCOL::GetPathSearch()
 {
@@ -2284,13 +2284,13 @@ XPATH* DIOPROTOCOL::GetPathSearch()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDIRELEMENT* DIOPROTOCOL::GetSearchElement()
 * @brief      Get search element
 * @ingroup    DATAIO
-*
-* @return     XDIRELEMENT* :
-*
+* 
+* @return     XDIRELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIRELEMENT* DIOPROTOCOL::GetSearchElement()
 {
@@ -2299,13 +2299,13 @@ XDIRELEMENT* DIOPROTOCOL::GetSearchElement()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDIR* DIOPROTOCOL::GetXDir()
 * @brief      Get X dir
 * @ingroup    DATAIO
-*
-* @return     XDIR* :
-*
+* 
+* @return     XDIR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIR* DIOPROTOCOL::GetXDir()
 {
@@ -2314,17 +2314,17 @@ XDIR* DIOPROTOCOL::GetXDir()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_GetProtocolVersion(XWORD& version, XWORD& subversion, XWORD& subversionerr)
 * @brief      CMD get protocol version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-* @param[in]  subversion :
-* @param[in]  subversionerr :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerr : Subversionerr value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_GetProtocolVersion(XWORD& version, XWORD& subversion, XWORD& subversionerr)
 {
@@ -2350,19 +2350,19 @@ bool DIOPROTOCOL::CMD_GetProtocolVersion(XWORD& version, XWORD& subversion, XWOR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_GetProtocolVersion(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV get protocol version
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_GetProtocolVersion(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2373,17 +2373,17 @@ int DIOPROTOCOL::RCV_GetProtocolVersion(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMA
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_Application_GetVersion(XWORD& version, XWORD& subversion, XWORD& subversionerr)
 * @brief      CMD application get version
 * @ingroup    DATAIO
-*
-* @param[in]  version :
-* @param[in]  subversion :
-* @param[in]  subversionerr :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  subversionerr : Subversionerr value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_Application_GetVersion(XWORD& version, XWORD& subversion, XWORD& subversionerr)
 {
@@ -2409,19 +2409,19 @@ bool DIOPROTOCOL::CMD_Application_GetVersion(XWORD& version, XWORD& subversion, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_Application_GetVersion(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV application get version
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_Application_GetVersion(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2432,15 +2432,15 @@ int DIOPROTOCOL::RCV_Application_GetVersion(DIOPROTOCOL* protocol, DIOPROTOCOL_C
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_Application_GetName(XSTRING& applicationname)
 * @brief      CMD application get name
 * @ingroup    DATAIO
-*
-* @param[in]  applicationname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  applicationname : Application name.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_Application_GetName(XSTRING& applicationname)
 {
@@ -2463,19 +2463,19 @@ bool DIOPROTOCOL::CMD_Application_GetName(XSTRING& applicationname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_Application_GetName(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV application get name
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_Application_GetName(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2485,16 +2485,16 @@ int DIOPROTOCOL::RCV_Application_GetName(DIOPROTOCOL* protocol, DIOPROTOCOL_COMM
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_Ping(XDWORD& milliseconds, int timeout)
 * @brief      CMD ping
 * @ingroup    DATAIO
-*
-* @param[in]  milliseconds :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  milliseconds : Milliseconds value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_Ping(XDWORD& milliseconds, int timeout)
 {
@@ -2522,19 +2522,19 @@ bool DIOPROTOCOL::CMD_Ping(XDWORD& milliseconds, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_Ping(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV ping
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_Ping(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2547,15 +2547,15 @@ int DIOPROTOCOL::RCV_Ping(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFF
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_SendIsInitServerProtocol(bool isinit)
 * @brief      CMD send is init server protocol
 * @ingroup    DATAIO
-*
-* @param[in]  isinit :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  isinit : Isinit value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_SendIsInitServerProtocol(bool isinit)
 {
@@ -2579,19 +2579,19 @@ bool DIOPROTOCOL::CMD_SendIsInitServerProtocol(bool isinit)
 }
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_SendIsInitServerProtocol(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV send is init server protocol
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_SendIsInitServerProtocol(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2613,15 +2613,15 @@ int DIOPROTOCOL::RCV_SendIsInitServerProtocol(DIOPROTOCOL* protocol, DIOPROTOCOL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_GetDateTime(XSTRING& datestring)
 * @brief      CMD get date time
 * @ingroup    DATAIO
-*
-* @param[in]  datestring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  datestring : Datestring value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_GetDateTime(XSTRING& datestring)
 {
@@ -2645,19 +2645,19 @@ bool DIOPROTOCOL::CMD_GetDateTime(XSTRING& datestring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_GetDateTime(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV get date time
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_GetDateTime(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2672,15 +2672,15 @@ int DIOPROTOCOL::RCV_GetDateTime(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_SetDateTime(XCHAR* datestring)
 * @brief      CMD set date time
 * @ingroup    DATAIO
-*
-* @param[in]  datestring :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  datestring : Datestring pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_SetDateTime(XCHAR* datestring)
 {
@@ -2709,19 +2709,19 @@ bool DIOPROTOCOL::CMD_SetDateTime(XCHAR* datestring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_SetDateTime(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV set date time
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_SetDateTime(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2742,19 +2742,19 @@ int DIOPROTOCOL::RCV_SetDateTime(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_File(DIOPROTOCOL_DIRECTION direction, XCHAR* sourcename, XCHAR* targetname, int timeout, void* param)
 * @brief      CMD file
 * @ingroup    DATAIO
-*
-* @param[in]  direction :
-* @param[in]  sourcename :
-* @param[in]  targetname :
-* @param[in]  timeout :
-* @param[in]  param :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  direction : Direction value.
+* @param[in]  sourcename : Sourcename pointer to use.
+* @param[in]  targetname : Targetname pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  param : Param pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_File(DIOPROTOCOL_DIRECTION direction, XCHAR* sourcename, XCHAR* targetname, int timeout, void* param)
 {
@@ -2825,16 +2825,16 @@ bool DIOPROTOCOL::CMD_File(DIOPROTOCOL_DIRECTION direction, XCHAR* sourcename, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_DeleteFile(XCHAR* namefile, bool overwrite)
 * @brief      CMD GEN_DELETE file
 * @ingroup    DATAIO
-*
-* @param[in]  namefile :
-* @param[in]  overwrite :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namefile : Namefile pointer to use.
+* @param[in]  overwrite : Overwrite value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_DeleteFile(XCHAR* namefile, bool overwrite)
 {
@@ -2864,19 +2864,19 @@ bool DIOPROTOCOL::CMD_DeleteFile(XCHAR* namefile, bool overwrite)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_DeleteFile(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV GEN_DELETE file
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_DeleteFile(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2900,15 +2900,15 @@ int DIOPROTOCOL::RCV_DeleteFile(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_MakeDir(XCHAR* namedir)
 * @brief      CMD make dir
 * @ingroup    DATAIO
-*
-* @param[in]  namedir :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namedir : Namedir pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_MakeDir(XCHAR* namedir)
 {
@@ -2938,19 +2938,19 @@ bool DIOPROTOCOL::CMD_MakeDir(XCHAR* namedir)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_MakeDir(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV make dir
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_MakeDir(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -2967,16 +2967,16 @@ int DIOPROTOCOL::RCV_MakeDir(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XB
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_DeleteDir(XCHAR* namedir, bool all)
 * @brief      CMD GEN_DELETE dir
 * @ingroup    DATAIO
-*
-* @param[in]  namedir :
-* @param[in]  all :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namedir : Namedir pointer to use.
+* @param[in]  all : All value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_DeleteDir(XCHAR* namedir, bool all)
 {
@@ -3006,19 +3006,19 @@ bool DIOPROTOCOL::CMD_DeleteDir(XCHAR* namedir, bool all)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_DeleteDir(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV GEN_DELETE dir
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_DeleteDir(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -3036,20 +3036,20 @@ int DIOPROTOCOL::RCV_DeleteDir(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_GetDirElement(XCHAR* pathsearch, XCHAR* mask, XPATH& namefile, XBYTE& type, int& sizefile, XDWORD& CRC32)
 * @brief      CMD get dir element
 * @ingroup    DATAIO
-*
-* @param[in]  pathsearch :
-* @param[in]  mask :
-* @param[in]  namefile :
-* @param[in]  type :
-* @param[in]  sizefile :
-* @param[in]  CRC32 :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pathsearch : Pathsearch pointer to use.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  namefile : Namefile value.
+* @param[in]  type : Type value.
+* @param[in]  sizefile : Sizefile value.
+* @param[in]  CRC32 : CRC32 value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_GetDirElement(XCHAR* pathsearch, XCHAR* mask, XPATH& namefile, XBYTE& type, int& sizefile, XDWORD& CRC32)
 {
@@ -3087,19 +3087,19 @@ bool DIOPROTOCOL::CMD_GetDirElement(XCHAR* pathsearch, XCHAR* mask, XPATH& namef
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_GetDirElement(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV get dir element
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_GetDirElement(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -3149,13 +3149,13 @@ int DIOPROTOCOL::RCV_GetDirElement(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* c
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::DeleteAllCommands()
 * @brief      Delete all commands
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::DeleteAllCommands()
 {
@@ -3169,15 +3169,15 @@ bool DIOPROTOCOL::DeleteAllCommands()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOPROTOCOL::CRC32OfFile(XPATH& xpath)
 * @brief      CRC32 of file
 * @ingroup    DATAIO
-*
-* @param[in]  xpath :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOPROTOCOL::CRC32OfFile(XPATH& xpath)
 {
@@ -3208,15 +3208,15 @@ XDWORD DIOPROTOCOL::CRC32OfFile(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_InitFileBlock(DIOPROTOCOL_FILE* fp)
 * @brief      CMD init file block
 * @ingroup    DATAIO
-*
-* @param[in]  fp :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  fp : Fp pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_InitFileBlock(DIOPROTOCOL_FILE* fp)
 {
@@ -3249,19 +3249,19 @@ bool DIOPROTOCOL::CMD_InitFileBlock(DIOPROTOCOL_FILE* fp)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_InitFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV init file block
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_InitFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -3288,15 +3288,15 @@ int DIOPROTOCOL::RCV_InitFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* c
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_GetFileBlock(DIOPROTOCOL_FILE* fp)
 * @brief      CMD get file block
 * @ingroup    DATAIO
-*
-* @param[in]  fp :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  fp : Fp pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_GetFileBlock(DIOPROTOCOL_FILE* fp)
 {
@@ -3358,19 +3358,19 @@ bool DIOPROTOCOL::CMD_GetFileBlock(DIOPROTOCOL_FILE* fp)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_GetFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV get file block
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_GetFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -3425,15 +3425,15 @@ int DIOPROTOCOL::RCV_GetFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cm
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_SendFileBlock(DIOPROTOCOL_FILE* fp)
 * @brief      CMD send file block
 * @ingroup    DATAIO
-*
-* @param[in]  fp :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  fp : Fp pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_SendFileBlock(DIOPROTOCOL_FILE* fp)
 {
@@ -3495,19 +3495,19 @@ bool DIOPROTOCOL::CMD_SendFileBlock(DIOPROTOCOL_FILE* fp)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_SendFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV send file block
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_SendFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -3572,15 +3572,15 @@ int DIOPROTOCOL::RCV_SendFileBlock(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* c
 #ifdef DIO_ALERTS_ACTIVE
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOPROTOCOL::CMD_SendAlert(DIOALERT* alert)
 * @brief      CMD send alert
 * @ingroup    DATAIO
-*
-* @param[in]  alert :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  alert : Alert pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOPROTOCOL::CMD_SendAlert(DIOALERT* alert)
 {
@@ -3622,19 +3622,19 @@ bool DIOPROTOCOL::CMD_SendAlert(DIOALERT* alert)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOPROTOCOL::RCV_SendAlert(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 * @brief      RCV send alert
 * @ingroup    DATAIO
-*
-* @param[in]  protocol :
-* @param[in]  cmd :
-* @param[in]  xbuffer :
-* @param[in]  rID :
-* @param[in]  param :
-*
-* @return     int :
-*
+* 
+* @param[in]  protocol : Protocol pointer to use.
+* @param[in]  cmd : Cmd pointer to use.
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  rID : R ID value.
+* @param[in]  param : Param value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOPROTOCOL::RCV_SendAlert(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, XBUFFER& xbuffer, XDWORD rID, XDWORD& param)
 {
@@ -3714,13 +3714,13 @@ int DIOPROTOCOL::RCV_SendAlert(DIOPROTOCOL* protocol, DIOPROTOCOL_COMMAND* cmd, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::ThreadReceived(void* param)
 * @brief      Thread received
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::ThreadReceived(void* param)
 {
@@ -3743,13 +3743,13 @@ void DIOPROTOCOL::ThreadReceived(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::ThreadAsks(void* param)
 * @brief      Thread asks
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::ThreadAsks(void* param)
 {
@@ -3783,12 +3783,12 @@ void DIOPROTOCOL::ThreadAsks(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOPROTOCOL::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOPROTOCOL::Clean()
 {

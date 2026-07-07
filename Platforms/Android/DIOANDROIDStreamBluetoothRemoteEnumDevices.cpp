@@ -97,7 +97,7 @@ extern "C"
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES()
+* @fn         DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES() : DIOSTREAMBLUETOOTHREMOTEENUMDEVICES() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -157,7 +157,7 @@ DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::~DIOANDROIDSTREAMBLUETOOTHREMOTEENUM
 * @brief      Search
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::Search()
@@ -195,9 +195,9 @@ bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::Search()
 * @brief      Stop search
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  waitend : 
+* @param[in]  waitend : Waitend value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::StopSearch(bool waitend)
@@ -228,7 +228,7 @@ bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::StopSearch(bool waitend)
 * @brief      Is searching
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::IsSearching()
@@ -249,10 +249,10 @@ bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::IsSearching()
 * @brief      Get addr from local device
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  localdeviceindex : 
-* @param[in]  btaddr : 
+* @param[in]  localdeviceindex : Localdeviceindex value.
+* @param[in]  btaddr : Btaddr pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::GetAddrFromLocalDevice(int localdeviceindex, char* btaddr)
@@ -279,9 +279,9 @@ bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::GetAddrFromLocalDevice(int loca
 * @brief      Is ready connect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::IsReadyConnect(int socket)
@@ -326,9 +326,9 @@ int DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::IsReadyConnect(int socket)
 * @brief      Scan devices
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  devices : 
+* @param[in]  devices : Devices pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevices(XVECTOR<DIOSTREAMDEVICE*>* devices)
@@ -386,9 +386,9 @@ bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevices(XVECTOR<DIOSTREAMDE
 * @brief      Scan devices name
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  device : 
+* @param[in]  device : Device pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesName(DIOSTREAMDEVICEBLUETOOTH* device)
@@ -436,9 +436,9 @@ bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesName(DIOSTREAMDEVICE
 * @brief      Scan devices services
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  devices : 
+* @param[in]  devices : Devices pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesServices(XVECTOR<DIOSTREAMDEVICE*>* devices)
@@ -481,10 +481,10 @@ bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDevicesServices(XVECTOR<DIO
 * @brief      Scan device services
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  device : 
-* @param[in]  search_context* context : 
+* @param[in]  device : Device pointer to use.
+* @param[in]  context : Context object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDeviceServices(DIOSTREAMDEVICEBLUETOOTH* device, struct search_context* context)
@@ -602,7 +602,7 @@ bool DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ScanDeviceServices(DIOSTREAMDEV
 * @brief      Thread enum devices
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMBLUETOOTHREMOTEENUMDEVICES::ThreadEnumDevices(void* param)
@@ -657,15 +657,15 @@ extern "C"
 
 
   /**-------------------------------------------------------------------------------------------------------------------
-  * 
-  * @fn         void print_service_class(void* value, void* userData)
-  * @brief      void print_service_class
-  * @ingroup    PLATFORM_ANDROID
-  * 
-  * @param[in]  value : 
-  * @param[in]  userData : 
-  * 
-  * --------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void print_service_class(void* value, void* userData)
+* @brief      void print_service_class
+* @ingroup    PLATFORM_ANDROID
+* 
+* @param[in]  value : Value pointer to use.
+* @param[in]  userData : User Data pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
   void print_service_class(void* value, void* userData)
   {
     if(!SDP_lastservice) return;
@@ -683,15 +683,15 @@ extern "C"
 
 
   /**-------------------------------------------------------------------------------------------------------------------
-  * 
-  * @fn         void print_service_desc(void* value, void* user)
-  * @brief      void print_service_desc
-  * @ingroup    PLATFORM_ANDROID
-  * 
-  * @param[in]  value : 
-  * @param[in]  user : 
-  * 
-  * --------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void print_service_desc(void* value, void* user)
+* @brief      void print_service_desc
+* @ingroup    PLATFORM_ANDROID
+* 
+* @param[in]  value : Value pointer to use.
+* @param[in]  user : User name.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
   void print_service_desc(void* value, void* user)
   {
     if(!SDP_lastservice) return;
@@ -730,15 +730,15 @@ extern "C"
 
 
   /**-------------------------------------------------------------------------------------------------------------------
-  * 
-  * @fn         void print_access_protos(void* value, void* userData)
-  * @brief      void print_access_protos
-  * @ingroup    PLATFORM_ANDROID
-  * 
-  * @param[in]  value : 
-  * @param[in]  userData : 
-  * 
-  * --------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         void print_access_protos(void* value, void* userData)
+* @brief      void print_access_protos
+* @ingroup    PLATFORM_ANDROID
+* 
+* @param[in]  value : Value pointer to use.
+* @param[in]  userData : User Data pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
   void print_access_protos(void* value, void* userData)
   {
     //XTRACE_PRINTCOLOR(4, __L("print_access_protos"));

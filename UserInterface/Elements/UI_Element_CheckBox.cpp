@@ -59,8 +59,8 @@
 * @fn         UI_ELEMENT_CHECKBOX::UI_ELEMENT_CHECKBOX()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_CHECKBOX::UI_ELEMENT_CHECKBOX()    
 { 
   Clean();   
@@ -76,8 +76,8 @@ UI_ELEMENT_CHECKBOX::UI_ELEMENT_CHECKBOX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_CHECKBOX::~UI_ELEMENT_CHECKBOX()    
 {   
   Clean();                            
@@ -89,10 +89,10 @@ UI_ELEMENT_CHECKBOX::~UI_ELEMENT_CHECKBOX()
 * @fn         bool UI_ELEMENT_CHECKBOX::GetStatus()
 * @brief      Get status
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool  UI_ELEMENT_CHECKBOX::GetStatus()
 {
   return status;
@@ -104,12 +104,12 @@ bool  UI_ELEMENT_CHECKBOX::GetStatus()
 * @fn         bool UI_ELEMENT_CHECKBOX::SetStatus(bool status)
 * @brief      Set status
 * @ingroup    USERINTERFACE
-*
-* @param[in]  status : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  status : Status value to read or update.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool  UI_ELEMENT_CHECKBOX::SetStatus(bool status)
 {
   //if(this->status == status) return false;
@@ -126,8 +126,8 @@ bool  UI_ELEMENT_CHECKBOX::SetStatus(bool status)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_CHECKBOX::Clean()
 {  
    status = false;

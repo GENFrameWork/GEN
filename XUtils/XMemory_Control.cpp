@@ -129,7 +129,7 @@ XMEMORY_CONTROL::~XMEMORY_CONTROL()
 * @brief      Is active
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::IsActive()
@@ -144,9 +144,9 @@ bool XMEMORY_CONTROL::IsActive()
 * @brief      Activate
 * @ingroup    XUTILS
 * 
-* @param[in]  isactive : 
+* @param[in]  isactive : Isactive value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::Activate(bool isactive)
@@ -160,17 +160,17 @@ bool XMEMORY_CONTROL::Activate(bool isactive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void* XMEMORY_CONTROL::Assign(size_t size,char* pathfile,int line)
+* 
+* @fn         void* XMEMORY_CONTROL::Assign(XDWORD size, char* pathfile, int line)
 * @brief      Assign
 * @ingroup    XUTILS
-*
-* @param[in]  size :
-* @param[in]  pathfile :
-* @param[in]  line :
-*
-* @return     void* :
-*
+* 
+* @param[in]  size : Size value.
+* @param[in]  pathfile : Pathfile pointer to use.
+* @param[in]  line : Line value.
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XMEMORY_CONTROL::Assign(XDWORD size, char* pathfile, int line)
 {
@@ -207,13 +207,13 @@ void* XMEMORY_CONTROL::Assign(XDWORD size, char* pathfile, int line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMEMORY_CONTROL::Free(void* ptr)
 * @brief      Free
 * @ingroup    XUTILS
-*
-* @param[in]  ptr :
-*
+* 
+* @param[in]  ptr : Ptr pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMEMORY_CONTROL::Free(void* ptr)
 {
@@ -240,13 +240,13 @@ void XMEMORY_CONTROL::Free(void* ptr)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMEMORY_CONTROL::FreeAll()
 * @brief      Free all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::FreeAll()
 {
@@ -263,13 +263,13 @@ bool XMEMORY_CONTROL::FreeAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD XMEMORY_CONTROL::GetMemoryUsed()
+* 
+* @fn         XDWORD XMEMORY_CONTROL::GetUsed()
 * @brief      Get memory used
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XMEMORY_CONTROL::GetUsed()
 {
@@ -278,13 +278,13 @@ XDWORD XMEMORY_CONTROL::GetUsed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD XMEMORY_CONTROL::GetMemoryNAssigns()
+* 
+* @fn         XDWORD XMEMORY_CONTROL::GetNAssigns()
 * @brief      Get memory N assigns
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XMEMORY_CONTROL::GetNAssigns()
 {
@@ -293,15 +293,15 @@ XDWORD XMEMORY_CONTROL::GetNAssigns()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
 * @brief      Display all
 * @ingroup    XUTILS
-*
-* @param[in]  displaydata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  displaydata : Displaydata value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
 {
@@ -383,13 +383,13 @@ bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMEMORY_CONTROL::Lock()
 * @brief      Lock
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::Lock()
 {
@@ -408,13 +408,13 @@ bool XMEMORY_CONTROL::Lock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMEMORY_CONTROL::UnLock()
 * @brief      Un lock
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::UnLock()
 {
@@ -433,15 +433,15 @@ bool XMEMORY_CONTROL::UnLock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XMEMORY_CONTROL::CRC32ForByte(XDWORD ini)
 * @brief      CRC32 for byte
 * @ingroup    XUTILS
-*
-* @param[in]  ini :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  ini : Ini value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XMEMORY_CONTROL::CRC32ForByte(XDWORD ini)
 {
@@ -455,16 +455,16 @@ XDWORD XMEMORY_CONTROL::CRC32ForByte(XDWORD ini)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XMEMORY_CONTROL::CRC32(XBYTE* data, XWORD size)
 * @brief      CRC32
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XMEMORY_CONTROL::CRC32(XBYTE* data, XWORD size)
 {
@@ -489,18 +489,18 @@ XDWORD XMEMORY_CONTROL::CRC32(XBYTE* data, XWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XMEMORY_CONTROL::RegisterAssign(void* ptr, size_t size, char* pathfile, int line)
+* 
+* @fn         bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, char* pathfile, int line)
 * @brief      Register assign
 * @ingroup    XUTILS
-*
-* @param[in]  ptr :
-* @param[in]  size :
-* @param[in]  pathfile :
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ptr : Ptr pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  pathfile : Pathfile pointer to use.
+* @param[in]  line : Line value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, char* pathfile, int line)
 {
@@ -536,16 +536,16 @@ bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, char* pathfile, int
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMEMORY_CONTROL::DeRegisterAssign(void* ptr, XDWORD& size)
 * @brief      De register assign
 * @ingroup    XUTILS
-*
-* @param[in]  ptr :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ptr : Ptr pointer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::DeRegisterAssign(void* ptr, XDWORD& size)
 {
@@ -568,13 +568,13 @@ bool XMEMORY_CONTROL::DeRegisterAssign(void* ptr, XDWORD& size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XMEMORY_CONTROL::ResizeAssignList(XDWORD newnregisterelements)
+* 
+* @fn         bool XMEMORY_CONTROL::ResizeAssignList()
 * @brief      Resize assign list
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::ResizeAssignList()
 {
@@ -597,16 +597,17 @@ bool XMEMORY_CONTROL::ResizeAssignList()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XMEMORY_CONTROL::SearchIndex(void* ptr, XDWORD& index)
+* 
+* @fn         bool XMEMORY_CONTROL::SearchAssignIndex(bool free, void* ptr, XDWORD& index)
 * @brief      Search index
 * @ingroup    XUTILS
-*
-* @param[in]  ptr :
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  free : Free value.
+* @param[in]  ptr : Ptr pointer to use.
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMEMORY_CONTROL::SearchAssignIndex(bool free, void* ptr, XDWORD& index)
 {
@@ -666,12 +667,12 @@ bool XMEMORY_CONTROL::SearchAssignIndex(bool free, void* ptr, XDWORD& index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMEMORY_CONTROL::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMEMORY_CONTROL::Clean()
 {
@@ -696,17 +697,17 @@ void XMEMORY_CONTROL::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void* operator new(std::size_t size, char const* namefile, int line)
+* 
+* @fn         void* operator new(size_t size, char const* namefile, int line)
 * @brief      perator new
 * @ingroup    XUTILS
-*
-* @param[in]  size :
-* @param[in]  const* namefile :
-* @param[in]  line :
-*
-* @return     void* :
-*
+* 
+* @param[in]  size : Size value.
+* @param[in]  namefile : Namefile value.
+* @param[in]  line : Line value.
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* operator new(size_t size, char const* namefile, int line)
 {
@@ -722,17 +723,17 @@ void* operator new(size_t size, char const* namefile, int line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void* operator new[](std::size_t size, char const* namefile, int line)
+* 
+* @fn         void* operator new[](size_t size, char const* namefile, int line)
 * @brief      perator new[]
 * @ingroup    XUTILS
-*
-* @param[in]  size :
-* @param[in]  const* namefile :
-* @param[in]  line :
-*
-* @return     void* :
-*
+* 
+* @param[in]  size : Size value.
+* @param[in]  namefile : Namefile value.
+* @param[in]  line : Line value.
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* operator new[](size_t size, char const* namefile, int line)
 {
@@ -748,13 +749,13 @@ void* operator new[](size_t size, char const* namefile, int line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void operator delete(void* ptr) noexcept
+* 
+* @fn         void operator delete(void* ptr) throw ()
 * @brief      perator delete
 * @ingroup    XUTILS
-*
-* @param[in]  ptr) noexcep :
-*
+* 
+* @param[in]  throw : Throw pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void operator delete(void* ptr) throw ()
 {
@@ -770,13 +771,13 @@ void operator delete(void* ptr) throw ()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void operator delete[] (void* ptr) noexcept
+* 
+* @fn         void operator delete[] (void* ptr) throw ()
 * @brief      perator delete[]
 * @ingroup    XUTILS
-*
-* @param[in]  ptr) noexcep :
-*
+* 
+* @param[in]  throw : Throw pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void operator delete[] (void* ptr) throw ()
 {
@@ -797,10 +798,10 @@ void operator delete[] (void* ptr) throw ()
 * @brief      eAlloc
 * @ingroup    XUTILS
 * 
-* @param[in]  assign : 
-* @param[in]  size : 
+* @param[in]  assign : Assign pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     void* : 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* ReAlloc(void* assign, size_t size)

@@ -92,7 +92,7 @@ HASH::~HASH()
 * @brief      Get type
 * @ingroup    CIPHER
 * 
-* @return     HASHTYPE : 
+* @return     HASHTYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 HASHTYPE HASH::GetType()
@@ -107,7 +107,7 @@ HASHTYPE HASH::GetType()
 * @brief      get type str
 * @ingroup    CIPHER
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* HASH::GetTypeStr()
@@ -142,7 +142,7 @@ XCHAR* HASH::GetTypeStr()
 * @brief      Get OUI no sign
 * @ingroup    CIPHER
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* HASH::GetOUINoSign()
@@ -154,13 +154,13 @@ XSTRING* HASH::GetOUINoSign()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASH::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASH::Do(XBYTE* input, XQWORD size)
@@ -172,12 +172,12 @@ bool HASH::Do(XBYTE* input, XQWORD size)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASH::Do(XBUFFER& input)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
+* @param[in]  input : Input value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASH::Do(XBUFFER& input)
@@ -189,14 +189,14 @@ bool HASH::Do(XBUFFER& input)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASH::Do(XPATH& xpath, XQWORD size, XQWORD pos)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  xpath : 
-* @param[in]  size : 
-* @param[in]  pos : 
+* @param[in]  xpath : Path to use.
+* @param[in]  size : Size value.
+* @param[in]  pos : Pos value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASH::Do(XPATH& xpath, XQWORD size, XQWORD pos)
@@ -229,14 +229,14 @@ bool HASH::Do(XPATH& xpath, XQWORD size, XQWORD pos)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASH::Do(XFILE* xfile, XQWORD size, XQWORD pos)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  xfile : 
-* @param[in]  size : 
-* @param[in]  pos : 
+* @param[in]  xfile : Xfile pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  pos : Pos value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASH::Do(XFILE* xfile, XQWORD size, XQWORD pos)
@@ -296,7 +296,7 @@ bool HASH::Do(XFILE* xfile, XQWORD size, XQWORD pos)
 * @brief      Reset result
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASH::ResetResult()
@@ -315,7 +315,7 @@ bool HASH::ResetResult()
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASH::GetDefaultSize()
@@ -330,7 +330,7 @@ int HASH::GetDefaultSize()
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* HASH::GetResult()
@@ -345,9 +345,9 @@ XBUFFER* HASH::GetResult()
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @param[in]  resultsize : 
+* @param[in]  resultsize : Output resultsize.
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* HASH::GetResult(XDWORD& resultsize)
@@ -368,9 +368,9 @@ XBYTE* HASH::GetResult(XDWORD& resultsize)
 * @brief      Get result string
 * @ingroup    CIPHER
 * 
-* @param[in]  stringhex : 
+* @param[in]  stringhex : Stringhex value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASH::GetResultString(XSTRING& stringhex)

@@ -54,11 +54,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSTRACE::XWINDOWSTRACE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSTRACE::XWINDOWSTRACE()
 {
@@ -72,12 +72,12 @@ XWINDOWSTRACE::XWINDOWSTRACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSTRACE::~XWINDOWSTRACE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSTRACE::~XWINDOWSTRACE()
 {
@@ -102,15 +102,15 @@ XWINDOWSTRACE::~XWINDOWSTRACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSTRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 * @brief      Print special
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  target : target to print the debug
 * @param[in]  level : level of debug
 * @param[in]  string : string with the line
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSTRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 {
@@ -158,15 +158,15 @@ void XWINDOWSTRACE::PrintSpecial(XTRACE_TARGET* target, XBYTE level, XCHAR* stri
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSTRACE::PrintFile(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 * @brief      Print file
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  target : target to print the debug
 * @param[in]  level : level of debug
 * @param[in]  string : string with the line
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSTRACE::PrintFile(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 {
@@ -255,15 +255,15 @@ void XWINDOWSTRACE::PrintFile(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSTRACE::PrintNet(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 * @brief      Print net
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  target : target to print the debug
 * @param[in]  level : level of debug
 * @param[in]  string : string with the line
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSTRACE::PrintNet(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 {
@@ -295,15 +295,15 @@ void XWINDOWSTRACE::PrintNet(XTRACE_TARGET* target, XBYTE level, XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSTRACE::GetHandleNet(XTRACE_TARGET* target)
 * @brief      Get handle net
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  target : target of debug
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSTRACE::GetHandleNet(XTRACE_TARGET* target)
 {
@@ -349,15 +349,15 @@ bool XWINDOWSTRACE::GetHandleNet(XTRACE_TARGET* target)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSTRACE::CloseHandleNet(XTRACE_TARGET* target)
 * @brief      Close handle net
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  target : target of debug
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSTRACE::CloseHandleNet(XTRACE_TARGET* target)
 {
@@ -376,14 +376,14 @@ bool XWINDOWSTRACE::CloseHandleNet(XTRACE_TARGET* target)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSTRACE::Lock()
 * @brief      Lock
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSTRACE::Lock()
 {
@@ -395,14 +395,14 @@ bool XWINDOWSTRACE::Lock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSTRACE::UnLock()
 * @brief      Un lock
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSTRACE::UnLock()
 {
@@ -414,12 +414,12 @@ bool XWINDOWSTRACE::UnLock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSTRACE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSTRACE::Clean()
 {

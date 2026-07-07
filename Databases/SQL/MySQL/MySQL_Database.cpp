@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         MYSQL_DATABASE::MYSQL_DATABASE()
+* 
+* @fn         MYSQL_DATABASE::MYSQL_DATABASE(): DB_SQL_DATABASE()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_DATABASE::MYSQL_DATABASE(): DB_SQL_DATABASE()
 {
@@ -75,12 +75,12 @@ MYSQL_DATABASE::MYSQL_DATABASE(): DB_SQL_DATABASE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MYSQL_DATABASE::~MYSQL_DATABASE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_DATABASE::~MYSQL_DATABASE()
 {
@@ -89,13 +89,13 @@ MYSQL_DATABASE::~MYSQL_DATABASE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_DATABASE_TYPE MYSQL_DATABASE::GetType()
 * @brief      Get type
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_DATABASE_TYPE :
-*
+* 
+* @return     DB_SQL_DATABASE_TYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_DATABASE_TYPE MYSQL_DATABASE::GetType()
 {
@@ -104,13 +104,13 @@ DB_SQL_DATABASE_TYPE MYSQL_DATABASE::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* MYSQL_DATABASE::GetTypeName()
 * @brief      Get type name
 * @ingroup    DATABASE
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* MYSQL_DATABASE::GetTypeName()
 {
@@ -119,13 +119,13 @@ XCHAR* MYSQL_DATABASE::GetTypeName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_VARIANT* MYSQL_DATABASE::CreateVariant()
 * @brief      Create variant
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_VARIANT* :
-*
+* 
+* @return     DB_SQL_VARIANT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT* MYSQL_DATABASE::CreateVariant()
 {
@@ -134,13 +134,13 @@ DB_SQL_VARIANT* MYSQL_DATABASE::CreateVariant()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_DATABASE::Transaction()
 * @brief      Transaction
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_DATABASE::Transaction()
 {
@@ -162,13 +162,13 @@ bool MYSQL_DATABASE::Transaction()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_DATABASE::Commit()
 * @brief      Commit
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_DATABASE::Commit()
 {
@@ -196,15 +196,15 @@ bool MYSQL_DATABASE::Commit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_DATABASE::Rollback(XCHAR* savepointname)
 * @brief      Rollback
 * @ingroup    DATABASE
-*
-* @param[in]  savepointname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  savepointname : Savepointname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_DATABASE::Rollback(XCHAR* savepointname)
 {
@@ -247,15 +247,15 @@ bool MYSQL_DATABASE::Rollback(XCHAR* savepointname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_DATABASE::Savepoint(XCHAR* savepoint)
 * @brief      Savepoint
 * @ingroup    DATABASE
-*
-* @param[in]  savepoint :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  savepoint : Savepoint pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_DATABASE::Savepoint(XCHAR* savepoint)
 {
@@ -282,15 +282,15 @@ bool MYSQL_DATABASE::Savepoint(XCHAR* savepoint)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_DATABASE::ReleaseSavepoint(XCHAR* savepoint)
 * @brief      Release savepoint
 * @ingroup    DATABASE
-*
-* @param[in]  savepoint :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  savepoint : Savepoint pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_DATABASE::ReleaseSavepoint(XCHAR* savepoint)
 {
@@ -316,13 +316,13 @@ bool MYSQL_DATABASE::ReleaseSavepoint(XCHAR* savepoint)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_QUERY* MYSQL_DATABASE::CreateQuery()
 * @brief      Create query
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_QUERY* :
-*
+* 
+* @return     DB_SQL_QUERY* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_QUERY* MYSQL_DATABASE::CreateQuery()
 {
@@ -332,13 +332,13 @@ DB_SQL_QUERY* MYSQL_DATABASE::CreateQuery()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_CONNECTION* MYSQL_DATABASE::CreateConnection()
 * @brief      Create connection
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_CONNECTION* :
-*
+* 
+* @return     DB_SQL_CONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_CONNECTION* MYSQL_DATABASE::CreateConnection()
 {
@@ -348,13 +348,13 @@ DB_SQL_CONNECTION* MYSQL_DATABASE::CreateConnection()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_DATABASE::GetTables()
 * @brief      Get tables
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_DATABASE::GetTables()
 {
@@ -411,13 +411,13 @@ bool MYSQL_DATABASE::GetTables()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_DATABASE_ENCODING MYSQL_DATABASE::GetDatabaseEncoding()
 * @brief      Get database encoding
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_DATABASE_ENCODING :
-*
+* 
+* @return     DB_SQL_DATABASE_ENCODING : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_DATABASE_ENCODING MYSQL_DATABASE::GetDatabaseEncoding()
 {
@@ -437,15 +437,15 @@ DB_SQL_DATABASE_ENCODING MYSQL_DATABASE::GetDatabaseEncoding()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_DATABASE::SetDatabaseEncoding(DB_SQL_DATABASE_ENCODING encodingtouse)
 * @brief      Set database encoding
 * @ingroup    DATABASE
-*
-* @param[in]  encodingtouse :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  encodingtouse : Encodingtouse value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_DATABASE::SetDatabaseEncoding(DB_SQL_DATABASE_ENCODING encodingtouse)
 {
@@ -510,12 +510,12 @@ bool MYSQL_DATABASE::SetDatabaseEncoding(DB_SQL_DATABASE_ENCODING encodingtouse)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void MYSQL_DATABASE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void MYSQL_DATABASE::Clean()
 {

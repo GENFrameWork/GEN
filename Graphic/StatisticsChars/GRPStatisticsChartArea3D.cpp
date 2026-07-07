@@ -81,12 +81,12 @@ GRPSTATISTICSCHARTAREA3D::~GRPSTATISTICSCHARTAREA3D()
 * @ingroup    GRAPHIC
 * 
 * @param[in]  builder : output builder
-* @param[in]  x       : plot area left
-* @param[in]  y       : plot area top
-* @param[in]  width   : plot area width
-* @param[in]  height  : plot area height
+* @param[in]  x : plot area left
+* @param[in]  y : plot area top
+* @param[in]  width : plot area width
+* @param[in]  height : plot area height
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSTATISTICSCHARTAREA3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, double x, double y, double width, double height)
@@ -316,10 +316,10 @@ bool GRPSTATISTICSCHARTAREA3D::DrawPlot(GRPSTATISTICSCHARTBUILDER& builder, doub
 * @brief      Make shade : scale a color by a factor (>1 lighter, <1 darker), clamped to 0..255
 * @ingroup    GRAPHIC
 * 
-* @param[in]  color  : base color
+* @param[in]  color : base color
 * @param[in]  factor : brightness factor
 * 
-* @return     GRPSTATISTICSCHARTCOLOR : the shaded color
+* @return     GRPSTATISTICSCHARTCOLOR : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSTATISTICSCHARTCOLOR GRPSTATISTICSCHARTAREA3D::MakeShade(GRPSTATISTICSCHARTCOLOR& color, double factor)

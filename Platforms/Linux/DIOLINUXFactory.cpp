@@ -150,15 +150,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMENUMDEVICES* DIOLINUXFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE type)
 * @brief      Create stream enum devices
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  type : type of enum to create
-*
-* @return     DIOSTREAMENUMDEVICES* : enum created
-*
+* 
+* @return     DIOSTREAMENUMDEVICES* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMDEVICES* DIOLINUXFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE type)
 {
@@ -203,15 +203,15 @@ DIOSTREAMENUMDEVICES* DIOLINUXFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
 * @brief      Delete stream enum devices
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  enumdevices : enumdevices to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
 {
@@ -229,9 +229,9 @@ bool DIOLINUXFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
 * @brief      Create stream IO
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  config : 
+* @param[in]  config : Configuration object to use.
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOLINUXFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
@@ -331,15 +331,15 @@ DIOSTREAM* DIOLINUXFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 * @brief      Delete stream IO
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  diostream : diostream to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 {
@@ -377,10 +377,10 @@ DELETEFUNC(DIOLINUXFACTORY, DIOPCAP   , DIOLINUXPCAP    , DeletePCap)
 * @fn         DIOLEDNEOPIXELWS2812B* DIOLINUXFACTORY::CreateLedNeopixelWS2812B()
 * @brief      Create led neopixel WS2812B
 * @ingroup    PLATFORM_LINUX
-*
-* @return     DIOLEDNEOPIXELWS2812B* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOLEDNEOPIXELWS2812B* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLEDNEOPIXELWS2812B* DIOLINUXFACTORY::CreateLedNeopixelWS2812B()
 {
   #ifdef HW_RASPBERRYPI
@@ -398,12 +398,12 @@ DIOLEDNEOPIXELWS2812B* DIOLINUXFACTORY::CreateLedNeopixelWS2812B()
 * @fn         bool DIOLINUXFACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixelws2812b)
 * @brief      Delete led neopixel WS2812B
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  ledneopixelws2812b : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  ledneopixelws2812b : Ledneopixelws2812b pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXFACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixelws2812b)
 {
   if(!ledneopixelws2812b) return false;

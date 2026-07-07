@@ -91,7 +91,7 @@ SNDPLAYCFG::~SNDPLAYCFG()
 * @brief      Get volume
 * @ingroup    SOUND
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int SNDPLAYCFG::GetVolume()
@@ -106,7 +106,7 @@ int SNDPLAYCFG::GetVolume()
 * @brief      Set volume
 * @ingroup    SOUND
 * 
-* @param[in]  volume : 
+* @param[in]  volume : Volume value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDPLAYCFG::SetVolume(int volume)
@@ -121,7 +121,7 @@ void SNDPLAYCFG::SetVolume(int volume)
 * @brief      Get pitch
 * @ingroup    SOUND
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float SNDPLAYCFG::GetPitch()
@@ -136,7 +136,7 @@ float SNDPLAYCFG::GetPitch()
 * @brief      Set pitch
 * @ingroup    SOUND
 * 
-* @param[in]  pitch : 
+* @param[in]  pitch : Pitch value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDPLAYCFG::SetPitch(float pitch)
@@ -151,9 +151,9 @@ void SNDPLAYCFG::SetPitch(float pitch)
 * @brief      Copy to
 * @ingroup    SOUND
 * 
-* @param[in]  playCFG : 
+* @param[in]  playCFG : Play configuration value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDPLAYCFG::CopyTo(SNDPLAYCFG& playCFG)
@@ -171,9 +171,9 @@ bool SNDPLAYCFG::CopyTo(SNDPLAYCFG& playCFG)
 * @brief      Copy from
 * @ingroup    SOUND
 * 
-* @param[in]  playCFG : 
+* @param[in]  playCFG : Play configuration value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDPLAYCFG::CopyFrom(SNDPLAYCFG& playCFG)

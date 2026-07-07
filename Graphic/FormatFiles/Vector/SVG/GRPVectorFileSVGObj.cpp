@@ -69,11 +69,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJ::GRPVECTORFILESVGOBJ()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJ::GRPVECTORFILESVGOBJ()
 {
@@ -82,12 +82,12 @@ GRPVECTORFILESVGOBJ::GRPVECTORFILESVGOBJ()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJ::~GRPVECTORFILESVGOBJ()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJ::~GRPVECTORFILESVGOBJ()
 {
@@ -99,15 +99,15 @@ GRPVECTORFILESVGOBJ::~GRPVECTORFILESVGOBJ()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* element)
 * @brief      Create instance : build a SVG object (and its sub tree) from a XML element
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  element : xml element
-*
-* @return     GRPVECTORFILESVGOBJ* : created object or NULL
-*
+* 
+* @return     GRPVECTORFILESVGOBJ* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* element)
 {
@@ -148,15 +148,15 @@ GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* elemen
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJTYPE GRPVECTORFILESVGOBJ::GetObjType(XSTRING& name)
 * @brief      Get obj type : map a SVG tag name to its object type
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  name : tag name
-*
-* @return     GRPVECTORFILESVGOBJTYPE : object type
-*
+* 
+* @return     GRPVECTORFILESVGOBJTYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJTYPE GRPVECTORFILESVGOBJ::GetObjType(XSTRING& name)
 {
@@ -183,15 +183,15 @@ GRPVECTORFILESVGOBJTYPE GRPVECTORFILESVGOBJ::GetObjType(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* GRPVECTORFILESVGOBJ::GetObjTypeName(GRPVECTORFILESVGOBJTYPE type)
 * @brief      Get obj type name
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  type : object type
-*
-* @return     XCHAR* : type name
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* GRPVECTORFILESVGOBJ::GetObjTypeName(GRPVECTORFILESVGOBJTYPE type)
 {
@@ -218,16 +218,16 @@ XCHAR* GRPVECTORFILESVGOBJ::GetObjTypeName(GRPVECTORFILESVGOBJTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGOBJ::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : parse the common attributes (id, transform, style) and build the child sub tree
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  element : xml element
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJ::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -248,16 +248,16 @@ bool GRPVECTORFILESVGOBJ::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGOBJ::BuildPath(GRP2DPATH& path)
 * @brief      Build path : emit the geometry of the object into a path (base does nothing)
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  path : output path
-*
-* @return     bool : true if any geometry was emitted.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJ::BuildPath(GRP2DPATH& path)
 {
@@ -266,13 +266,13 @@ bool GRPVECTORFILESVGOBJ::BuildPath(GRP2DPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJTYPE GRPVECTORFILESVGOBJ::GetObjType()
 * @brief      Get obj type
 * @ingroup    GRAPHIC
-*
-* @return     GRPVECTORFILESVGOBJTYPE : object type
-*
+* 
+* @return     GRPVECTORFILESVGOBJTYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJTYPE GRPVECTORFILESVGOBJ::GetObjType()
 {
@@ -281,13 +281,13 @@ GRPVECTORFILESVGOBJTYPE GRPVECTORFILESVGOBJ::GetObjType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGOBJ::SetObjType(GRPVECTORFILESVGOBJTYPE type)
 * @brief      Set obj type
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  type : object type
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJ::SetObjType(GRPVECTORFILESVGOBJTYPE type)
 {
@@ -296,13 +296,13 @@ void GRPVECTORFILESVGOBJ::SetObjType(GRPVECTORFILESVGOBJTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGOBJ::IsContainer()
 * @brief      Is container : true for elements that hold children (svg, g, a, defs)
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if the object is a container.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJ::IsContainer()
 {
@@ -313,13 +313,13 @@ bool GRPVECTORFILESVGOBJ::IsContainer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* GRPVECTORFILESVGOBJ::GetID()
 * @brief      Get id
 * @ingroup    GRAPHIC
-*
-* @return     XSTRING* : id
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVECTORFILESVGOBJ::GetID()
 {
@@ -328,13 +328,13 @@ XSTRING* GRPVECTORFILESVGOBJ::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGSTYLE* GRPVECTORFILESVGOBJ::GetStyle()
 * @brief      Get style
 * @ingroup    GRAPHIC
-*
-* @return     GRPVECTORFILESVGSTYLE* : style
-*
+* 
+* @return     GRPVECTORFILESVGSTYLE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGSTYLE* GRPVECTORFILESVGOBJ::GetStyle()
 {
@@ -343,13 +343,13 @@ GRPVECTORFILESVGSTYLE* GRPVECTORFILESVGOBJ::GetStyle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGTRANSFORM* GRPVECTORFILESVGOBJ::GetTransform()
 * @brief      Get transform
 * @ingroup    GRAPHIC
-*
-* @return     GRPVECTORFILESVGTRANSFORM* : transform
-*
+* 
+* @return     GRPVECTORFILESVGTRANSFORM* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGTRANSFORM* GRPVECTORFILESVGOBJ::GetTransform()
 {
@@ -358,13 +358,13 @@ GRPVECTORFILESVGTRANSFORM* GRPVECTORFILESVGOBJ::GetTransform()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXMLELEMENT* GRPVECTORFILESVGOBJ::GetXMLElement()
 * @brief      Get xml element
 * @ingroup    GRAPHIC
-*
-* @return     XFILEXMLELEMENT* : xml element (weak reference)
-*
+* 
+* @return     XFILEXMLELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* GRPVECTORFILESVGOBJ::GetXMLElement()
 {
@@ -373,13 +373,13 @@ XFILEXMLELEMENT* GRPVECTORFILESVGOBJ::GetXMLElement()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGOBJ::SetXMLElement(XFILEXMLELEMENT* element)
 * @brief      Set xml element
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  element : xml element
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJ::SetXMLElement(XFILEXMLELEMENT* element)
 {
@@ -388,13 +388,13 @@ void GRPVECTORFILESVGOBJ::SetXMLElement(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<GRPVECTORFILESVGOBJ*>* GRPVECTORFILESVGOBJ::GetChilds()
 * @brief      Get childs
 * @ingroup    GRAPHIC
-*
-* @return     XVECTOR<GRPVECTORFILESVGOBJ*>* : childs
-*
+* 
+* @return     XVECTOR<GRPVECTORFILESVGOBJ*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVECTORFILESVGOBJ*>* GRPVECTORFILESVGOBJ::GetChilds()
 {
@@ -403,13 +403,13 @@ XVECTOR<GRPVECTORFILESVGOBJ*>* GRPVECTORFILESVGOBJ::GetChilds()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD GRPVECTORFILESVGOBJ::GetNChilds()
 * @brief      Get n childs
 * @ingroup    GRAPHIC
-*
-* @return     XDWORD : number of childs
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRPVECTORFILESVGOBJ::GetNChilds()
 {
@@ -418,15 +418,15 @@ XDWORD GRPVECTORFILESVGOBJ::GetNChilds()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::GetChild(int index)
 * @brief      Get child
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  index : index of child
-*
-* @return     GRPVECTORFILESVGOBJ* : child
-*
+* 
+* @return     GRPVECTORFILESVGOBJ* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::GetChild(int index)
 {
@@ -435,15 +435,15 @@ GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::GetChild(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::FindByID(XCHAR* id)
 * @brief      Find by id : recursive search of a node by its id (this node and its descendants)
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  id : id to find (without the leading '#')
-*
-* @return     GRPVECTORFILESVGOBJ* : found node or NULL
-*
+* 
+* @return     GRPVECTORFILESVGOBJ* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::FindByID(XCHAR* id)
 {
@@ -467,13 +467,13 @@ GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::FindByID(XCHAR* id)
 
 #ifdef XTRACE_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGOBJ::Trace(int level)
 * @brief      Trace : dump this node and its sub tree
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  level : indentation level
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJ::Trace(int level)
 {
@@ -497,16 +497,16 @@ void GRPVECTORFILESVGOBJ::Trace(int level)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGOBJ::BuildChilds(XFILEXMLELEMENT* element)
 * @brief      Build childs : recursively create the SVG objects for every normal child element
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  element : xml element
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJ::BuildChilds(XFILEXMLELEMENT* element)
 {
@@ -530,12 +530,12 @@ bool GRPVECTORFILESVGOBJ::BuildChilds(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGOBJ::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJ::Clean()
 {

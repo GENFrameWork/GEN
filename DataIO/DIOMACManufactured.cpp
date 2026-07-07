@@ -96,10 +96,10 @@ DIOMACMANUFACTURED::~DIOMACMANUFACTURED()
 * @brief      Web get manufactured
 * @ingroup    DATAIO
 * 
-* @param[in]  MAC : 
-* @param[in]  manufactured : 
+* @param[in]  MAC : MAC value.
+* @param[in]  manufactured : Manufactured value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMACMANUFACTURED::Web_GetManufactured(DIOMAC& MAC, XSTRING& manufactured)
@@ -123,11 +123,11 @@ bool DIOMACMANUFACTURED::Web_GetManufactured(DIOMAC& MAC, XSTRING& manufactured)
 * @brief      File get manufactured
 * @ingroup    DATAIO
 * 
-* @param[in]  xpath : 
-* @param[in]  MAC : 
-* @param[in]  manufactured : 
+* @param[in]  xpath : Path to use.
+* @param[in]  MAC : MAC value.
+* @param[in]  manufactured : Manufactured value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMACMANUFACTURED::File_GetManufactured(XPATH& xpath, DIOMAC& MAC, XSTRING& manufactured)
@@ -177,11 +177,11 @@ bool DIOMACMANUFACTURED::File_GetManufactured(XPATH& xpath, DIOMAC& MAC, XSTRING
 * @brief      File get manufactured MA cs
 * @ingroup    DATAIO
 * 
-* @param[in]  xpath : 
-* @param[in]  manufactured : 
-* @param[in]  MACs : 
+* @param[in]  xpath : Path to use.
+* @param[in]  manufactured : Manufactured value.
+* @param[in]  MACs : MA Cs value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMACMANUFACTURED::File_GetManufacturedMACs(XPATH& xpath, XSTRING& manufactured, XVECTOR<XDWORD>& MACs)
@@ -244,10 +244,10 @@ bool DIOMACMANUFACTURED::File_GetManufacturedMACs(XPATH& xpath, XSTRING& manufac
 * @brief      File download
 * @ingroup    DATAIO
 * 
-* @param[in]  xbuffer : 
-* @param[in]  timeout : 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMACMANUFACTURED::File_Download(XBUFFER& xbuffer, int timeout)
@@ -275,10 +275,10 @@ bool DIOMACMANUFACTURED::File_Download(XBUFFER& xbuffer, int timeout)
 * @brief      File convert
 * @ingroup    DATAIO
 * 
-* @param[in]  xbuffer : 
-* @param[in]  xpath : 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  xpath : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMACMANUFACTURED::File_Convert(XBUFFER& xbuffer, XPATH& xpath)

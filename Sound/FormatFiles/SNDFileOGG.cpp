@@ -60,7 +60,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SNDFILEOGG::SNDFILEOGG()
+* @fn         SNDFILEOGG::SNDFILEOGG() : SNDFILE()
 * @brief      Constructor of class
 * @ingroup    SOUND
 * 
@@ -93,7 +93,7 @@ SNDFILEOGG::~SNDFILEOGG()
 * @brief      Load file
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFILEOGG::LoadFile()

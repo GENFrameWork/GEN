@@ -55,15 +55,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIONODE_XEVENT::DIONODE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         DIONODE_XEVENT::DIONODE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  subject :
-* @param[in]  type :
-* @param[in]  family :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODE_XEVENT::DIONODE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 {
@@ -91,7 +91,7 @@ DIONODE_XEVENT::~DIONODE_XEVENT()
 * @brief      Get node item
 * @ingroup    DATAIO
 * 
-* @return     DIONODEITEM* : 
+* @return     DIONODEITEM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEM* DIONODE_XEVENT::GetNodeItem()
@@ -106,7 +106,7 @@ DIONODEITEM* DIONODE_XEVENT::GetNodeItem()
 * @brief      Set node item
 * @ingroup    DATAIO
 * 
-* @param[in]  nodeitem : 
+* @param[in]  nodeitem : Nodeitem pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODE_XEVENT::SetNodeItem(DIONODEITEM* nodeitem)
@@ -121,7 +121,7 @@ void DIONODE_XEVENT::SetNodeItem(DIONODEITEM* nodeitem)
 * @brief      Get index value
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIONODE_XEVENT::GetIndexValue()
@@ -136,7 +136,7 @@ XDWORD DIONODE_XEVENT::GetIndexValue()
 * @brief      Set index value
 * @ingroup    DATAIO
 * 
-* @param[in]  indexvalue : 
+* @param[in]  indexvalue : Indexvalue value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODE_XEVENT::SetIndexValue(XDWORD indexvalue)
@@ -146,12 +146,12 @@ void DIONODE_XEVENT::SetIndexValue(XDWORD indexvalue)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIONODE_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODE_XEVENT::Clean()
 {

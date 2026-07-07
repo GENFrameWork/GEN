@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWCHECKRESOURCESHARDWARE::APPFLOWCHECKRESOURCESHARDWARE()
 * @brief      Constructor of class
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCHECKRESOURCESHARDWARE::APPFLOWCHECKRESOURCESHARDWARE()
 {
@@ -79,12 +79,12 @@ APPFLOWCHECKRESOURCESHARDWARE::APPFLOWCHECKRESOURCESHARDWARE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWCHECKRESOURCESHARDWARE::~APPFLOWCHECKRESOURCESHARDWARE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCHECKRESOURCESHARDWARE::~APPFLOWCHECKRESOURCESHARDWARE()
 {
@@ -99,15 +99,15 @@ APPFLOWCHECKRESOURCESHARDWARE::~APPFLOWCHECKRESOURCESHARDWARE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCHECKRESOURCESHARDWARE::Ini(APPFLOWCFG* cfg)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    APPFLOW
-*
-* @param[in]  cfg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  cfg : Configuration object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCHECKRESOURCESHARDWARE::Ini(APPFLOWCFG* cfg)
 {
@@ -191,7 +191,7 @@ bool APPFLOWCHECKRESOURCESHARDWARE::Ini(APPFLOWCFG* cfg)
 * @brief      Get CPU total memory
 * @ingroup    APPFLOW
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWCHECKRESOURCESHARDWARE::GetCPUTotalMemory()
@@ -206,7 +206,7 @@ XDWORD APPFLOWCHECKRESOURCESHARDWARE::GetCPUTotalMemory()
 * @brief      Get CPU free memory
 * @ingroup    APPFLOW
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD APPFLOWCHECKRESOURCESHARDWARE::GetCPUFreeMemory()
@@ -221,7 +221,7 @@ XDWORD APPFLOWCHECKRESOURCESHARDWARE::GetCPUFreeMemory()
 * @brief      Get CPU free percent memory
 * @ingroup    APPFLOW
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCHECKRESOURCESHARDWARE::GetCPUFreePercentMemory()
@@ -236,7 +236,7 @@ int APPFLOWCHECKRESOURCESHARDWARE::GetCPUFreePercentMemory()
 * @brief      Get CPU total CPU usage averange
 * @ingroup    APPFLOW
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCHECKRESOURCESHARDWARE::GetCPUTotalCPUUsageAverange()
@@ -253,7 +253,7 @@ int APPFLOWCHECKRESOURCESHARDWARE::GetCPUTotalCPUUsageAverange()
 * @brief      Get CPU total CPU usage max
 * @ingroup    APPFLOW
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCHECKRESOURCESHARDWARE::GetCPUTotalCPUUsageMax()
@@ -268,7 +268,7 @@ int APPFLOWCHECKRESOURCESHARDWARE::GetCPUTotalCPUUsageMax()
 * @brief      Get CPU app CPU usage averange
 * @ingroup    APPFLOW
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCHECKRESOURCESHARDWARE::GetCPUAppCPUUsageAverange()
@@ -285,7 +285,7 @@ int APPFLOWCHECKRESOURCESHARDWARE::GetCPUAppCPUUsageAverange()
 * @brief      Get CPU app CPU usage max
 * @ingroup    APPFLOW
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCHECKRESOURCESHARDWARE::GetCPUAppCPUUsageMax()
@@ -295,13 +295,13 @@ int APPFLOWCHECKRESOURCESHARDWARE::GetCPUAppCPUUsageMax()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCHECKRESOURCESHARDWARE::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCHECKRESOURCESHARDWARE::End()
 {
@@ -318,13 +318,13 @@ bool APPFLOWCHECKRESOURCESHARDWARE::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCHECKRESOURCESHARDWARE::CheckMemoryStatus()
 * @brief      Check memory status
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCHECKRESOURCESHARDWARE::CheckMemoryStatus()
 {
@@ -354,13 +354,13 @@ bool APPFLOWCHECKRESOURCESHARDWARE::CheckMemoryStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCHECKRESOURCESHARDWARE::CheckTotalCPUUsageStatus()
 * @brief      Check total CPU usage status
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCHECKRESOURCESHARDWARE::CheckTotalCPUUsageStatus()
 {
@@ -402,7 +402,7 @@ bool APPFLOWCHECKRESOURCESHARDWARE::CheckTotalCPUUsageStatus()
 * @brief      Check app CPU usage status
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCHECKRESOURCESHARDWARE::CheckAppCPUUsageStatus()
@@ -445,14 +445,14 @@ bool APPFLOWCHECKRESOURCESHARDWARE::CheckAppCPUUsageStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWCHECKRESOURCESHARDWARE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 * @brief      Handle event scheduler
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
-* @param[in]  event : 
-*
+* 
+* @param[in]  event : Event to process.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWCHECKRESOURCESHARDWARE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 {
@@ -472,14 +472,14 @@ void APPFLOWCHECKRESOURCESHARDWARE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* eve
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWCHECKRESOURCESHARDWARE::HandleEvent(XEVENT* xevent)
 * @brief      Handle event
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
-* @param[in]  xevent :
-*
+* 
+* @param[in]  xevent : Xevent pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWCHECKRESOURCESHARDWARE::HandleEvent(XEVENT* xevent)
 {
@@ -501,12 +501,12 @@ void APPFLOWCHECKRESOURCESHARDWARE::HandleEvent(XEVENT* xevent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWCHECKRESOURCESHARDWARE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWCHECKRESOURCESHARDWARE::Clean()
 {

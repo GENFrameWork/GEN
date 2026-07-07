@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XPATH::XPATH()
+* 
+* @fn         XPATH::XPATH(): XSTRING()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::XPATH(): XSTRING()
 {
@@ -75,13 +75,13 @@ XPATH::XPATH(): XSTRING()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XPATH::XPATH(XDWORD size)
+* 
+* @fn         XPATH::XPATH(XDWORD size): XSTRING(size)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  size :
-*
+* 
+* @param[in]  size : Size value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::XPATH(XDWORD size): XSTRING(size)
 {
@@ -90,13 +90,13 @@ XPATH::XPATH(XDWORD size): XSTRING(size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XPATH::XPATH(const char* path)
+* 
+* @fn         XPATH::XPATH(const char* path) : XSTRING(path)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::XPATH(const char* path) : XSTRING(path)
 {
@@ -105,13 +105,13 @@ XPATH::XPATH(const char* path) : XSTRING(path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XPATH::XPATH(const XCHAR* path)
+* 
+* @fn         XPATH::XPATH(const XCHAR* path): XSTRING(path)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::XPATH(const XCHAR* path): XSTRING(path)
 {
@@ -120,14 +120,14 @@ XPATH::XPATH(const XCHAR* path): XSTRING(path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XPATH::XPATH(const XCHAR* path,XDWORD size)
+* 
+* @fn         XPATH::XPATH(const XCHAR* path,XDWORD size): XSTRING(path,size)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-* @param[in]  size :
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  size : Size value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::XPATH(const XCHAR* path,XDWORD size): XSTRING(path,size)
 {
@@ -136,13 +136,13 @@ XPATH::XPATH(const XCHAR* path,XDWORD size): XSTRING(path,size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XPATH::XPATH(XPATH& path)
+* 
+* @fn         XPATH::XPATH(XPATH& path): XSTRING(path)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::XPATH(XPATH& path): XSTRING(path)
 {
@@ -151,13 +151,13 @@ XPATH::XPATH(XPATH& path): XSTRING(path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XPATH::XPATH(XSTRING& string)
+* 
+* @fn         XPATH::XPATH(XSTRING& string) : XSTRING(string)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
+* 
+* @param[in]  string : String to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::XPATH(XSTRING& string)  : XSTRING(string)
 {
@@ -166,13 +166,13 @@ XPATH::XPATH(XSTRING& string)  : XSTRING(string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XPATH::XPATH(XWORD* path)
+* 
+* @fn         XPATH::XPATH(XWORD* path) : XSTRING(path)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::XPATH(XWORD* path) : XSTRING(path)
 {
@@ -181,12 +181,12 @@ XPATH::XPATH(XWORD* path) : XSTRING(path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH::~XPATH()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH::~XPATH()
 {
@@ -195,13 +195,15 @@ XPATH::~XPATH()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator = (const char* path)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (const char* path)
 {
@@ -210,13 +212,15 @@ void XPATH::operator = (const char* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator = (const XCHAR* path)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (const XCHAR* path)
 {
@@ -225,13 +229,15 @@ void XPATH::operator = (const XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator = (XPATH& path)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (XPATH& path)
 {
@@ -240,13 +246,15 @@ void XPATH::operator = (XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator = (XSTRING& string)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (XSTRING& string)
 {
@@ -255,13 +263,15 @@ void XPATH::operator = (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator = (XWORD* path)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (XWORD* path)
 {
@@ -270,13 +280,15 @@ void XPATH::operator = (XWORD* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator += (const char* path)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (const char* path)
 {
@@ -285,13 +297,15 @@ void XPATH::operator += (const char* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator += (const XCHAR* path)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (const XCHAR* path)
 {
@@ -300,13 +314,15 @@ void XPATH::operator += (const XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator += (XPATH& path)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (XPATH& path)
 {
@@ -315,13 +331,15 @@ void XPATH::operator += (XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator += (XSTRING& string)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (XSTRING& string)
 {
@@ -330,13 +348,15 @@ void XPATH::operator += (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XPATH::operator += (XCHAR path)
-* @brief      operator += 
+* @brief      operator +=
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     void XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (XCHAR path)
 {
@@ -345,15 +365,15 @@ void XPATH::operator += (XCHAR path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator < (XPATH& path)
-* @brief      operator < 
+* @brief      operator <
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator <  (XPATH& path)
 {
@@ -362,15 +382,15 @@ bool XPATH::operator <  (XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator > (XPATH& path)
-* @brief      operator > 
+* @brief      operator >
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator >  (XPATH& path)
 {
@@ -379,15 +399,15 @@ bool XPATH::operator >  (XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator <= (XPATH& path)
-* @brief      operator <= 
+* @brief      operator <=
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator <= (XPATH& path)
 {
@@ -396,15 +416,15 @@ bool XPATH::operator <= (XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator >= (XPATH& path)
-* @brief      operator >= 
+* @brief      operator >=
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator >= (XPATH& path)
 {
@@ -413,15 +433,15 @@ bool XPATH::operator >= (XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator == (XPATH& path)
-* @brief      operator == 
+* @brief      operator ==
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator == (XPATH& path)
 {
@@ -430,15 +450,15 @@ bool XPATH::operator == (XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator != (XPATH& path)
-* @brief      operator != 
+* @brief      operator !=
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator != (XPATH& path)
 {
@@ -447,15 +467,15 @@ bool XPATH::operator != (XPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator < (XSTRING& string)
-* @brief      operator < 
+* @brief      operator <
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator <  (XSTRING& string)
 {
@@ -464,15 +484,15 @@ bool XPATH::operator <  (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator > (XSTRING& string)
-* @brief      operator > 
+* @brief      operator >
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator >  (XSTRING& string)
 {
@@ -481,15 +501,15 @@ bool XPATH::operator >  (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator <= (XSTRING& string)
-* @brief      operator <= 
+* @brief      operator <=
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator <= (XSTRING& string)
 {
@@ -498,15 +518,15 @@ bool XPATH::operator <= (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator >= (XSTRING& string)
-* @brief      operator >= 
+* @brief      operator >=
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator >= (XSTRING& string)
 {
@@ -515,15 +535,15 @@ bool XPATH::operator >= (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator == (XSTRING& string)
-* @brief      operator == 
+* @brief      operator ==
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator == (XSTRING& string)
 {
@@ -532,15 +552,15 @@ bool XPATH::operator == (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::operator != (XSTRING& string)
-* @brief      operator != 
+* @brief      operator !=
 * @ingroup    XUTILS
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::operator != (XSTRING& string)
 {
@@ -549,15 +569,15 @@ bool XPATH::operator != (XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR XPATH::operator [](int position)
 * @brief      operator []
 * @ingroup    XUTILS
-*
-* @param[in]  position :
-*
-* @return     XCHAR :
-*
+* 
+* @param[in]  position : Position value.
+* 
+* @return     XCHAR XPATH:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR XPATH::operator [](int position)
 {
@@ -571,15 +591,15 @@ XCHAR XPATH::operator [](int position)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetDrive(XSTRING& drive)
 * @brief      Get drive
 * @ingroup    XUTILS
-*
-* @param[in]  drive :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  drive : Drive value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetDrive(XSTRING& drive)
 {
@@ -592,15 +612,15 @@ bool XPATH::GetDrive(XSTRING& drive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetPath(XSTRING& path)
 * @brief      Get path
 * @ingroup    XUTILS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetPath(XSTRING& path)
 {
@@ -619,15 +639,15 @@ bool XPATH::GetPath(XSTRING& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetDriveAndPath(XSTRING& drivepath)
 * @brief      Get drive and path
 * @ingroup    XUTILS
-*
-* @param[in]  drivepath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  drivepath : Drivepath value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetDriveAndPath(XSTRING& drivepath)
 {
@@ -646,15 +666,15 @@ bool XPATH::GetDriveAndPath(XSTRING& drivepath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetPathAndNamefile(XSTRING& pathnamefile)
 * @brief      Get path and namefile
 * @ingroup    XUTILS
-*
-* @param[in]  pathnamefile :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pathnamefile : Pathnamefile value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetPathAndNamefile(XSTRING& pathnamefile)
 {
@@ -675,15 +695,15 @@ bool XPATH::GetPathAndNamefile(XSTRING& pathnamefile)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetPathAndNamefileExt(XSTRING& pathnamefile)
 * @brief      Get path and namefile ext
 * @ingroup    XUTILS
-*
-* @param[in]  pathnamefile :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  pathnamefile : Pathnamefile value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetPathAndNamefileExt(XSTRING& pathnamefile)
 {
@@ -706,15 +726,15 @@ bool XPATH::GetPathAndNamefileExt(XSTRING& pathnamefile)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetNamefile(XSTRING& namefile)
 * @brief      Get namefile
 * @ingroup    XUTILS
-*
-* @param[in]  namefile :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namefile : Namefile value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetNamefile(XSTRING& namefile)
 {
@@ -727,15 +747,15 @@ bool XPATH::GetNamefile(XSTRING& namefile)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetNamefileExt(XSTRING& namefileext)
 * @brief      Get namefile ext
 * @ingroup    XUTILS
-*
-* @param[in]  namefileext :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  namefileext : Namefileext value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetNamefileExt(XSTRING& namefileext)
 {
@@ -754,15 +774,15 @@ bool XPATH::GetNamefileExt(XSTRING& namefileext)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetExt(XSTRING& ext)
 * @brief      Get ext
 * @ingroup    XUTILS
-*
-* @param[in]  ext :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ext : Ext value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetExt(XSTRING& ext)
 {
@@ -775,16 +795,16 @@ bool XPATH::GetExt(XSTRING& ext)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::GetPathInSequence(int index, XSTRING& pathpart)
 * @brief      Get path in sequence
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-* @param[in]  pathpart :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  pathpart : Pathpart value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::GetPathInSequence(int index, XSTRING& pathpart)
 {
@@ -824,7 +844,7 @@ bool XPATH::GetPathInSequence(int index, XSTRING& pathpart)
 * @brief      Set only drive
 * @ingroup    XUTILS
 * 
-* @return     const XCHAR* : 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* XPATH::SetOnlyDrive()
@@ -842,13 +862,13 @@ const XCHAR* XPATH::SetOnlyDrive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         const XCHAR* XPATH::SetOnlyPath()
 * @brief      Set only path
 * @ingroup    XUTILS
-*
-* @return     const XCHAR* :
-*
+* 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* XPATH::SetOnlyPath()
 {
@@ -865,13 +885,13 @@ const XCHAR* XPATH::SetOnlyPath()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         const XCHAR* XPATH::SetOnlyDriveAndPath()
 * @brief      Set only drive and path
 * @ingroup    XUTILS
-*
-* @return     const XCHAR* :
-*
+* 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* XPATH::SetOnlyDriveAndPath()
 {
@@ -888,13 +908,13 @@ const XCHAR* XPATH::SetOnlyDriveAndPath()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         const XCHAR* XPATH::SetOnlyPathAndNamefile()
 * @brief      Set only path and namefile
 * @ingroup    XUTILS
-*
-* @return     const XCHAR* :
-*
+* 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* XPATH::SetOnlyPathAndNamefile()
 {
@@ -911,13 +931,13 @@ const XCHAR* XPATH::SetOnlyPathAndNamefile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         const XCHAR* XPATH::SetOnlyPathAndNamefileExt()
 * @brief      Set only path and namefile ext
 * @ingroup    XUTILS
-*
-* @return     const XCHAR* :
-*
+* 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* XPATH::SetOnlyPathAndNamefileExt()
 {
@@ -934,13 +954,13 @@ const XCHAR* XPATH::SetOnlyPathAndNamefileExt()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         const XCHAR* XPATH::SetOnlyNamefile()
 * @brief      Set only namefile
 * @ingroup    XUTILS
-*
-* @return     const XCHAR* :
-*
+* 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* XPATH::SetOnlyNamefile()
 {
@@ -957,13 +977,13 @@ const XCHAR* XPATH::SetOnlyNamefile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         const XCHAR* XPATH::SetOnlyNamefileExt()
 * @brief      Set only namefile ext
 * @ingroup    XUTILS
-*
-* @return     const XCHAR* :
-*
+* 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* XPATH::SetOnlyNamefileExt()
 {
@@ -980,13 +1000,13 @@ const XCHAR* XPATH::SetOnlyNamefileExt()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         const XCHAR* XPATH::SetOnlyExt()
 * @brief      Set only ext
 * @ingroup    XUTILS
-*
-* @return     const XCHAR* :
-*
+* 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* XPATH::SetOnlyExt()
 {
@@ -1003,13 +1023,13 @@ const XCHAR* XPATH::SetOnlyExt()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::DeleteDrive()
 * @brief      Delete drive
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::DeleteDrive()
 {
@@ -1035,7 +1055,7 @@ bool XPATH::DeleteDrive()
 * @brief      Delete ext
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::DeleteExt()
@@ -1047,13 +1067,13 @@ bool XPATH::DeleteExt()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::Slash_HaveAtLast()
 * @brief      Slash have at last
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::Slash_HaveAtLast()
 {
@@ -1066,13 +1086,13 @@ bool XPATH::Slash_HaveAtLast()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::Slash_Add()
 * @brief      Slash add
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::Slash_Add()
 {
@@ -1106,15 +1126,15 @@ bool XPATH::Slash_Add()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::Slash_Normalize(bool inverse)
 * @brief      Slash normalize
 * @ingroup    XUTILS
-*
-* @param[in]  inverse :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  inverse : Inverse value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::Slash_Normalize(bool inverse)
 {
@@ -1142,13 +1162,13 @@ bool XPATH::Slash_Normalize(bool inverse)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::Slash_Delete()
 * @brief      Slash delete
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::Slash_Delete()
 {
@@ -1167,16 +1187,16 @@ bool XPATH::Slash_Delete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::AddToNameFile(bool isprefix, XCHAR* tag)
 * @brief      Add to name file
 * @ingroup    XUTILS
-*
-* @param[in]  isprefix :
-* @param[in]  tag :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  isprefix : Isprefix value.
+* @param[in]  tag : Tag pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::AddToNameFile(bool isprefix, XCHAR* tag)
 {
@@ -1210,16 +1230,16 @@ bool XPATH::AddToNameFile(bool isprefix, XCHAR* tag)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::Create(int nelements,...)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  nelements :
-* @param[in]  ... :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nelements : Nelements value.
+* @param[in]  ... : Variable argument list.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::Create(int nelements,...)
 {
@@ -1257,17 +1277,17 @@ bool XPATH::Create(int nelements,...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::Create(XPATHSMANAGERSECTIONTYPE sectiontype, int nelements, ...)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  sectiontype :
-* @param[in]  nelements :
-* @param[in]  ... :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sectiontype : Sectiontype value.
+* @param[in]  nelements : Nelements value.
+* @param[in]  ... : Variable argument list.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::Create(XPATHSMANAGERSECTIONTYPE sectiontype, int nelements, ...)
 {
@@ -1311,18 +1331,18 @@ bool XPATH::Create(XPATHSMANAGERSECTIONTYPE sectiontype, int nelements, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XPATH::Split(XSTRING* drive, XPATH* xpath, XSTRING* name, XSTRING* ext)
 * @brief      Split
 * @ingroup    XUTILS
-*
-* @param[in]  drive :
-* @param[in]  xpath :
-* @param[in]  name :
-* @param[in]  ext :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  drive : Drive pointer to use.
+* @param[in]  xpath : Path to use.
+* @param[in]  name : Name to use.
+* @param[in]  ext : Ext pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::Split(XSTRING* drive, XPATH* xpath, XSTRING* name, XSTRING* ext)
 {
@@ -1396,12 +1416,12 @@ bool XPATH::Split(XSTRING* drive, XPATH* xpath, XSTRING* name, XSTRING* ext)
 * @brief      split
 * @ingroup    XUTILS
 * 
-* @param[in]  drive : 
-* @param[in]  subpaths : 
-* @param[in]  name : 
-* @param[in]  ext : 
+* @param[in]  drive : Drive pointer to use.
+* @param[in]  subpaths : Subpaths pointer to use.
+* @param[in]  name : Name to use.
+* @param[in]  ext : Ext pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATH::Split(XSTRING* drive, XVECTOR<XSTRING*>& subpaths, XSTRING* name, XSTRING* ext)
@@ -1464,8 +1484,8 @@ bool XPATH::Split(XSTRING* drive, XVECTOR<XSTRING*>& subpaths, XSTRING* name, XS
 * 
 * @fn         void XPATH::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    XUTILS
 * @note       INTERNAL
+* @ingroup    XUTILS
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::Clean()

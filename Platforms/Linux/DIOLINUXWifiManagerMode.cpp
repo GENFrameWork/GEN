@@ -101,17 +101,17 @@ DIOLINUXWIFIMANAGERMODE::~DIOLINUXWIFIMANAGERMODE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXWIFIMANAGERMODE::SetMode_AP(XCHAR* SSID, XCHAR* password, bool serialize)
 * @brief      Set mode AP
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  SSID : SSID pointer to use.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::SetMode_AP(XCHAR* SSID, XCHAR* password, bool serialize)
 {    
@@ -124,17 +124,17 @@ bool DIOLINUXWIFIMANAGERMODE::SetMode_AP(XCHAR* SSID, XCHAR* password, bool seri
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, bool serialize)
 * @brief      Set mode client
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  SSID : SSID pointer to use.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, bool serialize)  
 {     
@@ -160,10 +160,10 @@ bool DIOLINUXWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, bool 
 * @fn         bool DIOLINUXWIFIMANAGERMODE::IsDisconnected()
 * @brief      Is disconnected
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::IsDisconnected()
 {
   bool status = false;    
@@ -183,10 +183,10 @@ bool DIOLINUXWIFIMANAGERMODE::IsDisconnected()
 * @fn         bool DIOLINUXWIFIMANAGERMODE::Disconnect()
 * @brief      Disconnect
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::Disconnect()
 {
   bool status = false;    
@@ -202,13 +202,13 @@ bool DIOLINUXWIFIMANAGERMODE::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXWIFIMANAGERMODE::APList_Reload()
 * @brief      AP list reload
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::APList_Reload()
 {
@@ -217,19 +217,19 @@ bool DIOLINUXWIFIMANAGERMODE::APList_Reload()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXWIFIMANAGERMODE::WPA_SetMode(int mode, XCHAR* SSID, XCHAR* password, int indexnetwork, bool serialize)
 * @brief      WPA set mode
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  mode : 
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  indexnetwork : 
-* @param[in]  serialize : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  mode : Mode value.
+* @param[in]  SSID : SSID pointer to use.
+* @param[in]  password : Password text.
+* @param[in]  indexnetwork : Indexnetwork value.
+* @param[in]  serialize : Serialize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::WPA_SetMode(int mode, XCHAR* SSID, XCHAR* password, int indexnetwork, bool serialize)  
 {
@@ -395,10 +395,10 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_SetMode(int mode, XCHAR* SSID, XCHAR* password
 * @fn         bool DIOLINUXWIFIMANAGERMODE::WPA_IsDisconnected()
 * @brief      WPA is disconnected
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::WPA_IsDisconnected()
 {
   XSTRING   prefixcommand;
@@ -439,10 +439,10 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_IsDisconnected()
 * @fn         bool DIOLINUXWIFIMANAGERMODE::WPA_Disconnect()
 * @brief      WPA disconnect
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::WPA_Disconnect()
 {
   XSTRING   prefixcommand;
@@ -462,13 +462,13 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXWIFIMANAGERMODE::WPA_RemoveAllNetworks()
 * @brief      WPA remove all networks
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::WPA_RemoveAllNetworks()
 {
@@ -498,12 +498,12 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_RemoveAllNetworks()
 * @brief      WPA set value
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  indexnetwork : 
-* @param[in]  namevalue : 
-* @param[in]  value : 
-* @param[in]  isstring : 
+* @param[in]  indexnetwork : Indexnetwork value.
+* @param[in]  namevalue : Namevalue pointer to use.
+* @param[in]  value : Value pointer to use.
+* @param[in]  isstring : Isstring value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::WPA_SetValue(int indexnetwork, XCHAR* namevalue, XCHAR* value, bool isstring)
@@ -536,11 +536,11 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_SetValue(int indexnetwork, XCHAR* namevalue, X
 * @brief      WPA set value
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  indexnetwork : 
-* @param[in]  namevalue : 
-* @param[in]  value : 
+* @param[in]  indexnetwork : Indexnetwork value.
+* @param[in]  namevalue : Namevalue value.
+* @param[in]  value : Value value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::WPA_SetValue(int indexnetwork, XSTRING& namevalue, XSTRING& value)
@@ -550,15 +550,15 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_SetValue(int indexnetwork, XSTRING& namevalue,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXWIFIMANAGERMODE::WPA_GetListRemoteAP(XVECTOR<XSTRING*>& nameAPs)
 * @brief      WPA get list remote AP
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  nameAPs : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  nameAPs : Name A Ps pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::WPA_GetListRemoteAP(XVECTOR<XSTRING*>& nameAPs)
 { 
@@ -624,16 +624,16 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_GetListRemoteAP(XVECTOR<XSTRING*>& nameAPs)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXWIFIMANAGERMODE::WPA_CLI_Command(XSTRING& command, XSTRING& output)
 * @brief      WPACLI command
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  command : 
-* @param[in]  output : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  command : Command value.
+* @param[in]  output : Output output.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::WPA_CLI_Command(XSTRING& command, XSTRING& output)
 {
@@ -666,16 +666,16 @@ bool DIOLINUXWIFIMANAGERMODE::WPA_CLI_Command(XSTRING& command, XSTRING& output)
 * @fn         bool DIOLINUXWIFIMANAGERMODE::NM_SetMode(int mode, XCHAR* SSID, XCHAR* password, int indexnetwork, bool serialize)
 * @brief      NM set mode
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  mode : 
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  indexnetwork : 
-* @param[in]  serialize : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  mode : Mode value.
+* @param[in]  SSID : SSID pointer to use.
+* @param[in]  password : Password text.
+* @param[in]  indexnetwork : Indexnetwork value.
+* @param[in]  serialize : Serialize value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::NM_SetMode(int mode, XCHAR* SSID, XCHAR* password, int indexnetwork, bool serialize)
 {
   XSTRING   command;
@@ -723,10 +723,10 @@ bool DIOLINUXWIFIMANAGERMODE::NM_SetMode(int mode, XCHAR* SSID, XCHAR* password,
 * @fn         bool DIOLINUXWIFIMANAGERMODE::NM_IsDisconnected()
 * @brief      NM is disconnected
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::NM_IsDisconnected()
 {
   XSTRING   command;
@@ -751,10 +751,10 @@ bool DIOLINUXWIFIMANAGERMODE::NM_IsDisconnected()
 * @fn         bool DIOLINUXWIFIMANAGERMODE::NM_Disconnect()
 * @brief      NM disconnect
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::NM_Disconnect()
 {
   XSTRING   command;
@@ -806,13 +806,13 @@ bool DIOLINUXWIFIMANAGERMODE::NM_Disconnect()
 * @fn         bool DIOLINUXWIFIMANAGERMODE::NM_CLI_Command(XSTRING& command, XSTRING& output)
 * @brief      NMCLI command
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  command : 
-* @param[in]  output : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  command : Command value.
+* @param[in]  output : Output output.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXWIFIMANAGERMODE::NM_CLI_Command(XSTRING& command, XSTRING& output)
 {
   if(command.IsEmpty()) return false;

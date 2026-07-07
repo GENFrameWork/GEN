@@ -31,7 +31,6 @@
 #include "GEN_Defines.h"
 
 
-
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "GRPViewPort.h"
@@ -42,27 +41,23 @@
 #include "GRP2DCanvasAGG.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVIEWPORT::GRPVIEWPORT()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVIEWPORT::GRPVIEWPORT()
 {
@@ -71,12 +66,12 @@ GRPVIEWPORT::GRPVIEWPORT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVIEWPORT::~GRPVIEWPORT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVIEWPORT::~GRPVIEWPORT()
 {
@@ -90,13 +85,13 @@ GRPVIEWPORT::~GRPVIEWPORT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* GRPVIEWPORT::GetID()
 * @brief      Get ID
 * @ingroup    GRAPHIC
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPVIEWPORT::GetID()
 {
@@ -105,13 +100,13 @@ XSTRING* GRPVIEWPORT::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVIEWPORT::IsActive()
 * @brief      Is active
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIEWPORT::IsActive()
 {
@@ -120,13 +115,13 @@ bool GRPVIEWPORT::IsActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVIEWPORT::SetIsActive(bool active)
 * @brief      Set is active
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  active : true to active
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIEWPORT::SetIsActive(bool active)
 {
@@ -140,7 +135,7 @@ void GRPVIEWPORT::SetIsActive(bool active)
 * @brief      Get projection type
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVIEWPORT_PROJECTIONTYPE : 
+* @return     GRPVIEWPORT_PROJECTIONTYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVIEWPORT_PROJECTIONTYPE GRPVIEWPORT::GetProjectionType()
@@ -150,13 +145,13 @@ GRPVIEWPORT_PROJECTIONTYPE GRPVIEWPORT::GetProjectionType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVIEWPORT::SetProjectionType(GRPVIEWPORT_PROJECTIONTYPE projectiontype)
 * @brief      Set projection type
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  projectiontype : GEN_NEW projection type
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIEWPORT::SetProjectionType(GRPVIEWPORT_PROJECTIONTYPE projectiontype)
 {
@@ -170,9 +165,9 @@ void GRPVIEWPORT::SetProjectionType(GRPVIEWPORT_PROJECTIONTYPE projectiontype)
 * @brief      Create canvas
 * @ingroup    GRAPHIC
 * 
-* @param[in]  canvasproperties : 
+* @param[in]  canvasproperties : Canvasproperties value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIEWPORT::CreateCanvas(GRPPROPERTIES& canvasproperties)
@@ -193,13 +188,13 @@ bool GRPVIEWPORT::CreateCanvas(GRPPROPERTIES& canvasproperties)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float GRPVIEWPORT::GetPositionX()
 * @brief      Get position x
 * @ingroup    GRAPHIC
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float GRPVIEWPORT::GetPositionX()
 {
@@ -208,13 +203,13 @@ float GRPVIEWPORT::GetPositionX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float GRPVIEWPORT::GetPositionY()
 * @brief      Get position y
 * @ingroup    GRAPHIC
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float  GRPVIEWPORT::GetPositionY()
 {
@@ -223,14 +218,14 @@ float  GRPVIEWPORT::GetPositionY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVIEWPORT::SetPosition(float x, float y)
 * @brief      Set position
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : Set X position
 * @param[in]  y : Set Y position
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIEWPORT::SetPosition(float x, float y)
 {
@@ -240,13 +235,13 @@ void GRPVIEWPORT::SetPosition(float x, float y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float GRPVIEWPORT::GetWidth()
 * @brief      Get width
 * @ingroup    GRAPHIC
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float GRPVIEWPORT::GetWidth()
 {
@@ -255,13 +250,13 @@ float GRPVIEWPORT::GetWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float GRPVIEWPORT::GetHeight()
 * @brief      Get height
 * @ingroup    GRAPHIC
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float GRPVIEWPORT::GetHeight()
 {
@@ -270,14 +265,14 @@ float GRPVIEWPORT::GetHeight()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVIEWPORT::SetSize(float width, float height)
 * @brief      Set size
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  width : Set Width of View Port
 * @param[in]  height : Set Height of View Port
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIEWPORT::SetSize(float width, float height)
 {
@@ -292,7 +287,7 @@ void GRPVIEWPORT::SetSize(float width, float height)
 * @brief      Get canvas position x
 * @ingroup    GRAPHIC
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float GRPVIEWPORT::GetCanvasPositionX()
@@ -307,7 +302,7 @@ float GRPVIEWPORT::GetCanvasPositionX()
 * @brief      Get canvas position y
 * @ingroup    GRAPHIC
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float GRPVIEWPORT::GetCanvasPositionY()
@@ -322,10 +317,10 @@ float GRPVIEWPORT::GetCanvasPositionY()
 * @brief      Set canvas position
 * @ingroup    GRAPHIC
 * 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVIEWPORT::SetCanvasPosition(float x, float y)
@@ -371,13 +366,13 @@ bool GRPVIEWPORT::SetCanvasPosition(float x, float y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DCANVAS* GRPVIEWPORT::GetCanvas()
 * @brief      Get canvas
 * @ingroup    GRAPHIC
-*
-* @return     GRP2DCANVAS* :
-*
+* 
+* @return     GRP2DCANVAS* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS*  GRPVIEWPORT::GetCanvas()
 {
@@ -386,12 +381,12 @@ GRP2DCANVAS*  GRPVIEWPORT::GetCanvas()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVIEWPORT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVIEWPORT::Clean()
 {

@@ -70,11 +70,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPLINUXDEVICETOUCHSCREENDIRECT::INPLINUXDEVICETOUCHSCREENDIRECT()
+* 
+* @fn         INPLINUXDEVICETOUCHSCREENDIRECT::INPLINUXDEVICETOUCHSCREENDIRECT(): INPDEVICE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPLINUXDEVICETOUCHSCREENDIRECT::INPLINUXDEVICETOUCHSCREENDIRECT(): INPDEVICE()
 {
@@ -99,12 +99,12 @@ INPLINUXDEVICETOUCHSCREENDIRECT::INPLINUXDEVICETOUCHSCREENDIRECT(): INPDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPLINUXDEVICETOUCHSCREENDIRECT::~INPLINUXDEVICETOUCHSCREENDIRECT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPLINUXDEVICETOUCHSCREENDIRECT::~INPLINUXDEVICETOUCHSCREENDIRECT()
 {
@@ -124,13 +124,13 @@ INPLINUXDEVICETOUCHSCREENDIRECT::~INPLINUXDEVICETOUCHSCREENDIRECT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICETOUCHSCREENDIRECT::Update()
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICETOUCHSCREENDIRECT::Update()
 {
@@ -221,13 +221,13 @@ bool INPLINUXDEVICETOUCHSCREENDIRECT::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICETOUCHSCREENDIRECT::CreateAllButtons()
 * @brief      Create all buttons
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICETOUCHSCREENDIRECT::CreateAllButtons()
 {
@@ -238,13 +238,13 @@ bool INPLINUXDEVICETOUCHSCREENDIRECT::CreateAllButtons()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICETOUCHSCREENDIRECT::CreateAllCursors()
 * @brief      Create all cursors
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICETOUCHSCREENDIRECT::CreateAllCursors()
 {
@@ -262,13 +262,13 @@ bool INPLINUXDEVICETOUCHSCREENDIRECT::CreateAllCursors()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICETOUCHSCREENDIRECT::OpenAllDevicesID()
 * @brief      Open all devices ID
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICETOUCHSCREENDIRECT::OpenAllDevicesID()
 {
@@ -318,13 +318,13 @@ bool INPLINUXDEVICETOUCHSCREENDIRECT::OpenAllDevicesID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICETOUCHSCREENDIRECT::CloseAllDevicesID()
 * @brief      Close all devices ID
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICETOUCHSCREENDIRECT::CloseAllDevicesID()
 {
@@ -344,13 +344,13 @@ bool INPLINUXDEVICETOUCHSCREENDIRECT::CloseAllDevicesID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICETOUCHSCREENDIRECT::UpdateTouchScreenData()
 * @brief      Update touch screen data
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICETOUCHSCREENDIRECT::UpdateTouchScreenData()
 {
@@ -383,12 +383,12 @@ bool INPLINUXDEVICETOUCHSCREENDIRECT::UpdateTouchScreenData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPLINUXDEVICETOUCHSCREENDIRECT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPLINUXDEVICETOUCHSCREENDIRECT::Clean()
 {

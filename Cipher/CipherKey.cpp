@@ -91,7 +91,7 @@ CIPHERKEY::~CIPHERKEY()
 * @brief      Get type
 * @ingroup    CIPHER
 * 
-* @return     CIPHERKEYTYPE : 
+* @return     CIPHERKEYTYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEYTYPE CIPHERKEY::GetType()
@@ -106,7 +106,7 @@ CIPHERKEYTYPE CIPHERKEY::GetType()
 * @brief      Set type
 * @ingroup    CIPHER
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERKEY::SetType(CIPHERKEYTYPE type)
@@ -121,7 +121,7 @@ void CIPHERKEY::SetType(CIPHERKEYTYPE type)
 * @brief      get type str
 * @ingroup    CIPHER
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* CIPHERKEY::GetTypeStr()
@@ -169,7 +169,7 @@ XCHAR* CIPHERKEY::GetTypeStr()
 * @brief      Get size in bytes
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERKEY::GetSizeInBytes()
@@ -184,7 +184,7 @@ int CIPHERKEY::GetSizeInBytes()
 * @brief      Get size in bits
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERKEY::GetSizeInBits()
@@ -199,9 +199,9 @@ int CIPHERKEY::GetSizeInBits()
 * @brief      Copy from
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEY::CopyFrom(CIPHERKEY* key)

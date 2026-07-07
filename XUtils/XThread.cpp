@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMUTEX::XMUTEX()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX::XMUTEX()
 {
@@ -74,12 +74,12 @@ XMUTEX::XMUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMUTEX::~XMUTEX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX::~XMUTEX()
 {
@@ -88,13 +88,13 @@ XMUTEX::~XMUTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMUTEX::IsLock()
 * @brief      Is lock
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMUTEX::IsLock()
 {
@@ -103,13 +103,13 @@ bool XMUTEX::IsLock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMUTEX::Lock()
 * @brief      Lock
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMUTEX::Lock()
 {
@@ -118,13 +118,13 @@ bool XMUTEX::Lock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XMUTEX::UnLock()
 * @brief      Un lock
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMUTEX::UnLock()
 {
@@ -133,12 +133,12 @@ bool XMUTEX::UnLock()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XMUTEX::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMUTEX::Clean()
 {
@@ -151,16 +151,16 @@ void XMUTEX::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREAD::XTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-* @param[in]  ID :
-* @param[in]  function :
-* @param[in]  param :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD::XTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
 {
@@ -176,12 +176,12 @@ XTHREAD::XTHREAD(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, vo
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREAD::~XTHREAD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD::~XTHREAD()
 {
@@ -190,15 +190,15 @@ XTHREAD::~XTHREAD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREAD::Ini(bool run)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
-*
-* @param[in]  run :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  run : Run value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREAD::Ini(bool run)
 {
@@ -207,15 +207,15 @@ bool XTHREAD::Ini(bool run)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREAD::Wait(int miliseconds)
 * @brief      Wait
 * @ingroup    XUTILS
-*
-* @param[in]  miliseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  miliseconds : Miliseconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREAD::Wait(int miliseconds)
 {
@@ -224,13 +224,13 @@ bool XTHREAD::Wait(int miliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREAD::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREAD::End()
 {
@@ -239,13 +239,13 @@ bool XTHREAD::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREAD::IsRunning()
 * @brief      Is running
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREAD::IsRunning()
 {
@@ -255,15 +255,15 @@ bool XTHREAD::IsRunning()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREAD::Run(bool activate)
-* @brief      Run
+* @brief      Run operation
 * @ingroup    XUTILS
-*
-* @param[in]  activate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  activate : Activate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREAD::Run(bool activate)
 {
@@ -283,15 +283,15 @@ bool XTHREAD::Run(bool activate)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREAD::WaitToEnd(XDWORD timeout)
 * @brief      Wait to end
 * @ingroup    XUTILS
-*
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREAD::WaitToEnd(XDWORD timeout)
 {
@@ -324,13 +324,13 @@ bool XTHREAD::WaitToEnd(XDWORD timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XTHREAD::GetWaitYield()
 * @brief      Get wait yield
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XTHREAD::GetWaitYield()
 {
@@ -339,13 +339,13 @@ XDWORD XTHREAD::GetWaitYield()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XTHREAD::SetWaitYield(XDWORD waityield = XTHREAD_DEFAULTWAITYIELD)
+* 
+* @fn         void XTHREAD::SetWaitYield(XDWORD waityield)
 * @brief      Set wait yield
 * @ingroup    XUTILS
-*
-* @param[in]  waityield = XTHREAD_DEFAULTWAITYIELD :
-*
+* 
+* @param[in]  waityield : Waityield value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREAD::SetWaitYield(XDWORD waityield)
 {
@@ -354,13 +354,13 @@ void XTHREAD::SetWaitYield(XDWORD waityield)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREAD::Exit()
 * @brief      Exit
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREAD::Exit()
 {
@@ -370,13 +370,13 @@ bool XTHREAD::Exit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADGROUPID XTHREAD::GetGroupID()
 * @brief      Get group ID
 * @ingroup    XUTILS
-*
-* @return     XTHREADGROUPID :
-*
+* 
+* @return     XTHREADGROUPID : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADGROUPID XTHREAD::GetGroupID()
 {
@@ -385,13 +385,13 @@ XTHREADGROUPID XTHREAD::GetGroupID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREAD::SetGroupID(XTHREADGROUPID groupID)
 * @brief      Set group ID
 * @ingroup    XUTILS
-*
-* @param[in]  groupID : 
-*
+* 
+* @param[in]  groupID : Group ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREAD::SetGroupID(XTHREADGROUPID groupID)
 {
@@ -400,13 +400,13 @@ void XTHREAD::SetGroupID(XTHREADGROUPID groupID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XTHREAD::GetID()
 * @brief      Get ID
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XTHREAD::GetID()
 {
@@ -415,13 +415,13 @@ XSTRING* XTHREAD::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADFUNCTION XTHREAD::GetFunction()
 * @brief      Get function
 * @ingroup    XUTILS
-*
-* @return     XTHREADFUNCTION :
-*
+* 
+* @return     XTHREADFUNCTION : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADFUNCTION XTHREAD::GetFunction()
 {
@@ -430,13 +430,13 @@ XTHREADFUNCTION XTHREAD::GetFunction()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* XTHREAD::GetParam()
 * @brief      Get param
 * @ingroup    XUTILS
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XTHREAD::GetParam()
 {
@@ -445,13 +445,13 @@ void* XTHREAD::GetParam()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADPRIORITY XTHREAD::GetPriority()
 * @brief      Get priority
 * @ingroup    XUTILS
-*
-* @return     XTHREADPRIORITY :
-*
+* 
+* @return     XTHREADPRIORITY : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADPRIORITY XTHREAD::GetPriority()
 {
@@ -460,13 +460,13 @@ XTHREADPRIORITY XTHREAD::GetPriority()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREAD::SetPriority(XTHREADPRIORITY priority)
 * @brief      Set priority
 * @ingroup    XUTILS
-*
-* @param[in]  priority :
-*
+* 
+* @param[in]  priority : Priority value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREAD::SetPriority(XTHREADPRIORITY priority)
 {
@@ -475,13 +475,13 @@ void XTHREAD::SetPriority(XTHREADPRIORITY priority)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XTHREAD::GetStackSize()
 * @brief      Get stack size
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XTHREAD::GetStackSize()
 {
@@ -490,13 +490,13 @@ XDWORD XTHREAD::GetStackSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREAD::SetStackSize(XDWORD stacksize)
 * @brief      Set stack size
 * @ingroup    XUTILS
-*
-* @param[in]  stacksize :
-*
+* 
+* @param[in]  stacksize : Stacksize value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREAD::SetStackSize(XDWORD stacksize)
 {
@@ -505,13 +505,13 @@ void XTHREAD::SetStackSize(XDWORD stacksize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREAD::IsInFunction()
 * @brief      Is in function
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREAD::IsInFunction()
 {
@@ -520,13 +520,13 @@ bool XTHREAD::IsInFunction()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADSTATUS XTHREAD::GetStatusFunc()
 * @brief      Get status func
 * @ingroup    XUTILS
-*
-* @return     XTHREADSTATUS :
-*
+* 
+* @return     XTHREADSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSTATUS XTHREAD::GetStatusFunc()
 {
@@ -535,12 +535,12 @@ XTHREADSTATUS XTHREAD::GetStatusFunc()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREAD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREAD::Clean()
 {

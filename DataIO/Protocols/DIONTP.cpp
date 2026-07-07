@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIONTP::DIONTP()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONTP::DIONTP()
 {
@@ -80,12 +80,12 @@ DIONTP::DIONTP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIONTP::~DIONTP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONTP::~DIONTP()
 {
@@ -112,18 +112,18 @@ DIONTP::~DIONTP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONTP::GetTimeResponse(XCHAR* urlntpserver, int timeout, bool hardwareuselittleendian, DIONTPRESPONSE& response)
 * @brief      Get time response
 * @ingroup    DATAIO
-*
-* @param[in]  urlntpserver :
-* @param[in]  timeout :
-* @param[in]  hardwareuselittleendian :
-* @param[in]  response :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  urlntpserver : Urlntpserver pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  hardwareuselittleendian : Hardwareuselittleendian value.
+* @param[in]  response : Response value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONTP::GetTimeResponse(XCHAR* urlntpserver, int timeout, bool hardwareuselittleendian, DIONTPRESPONSE& response)
 {
@@ -198,18 +198,18 @@ bool DIONTP::GetTimeResponse(XCHAR* urlntpserver, int timeout, bool hardwareusel
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONTP::GetTimeResponse(DIOURL& urlntpserver, int timeout, bool hardwareuselittleendian, DIONTPRESPONSE& response)
 * @brief      Get time response
 * @ingroup    DATAIO
-*
-* @param[in]  urlntpserver :
-* @param[in]  timeout :
-* @param[in]  hardwareuselittleendian :
-* @param[in]  response :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  urlntpserver : Urlntpserver value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  hardwareuselittleendian : Hardwareuselittleendian value.
+* @param[in]  response : Response value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONTP::GetTimeResponse(DIOURL& urlntpserver, int timeout, bool hardwareuselittleendian, DIONTPRESPONSE& response)
 {
@@ -218,18 +218,18 @@ bool DIONTP::GetTimeResponse(DIOURL& urlntpserver, int timeout, bool hardwareuse
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONTP::GetTimeSeconds(XCHAR* urlntpserver, int timeout, bool hardwareuselittleendian, XQWORD& timeseconds)
 * @brief      Get time seconds
 * @ingroup    DATAIO
-*
-* @param[in]  urlntpserver :
-* @param[in]  timeout :
-* @param[in]  hardwareuselittleendian :
-* @param[in]  timeseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  urlntpserver : Urlntpserver pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  hardwareuselittleendian : Hardwareuselittleendian value.
+* @param[in]  timeseconds : Timeseconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONTP::GetTimeSeconds(XCHAR* urlntpserver, int timeout, bool hardwareuselittleendian, XQWORD& timeseconds)
 {
@@ -248,18 +248,18 @@ bool DIONTP::GetTimeSeconds(XCHAR* urlntpserver, int timeout, bool hardwareuseli
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONTP::GetTimeSeconds(DIOURL& urlntpserver, int timeout, bool hardwareuselittleendian, XQWORD& timeseconds)
 * @brief      Get time seconds
 * @ingroup    DATAIO
-*
-* @param[in]  urlntpserver :
-* @param[in]  timeout :
-* @param[in]  hardwareuselittleendian :
-* @param[in]  timeseconds :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  urlntpserver : Urlntpserver value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  hardwareuselittleendian : Hardwareuselittleendian value.
+* @param[in]  timeseconds : Timeseconds value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONTP::GetTimeSeconds(DIOURL& urlntpserver, int timeout, bool hardwareuselittleendian, XQWORD& timeseconds)
 {
@@ -268,18 +268,18 @@ bool DIONTP::GetTimeSeconds(DIOURL& urlntpserver, int timeout, bool hardwareusel
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONTP::GetTime(XCHAR* urlntpserver, int timeout, bool hardwareuselittleendian, XDATETIME& xdatetime)
 * @brief      Get time
 * @ingroup    DATAIO
-*
-* @param[in]  urlntpserver :
-* @param[in]  timeout :
-* @param[in]  hardwareuselittleendian :
-* @param[in]  xdatetime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  urlntpserver : Urlntpserver pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  hardwareuselittleendian : Hardwareuselittleendian value.
+* @param[in]  xdatetime : Xdatetime value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONTP::GetTime(XCHAR* urlntpserver, int timeout, bool hardwareuselittleendian, XDATETIME& xdatetime)
 {
@@ -307,18 +307,18 @@ bool DIONTP::GetTime(XCHAR* urlntpserver, int timeout, bool hardwareuselittleend
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONTP::GetTime(DIOURL& urlntpserver, int timeout, bool hardwareuselittleendian, XDATETIME& xtime)
 * @brief      Get time
 * @ingroup    DATAIO
-*
-* @param[in]  urlntpserver :
-* @param[in]  timeout :
-* @param[in]  hardwareuselittleendian :
-* @param[in]  xtime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  urlntpserver : Urlntpserver value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  hardwareuselittleendian : Hardwareuselittleendian value.
+* @param[in]  xtime : Xtime value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONTP::GetTime(DIOURL& urlntpserver, int timeout, bool hardwareuselittleendian, XDATETIME& xtime)
 {
@@ -327,16 +327,16 @@ bool DIONTP::GetTime(DIOURL& urlntpserver, int timeout, bool hardwareuselittleen
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD DIONTP::ConvertTimePacket(DIOTIMEPACKET& timepacket, bool hardwareuselittleendian)
 * @brief      Convert time packet
 * @ingroup    DATAIO
-*
-* @param[in]  timepacket :
-* @param[in]  hardwareuselittleendian :
-*
-* @return     XQWORD :
-*
+* 
+* @param[in]  timepacket : Timepacket value.
+* @param[in]  hardwareuselittleendian : Hardwareuselittleendian value.
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIONTP::ConvertTimePacket(DIOTIMEPACKET& timepacket, bool hardwareuselittleendian)
 {
@@ -352,12 +352,12 @@ XQWORD DIONTP::ConvertTimePacket(DIOTIMEPACKET& timepacket, bool hardwareuselitt
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIONTP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONTP::Clean()
 {

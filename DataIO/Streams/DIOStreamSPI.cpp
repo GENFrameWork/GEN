@@ -64,7 +64,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSTREAMSPI::DIOSTREAMSPI()
+* @fn         DIOSTREAMSPI::DIOSTREAMSPI() : DIOSTREAM(), XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
@@ -111,8 +111,8 @@ DIOSTREAMSPI::DIOSTREAMSPI() : DIOSTREAM(), XFSMACHINE(0)
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSPI::~DIOSTREAMSPI()
 {
   Close();
@@ -129,10 +129,10 @@ DIOSTREAMSPI::~DIOSTREAMSPI()
 * @fn         DIOSTREAMCONFIG* DIOSTREAMSPI::GetConfig()
 * @brief      Get config
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMCONFIG* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSTREAMCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIG* DIOSTREAMSPI::GetConfig()
 {
   return (DIOSTREAMCONFIG*)config;
@@ -144,12 +144,12 @@ DIOSTREAMCONFIG* DIOSTREAMSPI::GetConfig()
 * @fn         bool DIOSTREAMSPI::SetConfig(DIOSTREAMCONFIG* config)
 * @brief      Set config
 * @ingroup    DATAIO
-*
-* @param[in]  config : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  config : Configuration object to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMSPI::SetConfig(DIOSTREAMCONFIG* config)
 {
   if(!config) return false;
@@ -164,10 +164,10 @@ bool DIOSTREAMSPI::SetConfig(DIOSTREAMCONFIG* config)
 * @fn         bool DIOSTREAMSPI::Open()
 * @brief      Open
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMSPI::Open()
 {
   if(!config) return false;
@@ -234,10 +234,10 @@ bool DIOSTREAMSPI::Open()
 * @fn         bool DIOSTREAMSPI::Close()
 * @brief      Close
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMSPI::Close()
 {
   if(config->IsDirectAccess()) GEN_DIOGPIO.SetValue(GPIO_Entry[DIOSTREAMSPI_GPIO_CS], !CSline); 
@@ -261,14 +261,14 @@ bool DIOSTREAMSPI::Close()
 * @fn         bool DIOSTREAMSPI::TransferBuffer(XBYTE* bufferread, XBYTE* bufferwrite, XDWORD size)
 * @brief      Transfer buffer
 * @ingroup    DATAIO
-*
-* @param[in]  bufferread : 
-* @param[in]  bufferwrite : 
-* @param[in]  size : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  bufferread : Bufferread pointer to use.
+* @param[in]  bufferwrite : Bufferwrite pointer to use.
+* @param[in]  size : Size value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMSPI::TransferBuffer(XBYTE* bufferread, XBYTE* bufferwrite, XDWORD size)
 {
   if(!config)     return false;
@@ -316,10 +316,10 @@ bool DIOSTREAMSPI::TransferBuffer(XBYTE* bufferread, XBYTE* bufferwrite, XDWORD 
 * @fn         void DIOSTREAMSPI::Sleep(int count)
 * @brief      Sleep
 * @ingroup    DATAIO
-*
-* @param[in]  count : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  count : Count value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMSPI::Sleep(int count)
 {
   /*
@@ -346,8 +346,8 @@ void DIOSTREAMSPI::Sleep(int count)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMSPI::Clean()
 {
   config            = NULL;
@@ -376,13 +376,13 @@ void DIOSTREAMSPI::Clean()
 * @fn         bool DIOSTREAMSPI::TransferOneData(XWORD writedata,XWORD& readdata)
 * @brief      Transfer one data
 * @ingroup    DATAIO
-*
-* @param[in]  writedata : 
-* @param[in]  readdata : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  writedata : Writedata value.
+* @param[in]  readdata : Readdata value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMSPI::TransferOneData(XWORD writedata,XWORD& readdata)
 {
   if(!config->IsDirectAccess()) return false;
@@ -437,10 +437,10 @@ bool DIOSTREAMSPI::TransferOneData(XWORD writedata,XWORD& readdata)
 * @fn         void DIOSTREAMSPI::ThreadConnection(void* data)
 * @brief      Thread connection
 * @ingroup    DATAIO
-*
-* @param[in]  data : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  data : Data buffer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMSPI::ThreadConnection(void* data)
 {
   DIOSTREAMSPI* diostream = (DIOSTREAMSPI*)data;

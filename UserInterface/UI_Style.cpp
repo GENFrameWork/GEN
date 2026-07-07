@@ -50,11 +50,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UI_STYLE::UI_STYLE()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_STYLE::UI_STYLE()
 {
@@ -63,12 +63,12 @@ UI_STYLE::UI_STYLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UI_STYLE::~UI_STYLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_STYLE::~UI_STYLE()
 {
@@ -79,14 +79,14 @@ UI_STYLE::~UI_STYLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_STYLE::Set(XCHAR* key, XCHAR* value)
 * @brief      Set (insert or overwrite) a property by key
 * @ingroup    USERINTERFACE
-*
-* @param[in]  key :
-* @param[in]  value :
-*
+* 
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_STYLE::Set(XCHAR* key, XCHAR* value)
 {
@@ -106,14 +106,14 @@ void UI_STYLE::Set(XCHAR* key, XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_STYLE::Set(XCHAR* key, XSTRING& value)
 * @brief      Set (insert or overwrite) a property by key
 * @ingroup    USERINTERFACE
-*
-* @param[in]  key :
-* @param[in]  value :
-*
+* 
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_STYLE::Set(XCHAR* key, XSTRING& value)
 {
@@ -122,15 +122,15 @@ void UI_STYLE::Set(XCHAR* key, XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_STYLE::Exists(XCHAR* key)
 * @brief      Exists
 * @ingroup    USERINTERFACE
-*
-* @param[in]  key :
-*
-* @return     bool : true if the key is present.
-*
+* 
+* @param[in]  key : Key pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_STYLE::Exists(XCHAR* key)
 {
@@ -139,16 +139,16 @@ bool UI_STYLE::Exists(XCHAR* key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_STYLE::Get(XCHAR* key, XSTRING& value)
 * @brief      Get a property as string. Mirrors GetLayoutElementValue(node, key, XSTRING&).
 * @ingroup    USERINTERFACE
-*
-* @param[in]  key :
-* @param[out] value :
-*
-* @return     bool : true if the key is present.
-*
+* 
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_STYLE::Get(XCHAR* key, XSTRING& value)
 {
@@ -164,16 +164,16 @@ bool UI_STYLE::Get(XCHAR* key, XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_STYLE::Get(XCHAR* key, double& value)
 * @brief      Get a property as double. Mirrors GetLayoutElementValue(node, key, double&).
 * @ingroup    USERINTERFACE
-*
-* @param[in]  key :
-* @param[out] value :
-*
-* @return     bool : true if the key is present.
-*
+* 
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_STYLE::Get(XCHAR* key, double& value)
 {
@@ -187,13 +187,13 @@ bool UI_STYLE::Get(XCHAR* key, double& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<UI_STYLEPROPERTY*>* UI_STYLE::GetProperties()
 * @brief      Get properties
 * @ingroup    USERINTERFACE
-*
-* @return     XVECTOR<UI_STYLEPROPERTY*>* :
-*
+* 
+* @return     XVECTOR<UI_STYLEPROPERTY*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<UI_STYLEPROPERTY*>* UI_STYLE::GetProperties()
 {
@@ -202,11 +202,11 @@ XVECTOR<UI_STYLEPROPERTY*>* UI_STYLE::GetProperties()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_STYLE::DeleteAll()
 * @brief      Delete all
 * @ingroup    USERINTERFACE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_STYLE::DeleteAll()
 {
@@ -221,15 +221,15 @@ void UI_STYLE::DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_STYLE::FillFromXMLElement(XFILEXMLELEMENT* node)
 * @brief      XML front-end: copy every attribute of the node into the neutral bag.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  node :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  node : Node pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_STYLE::FillFromXMLElement(XFILEXMLELEMENT* node)
 {
@@ -249,16 +249,16 @@ bool UI_STYLE::FillFromXMLElement(XFILEXMLELEMENT* node)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UI_STYLEPROPERTY* UI_STYLE::Find(XCHAR* key)
 * @brief      Find a property by key (case-insensitive, matching XML attribute lookup semantics).
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* @param[in]  key :
-*
-* @return     UI_STYLEPROPERTY* : NULL if not found.
-*
+* 
+* @param[in]  key : Key pointer to use.
+* 
+* @return     UI_STYLEPROPERTY* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_STYLEPROPERTY* UI_STYLE::Find(XCHAR* key)
 {
@@ -280,12 +280,12 @@ UI_STYLEPROPERTY* UI_STYLE::Find(XCHAR* key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_STYLE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_STYLE::Clean()
 {

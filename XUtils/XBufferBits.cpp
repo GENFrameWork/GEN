@@ -55,13 +55,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFERBITS::XBUFFERBITS(XBUFFER* xbuffer)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xbuffer : buffer of origin
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFERBITS::XBUFFERBITS(XBUFFER* xbuffer)
 {
@@ -74,12 +74,12 @@ XBUFFERBITS::XBUFFERBITS(XBUFFER* xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFERBITS::~XBUFFERBITS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFERBITS::~XBUFFERBITS()
 {
@@ -88,13 +88,13 @@ XBUFFERBITS::~XBUFFERBITS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFERBITS::IsByteAligned()
 * @brief      Is byte aligned
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFERBITS::IsByteAligned()
 {
@@ -103,13 +103,13 @@ bool XBUFFERBITS::IsByteAligned()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFERBITS::IsEOF()
 * @brief      Is EOF
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFERBITS::IsEOF()
 {
@@ -118,13 +118,13 @@ bool XBUFFERBITS::IsEOF()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBUFFERBITS::IsOverrun()
 * @brief      Is overrun
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFERBITS::IsOverrun()
 {
@@ -133,13 +133,13 @@ bool XBUFFERBITS::IsOverrun()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFERBITS::GetBytePosition()
 * @brief      Get byte position
 * @ingroup    XUTILS
-*
-* @return     XDWORD : position byte into buffer
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFERBITS::GetBytePosition()
 {
@@ -148,13 +148,13 @@ XDWORD XBUFFERBITS::GetBytePosition()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFERBITS::GetBitPosition()
 * @brief      Get bit position
 * @ingroup    XUTILS
-*
-* @return     XDWORD : position bit into buffer
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFERBITS::GetBitPosition()
 {
@@ -163,14 +163,14 @@ XDWORD XBUFFERBITS::GetBitPosition()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFERBITS::SetPosition(XDWORD index, XDWORD bitindex)
 * @brief      Set position
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  index : index into buffer
 * @param[in]  bitindex : bit index into buffer
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFERBITS::SetPosition(XDWORD index, XDWORD bitindex)
 {
@@ -180,11 +180,11 @@ void XBUFFERBITS::SetPosition(XDWORD index, XDWORD bitindex)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFERBITS::SkipU1()
 * @brief      Skip U1
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFERBITS::SkipU1()
 {
@@ -199,13 +199,13 @@ void XBUFFERBITS::SkipU1()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFERBITS::PeekU1()
 * @brief      Peek U1
 * @ingroup    XUTILS
-*
-* @return     XDWORD : bit peek.
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFERBITS::PeekU1()
 {
@@ -221,13 +221,13 @@ XDWORD XBUFFERBITS::PeekU1()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFERBITS::ReadU1()
 * @brief      Read U1
 * @ingroup    XUTILS
-*
-* @return     XDWORD : Read U1
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFERBITS::ReadU1()
 {
@@ -251,13 +251,13 @@ XDWORD XBUFFERBITS::ReadU1()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFERBITS::SkipU(XDWORD n)
 * @brief      Skip u
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  n : n bits
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFERBITS::SkipU(XDWORD n)
 {
@@ -270,15 +270,15 @@ void XBUFFERBITS::SkipU(XDWORD n)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFERBITS::PeekU(XDWORD n)
 * @brief      Peek u
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  n : n bits
-*
-* @return     XDWORD : n bits Peek (max 32 bits)
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFERBITS::PeekU(XDWORD n)
 {
@@ -297,15 +297,15 @@ XDWORD XBUFFERBITS::PeekU(XDWORD n)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFERBITS::ReadU(XDWORD n)
 * @brief      Read u
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  n : n bits
-*
-* @return     XDWORD : n bits read (max 32 bits)
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFERBITS::ReadU(XDWORD n)
 {
@@ -321,13 +321,13 @@ XDWORD XBUFFERBITS::ReadU(XDWORD n)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBUFFERBITS::ReadUE()
-* @brief
+* @brief      Read UE
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFERBITS::ReadUE()
 {
@@ -347,13 +347,13 @@ XDWORD XBUFFERBITS::ReadUE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XBUFFERBITS::ReadSE()
 * @brief      Read SE
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XBUFFERBITS::ReadSE()
 {
@@ -372,13 +372,13 @@ int XBUFFERBITS::ReadSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFERBITS::WriteU1(XDWORD v)
 * @brief      Write U1
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  v : bit to write
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFERBITS::WriteU1(XDWORD v)
 {
@@ -402,14 +402,14 @@ void XBUFFERBITS::WriteU1(XDWORD v)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFERBITS::WriteU(XDWORD n, XDWORD v)
 * @brief      Write u
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  n : n bits
 * @param[in]  v : bits to write
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFERBITS::WriteU(XDWORD n, XDWORD v)
 {
@@ -422,13 +422,13 @@ void XBUFFERBITS::WriteU(XDWORD n, XDWORD v)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFERBITS::WriteUE(XDWORD v)
-* @brief
+* @brief      Write UE
 * @ingroup    XUTILS
-*
-* @param[in]  v :
-*
+* 
+* @param[in]  v : V value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFERBITS::WriteUE(XDWORD v)
 {
@@ -489,13 +489,13 @@ void XBUFFERBITS::WriteUE(XDWORD v)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFERBITS::WriteSE(int v)
-* @brief
+* @brief      Write SE
 * @ingroup    XUTILS
-*
-* @param[in]  v :
-*
+* 
+* @param[in]  v : V value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFERBITS::WriteSE(int v)
 {
@@ -511,12 +511,12 @@ void XBUFFERBITS::WriteSE(int v)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBUFFERBITS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFERBITS::Clean()
 {

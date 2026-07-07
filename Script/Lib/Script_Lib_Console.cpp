@@ -61,11 +61,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SCRIPT_LIB_CONSOLE::SCRIPT_LIB_CONSOLE()
+* 
+* @fn         SCRIPT_LIB_CONSOLE::SCRIPT_LIB_CONSOLE() : SCRIPT_LIB(SCRIPT_LIB_NAME_CONSOLE)
 * @brief      Constructor of class
 * @ingroup    SCRIPT
-*
+* 
+* @param[in]  SCRIPT_LIB_NAME_CONSOLE : SCRIPT LIB NAME CONSOLE value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_CONSOLE::SCRIPT_LIB_CONSOLE() : SCRIPT_LIB(SCRIPT_LIB_NAME_CONSOLE)
 {
@@ -76,12 +78,12 @@ SCRIPT_LIB_CONSOLE::SCRIPT_LIB_CONSOLE() : SCRIPT_LIB(SCRIPT_LIB_NAME_CONSOLE)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SCRIPT_LIB_CONSOLE::~SCRIPT_LIB_CONSOLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_CONSOLE::~SCRIPT_LIB_CONSOLE()
 {
@@ -92,15 +94,15 @@ SCRIPT_LIB_CONSOLE::~SCRIPT_LIB_CONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SCRIPT_LIB_CONSOLE::AddLibraryFunctions(SCRIPT* script)
 * @brief      Add library functions
 * @ingroup    SCRIPT
-*
-* @param[in]  script :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  script : Script pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LIB_CONSOLE::AddLibraryFunctions(SCRIPT* script)
 {
@@ -117,13 +119,13 @@ bool SCRIPT_LIB_CONSOLE::AddLibraryFunctions(SCRIPT* script)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCONSOLE* SCRIPT_LIB_CONSOLE::GetConsole()
 * @brief      Get console
 * @ingroup    SCRIPT
-*
-* @return     XCONSOLE* :
-*
+* 
+* @return     XCONSOLE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE* SCRIPT_LIB_CONSOLE::GetConsole()
 {
@@ -139,12 +141,12 @@ XCONSOLE* SCRIPT_LIB_CONSOLE::GetConsole()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SCRIPT_LIB_CONSOLE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SCRIPT
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_CONSOLE::Clean()
 {
@@ -163,10 +165,10 @@ void SCRIPT_LIB_CONSOLE::Clean()
 * @brief      Call  console  get char
 * @ingroup    SCRIPT
 * 
-* @param[in]  library : 
-* @param[in]  script : 
-* @param[in]  params : 
-* @param[in]  returnvalue : 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Console_GetChar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
@@ -184,16 +186,16 @@ void Call_Console_GetChar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void Call_Console_PutChar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 * @brief      Call_Console_PutChar
 * @ingroup    SCRIPT
-*
-* @param[in]  library :
-* @param[in]  script :
-* @param[in]  params :
-* @param[in]  returnvalue :
-*
+* 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Console_PutChar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
@@ -220,16 +222,16 @@ void Call_Console_PutChar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void Call_Console_Printf(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 * @brief      Call_Console_Printf
 * @ingroup    SCRIPT
-*
-* @param[in]  library :
-* @param[in]  script :
-* @param[in]  params :
-* @param[in]  returnvalue :
-*
+* 
+* @param[in]  library : Library pointer to use.
+* @param[in]  script : Script pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  returnvalue : Returnvalue pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_Console_Printf(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {

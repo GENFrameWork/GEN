@@ -62,11 +62,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XLINUXCONSOLE::XLINUXCONSOLE()
+* 
+* @fn         XLINUXCONSOLE::XLINUXCONSOLE(): XCONSOLE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXCONSOLE::XLINUXCONSOLE(): XCONSOLE()
 {
@@ -75,12 +75,12 @@ XLINUXCONSOLE::XLINUXCONSOLE(): XCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXCONSOLE::~XLINUXCONSOLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXCONSOLE::~XLINUXCONSOLE()
 {
@@ -89,16 +89,16 @@ XLINUXCONSOLE::~XLINUXCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXCONSOLE::GetSizeText(int& columns, int& rows)
 * @brief      Get size text
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  columns :
-* @param[in]  rows :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  columns : Columns value.
+* @param[in]  rows : Rows value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::GetSizeText(int& columns, int& rows)
 {
@@ -119,13 +119,13 @@ bool XLINUXCONSOLE::GetSizeText(int& columns, int& rows)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXCONSOLE::Maximize()
 * @brief      Maximize
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::Maximize()
 {
@@ -138,13 +138,13 @@ bool XLINUXCONSOLE::Maximize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXCONSOLE::Minimize()
 * @brief      Minimize
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::Minimize()
 {
@@ -153,13 +153,13 @@ bool XLINUXCONSOLE::Minimize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXCONSOLE::Hide()
 * @brief      Hide
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::Hide()
 {
@@ -168,13 +168,13 @@ bool XLINUXCONSOLE::Hide()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXCONSOLE::IsHide()
 * @brief      Is hide
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::IsHide()
 {
@@ -183,15 +183,15 @@ bool XLINUXCONSOLE::IsHide()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXCONSOLE::Print(XCHAR* string)
 * @brief      Print
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  string : string to print
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::Print(XCHAR* string)
 {
@@ -222,12 +222,12 @@ bool XLINUXCONSOLE::Print(XCHAR* string)
 * @fn         bool XLINUXCONSOLE::Clear(bool fill)
 * @brief      Clear
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  fill : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  fill : Fill value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::Clear(bool fill)
 {
   #ifndef APPFLOW_GRAPHICS_NOTCONSOLE_ACTIVE
@@ -250,13 +250,13 @@ bool XLINUXCONSOLE::Clear(bool fill)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXCONSOLE::KBHit(void)
 * @brief      KB hit
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::KBHit(void)
 {
@@ -314,7 +314,7 @@ bool XLINUXCONSOLE::KBHit(void)
 * @brief      Get char
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XLINUXCONSOLE::GetChar()
@@ -346,11 +346,11 @@ int XLINUXCONSOLE::GetChar()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXCONSOLE::RawModeEnable()
 * @brief      Raw mode enable
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXCONSOLE::RawModeEnable()
 {
@@ -367,11 +367,11 @@ void XLINUXCONSOLE::RawModeEnable()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXCONSOLE::RawModeDisable()
 * @brief      Raw mode disable
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXCONSOLE::RawModeDisable()
 {

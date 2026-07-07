@@ -59,10 +59,10 @@ UI_COLORS* UI_COLORS::instance = NULL;
 * @fn         bool UI_COLORS::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLORS::GetIsInstanced()
 {
   return instance!=NULL;
@@ -74,10 +74,10 @@ bool UI_COLORS::GetIsInstanced()
 * @fn         UI_COLORS& UI_COLORS::GetInstance()
 * @brief      Get instance
 * @ingroup    USERINTERFACE
-*
-* @return     UI_COLORS& : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_COLORS& : Reference to the requested object.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLORS& UI_COLORS::GetInstance()
 {
   if(!instance) instance = GEN_NEW UI_COLORS();
@@ -91,10 +91,10 @@ UI_COLORS& UI_COLORS::GetInstance()
 * @fn         bool UI_COLORS::DelInstance()
 * @brief      Del instance
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLORS::DelInstance()
 {
   if(instance)
@@ -112,15 +112,15 @@ bool UI_COLORS::DelInstance()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_COLORS::Add(XCHAR* name, XCHAR* colorstr)
-* @brief      Add
+* @brief      Add value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
-* @param[in]  colorstr : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  name : Name to use.
+* @param[in]  colorstr : Colorstr pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLORS::Add(XCHAR* name, XCHAR* colorstr)
 {
   if(!name)       return false;
@@ -150,15 +150,15 @@ bool UI_COLORS::Add(XCHAR* name, XCHAR* colorstr)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_COLORS::Add(XSTRING& name, XSTRING& colorstr)
-* @brief      Add
+* @brief      Add value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
-* @param[in]  colorstr : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  name : Name to use.
+* @param[in]  colorstr : Colorstr value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLORS::Add(XSTRING& name, XSTRING& colorstr)
 {
   return Add(name.Get(), colorstr.Get());
@@ -168,14 +168,14 @@ bool UI_COLORS::Add(XSTRING& name, XSTRING& colorstr)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XSTRING* UI_COLORS::Get(XCHAR* name)
-* @brief      Get
+* @brief      Get value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
 * 
-* @return     XSTRING* : 
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_COLORS::Get(XCHAR* name)
 {
   if(!name) return NULL;
@@ -196,14 +196,14 @@ XSTRING* UI_COLORS::Get(XCHAR* name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XSTRING* UI_COLORS::Get(XSTRING& name)
-* @brief      Get
+* @brief      Get value
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
 * 
-* @return     XSTRING* : 
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_COLORS::Get(XSTRING& name)
 {
   return Get(name.Get());
@@ -215,10 +215,10 @@ XSTRING* UI_COLORS::Get(XSTRING& name)
 * @fn         bool UI_COLORS::DeleteAll()
 * @brief      Delete all
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_COLORS::DeleteAll()
 {
   colors.DeleteKeyContents();
@@ -234,8 +234,8 @@ bool UI_COLORS::DeleteAll()
 * @fn         UI_COLORS::UI_COLORS()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLORS::UI_COLORS()
 {
   Clean();
@@ -258,8 +258,8 @@ UI_COLORS::UI_COLORS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLORS::~UI_COLORS()
 {
   DeleteAll();
@@ -274,8 +274,8 @@ UI_COLORS::~UI_COLORS()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_COLORS::Clean()
 {
 

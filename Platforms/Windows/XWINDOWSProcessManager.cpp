@@ -77,7 +77,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XWINDOWSPROCESSMANAGER::XWINDOWSPROCESSMANAGER()
+* @fn         XWINDOWSPROCESSMANAGER::XWINDOWSPROCESSMANAGER() : XPROCESSMANAGER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -91,12 +91,12 @@ XWINDOWSPROCESSMANAGER::XWINDOWSPROCESSMANAGER() : XPROCESSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSPROCESSMANAGER::~XWINDOWSPROCESSMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSPROCESSMANAGER::~XWINDOWSPROCESSMANAGER()
 {
@@ -110,15 +110,15 @@ XWINDOWSPROCESSMANAGER::~XWINDOWSPROCESSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 * @brief      Make system command
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  command : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  command : Command pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 {
@@ -127,17 +127,17 @@ bool XWINDOWSPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSPROCESSMANAGER::MakeCommand(XCHAR* command, XSTRING& out, int* returncode)
+* 
+* @fn         bool XWINDOWSPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* returncode)
 * @brief      Make command
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  command :
-* @param[in]  out :
-* @param[in]  returncode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  command : Command pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* returncode)
 {
@@ -176,9 +176,9 @@ bool XWINDOWSPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* retu
 * @brief      Open URL
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  url : 
+* @param[in]  url : URL to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::OpenURL(XCHAR* url)
@@ -198,13 +198,13 @@ bool XWINDOWSPROCESSMANAGER::OpenURL(XCHAR* url)
 * @brief      Application execute
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  in : In pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
@@ -349,13 +349,13 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
 * @brief      application  execute elevated
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  in : In pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
@@ -443,16 +443,16 @@ bool XWINDOWSPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD* ID)
 * @brief      Application is running
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  applicationname : application name
-* @param[out] ID : ID of the application by SO
-*
-* @return     bool : true if is succesful.
-*
+* @param[in]  ID : ID of the application by SO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD* ID)
 {
@@ -501,10 +501,10 @@ bool XWINDOWSPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWOR
 * @brief      Application get running list
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  applist : 
-* @param[in]  onlywithvalidwindow : 
+* @param[in]  applist : Applist pointer to use.
+* @param[in]  onlywithvalidwindow : Onlywithvalidwindow value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applist, bool onlywithvalidwindow)
@@ -692,13 +692,13 @@ bool XWINDOWSPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& appl
 * @fn         bool XWINDOWSPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD exitcode)
 * @brief      Application terminate
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  processID : 
-* @param[in]  exitcode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  processID : Process ID value.
+* @param[in]  exitcode : Exitcode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD  exitcode)
 {
   DWORD   desiredaccess   = PROCESS_TERMINATE;
@@ -722,9 +722,9 @@ bool XWINDOWSPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD  exi
 * @brief      enable privilege
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  privname : 
+* @param[in]  privname : Privname value.
 * 
-* @return     BOOL : 
+* @return     BOOL : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL XWINDOWSPROCESSMANAGER::EnablePrivilege(LPCWSTR privname)
@@ -766,9 +766,9 @@ BOOL XWINDOWSPROCESSMANAGER::EnablePrivilege(LPCWSTR privname)
 * @brief      get active session id
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  ptrsessionID : 
+* @param[in]  ptrsessionID : Ptrsession ID pointer to use.
 * 
-* @return     BOOL : 
+* @return     BOOL : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL XWINDOWSPROCESSMANAGER::GetActiveSessionId(DWORD* ptrsessionID)
@@ -797,10 +797,10 @@ BOOL XWINDOWSPROCESSMANAGER::GetActiveSessionId(DWORD* ptrsessionID)
 * @brief      duplicate to primary token
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  handleIN : 
-* @param[in]  phandleprimaryout : 
+* @param[in]  handleIN : Handle IN value.
+* @param[in]  phandleprimaryout : Phandleprimaryout pointer to use.
 * 
-* @return     BOOL : 
+* @return     BOOL : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL XWINDOWSPROCESSMANAGER::DuplicateToPrimaryToken(HANDLE handleIN, HANDLE* phandleprimaryout)
@@ -827,10 +827,10 @@ BOOL XWINDOWSPROCESSMANAGER::DuplicateToPrimaryToken(HANDLE handleIN, HANDLE* ph
 * @brief      try get linked elevated primary
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  handleprimary : 
-* @param[in]  phandleelevprimaryout : 
+* @param[in]  handleprimary : Handleprimary value.
+* @param[in]  phandleelevprimaryout : Phandleelevprimaryout pointer to use.
 * 
-* @return     BOOL : 
+* @return     BOOL : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL XWINDOWSPROCESSMANAGER::TryGetLinkedElevatedPrimary(HANDLE handleprimary, HANDLE* phandleelevprimaryout)
@@ -887,11 +887,11 @@ BOOL XWINDOWSPROCESSMANAGER::TryGetLinkedElevatedPrimary(HANDLE handleprimary, H
 * @brief      build mutable command line
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  exepath : 
-* @param[in]  args : 
-* @param[in]  ptrcmdline : 
+* @param[in]  exepath : Exepath value.
+* @param[in]  args : Args value.
+* @param[in]  ptrcmdline : Ptrcmdline pointer to use.
 * 
-* @return     BOOL : 
+* @return     BOOL : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL XWINDOWSPROCESSMANAGER::BuildMutableCommandLine(LPCWSTR exepath, LPCWSTR args, LPWSTR* ptrcmdline)
@@ -938,13 +938,13 @@ BOOL XWINDOWSPROCESSMANAGER::BuildMutableCommandLine(LPCWSTR exepath, LPCWSTR ar
 * @brief      create interactive process  attempt elevated
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  exepath : 
-* @param[in]  args : 
-* @param[in]  workingdir : 
-* @param[in]  waitforexit : 
-* @param[in]  ptrexitcode : 
+* @param[in]  exepath : Exepath value.
+* @param[in]  args : Args value.
+* @param[in]  workingdir : Workingdir value.
+* @param[in]  waitforexit : Waitforexit value.
+* @param[in]  ptrexitcode : Ptrexitcode pointer to use.
 * 
-* @return     BOOL : 
+* @return     BOOL : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL XWINDOWSPROCESSMANAGER::CreateInteractiveProcess_AttemptElevated(LPCWSTR exepath, LPCWSTR args, LPCWSTR workingdir, BOOL waitforexit, DWORD* ptrexitcode)
@@ -1082,11 +1082,11 @@ BOOL XWINDOWSPROCESSMANAGER::CreateInteractiveProcess_AttemptElevated(LPCWSTR ex
 * @brief      get window propertys
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  hwnd : 
-* @param[in]  title : 
-* @param[in]  rect : 
+* @param[in]  hwnd : Hwnd value.
+* @param[in]  title : Title text.
+* @param[in]  rect : Rectangle to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::GetWindowPropertys(HWND hwnd, XSTRING& title, GRPRECTINT& rect)
@@ -1129,9 +1129,9 @@ bool XWINDOWSPROCESSMANAGER::GetWindowPropertys(HWND hwnd, XSTRING& title, GRPRE
 * @brief      Get window title height
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  hwnd : 
+* @param[in]  hwnd : Hwnd value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XWINDOWSPROCESSMANAGER::GetWindowTitleHeight(HWND hwnd) 
@@ -1157,9 +1157,9 @@ int XWINDOWSPROCESSMANAGER::GetWindowTitleHeight(HWND hwnd)
 * @brief      Get window border width
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  hwnd : 
+* @param[in]  hwnd : Hwnd value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XWINDOWSPROCESSMANAGER::GetWindowBorderWidth(HWND hwnd) 
@@ -1180,9 +1180,9 @@ int XWINDOWSPROCESSMANAGER::GetWindowBorderWidth(HWND hwnd)
 * @brief      Get child processes
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  applist : 
+* @param[in]  applist : Applist pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::GetChildProcesses(XVECTOR<XPROCESS*>& applist) 
@@ -1227,10 +1227,10 @@ bool XWINDOWSPROCESSMANAGER::GetChildProcesses(XVECTOR<XPROCESS*>& applist)
 * @brief      Enum windows proc
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  hwnd : 
-* @param[in]  lparam : 
+* @param[in]  hwnd : Hwnd value.
+* @param[in]  lparam : Lparam value.
 * 
-* @return     BOOL : 
+* @return     BOOL CALLBACK : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 BOOL CALLBACK XWINDOWSPROCESSMANAGER::EnumWindowsProc(HWND hwnd, LPARAM lparam)
@@ -1260,9 +1260,9 @@ BOOL CALLBACK XWINDOWSPROCESSMANAGER::EnumWindowsProc(HWND hwnd, LPARAM lparam)
 * @brief      Get map of win process
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  mapofwinprocess : 
+* @param[in]  mapofwinprocess : Mapofwinprocess value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSPROCESSMANAGER::GetMapOfWinProcess(MAPWINPROCESS& mapofwinprocess)
@@ -1276,12 +1276,12 @@ bool XWINDOWSPROCESSMANAGER::GetMapOfWinProcess(MAPWINPROCESS& mapofwinprocess)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSPROCESSMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSPROCESSMANAGER::Clean()
 {

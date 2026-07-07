@@ -73,7 +73,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         HASHMD5::HASHMD5()
+* @fn         HASHMD5::HASHMD5() : HASH()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -105,13 +105,13 @@ HASHMD5::~HASHMD5()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASHMD5::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHMD5::Do(XBYTE* input, XQWORD size)
@@ -138,7 +138,7 @@ bool HASHMD5::Do(XBYTE* input, XQWORD size)
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASHMD5::GetDefaultSize()
@@ -150,7 +150,7 @@ int HASHMD5::GetDefaultSize()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void HASHMD5::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -175,8 +175,8 @@ void HASHMD5::Ini()
 * @brief      Update
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHMD5::Update(XBYTE* input, XQWORD size)
@@ -223,7 +223,7 @@ void HASHMD5::Update(XBYTE* input, XQWORD size)
 * @brief      Transform
 * @ingroup    CIPHER
 * 
-* @param[in]  block[HASHMD5_BLOCKSIZE] : 
+* @param[in]  block : Block value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHMD5::Transform(XBYTE block[HASHMD5_BLOCKSIZE])
@@ -324,9 +324,9 @@ void HASHMD5::Transform(XBYTE block[HASHMD5_BLOCKSIZE])
 * @brief      Decode
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  output : Output output.
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHMD5::Decode(XDWORD* output, XBYTE* input, XDWORD size)
@@ -344,9 +344,9 @@ void HASHMD5::Decode(XDWORD* output, XBYTE* input, XDWORD size)
 * @brief      Encode
 * @ingroup    CIPHER
 * 
-* @param[in]  output : 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  output : Output output.
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHMD5::Encode(XBYTE* output, XDWORD* input, XDWORD size)
@@ -364,7 +364,7 @@ void HASHMD5::Encode(XBYTE* output, XDWORD* input, XDWORD size)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void HASHMD5::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -409,11 +409,11 @@ void HASHMD5::End()
 * @brief      F
 * @ingroup    CIPHER
 * 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  z : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  z : Z coordinate.
 * 
-* @return     inline : 
+* @return     inline XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline XDWORD HASHMD5::F(XDWORD x, XDWORD y, XDWORD z)
@@ -428,11 +428,11 @@ inline XDWORD HASHMD5::F(XDWORD x, XDWORD y, XDWORD z)
 * @brief      G
 * @ingroup    CIPHER
 * 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  z : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  z : Z coordinate.
 * 
-* @return     inline : 
+* @return     inline XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline XDWORD HASHMD5::G(XDWORD x, XDWORD y, XDWORD z)
@@ -447,11 +447,11 @@ inline XDWORD HASHMD5::G(XDWORD x, XDWORD y, XDWORD z)
 * @brief      H
 * @ingroup    CIPHER
 * 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  z : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  z : Z coordinate.
 * 
-* @return     inline : 
+* @return     inline XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline XDWORD HASHMD5::H(XDWORD x, XDWORD y, XDWORD z)
@@ -466,11 +466,11 @@ inline XDWORD HASHMD5::H(XDWORD x, XDWORD y, XDWORD z)
 * @brief      I
 * @ingroup    CIPHER
 * 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  z : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  z : Z coordinate.
 * 
-* @return     inline : 
+* @return     inline XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline XDWORD HASHMD5::I(XDWORD x, XDWORD y, XDWORD z)
@@ -485,10 +485,10 @@ inline XDWORD HASHMD5::I(XDWORD x, XDWORD y, XDWORD z)
 * @brief      Rotate left
 * @ingroup    CIPHER
 * 
-* @param[in]  x : 
-* @param[in]  n : 
+* @param[in]  x : X coordinate.
+* @param[in]  n : N value.
 * 
-* @return     inline : 
+* @return     inline XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline XDWORD HASHMD5::RotateLeft(XDWORD x, int n)
@@ -503,15 +503,15 @@ inline XDWORD HASHMD5::RotateLeft(XDWORD x, int n)
 * @brief      FF
 * @ingroup    CIPHER
 * 
-* @param[in]  a : 
-* @param[in]  b : 
-* @param[in]  c : 
-* @param[in]  d : 
-* @param[in]  x : 
-* @param[in]  s : 
-* @param[in]  ac : 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* @param[in]  x : X coordinate.
+* @param[in]  s : S value.
+* @param[in]  ac : Ac value.
 * 
-* @return     inline : 
+* @return     inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline void HASHMD5::FF(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWORD s, XDWORD ac)
@@ -526,15 +526,15 @@ inline void HASHMD5::FF(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWOR
 * @brief      GG
 * @ingroup    CIPHER
 * 
-* @param[in]  a : 
-* @param[in]  b : 
-* @param[in]  c : 
-* @param[in]  d : 
-* @param[in]  x : 
-* @param[in]  s : 
-* @param[in]  ac : 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* @param[in]  x : X coordinate.
+* @param[in]  s : S value.
+* @param[in]  ac : Ac value.
 * 
-* @return     inline : 
+* @return     inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline void HASHMD5::GG(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWORD s, XDWORD ac)
@@ -549,15 +549,15 @@ inline void HASHMD5::GG(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWOR
 * @brief      HH
 * @ingroup    CIPHER
 * 
-* @param[in]  a : 
-* @param[in]  b : 
-* @param[in]  c : 
-* @param[in]  d : 
-* @param[in]  x : 
-* @param[in]  s : 
-* @param[in]  ac : 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* @param[in]  x : X coordinate.
+* @param[in]  s : S value.
+* @param[in]  ac : Ac value.
 * 
-* @return     inline : 
+* @return     inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline void HASHMD5::HH(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWORD s, XDWORD ac)
@@ -572,15 +572,15 @@ inline void HASHMD5::HH(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWOR
 * @brief      II
 * @ingroup    CIPHER
 * 
-* @param[in]  a : 
-* @param[in]  b : 
-* @param[in]  c : 
-* @param[in]  d : 
-* @param[in]  x : 
-* @param[in]  s : 
-* @param[in]  ac : 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* @param[in]  x : X coordinate.
+* @param[in]  s : S value.
+* @param[in]  ac : Ac value.
 * 
-* @return     inline : 
+* @return     inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline void HASHMD5::II(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWORD s, XDWORD ac)

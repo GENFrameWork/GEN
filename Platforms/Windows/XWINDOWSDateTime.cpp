@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSDATETIME::XWINDOWSDATETIME()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSDATETIME::XWINDOWSDATETIME()
 {
@@ -72,12 +72,12 @@ XWINDOWSDATETIME::XWINDOWSDATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSDATETIME::~XWINDOWSDATETIME()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSDATETIME::~XWINDOWSDATETIME()
 {
@@ -86,13 +86,15 @@ XWINDOWSDATETIME::~XWINDOWSDATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSDATETIME::Read()
+* 
+* @fn         bool XWINDOWSDATETIME::Read(bool islocal)
 * @brief      Read
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  islocal : Islocal value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDATETIME::Read(bool islocal)
 {
@@ -109,13 +111,15 @@ bool XWINDOWSDATETIME::Read(bool islocal)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSDATETIME::Write()
+* 
+* @fn         bool XWINDOWSDATETIME::Write(bool islocal)
 * @brief      Write
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  islocal : Islocal value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDATETIME::Write(bool islocal)
 {
@@ -136,17 +140,17 @@ bool XWINDOWSDATETIME::Write(bool islocal)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDATETIME::GetFileDateTime(XPATH& xpath, void* tmzip, XDWORD* dt)
 * @brief      Get file date time
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-* @param[in]  tmzip :
-* @param[in]  dt :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  tmzip : Tmzip pointer to use.
+* @param[in]  dt : Dt pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDATETIME::GetFileDateTime(XPATH& xpath, void* tmzip, XDWORD* dt)
 {
@@ -169,15 +173,15 @@ bool XWINDOWSDATETIME::GetFileDateTime(XPATH& xpath, void* tmzip, XDWORD* dt)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDATETIME::GetFileDateTime(XPATH& xpath)
 * @brief      Get file date time
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDATETIME::GetFileDateTime(XPATH& xpath)
 {
@@ -215,7 +219,7 @@ bool XWINDOWSDATETIME::GetFileDateTime(XPATH& xpath)
 * @brief      Get meridian difference
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XWINDOWSDATETIME::GetMeridianDifference()
@@ -232,15 +236,15 @@ int XWINDOWSDATETIME::GetMeridianDifference()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDATETIME::IsDayLigthSavingTime(int* bias)
 * @brief      Is day ligth saving time
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  bias :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  bias : Bias pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDATETIME::IsDayLigthSavingTime(int* bias)
 {
@@ -276,8 +280,8 @@ bool XWINDOWSDATETIME::IsDayLigthSavingTime(int* bias)
 * @brief      Get actual date time
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  time : 
-* @param[in]  islocal : 
+* @param[in]  time : Time pointer to use.
+* @param[in]  islocal : Islocal value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSDATETIME::GetActualDateTime(XWINDOWSDATETIME* time, bool islocal)
@@ -310,8 +314,8 @@ void XWINDOWSDATETIME::GetActualDateTime(XWINDOWSDATETIME* time, bool islocal)
 * @brief      Set actual date time
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  time : 
-* @param[in]  islocal : 
+* @param[in]  time : Time pointer to use.
+* @param[in]  islocal : Islocal value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSDATETIME::SetActualDateTime(XWINDOWSDATETIME* time, bool islocal)

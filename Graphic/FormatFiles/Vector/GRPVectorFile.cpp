@@ -114,7 +114,7 @@ GRPVECTORFILE::~GRPVECTORFILE()
 * @brief      Get path file
 * @ingroup    GRAPHIC
 * 
-* @return     XPATH* : 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* GRPVECTORFILE::GetPathFile()
@@ -129,7 +129,7 @@ XPATH* GRPVECTORFILE::GetPathFile()
 * @brief      Get type
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILETYPE : 
+* @return     GRPVECTORFILETYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILETYPE GRPVECTORFILE::GetType()
@@ -144,7 +144,7 @@ GRPVECTORFILETYPE GRPVECTORFILE::GetType()
 * @brief      Set type
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILE::SetType(GRPVECTORFILETYPE type)
@@ -159,9 +159,9 @@ void GRPVECTORFILE::SetType(GRPVECTORFILETYPE type)
 * @brief      Create instance
 * @ingroup    GRAPHIC
 * 
-* @param[in]  pathfile : 
+* @param[in]  pathfile : Pathfile value.
 * 
-* @return     GRPVECTORFILE* : 
+* @return     GRPVECTORFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILE* GRPVECTORFILE::CreateInstance(XPATH& pathfile)
@@ -205,9 +205,9 @@ GRPVECTORFILE* GRPVECTORFILE::CreateInstance(XPATH& pathfile)
 * @brief      Create instance
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     GRPVECTORFILE* : 
+* @return     GRPVECTORFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type)
@@ -242,14 +242,13 @@ GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type, XSTRING& content)
-* @brief      Create instance : build the vector file of the given type and load it from an in memory text buffer.
-*             The content is handled exactly as if it had been read from disk in text mode.
+* @brief      Create instance : build the vector file of the given type and load it from an in memory text buffer. The content is handled exactly as if it had been read from disk in text mode.
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type    : vector file type (SVG, DXF, ...).
+* @param[in]  type : vector file type (SVG, DXF, ...).
 * @param[in]  content : text content of the vector file (SVG / DXF source as a string).
 * 
-* @return     GRPVECTORFILE* : vector file ready to render, or NULL on error.
+* @return     GRPVECTORFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type, XSTRING& content)
@@ -276,9 +275,9 @@ GRPVECTORFILE* GRPVECTORFILE::CreateInstance(GRPVECTORFILETYPE type, XSTRING& co
 * @brief      Get type text
 * @ingroup    GRAPHIC
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* GRPVECTORFILE::GetTypeText(GRPVECTORFILETYPE type)
@@ -312,7 +311,7 @@ XCHAR* GRPVECTORFILE::GetTypeText(GRPVECTORFILETYPE type)
 * @brief      Detect type
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILERESULT : 
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILE::DetectType()
@@ -342,7 +341,7 @@ GRPVECTORFILERESULT GRPVECTORFILE::DetectType()
 * @brief      Load
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILERESULT : 
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILE::Load()
@@ -359,7 +358,7 @@ GRPVECTORFILERESULT GRPVECTORFILE::Load()
 * 
 * @param[in]  content : text content of the vector file.
 * 
-* @return     GRPVECTORFILERESULT : result.
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILE::Load(XSTRING& content)
@@ -371,14 +370,13 @@ GRPVECTORFILERESULT GRPVECTORFILE::Load(XSTRING& content)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILE::PopulateTextFileFromString(XFILETXT* file, XSTRING& content)
-* @brief      Fill a text file object with the lines of a string, as if the file had been read from disk in text mode.
-*             Shared by every format backend so the in memory load reuses the same parsers as the disk load.
+* @brief      Fill a text file object with the lines of a string, as if the file had been read from disk in text mode. Shared by every format backend so the in memory load reuses the same parsers as the disk load.
 * @ingroup    GRAPHIC
 * 
-* @param[in]  file    : text file object to fill (will be cleared first).
+* @param[in]  file : text file object to fill (will be cleared first).
 * @param[in]  content : text content to load.
 * 
-* @return     bool : true if is succesful.
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILE::PopulateTextFileFromString(XFILETXT* file, XSTRING& content)
@@ -407,7 +405,7 @@ bool GRPVECTORFILE::PopulateTextFileFromString(XFILETXT* file, XSTRING& content)
 * @brief      Get config
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILECONFIG* : 
+* @return     GRPVECTORFILECONFIG* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILECONFIG* GRPVECTORFILE::GetConfig()
@@ -422,9 +420,9 @@ GRPVECTORFILECONFIG* GRPVECTORFILE::GetConfig()
 * @brief      Detect file format text
 * @ingroup    GRAPHIC
 * 
-* @param[in]  pathfile : 
+* @param[in]  pathfile : Pathfile value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILE::DetectFileFormatText(XPATH& pathfile)
@@ -492,7 +490,7 @@ bool GRPVECTORFILE::DetectFileFormatText(XPATH& pathfile)
 * @brief      Is conversion file
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILE::IsConversionFile()
@@ -507,7 +505,7 @@ bool GRPVECTORFILE::IsConversionFile()
 * @brief      Set is conversion file
 * @ingroup    GRAPHIC
 * 
-* @param[in]  isconversionfile : 
+* @param[in]  isconversionfile : Isconversionfile value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILE::SetIsConversionFile(bool isconversionfile)
@@ -522,9 +520,9 @@ void GRPVECTORFILE::SetIsConversionFile(bool isconversionfile)
 * @brief      Detect file
 * @ingroup    GRAPHIC
 * 
-* @param[in]  pathfile : 
+* @param[in]  pathfile : Pathfile value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILE::DetectFile(XPATH& pathfile)

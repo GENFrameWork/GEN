@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIONATIVEMSGBROWSEREXTENSION::DIONATIVEMSGBROWSEREXTENSION()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONATIVEMSGBROWSEREXTENSION::DIONATIVEMSGBROWSEREXTENSION()
 {
@@ -72,12 +72,12 @@ DIONATIVEMSGBROWSEREXTENSION::DIONATIVEMSGBROWSEREXTENSION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIONATIVEMSGBROWSEREXTENSION::~DIONATIVEMSGBROWSEREXTENSION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONATIVEMSGBROWSEREXTENSION::~DIONATIVEMSGBROWSEREXTENSION()
 {
@@ -91,7 +91,7 @@ DIONATIVEMSGBROWSEREXTENSION::~DIONATIVEMSGBROWSEREXTENSION()
 * @brief      Is open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONATIVEMSGBROWSEREXTENSION::IsOpen()
@@ -106,9 +106,9 @@ bool DIONATIVEMSGBROWSEREXTENSION::IsOpen()
 * @brief      Read
 * @ingroup    DATAIO
 * 
-* @param[in]  json : 
+* @param[in]  json : JSON value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONATIVEMSGBROWSEREXTENSION::Read(XFILEJSON& json)
@@ -162,9 +162,9 @@ bool DIONATIVEMSGBROWSEREXTENSION::Read(XFILEJSON& json)
 * @brief      Write
 * @ingroup    DATAIO
 * 
-* @param[in]  json : 
+* @param[in]  json : JSON value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONATIVEMSGBROWSEREXTENSION::Write(XFILEJSON& json)
@@ -194,12 +194,12 @@ bool DIONATIVEMSGBROWSEREXTENSION::Write(XFILEJSON& json)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIONATIVEMSGBROWSEREXTENSION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONATIVEMSGBROWSEREXTENSION::Clean()
 {

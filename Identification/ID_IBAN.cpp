@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         ID_IBAN::ID_IBAN()
 * @brief      Constructor of class
 * @ingroup    IDENTIFICATION
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 ID_IBAN::ID_IBAN()
 {
@@ -69,12 +69,12 @@ ID_IBAN::ID_IBAN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         ID_IBAN::~ID_IBAN()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    IDENTIFICATION
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 ID_IBAN::~ID_IBAN()
 {
@@ -83,13 +83,13 @@ ID_IBAN::~ID_IBAN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* ID_IBAN::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    IDENTIFICATION
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* ID_IBAN::Get()
 {
@@ -98,15 +98,15 @@ XSTRING* ID_IBAN::Get()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool ID_IBAN::Set(XCHAR* IBAN)
-* @brief      Set
+* @brief      Set value
 * @ingroup    IDENTIFICATION
-*
-* @param[in]  IBAN :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  IBAN : IBAN pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool ID_IBAN::Set(XCHAR* IBAN)
 {
@@ -180,13 +180,13 @@ bool ID_IBAN::Set(XCHAR* IBAN)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* ID_IBAN::GetCountry()
 * @brief      Get country
 * @ingroup    IDENTIFICATION
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* ID_IBAN::GetCountry()
 {
@@ -195,16 +195,16 @@ XSTRING* ID_IBAN::GetCountry()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool ID_IBAN::IsValidSizeCountry(XCHAR* countrystr, int size)
 * @brief      Is valid size country
 * @ingroup    IDENTIFICATION
-*
-* @param[in]  countrystr :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  countrystr : Countrystr pointer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool ID_IBAN::IsValidSizeCountry(XCHAR* countrystr, int size)
 {
@@ -303,15 +303,15 @@ bool ID_IBAN::IsValidSizeCountry(XCHAR* countrystr, int size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int ID_IBAN::Mod97(XSTRING& IBANstr)
 * @brief      Mod97
 * @ingroup    IDENTIFICATION
-*
-* @param[in]  IBANstr :
-*
-* @return     int :
-*
+* 
+* @param[in]  IBANstr : IBA Nstr value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int ID_IBAN::Mod97(XSTRING& IBANstr)
 {
@@ -362,15 +362,15 @@ int ID_IBAN::Mod97(XSTRING& IBANstr)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int ID_IBAN::Spain_CalculeControlDigit(XSTRING& IBANstr)
 * @brief      Spain calcule control digit
 * @ingroup    IDENTIFICATION
-*
-* @param[in]  IBANstr :
-*
-* @return     int :
-*
+* 
+* @param[in]  IBANstr : IBA Nstr value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int ID_IBAN::Spain_CalculeControlDigit(XSTRING& IBANstr)
 {
@@ -444,15 +444,15 @@ int ID_IBAN::Spain_CalculeControlDigit(XSTRING& IBANstr)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool ID_IBAN::Spain_ValidateControlDigit(XSTRING& IBANstr)
 * @brief      Spain validate control digit
 * @ingroup    IDENTIFICATION
-*
-* @param[in]  IBANstr :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  IBANstr : IBA Nstr value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool ID_IBAN::Spain_ValidateControlDigit(XSTRING& IBANstr)
 {
@@ -481,12 +481,12 @@ bool ID_IBAN::Spain_ValidateControlDigit(XSTRING& IBANstr)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void ID_IBAN::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    IDENTIFICATION
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void ID_IBAN::Clean()
 {

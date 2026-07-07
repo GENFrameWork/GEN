@@ -158,14 +158,14 @@ XLOGBASE::~XLOGBASE()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XLOGBASE::Ini(XCHAR* pathfile, XCHAR* nameapplication, bool isdumpintrace)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
 * 
-* @param[in]  pathfile : 
-* @param[in]  nameapplication : 
-* @param[in]  isdumpintrace : 
+* @param[in]  pathfile : Pathfile pointer to use.
+* @param[in]  nameapplication : Nameapplication pointer to use.
+* @param[in]  isdumpintrace : Isdumpintrace value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Ini(XCHAR* pathfile, XCHAR* nameapplication, bool isdumpintrace)
@@ -193,14 +193,14 @@ bool XLOGBASE::Ini(XCHAR* pathfile, XCHAR* nameapplication, bool isdumpintrace)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XLOGBASE::Ini(XPATH& xpathfile, XCHAR* nameapplication, bool isdumpintrace)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
 * 
-* @param[in]  xpathfile : 
-* @param[in]  nameapplication : 
-* @param[in]  isdumpintrace : 
+* @param[in]  xpathfile : Xpathfile value.
+* @param[in]  nameapplication : Nameapplication pointer to use.
+* @param[in]  isdumpintrace : Isdumpintrace value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Ini(XPATH& xpathfile, XCHAR* nameapplication, bool isdumpintrace)
@@ -212,14 +212,14 @@ bool XLOGBASE::Ini(XPATH& xpathfile, XCHAR* nameapplication, bool isdumpintrace)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XLOGBASE::Ini(XPATH& xpathfile, XSTRING& nameapplication, bool isdumpintrace)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
 * 
-* @param[in]  xpathfile : 
-* @param[in]  nameapplication : 
-* @param[in]  isdumpintrace : 
+* @param[in]  xpathfile : Xpathfile value.
+* @param[in]  nameapplication : Nameapplication value.
+* @param[in]  isdumpintrace : Isdumpintrace value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Ini(XPATH& xpathfile, XSTRING& nameapplication, bool isdumpintrace)
@@ -234,11 +234,11 @@ bool XLOGBASE::Ini(XPATH& xpathfile, XSTRING& nameapplication, bool isdumpintrac
 * @brief      Set limit
 * @ingroup    XUTILS
 * 
-* @param[in]  typelimit : 
-* @param[in]  limit : 
-* @param[in]  reductionpercent : 
+* @param[in]  typelimit : Typelimit value.
+* @param[in]  limit : Limit value.
+* @param[in]  reductionpercent : Reductionpercent value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::SetLimit(XLOGTYPELIMIT typelimit, int limit, int reductionpercent)
@@ -257,11 +257,11 @@ bool XLOGBASE::SetLimit(XLOGTYPELIMIT typelimit, int limit, int reductionpercent
 * @brief      Set backup
 * @ingroup    XUTILS
 * 
-* @param[in]  isactive : 
-* @param[in]  maxfiles : 
-* @param[in]  iscompress : 
+* @param[in]  isactive : Isactive value.
+* @param[in]  maxfiles : Maxfiles value.
+* @param[in]  iscompress : Iscompress value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::SetBackup(bool isactive, int maxfiles, bool iscompress)
@@ -280,10 +280,10 @@ bool XLOGBASE::SetBackup(bool isactive, int maxfiles, bool iscompress)
 * @brief      Set filters
 * @ingroup    XUTILS
 * 
-* @param[in]  sectionsID : 
-* @param[in]  level : 
+* @param[in]  sectionsID : Sections ID pointer to use.
+* @param[in]  level : Level value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::SetFilters(XCHAR* sectionsID, XBYTE level)
@@ -301,7 +301,7 @@ bool XLOGBASE::SetFilters(XCHAR* sectionsID, XBYTE level)
 * @brief      Get path file
 * @ingroup    XUTILS
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XLOGBASE::GetPathFile()
@@ -316,7 +316,7 @@ XCHAR* XLOGBASE::GetPathFile()
 * @brief      Get name application
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XLOGBASE::GetNameApplication()
@@ -331,7 +331,7 @@ XSTRING* XLOGBASE::GetNameApplication()
 * @brief      Get prev label
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XLOGBASE::GetPrevLabel()                                                                    
@@ -346,7 +346,7 @@ XSTRING* XLOGBASE::GetPrevLabel()
 * @brief      Is active
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::IsActive()
@@ -365,7 +365,7 @@ bool XLOGBASE::IsActive()
 * @brief      Set is active
 * @ingroup    XUTILS
 * 
-* @param[in]  isactive : 
+* @param[in]  isactive : Isactive value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLOGBASE::SetIsActive(bool isactive)                                                 
@@ -380,7 +380,7 @@ void XLOGBASE::SetIsActive(bool isactive)
 * @brief      Get N entrys
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XLOGBASE::GetNEntrys()
@@ -395,7 +395,7 @@ XDWORD XLOGBASE::GetNEntrys()
 * @brief      Get N lines
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XLOGBASE::GetNLines()
@@ -410,7 +410,7 @@ XDWORD XLOGBASE::GetNLines()
 * @brief      Get size
 * @ingroup    XUTILS
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XLOGBASE::GetSize()                                                                    
@@ -425,11 +425,11 @@ XQWORD XLOGBASE::GetSize()
 * @brief      Get level string
 * @ingroup    XUTILS
 * 
-* @param[in]  level : 
-* @param[in]  strlevel : 
-* @param[in]  size : 
+* @param[in]  level : Level value.
+* @param[in]  strlevel : Strlevel value.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::GetLevelString(XLOGLEVEL level, XSTRING& strlevel, XDWORD size)
@@ -458,7 +458,7 @@ bool XLOGBASE::GetLevelString(XLOGLEVEL level, XSTRING& strlevel, XDWORD size)
 * @brief      Get sections ID filter
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XLOGBASE::GetSectionsIDFilter()
@@ -473,10 +473,10 @@ XSTRING* XLOGBASE::GetSectionsIDFilter()
 * @brief      Pass filters
 * @ingroup    XUTILS
 * 
-* @param[in]  level : 
-* @param[in]  sectionID : 
+* @param[in]  level : Level value.
+* @param[in]  sectionID : Section ID pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::PassFilters(XLOGLEVEL level, XCHAR* sectionID)
@@ -499,13 +499,13 @@ bool XLOGBASE::PassFilters(XLOGLEVEL level, XCHAR* sectionID)
 * @brief      Add entry
 * @ingroup    XUTILS
 * 
-* @param[in]  level : 
-* @param[in]  sectionID : 
-* @param[in]  inmemory : 
-* @param[in]  mask : 
-* @param[in]  ... : 
+* @param[in]  level : Level value.
+* @param[in]  sectionID : Section ID pointer to use.
+* @param[in]  inmemory : Inmemory value.
+* @param[in]  mask : Mask pointer to use.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XCHAR* mask,...)
@@ -656,16 +656,16 @@ bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XCHAR*
 * @brief      Add entry
 * @ingroup    XUTILS
 * 
-* @param[in]  level : 
-* @param[in]  sectionID : 
-* @param[in]  inmemory : 
-* @param[in]  data : 
-* @param[in]  size : 
-* @param[in]  sizeline : 
-* @param[in]  showoffset : 
-* @param[in]  showtext : 
+* @param[in]  level : Level value.
+* @param[in]  sectionID : Section ID pointer to use.
+* @param[in]  inmemory : Inmemory value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  sizeline : Sizeline value.
+* @param[in]  showoffset : Showoffset value.
+* @param[in]  showtext : Showtext value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XBYTE* data, XDWORD size, XDWORD sizeline, bool showoffset, bool showtext)
@@ -755,15 +755,15 @@ bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XBYTE*
 * @brief      Add entry
 * @ingroup    XUTILS
 * 
-* @param[in]  level : 
-* @param[in]  sectionID : 
-* @param[in]  inmemory : 
-* @param[in]  data : 
-* @param[in]  sizeline : 
-* @param[in]  showoffset : 
-* @param[in]  showtext : 
+* @param[in]  level : Level value.
+* @param[in]  sectionID : Section ID pointer to use.
+* @param[in]  inmemory : Inmemory value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizeline : Sizeline value.
+* @param[in]  showoffset : Showoffset value.
+* @param[in]  showtext : Showtext value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XBUFFER& data, XDWORD sizeline, bool showoffset, bool showtext)
@@ -778,7 +778,7 @@ bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XBUFFE
 * @brief      Flush
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Flush()
@@ -799,12 +799,12 @@ bool XLOGBASE::Flush()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XLOGBASE::End(bool doflush)
-* @brief      End
+* @brief      End the object
 * @ingroup    XUTILS
 * 
-* @param[in]  doflush : 
+* @param[in]  doflush : Doflush value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::End(bool doflush)
@@ -838,7 +838,7 @@ bool XLOGBASE::End(bool doflush)
 * @brief      Calculate initial status
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::CalculateInitialStatus()
@@ -943,7 +943,7 @@ bool XLOGBASE::CalculateInitialStatus()
 * @brief      Flush memory entrys
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::FlushMemoryEntrys()
@@ -1000,7 +1000,7 @@ bool XLOGBASE::FlushMemoryEntrys()
 * @brief      Backup get N files
 * @ingroup    XUTILS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XLOGBASE::Backup_GetNFiles()
@@ -1036,9 +1036,9 @@ int XLOGBASE::Backup_GetNFiles()
 * @brief      Backup get name file more old
 * @ingroup    XUTILS
 * 
-* @param[in]  xpathselect : 
+* @param[in]  xpathselect : Xpathselect value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Backup_GetNameFileMoreOld(XPATH& xpathselect)
@@ -1107,9 +1107,9 @@ bool XLOGBASE::Backup_GetNameFileMoreOld(XPATH& xpathselect)
 * @brief      Backup create name ZIP
 * @ingroup    XUTILS
 * 
-* @param[in]  xpathzipfile : 
+* @param[in]  xpathzipfile : Xpathzipfile value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Backup_CreateNameZIP(XPATH& xpathzipfile)
@@ -1131,7 +1131,7 @@ bool XLOGBASE::Backup_CreateNameZIP(XPATH& xpathzipfile)
 * @brief      Backup adjust N files in compressed
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Backup_AdjustNFilesInCompressed()
@@ -1164,10 +1164,10 @@ bool XLOGBASE::Backup_AdjustNFilesInCompressed()
 * @brief      Backup adjust N files
 * @ingroup    XUTILS
 * 
-* @param[in]  pathnamelog : 
-* @param[in]  iscompress : 
+* @param[in]  pathnamelog : Pathnamelog pointer to use.
+* @param[in]  iscompress : Iscompress value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Backup_AdjustNFiles(XCHAR* pathnamelog, bool iscompress)
@@ -1237,7 +1237,7 @@ bool XLOGBASE::Backup_AdjustNFiles(XCHAR* pathnamelog, bool iscompress)
 * @brief      Backup control limits
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOGBASE::Backup_ControlLimits()
@@ -1365,7 +1365,7 @@ void XLOGBASE::Clean()
 * @brief      Get is instanced
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOG::GetIsInstanced()
@@ -1380,7 +1380,7 @@ bool XLOG::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    XUTILS
 * 
-* @return     XLOG& : 
+* @return     XLOG& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLOG& XLOG::GetInstance()
@@ -1397,7 +1397,7 @@ XLOG& XLOG::GetInstance()
 * @brief      Del instance
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLOG::DelInstance()
@@ -1416,7 +1416,7 @@ bool XLOG::DelInstance()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XLOG::XLOG()
+* @fn         XLOG::XLOG() : XLOGBASE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 

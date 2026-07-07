@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOI2CGPIOMCP2317::DIOI2CGPIOMCP2317()
+* 
+* @fn         DIOI2CGPIOMCP2317::DIOI2CGPIOMCP2317() : DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CGPIOMCP2317::DIOI2CGPIOMCP2317() :  DIODEVICEI2C()
 {
@@ -74,12 +74,12 @@ DIOI2CGPIOMCP2317::DIOI2CGPIOMCP2317() :  DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CGPIOMCP2317::~DIOI2CGPIOMCP2317()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CGPIOMCP2317::~DIOI2CGPIOMCP2317()
 {
@@ -94,13 +94,13 @@ DIOI2CGPIOMCP2317::~DIOI2CGPIOMCP2317()
 * @fn         bool DIOI2CGPIOMCP2317::Configure(XBYTE port_A, XBYTE port_B)
 * @brief      Configure
 * @ingroup    DATAIO
-*
-* @param[in]  port_A : 
-* @param[in]  port_B : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  port_A : Port A value.
+* @param[in]  port_B : Port B value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOMCP2317::Configure(XBYTE port_A, XBYTE port_B)
 {
   SendCommand(DIOI2CGPIOMCP2317_IODIR + DIOI2CGPIOMCP2317PORT_A, port_A);
@@ -111,16 +111,16 @@ bool DIOI2CGPIOMCP2317::Configure(XBYTE port_A, XBYTE port_B)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOMCP2317::ReadInputs(DIOI2CGPIOMCP2317PORT port, XBYTE& value)
 * @brief      Read inputs
 * @ingroup    DATAIO
-*
-* @param[in]  port :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  port : Port number to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOMCP2317::ReadInputs(DIOI2CGPIOMCP2317PORT port, XBYTE& value)
 {
@@ -140,16 +140,16 @@ bool DIOI2CGPIOMCP2317::ReadInputs(DIOI2CGPIOMCP2317PORT port, XBYTE& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOMCP2317::WriteOutputs(DIOI2CGPIOMCP2317PORT port, XBYTE value)
 * @brief      Write outputs
 * @ingroup    DATAIO
-*
-* @param[in]  port :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  port : Port number to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOMCP2317::WriteOutputs(DIOI2CGPIOMCP2317PORT port, XBYTE value)
 {
@@ -160,16 +160,16 @@ bool DIOI2CGPIOMCP2317::WriteOutputs(DIOI2CGPIOMCP2317PORT port, XBYTE value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOMCP2317::SendCommand(XBYTE cmd, XBYTE value)
 * @brief      Send command
 * @ingroup    DATAIO
-*
-* @param[in]  cmd :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  cmd : Cmd value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOMCP2317::SendCommand(XBYTE cmd, XBYTE value)
 {
@@ -190,13 +190,13 @@ bool DIOI2CGPIOMCP2317::SendCommand(XBYTE cmd, XBYTE value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOMCP2317::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOMCP2317::End()
 {
@@ -207,13 +207,13 @@ bool DIOI2CGPIOMCP2317::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CGPIOMCP2317::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CGPIOMCP2317::IniDevice()
 {  
@@ -233,12 +233,12 @@ bool DIOI2CGPIOMCP2317::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CGPIOMCP2317::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CGPIOMCP2317::Clean()
 {

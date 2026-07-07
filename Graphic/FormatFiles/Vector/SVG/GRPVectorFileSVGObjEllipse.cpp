@@ -60,9 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJELLIPSE::GRPVECTORFILESVGOBJELLIPSE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJELLIPSE::GRPVECTORFILESVGOBJELLIPSE()
 {
@@ -71,10 +73,12 @@ GRPVECTORFILESVGOBJELLIPSE::GRPVECTORFILESVGOBJELLIPSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJELLIPSE::~GRPVECTORFILESVGOBJELLIPSE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJELLIPSE::~GRPVECTORFILESVGOBJELLIPSE()
 {
@@ -83,11 +87,15 @@ GRPVECTORFILESVGOBJELLIPSE::~GRPVECTORFILESVGOBJELLIPSE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJELLIPSE::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read the common attributes and the ellipse geometry (cx, cy, rx, ry)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJELLIPSE::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -105,11 +113,15 @@ bool GRPVECTORFILESVGOBJELLIPSE::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJELLIPSE::BuildPath(GRP2DPATH& path)
 * @brief      Build path : emit the ellipse as 4 cubic bezier curves
 * @ingroup    GRAPHIC
+* 
 * @param[in]  path : output path
-* @return     bool : true if geometry was emitted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJELLIPSE::BuildPath(GRP2DPATH& path)
 {
@@ -130,46 +142,60 @@ bool GRPVECTORFILESVGOBJELLIPSE::BuildPath(GRP2DPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJELLIPSE::GetCX()
 * @brief      Get cx
 * @ingroup    GRAPHIC
-* @return     double : cx
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJELLIPSE::GetCX()   { return cx; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJELLIPSE::GetCY()
 * @brief      Get cy
 * @ingroup    GRAPHIC
-* @return     double : cy
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJELLIPSE::GetCY()   { return cy; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJELLIPSE::GetRX()
 * @brief      Get rx
 * @ingroup    GRAPHIC
-* @return     double : rx
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJELLIPSE::GetRX()   { return rx; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJELLIPSE::GetRY()
 * @brief      Get ry
 * @ingroup    GRAPHIC
-* @return     double : ry
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJELLIPSE::GetRY()   { return ry; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJELLIPSE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJELLIPSE::Clean()
 {

@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XESP32DIR::XESP32DIR()
+* 
+* @fn         XESP32DIR::XESP32DIR(): XDIR()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32DIR::XESP32DIR(): XDIR()
 {
@@ -74,12 +74,12 @@ XESP32DIR::XESP32DIR(): XDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32DIR::~XESP32DIR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32DIR::~XESP32DIR()
 {
@@ -88,15 +88,15 @@ XESP32DIR::~XESP32DIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32DIR::Exist(XCHAR* path)
 * @brief      Exist
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DIR::Exist(XCHAR* path)
 {   
@@ -109,13 +109,13 @@ bool XESP32DIR::Exist(XCHAR* path)
 * @fn         bool XESP32DIR::Make(XCHAR* path, bool recursive)
 * @brief      Make
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  path : 
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  path : Path to use.
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DIR::Make(XCHAR* path, bool recursive)
 {
   return false;  
@@ -123,15 +123,15 @@ bool XESP32DIR::Make(XCHAR* path, bool recursive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32DIR::ChangeTo(XCHAR* path)
 * @brief      Change to
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DIR::ChangeTo(XCHAR* path)
 {  
@@ -140,16 +140,16 @@ bool XESP32DIR::ChangeTo(XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XESP32DIR::Delete(XCHAR* path,bool all)
-* @brief      Delete
+* 
+* @fn         bool XESP32DIR::Delete(XCHAR* path, bool all)
+* @brief      Delete resource
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  path :
-* @param[in]  all :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  all : All value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DIR::Delete(XCHAR* path, bool all)
 {
@@ -158,15 +158,15 @@ bool XESP32DIR::Delete(XCHAR* path, bool all)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32DIR::GetActual(XPATH& xpath)
 * @brief      Get actual
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DIR::GetActual(XPATH& xpath)
 {       
@@ -175,17 +175,17 @@ bool XESP32DIR::GetActual(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XESP32DIR::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* searchelement)
 * @brief      First search
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  xpath :
-* @param[in]  patternsearch :
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  patternsearch : Patternsearch pointer to use.
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DIR::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* searchelement)
 {    
@@ -199,9 +199,9 @@ bool XESP32DIR::FirstSearch(XCHAR* xpath, XCHAR* patternsearch, XDIRELEMENT* sea
 * @brief      Next search
 * @ingroup    PLATFORM_ESP32
 * 
-* @param[in]  searchelement : 
+* @param[in]  searchelement : Searchelement pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32DIR::NextSearch(XDIRELEMENT* searchelement)
@@ -211,12 +211,12 @@ bool XESP32DIR::NextSearch(XDIRELEMENT* searchelement)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32DIR::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32DIR::Clean()
 {

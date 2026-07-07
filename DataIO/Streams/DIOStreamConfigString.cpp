@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMCONFIGSTRING::DIOSTREAMCONFIGSTRING()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIGSTRING::DIOSTREAMCONFIGSTRING()
 {
@@ -66,12 +66,12 @@ DIOSTREAMCONFIGSTRING::DIOSTREAMCONFIGSTRING()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMCONFIGSTRING::~DIOSTREAMCONFIGSTRING()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIGSTRING::~DIOSTREAMCONFIGSTRING()
 {
@@ -80,15 +80,15 @@ DIOSTREAMCONFIGSTRING::~DIOSTREAMCONFIGSTRING()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCONFIGSTRING::GetToString(XSTRING* string)
 * @brief      Get to string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCONFIGSTRING::GetToString(XSTRING* string)
 {
@@ -101,15 +101,15 @@ bool DIOSTREAMCONFIGSTRING::GetToString(XSTRING* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCONFIGSTRING::GetToString(XSTRING& string)
 * @brief      Get to string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCONFIGSTRING::GetToString(XSTRING& string)
 {
@@ -118,15 +118,15 @@ bool DIOSTREAMCONFIGSTRING::GetToString(XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCONFIGSTRING::SetFromString(XCHAR* string)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCONFIGSTRING::SetFromString(XCHAR* string)
 {
@@ -197,15 +197,15 @@ bool DIOSTREAMCONFIGSTRING::SetFromString(XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCONFIGSTRING::SetFromString(XSTRING* string)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCONFIGSTRING::SetFromString(XSTRING* string)
 {
@@ -215,16 +215,16 @@ bool DIOSTREAMCONFIGSTRING::SetFromString(XSTRING* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMCONFIGSTRING::SetFromString(XSTRING& string, bool addslash)
 * @brief      Set from string
 * @ingroup    DATAIO
-*
-* @param[in]  string :
-* @param[in]  addslash :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  string : String to use.
+* @param[in]  addslash : Addslash value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMCONFIGSTRING::SetFromString(XSTRING& string, bool addslash)
 {
@@ -233,12 +233,12 @@ bool DIOSTREAMCONFIGSTRING::SetFromString(XSTRING& string, bool addslash)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMCONFIGSTRING::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMCONFIGSTRING::Clean()
 {

@@ -53,15 +53,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEZIP_XEVENT::XFILEZIP_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         XFILEZIP_XEVENT::XFILEZIP_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  subject :
-* @param[in]  type :
-* @param[in]  family :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEZIP_XEVENT::XFILEZIP_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 {
@@ -70,12 +70,12 @@ XFILEZIP_XEVENT::XFILEZIP_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEZIP_XEVENT::~XFILEZIP_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEZIP_XEVENT::~XFILEZIP_XEVENT()
 {
@@ -84,13 +84,13 @@ XFILEZIP_XEVENT::~XFILEZIP_XEVENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* XFILEZIP_XEVENT::GetFileName()
 * @brief      Get file name
 * @ingroup    XUTILS
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* XFILEZIP_XEVENT::GetFileName()
 {
@@ -99,13 +99,13 @@ XPATH* XFILEZIP_XEVENT::GetFileName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECMPZIP* XFILEZIP_XEVENT::GetFileCompress()
 * @brief      Get file compress
 * @ingroup    XUTILS
-*
-* @return     XFILECMPZIP* :
-*
+* 
+* @return     XFILECMPZIP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECMPZIP* XFILEZIP_XEVENT::GetFileCompress()
 {
@@ -119,7 +119,7 @@ XFILECMPZIP* XFILEZIP_XEVENT::GetFileCompress()
 * @brief      Set file compress
 * @ingroup    XUTILS
 * 
-* @param[in]  filecmp : 
+* @param[in]  filecmp : Filecmp pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEZIP_XEVENT::SetFileCompress(XFILECMPZIP* filecmp)
@@ -129,13 +129,13 @@ void XFILEZIP_XEVENT::SetFileCompress(XFILECMPZIP* filecmp)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float XFILEZIP_XEVENT::GetOperationPercent()
 * @brief      Get operation percent
 * @ingroup    XUTILS
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XFILEZIP_XEVENT::GetOperationPercent()
 {
@@ -144,13 +144,13 @@ float XFILEZIP_XEVENT::GetOperationPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEZIP_XEVENT::SetOperationPercent(float operationpercent)
 * @brief      Set operation percent
 * @ingroup    XUTILS
-*
-* @param[in]  operationpercent :
-*
+* 
+* @param[in]  operationpercent : Operationpercent value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEZIP_XEVENT::SetOperationPercent(float operationpercent)
 {
@@ -159,13 +159,13 @@ void XFILEZIP_XEVENT::SetOperationPercent(float operationpercent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEZIP_ERROR XFILEZIP_XEVENT::GetError()
 * @brief      Get error
 * @ingroup    XUTILS
-*
-* @return     XFILEZIP_ERROR :
-*
+* 
+* @return     XFILEZIP_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEZIP_ERROR XFILEZIP_XEVENT::GetError()
 {
@@ -174,13 +174,13 @@ XFILEZIP_ERROR XFILEZIP_XEVENT::GetError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEZIP_XEVENT::SetError(XFILEZIP_ERROR error)
 * @brief      Set error
 * @ingroup    XUTILS
-*
-* @param[in]  error :
-*
+* 
+* @param[in]  error : Error value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEZIP_XEVENT::SetError(XFILEZIP_ERROR error)
 {
@@ -189,12 +189,12 @@ void XFILEZIP_XEVENT::SetError(XFILEZIP_ERROR error)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEZIP_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEZIP_XEVENT::Clean()
 {

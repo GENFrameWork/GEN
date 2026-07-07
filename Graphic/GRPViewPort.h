@@ -35,7 +35,6 @@
 #include "GRPProperties.h"
 
 
-
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
@@ -49,8 +48,6 @@ enum GRPVIEWPORT_PROJECTIONTYPE
 
 
 #define GRPVIEWPORT_ID_MAIN   __L("mainviewport")
-
-
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -88,7 +85,7 @@ class GRPVIEWPORT
     bool                          SetCanvasPosition                   (float  x, float  y);
 
 
-    GRP2DCANVAS*                    GetCanvas                           ();
+    GRP2DCANVAS*                  GetCanvas                           ();
 
   protected:
 
@@ -104,7 +101,7 @@ class GRPVIEWPORT
     
     float                         canvas_x;
     float                         canvas_y;
-    GRP2DCANVAS*                    canvas;
+    GRP2DCANVAS*                  canvas;
     
   private:
 

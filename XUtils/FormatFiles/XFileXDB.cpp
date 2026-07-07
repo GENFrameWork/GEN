@@ -61,13 +61,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEXDB::XFILEXDB(HASH* hash)
+* 
+* @fn         XFILEXDB::XFILEXDB(HASH* hash) : XFILEHASH(hash)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  hash :
-*
+* 
+* @param[in]  hash : Hash pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXDB::XFILEXDB(HASH* hash) : XFILEHASH(hash)
 {
@@ -80,14 +80,14 @@ XFILEXDB::XFILEXDB(HASH* hash) : XFILEHASH(hash)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEXDB::XFILEXDB(HASH* hash, XPATH& xpath)
+* 
+* @fn         XFILEXDB::XFILEXDB(HASH* hash, XPATH& xpath) : XFILEHASH(hash)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  hash :
-* @param[in]  xpath :
-*
+* 
+* @param[in]  hash : Hash pointer to use.
+* @param[in]  hash : Hash value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXDB::XFILEXDB(HASH* hash, XPATH& xpath)
   : XFILEHASH(hash)
@@ -103,12 +103,12 @@ XFILEXDB::XFILEXDB(HASH* hash, XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEXDB::~XFILEXDB()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXDB::~XFILEXDB()
 {
@@ -119,15 +119,15 @@ XFILEXDB::~XFILEXDB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXDB::SetPath(XPATH& xpath)
 * @brief      Set path
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXDB::SetPath(XPATH& xpath)
 {
@@ -140,13 +140,13 @@ bool XFILEXDB::SetPath(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXDB::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXDB::Ini()
 {
@@ -155,13 +155,13 @@ bool XFILEXDB::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXDB::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXDB::End()
 {
@@ -170,13 +170,13 @@ bool XFILEXDB::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMAP<XDWORD, XDWORD>* XFILEXDB::GetIndexMap()
 * @brief      Get index map
 * @ingroup    XUTILS
-*
-* @return     XMAP<XDWORD, :
-*
+* 
+* @return     XMAP<XDWORD, XDWORD>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMAP<XDWORD, XDWORD>* XFILEXDB::GetIndexMap()
 {
@@ -185,13 +185,13 @@ XMAP<XDWORD, XDWORD>* XFILEXDB::GetIndexMap()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXDB::OpenFile()
 * @brief      Open file
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXDB::OpenFile()
 {
@@ -228,13 +228,13 @@ bool XFILEXDB::OpenFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEXDB::GetNumberRecords()
 * @brief      Get number records
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEXDB::GetNumberRecords()
 {
@@ -243,15 +243,15 @@ int XFILEXDB::GetNumberRecords()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER* XFILEXDB::GetRecord(XDWORD ID)
 * @brief      Get record
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-*
-* @return     XBUFFER* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* XFILEXDB::GetRecord(XDWORD ID)
 {
@@ -294,15 +294,15 @@ XBUFFER* XFILEXDB::GetRecord(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER* XFILEXDB::GetRecordIndex(XDWORD index)
 * @brief      Get record index
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     XBUFFER* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* XFILEXDB::GetRecordIndex(XDWORD index)
 {
@@ -345,15 +345,15 @@ XBUFFER* XFILEXDB::GetRecordIndex(XDWORD index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XFILEXDB::GetPosition(XDWORD ID)
 * @brief      Get position
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILEXDB::GetPosition(XDWORD ID)
 {
@@ -374,13 +374,13 @@ XDWORD XFILEXDB::GetPosition(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEXDB::CloseFile()
 * @brief      Close file
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEXDB::CloseFile()
 {
@@ -397,12 +397,12 @@ bool XFILEXDB::CloseFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEXDB::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEXDB::Clean()
 {

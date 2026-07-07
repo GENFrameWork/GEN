@@ -31,7 +31,6 @@
 #include "GEN_Defines.h"
 
 
-
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "GRPFactory.h"
@@ -41,12 +40,9 @@
 #include "GRPBitmap.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -54,16 +50,15 @@
 GRPFACTORY* GRPFACTORY::instance = NULL;
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPFACTORY::GRPFACTORY()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPFACTORY::GRPFACTORY()
 {
@@ -72,12 +67,12 @@ GRPFACTORY::GRPFACTORY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPFACTORY::~GRPFACTORY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPFACTORY::~GRPFACTORY()
 {
@@ -91,7 +86,7 @@ GRPFACTORY::~GRPFACTORY()
 * @brief      Get is instanced
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPFACTORY::GetIsInstanced()
@@ -106,7 +101,7 @@ bool GRPFACTORY::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    GRAPHIC
 * 
-* @return     GRPFACTORY& : 
+* @return     GRPFACTORY& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPFACTORY& GRPFACTORY::GetInstance()
@@ -126,9 +121,9 @@ GRPFACTORY& GRPFACTORY::GetInstance()
 * @brief      Set instance
 * @ingroup    GRAPHIC
 * 
-* @param[in]  _instance : 
+* @param[in]  _instance : Instance pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPFACTORY::SetInstance(GRPFACTORY* _instance)
@@ -147,7 +142,7 @@ bool GRPFACTORY::SetInstance(GRPFACTORY* _instance)
 * @brief      Del instance
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPFACTORY::DelInstance()
@@ -162,13 +157,13 @@ bool GRPFACTORY::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPSCREEN* GRPFACTORY::CreateScreen()
 * @brief      Create screen
 * @ingroup    GRAPHIC
-*
-* @return     GRPSCREEN* : screen class
-*
+* 
+* @return     GRPSCREEN* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREEN* GRPFACTORY::CreateScreen()
 {
@@ -177,15 +172,15 @@ GRPSCREEN* GRPFACTORY::CreateScreen()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPFACTORY::DeleteScreen(GRPSCREEN* screen)
 * @brief      Delete screen
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  screen : screen class to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPFACTORY::DeleteScreen(GRPSCREEN* screen)
 {
@@ -194,15 +189,15 @@ bool GRPFACTORY::DeleteScreen(GRPSCREEN* screen)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRP2DCANVAS* GRPFACTORY::CreateCanvas(GRPSCREEN* screen)
+* 
+* @fn         GRP2DCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
 * @brief      Create canvas
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  properties : properties to generate canvas
-*
-* @return     GRP2DCANVAS* : canvas class
-*
+* 
+* @return     GRP2DCANVAS* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
 {
@@ -249,15 +244,15 @@ GRP2DCANVAS* GRPFACTORY::CreateCanvas(GRPPROPERTIES* properties)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPFACTORY::DeleteCanvas(GRP2DCANVAS* canvas)
 * @brief      Delete canvas
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  canvas : canvas to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPFACTORY::DeleteCanvas(GRP2DCANVAS* canvas)
 {
@@ -275,18 +270,18 @@ bool GRPFACTORY::DeleteCanvas(GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPFACTORY::CreateBitmap(int width, int height, GRPPROPERTYMODE mode, bool isbufferinverse)
 * @brief      Create bitmap
 * @ingroup    GRAPHIC
-*
-* @param[in]  width :
-* @param[in]  height :
-* @param[in]  mode :
-* @param[in]  isbufferinverse :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* @param[in]  mode : Mode value.
+* @param[in]  isbufferinverse : Isbufferinverse value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPFACTORY::CreateBitmap(int width, int height, GRPPROPERTYMODE mode, bool isbufferinverse)
 {
@@ -314,15 +309,15 @@ GRPBITMAP* GRPFACTORY::CreateBitmap(int width, int height, GRPPROPERTYMODE mode,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPFACTORY::DeleteBitmap(GRPBITMAP* bitmap)
 * @brief      Delete bitmap
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  bitmap : bitmap class to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPFACTORY::DeleteBitmap(GRPBITMAP* bitmap)
 {
@@ -342,7 +337,7 @@ bool GRPFACTORY::DeleteBitmap(GRPBITMAP* bitmap)
 * @brief      Create desktop manager
 * @ingroup    GRAPHIC
 * 
-* @return     GRPDESKTOPMANAGER* : 
+* @return     GRPDESKTOPMANAGER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPDESKTOPMANAGER* GRPFACTORY::CreateDesktopManager()
@@ -357,9 +352,9 @@ GRPDESKTOPMANAGER* GRPFACTORY::CreateDesktopManager()
 * @brief      Delete desktop manager
 * @ingroup    GRAPHIC
 * 
-* @param[in]  desktopmanager : 
+* @param[in]  desktopmanager : Desktopmanager pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPFACTORY::DeleteDesktopManager(GRPDESKTOPMANAGER* desktopmanager)
@@ -371,12 +366,12 @@ bool GRPFACTORY::DeleteDesktopManager(GRPDESKTOPMANAGER* desktopmanager)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPFACTORY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPFACTORY::Clean()
 {

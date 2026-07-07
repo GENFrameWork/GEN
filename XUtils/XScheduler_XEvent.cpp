@@ -53,15 +53,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSCHEDULER_XEVENT::XSCHEDULER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         XSCHEDULER_XEVENT::XSCHEDULER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  subject :
-* @param[in]  type :
-* @param[in]  family :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULER_XEVENT::XSCHEDULER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 {
@@ -70,12 +70,12 @@ XSCHEDULER_XEVENT::XSCHEDULER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD fami
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSCHEDULER_XEVENT::~XSCHEDULER_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULER_XEVENT::~XSCHEDULER_XEVENT()
 {
@@ -84,13 +84,13 @@ XSCHEDULER_XEVENT::~XSCHEDULER_XEVENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSCHEDULER* XSCHEDULER_XEVENT::GetScheduler()
 * @brief      Get scheduler
 * @ingroup    XUTILS
-*
-* @return     XSCHEDULER* :
-*
+* 
+* @return     XSCHEDULER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULER*  XSCHEDULER_XEVENT::GetScheduler()
 {
@@ -99,13 +99,13 @@ XSCHEDULER*  XSCHEDULER_XEVENT::GetScheduler()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULER_XEVENT::SetScheduler(XSCHEDULER* xscheduler)
 * @brief      Set scheduler
 * @ingroup    XUTILS
-*
-* @param[in]  xscheduler :
-*
+* 
+* @param[in]  xscheduler : Xscheduler pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULER_XEVENT::SetScheduler(XSCHEDULER* xscheduler)
 {
@@ -114,13 +114,13 @@ void XSCHEDULER_XEVENT::SetScheduler(XSCHEDULER* xscheduler)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSCHEDULERTASK* XSCHEDULER_XEVENT::GetTask()
 * @brief      Get task
 * @ingroup    XUTILS
-*
-* @return     XSCHEDULERTASK* :
-*
+* 
+* @return     XSCHEDULERTASK* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSCHEDULERTASK* XSCHEDULER_XEVENT::GetTask()
 {
@@ -129,13 +129,13 @@ XSCHEDULERTASK* XSCHEDULER_XEVENT::GetTask()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULER_XEVENT::SetTask(XSCHEDULERTASK* xtask)
 * @brief      Set task
 * @ingroup    XUTILS
-*
-* @param[in]  xtask :
-*
+* 
+* @param[in]  xtask : Xtask pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULER_XEVENT::SetTask(XSCHEDULERTASK* xtask)
 {
@@ -144,13 +144,13 @@ void XSCHEDULER_XEVENT::SetTask(XSCHEDULERTASK* xtask)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* XSCHEDULER_XEVENT::GetDateTime()
 * @brief      Get date time
 * @ingroup    XUTILS
-*
-* @return     XDATETIME* :
-*
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XSCHEDULER_XEVENT::GetDateTime()
 {
@@ -159,13 +159,13 @@ XDATETIME* XSCHEDULER_XEVENT::GetDateTime()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULER_XEVENT::SetDateTime(XDATETIME* xdatetime)
 * @brief      Set date time
 * @ingroup    XUTILS
-*
-* @param[in]  xdatetime :
-*
+* 
+* @param[in]  xdatetime : Xdatetime pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULER_XEVENT::SetDateTime(XDATETIME* xdatetime)
 {
@@ -174,12 +174,12 @@ void XSCHEDULER_XEVENT::SetDateTime(XDATETIME* xdatetime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSCHEDULER_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSCHEDULER_XEVENT::Clean()
 {

@@ -66,7 +66,7 @@ DIOSSHREVERSE* DIOSSHREVERSE::instance = NULL;
 * @brief      Get is instanced
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::GetIsInstanced()
@@ -81,7 +81,7 @@ bool DIOSSHREVERSE::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    DATAIO
 * 
-* @return     DIOSSHREVERSE& : 
+* @return     DIOSSHREVERSE& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSSHREVERSE& DIOSSHREVERSE::GetInstance()
@@ -98,7 +98,7 @@ DIOSSHREVERSE& DIOSSHREVERSE::GetInstance()
 * @brief      Del instance
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::DelInstance()
@@ -121,7 +121,7 @@ bool DIOSSHREVERSE::DelInstance()
 * @brief      Get URL target
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSSHREVERSE::GetURLTarget()
@@ -136,7 +136,7 @@ XSTRING* DIOSSHREVERSE::GetURLTarget()
 * @brief      Get local IP
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSSHREVERSE::GetLocalIP()
@@ -151,7 +151,7 @@ XSTRING* DIOSSHREVERSE::GetLocalIP()
 * @brief      Get login
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSSHREVERSE::GetLogin()
@@ -166,7 +166,7 @@ XSTRING* DIOSSHREVERSE::GetLogin()
 * @brief      Get password
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSSHREVERSE::GetPassword()
@@ -181,7 +181,7 @@ XSTRING* DIOSSHREVERSE::GetPassword()
 * @brief      Get port
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSSHREVERSE::GetPort()
@@ -196,7 +196,7 @@ XDWORD DIOSSHREVERSE::GetPort()
 * @brief      Set port
 * @ingroup    DATAIO
 * 
-* @param[in]  port : 
+* @param[in]  port : Port number to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSSHREVERSE::SetPort(XDWORD port)
@@ -211,11 +211,11 @@ void DIOSSHREVERSE::SetPort(XDWORD port)
 * @brief      Download CFG
 * @ingroup    DATAIO
 * 
-* @param[in]  URL : 
-* @param[in]  publicIP : 
-* @param[in]  localIP : 
+* @param[in]  URL : URL to use.
+* @param[in]  publicIP : Public IP value.
+* @param[in]  localIP : Local IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::DownloadCFG(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
@@ -337,11 +337,11 @@ bool DIOSSHREVERSE::DownloadCFG(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
 * @brief      Download CFG
 * @ingroup    DATAIO
 * 
-* @param[in]  URL : 
-* @param[in]  publicIP : 
-* @param[in]  localIP : 
+* @param[in]  URL : URL to use.
+* @param[in]  publicIP : Public IP value.
+* @param[in]  localIP : Local IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::DownloadCFG(XSTRING& URL, XSTRING& publicIP, XSTRING& localIP)
@@ -356,11 +356,11 @@ bool DIOSSHREVERSE::DownloadCFG(XSTRING& URL, XSTRING& publicIP, XSTRING& localI
 * @brief      Download CFG
 * @ingroup    DATAIO
 * 
-* @param[in]  URL : 
-* @param[in]  publicIP : 
-* @param[in]  localIP : 
+* @param[in]  URL : URL to use.
+* @param[in]  publicIP : Public IP value.
+* @param[in]  localIP : Local IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::DownloadCFG(DIOURL&  URL, XSTRING& publicIP, XSTRING& localIP)
@@ -375,7 +375,7 @@ bool DIOSSHREVERSE::DownloadCFG(DIOURL&  URL, XSTRING& publicIP, XSTRING& localI
 * @brief      Activate
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::Activate()
@@ -418,7 +418,7 @@ bool DIOSSHREVERSE::Activate()
 * @brief      De activate
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::DeActivate()
@@ -449,7 +449,7 @@ bool DIOSSHREVERSE::DeActivate()
 * @brief      Is running
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::IsRunning()
@@ -542,11 +542,11 @@ bool DIOSSHREVERSE::IsRunning()
 * @brief      Exec
 * @ingroup    DATAIO
 * 
-* @param[in]  URL : 
-* @param[in]  publicIP : 
-* @param[in]  localIP : 
+* @param[in]  URL : URL to use.
+* @param[in]  publicIP : Public IP value.
+* @param[in]  localIP : Local IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::Exec(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
@@ -576,11 +576,11 @@ bool DIOSSHREVERSE::Exec(XCHAR* URL, XSTRING& publicIP, XSTRING& localIP)
 * @brief      Exec
 * @ingroup    DATAIO
 * 
-* @param[in]  URL : 
-* @param[in]  publicIP : 
-* @param[in]  localIP : 
+* @param[in]  URL : URL to use.
+* @param[in]  publicIP : Public IP value.
+* @param[in]  localIP : Local IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::Exec(XSTRING& URL, XSTRING& publicIP, XSTRING& localIP)
@@ -595,11 +595,11 @@ bool DIOSSHREVERSE::Exec(XSTRING& URL, XSTRING& publicIP, XSTRING& localIP)
 * @brief      Exec
 * @ingroup    DATAIO
 * 
-* @param[in]  URL : 
-* @param[in]  publicIP : 
-* @param[in]  localIP : 
+* @param[in]  URL : URL to use.
+* @param[in]  publicIP : Public IP value.
+* @param[in]  localIP : Local IP value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSSHREVERSE::Exec(DIOURL&  URL, XSTRING& publicIP, XSTRING& localIP)

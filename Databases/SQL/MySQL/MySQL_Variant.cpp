@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         MYSQL_VARIANT::MYSQL_VARIANT()
+* 
+* @fn         MYSQL_VARIANT::MYSQL_VARIANT() : DB_SQL_VARIANT()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_VARIANT::MYSQL_VARIANT()  : DB_SQL_VARIANT()
 {
@@ -69,12 +69,12 @@ MYSQL_VARIANT::MYSQL_VARIANT()  : DB_SQL_VARIANT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MYSQL_VARIANT::~MYSQL_VARIANT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_VARIANT::~MYSQL_VARIANT()
 {
@@ -83,15 +83,15 @@ MYSQL_VARIANT::~MYSQL_VARIANT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_VARIANT& MYSQL_VARIANT::operator =(DB_SQL_DATETIME& datetime)
 * @brief      operator =
 * @ingroup    DATABASE
-*
-* @param[in]  datetime :
-*
-* @return     DB_SQL_VARIANT& :
-*
+* 
+* @param[in]  datetime : Datetime value.
+* 
+* @return     DB_SQL_VARIANT& MYSQL_VARIANT:: : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_VARIANT& MYSQL_VARIANT::operator =(DB_SQL_DATETIME& datetime)
 {
@@ -113,13 +113,13 @@ DB_SQL_VARIANT& MYSQL_VARIANT::operator =(DB_SQL_DATETIME& datetime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MYSQL_VARIANT::operator DB_SQL_DATETIME()
 * @brief      operator DBSQLDATETIME
 * @ingroup    DATABASE
-*
-* @return     MYSQL_VARIANT::operator :
-*
+* 
+* @return     MYSQL_VARIANT:: : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_VARIANT::operator DB_SQL_DATETIME()
 {
@@ -138,13 +138,13 @@ MYSQL_VARIANT::operator DB_SQL_DATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD MYSQL_VARIANT::GetSize()
 * @brief      Get size
 * @ingroup    DATABASE
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD MYSQL_VARIANT::GetSize()
 {
@@ -155,13 +155,13 @@ XDWORD MYSQL_VARIANT::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* MYSQL_VARIANT::GetData()
 * @brief      Get data
 * @ingroup    DATABASE
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* MYSQL_VARIANT::GetData()
 {
@@ -170,12 +170,12 @@ void* MYSQL_VARIANT::GetData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void MYSQL_VARIANT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void MYSQL_VARIANT::Clean()
 {

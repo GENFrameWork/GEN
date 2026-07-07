@@ -54,13 +54,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOSTREAM_XEVENT::DIOSTREAM_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* @fn         DIOSTREAM_XEVENT::DIOSTREAM_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM_XEVENT::DIOSTREAM_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
@@ -89,7 +89,7 @@ DIOSTREAM_XEVENT::~DIOSTREAM_XEVENT()
 * @brief      Get DIO stream
 * @ingroup    DATAIO
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOSTREAM_XEVENT::GetDIOStream()
@@ -104,7 +104,7 @@ DIOSTREAM* DIOSTREAM_XEVENT::GetDIOStream()
 * @brief      Set DIO stream
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
+* @param[in]  diostream : Diostream pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAM_XEVENT::SetDIOStream(DIOSTREAM* diostream)
@@ -119,7 +119,7 @@ void DIOSTREAM_XEVENT::SetDIOStream(DIOSTREAM* diostream)
 * @brief      Get device
 * @ingroup    DATAIO
 * 
-* @return     DIOSTREAMDEVICE* : 
+* @return     DIOSTREAMDEVICE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICE* DIOSTREAM_XEVENT::GetDevice()
@@ -134,7 +134,7 @@ DIOSTREAMDEVICE* DIOSTREAM_XEVENT::GetDevice()
 * @brief      Set device
 * @ingroup    DATAIO
 * 
-* @param[in]  device : 
+* @param[in]  device : Device value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAM_XEVENT::SetDevice(DIOSTREAMDEVICE& device)

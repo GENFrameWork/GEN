@@ -57,8 +57,8 @@
 * @fn         UI_ELEMENT_FORM::UI_ELEMENT_FORM()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_FORM::UI_ELEMENT_FORM()    
 { 
   Clean();   
@@ -75,8 +75,8 @@ UI_ELEMENT_FORM::UI_ELEMENT_FORM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_FORM::~UI_ELEMENT_FORM()    
 { 
   Clean();                            
@@ -88,10 +88,10 @@ UI_ELEMENT_FORM::~UI_ELEMENT_FORM()
 * @fn         UI_COLOR* UI_ELEMENT_FORM::GetLineColor()
 * @brief      Get line color
 * @ingroup    USERINTERFACE
-*
-* @return     UI_COLOR* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_COLOR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR* UI_ELEMENT_FORM::GetLineColor()
 {
   return &linecolor;
@@ -103,10 +103,10 @@ UI_COLOR* UI_ELEMENT_FORM::GetLineColor()
 * @fn         UI_BOUNDARYLINE* UI_ELEMENT_FORM::GetVisibleRect()
 * @brief      Get visible rect
 * @ingroup    USERINTERFACE
-*
-* @return     UI_BOUNDARYLINE* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_BOUNDARYLINE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_BOUNDARYLINE* UI_ELEMENT_FORM::GetVisibleRect()
 {
   return &visiblerect;
@@ -119,8 +119,8 @@ UI_BOUNDARYLINE* UI_ELEMENT_FORM::GetVisibleRect()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_FORM::Clean()
 {
   roundvisiblerect = 0;    

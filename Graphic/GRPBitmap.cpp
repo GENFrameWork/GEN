@@ -55,16 +55,16 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP::GRPBITMAP(int width, int height, GRPPROPERTYMODE mode, bool isbufferinverse)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
-* @param[in]  width :
-* @param[in]  height :
-* @param[in]  mode :
-* @param[in]  isbufferinverse :
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* @param[in]  mode : Mode value.
+* @param[in]  isbufferinverse : Isbufferinverse value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP::GRPBITMAP(int width, int height, GRPPROPERTYMODE mode, bool isbufferinverse)
 {
@@ -78,12 +78,12 @@ GRPBITMAP::GRPBITMAP(int width, int height, GRPPROPERTYMODE mode, bool isbufferi
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP::~GRPBITMAP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP::~GRPBITMAP()
 {
@@ -92,13 +92,13 @@ GRPBITMAP::~GRPBITMAP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAP::IsValid()
 * @brief      Is valid
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::IsValid()
 {
@@ -107,13 +107,13 @@ bool GRPBITMAP::IsValid()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* GRPBITMAP::GetBuffer()
 * @brief      Get buffer
 * @ingroup    GRAPHIC
-*
-* @return     XBYTE* : pointer to array
-*
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* GRPBITMAP::GetBuffer()
 {
@@ -122,13 +122,13 @@ XBYTE* GRPBITMAP::GetBuffer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE** GRPBITMAP::GetBufferPointer()
 * @brief      Get buffer pointer
 * @ingroup    GRAPHIC
-*
-* @return     XBYTE** : pointer to pointer array
-*
+* 
+* @return     XBYTE** : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE** GRPBITMAP::GetBufferPointer()
 {
@@ -137,13 +137,13 @@ XBYTE** GRPBITMAP::GetBufferPointer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPBITMAP::GetBufferSize()
 * @brief      Get buffer size
 * @ingroup    GRAPHIC
-*
-* @return     int : size of buffer
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPBITMAP::GetBufferSize()
 {
@@ -152,15 +152,15 @@ int GRPBITMAP::GetBufferSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAP::GetSubBitmap(GRPRECTINT& rect)
 * @brief      Get sub bitmap
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  rect : rect to get sub-bitmap
-*
-* @return     GRPBITMAP* : sub-bitmap class
-*
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAP::GetSubBitmap(GRPRECTINT& rect)
 {
@@ -169,13 +169,13 @@ GRPBITMAP* GRPBITMAP::GetSubBitmap(GRPRECTINT& rect)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAP::Clone()
 * @brief      Clone
 * @ingroup    GRAPHIC
-*
-* @return     GRPBITMAP* : clone bitmap class
-*
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAP::Clone()
 {
@@ -184,15 +184,15 @@ GRPBITMAP* GRPBITMAP::Clone()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAP::CopyFrom(GRPBITMAP* bitmap)
 * @brief      Copy from
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  bitmap : bitmap origin to clone
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::CopyFrom(GRPBITMAP* bitmap)
 {
@@ -201,15 +201,15 @@ bool GRPBITMAP::CopyFrom(GRPBITMAP* bitmap)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAP::ConvertToMode(GRPPROPERTYMODE newmode)
 * @brief      Convert to mode
 * @ingroup    GRAPHIC
-*
-* @param[in]  newmode :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  newmode : Newmode value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAP::ConvertToMode(GRPPROPERTYMODE newmode)
 {
@@ -218,13 +218,13 @@ GRPBITMAP* GRPBITMAP::ConvertToMode(GRPPROPERTYMODE newmode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAP::FlipHorizontal()
 * @brief      Flip horizontal
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::FlipHorizontal()
 {
@@ -233,13 +233,13 @@ bool GRPBITMAP::FlipHorizontal()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAP::FlipVertical()
 * @brief      Flip vertical
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::FlipVertical()
 {
@@ -248,15 +248,15 @@ bool GRPBITMAP::FlipVertical()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAP::Rotate(float degrees)
 * @brief      Rotate
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  degrees : degrees to rotate
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::Rotate(float degrees)
 {
@@ -265,16 +265,16 @@ bool GRPBITMAP::Rotate(float degrees)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAP::Scale(int nwidth, int nheight)
 * @brief      Scale
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  nwidth : GEN_NEW width
 * @param[in]  nheight : GEN_NEW height
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::Scale(int nwidth, int nheight)
 {
@@ -283,15 +283,15 @@ bool GRPBITMAP::Scale(int nwidth, int nheight)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAP::Crop(GRPRECTINT& rect)
 * @brief      Crop
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  rect : recto to crop
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::Crop(GRPRECTINT& rect)
 {
@@ -305,9 +305,9 @@ bool GRPBITMAP::Crop(GRPRECTINT& rect)
 * @brief      Compare
 * @ingroup    GRAPHIC
 * 
-* @param[in]  bitmap : 
+* @param[in]  bitmap : Bitmap pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::Compare(GRPBITMAP* bitmap)
@@ -354,13 +354,13 @@ bool GRPBITMAP::Compare(GRPBITMAP* bitmap)
 * @brief      Find sub bitmap
 * @ingroup    GRAPHIC
 * 
-* @param[in]  bitmapref : 
-* @param[in]  x : 
-* @param[in]  y : 
-* @param[in]  difflimitpercent : 
-* @param[in]  pixelmargin : 
+* @param[in]  bitmapref : Bitmapref pointer to use.
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* @param[in]  difflimitpercent : Difflimitpercent value.
+* @param[in]  pixelmargin : Pixelmargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::FindSubBitmap(GRPBITMAP* bitmapref, int& x, int& y, XBYTE difflimitpercent, XBYTE pixelmargin)
@@ -466,13 +466,13 @@ bool GRPBITMAP::FindSubBitmap(GRPBITMAP* bitmapref, int& x, int& y, XBYTE diffli
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD GRPBITMAP::GetHandle()
 * @brief      Get handle
 * @ingroup    GRAPHIC
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRPBITMAP::GetHandle()
 {
@@ -481,13 +481,13 @@ XDWORD GRPBITMAP::GetHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAP::SetHandle(XDWORD handle)
 * @brief      Set handle
 * @ingroup    GRAPHIC
-*
-* @param[in]  handle :
-*
+* 
+* @param[in]  handle : Handle value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAP::SetHandle(XDWORD handle)
 {
@@ -501,11 +501,11 @@ void GRPBITMAP::SetHandle(XDWORD handle)
 * @brief      Differences per cent
 * @ingroup    GRAPHIC
 * 
-* @param[in]  ndiff : 
-* @param[in]  max : 
-* @param[in]  limit : 
+* @param[in]  ndiff : Ndiff value.
+* @param[in]  max : Max value.
+* @param[in]  limit : Limit value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::DifferencesPerCent(XDWORD ndiff, XDWORD max, int limit)
@@ -524,11 +524,11 @@ bool GRPBITMAP::DifferencesPerCent(XDWORD ndiff, XDWORD max, int limit)
 * @brief      Is similar pixel
 * @ingroup    GRAPHIC
 * 
-* @param[in]  origin : 
-* @param[in]  target : 
-* @param[in]  margin : 
+* @param[in]  origin : Origin value.
+* @param[in]  target : Target value.
+* @param[in]  margin : Margin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAP::IsSimilarPixel(XDWORD origin, XDWORD target, XBYTE margin)
@@ -557,12 +557,12 @@ bool GRPBITMAP::IsSimilarPixel(XDWORD origin, XDWORD target, XBYTE margin)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAP::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAP::Clean()
 {

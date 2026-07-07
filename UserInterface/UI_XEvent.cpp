@@ -53,15 +53,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         UI_XEVENT::UI_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         UI_XEVENT::UI_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* @param[in]  subject :
-* @param[in]  type :
-* @param[in]  family :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_XEVENT::UI_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 {
@@ -70,12 +70,12 @@ UI_XEVENT::UI_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(sub
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UI_XEVENT::~UI_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_XEVENT::~UI_XEVENT()
 {
@@ -88,10 +88,10 @@ UI_XEVENT::~UI_XEVENT()
 * @fn         XDWORD UI_XEVENT::GetXPos()
 * @brief      Get X pos
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_XEVENT::GetXPos()
 {
   return xpos;
@@ -103,10 +103,10 @@ XDWORD UI_XEVENT::GetXPos()
 * @fn         void UI_XEVENT::SetXPos(XDWORD xpos)
 * @brief      Set X pos
 * @ingroup    USERINTERFACE
-*
-* @param[in]  xpos : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  xpos : Xpos value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_XEVENT::SetXPos(XDWORD xpos)
 {
   this->xpos = xpos;
@@ -118,10 +118,10 @@ void UI_XEVENT::SetXPos(XDWORD xpos)
 * @fn         XDWORD UI_XEVENT::GetYPos()
 * @brief      Get Y pos
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_XEVENT::GetYPos()
 {
   return ypos;
@@ -133,10 +133,10 @@ XDWORD UI_XEVENT::GetYPos()
 * @fn         void UI_XEVENT::SetYPos(XDWORD ypos)
 * @brief      Set Y pos
 * @ingroup    USERINTERFACE
-*
-* @param[in]  ypos : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  ypos : Ypos value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_XEVENT::SetYPos(XDWORD ypos)
 {
   this->ypos = ypos;
@@ -148,10 +148,10 @@ void UI_XEVENT::SetYPos(XDWORD ypos)
 * @fn         UI_ELEMENT* UI_XEVENT::GetElement()
 * @brief      Get element
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT* UI_XEVENT::GetElement()
 {
   return element;
@@ -163,10 +163,10 @@ UI_ELEMENT* UI_XEVENT::GetElement()
 * @fn         INPCURSORMOTION* UI_XEVENT::GetCursorMotion()
 * @brief      Get cursor motion
 * @ingroup    USERINTERFACE
-*
-* @return     INPCURSORMOTION* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     INPCURSORMOTION* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 INPCURSORMOTION* UI_XEVENT::GetCursorMotion()
 {
   return cursormotion;
@@ -178,10 +178,10 @@ INPCURSORMOTION* UI_XEVENT::GetCursorMotion()
 * @fn         void UI_XEVENT::SetCursorMotion(INPCURSORMOTION* cursormotion)
 * @brief      Set cursor motion
 * @ingroup    USERINTERFACE
-*
-* @param[in]  cursormotion : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  cursormotion : Cursormotion pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_XEVENT::SetCursorMotion(INPCURSORMOTION* cursormotion)
 {
   this->cursormotion = cursormotion;
@@ -193,12 +193,12 @@ void UI_XEVENT::SetCursorMotion(INPCURSORMOTION* cursormotion)
 * @fn         bool UI_XEVENT::SetElement(UI_ELEMENT* element)
 * @brief      Set element
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_XEVENT::SetElement(UI_ELEMENT* element)
 {
   if(!element) return false;
@@ -214,10 +214,10 @@ bool UI_XEVENT::SetElement(UI_ELEMENT* element)
 * @fn         UI_SKIN* UI_XEVENT::GetSkin()
 * @brief      Get skin
 * @ingroup    USERINTERFACE
-*
-* @return     UI_SKIN* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_SKIN* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN* UI_XEVENT::GetSkin()
 {
   return skin;
@@ -229,12 +229,12 @@ UI_SKIN* UI_XEVENT::GetSkin()
 * @fn         bool UI_XEVENT::SetSkin(UI_SKIN* skin)
 * @brief      Set skin
 * @ingroup    USERINTERFACE
-*
-* @param[in]  skin : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  skin : Skin pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_XEVENT::SetSkin(UI_SKIN* skin)
 {
   this->skin = skin;
@@ -248,10 +248,10 @@ bool UI_XEVENT::SetSkin(UI_SKIN* skin)
 * @fn         XSTRING* UI_XEVENT::GetMaskTextValue()
 * @brief      Get mask text value
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_XEVENT::GetMaskTextValue()
 {
   return &masktextvalue;
@@ -264,7 +264,7 @@ XSTRING* UI_XEVENT::GetMaskTextValue()
 * @brief      Get mask text resolved
 * @ingroup    USERINTERFACE
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_XEVENT::GetMaskTextResolved()
@@ -274,12 +274,12 @@ XSTRING* UI_XEVENT::GetMaskTextResolved()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_XEVENT::Clean()
 {

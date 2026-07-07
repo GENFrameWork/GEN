@@ -47,11 +47,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTM32GPIO::DIOSTM32GPIO()
+* 
+* @fn         DIOSTM32GPIO::DIOSTM32GPIO(): DIOGPIO()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32GPIO::DIOSTM32GPIO(): DIOGPIO()
 {
@@ -61,12 +61,12 @@ DIOSTM32GPIO::DIOSTM32GPIO(): DIOGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32GPIO::~DIOSTM32GPIO()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32GPIO::~DIOSTM32GPIO()
 {
@@ -76,13 +76,13 @@ DIOSTM32GPIO::~DIOSTM32GPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32GPIO::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32GPIO::Ini()
 {
@@ -96,13 +96,13 @@ bool DIOSTM32GPIO::Ini()
 * @fn         bool DIOSTM32GPIO::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 * @brief      Set mode
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  entry : 
-* @param[in]  mode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
+* @param[in]  mode : Mode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32GPIO::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 {
   if(!entry) return false;
@@ -169,12 +169,12 @@ bool DIOSTM32GPIO::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 * @fn         bool DIOSTM32GPIO::GetValue(DIOGPIO_ENTRY* entry)
 * @brief      Get value
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  entry : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32GPIO::GetValue(DIOGPIO_ENTRY* entry)
 {   
   if(!entry) return false;
@@ -209,13 +209,13 @@ bool DIOSTM32GPIO::GetValue(DIOGPIO_ENTRY* entry)
 * @fn         bool DIOSTM32GPIO::SetValue(DIOGPIO_ENTRY* entry, bool value)
 * @brief      Set value
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  entry : 
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
+* @param[in]  value : Value value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32GPIO::SetValue(DIOGPIO_ENTRY* entry, bool value)
 {
   if(!entry) return false;
@@ -246,13 +246,13 @@ bool DIOSTM32GPIO::SetValue(DIOGPIO_ENTRY* entry, bool value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32GPIO::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32GPIO::End()
 {
@@ -262,12 +262,12 @@ bool DIOSTM32GPIO::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32GPIO::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32GPIO::Clean()
 {

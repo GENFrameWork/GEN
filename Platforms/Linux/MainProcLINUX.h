@@ -66,6 +66,8 @@ class MAINPROCLINUX : public MAINPROC
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
+extern MAINPROCLINUX                mainproclinux;
+
 
 
 

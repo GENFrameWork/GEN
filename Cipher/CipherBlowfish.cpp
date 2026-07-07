@@ -59,6 +59,19 @@
                                         | ( (XDWORD) (b)[(i) + 3]       );             \
                               }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         #define PUT_UINT32_BE(n,b,i)
+* @brief      PUT UINT32 BE
+* @ingroup    CIPHER
+* 
+* @param[in]  n : N value.
+* @param[in]  b : B value.
+* @param[in]  i : I value.
+* 
+* @return     #define : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 #define PUT_UINT32_BE(n,b,i)  {  (b)[(i)    ] = (XBYTE) ( (n) >> 24 );                 \
                                  (b)[(i) + 1] = (XBYTE) ( (n) >> 16 );                 \
                                  (b)[(i) + 2] = (XBYTE) ( (n) >>  8 );                 \
@@ -340,7 +353,7 @@ XDWORD CIPHERBLOWFISH::S[4][256]                     =  { { 0xD1310BA6L, 0x98DFB
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERBLOWFISH::CIPHERBLOWFISH()
+* @fn         CIPHERBLOWFISH::CIPHERBLOWFISH() : CIPHER()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -374,10 +387,10 @@ CIPHERBLOWFISH::~CIPHERBLOWFISH()
 * @brief      Cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERBLOWFISH::Cipher(XBYTE* input,XDWORD size)
@@ -441,10 +454,10 @@ bool CIPHERBLOWFISH::Cipher(XBYTE* input,XDWORD size)
 * @brief      Uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERBLOWFISH::Uncipher(XBYTE* input,XDWORD size)
@@ -503,10 +516,10 @@ bool CIPHERBLOWFISH::Uncipher(XBYTE* input,XDWORD size)
 * @brief      F
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  x : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  x : X coordinate.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERBLOWFISH::F(CIPHERBLOWFISH_CONTEXT* ctx, XDWORD x)
@@ -538,9 +551,9 @@ XDWORD CIPHERBLOWFISH::F(CIPHERBLOWFISH_CONTEXT* ctx, XDWORD x)
 * @brief      Blowfish cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  xl : 
-* @param[in]  xr : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  xl : Xl pointer to use.
+* @param[in]  xr : Xr pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERBLOWFISH::BlowfishCipher(CIPHERBLOWFISH_CONTEXT* ctx, XDWORD* xl, XDWORD* xr)
@@ -581,9 +594,9 @@ void CIPHERBLOWFISH::BlowfishCipher(CIPHERBLOWFISH_CONTEXT* ctx, XDWORD* xl, XDW
 * @brief      Blowfish uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  xl : 
-* @param[in]  xr : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  xl : Xl pointer to use.
+* @param[in]  xr : Xr pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERBLOWFISH::BlowfishUncipher(CIPHERBLOWFISH_CONTEXT* ctx, XDWORD* xl, XDWORD* xr)
@@ -624,11 +637,11 @@ void CIPHERBLOWFISH::BlowfishUncipher(CIPHERBLOWFISH_CONTEXT* ctx, XDWORD* xl, X
 * @brief      Blowfish set key
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  key : 
-* @param[in]  keysize : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  key : Key pointer to use.
+* @param[in]  keysize : Keysize value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERBLOWFISH::BlowfishSetKey(CIPHERBLOWFISH_CONTEXT* ctx, XBYTE* key, XDWORD keysize)
@@ -694,12 +707,12 @@ bool CIPHERBLOWFISH::BlowfishSetKey(CIPHERBLOWFISH_CONTEXT* ctx, XBYTE* key, XDW
 * @brief      Blowfish cipher ECB
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  input[CIPHERBLOWFISH_BLOCKSIZE] : 
-* @param[in]  output[CIPHERBLOWFISH_BLOCKSIZE] : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  input : Input value.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERBLOWFISH::BlowfishCipher_ECB(CIPHERBLOWFISH_CONTEXT* ctx, int mode, XBYTE input[CIPHERBLOWFISH_BLOCKSIZE], XBYTE output[CIPHERBLOWFISH_BLOCKSIZE])
@@ -732,14 +745,14 @@ bool CIPHERBLOWFISH::BlowfishCipher_ECB(CIPHERBLOWFISH_CONTEXT* ctx, int mode, X
 * @brief      Blowfish cipher CBC
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  size : 
-* @param[in]  iv[CIPHERBLOWFISH_BLOCKSIZE] : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  size : Size value.
+* @param[in]  iv : Iv value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERBLOWFISH::BlowfishCipher_CBC(CIPHERBLOWFISH_CONTEXT* ctx, int mode, XDWORD size, XBYTE iv[CIPHERBLOWFISH_BLOCKSIZE], XBYTE* input, XBYTE* output)
@@ -797,15 +810,15 @@ bool CIPHERBLOWFISH::BlowfishCipher_CBC(CIPHERBLOWFISH_CONTEXT* ctx, int mode, X
 * @brief      Blowfish cipher CFB64
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  mode : 
-* @param[in]  size : 
-* @param[in]  iv_off : 
-* @param[in]  iv[CIPHERBLOWFISH_BLOCKSIZE] : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  mode : Mode value.
+* @param[in]  size : Size value.
+* @param[in]  iv_off : Iv off pointer to use.
+* @param[in]  iv : Iv value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERBLOWFISH::BlowfishCipher_CFB64(CIPHERBLOWFISH_CONTEXT* ctx, int mode, XDWORD size, int* iv_off, XBYTE iv[CIPHERBLOWFISH_BLOCKSIZE], XBYTE* input, XBYTE* output)
@@ -850,15 +863,15 @@ bool CIPHERBLOWFISH::BlowfishCipher_CFB64(CIPHERBLOWFISH_CONTEXT* ctx, int mode,
 * @brief      Blowfish cipher CTR
 * @ingroup    CIPHER
 * 
-* @param[in]  ctx : 
-* @param[in]  size : 
-* @param[in]  nc_off : 
-* @param[in]  nonce_counter[CIPHERBLOWFISH_BLOCKSIZE] : 
-* @param[in]  stream_block[CIPHERBLOWFISH_BLOCKSIZE] : 
-* @param[in]  input : 
-* @param[in]  output : 
+* @param[in]  ctx : Ctx pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  nc_off : Nc off pointer to use.
+* @param[in]  nonce_counter : Nonce counter value.
+* @param[in]  stream_block : Stream block value.
+* @param[in]  input : Input pointer to use.
+* @param[in]  output : Output output.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERBLOWFISH::BlowfishCipher_CTR(CIPHERBLOWFISH_CONTEXT* ctx, XDWORD size, int* nc_off, XBYTE nonce_counter[CIPHERBLOWFISH_BLOCKSIZE], XBYTE stream_block[CIPHERBLOWFISH_BLOCKSIZE], XBYTE* input, XBYTE* output)

@@ -75,7 +75,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSSTREAMBLUETOOTH::DIOWINDOWSSTREAMBLUETOOTH()
+* @fn         DIOWINDOWSSTREAMBLUETOOTH::DIOWINDOWSSTREAMBLUETOOTH() : DIOSTREAMBLUETOOTH() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -148,7 +148,7 @@ DIOWINDOWSSTREAMBLUETOOTH::~DIOWINDOWSSTREAMBLUETOOTH()
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMBLUETOOTH::Open()
@@ -170,7 +170,7 @@ bool DIOWINDOWSSTREAMBLUETOOTH::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMBLUETOOTH::Disconnect()
@@ -198,7 +198,7 @@ bool DIOWINDOWSSTREAMBLUETOOTH::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMBLUETOOTH::Close()
@@ -251,9 +251,9 @@ bool DIOWINDOWSSTREAMBLUETOOTH::Close()
 * @brief      Is ready connect
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWINDOWSSTREAMBLUETOOTH::IsReadyConnect(SOCKET socket)
@@ -298,13 +298,13 @@ int DIOWINDOWSSTREAMBLUETOOTH::IsReadyConnect(SOCKET socket)
 * @brief      SDP register service
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  reg : 
-* @param[in]  service_name : 
-* @param[in]  service_dsc : 
-* @param[in]  service_prov : 
-* @param[in]  addr : 
+* @param[in]  reg : Reg value.
+* @param[in]  service_name : Service name pointer to use.
+* @param[in]  service_dsc : Service dsc pointer to use.
+* @param[in]  service_prov : Service prov pointer to use.
+* @param[in]  addr : Addr pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSSTREAMBLUETOOTH::SDP_RegisterService(bool reg, char* service_name, char* service_dsc, char* service_prov, void* addr)
@@ -371,7 +371,7 @@ void DIOWINDOWSSTREAMBLUETOOTH::Clean()
 * @brief      Thread connection
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMBLUETOOTH::ThreadConnection(void* param)

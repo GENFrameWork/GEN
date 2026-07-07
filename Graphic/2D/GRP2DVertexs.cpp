@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DVERTEX::GRP2DVERTEX()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVERTEX::GRP2DVERTEX()
 {
@@ -68,12 +68,12 @@ GRP2DVERTEX::GRP2DVERTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DVERTEX::~GRP2DVERTEX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVERTEX::~GRP2DVERTEX()
 {
@@ -82,12 +82,12 @@ GRP2DVERTEX::~GRP2DVERTEX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DVERTEX::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVERTEX::Clean()
 {
@@ -101,11 +101,11 @@ void GRP2DVERTEX::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DVERTEXS::GRP2DVERTEXS()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVERTEXS::GRP2DVERTEXS()
 {
@@ -114,12 +114,12 @@ GRP2DVERTEXS::GRP2DVERTEXS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DVERTEXS::~GRP2DVERTEXS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVERTEXS::~GRP2DVERTEXS()
 {
@@ -130,16 +130,16 @@ GRP2DVERTEXS::~GRP2DVERTEXS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DVERTEXS::Add(double x, double y)
-* @brief      Add
+* @brief      Add value
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : x pos
 * @param[in]  y : y pos
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVERTEXS::Add(double x, double y)
 {
@@ -154,13 +154,13 @@ bool GRP2DVERTEXS::Add(double x, double y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD GRP2DVERTEXS::GetSize()
 * @brief      Get size
 * @ingroup    GRAPHIC
-*
-* @return     XDWORD : number of vertex
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRP2DVERTEXS::GetSize()
 {
@@ -169,15 +169,15 @@ XDWORD GRP2DVERTEXS::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRP2DVERTEX* GRP2DVERTEXS::Get(int index)
-* @brief      Get
+* @brief      Get value
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  index : index of vertex
-*
-* @return     GRP2DVERTEX* : vertex class
-*
+* 
+* @return     GRP2DVERTEX* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVERTEX* GRP2DVERTEXS::Get(int index)
 {
@@ -186,13 +186,13 @@ GRP2DVERTEX* GRP2DVERTEXS::Get(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DVERTEXS::DeleteAll()
 * @brief      Delete all
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVERTEXS::DeleteAll()
 {
@@ -205,12 +205,12 @@ bool GRP2DVERTEXS::DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DVERTEXS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVERTEXS::Clean()
 {

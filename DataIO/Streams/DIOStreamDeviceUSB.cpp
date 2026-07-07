@@ -60,11 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB_DESCRIPTOR::DIOSTREAMDEVICEUSB_DESCRIPTOR()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB_DESCRIPTOR::DIOSTREAMDEVICEUSB_DESCRIPTOR()
 {
@@ -73,12 +73,12 @@ DIOSTREAMDEVICEUSB_DESCRIPTOR::DIOSTREAMDEVICEUSB_DESCRIPTOR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB_DESCRIPTOR::~DIOSTREAMDEVICEUSB_DESCRIPTOR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB_DESCRIPTOR::~DIOSTREAMDEVICEUSB_DESCRIPTOR()
 {
@@ -87,13 +87,13 @@ DIOSTREAMDEVICEUSB_DESCRIPTOR::~DIOSTREAMDEVICEUSB_DESCRIPTOR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetBCDUSB()
 * @brief      Get BCDUSB
 * @ingroup    DATAIO
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetBCDUSB()
 {
@@ -102,13 +102,13 @@ XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetBCDUSB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetBCDUSB(XWORD BCDUSB)
 * @brief      Set BCDUSB
 * @ingroup    DATAIO
-*
-* @param[in]  BCDUSB :
-*
+* 
+* @param[in]  BCDUSB : BCDUSB value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetBCDUSB(XWORD BCDUSB)
 {
@@ -117,13 +117,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetBCDUSB(XWORD BCDUSB)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceClass()
 * @brief      Get device class
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceClass()
 {
@@ -132,13 +132,13 @@ XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceClass()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceClass(XBYTE deviceclass)
 * @brief      Set device class
 * @ingroup    DATAIO
-*
-* @param[in]  deviceclass :
-*
+* 
+* @param[in]  deviceclass : Deviceclass value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceClass(XBYTE deviceclass)
 {
@@ -147,13 +147,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceClass(XBYTE deviceclass)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceSubClass()
 * @brief      Get device sub class
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceSubClass()
 {
@@ -162,13 +162,13 @@ XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceSubClass()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceSubClass(XBYTE devicesubclass)
 * @brief      Set device sub class
 * @ingroup    DATAIO
-*
-* @param[in]  devicesubclass :
-*
+* 
+* @param[in]  devicesubclass : Devicesubclass value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceSubClass(XBYTE devicesubclass)
 {
@@ -177,13 +177,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceSubClass(XBYTE devicesubclass)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceProtocol()
 * @brief      Get device protocol
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceProtocol()
 {
@@ -192,13 +192,13 @@ XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetDeviceProtocol()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceProtocol(XBYTE deviceprotocol)
 * @brief      Set device protocol
 * @ingroup    DATAIO
-*
-* @param[in]  deviceprotocol :
-*
+* 
+* @param[in]  deviceprotocol : Deviceprotocol value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceProtocol(XBYTE deviceprotocol)
 {
@@ -207,13 +207,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetDeviceProtocol(XBYTE deviceprotocol)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetMaxPacketSize()
 * @brief      Get max packet size
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetMaxPacketSize()
 {
@@ -222,13 +222,13 @@ XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetMaxPacketSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetMaxPacketSize(XBYTE maxpacketsize)
 * @brief      Set max packet size
 * @ingroup    DATAIO
-*
-* @param[in]  maxpacketsize :
-*
+* 
+* @param[in]  maxpacketsize : Maxpacketsize value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetMaxPacketSize(XBYTE maxpacketsize)
 {
@@ -237,13 +237,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetMaxPacketSize(XBYTE maxpacketsize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetIDVendor()
 * @brief      Get ID vendor
 * @ingroup    DATAIO
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetIDVendor()
 {
@@ -252,13 +252,13 @@ XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetIDVendor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetIDVendor(XWORD IDvendor)
 * @brief      Set ID vendor
 * @ingroup    DATAIO
-*
-* @param[in]  IDvendor :
-*
+* 
+* @param[in]  IDvendor : I Dvendor value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetIDVendor(XWORD IDvendor)
 {
@@ -267,13 +267,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetIDVendor(XWORD IDvendor)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetIDProduct()
 * @brief      Get ID product
 * @ingroup    DATAIO
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetIDProduct()
 {
@@ -282,13 +282,13 @@ XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetIDProduct()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetIDProduct(XWORD IDproduct)
 * @brief      Set ID product
 * @ingroup    DATAIO
-*
-* @param[in]  IDproduct :
-*
+* 
+* @param[in]  IDproduct : I Dproduct value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetIDProduct(XWORD IDproduct)
 {
@@ -297,13 +297,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetIDProduct(XWORD IDproduct)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetBCDDevice()
 * @brief      Get BCD device
 * @ingroup    DATAIO
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetBCDDevice()
 {
@@ -312,13 +312,13 @@ XWORD DIOSTREAMDEVICEUSB_DESCRIPTOR::GetBCDDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetBCDDevice(XWORD BCDdevice)
 * @brief      Set BCD device
 * @ingroup    DATAIO
-*
-* @param[in]  BCDdevice :
-*
+* 
+* @param[in]  BCDdevice : BC Ddevice value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetBCDDevice(XWORD BCDdevice)
 {
@@ -327,13 +327,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetBCDDevice(XWORD BCDdevice)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetManufacturer()
 * @brief      Get manufacturer
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetManufacturer()
 {
@@ -342,13 +342,13 @@ XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetManufacturer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetManufacturer(XBYTE manufacturer)
 * @brief      Set manufacturer
 * @ingroup    DATAIO
-*
-* @param[in]  manufacturer :
-*
+* 
+* @param[in]  manufacturer : Manufacturer value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetManufacturer(XBYTE manufacturer)
 {
@@ -357,13 +357,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetManufacturer(XBYTE manufacturer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetProduct()
 * @brief      Get product
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetProduct()
 {
@@ -372,13 +372,13 @@ XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetProduct()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetProduct(XBYTE product)
 * @brief      Set product
 * @ingroup    DATAIO
-*
-* @param[in]  product :
-*
+* 
+* @param[in]  product : Product value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetProduct(XBYTE product)
 {
@@ -387,13 +387,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetProduct(XBYTE product)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetSerialNumber()
 * @brief      Get serial number
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetSerialNumber()
 {
@@ -402,13 +402,13 @@ XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetSerialNumber()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetSerialNumber(XBYTE serialnumber)
 * @brief      Set serial number
 * @ingroup    DATAIO
-*
-* @param[in]  serialnumber :
-*
+* 
+* @param[in]  serialnumber : Serialnumber value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetSerialNumber(XBYTE serialnumber)
 {
@@ -417,13 +417,13 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetSerialNumber(XBYTE serialnumber)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetNumConfigurations()
 * @brief      Get num configurations
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetNumConfigurations()
 {
@@ -432,13 +432,13 @@ XBYTE DIOSTREAMDEVICEUSB_DESCRIPTOR::GetNumConfigurations()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetNumConfigurations(XBYTE numconfigurations)
 * @brief      Set num configurations
 * @ingroup    DATAIO
-*
-* @param[in]  numconfigurations :
-*
+* 
+* @param[in]  numconfigurations : Numconfigurations value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetNumConfigurations(XBYTE numconfigurations)
 {
@@ -447,12 +447,12 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::SetNumConfigurations(XBYTE numconfigurations
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB_DESCRIPTOR::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB_DESCRIPTOR::Clean()
 {
@@ -476,11 +476,11 @@ void DIOSTREAMDEVICEUSB_DESCRIPTOR::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB::DIOSTREAMDEVICEUSB()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB::DIOSTREAMDEVICEUSB()
 {
@@ -489,12 +489,12 @@ DIOSTREAMDEVICEUSB::DIOSTREAMDEVICEUSB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB::~DIOSTREAMDEVICEUSB()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB::~DIOSTREAMDEVICEUSB()
 {
@@ -503,13 +503,13 @@ DIOSTREAMDEVICEUSB::~DIOSTREAMDEVICEUSB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEUSB::IsHUB()
 * @brief      Is HUB
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEUSB::IsHUB()
 {
@@ -518,13 +518,13 @@ bool DIOSTREAMDEVICEUSB::IsHUB()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB::SetIsHUB(bool isHUB)
 * @brief      Set is HUB
 * @ingroup    DATAIO
-*
-* @param[in]  isHUB :
-*
+* 
+* @param[in]  isHUB : Is HUB value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB::SetIsHUB(bool isHUB)
 {
@@ -533,13 +533,13 @@ void DIOSTREAMDEVICEUSB::SetIsHUB(bool isHUB)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICEUSB::GetLocation()
 * @brief      Get location
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICEUSB::GetLocation()
 {
@@ -548,13 +548,13 @@ XSTRING* DIOSTREAMDEVICEUSB::GetLocation()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICEUSB::GetParentID()
 * @brief      Get parent ID
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICEUSB::GetParentID()
 {
@@ -563,13 +563,13 @@ XSTRING* DIOSTREAMDEVICEUSB::GetParentID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOSTREAMDEVICEUSB::GetVendorID()
 * @brief      Get vendor ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMDEVICEUSB::GetVendorID()
 {
@@ -578,13 +578,13 @@ XWORD DIOSTREAMDEVICEUSB::GetVendorID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOSTREAMDEVICEUSB::SetVendorID(XDWORD vendorID)
+* 
+* @fn         void DIOSTREAMDEVICEUSB::SetVendorID(XWORD vendorID)
 * @brief      Set vendor ID
 * @ingroup    DATAIO
-*
-* @param[in]  vendorID :
-*
+* 
+* @param[in]  vendorID : Vendor ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB::SetVendorID(XWORD vendorID)
 {
@@ -593,13 +593,13 @@ void DIOSTREAMDEVICEUSB::SetVendorID(XWORD vendorID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD DIOSTREAMDEVICEUSB::GetProductID()
+* 
+* @fn         XWORD DIOSTREAMDEVICEUSB::GetProductID()
 * @brief      Get product ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMDEVICEUSB::GetProductID()
 {
@@ -608,13 +608,13 @@ XWORD DIOSTREAMDEVICEUSB::GetProductID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB::SetProductID(XWORD productID)
 * @brief      Set product ID
 * @ingroup    DATAIO
-*
-* @param[in]  productID :
-*
+* 
+* @param[in]  productID : Product ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB::SetProductID(XWORD productID)
 {
@@ -623,13 +623,13 @@ void DIOSTREAMDEVICEUSB::SetProductID(XWORD productID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSBCLASS DIOSTREAMDEVICEUSB::GetClass()
 * @brief      Get class
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMDEVICEUSBCLASS :
-*
+* 
+* @return     DIOSTREAMDEVICEUSBCLASS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSBCLASS DIOSTREAMDEVICEUSB::GetClass()
 {
@@ -638,13 +638,13 @@ DIOSTREAMDEVICEUSBCLASS DIOSTREAMDEVICEUSB::GetClass()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB::SetClass(DIOSTREAMDEVICEUSBCLASS classdev)
 * @brief      Set class
 * @ingroup    DATAIO
-*
-* @param[in]  classdev :
-*
+* 
+* @param[in]  classdev : Classdev value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB::SetClass(DIOSTREAMDEVICEUSBCLASS classdev)
 {
@@ -653,13 +653,13 @@ void DIOSTREAMDEVICEUSB::SetClass(DIOSTREAMDEVICEUSBCLASS classdev)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOSTREAMDEVICEUSB::GetSerialString()
 * @brief      Get serial string
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMDEVICEUSB::GetSerialString()
 {
@@ -668,13 +668,13 @@ XSTRING* DIOSTREAMDEVICEUSB::GetSerialString()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMDEVICEUSB_DESCRIPTOR* DIOSTREAMDEVICEUSB::GetDescriptor()
 * @brief      Get descriptor
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMDEVICEUSB_DESCRIPTOR* :
-*
+* 
+* @return     DIOSTREAMDEVICEUSB_DESCRIPTOR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMDEVICEUSB_DESCRIPTOR* DIOSTREAMDEVICEUSB::GetDescriptor()
 {
@@ -683,13 +683,13 @@ DIOSTREAMDEVICEUSB_DESCRIPTOR* DIOSTREAMDEVICEUSB::GetDescriptor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEUSB::DebugPrintInfo()
 * @brief      Debug print info
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEUSB::DebugPrintInfo()
 {
@@ -727,12 +727,12 @@ bool DIOSTREAMDEVICEUSB::DebugPrintInfo()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEUSB::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEUSB::Clean()
 {

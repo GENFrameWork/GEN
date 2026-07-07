@@ -72,7 +72,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXSTREAMSPI::DIOLINUXSTREAMSPI()
+* @fn         DIOLINUXSTREAMSPI::DIOLINUXSTREAMSPI() : DIOSTREAMSPI()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -103,7 +103,7 @@ DIOLINUXSTREAMSPI::~DIOLINUXSTREAMSPI()
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMSPI::Open()
@@ -143,7 +143,7 @@ bool DIOLINUXSTREAMSPI::Open()
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMSPI::Close()
@@ -166,11 +166,11 @@ bool DIOLINUXSTREAMSPI::Close()
 * @brief      Transfer buffer
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  bufferread : 
-* @param[in]  bufferwrite : 
-* @param[in]  size : 
+* @param[in]  bufferread : Bufferread pointer to use.
+* @param[in]  bufferwrite : Bufferwrite pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMSPI::TransferBuffer(XBYTE* bufferread, XBYTE* bufferwrite, XDWORD size)
@@ -211,7 +211,7 @@ bool DIOLINUXSTREAMSPI::TransferBuffer(XBYTE* bufferread, XBYTE* bufferwrite, XD
 * @brief      Sleep
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  count : 
+* @param[in]  count : Count value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMSPI::Sleep(int count)

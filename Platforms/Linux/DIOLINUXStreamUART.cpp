@@ -81,7 +81,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXSTREAMUART::DIOLINUXSTREAMUART()
+* @fn         DIOLINUXSTREAMUART::DIOLINUXSTREAMUART() : DIOSTREAMUART() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -140,7 +140,7 @@ DIOLINUXSTREAMUART::~DIOLINUXSTREAMUART()
 * @brief      Get status
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     DIOSTREAMSTATUS : 
+* @return     DIOSTREAMSTATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOLINUXSTREAMUART::GetStatus()
@@ -158,7 +158,7 @@ DIOSTREAMSTATUS DIOLINUXSTREAMUART::GetStatus()
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::Open()
@@ -212,9 +212,9 @@ bool DIOLINUXSTREAMUART::Open()
 * @brief      Config
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  mask : 
+* @param[in]  mask : Mask value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::Config(XWORD mask)
@@ -357,10 +357,10 @@ bool DIOLINUXSTREAMUART::Config(XWORD mask)
 * @brief      Read direct
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOLINUXSTREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
@@ -410,10 +410,10 @@ XDWORD DIOLINUXSTREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOLINUXSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
@@ -448,7 +448,7 @@ XDWORD DIOLINUXSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::Close()
@@ -472,7 +472,7 @@ bool DIOLINUXSTREAMUART::Close()
 * @brief      Get CTS
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::GetCTS()
@@ -493,7 +493,7 @@ bool DIOLINUXSTREAMUART::GetCTS()
 * @brief      Get DSR
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::GetDSR()
@@ -514,7 +514,7 @@ bool DIOLINUXSTREAMUART::GetDSR()
 * @brief      Get ring
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::GetRing()
@@ -535,7 +535,7 @@ bool DIOLINUXSTREAMUART::GetRing()
 * @brief      Get RLSD
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::GetRLSD()
@@ -552,9 +552,9 @@ bool DIOLINUXSTREAMUART::GetRLSD()
 * @brief      Set RTS
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  on : 
+* @param[in]  on : On value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::SetRTS(bool on)
@@ -579,9 +579,9 @@ bool DIOLINUXSTREAMUART::SetRTS(bool on)
 * @brief      Set DTR
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  on : 
+* @param[in]  on : On value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::SetDTR(bool on)
@@ -607,7 +607,7 @@ bool DIOLINUXSTREAMUART::SetDTR(bool on)
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMUART::CleanBuffers()
@@ -626,7 +626,7 @@ bool DIOLINUXSTREAMUART::CleanBuffers()
 * @brief      Thread connection
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMUART::ThreadConnection(void* param)

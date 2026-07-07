@@ -68,11 +68,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOLINUXGPIO::DIOLINUXGPIO()
+* 
+* @fn         DIOLINUXGPIO::DIOLINUXGPIO() : DIOGPIO()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXGPIO::DIOLINUXGPIO() : DIOGPIO()
 {
@@ -81,12 +81,12 @@ DIOLINUXGPIO::DIOLINUXGPIO() : DIOGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXGPIO::~DIOLINUXGPIO()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXGPIO::~DIOLINUXGPIO()
 {
@@ -95,13 +95,13 @@ DIOLINUXGPIO::~DIOLINUXGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOLINUXGPIO::Ini(XPATH* xpath)
-* @brief      Ini
+* 
+* @fn         bool DIOLINUXGPIO::Ini()
+* @brief      Initialize the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::Ini()
 {
@@ -114,13 +114,13 @@ bool DIOLINUXGPIO::Ini()
 * @fn         bool DIOLINUXGPIO::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 * @brief      Set mode
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  entry : 
-* @param[in]  mode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
+* @param[in]  mode : Mode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 {
   if(!entry) return false;
@@ -151,12 +151,12 @@ bool DIOLINUXGPIO::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 * @fn         bool DIOLINUXGPIO::GetValue(DIOGPIO_ENTRY* entry)
 * @brief      Get value
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  entry : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::GetValue(DIOGPIO_ENTRY* entry)
 {
 	if(!entry) return false;
@@ -175,13 +175,13 @@ bool DIOLINUXGPIO::GetValue(DIOGPIO_ENTRY* entry)
 * @fn         bool DIOLINUXGPIO::SetValue(DIOGPIO_ENTRY* entry, bool value)
 * @brief      Set value
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  entry : 
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  entry : Entry pointer to use.
+* @param[in]  value : Value value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::SetValue(DIOGPIO_ENTRY* entry, bool value)
 {
 	if(!entry) return false;
@@ -196,13 +196,13 @@ bool DIOLINUXGPIO::SetValue(DIOGPIO_ENTRY* entry, bool value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXGPIO::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::End()
 {
@@ -226,15 +226,15 @@ bool DIOLINUXGPIO::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXGPIO::GPIOExport_Add(XDWORD GPIO)
 * @brief      GPIO export add
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  GPIO : GPIO value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::GPIOExport_Add(XDWORD GPIO)
 {
@@ -248,15 +248,15 @@ bool DIOLINUXGPIO::GPIOExport_Add(XDWORD GPIO)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXGPIO::GPIOExport_IsExport(XDWORD GPIO)
 * @brief      GPIO export is export
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  GPIO : GPIO value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::GPIOExport_IsExport(XDWORD GPIO)
 {
@@ -274,13 +274,13 @@ bool DIOLINUXGPIO::GPIOExport_IsExport(XDWORD GPIO)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<XDWORD>* DIOLINUXGPIO::GPIOExport_Get()
 * @brief      GPIO export get
 * @ingroup    PLATFORM_LINUX
-*
-* @return     XVECTOR<XDWORD>* : 
-*
+* 
+* @return     XVECTOR<XDWORD>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XDWORD>* DIOLINUXGPIO::GPIOExport_Get()
 {
@@ -289,13 +289,13 @@ XVECTOR<XDWORD>* DIOLINUXGPIO::GPIOExport_Get()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXGPIO::GPIOExport_DeleteAll()
 * @brief      GPIO export GEN_DELETE all
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::GPIOExport_DeleteAll()    
 {
@@ -311,16 +311,16 @@ bool DIOLINUXGPIO::GPIOExport_DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXGPIO::GPIO_Export(XDWORD GPIO, bool isexport)
 * @brief      GPIO export
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
-* @param[in]  isexport : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  GPIO : GPIO value.
+* @param[in]  isexport : Isexport value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::GPIO_Export(XDWORD GPIO, bool isexport)
 {	
@@ -355,16 +355,16 @@ bool DIOLINUXGPIO::GPIO_Export(XDWORD GPIO, bool isexport)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXGPIO::GPIO_SetDirection(XDWORD GPIO, bool isinput)
 * @brief      GPIO set direction
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
-* @param[in]  isinput : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  GPIO : GPIO value.
+* @param[in]  isinput : Isinput value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::GPIO_SetDirection(XDWORD GPIO, bool isinput)
 {
@@ -399,15 +399,15 @@ bool DIOLINUXGPIO::GPIO_SetDirection(XDWORD GPIO, bool isinput)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXGPIO::GPIO_GetData(XDWORD GPIO)
 * @brief      GPIO get data
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  GPIO : GPIO value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::GPIO_GetData(XDWORD GPIO)
 {
@@ -441,16 +441,16 @@ bool DIOLINUXGPIO::GPIO_GetData(XDWORD GPIO)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXGPIO::GPIO_SetData(XDWORD GPIO, bool on)
 * @brief      GPIO set data
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
-* @param[in]  on : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  GPIO : GPIO value.
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIO::GPIO_SetData(XDWORD GPIO, bool on)
 {
@@ -485,12 +485,12 @@ bool DIOLINUXGPIO::GPIO_SetData(XDWORD GPIO, bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXGPIO::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXGPIO::Clean()
 {

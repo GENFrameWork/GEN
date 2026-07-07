@@ -61,13 +61,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_QUERY::DB_SQL_QUERY(DB_SQL_DATABASE* database)
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  DB_SQL_DATABASE* :
-*
+* 
+* @param[in]  database : Database pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_QUERY::DB_SQL_QUERY(DB_SQL_DATABASE* database)
 {
@@ -78,12 +78,12 @@ DB_SQL_QUERY::DB_SQL_QUERY(DB_SQL_DATABASE* database)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_QUERY::~DB_SQL_QUERY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_QUERY::~DB_SQL_QUERY()
 {
@@ -92,13 +92,13 @@ DB_SQL_QUERY::~DB_SQL_QUERY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::ClearCursor()
 * @brief      Clear cursor
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::ClearCursor()
 {
@@ -107,13 +107,13 @@ bool DB_SQL_QUERY::ClearCursor()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::IsWellConstructedQuery()
 * @brief      Is well constructed query
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::IsWellConstructedQuery()
 {
@@ -122,13 +122,13 @@ bool DB_SQL_QUERY::IsWellConstructedQuery()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_RESULT* DB_SQL_QUERY::GetResult()
 * @brief      Get result
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_RESULT* :
-*
+* 
+* @return     DB_SQL_RESULT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_RESULT* DB_SQL_QUERY::GetResult()
 {
@@ -137,13 +137,13 @@ DB_SQL_RESULT* DB_SQL_QUERY::GetResult()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_STRING* DB_SQL_QUERY::GetValue()
 * @brief      Get value
 * @ingroup    DATABASE
-*
-* @return     DB_SQL_STRING* :
-*
+* 
+* @return     DB_SQL_STRING* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_STRING* DB_SQL_QUERY::GetValue()
 {
@@ -152,15 +152,15 @@ DB_SQL_STRING* DB_SQL_QUERY::GetValue()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::Set(XCHAR* query)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATABASE
-*
-* @param[in]  query :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  query : Query pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Set(XCHAR* query)
 {
@@ -174,13 +174,13 @@ bool DB_SQL_QUERY::Set(XCHAR* query)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::UnbindAll()
 * @brief      Unbind all
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::UnbindAll()
 {
@@ -189,16 +189,16 @@ bool DB_SQL_QUERY::UnbindAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::Bind(XDWORD ID, DB_SQL_VARIANT* variant)
 * @brief      Bind
 * @ingroup    DATABASE
-*
-* @param[in]  ID :
-* @param[in]  variant :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  variant : Variant pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, DB_SQL_VARIANT* variant)
 {
@@ -207,16 +207,16 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, DB_SQL_VARIANT* variant)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::Bind(XDWORD ID, int integer)
 * @brief      Bind
 * @ingroup    DATABASE
-*
-* @param[in]  ID :
-* @param[in]  integer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  integer : Integer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, int integer)
 {
@@ -230,16 +230,16 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, int integer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::Bind(XDWORD ID, XCHAR* string)
 * @brief      Bind
 * @ingroup    DATABASE
-*
-* @param[in]  ID :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, XCHAR* string)
 {
@@ -253,16 +253,16 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::Bind(XDWORD ID, float decimal)
 * @brief      Bind
 * @ingroup    DATABASE
-*
-* @param[in]  ID :
-* @param[in]  decimal :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  decimal : Decimal value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, float decimal)
 {
@@ -276,16 +276,16 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, float decimal)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::Bind(XDWORD ID, char* string)
 * @brief      Bind
 * @ingroup    DATABASE
-*
-* @param[in]  ID :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD ID, char* string)
 {
@@ -299,16 +299,16 @@ bool DB_SQL_QUERY::Bind(XDWORD ID, char* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::Bind(XDWORD id, XDATETIME& datetime)
 * @brief      Bind
 * @ingroup    DATABASE
-*
-* @param[in]  id :
-* @param[in]  datetime :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  id : Identifier to use.
+* @param[in]  datetime : Datetime value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::Bind(XDWORD id, XDATETIME& datetime)
 {
@@ -322,11 +322,11 @@ bool DB_SQL_QUERY::Bind(XDWORD id, XDATETIME& datetime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DB_SQL_QUERY::ClearBuffers()
 * @brief      Clear buffers
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_QUERY::ClearBuffers()
 {
@@ -341,15 +341,15 @@ void DB_SQL_QUERY::ClearBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DB_SQL_QUERY::UseCursor(XCHAR* cursorname)
 * @brief      Use cursor
 * @ingroup    DATABASE
-*
-* @param[in]  cursorname :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  cursorname : Cursorname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DB_SQL_QUERY::UseCursor(XCHAR* cursorname)
 {
@@ -362,12 +362,12 @@ bool DB_SQL_QUERY::UseCursor(XCHAR* cursorname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DB_SQL_QUERY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_QUERY::Clean()
 {

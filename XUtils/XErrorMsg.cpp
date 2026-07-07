@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORMSG::XERRORMSG()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORMSG::XERRORMSG()
 {
@@ -68,15 +68,15 @@ XERRORMSG::XERRORMSG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORMSG::XERRORMSG(int code, XCHAR* title, XCHAR* msg)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-* @param[in]  title :
-* @param[in]  msg :
-*
+* 
+* @param[in]  code : Code value.
+* @param[in]  title : Title text.
+* @param[in]  msg : Msg pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORMSG::XERRORMSG(int code, XCHAR* title, XCHAR* msg)
 {
@@ -87,12 +87,12 @@ XERRORMSG::XERRORMSG(int code, XCHAR* title, XCHAR* msg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORMSG::~XERRORMSG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORMSG::~XERRORMSG()
 {
@@ -101,13 +101,13 @@ XERRORMSG::~XERRORMSG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORMSG* XERRORMSG::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    XUTILS
-*
-* @return     XERRORMSG* :
-*
+* 
+* @return     XERRORMSG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORMSG* XERRORMSG::Get()
 {
@@ -116,17 +116,17 @@ XERRORMSG* XERRORMSG::Get()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XERRORMSG::Set(int code,XCHAR* title,XCHAR* msg)
-* @brief      Set
+* 
+* @fn         bool XERRORMSG::Set(int code, XCHAR* title, XCHAR* msg)
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-* @param[in]  title :
-* @param[in]  msg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* @param[in]  title : Title text.
+* @param[in]  msg : Msg pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::Set(int code, XCHAR* title, XCHAR* msg)
 {
@@ -139,20 +139,20 @@ bool XERRORMSG::Set(int code, XCHAR* title, XCHAR* msg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::Set(int code, int level, int image, int sound, XCHAR* title, XCHAR* msg)
-* @brief      Set
+* @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-* @param[in]  level :
-* @param[in]  image :
-* @param[in]  sound :
-* @param[in]  title :
-* @param[in]  msg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* @param[in]  level : Level value.
+* @param[in]  image : Image value.
+* @param[in]  sound : Sound value.
+* @param[in]  title : Title text.
+* @param[in]  msg : Msg pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::Set(int code, int level, int image, int sound, XCHAR* title, XCHAR* msg)
 {
@@ -168,13 +168,13 @@ bool XERRORMSG::Set(int code, int level, int image, int sound, XCHAR* title, XCH
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XERRORMSG::GetCode()
 * @brief      Get code
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XERRORMSG::GetCode()
 {
@@ -183,15 +183,15 @@ int XERRORMSG::GetCode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::SetCode(int code)
 * @brief      Set code
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::SetCode(int code)
 {
@@ -202,13 +202,13 @@ bool XERRORMSG::SetCode(int code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XERRORMSG::GetLevel()
 * @brief      Get level
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XERRORMSG::GetLevel()
 {
@@ -217,15 +217,15 @@ int XERRORMSG::GetLevel()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::SetLevel(int level)
 * @brief      Set level
 * @ingroup    XUTILS
-*
-* @param[in]  level :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  level : Level value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::SetLevel(int level)
 {
@@ -236,13 +236,13 @@ bool XERRORMSG::SetLevel(int level)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XERRORMSG::GetImage()
 * @brief      Get image
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XERRORMSG::GetImage()
 {
@@ -251,15 +251,15 @@ int XERRORMSG::GetImage()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::SetImage(int image)
 * @brief      Set image
 * @ingroup    XUTILS
-*
-* @param[in]  image :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  image : Image value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::SetImage(int image)
 {
@@ -270,13 +270,13 @@ bool XERRORMSG::SetImage(int image)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XERRORMSG::GetSound()
 * @brief      Get sound
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XERRORMSG::GetSound()
 {
@@ -285,15 +285,15 @@ int XERRORMSG::GetSound()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::SetSound(int sound)
 * @brief      Set sound
 * @ingroup    XUTILS
-*
-* @param[in]  sound :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  sound : Sound value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::SetSound(int sound)
 {
@@ -304,13 +304,13 @@ bool XERRORMSG::SetSound(int sound)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XERRORMSG::GetTitle()
 * @brief      Get title
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XERRORMSG::GetTitle()
 {
@@ -319,15 +319,15 @@ XSTRING* XERRORMSG::GetTitle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::SetTitle(XCHAR* title)
 * @brief      Set title
 * @ingroup    XUTILS
-*
-* @param[in]  title :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  title : Title text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::SetTitle(XCHAR* title)
 {
@@ -340,15 +340,15 @@ bool XERRORMSG::SetTitle(XCHAR* title)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::SetTitle(XSTRING& title)
 * @brief      Set title
 * @ingroup    XUTILS
-*
-* @param[in]  title :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  title : Title text.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::SetTitle(XSTRING& title)
 {
@@ -357,13 +357,13 @@ bool XERRORMSG::SetTitle(XSTRING& title)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XERRORMSG::GetMsg()
 * @brief      Get msg
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XERRORMSG::GetMsg()
 {
@@ -372,15 +372,15 @@ XSTRING* XERRORMSG::GetMsg()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::SetMsg(XCHAR* msg)
 * @brief      Set msg
 * @ingroup    XUTILS
-*
-* @param[in]  msg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  msg : Msg pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::SetMsg(XCHAR* msg)
 {
@@ -393,15 +393,15 @@ bool XERRORMSG::SetMsg(XCHAR* msg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::SetMsg(XSTRING& msg)
 * @brief      Set msg
 * @ingroup    XUTILS
-*
-* @param[in]  msg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  msg : Msg value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::SetMsg(XSTRING& msg)
 {
@@ -410,14 +410,14 @@ bool XERRORMSG::SetMsg(XSTRING& msg)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORMSG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORMSG::Clean()
 {
@@ -438,11 +438,11 @@ bool XERRORMSG::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORSMSG::XERRORSMSG()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORSMSG::XERRORSMSG()
 {
@@ -451,14 +451,14 @@ XERRORSMSG::XERRORSMSG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORSMSG::XERRORSMSG(XCHAR* titleapp, XCHAR* version)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  titleapp :
-* @param[in]  version :
-*
+* 
+* @param[in]  titleapp : Titleapp pointer to use.
+* @param[in]  version : Version pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORSMSG::XERRORSMSG(XCHAR* titleapp, XCHAR* version)
 {
@@ -470,12 +470,12 @@ XERRORSMSG::XERRORSMSG(XCHAR* titleapp, XCHAR* version)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORSMSG::~XERRORSMSG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORSMSG::~XERRORSMSG()
 {
@@ -486,13 +486,13 @@ XERRORSMSG::~XERRORSMSG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XERRORSMSG::GetTitleApplication()
 * @brief      Get title application
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XERRORSMSG::GetTitleApplication()
 {
@@ -501,13 +501,13 @@ XSTRING* XERRORSMSG::GetTitleApplication()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XERRORSMSG::GetVersion()
 * @brief      Get version
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XERRORSMSG::GetVersion()
 {
@@ -516,15 +516,15 @@ XSTRING* XERRORSMSG::GetVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORSMSG::SetTitleApplication(XCHAR* titleapp)
 * @brief      Set title application
 * @ingroup    XUTILS
-*
-* @param[in]  titleapp :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  titleapp : Titleapp pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORSMSG::SetTitleApplication(XCHAR* titleapp)
 {
@@ -537,15 +537,15 @@ bool XERRORSMSG::SetTitleApplication(XCHAR* titleapp)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORSMSG::SetTitleApplication(XSTRING& titleapp)
 * @brief      Set title application
 * @ingroup    XUTILS
-*
-* @param[in]  titleapp :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  titleapp : Titleapp value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORSMSG::SetTitleApplication(XSTRING& titleapp)
 {
@@ -554,15 +554,15 @@ bool XERRORSMSG::SetTitleApplication(XSTRING& titleapp)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORSMSG::SetVersion(XCHAR* version)
 * @brief      Set version
 * @ingroup    XUTILS
-*
-* @param[in]  version :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  version : Version pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORSMSG::SetVersion(XCHAR* version)
 {
@@ -575,15 +575,15 @@ bool XERRORSMSG::SetVersion(XCHAR* version)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORSMSG::SetVersion(XSTRING& version)
 * @brief      Set version
 * @ingroup    XUTILS
-*
-* @param[in]  version :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  version : Version value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORSMSG::SetVersion(XSTRING& version)
 {
@@ -592,15 +592,15 @@ bool XERRORSMSG::SetVersion(XSTRING& version)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORMSG* XERRORSMSG::FindMsg(int code)
 * @brief      Find msg
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-*
-* @return     XERRORMSG* :
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     XERRORMSG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORMSG* XERRORSMSG::FindMsg(int code)
 {
@@ -618,20 +618,20 @@ XERRORMSG* XERRORSMSG::FindMsg(int code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORSMSG::AddMsg(int code, int level, int image, int sound, XCHAR* title, XCHAR* msg)
 * @brief      Add msg
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-* @param[in]  level :
-* @param[in]  image :
-* @param[in]  sound :
-* @param[in]  title :
-* @param[in]  msg :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* @param[in]  level : Level value.
+* @param[in]  image : Image value.
+* @param[in]  sound : Sound value.
+* @param[in]  title : Title text.
+* @param[in]  msg : Msg pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORSMSG::AddMsg(int code, int level, int image, int sound, XCHAR* title, XCHAR* msg)
 {
@@ -653,15 +653,15 @@ bool XERRORSMSG::AddMsg(int code, int level, int image, int sound, XCHAR* title,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORSMSG::EraseMsg(int code)
 * @brief      Erase msg
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORSMSG::EraseMsg(int code)
 {
@@ -689,13 +689,13 @@ bool XERRORSMSG::EraseMsg(int code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORSMSG::EraseAllMsg()
 * @brief      Erase all msg
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORSMSG::EraseAllMsg()
 {
@@ -710,19 +710,19 @@ bool XERRORSMSG::EraseAllMsg()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XERRORMSG_RETURN XERRORSMSG::ShowMsg(int code,bool statusline,XBYTE returns,XCHAR* addstr,bool sound)
 * @brief      Show msg
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-* @param[in]  statusline :
-* @param[in]  returns :
-* @param[in]  addstr :
-* @param[in]  sound :
-*
-* @return     XERRORMSG_RETURN :
-*
+* 
+* @param[in]  code : Code value.
+* @param[in]  statusline : Statusline value.
+* @param[in]  returns : Returns value.
+* @param[in]  addstr : Addstr pointer to use.
+* @param[in]  sound : Sound value.
+* 
+* @return     XERRORMSG_RETURN : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XERRORMSG_RETURN XERRORSMSG::ShowMsg(int code,bool statusline,XBYTE returns,XCHAR* addstr,bool sound)
 {
@@ -731,14 +731,14 @@ XERRORMSG_RETURN XERRORSMSG::ShowMsg(int code,bool statusline,XBYTE returns,XCHA
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XERRORSMSG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XERRORSMSG::Clean()
 {

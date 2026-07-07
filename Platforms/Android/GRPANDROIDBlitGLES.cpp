@@ -8,6 +8,22 @@
 * @ingroup    PLATFORM_ANDROID
 *
 * @copyright  EndoraSoft. All rights reserved.
+* 
+* @cond
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+* documentation files(the "Software"), to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
+* and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+* the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+* THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* @endcond
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
@@ -35,14 +51,24 @@
 
 
 GRPANDROIDBLITGLES::GRPANDROIDBLITGLES()  : GRPBLITGLES() { }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPANDROIDBLITGLES::~GRPANDROIDBLITGLES()
+* @brief      Destructor of class
+* @ingroup    PLATFORM_ANDROID
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPANDROIDBLITGLES::~GRPANDROIDBLITGLES()                 { }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         EGLNativeDisplayType GRPANDROIDBLITGLES::GetNativeDisplay()
+* @brief      Get native display
 * @ingroup    PLATFORM_ANDROID
-*
+* 
+* @return     EGLNativeDisplayType : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 EGLNativeDisplayType GRPANDROIDBLITGLES::GetNativeDisplay()
 {
@@ -51,10 +77,13 @@ EGLNativeDisplayType GRPANDROIDBLITGLES::GetNativeDisplay()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         EGLNativeWindowType GRPANDROIDBLITGLES::GetNativeWindow()
+* @brief      Get native window
 * @ingroup    PLATFORM_ANDROID
-*
+* 
+* @return     EGLNativeWindowType : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 EGLNativeWindowType GRPANDROIDBLITGLES::GetNativeWindow()
 {
@@ -65,12 +94,16 @@ EGLNativeWindowType GRPANDROIDBLITGLES::GetNativeWindow()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPANDROIDBLITGLES::GetNativeWindowSize(int&, int&)
-* @brief      Report the CURRENT ANativeWindow size. Used by the base blitter to detect a
-*             rotation/resize and recreate the EGL surface accordingly.
+* 
+* @fn         bool GRPANDROIDBLITGLES::GetNativeWindowSize(int& width, int& height)
+* @brief      Report the CURRENT ANativeWindow size. Used by the base blitter to detect a rotation/resize and recreate the EGL surface accordingly.
 * @ingroup    PLATFORM_ANDROID
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDBLITGLES::GetNativeWindowSize(int& width, int& height)
 {
@@ -87,13 +120,15 @@ bool GRPANDROIDBLITGLES::GetNativeWindowSize(int& width, int& height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPANDROIDBLITGLES::PostCreateHook(EGLint)
-* @brief      On Android the ANativeWindow buffer geometry MUST be reconfigured to the
-*             native visual id selected by EGL before the surface is used. Otherwise the
-*             driver may either fail or silently mismatch the format.
+* 
+* @fn         bool GRPANDROIDBLITGLES::PostCreateHook(EGLint native_visual_id)
+* @brief      On Android the ANativeWindow buffer geometry MUST be reconfigured to the native visual id selected by EGL before the surface is used. Otherwise the driver may either fail or silently mismatch the format.
 * @ingroup    PLATFORM_ANDROID
-*
+* 
+* @param[in]  native_visual_id : Native visual identifier.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPANDROIDBLITGLES::PostCreateHook(EGLint native_visual_id)
 {

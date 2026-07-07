@@ -54,13 +54,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         APPFLOWCHECKRESOURCESHARDWARE_XEVENT::APPFLOWCHECKRESOURCESHARDWARE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* @fn         APPFLOWCHECKRESOURCESHARDWARE_XEVENT::APPFLOWCHECKRESOURCESHARDWARE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    APPFLOW
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCHECKRESOURCESHARDWARE_XEVENT::APPFLOWCHECKRESOURCESHARDWARE_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
@@ -84,16 +84,16 @@ APPFLOWCHECKRESOURCESHARDWARE_XEVENT::~APPFLOWCHECKRESOURCESHARDWARE_XEVENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWCHECKRESOURCESHARDWARE_XEVENT::GetActualMemFree(XDWORD& memfree_inbytes, XBYTE& memfree_percent)
 * @brief      Get actual mem free
 * @ingroup    APPFLOW
-*
-* @param[in]  memfree_inbytes : 
-* @param[in]  memfree_percent : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  memfree_inbytes : Memfree inbytes value.
+* @param[in]  memfree_percent : Memfree percent value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCHECKRESOURCESHARDWARE_XEVENT::GetActualMemFree(XDWORD& memfree_inbytes, XBYTE& memfree_percent)
 {
@@ -105,14 +105,14 @@ bool APPFLOWCHECKRESOURCESHARDWARE_XEVENT::GetActualMemFree(XDWORD& memfree_inby
     
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWCHECKRESOURCESHARDWARE_XEVENT::SetActualMemFree(XDWORD memfree_inbytes, XBYTE memfree_percent)
 * @brief      Set actual mem free
 * @ingroup    APPFLOW
-*
-* @param[in]  memfree_inbytes : 
-* @param[in]  memfree_percent : 
-*
+* 
+* @param[in]  memfree_inbytes : Memfree inbytes value.
+* @param[in]  memfree_percent : Memfree percent value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWCHECKRESOURCESHARDWARE_XEVENT::SetActualMemFree(XDWORD memfree_inbytes, XBYTE memfree_percent)
 {
@@ -127,7 +127,7 @@ void APPFLOWCHECKRESOURCESHARDWARE_XEVENT::SetActualMemFree(XDWORD memfree_inbyt
 * @brief      Get actual total CPU usage
 * @ingroup    APPFLOW
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCHECKRESOURCESHARDWARE_XEVENT::GetActualTotalCPUUsage()
@@ -142,7 +142,7 @@ int APPFLOWCHECKRESOURCESHARDWARE_XEVENT::GetActualTotalCPUUsage()
 * @brief      set actual total CPUusage
 * @ingroup    APPFLOW
 * 
-* @param[in]  CPUusage : 
+* @param[in]  CPUusage : CP Uusage value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWCHECKRESOURCESHARDWARE_XEVENT::SetActualTotalCPUUsage(int& CPUusage)
@@ -157,7 +157,7 @@ void APPFLOWCHECKRESOURCESHARDWARE_XEVENT::SetActualTotalCPUUsage(int& CPUusage)
 * @brief      Get actual app CPU usage
 * @ingroup    APPFLOW
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int APPFLOWCHECKRESOURCESHARDWARE_XEVENT::GetActualAppCPUUsage()
@@ -172,7 +172,7 @@ int APPFLOWCHECKRESOURCESHARDWARE_XEVENT::GetActualAppCPUUsage()
 * @brief      set actual app CPUusage
 * @ingroup    APPFLOW
 * 
-* @param[in]  CPUusage : 
+* @param[in]  CPUusage : CP Uusage value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWCHECKRESOURCESHARDWARE_XEVENT::SetActualAppCPUUsage(int& CPUusage)

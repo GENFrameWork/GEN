@@ -71,9 +71,9 @@ GRPVECTORFILEDXFENTITYDEFPOINT::GRPVECTORFILEDXFENTITYDEFPOINT()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  xpoint : 
-* @param[in]  ypoint : 
-* @param[in]  zpoint : 
+* @param[in]  xpoint : Xpoint value.
+* @param[in]  ypoint : Ypoint value.
+* @param[in]  zpoint : Zpoint value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT::GRPVECTORFILEDXFENTITYDEFPOINT(double xpoint, double ypoint, double zpoint)
@@ -92,7 +92,7 @@ GRPVECTORFILEDXFENTITYDEFPOINT::GRPVECTORFILEDXFENTITYDEFPOINT(double xpoint, do
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFENTITYDEFPOINT::GRPVECTORFILEDXFENTITYDEFPOINT(GRPVECTORFILEDXFENTITYDEFPOINT* point)
@@ -120,10 +120,12 @@ GRPVECTORFILEDXFENTITYDEFPOINT::~GRPVECTORFILEDXFENTITYDEFPOINT()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILEDXFENTITYDEFPOINT::operator = (GRPVECTORFILEDXFENTITYDEFPOINT* point)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point pointer to use.
+* 
+* @return     void GRPVECTORFILEDXFENTITYDEFPOINT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFPOINT::operator =  (GRPVECTORFILEDXFENTITYDEFPOINT* point)
@@ -135,10 +137,12 @@ void GRPVECTORFILEDXFENTITYDEFPOINT::operator =  (GRPVECTORFILEDXFENTITYDEFPOINT
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILEDXFENTITYDEFPOINT::operator = (GRPVECTORFILEDXFENTITYDEFPOINT point)
-* @brief      operator = 
+* @brief      operator =
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point value.
+* 
+* @return     void GRPVECTORFILEDXFENTITYDEFPOINT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFPOINT::operator =  (GRPVECTORFILEDXFENTITYDEFPOINT point)
@@ -153,7 +157,7 @@ void GRPVECTORFILEDXFENTITYDEFPOINT::operator =  (GRPVECTORFILEDXFENTITYDEFPOINT
 * @brief      Get x
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYDEFPOINT::GetX() 
@@ -168,7 +172,7 @@ double GRPVECTORFILEDXFENTITYDEFPOINT::GetX()
 * @brief      Set x
 * @ingroup    GRAPHIC
 * 
-* @param[in]  xpoint : 
+* @param[in]  xpoint : Xpoint value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFPOINT::SetX(double xpoint) 
@@ -183,7 +187,7 @@ void GRPVECTORFILEDXFENTITYDEFPOINT::SetX(double xpoint)
 * @brief      Get y
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYDEFPOINT::GetY() 
@@ -198,7 +202,7 @@ double GRPVECTORFILEDXFENTITYDEFPOINT::GetY()
 * @brief      Set y
 * @ingroup    GRAPHIC
 * 
-* @param[in]  ypoint : 
+* @param[in]  ypoint : Ypoint value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFPOINT::SetY(double ypoint) 
@@ -213,7 +217,7 @@ void GRPVECTORFILEDXFENTITYDEFPOINT::SetY(double ypoint)
 * @brief      Get z
 * @ingroup    GRAPHIC
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILEDXFENTITYDEFPOINT::GetZ() 
@@ -228,7 +232,7 @@ double GRPVECTORFILEDXFENTITYDEFPOINT::GetZ()
 * @brief      Set z
 * @ingroup    GRAPHIC
 * 
-* @param[in]  zpoint : 
+* @param[in]  zpoint : Zpoint value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFPOINT::SetZ(double zpoint) 
@@ -243,9 +247,9 @@ void GRPVECTORFILEDXFENTITYDEFPOINT::SetZ(double zpoint)
 * @brief      Copy to
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYDEFPOINT::CopyTo(GRPVECTORFILEDXFENTITYDEFPOINT* point)
@@ -269,9 +273,9 @@ bool GRPVECTORFILEDXFENTITYDEFPOINT::CopyTo(GRPVECTORFILEDXFENTITYDEFPOINT* poin
 * @brief      Copy from
 * @ingroup    GRAPHIC
 * 
-* @param[in]  point : 
+* @param[in]  point : Point pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFENTITYDEFPOINT::CopyFrom(GRPVECTORFILEDXFENTITYDEFPOINT* point)

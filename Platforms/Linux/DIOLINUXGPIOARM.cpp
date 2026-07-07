@@ -71,11 +71,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOLINUXGPIOARM::DIOLINUXGPIOARM()
+* 
+* @fn         DIOLINUXGPIOARM::DIOLINUXGPIOARM() : DIOLINUXGPIO()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXGPIOARM::DIOLINUXGPIOARM() : DIOLINUXGPIO()
 {
@@ -84,12 +84,12 @@ DIOLINUXGPIOARM::DIOLINUXGPIOARM() : DIOLINUXGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXGPIOARM::~DIOLINUXGPIOARM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXGPIOARM::~DIOLINUXGPIOARM()
 {
@@ -98,12 +98,12 @@ DIOLINUXGPIOARM::~DIOLINUXGPIOARM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXGPIOARM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXGPIOARM::Clean()
 {

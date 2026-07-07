@@ -58,12 +58,12 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXDBUS_XEVENT::DIOLINUXDBUS_XEVENT(XSUBJECT* subject, XDWORD type)
+* @fn         DIOLINUXDBUS_XEVENT::DIOLINUXDBUS_XEVENT(XSUBJECT* subject, XDWORD type) : XEVENT(subject, type, XEVENT_TYPE_LINUX_DBUS)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  XEVENT_TYPE_LINUX_DBUS : XEVENT TYPE LINUX DBUS value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_XEVENT::DIOLINUXDBUS_XEVENT(XSUBJECT* subject, XDWORD type) : XEVENT(subject, type, XEVENT_TYPE_LINUX_DBUS)
@@ -91,10 +91,10 @@ DIOLINUXDBUS_XEVENT::~DIOLINUXDBUS_XEVENT()
 * @fn         DIOLINUXDBUS_SIGNAL* DIOLINUXDBUS_XEVENT::GetSignal()
 * @brief      Get signal
 * @ingroup    PLATFORM_LINUX
-*
-* @return     DIOLINUXDBUS_SIGNAL* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOLINUXDBUS_SIGNAL* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_SIGNAL* DIOLINUXDBUS_XEVENT::GetSignal()
 {
   return signal;
@@ -106,10 +106,10 @@ DIOLINUXDBUS_SIGNAL* DIOLINUXDBUS_XEVENT::GetSignal()
 * @fn         void DIOLINUXDBUS_XEVENT::SetSignal(DIOLINUXDBUS_SIGNAL* signal)
 * @brief      Set signal
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  signal : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  signal : Signal pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXDBUS_XEVENT::SetSignal(DIOLINUXDBUS_SIGNAL* signal)
 {
   this->signal = signal;
@@ -121,10 +121,10 @@ void DIOLINUXDBUS_XEVENT::SetSignal(DIOLINUXDBUS_SIGNAL* signal)
 * @fn         DIOLINUXDBUS_MESSAGE* DIOLINUXDBUS_XEVENT::GetMessage()
 * @brief      Get message
 * @ingroup    PLATFORM_LINUX
-*
-* @return     DIOLINUXDBUS_MESSAGE* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOLINUXDBUS_MESSAGE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_MESSAGE* DIOLINUXDBUS_XEVENT::GetMessage()
 {
   return message;
@@ -136,10 +136,10 @@ DIOLINUXDBUS_MESSAGE* DIOLINUXDBUS_XEVENT::GetMessage()
 * @fn         void DIOLINUXDBUS_XEVENT::SetMessage(DIOLINUXDBUS_MESSAGE* message)
 * @brief      Set message
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  message : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  message : Message text.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXDBUS_XEVENT::SetMessage(DIOLINUXDBUS_MESSAGE* message)
 {
   this->message = message;

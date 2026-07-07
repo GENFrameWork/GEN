@@ -50,11 +50,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTM32SYSTEM::XSTM32SYSTEM()
+* 
+* @fn         XSTM32SYSTEM::XSTM32SYSTEM() : XSYSTEM()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32SYSTEM::XSTM32SYSTEM() : XSYSTEM()
 {
@@ -64,12 +64,12 @@ XSTM32SYSTEM::XSTM32SYSTEM() : XSYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32SYSTEM::~XSTM32SYSTEM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32SYSTEM::~XSTM32SYSTEM()
 {
@@ -79,15 +79,15 @@ XSTM32SYSTEM::~XSTM32SYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSYSTEM_HARDWARETYPE XSTM32SYSTEM::GetTypeHardware(int* revision)
 * @brief      Get type hardware
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  revision :
-*
-* @return     XSYSTEM_HARDWARETYPE :
-*
+* 
+* @param[in]  revision : Revision pointer to use.
+* 
+* @return     XSYSTEM_HARDWARETYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_HARDWARETYPE XSTM32SYSTEM::GetTypeHardware(int* revision)
 {
@@ -101,12 +101,12 @@ XSYSTEM_HARDWARETYPE XSTM32SYSTEM::GetTypeHardware(int* revision)
 * @fn         XSYSTEM_PLATFORM XSTM32SYSTEM::GetPlatform(XSTRING* namestring)
 * @brief      Get platform
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  namestring : 
 * 
-* @return     XSYSTEM_PLATFORM : 
+* @param[in]  namestring : Namestring pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSYSTEM_PLATFORM : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_PLATFORM XSTM32SYSTEM::GetPlatform(XSTRING* namestring)
 {
   if(namestring)  namestring->Set(__L("STM32"));
@@ -154,16 +154,16 @@ XSYSTEM_PLATFORM XSTM32SYSTEM::GetPlatform(XSTRING* namestring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32SYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 * @brief      Get memory info
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  total :
-* @param[in]  free :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  total : Total value.
+* @param[in]  free : Free value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32SYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 {
@@ -176,15 +176,15 @@ bool XSTM32SYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32SYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 * @brief      Shut down
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  type :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32SYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 {
@@ -211,12 +211,12 @@ bool XSTM32SYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSTM32SYSTEM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSTM32SYSTEM::Clean()
 {

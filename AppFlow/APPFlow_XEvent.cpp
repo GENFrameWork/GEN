@@ -60,9 +60,9 @@
 * @brief      Constructor of class
 * @ingroup    APPFLOW
 * 
-* @param[in]  subject : 
-* @param[in]  type : 
-* @param[in]  family : 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOW_XEVENT::APPFLOW_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
@@ -91,7 +91,7 @@ APPFLOW_XEVENT::~APPFLOW_XEVENT()
 * @brief      Get change status type
 * @ingroup    APPFLOW
 * 
-* @return     XSYSTEM_CHANGESTATUSTYPE : 
+* @return     XSYSTEM_CHANGESTATUSTYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_CHANGESTATUSTYPE APPFLOW_XEVENT::GetChangeStatusType()
@@ -106,7 +106,7 @@ XSYSTEM_CHANGESTATUSTYPE APPFLOW_XEVENT::GetChangeStatusType()
 * @brief      Set change status type
 * @ingroup    APPFLOW
 * 
-* @param[in]  changestatustype : 
+* @param[in]  changestatustype : Changestatustype value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOW_XEVENT::SetChangeStatusType(XSYSTEM_CHANGESTATUSTYPE changestatustype)

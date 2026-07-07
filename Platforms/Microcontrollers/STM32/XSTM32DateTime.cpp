@@ -43,11 +43,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32DATETIME::XSTM32DATETIME()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32DATETIME::XSTM32DATETIME()
 {
@@ -57,12 +57,12 @@ XSTM32DATETIME::XSTM32DATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32DATETIME::~XSTM32DATETIME()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32DATETIME::~XSTM32DATETIME()
 {
@@ -72,13 +72,13 @@ XSTM32DATETIME::~XSTM32DATETIME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DATETIME::Read()
 * @brief      Read
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DATETIME::Read()
 {
@@ -90,13 +90,13 @@ bool XSTM32DATETIME::Read()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DATETIME::Write()
 * @brief      Write
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DATETIME::Write()
 {
@@ -108,13 +108,13 @@ bool XSTM32DATETIME::Write()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XSTM32DATETIME::GetMeridianDifference()
 * @brief      Get meridian difference
 * @ingroup    PLATFORM_STM32
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSTM32DATETIME::GetMeridianDifference()
 {
@@ -124,15 +124,15 @@ int XSTM32DATETIME::GetMeridianDifference()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32DATETIME::IsDayLigthSavingTime(int* bias)
 * @brief      Is day ligth saving time
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  bias :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  bias : Bias pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32DATETIME::IsDayLigthSavingTime(int* bias)
 {

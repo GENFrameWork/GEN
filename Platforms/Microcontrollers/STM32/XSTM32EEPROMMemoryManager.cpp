@@ -46,11 +46,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32EEPROMMEMORYMANAGER::XSTM32EEPROMMEMORYMANAGER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32EEPROMMEMORYMANAGER::XSTM32EEPROMMEMORYMANAGER()
 {
@@ -60,12 +60,12 @@ XSTM32EEPROMMEMORYMANAGER::XSTM32EEPROMMEMORYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTM32EEPROMMEMORYMANAGER::~XSTM32EEPROMMEMORYMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTM32EEPROMMEMORYMANAGER::~XSTM32EEPROMMEMORYMANAGER()
 {
@@ -75,13 +75,13 @@ XSTM32EEPROMMEMORYMANAGER::~XSTM32EEPROMMEMORYMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32EEPROMMEMORYMANAGER::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32EEPROMMEMORYMANAGER::Ini()
 {
@@ -91,13 +91,13 @@ bool XSTM32EEPROMMEMORYMANAGER::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32EEPROMMEMORYMANAGER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32EEPROMMEMORYMANAGER::End()
 {
@@ -107,17 +107,17 @@ bool XSTM32EEPROMMEMORYMANAGER::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32EEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE* data, XDWORD size)
 * @brief      Read
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  offset :
-* @param[in]  data :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32EEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE* data, XDWORD size)
 {
@@ -138,17 +138,17 @@ bool XSTM32EEPROMMEMORYMANAGER::Read(XDWORD offset, XBYTE* data, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32EEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE* data, XDWORD size)
 * @brief      Write
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  offset :
-* @param[in]  data :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32EEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE* data, XDWORD size)
 {
@@ -169,13 +169,13 @@ bool XSTM32EEPROMMEMORYMANAGER::Write(XDWORD offset, XBYTE* data, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSTM32EEPROMMEMORYMANAGER::EraseAll()
 * @brief      Erase all
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSTM32EEPROMMEMORYMANAGER::EraseAll()
 {

@@ -63,11 +63,11 @@ using namespace std;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSWMIINTERFACE_RESULT::XWINDOWSWMIINTERFACE_RESULT()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWMIINTERFACE_RESULT::XWINDOWSWMIINTERFACE_RESULT()
 {
@@ -78,12 +78,12 @@ XWINDOWSWMIINTERFACE_RESULT::XWINDOWSWMIINTERFACE_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSWMIINTERFACE_RESULT::~XWINDOWSWMIINTERFACE_RESULT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWMIINTERFACE_RESULT::~XWINDOWSWMIINTERFACE_RESULT()
 {
@@ -99,7 +99,7 @@ XWINDOWSWMIINTERFACE_RESULT::~XWINDOWSWMIINTERFACE_RESULT()
 * @brief      Get results string
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XVECTOR<XSTRING*>* : 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* XWINDOWSWMIINTERFACE_RESULT::GetResultsString()
@@ -114,7 +114,7 @@ XVECTOR<XSTRING*>* XWINDOWSWMIINTERFACE_RESULT::GetResultsString()
 * @brief      Get results variant
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XVECTOR<XVARIANT*>* : 
+* @return     XVECTOR<XVARIANT*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XVARIANT*>* XWINDOWSWMIINTERFACE_RESULT::GetResultsVariant()
@@ -142,13 +142,13 @@ void XWINDOWSWMIINTERFACE_RESULT::DeleteAllResults()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         WMIQUERYERROR XWINDOWSWMIINTERFACE_RESULT::GetError()
+* 
+* @fn         XWINDOWSWMIINTERFACE_ERROR XWINDOWSWMIINTERFACE_RESULT::GetError()
 * @brief      Get error
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     XWINDOWSWMIINTERFACE_ERROR  :
-*
+* 
+* @return     XWINDOWSWMIINTERFACE_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWMIINTERFACE_ERROR XWINDOWSWMIINTERFACE_RESULT::GetError()
 {
@@ -157,13 +157,13 @@ XWINDOWSWMIINTERFACE_ERROR XWINDOWSWMIINTERFACE_RESULT::GetError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSWMIINTERFACE_RESULT::SetError(XWINDOWSWMIINTERFACE_ERROR error)
 * @brief      Set error
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  error :
-*
+* 
+* @param[in]  error : Error value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWMIINTERFACE_RESULT::SetError(XWINDOWSWMIINTERFACE_ERROR error)
 {
@@ -172,13 +172,13 @@ void XWINDOWSWMIINTERFACE_RESULT::SetError(XWINDOWSWMIINTERFACE_ERROR error)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTRING XWINDOWSWMIINTERFACE_RESULT::GetErrorDescription()
+* 
+* @fn         XSTRING* XWINDOWSWMIINTERFACE_RESULT::GetErrorDescription()
 * @brief      Get error description
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XWINDOWSWMIINTERFACE_RESULT::GetErrorDescription()
 {
@@ -187,12 +187,12 @@ XSTRING* XWINDOWSWMIINTERFACE_RESULT::GetErrorDescription()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSWMIINTERFACE_RESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWMIINTERFACE_RESULT::Clean()
 {
@@ -205,11 +205,11 @@ void XWINDOWSWMIINTERFACE_RESULT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSWMIINTERFACE::XWINDOWSWMIINTERFACE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWMIINTERFACE::XWINDOWSWMIINTERFACE()
 {
@@ -220,12 +220,12 @@ XWINDOWSWMIINTERFACE::XWINDOWSWMIINTERFACE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSWMIINTERFACE::~XWINDOWSWMIINTERFACE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWMIINTERFACE::~XWINDOWSWMIINTERFACE()
 {
@@ -237,11 +237,11 @@ XWINDOWSWMIINTERFACE::~XWINDOWSWMIINTERFACE()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XSTRING XWINDOWSWMIINTERFACE::GetRootDir()
+* @fn         XSTRING* XWINDOWSWMIINTERFACE::GetRootDir()
 * @brief      get root dir
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     XSTRING : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XWINDOWSWMIINTERFACE::GetRootDir()
@@ -251,13 +251,13 @@ XSTRING* XWINDOWSWMIINTERFACE::GetRootDir()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSWMIINTERFACE::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::Ini()
 {
@@ -300,17 +300,17 @@ bool XWINDOWSWMIINTERFACE::Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* propertynameofresultobject, bool allowemptyitems)
 * @brief      Do query
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  query :
-* @param[in]  propertynameofresultobject :
-* @param[in]  allowemptyitems :
-*
-* @return     XWINDOWSWMIINTERFACE_RESULT* :
-*
+* 
+* @param[in]  query : Query pointer to use.
+* @param[in]  propertynameofresultobject : Output propertynameofresultobject.
+* @param[in]  allowemptyitems : Allowemptyitems value.
+* 
+* @return     XWINDOWSWMIINTERFACE_RESULT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* propertynameofresultobject, bool allowemptyitems)
 {
@@ -647,17 +647,17 @@ XWINDOWSWMIINTERFACE_RESULT* XWINDOWSWMIINTERFACE::DoQuery(XCHAR* query, XCHAR* 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata, XSTRING& answer)
 * @brief      Do query
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  _class :
-* @param[in]  namedata :
-* @param[in]  answer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  _class : Class pointer to use.
+* @param[in]  namedata : Namedata pointer to use.
+* @param[in]  answer : Answer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XSTRING& answer)
 {
@@ -690,17 +690,17 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XSTRING& ans
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata, XVECTOR<XSTRING*>* answers)
 * @brief      Do query
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  _class :
-* @param[in]  namedata :
-* @param[in]  answers :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  _class : Class pointer to use.
+* @param[in]  namedata : Namedata pointer to use.
+* @param[in]  answers : Answers pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVECTOR<XSTRING*>* answers)
 {
@@ -745,11 +745,11 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVECTOR<XSTR
 * @brief      Do query
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  _class : 
-* @param[in]  namedata : 
-* @param[in]  answer : 
+* @param[in]  _class : Class pointer to use.
+* @param[in]  namedata : Namedata pointer to use.
+* @param[in]  answer : Answer value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVARIANT& answer)
@@ -788,11 +788,11 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVARIANT& an
 * @brief      Do query
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  _class : 
-* @param[in]  namedata : 
-* @param[in]  answers : 
+* @param[in]  _class : Class pointer to use.
+* @param[in]  namedata : Namedata pointer to use.
+* @param[in]  answers : Answers pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVECTOR<XVARIANT*>* answers)
@@ -833,16 +833,16 @@ bool XWINDOWSWMIINTERFACE::DoQuery(XCHAR* _class, XCHAR* namedata,  XVECTOR<XVAR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XWINDOWSWMIINTERFACE::NetWorkInterfaceEnable(int ID, bool enabled)
+* 
+* @fn         bool XWINDOWSWMIINTERFACE::NetWorkInterfaceEnable(int ID, bool enable)
 * @brief      Net work interface enable
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  ID :
-* @param[in]  enabled :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  enable : Enable value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::NetWorkInterfaceEnable(int ID, bool enable)
 {
@@ -929,13 +929,13 @@ bool XWINDOWSWMIINTERFACE::NetWorkInterfaceEnable(int ID, bool enable)
 * @fn         bool XWINDOWSWMIINTERFACE::NetWorkInterfaceSetMetric(int ID, int metric)
 * @brief      Net work interface set metric
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  ID : 
-* @param[in]  metric : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  ID : Identifier to use.
+* @param[in]  metric : Metric value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::NetWorkInterfaceSetMetric(int ID, int metric)
 {
   IWbemLocator*   ploc = NULL;
@@ -1053,9 +1053,9 @@ bool XWINDOWSWMIINTERFACE::NetWorkInterfaceSetMetric(int ID, int metric)
 * @brief      Net work interface set metric
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  metric : 
+* @param[in]  metric : Metric value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::NetWorkInterfaceSetMetric(int metric)
@@ -1329,10 +1329,10 @@ bool XWINDOWSWMIINTERFACE::NetWorkInterfaceSetMetric(int metric)
 * @brief      convert date time to Xdate time
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  datetime : 
-* @param[in]  xdatetime : 
+* @param[in]  datetime : Datetime value.
+* @param[in]  xdatetime : Xdatetime value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::ConvertDateTimeToXDateTime(XSTRING& datetime, XDATETIME& xdatetime)
@@ -1370,13 +1370,13 @@ bool XWINDOWSWMIINTERFACE::ConvertDateTimeToXDateTime(XSTRING& datetime, XDATETI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSWMIINTERFACE::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSWMIINTERFACE::End()
 {
@@ -1387,12 +1387,12 @@ bool XWINDOWSWMIINTERFACE::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSWMIINTERFACE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSWMIINTERFACE::Clean()
 {

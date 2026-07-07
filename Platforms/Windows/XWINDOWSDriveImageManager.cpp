@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSDRIVEIMAGEMANAGER::XWINDOWSDRIVEIMAGEMANAGER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSDRIVEIMAGEMANAGER::XWINDOWSDRIVEIMAGEMANAGER()
 {
@@ -69,12 +69,12 @@ XWINDOWSDRIVEIMAGEMANAGER::XWINDOWSDRIVEIMAGEMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSDRIVEIMAGEMANAGER::~XWINDOWSDRIVEIMAGEMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSDRIVEIMAGEMANAGER::~XWINDOWSDRIVEIMAGEMANAGER()
 {
@@ -83,15 +83,15 @@ XWINDOWSDRIVEIMAGEMANAGER::~XWINDOWSDRIVEIMAGEMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::GetDrives(XVECTOR<XDRIVEIMAGEMANAGER_DRIVE*>& drives)
 * @brief      Get drives
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  drives :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  drives : Drives pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::GetDrives(XVECTOR<XDRIVEIMAGEMANAGER_DRIVE*>& drives)
 {
@@ -142,15 +142,15 @@ bool XWINDOWSDRIVEIMAGEMANAGER::GetDrives(XVECTOR<XDRIVEIMAGEMANAGER_DRIVE*>& dr
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::Open(XDRIVEIMAGEMANAGER_DRIVE& drive)
 * @brief      Open
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  drive :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  drive : Drive value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::Open(XDRIVEIMAGEMANAGER_DRIVE& drive)
 {
@@ -185,18 +185,18 @@ bool XWINDOWSDRIVEIMAGEMANAGER::Open(XDRIVEIMAGEMANAGER_DRIVE& drive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::Read(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD startsector, XQWORD numbersectors, XBUFFER& buffer)
 * @brief      Read
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  drive :
-* @param[in]  startsector :
-* @param[in]  numbersectors :
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  drive : Drive value.
+* @param[in]  startsector : Startsector value.
+* @param[in]  numbersectors : Numbersectors value.
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::Read(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD startsector, XQWORD numbersectors, XBUFFER& buffer)
 {
@@ -256,18 +256,18 @@ bool XWINDOWSDRIVEIMAGEMANAGER::Read(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD sta
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::Write(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD startsector, XQWORD numbersectors, XBUFFER& buffer)
 * @brief      Write
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  drive :
-* @param[in]  startsector :
-* @param[in]  numbersectors :
-* @param[in]  buffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  drive : Drive value.
+* @param[in]  startsector : Startsector value.
+* @param[in]  numbersectors : Numbersectors value.
+* @param[in]  buffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::Write(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD startsector, XQWORD numbersectors, XBUFFER& buffer)
 {
@@ -325,15 +325,15 @@ bool XWINDOWSDRIVEIMAGEMANAGER::Write(XDRIVEIMAGEMANAGER_DRIVE& drive, XQWORD st
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::Close(XDRIVEIMAGEMANAGER_DRIVE& drive)
 * @brief      Close
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  drive :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  drive : Drive value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::Close(XDRIVEIMAGEMANAGER_DRIVE& drive)
 {
@@ -356,16 +356,16 @@ bool XWINDOWSDRIVEIMAGEMANAGER::Close(XDRIVEIMAGEMANAGER_DRIVE& drive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         HANDLE XWINDOWSDRIVEIMAGEMANAGER::GetHandleFromDevice(int device, XDWORD access)
 * @brief      Get handle from device
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  device :
-* @param[in]  access :
-*
-* @return     HANDLE :
-*
+* 
+* @param[in]  device : Device value.
+* @param[in]  access : Access value.
+* 
+* @return     HANDLE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 HANDLE XWINDOWSDRIVEIMAGEMANAGER::GetHandleFromDevice(int device, XDWORD access)
 {
@@ -377,16 +377,16 @@ HANDLE XWINDOWSDRIVEIMAGEMANAGER::GetHandleFromDevice(int device, XDWORD access)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         HANDLE XWINDOWSDRIVEIMAGEMANAGER::GetHandleFromVolume(int volume, XDWORD access)
 * @brief      Get handle from volume
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  volume :
-* @param[in]  access :
-*
-* @return     HANDLE :
-*
+* 
+* @param[in]  volume : Volume value.
+* @param[in]  access : Access value.
+* 
+* @return     HANDLE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 HANDLE XWINDOWSDRIVEIMAGEMANAGER::GetHandleFromVolume(int volume, XDWORD access)
 {
@@ -399,15 +399,16 @@ HANDLE XWINDOWSDRIVEIMAGEMANAGER::GetHandleFromVolume(int volume, XDWORD access)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD XWINDOWSDRIVEIMAGEMANAGER::GetDeviceID(HANDLE handlevolume);
+* 
+* @fn         bool XWINDOWSDRIVEIMAGEMANAGER::GetDeviceID(HANDLE handlevolume, XDWORD& deviceID)
 * @brief      Get device ID
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handlevolume) :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  handlevolume : Handlevolume value.
+* @param[in]  deviceID : Device ID value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::GetDeviceID(HANDLE handlevolume, XDWORD& deviceID)
 {
@@ -428,16 +429,16 @@ bool XWINDOWSDRIVEIMAGEMANAGER::GetDeviceID(HANDLE handlevolume, XDWORD& deviceI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::LockVolume(HANDLE handle, bool islock)
 * @brief      Lock volume
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handle :
-* @param[in]  islock :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handle : Handle value.
+* @param[in]  islock : Islock value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::LockVolume(HANDLE handle, bool islock)
 {
@@ -448,15 +449,15 @@ bool XWINDOWSDRIVEIMAGEMANAGER::LockVolume(HANDLE handle, bool islock)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::UnMountVolume(HANDLE handle)
 * @brief      Un mount volume
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handle :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handle : Handle value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::UnMountVolume(HANDLE handle)
 {
@@ -467,15 +468,15 @@ bool XWINDOWSDRIVEIMAGEMANAGER::UnMountVolume(HANDLE handle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::IsVolumeUnmounted(HANDLE handle)
 * @brief      Is volume unmounted
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handle :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handle : Handle value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::IsVolumeUnmounted(HANDLE handle)
 {
@@ -486,17 +487,17 @@ bool XWINDOWSDRIVEIMAGEMANAGER::IsVolumeUnmounted(HANDLE handle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::GetNumberOfSectors(HANDLE handle, XQWORD& sectorsize, XQWORD& numbersectors)
 * @brief      Get number of sectors
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handle :
-* @param[in]  sectorsize :
-* @param[in]  numbersectors :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handle : Handle value.
+* @param[in]  sectorsize : Sectorsize value.
+* @param[in]  numbersectors : Numbersectors value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::GetNumberOfSectors(HANDLE handle, XQWORD& sectorsize, XQWORD& numbersectors)
 {
@@ -519,16 +520,16 @@ bool XWINDOWSDRIVEIMAGEMANAGER::GetNumberOfSectors(HANDLE handle, XQWORD& sector
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::GetSpaceAvailable(XCHAR* location, XQWORD& spaveavailable)
 * @brief      Get space available
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  location :
-* @param[in]  spaveavailable :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  location : Location pointer to use.
+* @param[in]  spaveavailable : Spaveavailable value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::GetSpaceAvailable(XCHAR* location, XQWORD& spaveavailable)
 {
@@ -547,16 +548,16 @@ bool XWINDOWSDRIVEIMAGEMANAGER::GetSpaceAvailable(XCHAR* location, XQWORD& spave
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::GetDriveLabel(XCHAR* location, XSTRING& label)
 * @brief      Get drive label
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  location :
-* @param[in]  label :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  location : Location pointer to use.
+* @param[in]  label : Label value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::GetDriveLabel(XCHAR* location, XSTRING& label)
 {
@@ -571,16 +572,16 @@ bool XWINDOWSDRIVEIMAGEMANAGER::GetDriveLabel(XCHAR* location, XSTRING& label)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::CheckDriveType(XPATH& path, XQWORD& ID)
 * @brief      Check drive type
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  path :
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::CheckDriveType(XPATH& path, XQWORD& ID)
 {
@@ -700,15 +701,15 @@ bool XWINDOWSDRIVEIMAGEMANAGER::CheckDriveType(XPATH& path, XQWORD& ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::GetMediaType(HANDLE hdevice)
 * @brief      Get media type
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  hdevice :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  hdevice : Hdevice value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::GetMediaType(HANDLE hdevice)
 {
@@ -725,19 +726,19 @@ bool XWINDOWSDRIVEIMAGEMANAGER::GetMediaType(HANDLE hdevice)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::ReadSectorDataFromHandle(HANDLE handle, XQWORD startsector, XQWORD sectorsize, XBYTE* buffer, XQWORD& size)
 * @brief      Read sector data from handle
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handle :
-* @param[in]  startsector :
-* @param[in]  sectorsize :
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handle : Handle value.
+* @param[in]  startsector : Startsector value.
+* @param[in]  sectorsize : Sectorsize value.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::ReadSectorDataFromHandle(HANDLE handle, XQWORD startsector, XQWORD sectorsize, XBYTE* buffer, XQWORD& size)
 {
@@ -761,19 +762,19 @@ bool XWINDOWSDRIVEIMAGEMANAGER::ReadSectorDataFromHandle(HANDLE handle, XQWORD s
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDRIVEIMAGEMANAGER::WriteSectorDataToHandle(HANDLE handle, XQWORD startsector, XQWORD sectorsize, XBYTE* buffer, XQWORD& size)
 * @brief      Write sector data to handle
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  handle :
-* @param[in]  startsector :
-* @param[in]  sectorsize :
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  handle : Handle value.
+* @param[in]  startsector : Startsector value.
+* @param[in]  sectorsize : Sectorsize value.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDRIVEIMAGEMANAGER::WriteSectorDataToHandle(HANDLE handle, XQWORD startsector, XQWORD sectorsize, XBYTE* buffer, XQWORD& size)
 {
@@ -797,12 +798,12 @@ bool XWINDOWSDRIVEIMAGEMANAGER::WriteSectorDataToHandle(HANDLE handle, XQWORD st
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSDRIVEIMAGEMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSDRIVEIMAGEMANAGER::Clean()
 {

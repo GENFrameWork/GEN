@@ -53,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32SLEEP::XESP32SLEEP()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32SLEEP::XESP32SLEEP()
 {
@@ -66,12 +66,12 @@ XESP32SLEEP::XESP32SLEEP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XESP32SLEEP::~XESP32SLEEP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_ESP32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XESP32SLEEP::~XESP32SLEEP()
 {
@@ -80,13 +80,13 @@ XESP32SLEEP::~XESP32SLEEP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32SLEEP::Seconds(int seconds)
 * @brief      Seconds
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  seconds :
-*
+* 
+* @param[in]  seconds : Seconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32SLEEP::Seconds(int seconds)
 {
@@ -95,13 +95,13 @@ void XESP32SLEEP::Seconds(int seconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32SLEEP::MilliSeconds(int milliseconds)
 * @brief      Milli seconds
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  milliseconds :
-*
+* 
+* @param[in]  milliseconds : Milliseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32SLEEP::MilliSeconds(int milliseconds)
 {
@@ -110,13 +110,13 @@ void XESP32SLEEP::MilliSeconds(int milliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32SLEEP::MicroSeconds(int microseconds)
 * @brief      Micro seconds
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  microseconds :
-*
+* 
+* @param[in]  microseconds : Microseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32SLEEP::MicroSeconds(int microseconds)
 {
@@ -125,13 +125,13 @@ void XESP32SLEEP::MicroSeconds(int microseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XESP32SLEEP::NanoSeconds(int nanoseconds)
 * @brief      Nano seconds
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  nanoseconds :
-*
+* 
+* @param[in]  nanoseconds : Nanoseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XESP32SLEEP::NanoSeconds(int nanoseconds)
 {

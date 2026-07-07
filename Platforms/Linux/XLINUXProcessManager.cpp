@@ -72,11 +72,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XLINUXPROCESSMANAGER::XLINUXPROCESSMANAGER()
+* 
+* @fn         XLINUXPROCESSMANAGER::XLINUXPROCESSMANAGER(): XPROCESSMANAGER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXPROCESSMANAGER::XLINUXPROCESSMANAGER(): XPROCESSMANAGER()
 {
@@ -85,12 +85,12 @@ XLINUXPROCESSMANAGER::XLINUXPROCESSMANAGER(): XPROCESSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXPROCESSMANAGER::~XLINUXPROCESSMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXPROCESSMANAGER::~XLINUXPROCESSMANAGER()
 {
@@ -99,15 +99,15 @@ XLINUXPROCESSMANAGER::~XLINUXPROCESSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 * @brief      Make system command
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  command : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  command : Command pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 {
@@ -127,17 +127,17 @@ bool XLINUXPROCESSMANAGER::MakeSystemCommand(XCHAR* command)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XLINUXPROCESSMANAGER::MakeCommand(XCHAR* command, XSTRING& out, int* returncode)
+* 
+* @fn         bool XLINUXPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* returncode)
 * @brief      Make command
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  command :
-* @param[in]  out :
-* @param[in]  returncode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  command : Command pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* returncode)
 {
@@ -187,9 +187,9 @@ bool XLINUXPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* return
 * @brief      Open URL
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  url : 
+* @param[in]  url : URL to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXPROCESSMANAGER::OpenURL(XCHAR* url)
@@ -216,13 +216,13 @@ bool XLINUXPROCESSMANAGER::OpenURL(XCHAR* url)
 * @brief      Application execute
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  applicationpath : 
-* @param[in]  params : 
-* @param[in]  in : 
-* @param[in]  out : 
-* @param[in]  returncode : 
+* @param[in]  applicationpath : Applicationpath pointer to use.
+* @param[in]  params : Params pointer to use.
+* @param[in]  in : In pointer to use.
+* @param[in]  out : Output out.
+* @param[in]  returncode : Returncode pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* params, XBUFFER* in, XBUFFER* out, int* returncode)
@@ -461,16 +461,16 @@ bool XLINUXPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* pa
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD* ID)
 * @brief      Application is running
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  applicationname : application name
-* @param[out] ID : ID of the application in the SO
-*
-* @return     bool : true if is succesful.
-*
+* @param[in]  ID : ID of the application in the SO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD* ID)
 {
@@ -537,9 +537,9 @@ bool XLINUXPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD*
 * @brief      Application get running list
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  applist : 
+* @param[in]  applist : Applist pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applist)
@@ -606,10 +606,10 @@ bool XLINUXPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applis
 * @brief      Application terminate
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  processID : 
-* @param[in]  exitcode : 
+* @param[in]  processID : Process ID value.
+* @param[in]  exitcode : Exitcode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD exitcode)
@@ -627,12 +627,12 @@ bool XLINUXPROCESSMANAGER::Application_Terminate(XDWORD processID, XDWORD exitco
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXPROCESSMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXPROCESSMANAGER::Clean()
 {

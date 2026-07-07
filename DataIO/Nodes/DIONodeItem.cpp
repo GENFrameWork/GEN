@@ -79,7 +79,7 @@ DIONODEITEM::DIONODEITEM()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  itemhandler : 
+* @param[in]  itemhandler : Itemhandler pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEM::DIONODEITEM(DIONODEITEMHANDLER* itemhandler)
@@ -125,7 +125,7 @@ DIONODEITEM::~DIONODEITEM()
 * @brief      Get category
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIONODEITEM::GetCategory()
@@ -140,7 +140,7 @@ XDWORD DIONODEITEM::GetCategory()
 * @brief      Set category
 * @ingroup    DATAIO
 * 
-* @param[in]  category : 
+* @param[in]  category : Category value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEM::SetCategory(XDWORD category)
@@ -162,7 +162,7 @@ void DIONODEITEM::SetCategory(XDWORD category)
 * @brief      Get description
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIONODEITEM::GetDescription()
@@ -177,7 +177,7 @@ XSTRING* DIONODEITEM::GetDescription()
 * @brief      Get ID
 * @ingroup    DATAIO
 * 
-* @return     XUUID& : 
+* @return     XUUID& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID& DIONODEITEM::GetID()
@@ -192,7 +192,7 @@ XUUID& DIONODEITEM::GetID()
 * @brief      Set ID
 * @ingroup    DATAIO
 * 
-* @param[in]  UUID : 
+* @param[in]  UUID : UUID value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEM::SetID(XUUID& UUID)
@@ -207,7 +207,7 @@ void DIONODEITEM::SetID(XUUID& UUID)
 * @brief      Item handler get
 * @ingroup    DATAIO
 * 
-* @return     DIONODEITEMHANDLER* : 
+* @return     DIONODEITEMHANDLER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEMHANDLER* DIONODEITEM::ItemHandler_Get()
@@ -222,9 +222,9 @@ DIONODEITEMHANDLER* DIONODEITEM::ItemHandler_Get()
 * @brief      Item handler set
 * @ingroup    DATAIO
 * 
-* @param[in]  itemhandler : 
+* @param[in]  itemhandler : Itemhandler pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEM::ItemHandler_Set(DIONODEITEMHANDLER* itemhandler)
@@ -251,7 +251,7 @@ bool DIONODEITEM::ItemHandler_Set(DIONODEITEMHANDLER* itemhandler)
 * @brief      Item handler open
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEM::ItemHandler_Open()
@@ -286,7 +286,7 @@ bool DIONODEITEM::ItemHandler_Open()
 * @brief      Item handler close
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEM::ItemHandler_Close()
@@ -316,7 +316,7 @@ bool DIONODEITEM::ItemHandler_Close()
 * @brief      Is simulate
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEM::IsSimulate()
@@ -331,7 +331,7 @@ bool DIONODEITEM::IsSimulate()
 * @brief      Set is simulate
 * @ingroup    DATAIO
 * 
-* @param[in]  issimulated : 
+* @param[in]  issimulated : Issimulated value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEM::SetIsSimulate(bool issimulated)
@@ -346,7 +346,7 @@ void DIONODEITEM::SetIsSimulate(bool issimulated)
 * @brief      Get time to update
 * @ingroup    DATAIO
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIONODEITEM::GetTimeToUpdate()
@@ -361,7 +361,7 @@ XQWORD DIONODEITEM::GetTimeToUpdate()
 * @brief      Set time to update
 * @ingroup    DATAIO
 * 
-* @param[in]  timetoupdate : 
+* @param[in]  timetoupdate : Timetoupdate value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEM::SetTimeToUpdate(XQWORD timetoupdate)
@@ -382,7 +382,7 @@ void DIONODEITEM::SetTimeToUpdate(XQWORD timetoupdate)
 * @brief      Get update timer
 * @ingroup    DATAIO
 * 
-* @return     XTIMER* : 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIONODEITEM::GetUpdateTimer()
@@ -397,7 +397,7 @@ XTIMER* DIONODEITEM::GetUpdateTimer()
 * @brief      Get values
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIONODEITEMVALUE*>* : 
+* @return     XVECTOR<DIONODEITEMVALUE*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIONODEITEMVALUE*>* DIONODEITEM::GetValues()
@@ -412,7 +412,7 @@ XVECTOR<DIONODEITEMVALUE*>* DIONODEITEM::GetValues()
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEM::Update()
@@ -443,7 +443,7 @@ bool DIONODEITEM::Update()
 * @brief      Serialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEM::Serialize()
@@ -477,7 +477,7 @@ bool DIONODEITEM::Serialize()
 * @brief      Deserialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEM::Deserialize()

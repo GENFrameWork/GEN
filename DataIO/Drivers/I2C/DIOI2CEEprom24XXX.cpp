@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOI2CEEPROM24XXX::DIOI2CEEPROM24XXX()
+* 
+* @fn         DIOI2CEEPROM24XXX::DIOI2CEEPROM24XXX(): DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CEEPROM24XXX::DIOI2CEEPROM24XXX(): DIODEVICEI2C()
 {
@@ -74,12 +74,12 @@ DIOI2CEEPROM24XXX::DIOI2CEEPROM24XXX(): DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CEEPROM24XXX::~DIOI2CEEPROM24XXX()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CEEPROM24XXX::~DIOI2CEEPROM24XXX()
 {
@@ -94,10 +94,10 @@ DIOI2CEEPROM24XXX::~DIOI2CEEPROM24XXX()
 * @fn         DIOI2CEEPROM24XXXTYPE DIOI2CEEPROM24XXX::GetType()
 * @brief      Get type
 * @ingroup    DATAIO
-*
-* @return     DIOI2CEEPROM24XXXTYPE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOI2CEEPROM24XXXTYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CEEPROM24XXXTYPE DIOI2CEEPROM24XXX::GetType()
 { 
   return type;                                   
@@ -109,10 +109,10 @@ DIOI2CEEPROM24XXXTYPE DIOI2CEEPROM24XXX::GetType()
 * @fn         void DIOI2CEEPROM24XXX::SetType(DIOI2CEEPROM24XXXTYPE type)
 * @brief      Set type
 * @ingroup    DATAIO
-*
-* @param[in]  type : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  type : Type value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CEEPROM24XXX::SetType(DIOI2CEEPROM24XXXTYPE type)    
 { 
   this->type = type;                             
@@ -124,10 +124,10 @@ void DIOI2CEEPROM24XXX::SetType(DIOI2CEEPROM24XXXTYPE type)
 * @fn         XDWORD DIOI2CEEPROM24XXX::GetSize()
 * @brief      Get size
 * @ingroup    DATAIO
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOI2CEEPROM24XXX::GetSize()                              
 { 
   return maxsize;                                
@@ -135,17 +135,17 @@ XDWORD DIOI2CEEPROM24XXX::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CEEPROM24XXX::Read(XDWORD address, XBYTE* buffer, XDWORD size)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  address :
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  address : Address value.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CEEPROM24XXX::Read(XDWORD address, XBYTE* buffer, XDWORD size)
 {
@@ -178,17 +178,17 @@ bool DIOI2CEEPROM24XXX::Read(XDWORD address, XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CEEPROM24XXX::Read(XDWORD address, XDWORD size, XBUFFER& xbuffer)
 * @brief      Read
 * @ingroup    DATAIO
-*
-* @param[in]  address :
-* @param[in]  size :
-* @param[in]  xbuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  address : Address value.
+* @param[in]  size : Size value.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CEEPROM24XXX::Read(XDWORD address, XDWORD size, XBUFFER& xbuffer)
 {
@@ -200,17 +200,17 @@ bool DIOI2CEEPROM24XXX::Read(XDWORD address, XDWORD size, XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CEEPROM24XXX::Write(XDWORD address, XBYTE* buffer, XDWORD size)
 * @brief      Write
 * @ingroup    DATAIO
-*
-* @param[in]  address :
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  address : Address value.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CEEPROM24XXX::Write(XDWORD address, XBYTE* buffer, XDWORD size)
 {
@@ -234,16 +234,16 @@ bool DIOI2CEEPROM24XXX::Write(XDWORD address, XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CEEPROM24XXX::Write(XDWORD address, XBUFFER& xbuffer)
 * @brief      Write
 * @ingroup    DATAIO
-*
-* @param[in]  address :
-* @param[in]  xbuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  address : Address value.
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CEEPROM24XXX::Write(XDWORD address, XBUFFER& xbuffer)
 {
@@ -252,13 +252,13 @@ bool DIOI2CEEPROM24XXX::Write(XDWORD address, XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CEEPROM24XXX::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CEEPROM24XXX::End()
 {
@@ -269,13 +269,13 @@ bool DIOI2CEEPROM24XXX::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CEEPROM24XXX::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CEEPROM24XXX::IniDevice()
 {
@@ -334,10 +334,10 @@ bool DIOI2CEEPROM24XXX::IniDevice()
 * @brief      Read BYTE
 * @ingroup    DATAIO
 * 
-* @param[in]  address : 
-* @param[in]  data : 
+* @param[in]  address : Address value.
+* @param[in]  data : Data buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CEEPROM24XXX::ReadBYTE(XDWORD address, XBYTE& data)
@@ -386,16 +386,16 @@ bool DIOI2CEEPROM24XXX::ReadBYTE(XDWORD address, XBYTE& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CEEPROM24XXX::WriteBYTE(XDWORD address, XBYTE data)
 * @brief      Write BYTE
 * @ingroup    DATAIO
-*
-* @param[in]  address :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  address : Address value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CEEPROM24XXX::WriteBYTE(XDWORD address, XBYTE data)
 {
@@ -450,8 +450,8 @@ bool DIOI2CEEPROM24XXX::WriteBYTE(XDWORD address, XBYTE data)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CEEPROM24XXX::Clean()
 {
   diostream     = NULL;

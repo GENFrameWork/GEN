@@ -55,15 +55,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOWEBCLIENT_XEVENT::DIOWEBCLIENT_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         DIOWEBCLIENT_XEVENT::DIOWEBCLIENT_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  subject :
-* @param[in]  type :
-* @param[in]  family :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_XEVENT::DIOWEBCLIENT_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 {
@@ -72,12 +72,12 @@ DIOWEBCLIENT_XEVENT::DIOWEBCLIENT_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT_XEVENT::~DIOWEBCLIENT_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_XEVENT::~DIOWEBCLIENT_XEVENT()
 {
@@ -86,13 +86,13 @@ DIOWEBCLIENT_XEVENT::~DIOWEBCLIENT_XEVENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOURL* DIOWEBCLIENT_XEVENT::GetURL()
 * @brief      Get URL
 * @ingroup    DATAIO
-*
-* @return     DIOURL* :
-*
+* 
+* @return     DIOURL* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOWEBCLIENT_XEVENT::GetURL()
 {
@@ -101,13 +101,13 @@ DIOURL* DIOWEBCLIENT_XEVENT::GetURL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBHEADER_METHOD DIOWEBCLIENT_XEVENT::GetMethod()
 * @brief      Get method
 * @ingroup    DATAIO
-*
-* @return     DIOWEBHEADER_METHOD :
-*
+* 
+* @return     DIOWEBHEADER_METHOD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBHEADER_METHOD DIOWEBCLIENT_XEVENT::GetMethod()
 {
@@ -116,13 +116,13 @@ DIOWEBHEADER_METHOD DIOWEBCLIENT_XEVENT::GetMethod()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT_XEVENT::SetMethod(DIOWEBHEADER_METHOD method)
 * @brief      Set method
 * @ingroup    DATAIO
-*
-* @param[in]  method :
-*
+* 
+* @param[in]  method : Method descriptor to call.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_XEVENT::SetMethod(DIOWEBHEADER_METHOD method)
 {
@@ -131,13 +131,13 @@ void DIOWEBCLIENT_XEVENT::SetMethod(DIOWEBHEADER_METHOD method)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTRNG* DIOWEBCLIENT_XEVENT::GetEtag()
+* 
+* @fn         XSTRING* DIOWEBCLIENT_XEVENT::GetEtag()
 * @brief      Get etag
 * @ingroup    DATAIO
-*
-* @return     XSTRNG* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOWEBCLIENT_XEVENT::GetEtag()
 {
@@ -146,13 +146,13 @@ XSTRING* DIOWEBCLIENT_XEVENT::GetEtag()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD DIOWEBCLIENT_XEVENT::GetContentLenght()
 * @brief      Get content lenght
 * @ingroup    DATAIO
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOWEBCLIENT_XEVENT::GetContentLenght()
 {
@@ -161,13 +161,13 @@ XQWORD DIOWEBCLIENT_XEVENT::GetContentLenght()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void DIOWEBCLIENT_XEVENT::SetContentLenght(XQWORD& contentlenght)
+* 
+* @fn         void DIOWEBCLIENT_XEVENT::SetContentLenght(XQWORD contentlenght)
 * @brief      Set content lenght
 * @ingroup    DATAIO
-*
-* @param[in]  contentlenght :
-*
+* 
+* @param[in]  contentlenght : Contentlenght value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_XEVENT::SetContentLenght(XQWORD contentlenght)
 {
@@ -176,13 +176,13 @@ void DIOWEBCLIENT_XEVENT::SetContentLenght(XQWORD contentlenght)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float DIOWEBCLIENT_XEVENT::GetOperationPercent()
 * @brief      Get operation percent
 * @ingroup    DATAIO
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float DIOWEBCLIENT_XEVENT::GetOperationPercent()
 {
@@ -191,13 +191,13 @@ float DIOWEBCLIENT_XEVENT::GetOperationPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT_XEVENT::SetOperationPercent(float operationpercent)
 * @brief      Set operation percent
 * @ingroup    DATAIO
-*
-* @param[in]  operationpercent :
-*
+* 
+* @param[in]  operationpercent : Operationpercent value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_XEVENT::SetOperationPercent(float operationpercent)
 {
@@ -206,13 +206,13 @@ void DIOWEBCLIENT_XEVENT::SetOperationPercent(float operationpercent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD DIOWEBCLIENT_XEVENT::GetDownloadSize()
 * @brief      Get download size
 * @ingroup    DATAIO
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOWEBCLIENT_XEVENT::GetDownloadSize()
 {
@@ -221,13 +221,13 @@ XQWORD DIOWEBCLIENT_XEVENT::GetDownloadSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT_XEVENT::SetDownloadSize(XQWORD downloadsize)
 * @brief      Set download size
 * @ingroup    DATAIO
-*
-* @param[in]  downloadsize :
-*
+* 
+* @param[in]  downloadsize : Downloadsize value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_XEVENT::SetDownloadSize(XQWORD downloadsize)
 {
@@ -236,13 +236,13 @@ void DIOWEBCLIENT_XEVENT::SetDownloadSize(XQWORD downloadsize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOWEBCLIENT_XEVENT::GetMBPSSpeed()
 * @brief      Get MBPS speed
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOWEBCLIENT_XEVENT::GetMBPSSpeed()
 {
@@ -251,13 +251,13 @@ XDWORD DIOWEBCLIENT_XEVENT::GetMBPSSpeed()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT_XEVENT::SetMBPSSpeed(XDWORD MBPSspeed)
 * @brief      Set MBPS speed
 * @ingroup    DATAIO
-*
-* @param[in]  MBPSspeed :
-*
+* 
+* @param[in]  MBPSspeed : MBP Sspeed value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_XEVENT::SetMBPSSpeed(XDWORD MBPSspeed)
 {
@@ -266,12 +266,12 @@ void DIOWEBCLIENT_XEVENT::SetMBPSSpeed(XDWORD MBPSspeed)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_XEVENT::Clean()
 {

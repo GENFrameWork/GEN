@@ -63,11 +63,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOLINUXGPIORPI::DIOLINUXGPIORPI()
+* 
+* @fn         DIOLINUXGPIORPI::DIOLINUXGPIORPI(): DIOLINUXGPIO()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 //DIOLINUXGPIORPI::DIOLINUXGPIORPI(): DIOGPIO()
 DIOLINUXGPIORPI::DIOLINUXGPIORPI(): DIOLINUXGPIO()
@@ -77,12 +77,12 @@ DIOLINUXGPIORPI::DIOLINUXGPIORPI(): DIOLINUXGPIO()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXGPIORPI::~DIOLINUXGPIORPI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXGPIORPI::~DIOLINUXGPIORPI()
 {
@@ -91,13 +91,13 @@ DIOLINUXGPIORPI::~DIOLINUXGPIORPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOLINUXGPIORPI::Ini(XPATH* xpath)
-* @brief      Ini
+* 
+* @fn         bool DIOLINUXGPIORPI::Ini()
+* @brief      Initialize the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXGPIORPI::Ini()
 {
@@ -210,16 +210,11 @@ bool DIOLINUXGPIORPI::Ini()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOLINUXGPIORPI::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      Set mode
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  entry : 
-* @param[in]  mode : 
 * 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 {
@@ -238,15 +233,11 @@ bool DIOLINUXGPIORPI::SetMode(DIOGPIO_ENTRY* entry, XWORD mode)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOLINUXGPIORPI::GetValue(DIOGPIO_ENTRY* entry)
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      Get value
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  entry : 
 * 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::GetValue(DIOGPIO_ENTRY* entry)
 {  
@@ -260,16 +251,11 @@ bool DIOLINUXGPIORPI::GetValue(DIOGPIO_ENTRY* entry)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOLINUXGPIORPI::SetValue(DIOGPIO_ENTRY* entry, bool value)
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      Set value
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  entry : 
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::SetValue(DIOGPIO_ENTRY* entry, bool value)
 {
@@ -282,13 +268,11 @@ bool DIOLINUXGPIORPI::SetValue(DIOGPIO_ENTRY* entry, bool value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOLINUXGPIORPI::End()
-* @brief      End
+* 
+* @fn         void DIOLINUXGPIORPI::Clean()
+* @brief      Clean internal state
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::End()
@@ -299,13 +283,11 @@ bool DIOLINUXGPIORPI::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOLINUXGPIORPI::RPI_Ini()
+* 
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      RPI ini
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::RPI_Ini()
@@ -344,13 +326,11 @@ bool DIOLINUXGPIORPI::RPI_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOLINUXGPIORPI::RPI_End()
+* 
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      RPI end
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::RPI_End()
@@ -370,15 +350,11 @@ bool DIOLINUXGPIORPI::RPI_End()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOLINUXGPIORPI::RPI_IsGPIOValid(XQWORD GPIO)
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      RPI is GPIO valid
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
 * 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::RPI_IsGPIOValid(XQWORD GPIO)
 {
@@ -391,16 +367,11 @@ bool DIOLINUXGPIORPI::RPI_IsGPIOValid(XQWORD GPIO)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOLINUXGPIORPI::RPI_GPIOMode(XQWORD GPIO, bool isinput)
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      RPIGPIO mode
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
-* @param[in]  isinput : 
 * 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::RPI_GPIOMode(XQWORD GPIO, bool isinput)
 {
@@ -458,15 +429,11 @@ bool DIOLINUXGPIORPI::RPI_GPIOMode(XQWORD GPIO, bool isinput)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOLINUXGPIORPI::RPI_GPIORead(XQWORD GPIO)
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      RPIGPIO read
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
 * 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::RPI_GPIORead(XQWORD GPIO)
 {
@@ -503,16 +470,11 @@ bool DIOLINUXGPIORPI::RPI_GPIORead(XQWORD GPIO)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOLINUXGPIORPI::RPI_GPIOWrite(XQWORD GPIO, bool isactive)
+* @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      RPIGPIO write
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  GPIO : 
-* @param[in]  isactive : 
 * 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DIOLINUXGPIORPI::RPI_GPIOWrite(XQWORD GPIO, bool isactive)
 {
@@ -571,12 +533,12 @@ bool DIOLINUXGPIORPI::RPI_GPIOWrite(XQWORD GPIO, bool isactive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXGPIORPI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXGPIORPI::Clean()
 {

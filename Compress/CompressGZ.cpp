@@ -60,7 +60,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         COMPRESS_GZ::COMPRESS_GZ()
+* @fn         COMPRESS_GZ::COMPRESS_GZ() : COMPRESSBASE()
 * @brief      Constructor of class
 * @ingroup    COMPRESS
 * 
@@ -93,11 +93,11 @@ COMPRESS_GZ::~COMPRESS_GZ()
 * @brief      Compress
 * @ingroup    COMPRESS
 * 
-* @param[in]  source : 
-* @param[in]  size : 
-* @param[in]  xbuffer : 
+* @param[in]  source : Source pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  xbuffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESS_GZ::Compress(XBYTE* source, XDWORD size, XBUFFER* xbuffer)
@@ -125,11 +125,11 @@ bool COMPRESS_GZ::Compress(XBYTE* source, XDWORD size, XBUFFER* xbuffer)
 * @brief      Decompress
 * @ingroup    COMPRESS
 * 
-* @param[in]  source : 
-* @param[in]  size : 
-* @param[in]  xbuffer : 
+* @param[in]  source : Source pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  xbuffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESS_GZ::Decompress(XBYTE* source, XDWORD size, XBUFFER* xbuffer)
@@ -152,12 +152,12 @@ bool COMPRESS_GZ::Decompress(XBYTE* source, XDWORD size, XBUFFER* xbuffer)
 * @brief      Z compress
 * @ingroup    COMPRESS
 * 
-* @param[in]  target : 
-* @param[in]  targetsize : 
-* @param[in]  source : 
-* @param[in]  sourcesize : 
+* @param[in]  target : Target pointer to use.
+* @param[in]  targetsize : Targetsize pointer to use.
+* @param[in]  source : Source pointer to use.
+* @param[in]  sourcesize : Sourcesize value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int COMPRESS_GZ::ZCompress(XBYTE* target, XDWORD* targetsize, XBYTE* source, XDWORD sourcesize)
@@ -201,12 +201,12 @@ int COMPRESS_GZ::ZCompress(XBYTE* target, XDWORD* targetsize, XBYTE* source, XDW
 * @brief      Z decompress
 * @ingroup    COMPRESS
 * 
-* @param[in]  target : 
-* @param[in]  targetsize : 
-* @param[in]  source : 
-* @param[in]  sourcesize : 
+* @param[in]  target : Target pointer to use.
+* @param[in]  targetsize : Targetsize pointer to use.
+* @param[in]  source : Source pointer to use.
+* @param[in]  sourcesize : Sourcesize value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int COMPRESS_GZ::ZDecompress(XBYTE* target,XDWORD* targetsize,XBYTE* source,XDWORD sourcesize)

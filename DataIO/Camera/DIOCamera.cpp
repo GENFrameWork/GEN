@@ -86,10 +86,10 @@ DIOCAMERA::~DIOCAMERA()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCAMERA::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCAMERA::Ini()
@@ -106,10 +106,10 @@ bool DIOCAMERA::Ini()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCAMERA::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCAMERA::End()
@@ -131,7 +131,7 @@ bool DIOCAMERA::End()
 * @note       INTERNAL
 * @ingroup    DATAIO
 * 
-* @param[in]  event : 
+* @param[in]  event : Event to process.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCAMERA::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
@@ -152,7 +152,7 @@ void DIOCAMERA::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 * @note       INTERNAL
 * @ingroup    DATAIO
 * 
-* @param[in]  xevent : 
+* @param[in]  xevent : Xevent pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCAMERA::HandleEvent(XEVENT* xevent)

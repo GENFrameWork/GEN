@@ -67,11 +67,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTION_CUT::DIOCHECKTCPIPCONNECTION_CUT()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION_CUT::DIOCHECKTCPIPCONNECTION_CUT()
 {
@@ -82,12 +82,12 @@ DIOCHECKTCPIPCONNECTION_CUT::DIOCHECKTCPIPCONNECTION_CUT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTION_CUT::~DIOCHECKTCPIPCONNECTION_CUT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION_CUT::~DIOCHECKTCPIPCONNECTION_CUT()
 {
@@ -98,13 +98,13 @@ DIOCHECKTCPIPCONNECTION_CUT::~DIOCHECKTCPIPCONNECTION_CUT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* DIOCHECKTCPIPCONNECTION_CUT::GetStartDateTime()
 * @brief      Get start date time
 * @ingroup    DATAIO
-*
-* @return     XDATETIME* :
-*
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* DIOCHECKTCPIPCONNECTION_CUT::GetStartDateTime()
 {
@@ -113,13 +113,13 @@ XDATETIME* DIOCHECKTCPIPCONNECTION_CUT::GetStartDateTime()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOCHECKTCPIPCONNECTION_CUT::GetMeasureNSeconds()
 * @brief      Get measure N seconds
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCHECKTCPIPCONNECTION_CUT::GetMeasureNSeconds()
 {
@@ -128,13 +128,13 @@ int DIOCHECKTCPIPCONNECTION_CUT::GetMeasureNSeconds()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTION_CUT::SetMeasureNSeconds(XDWORD nseconds)
 * @brief      Set measure N seconds
 * @ingroup    DATAIO
-*
-* @param[in]  nseconds :
-*
+* 
+* @param[in]  nseconds : Nseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTION_CUT::SetMeasureNSeconds(XDWORD nseconds)
 {
@@ -143,16 +143,16 @@ void DIOCHECKTCPIPCONNECTION_CUT::SetMeasureNSeconds(XDWORD nseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOCHECKTCPIPCONNECTION_CUT::GetMeasureTimeString(XSTRING& measuretime, bool large = false)
+* 
+* @fn         bool DIOCHECKTCPIPCONNECTION_CUT::GetMeasureTimeString(XSTRING& measuretime, bool large)
 * @brief      Get measure time string
 * @ingroup    DATAIO
-*
-* @param[in]  measuretime :
-* @param[in]  large :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  measuretime : Measuretime value.
+* @param[in]  large : Large value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTION_CUT::GetMeasureTimeString(XSTRING& measuretime, bool large)
 {
@@ -168,15 +168,15 @@ bool DIOCHECKTCPIPCONNECTION_CUT::GetMeasureTimeString(XSTRING& measuretime, boo
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTION_CUT::CopyFrom(DIOCHECKTCPIPCONNECTION_CUT* connectioncut)
 * @brief      Copy from
 * @ingroup    DATAIO
-*
-* @param[in]  connectioncut :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  connectioncut : Connectioncut pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTION_CUT::CopyFrom(DIOCHECKTCPIPCONNECTION_CUT* connectioncut)
 {
@@ -187,15 +187,15 @@ bool DIOCHECKTCPIPCONNECTION_CUT::CopyFrom(DIOCHECKTCPIPCONNECTION_CUT* connecti
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTION_CUT::CopyTo(DIOCHECKTCPIPCONNECTION_CUT* connectioncut)
 * @brief      Copy to
 * @ingroup    DATAIO
-*
-* @param[in]  connectioncut :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  connectioncut : Connectioncut pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTION_CUT::CopyTo(DIOCHECKTCPIPCONNECTION_CUT* connectioncut)
 {
@@ -209,12 +209,12 @@ bool DIOCHECKTCPIPCONNECTION_CUT::CopyTo(DIOCHECKTCPIPCONNECTION_CUT* connection
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTION_CUT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTION_CUT::Clean()
 {
@@ -228,11 +228,11 @@ void DIOCHECKTCPIPCONNECTION_CUT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTION::DIOCHECKTCPIPCONNECTION()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION::DIOCHECKTCPIPCONNECTION()
 {
@@ -245,12 +245,12 @@ DIOCHECKTCPIPCONNECTION::DIOCHECKTCPIPCONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTION::~DIOCHECKTCPIPCONNECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION::~DIOCHECKTCPIPCONNECTION()
 {
@@ -263,13 +263,13 @@ DIOCHECKTCPIPCONNECTION::~DIOCHECKTCPIPCONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOCHECKTCPIPCONNECTION::GetID()
 * @brief      Get ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCHECKTCPIPCONNECTION::GetID()
 {
@@ -278,13 +278,13 @@ XDWORD DIOCHECKTCPIPCONNECTION::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOURL* DIOCHECKTCPIPCONNECTION::GetURL()
 * @brief      Get URL
 * @ingroup    DATAIO
-*
-* @return     DIOURL* :
-*
+* 
+* @return     DIOURL* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOCHECKTCPIPCONNECTION::GetURL()
 {
@@ -293,13 +293,13 @@ DIOURL* DIOCHECKTCPIPCONNECTION::GetURL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTION::IsConnected()
 * @brief      Is connected
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTION::IsConnected()
 {
@@ -308,13 +308,13 @@ bool DIOCHECKTCPIPCONNECTION::IsConnected()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTION::SetIsConnected(bool isconnected)
 * @brief      Set is connected
 * @ingroup    DATAIO
-*
-* @param[in]  isconnected :
-*
+* 
+* @param[in]  isconnected : Isconnected value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTION::SetIsConnected(bool isconnected)
 {
@@ -323,13 +323,13 @@ void DIOCHECKTCPIPCONNECTION::SetIsConnected(bool isconnected)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOCHECKTCPIPCONNECTION::GetNChecks()
 * @brief      Get N checks
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCHECKTCPIPCONNECTION::GetNChecks()
 {
@@ -338,13 +338,13 @@ XDWORD DIOCHECKTCPIPCONNECTION::GetNChecks()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTION::SetNChecks(XDWORD nchecks)
 * @brief      Set N checks
 * @ingroup    DATAIO
-*
-* @param[in]  nchecks :
-*
+* 
+* @param[in]  nchecks : Nchecks value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTION::SetNChecks(XDWORD nchecks)
 {
@@ -353,13 +353,13 @@ void DIOCHECKTCPIPCONNECTION::SetNChecks(XDWORD nchecks)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOCHECKTCPIPCONNECTION::IncNChecks()
 * @brief      Inc N checks
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCHECKTCPIPCONNECTION::IncNChecks()
 {
@@ -368,15 +368,15 @@ XDWORD DIOCHECKTCPIPCONNECTION::IncNChecks()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTION::Set(XCHAR* url)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTION::Set(XCHAR* url)
 {
@@ -393,13 +393,13 @@ bool DIOCHECKTCPIPCONNECTION::Set(XCHAR* url)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOCHECKTCPIPCONNECTION::GetElapsedTime()
 * @brief      Get elapsed time
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCHECKTCPIPCONNECTION::GetElapsedTime()
 {
@@ -408,13 +408,13 @@ XDWORD DIOCHECKTCPIPCONNECTION::GetElapsedTime()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTION::SetElapsedTime(XDWORD elapsedtime)
 * @brief      Set elapsed time
 * @ingroup    DATAIO
-*
-* @param[in]  elapsedtime :
-*
+* 
+* @param[in]  elapsedtime : Elapsedtime value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTION::SetElapsedTime(XDWORD elapsedtime)
 {
@@ -423,13 +423,13 @@ void DIOCHECKTCPIPCONNECTION::SetElapsedTime(XDWORD elapsedtime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTION::ResetTimeConnexionStatus()
 * @brief      Reset time connexion status
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTION::ResetTimeConnexionStatus()
 {
@@ -441,13 +441,13 @@ bool DIOCHECKTCPIPCONNECTION::ResetTimeConnexionStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD DIOCHECKTCPIPCONNECTION::GetTimeConnexionStatus()
 * @brief      Get time connexion status
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOCHECKTCPIPCONNECTION::GetTimeConnexionStatus()
 {
@@ -457,13 +457,13 @@ XQWORD DIOCHECKTCPIPCONNECTION::GetTimeConnexionStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOCHECKTCPIPCONNECTION::CreateID()
 * @brief      Create ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCHECKTCPIPCONNECTION::CreateID()
 {
@@ -480,12 +480,12 @@ XDWORD DIOCHECKTCPIPCONNECTION::CreateID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTION::Clean()
 {
@@ -503,11 +503,11 @@ void DIOCHECKTCPIPCONNECTION::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTIONS::DIOCHECKTCPIPCONNECTIONS()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTIONS::DIOCHECKTCPIPCONNECTIONS()
 {
@@ -516,12 +516,12 @@ DIOCHECKTCPIPCONNECTIONS::DIOCHECKTCPIPCONNECTIONS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCHECKTCPIPCONNECTIONS::~DIOCHECKTCPIPCONNECTIONS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTIONS::~DIOCHECKTCPIPCONNECTIONS()
 {
@@ -532,17 +532,17 @@ DIOCHECKTCPIPCONNECTIONS::~DIOCHECKTCPIPCONNECTIONS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Ini(int timeconnectionchecks, bool validsomeisconnected, bool dispersionmode)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  timeconnectionchecks :
-* @param[in]  validsomeisconnected :
-* @param[in]  dispersionmode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  timeconnectionchecks : Timeconnectionchecks value.
+* @param[in]  validsomeisconnected : Validsomeisconnected value.
+* @param[in]  dispersionmode : Dispersionmode value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Ini(int timeconnectionchecks, bool validsomeisconnected, bool dispersionmode)
 {
@@ -564,15 +564,15 @@ bool DIOCHECKTCPIPCONNECTIONS::Ini(int timeconnectionchecks, bool validsomeiscon
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Run(bool activate)
-* @brief      Run
+* @brief      Run operation
 * @ingroup    DATAIO
-*
-* @param[in]  activate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  activate : Activate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Run(bool activate)
 {
@@ -582,13 +582,13 @@ bool DIOCHECKTCPIPCONNECTIONS::Run(bool activate)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOCHECKTCPIPCONNECTIONS::GetTimeConnectionChecks()
 * @brief      Get time connection checks
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCHECKTCPIPCONNECTIONS::GetTimeConnectionChecks()
 {
@@ -597,13 +597,13 @@ int DIOCHECKTCPIPCONNECTIONS::GetTimeConnectionChecks()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::IsCheckTimeConnections()
 * @brief      Is check time connections
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::IsCheckTimeConnections()
 {
@@ -612,13 +612,13 @@ bool DIOCHECKTCPIPCONNECTIONS::IsCheckTimeConnections()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTIONS::SetIsCheckTimeConnections(bool ischecktimeconnections)
 * @brief      Set is check time connections
 * @ingroup    DATAIO
-*
-* @param[in]  ischecktimeconnections :
-*
+* 
+* @param[in]  ischecktimeconnections : Ischecktimeconnections value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTIONS::SetIsCheckTimeConnections(bool ischecktimeconnections)
 {
@@ -627,15 +627,15 @@ void DIOCHECKTCPIPCONNECTIONS::SetIsCheckTimeConnections(bool ischecktimeconnect
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTIONS::Setup(int timeconnectionchecks, bool validsomeisconnected, bool dispersionmode)
 * @brief      Setup
 * @ingroup    DATAIO
-*
-* @param[in]  timeconnectionchecks :
-* @param[in]  validsomeisconnected :
-* @param[in]  dispersionmode :
-*
+* 
+* @param[in]  timeconnectionchecks : Timeconnectionchecks value.
+* @param[in]  validsomeisconnected : Validsomeisconnected value.
+* @param[in]  dispersionmode : Dispersionmode value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTIONS::Setup(int timeconnectionchecks, bool validsomeisconnected, bool dispersionmode)
 {
@@ -646,16 +646,16 @@ void DIOCHECKTCPIPCONNECTIONS::Setup(int timeconnectionchecks, bool validsomeisc
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(XCHAR* url, XDWORD& ID)
 * @brief      Connection add
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(XCHAR* url, XDWORD& ID)
 {
@@ -685,16 +685,16 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(XCHAR* url, XDWORD& ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(XSTRING& url, XDWORD& ID)
 * @brief      Connection add
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(XSTRING& url, XDWORD& ID)
 {
@@ -703,16 +703,16 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(XSTRING& url, XDWORD& ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(DIOURL& url, XDWORD& ID)
 * @brief      Connection add
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(DIOURL& url, XDWORD& ID)
 {
@@ -721,15 +721,15 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_Add(DIOURL& url, XDWORD& ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn        DIOCHECKTCPIPCONNECTION* DIOCHECKTCPIPCONNECTIONS::Connection_GetByID(XDWORD ID)
+* 
+* @fn         DIOCHECKTCPIPCONNECTION* DIOCHECKTCPIPCONNECTIONS::Connection_GetByID(XDWORD ID)
 * @brief      Connection_GetByID
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return    DIOCHECKTCPIPCONNECTION* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     DIOCHECKTCPIPCONNECTION* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCHECKTCPIPCONNECTION* DIOCHECKTCPIPCONNECTIONS::Connection_GetByID(XDWORD ID)
 {
@@ -761,16 +761,16 @@ DIOCHECKTCPIPCONNECTION* DIOCHECKTCPIPCONNECTIONS::Connection_GetByID(XDWORD ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connection_IsActive(XDWORD ID, bool& isactive)
 * @brief      Connection is active
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-* @param[in]  isactive :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  isactive : Isactive value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connection_IsActive(XDWORD ID, bool& isactive)
 {
@@ -800,15 +800,15 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_IsActive(XDWORD ID, bool& isactive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connection_DeleteByID(XDWORD ID)
 * @brief      Connection GEN_DELETE by ID
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connection_DeleteByID(XDWORD ID)
 {
@@ -835,7 +835,7 @@ bool DIOCHECKTCPIPCONNECTIONS::Connection_DeleteByID(XDWORD ID)
 * @brief      Connections get mutex
 * @ingroup    DATAIO
 * 
-* @return     XMUTEX* : 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIOCHECKTCPIPCONNECTIONS::Connections_GetMutex()
@@ -845,13 +845,13 @@ XMUTEX* DIOCHECKTCPIPCONNECTIONS::Connections_GetMutex()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connections_IsAllChecked()
 * @brief      Connections is all checked
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connections_IsAllChecked()
 {
@@ -875,13 +875,13 @@ bool DIOCHECKTCPIPCONNECTIONS::Connections_IsAllChecked()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connections_IsSomeChecked()
 * @brief      Connections is some checked
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connections_IsSomeChecked()
 {
@@ -909,15 +909,15 @@ bool DIOCHECKTCPIPCONNECTIONS::Connections_IsSomeChecked()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connections_WaitToAllChecked(int timeout)
 * @brief      Connections wait to all checked
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connections_WaitToAllChecked(int timeout)
 {
@@ -957,15 +957,15 @@ bool DIOCHECKTCPIPCONNECTIONS::Connections_WaitToAllChecked(int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connections_WaitToSomeIsChecked(int timeout)
 * @brief      Connections wait to some is checked
 * @ingroup    DATAIO
-*
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connections_WaitToSomeIsChecked(int timeout)
 {
@@ -1005,13 +1005,13 @@ bool DIOCHECKTCPIPCONNECTIONS::Connections_WaitToSomeIsChecked(int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connections_SomeIsConnected()
 * @brief      Connections some is connected
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connections_SomeIsConnected()
 {
@@ -1036,13 +1036,13 @@ bool DIOCHECKTCPIPCONNECTIONS::Connections_SomeIsConnected()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connections_DeleteAll()
 * @brief      Connections GEN_DELETE all
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::Connections_DeleteAll()
 {
@@ -1063,7 +1063,7 @@ bool DIOCHECKTCPIPCONNECTIONS::Connections_DeleteAll()
 * @brief      Is actived exit
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::IsActivedExit()
@@ -1078,9 +1078,9 @@ bool DIOCHECKTCPIPCONNECTIONS::IsActivedExit()
 * @brief      Set actived exit
 * @ingroup    DATAIO
 * 
-* @param[in]  actived : 
+* @param[in]  actived : Actived value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::SetActivedExit(bool actived)
@@ -1092,13 +1092,13 @@ bool DIOCHECKTCPIPCONNECTIONS::SetActivedExit(bool actived)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCHECKTCPIPCONNECTIONS::End()
 {
@@ -1131,13 +1131,13 @@ bool DIOCHECKTCPIPCONNECTIONS::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTIONS::ThreadCheckConnections(void* param)
 * @brief      Thread check connections
 * @ingroup    DATAIO
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTIONS::ThreadCheckConnections(void* param)
 {
@@ -1266,12 +1266,12 @@ void DIOCHECKTCPIPCONNECTIONS::ThreadCheckConnections(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCHECKTCPIPCONNECTIONS::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCHECKTCPIPCONNECTIONS::Clean()
 {

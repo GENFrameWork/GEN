@@ -53,11 +53,11 @@ DIOSTM32STREAMUART*   diostreamuartptrhandle[DIOSTM32STREAMIUART_MAXHANDLES] = {
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTM32STREAMUART::DIOSTM32STREAMUART()
+* 
+* @fn         DIOSTM32STREAMUART::DIOSTM32STREAMUART() : DIOSTREAMUART(), XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMUART::DIOSTM32STREAMUART() : DIOSTREAMUART(), XFSMACHINE(0)
 {
@@ -89,12 +89,12 @@ DIOSTM32STREAMUART::DIOSTM32STREAMUART() : DIOSTREAMUART(), XFSMACHINE(0)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32STREAMUART::~DIOSTM32STREAMUART()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMUART::~DIOSTM32STREAMUART()
 {
@@ -108,13 +108,13 @@ DIOSTM32STREAMUART::~DIOSTM32STREAMUART()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSTATUS DIOSTM32STREAMUART::GetStatus()
 * @brief      Get status
 * @ingroup    PLATFORM_STM32
-*
-* @return     DIOSTREAMSTATUS :
-*
+* 
+* @return     DIOSTREAMSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOSTM32STREAMUART::GetStatus()
 {
@@ -126,13 +126,13 @@ DIOSTREAMSTATUS DIOSTM32STREAMUART::GetStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::Open()
 * @brief      Open
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::Open()
 {
@@ -204,15 +204,15 @@ bool DIOSTM32STREAMUART::Open()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::Config(XWORD mask)
 * @brief      Config
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  mask :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::Config(XWORD mask)
 {
@@ -292,16 +292,16 @@ bool DIOSTM32STREAMUART::Config(XWORD mask)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
 * @brief      Read direct
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
 {
@@ -320,16 +320,16 @@ XDWORD DIOSTM32STREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 {
@@ -343,16 +343,16 @@ XDWORD DIOSTM32STREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMUART::Write(XBYTE* buffer, XDWORD size)
 * @brief      Write
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMUART::Write(XBYTE* buffer, XDWORD size)
 {
@@ -376,13 +376,13 @@ XDWORD DIOSTM32STREAMUART::Write(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::Disconnect()
 * @brief      Disconnect
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::Disconnect()
 {
@@ -392,13 +392,13 @@ bool DIOSTM32STREAMUART::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::Close()
 * @brief      Close
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::Close()
 {
@@ -416,13 +416,13 @@ bool DIOSTM32STREAMUART::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::GetCTS()
 * @brief      Get CTS
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::GetCTS()
 {
@@ -432,13 +432,13 @@ bool DIOSTM32STREAMUART::GetCTS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::GetDSR()
 * @brief      Get DSR
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::GetDSR()
 {
@@ -448,13 +448,13 @@ bool DIOSTM32STREAMUART::GetDSR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::GetRing()
 * @brief      Get ring
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::GetRing()
 {
@@ -464,13 +464,13 @@ bool DIOSTM32STREAMUART::GetRing()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::GetRLSD()
 * @brief      Get RLSD
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::GetRLSD()
 {
@@ -480,15 +480,15 @@ bool DIOSTM32STREAMUART::GetRLSD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::SetRTS(bool on)
 * @brief      Set RTS
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::SetRTS(bool on)
 {
@@ -498,15 +498,15 @@ bool DIOSTM32STREAMUART::SetRTS(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::SetDTR(bool on)
 * @brief      Set DTR
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::SetDTR(bool on)
 {
@@ -516,14 +516,14 @@ bool DIOSTM32STREAMUART::SetDTR(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMUART::CleanBuffers()
 * @brief      Clean buffers
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMUART::CleanBuffers()
 {
@@ -534,13 +534,13 @@ bool DIOSTM32STREAMUART::CleanBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UART_HandleTypeDef* DIOSTM32STREAMUART::GetHuart()
 * @brief      Get huart
 * @ingroup    PLATFORM_STM32
-*
-* @return     UART_HandleTypeDef* :
-*
+* 
+* @return     UART_HandleTypeDef* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 UART_HandleTypeDef* DIOSTM32STREAMUART::GetHuart()
 {
@@ -550,13 +550,13 @@ UART_HandleTypeDef* DIOSTM32STREAMUART::GetHuart()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMUART::SetHuart(UART_HandleTypeDef* huart)
 * @brief      Set huart
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  huart :
-*
+* 
+* @param[in]  huart : Huart pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMUART::SetHuart(UART_HandleTypeDef* huart)
 {
@@ -569,13 +569,13 @@ void DIOSTM32STREAMUART::SetHuart(UART_HandleTypeDef* huart)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void HAL_UART_RxCpltCallback(UART_HandleTypeDef*huart)
+* 
+* @fn         void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 * @brief      AL_UART_RxCpltCallback
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  UART_HandleTypeDef*huart :
-*
+* 
+* @param[in]  huart : Huart pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
@@ -617,13 +617,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMUART::ThreadConnection(void* param)
 * @brief      Thread connection
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMUART::ThreadConnection(void* param)
 {
@@ -710,12 +710,12 @@ void DIOSTM32STREAMUART::ThreadConnection(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMUART::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMUART::Clean()
 {

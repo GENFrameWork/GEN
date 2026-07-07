@@ -70,11 +70,11 @@ void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated() const
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(int actionIndex) const
+* @fn         void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(int actionindex) const
 * @brief      toast activated
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  actionIndex : 
+* @param[in]  actionindex : Actionindex value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(int actionindex) const 
@@ -91,7 +91,7 @@ void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(int actionindex) con
 * @brief      toast activated
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  response : 
+* @param[in]  response : Response value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(const char* response) const 
@@ -106,7 +106,7 @@ void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastActivated(const char* response
 * @brief      toast dismissed
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  state : 
+* @param[in]  state : State value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSNOTIFICATIONSMANAGER_HANDLER::toastDismissed(WinToastDismissalReason state) const 
@@ -175,13 +175,13 @@ DIOWINDOWSNOTIFICATIONSMANAGER::~DIOWINDOWSNOTIFICATIONSMANAGER()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
-* @brief      ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  ownertitle : 
-* @param[in]  appname : 
+* @param[in]  ownertitle : Ownertitle pointer to use.
+* @param[in]  appname : Appname pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
@@ -209,12 +209,12 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  notification : 
+* @param[in]  notification : Notification pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
@@ -247,10 +247,10 @@ bool DIOWINDOWSNOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOWINDOWSNOTIFICATIONSMANAGER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSNOTIFICATIONSMANAGER::End()

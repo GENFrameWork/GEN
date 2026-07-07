@@ -63,7 +63,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOWINDOWSPCAP::DIOWINDOWSPCAP()
+* @fn         DIOWINDOWSPCAP::DIOWINDOWSPCAP() : DIOPCAP()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
 * 
@@ -95,14 +95,14 @@ DIOWINDOWSPCAP::~DIOWINDOWSPCAP()
 * @fn         bool DIOWINDOWSPCAP::Capture_Start(DIOPCAPNETINTERFACE* netinterface, bool promiscuousmode, int timeout)
 * @brief      Capture start
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  netinterface : 
-* @param[in]  promiscuousmode : 
-* @param[in]  timeout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  netinterface : Netinterface pointer to use.
+* @param[in]  promiscuousmode : Promiscuousmode value.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSPCAP::Capture_Start(DIOPCAPNETINTERFACE* netinterface, bool promiscuousmode, int timeout)
 {
   if(!netinterface) return false;
@@ -134,10 +134,10 @@ bool DIOWINDOWSPCAP::Capture_Start(DIOPCAPNETINTERFACE* netinterface, bool promi
 * @fn         bool DIOWINDOWSPCAP::Capture_End()
 * @brief      Capture end
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSPCAP::Capture_End()
 {
   if(handle) pcap_breakloop(handle);
@@ -167,8 +167,8 @@ bool DIOWINDOWSPCAP::Capture_End()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSPCAP::Clean()
 {
   handle        = NULL;
@@ -181,10 +181,10 @@ void DIOWINDOWSPCAP::Clean()
 * @fn         bool DIOWINDOWSPCAP::CreateListNetInterfaces()
 * @brief      Create list net interfaces
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWINDOWSPCAP::CreateListNetInterfaces()
 {
   pcap_if_t* allnetinterfaces;
@@ -238,10 +238,10 @@ bool DIOWINDOWSPCAP::CreateListNetInterfaces()
 * @fn         void DIOWINDOWSPCAP::ThreadCapture(void* data)
 * @brief      Thread capture
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  data : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  data : Data buffer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSPCAP::ThreadCapture(void* data)
 {
   DIOWINDOWSPCAP* diopcap = (DIOWINDOWSPCAP*)data;
@@ -263,12 +263,12 @@ void DIOWINDOWSPCAP::ThreadCapture(void* data)
 * @fn         void DIOWINDOWSPCAP::PacketHandler(u_char* param, const struct pcap_pkthdr* header, const u_char* data)
 * @brief      Packet handler
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  param : 
-* @param[in]  struct pcap_pkthdr* header : 
-* @param[in]  u_char* data : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  param : Param pointer to use.
+* @param[in]  header : Header value.
+* @param[in]  data : Data buffer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSPCAP::PacketHandler(u_char* param, const struct pcap_pkthdr* header, const u_char* data)
 {
   DIOWINDOWSPCAP* diopcap = (DIOWINDOWSPCAP*)param;

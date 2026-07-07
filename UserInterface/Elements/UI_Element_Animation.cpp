@@ -64,8 +64,8 @@
 * @fn         UI_ELEMENT_ANIMATION::UI_ELEMENT_ANIMATION()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_ANIMATION::UI_ELEMENT_ANIMATION()    
 { 
   Clean();   
@@ -85,8 +85,8 @@ UI_ELEMENT_ANIMATION::UI_ELEMENT_ANIMATION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_ANIMATION::~UI_ELEMENT_ANIMATION()    
 {  
   if(xtimerplay) 
@@ -104,10 +104,10 @@ UI_ELEMENT_ANIMATION::~UI_ELEMENT_ANIMATION()
 * @fn         bool UI_ELEMENT_ANIMATION::Play()
 * @brief      Play
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_ANIMATION::Play()
 {
   state = UI_ELEMENT_ANIMATION_STATE_PLAY;
@@ -121,12 +121,12 @@ bool UI_ELEMENT_ANIMATION::Play()
 * @fn         bool UI_ELEMENT_ANIMATION::Play(int millisecdelay)
 * @brief      Play
 * @ingroup    USERINTERFACE
-*
-* @param[in]  millisecdelay : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  millisecdelay : Millisecdelay value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_ANIMATION::Play(int millisecdelay)
 {
   SetMilliSecondsDelay(millisecdelay);
@@ -140,10 +140,10 @@ bool UI_ELEMENT_ANIMATION::Play(int millisecdelay)
 * @fn         bool UI_ELEMENT_ANIMATION::Stop()
 * @brief      Stop
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_ANIMATION::Stop()
 {
   state = UI_ELEMENT_ANIMATION_STATE_STOP;
@@ -157,10 +157,10 @@ bool UI_ELEMENT_ANIMATION::Stop()
 * @fn         bool UI_ELEMENT_ANIMATION::Pause()
 * @brief      Pause
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_ANIMATION::Pause()
 {
   state = UI_ELEMENT_ANIMATION_STATE_PAUSE;
@@ -174,10 +174,10 @@ bool UI_ELEMENT_ANIMATION::Pause()
 * @fn         UI_ELEMENT_ANIMATION_STATE UI_ELEMENT_ANIMATION::GetState()
 * @brief      Get state
 * @ingroup    USERINTERFACE
-*
-* @return     UI_ELEMENT_ANIMATION_STATE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_ELEMENT_ANIMATION_STATE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT_ANIMATION_STATE UI_ELEMENT_ANIMATION::GetState()
 {
   return state;
@@ -189,10 +189,10 @@ UI_ELEMENT_ANIMATION_STATE UI_ELEMENT_ANIMATION::GetState()
 * @fn         XTIMER* UI_ELEMENT_ANIMATION::GetXTimerPlay()
 * @brief      Get X timer play
 * @ingroup    USERINTERFACE
-*
-* @return     XTIMER* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* UI_ELEMENT_ANIMATION::GetXTimerPlay()
 {
   return xtimerplay;
@@ -204,10 +204,10 @@ XTIMER* UI_ELEMENT_ANIMATION::GetXTimerPlay()
 * @fn         int UI_ELEMENT_ANIMATION::GetMilliSecondsDelay()
 * @brief      Get milli seconds delay
 * @ingroup    USERINTERFACE
-*
-* @return     int : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_ELEMENT_ANIMATION::GetMilliSecondsDelay()
 {
   return millisecdelay;
@@ -219,10 +219,10 @@ int UI_ELEMENT_ANIMATION::GetMilliSecondsDelay()
 * @fn         void UI_ELEMENT_ANIMATION::SetMilliSecondsDelay(int millisecdelay)
 * @brief      Set milli seconds delay
 * @ingroup    USERINTERFACE
-*
-* @param[in]  millisecdelay : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  millisecdelay : Millisecdelay value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_ANIMATION::SetMilliSecondsDelay(int millisecdelay)
 {
   this->millisecdelay = millisecdelay;
@@ -234,10 +234,10 @@ void UI_ELEMENT_ANIMATION::SetMilliSecondsDelay(int millisecdelay)
 * @fn         int UI_ELEMENT_ANIMATION::IndexImage_Get()
 * @brief      Index image get
 * @ingroup    USERINTERFACE
-*
-* @return     int : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int UI_ELEMENT_ANIMATION::IndexImage_Get()
 {
   return indeximage;
@@ -249,12 +249,12 @@ int UI_ELEMENT_ANIMATION::IndexImage_Get()
 * @fn         bool UI_ELEMENT_ANIMATION::IndexImage_Set(int indeximage)
 * @brief      Index image set
 * @ingroup    USERINTERFACE
-*
-* @param[in]  indeximage : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  indeximage : Indeximage value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_ANIMATION::IndexImage_Set(int indeximage)
 {
   if(indeximage <0)                                        return false;
@@ -273,12 +273,12 @@ bool UI_ELEMENT_ANIMATION::IndexImage_Set(int indeximage)
 * @fn         bool UI_ELEMENT_ANIMATION::IndexImage_Add(int inc)
 * @brief      Index image add
 * @ingroup    USERINTERFACE
-*
-* @param[in]  inc : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  inc : Inc value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_ANIMATION::IndexImage_Add(int inc)
 {
   indeximage += inc;
@@ -296,10 +296,10 @@ bool UI_ELEMENT_ANIMATION::IndexImage_Add(int inc)
 * @fn         bool UI_ELEMENT_ANIMATION::IndexImage_Reset()
 * @brief      Index image reset
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_ELEMENT_ANIMATION::IndexImage_Reset()
 {
   indeximage = 0;
@@ -313,10 +313,10 @@ bool UI_ELEMENT_ANIMATION::IndexImage_Reset()
 * @fn         XBYTE UI_ELEMENT_ANIMATION::GetAlpha()
 * @brief      Get alpha
 * @ingroup    USERINTERFACE
-*
-* @return     XBYTE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTE UI_ELEMENT_ANIMATION::GetAlpha()
 {
   return alpha;
@@ -328,10 +328,10 @@ XBYTE UI_ELEMENT_ANIMATION::GetAlpha()
 * @fn         void UI_ELEMENT_ANIMATION::SetAlpha(XBYTE alpha)
 * @brief      Set alpha
 * @ingroup    USERINTERFACE
-*
-* @param[in]  alpha : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  alpha : Alpha value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_ANIMATION::SetAlpha(XBYTE alpha)
 {
   this->alpha = alpha;
@@ -344,8 +344,8 @@ void UI_ELEMENT_ANIMATION::SetAlpha(XBYTE alpha)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_ANIMATION::Clean()
 {
   xtimerplay      = NULL;

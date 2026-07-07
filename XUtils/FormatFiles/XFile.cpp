@@ -66,11 +66,11 @@ XFILEOPENLIST XFileOpenList;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILE::XFILE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILE::XFILE()
 {
@@ -79,12 +79,12 @@ XFILE::XFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILE::~XFILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILE::~XFILE()
 
@@ -96,13 +96,13 @@ XFILE::~XFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD XFILE::GetSize()
+* 
+* @fn         XQWORD XFILE::GetSize()
 * @brief      Get size
 * @ingroup    XUTILS
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XFILE::GetSize()
 {
@@ -111,15 +111,15 @@ XQWORD XFILE::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Write(XBUFFER &xbuffer)
 * @brief      Write
 * @ingroup    XUTILS
-*
-* @param[in]  &xbuffer :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xbuffer : Buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Write(XBUFFER &xbuffer)
 {
@@ -128,13 +128,13 @@ bool XFILE::Write(XBUFFER &xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Close()
 {
@@ -143,15 +143,15 @@ bool XFILE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Exist(XPATH& xpath)
 * @brief      Exist
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Exist(XPATH& xpath)
 {
@@ -160,16 +160,16 @@ bool XFILE::Exist(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Open(XPATH& xpath,bool readonly)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  readonly :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  readonly : Readonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Open(XPATH& xpath,bool readonly)
 {
@@ -178,15 +178,15 @@ bool XFILE::Open(XPATH& xpath,bool readonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Create(XPATH& xpath)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Create(XPATH& xpath)
 {
@@ -195,16 +195,16 @@ bool XFILE::Create(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Erase(XPATH& xpath,bool overwrite)
 * @brief      Erase
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  overwrite :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  overwrite : Overwrite value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Erase(XPATH& xpath,bool overwrite)
 {
@@ -213,16 +213,16 @@ bool XFILE::Erase(XPATH& xpath,bool overwrite)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Rename(XPATH& xpathold,XPATH& xpathnew)
 * @brief      Rename
 * @ingroup    XUTILS
-*
-* @param[in]  xpathold :
-* @param[in]  xpathnew :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathold : Xpathold value.
+* @param[in]  xpathnew : Xpathnew value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Rename(XPATH& xpathold,XPATH& xpathnew)
 {
@@ -231,16 +231,16 @@ bool XFILE::Rename(XPATH& xpathold,XPATH& xpathnew)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Rename(XCHAR* xpathold,XPATH& xpathnew)
 * @brief      Rename
 * @ingroup    XUTILS
-*
-* @param[in]  xpathold :
-* @param[in]  xpathnew :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathold : Xpathold pointer to use.
+* @param[in]  xpathnew : Xpathnew value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Rename(XCHAR* xpathold,XPATH& xpathnew)
 {
@@ -249,16 +249,16 @@ bool XFILE::Rename(XCHAR* xpathold,XPATH& xpathnew)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::Rename(XPATH& xpathold,XCHAR* xpathnew)
 * @brief      Rename
 * @ingroup    XUTILS
-*
-* @param[in]  xpathold :
-* @param[in]  xpathnew :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpathold : Xpathold value.
+* @param[in]  xpathnew : Xpathnew pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::Rename(XPATH& xpathold,XCHAR* xpathnew)
 {
@@ -267,13 +267,13 @@ bool XFILE::Rename(XPATH& xpathold,XCHAR* xpathnew)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::IsOpen()
 * @brief      Is open
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::IsOpen()
 {
@@ -282,13 +282,13 @@ bool XFILE::IsOpen()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::IsReadOnly()
 * @brief      Is read only
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::IsReadOnly()
 {
@@ -297,13 +297,13 @@ bool XFILE::IsReadOnly()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* XFILE::GetPathNameFile()
 * @brief      Get path name file
 * @ingroup    XUTILS
-*
-* @return     XCHAR* :
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XFILE::GetPathNameFile()
 {
@@ -312,15 +312,15 @@ XCHAR* XFILE::GetPathNameFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::EraseBlock(XQWORD size)
 * @brief      Erase block
 * @ingroup    XUTILS
-*
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::EraseBlock(XQWORD size)
 {
@@ -369,16 +369,16 @@ bool XFILE::EraseBlock(XQWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILE::InsertBlock(XBYTE* buffer, XDWORD size)
 * @brief      Insert block
 * @ingroup    XUTILS
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::InsertBlock(XBYTE* buffer, XDWORD size)
 {
@@ -442,13 +442,13 @@ bool XFILE::InsertBlock(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILE::ChangeAttributes(XCHAR* attributes)
 * @brief      Change attributes
 * @ingroup    XUTILS
-*
-* @param[in]  attributes :
-*
+* 
+* @param[in]  attributes : Attributes pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILE::ChangeAttributes(XCHAR* attributes)
 {
@@ -462,9 +462,9 @@ void XFILE::ChangeAttributes(XCHAR* attributes)
 * @brief      Overwrite content
 * @ingroup    XUTILS
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILE::OverwriteContent(XCHAR* xpath)
@@ -508,12 +508,12 @@ bool XFILE::OverwriteContent(XCHAR* xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILE::Clean()
 {
@@ -528,11 +528,11 @@ void XFILE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECONTAINER::XFILECONTAINER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECONTAINER::XFILECONTAINER()
 {
@@ -541,12 +541,12 @@ XFILECONTAINER::XFILECONTAINER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECONTAINER::~XFILECONTAINER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECONTAINER::~XFILECONTAINER()
 {
@@ -560,7 +560,7 @@ XFILECONTAINER::~XFILECONTAINER()
 * @brief      Create primary file
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECONTAINER::CreatePrimaryFile()
@@ -580,7 +580,7 @@ bool XFILECONTAINER::CreatePrimaryFile()
 * @brief      Get primary file
 * @ingroup    XUTILS
 * 
-* @return     XFILE* : 
+* @return     XFILE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILE* XFILECONTAINER::GetPrimaryFile()
@@ -595,7 +595,7 @@ XFILE* XFILECONTAINER::GetPrimaryFile()
 * @brief      Delete primary file
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECONTAINER::DeletePrimaryFile()
@@ -613,12 +613,12 @@ bool XFILECONTAINER::DeletePrimaryFile()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILECONTAINER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECONTAINER::Clean()
 {
@@ -651,12 +651,12 @@ XFILEOPENLIST::~XFILEOPENLIST()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEOPENLIST::Add(XFILE* xfile)
-* @brief      Add
+* @brief      Add value
 * @ingroup    XUTILS
 * 
-* @param[in]  xfile : 
+* @param[in]  xfile : Xfile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEOPENLIST::Add(XFILE* xfile)
@@ -670,12 +670,12 @@ bool XFILEOPENLIST::Add(XFILE* xfile)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEOPENLIST::Del(XFILE* xfile)
-* @brief      Del
+* @brief      Delete resource
 * @ingroup    XUTILS
 * 
-* @param[in]  xfile : 
+* @param[in]  xfile : Xfile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEOPENLIST::Del(XFILE* xfile)
@@ -694,7 +694,7 @@ bool XFILEOPENLIST::Del(XFILE* xfile)
 * @brief      Close all
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEOPENLIST::CloseAll()
@@ -718,7 +718,7 @@ bool XFILEOPENLIST::CloseAll()
 * @brief      Display all
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEOPENLIST::DisplayAll()

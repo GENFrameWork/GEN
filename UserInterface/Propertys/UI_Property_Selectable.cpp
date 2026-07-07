@@ -62,8 +62,8 @@
 * @fn         UI_PROPERTY_SELECTABLE::UI_PROPERTY_SELECTABLE()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SELECTABLE::UI_PROPERTY_SELECTABLE()    
 { 
   Clean(); 
@@ -79,8 +79,8 @@ UI_PROPERTY_SELECTABLE::UI_PROPERTY_SELECTABLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SELECTABLE::~UI_PROPERTY_SELECTABLE()    
 {   
   if(xtimerselected) 
@@ -98,10 +98,10 @@ UI_PROPERTY_SELECTABLE::~UI_PROPERTY_SELECTABLE()
 * @fn         XDWORD UI_PROPERTY_SELECTABLE::GetTimeSelected()
 * @brief      Get time selected
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_PROPERTY_SELECTABLE::GetTimeSelected()
 {
   return timeselected;
@@ -113,10 +113,10 @@ XDWORD UI_PROPERTY_SELECTABLE::GetTimeSelected()
 * @fn         void UI_PROPERTY_SELECTABLE::SetTimeSelected(XDWORD timeselected)
 * @brief      Set time selected
 * @ingroup    USERINTERFACE
-*
-* @param[in]  timeselected : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  timeselected : Timeselected value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SELECTABLE::SetTimeSelected(XDWORD timeselected)
 {
   this->timeselected = timeselected;
@@ -128,10 +128,10 @@ void UI_PROPERTY_SELECTABLE::SetTimeSelected(XDWORD timeselected)
 * @fn         XTIMER* UI_PROPERTY_SELECTABLE::GetXTimerSelected()
 * @brief      Get X timer selected
 * @ingroup    USERINTERFACE
-*
-* @return     XTIMER* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* UI_PROPERTY_SELECTABLE::GetXTimerSelected()
 {
   return xtimerselected;
@@ -143,10 +143,10 @@ XTIMER* UI_PROPERTY_SELECTABLE::GetXTimerSelected()
 * @fn         UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::GetSelectableState()
 * @brief      Get selectable state
 * @ingroup    USERINTERFACE
-*
-* @return     UI_PROPERTY_SELECTABLE_STATE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_PROPERTY_SELECTABLE_STATE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::GetSelectableState()
 {
   return selectable_state;
@@ -158,12 +158,12 @@ UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::GetSelectableState()
 * @fn         bool UI_PROPERTY_SELECTABLE::SetSelectableState(UI_PROPERTY_SELECTABLE_STATE state)
 * @brief      Set selectable state
 * @ingroup    USERINTERFACE
-*
-* @param[in]  state : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  state : State value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SELECTABLE::SetSelectableState(UI_PROPERTY_SELECTABLE_STATE state)
 {
   this->selectable_state = state;
@@ -177,12 +177,12 @@ bool UI_PROPERTY_SELECTABLE::SetSelectableState(UI_PROPERTY_SELECTABLE_STATE sta
 * @fn         UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::SetSelectableStateFromString(XCHAR* selectablestr)
 * @brief      Set selectable state from string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  selectablestr : 
 * 
-* @return     UI_PROPERTY_SELECTABLE_STATE : 
+* @param[in]  selectablestr : Selectablestr pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_PROPERTY_SELECTABLE_STATE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::SetSelectableStateFromString(XCHAR* selectablestr)
 { 
   if(!selectablestr)  return UI_PROPERTY_SELECTABLE_STATE_DEACTIVE;
@@ -207,12 +207,12 @@ UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::SetSelectableStateFromStrin
 * @fn         UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::SetSelectableStateFromString(XSTRING& selectablestr)
 * @brief      Set selectable state from string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  selectablestr : 
 * 
-* @return     UI_PROPERTY_SELECTABLE_STATE : 
+* @param[in]  selectablestr : Selectablestr value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_PROPERTY_SELECTABLE_STATE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::SetSelectableStateFromString(XSTRING& selectablestr)
 {
   return SetSelectableStateFromString(selectablestr.Get());
@@ -225,8 +225,8 @@ UI_PROPERTY_SELECTABLE_STATE UI_PROPERTY_SELECTABLE::SetSelectableStateFromStrin
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SELECTABLE::Clean()
 {  
   selectable_state = UI_PROPERTY_SELECTABLE_STATE_DEACTIVE;

@@ -78,7 +78,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMUSB::DIOANDROIDSTREAMUSB()
+* @fn         DIOANDROIDSTREAMUSB::DIOANDROIDSTREAMUSB() : DIOSTREAMUSB(), XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -138,7 +138,7 @@ DIOANDROIDSTREAMUSB::~DIOANDROIDSTREAMUSB()
 * @brief      Get status
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     DIOSTREAMSTATUS : 
+* @return     DIOSTREAMSTATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOANDROIDSTREAMUSB::GetStatus()
@@ -156,7 +156,7 @@ DIOSTREAMSTATUS DIOANDROIDSTREAMUSB::GetStatus()
 * @brief      Open
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUSB::Open()
@@ -190,7 +190,7 @@ bool DIOANDROIDSTREAMUSB::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUSB::Disconnect()                                
@@ -205,7 +205,7 @@ bool DIOANDROIDSTREAMUSB::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUSB::Close()
@@ -233,7 +233,7 @@ bool DIOANDROIDSTREAMUSB::Close()
 * @note       INTERNAL
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMUSB::CleanBuffers()
@@ -250,7 +250,7 @@ bool DIOANDROIDSTREAMUSB::CleanBuffers()
 * @brief      Thread connection
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMUSB::ThreadConnection(void* data)
@@ -354,10 +354,10 @@ void DIOANDROIDSTREAMUSB::ThreadConnection(void* data)
 * @brief      Read buffer
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOANDROIDSTREAMUSB::ReadBuffer(XBYTE* buffer,XDWORD size)
@@ -395,10 +395,10 @@ XDWORD DIOANDROIDSTREAMUSB::ReadBuffer(XBYTE* buffer,XDWORD size)
 * @brief      Write buffer
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOANDROIDSTREAMUSB::WriteBuffer(XBYTE* buffer, XDWORD size)

@@ -76,11 +76,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRPBITMAPFILEBASE::GRPBITMAPFILEBASE()
+* 
+* @fn         GRPBITMAPFILEBASE::GRPBITMAPFILEBASE(): XFILECONTAINER()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFILEBASE::GRPBITMAPFILEBASE(): XFILECONTAINER()
 {
@@ -91,12 +91,12 @@ GRPBITMAPFILEBASE::GRPBITMAPFILEBASE(): XFILECONTAINER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFILEBASE::~GRPBITMAPFILEBASE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFILEBASE::~GRPBITMAPFILEBASE()
 {
@@ -107,16 +107,16 @@ GRPBITMAPFILEBASE::~GRPBITMAPFILEBASE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAPFILEBASE::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE forcemode)
 * @brief      Create bitmap from file
 * @ingroup    GRAPHIC
-*
-* @param[in]  xpath :
-* @param[in]  forcemode :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  forcemode : Forcemode value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAPFILEBASE::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE forcemode)
 {
@@ -125,17 +125,17 @@ GRPBITMAP* GRPBITMAPFILEBASE::CreateBitmapFromFile(XPATH& xpath, GRPPROPERTYMODE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         GRPBITMAP* GRPBITMAPFILEBASE::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, GRPPROPERTYMODE forcemode);
+* 
+* @fn         GRPBITMAP* GRPBITMAPFILEBASE::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, GRPPROPERTYMODE forcemode)
 * @brief      Create bitmap from buffer
 * @ingroup    GRAPHIC
-*
-* @param[in]  buffer :
-* @param[in]  size :
-* @param[in]  forcemode :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* @param[in]  forcemode : Forcemode value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAPFILEBASE::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size, GRPPROPERTYMODE forcemode)
 {
@@ -144,17 +144,17 @@ GRPBITMAP* GRPBITMAPFILEBASE::CreateBitmapFromBuffer(XBYTE* buffer, XDWORD size,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPFILEBASE::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int quality)
 * @brief      Create file from bitmap
 * @ingroup    GRAPHIC
-*
-* @param[in]  xpath :
-* @param[in]  bitmap :
-* @param[in]  quality :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  bitmap : Bitmap pointer to use.
+* @param[in]  quality : Quality value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEBASE::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, int quality)
 {
@@ -163,15 +163,15 @@ bool GRPBITMAPFILEBASE::CreateFileFromBitmap(XPATH& xpath, GRPBITMAP* bitmap, in
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* GRPBITMAPFILEBASE::ReadImageBufferFromFile(XPATH& xpath)
 * @brief      Read image buffer from file
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  xpath : path to the Graphic file
-*
-* @return     XBYTE* : Pointer to buffer
-*
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* GRPBITMAPFILEBASE::ReadImageBufferFromFile(XPATH& xpath)
 {
@@ -180,16 +180,16 @@ XBYTE* GRPBITMAPFILEBASE::ReadImageBufferFromFile(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAPFILEBASE::ForceModeOfBitmap(GRPPROPERTYMODE forcemode, GRPBITMAP* bitmap)
 * @brief      Force mode of bitmap
 * @ingroup    GRAPHIC
-*
-* @param[in]  forcemode :
-* @param[in]  bitmap :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  forcemode : Forcemode value.
+* @param[in]  bitmap : Bitmap pointer to use.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAPFILEBASE::ForceModeOfBitmap(GRPPROPERTYMODE forcemode, GRPBITMAP* bitmap)
 {
@@ -209,16 +209,16 @@ GRPBITMAP* GRPBITMAPFILEBASE::ForceModeOfBitmap(GRPPROPERTYMODE forcemode, GRPBI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPFILEBASE::Open(XPATH& xpath,bool readonly)
 * @brief      Open
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  xpath : path to the Graphic file
 * @param[in]  readonly : is read only flag
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEBASE::Open(XPATH& xpath,bool readonly)
 {
@@ -230,15 +230,15 @@ bool GRPBITMAPFILEBASE::Open(XPATH& xpath,bool readonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPFILEBASE::Create(XPATH& xpath)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  xpath : path to create the Graphic file
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEBASE::Create(XPATH& xpath)
 {
@@ -250,13 +250,13 @@ bool GRPBITMAPFILEBASE::Create(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPFILEBASE::Close()
 * @brief      Close
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILEBASE::Close()
 {
@@ -267,12 +267,12 @@ bool GRPBITMAPFILEBASE::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAPFILEBASE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFILEBASE::Clean()
 {
@@ -285,11 +285,11 @@ void GRPBITMAPFILEBASE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFILE::GRPBITMAPFILE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFILE::GRPBITMAPFILE()
 {
@@ -303,7 +303,7 @@ GRPBITMAPFILE::GRPBITMAPFILE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFILE::GRPBITMAPFILE(XCHAR* xpath)
@@ -315,13 +315,13 @@ GRPBITMAPFILE::GRPBITMAPFILE(XCHAR* xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFILE::GRPBITMAPFILE(XPATH& xpath)
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  xpath : initial path to file
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFILE::GRPBITMAPFILE(XPATH& xpath)
 {
@@ -332,12 +332,12 @@ GRPBITMAPFILE::GRPBITMAPFILE(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFILE::~GRPBITMAPFILE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFILE::~GRPBITMAPFILE()
 {
@@ -346,13 +346,13 @@ GRPBITMAPFILE::~GRPBITMAPFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* GRPBITMAPFILE::GetPath()
 * @brief      Get path
 * @ingroup    GRAPHIC
-*
-* @return     XCHAR* : Path of file
-*
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* GRPBITMAPFILE::GetPath()
 {
@@ -361,13 +361,13 @@ XCHAR* GRPBITMAPFILE::GetPath()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAPFILE::SetPath(XPATH& xpath)
 * @brief      Set path
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  xpath : Path of file
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFILE::SetPath(XPATH& xpath)
 {
@@ -376,13 +376,13 @@ void GRPBITMAPFILE::SetPath(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAPFILE::SetPath(XCHAR* xpath)
 * @brief      Set path
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  xpath : Path of file
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFILE::SetPath(XCHAR* xpath)
 {
@@ -396,9 +396,9 @@ void GRPBITMAPFILE::SetPath(XCHAR* xpath)
 * @brief      Get type from extenxion
 * @ingroup    GRAPHIC
 * 
-* @param[in]  xpath : 
+* @param[in]  xpath : Path to use.
 * 
-* @return     GRPBITMAPFILE_TYPE : 
+* @return     GRPBITMAPFILE_TYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFILE_TYPE GRPBITMAPFILE::GetTypeFromExtenxion(XCHAR* xpath)
@@ -422,16 +422,16 @@ GRPBITMAPFILE_TYPE GRPBITMAPFILE::GetTypeFromExtenxion(XCHAR* xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAPFILE::Load(XCHAR* xpath, GRPPROPERTYMODE forcemode)
 * @brief      Load
 * @ingroup    GRAPHIC
-*
-* @param[in]  xpath :
-* @param[in]  forcemode :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  forcemode : Forcemode value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAPFILE::Load(XCHAR* xpath, GRPPROPERTYMODE forcemode)
 {
@@ -482,16 +482,16 @@ GRPBITMAP* GRPBITMAPFILE::Load(XCHAR* xpath, GRPPROPERTYMODE forcemode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAPFILE::Load(XPATH& xpath, GRPPROPERTYMODE forcemode)
 * @brief      Load
 * @ingroup    GRAPHIC
-*
-* @param[in]  xpath :
-* @param[in]  forcemode :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  forcemode : Forcemode value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAPFILE::Load(XPATH& xpath, GRPPROPERTYMODE forcemode)
 {
@@ -500,15 +500,15 @@ GRPBITMAP* GRPBITMAPFILE::Load(XPATH& xpath, GRPPROPERTYMODE forcemode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAPFILE::Load(GRPPROPERTYMODE forcemode)
 * @brief      Load
 * @ingroup    GRAPHIC
-*
-* @param[in]  forcemode :
-*
-* @return     GRPBITMAP* :
-*
+* 
+* @param[in]  forcemode : Forcemode value.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAPFILE::Load(GRPPROPERTYMODE forcemode)
 {
@@ -519,17 +519,17 @@ GRPBITMAP* GRPBITMAPFILE::Load(GRPPROPERTYMODE forcemode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPFILE::Save(XCHAR* xpath, GRPBITMAP* bitmap, int quality)
 * @brief      Save
 * @ingroup    GRAPHIC
-*
-* @param[in]  xpath :
-* @param[in]  bitmap :
-* @param[in]  quality :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  bitmap : Bitmap pointer to use.
+* @param[in]  quality : Quality value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILE::Save(XCHAR* xpath, GRPBITMAP* bitmap, int quality)
 {  
@@ -582,17 +582,17 @@ bool GRPBITMAPFILE::Save(XCHAR* xpath, GRPBITMAP* bitmap, int quality)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPFILE::Save(XPATH& xpath, GRPBITMAP* bitmap, int quality)
 * @brief      Save
 * @ingroup    GRAPHIC
-*
-* @param[in]  xpath :
-* @param[in]  bitmap :
-* @param[in]  quality :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  bitmap : Bitmap pointer to use.
+* @param[in]  quality : Quality value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILE::Save(XPATH& xpath, GRPBITMAP* bitmap, int quality)
 {
@@ -601,16 +601,16 @@ bool GRPBITMAPFILE::Save(XPATH& xpath, GRPBITMAP* bitmap, int quality)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPFILE::Save(GRPBITMAP* bitmap, int quality)
 * @brief      Save
 * @ingroup    GRAPHIC
-*
-* @param[in]  bitmap :
-* @param[in]  quality :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  bitmap : Bitmap pointer to use.
+* @param[in]  quality : Quality value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPFILE::Save(GRPBITMAP* bitmap, int quality)
 {
@@ -621,17 +621,17 @@ bool GRPBITMAPFILE::Save(GRPBITMAP* bitmap, int quality)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPSEQUENCE* GRPBITMAPFILE::LoadSequence(XCHAR* namemask, int inisequence, int endsequence)
 * @brief      Load sequence
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  namemask : string to mask
 * @param[in]  inisequence : first ini of the sequence
 * @param[in]  endsequence : end ini of the sequence
-*
-* @return     GRPBITMAPSEQUENCE* : bitmap sequence class
-*
+* 
+* @return     GRPBITMAPSEQUENCE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPSEQUENCE* GRPBITMAPFILE::LoadSequence(XCHAR* namemask, int inisequence, int endsequence)
 {
@@ -678,12 +678,12 @@ GRPBITMAPSEQUENCE* GRPBITMAPFILE::LoadSequence(XCHAR* namemask, int inisequence,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAPFILE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFILE::Clean()
 {

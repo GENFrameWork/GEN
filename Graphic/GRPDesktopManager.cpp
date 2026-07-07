@@ -92,7 +92,7 @@ GRPDESKTOPMONITORS::~GRPDESKTOPMONITORS()
 * @brief      Get monitors rects
 * @ingroup    GRAPHIC
 * 
-* @return     XVECTOR<GRPRECTINT*>* : 
+* @return     XVECTOR<GRPRECTINT*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPRECTINT*>* GRPDESKTOPMONITORS::GetMonitorsRects()
@@ -107,7 +107,7 @@ XVECTOR<GRPRECTINT*>* GRPDESKTOPMONITORS::GetMonitorsRects()
 * @brief      Get combined rect
 * @ingroup    GRAPHIC
 * 
-* @return     GRPRECTINT* : 
+* @return     GRPRECTINT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPRECTINT* GRPDESKTOPMONITORS::GetCombinedRect()
@@ -167,7 +167,7 @@ GRPDESKTOPMANAGER::~GRPDESKTOPMANAGER()
 * @brief      Get desktop monitors
 * @ingroup    GRAPHIC
 * 
-* @return     GRPDESKTOPMONITORS* : 
+* @return     GRPDESKTOPMONITORS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPDESKTOPMONITORS* GRPDESKTOPMANAGER::GetDesktopMonitors()

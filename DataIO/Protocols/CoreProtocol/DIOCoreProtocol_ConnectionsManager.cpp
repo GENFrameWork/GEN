@@ -115,10 +115,10 @@ DIOCOREPROTOCOL_CONNECTIONSMANAGER::~DIOCOREPROTOCOL_CONNECTIONSMANAGER()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Ini()
@@ -192,10 +192,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Ini()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::End()
@@ -259,7 +259,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::End()
 * @brief      Get protocol CFG
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_CFG* : 
+* @return     DIOCOREPROTOCOL_CFG* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CFG* DIOCOREPROTOCOL_CONNECTIONSMANAGER::GetProtocolCFG()
@@ -274,7 +274,7 @@ DIOCOREPROTOCOL_CFG* DIOCOREPROTOCOL_CONNECTIONSMANAGER::GetProtocolCFG()
 * @brief      DIO stream get all
 * @ingroup    DATAIO
 * 
-* @return     XMAP<DIOSTREAMCONFIG*, : 
+* @return     XMAP<DIOSTREAMCONFIG*, DIOSTREAM*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMAP<DIOSTREAMCONFIG*, DIOSTREAM*>* DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_GetAll()
@@ -289,10 +289,10 @@ XMAP<DIOSTREAMCONFIG*, DIOSTREAM*>* DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStrea
 * @brief      DIO stream add
 * @ingroup    DATAIO
 * 
-* @param[in]  diostreamCFG : 
-* @param[in]  diostream : 
+* @param[in]  diostreamCFG : Diostream configuration pointer to use.
+* @param[in]  diostream : Diostream pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_Add(DIOSTREAMCONFIG* diostreamCFG, DIOSTREAM* diostream)
@@ -312,9 +312,9 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_Add(DIOSTREAMCONFIG* diostrea
 * @brief      DIO stream delete
 * @ingroup    DATAIO
 * 
-* @param[in]  diostreamCFG : 
+* @param[in]  diostreamCFG : Diostream configuration pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_Delete(DIOSTREAMCONFIG* diostreamCFG)
@@ -345,7 +345,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_Delete(DIOSTREAMCONFIG* diost
 * @brief      DIO stream GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_DeleteAll()
@@ -370,7 +370,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::DIOStream_DeleteAll()
 * @brief      Create connection
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_CONNECTION* : 
+* @return     DIOCOREPROTOCOL_CONNECTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateConnection()
@@ -387,10 +387,10 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateConnection
 * @brief      Create protocol
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
-* @param[in]  diostream : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  diostream : Diostream pointer to use.
 * 
-* @return     DIOCOREPROTOCOL* : 
+* @return     DIOCOREPROTOCOL* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateProtocol(DIOCOREPROTOCOL_CONNECTION* connection, DIOSTREAM* diostream)
@@ -407,7 +407,7 @@ DIOCOREPROTOCOL* DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateProtocol(DIOCOREPROTO
 * @brief      update class  get Xmutex
 * @ingroup    DATAIO
 * 
-* @return     XMUTEX* : 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_GetXMutex()
@@ -422,10 +422,10 @@ XMUTEX* DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_GetXMutex()
 * @brief      Update class serialize
 * @ingroup    DATAIO
 * 
-* @param[in]  message : 
-* @param[in]  classcontent : 
+* @param[in]  message : Message text.
+* @param[in]  classcontent : Classcontent pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Serialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
@@ -472,10 +472,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Serialize(DIOCOREPROTOCOL_M
 * @brief      Update class deserialize
 * @ingroup    DATAIO
 * 
-* @param[in]  message : 
-* @param[in]  classcontent : 
+* @param[in]  message : Message text.
+* @param[in]  classcontent : Classcontent pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Deserialize(DIOCOREPROTOCOL_MESSAGE* message, XSERIALIZABLE* classcontent)
@@ -513,7 +513,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::UpdateClass_Deserialize(DIOCOREPROTOCOL
 * @brief      Connections get all
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIOCOREPROTOCOL_CONNECTION*>* : 
+* @return     XVECTOR<DIOCOREPROTOCOL_CONNECTION*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOCOREPROTOCOL_CONNECTION*>* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_GetAll()
@@ -528,7 +528,7 @@ XVECTOR<DIOCOREPROTOCOL_CONNECTION*>* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connec
 * @brief      Connections get X mutex
 * @ingroup    DATAIO
 * 
-* @return     XMUTEX* : 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_GetXMutex()
@@ -539,13 +539,13 @@ XMUTEX* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_GetXMutex()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Add(DIOSTREAM* diostream)
+* @fn         DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Add(DIOSTREAM* diostream)
 * @brief      Connections add
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
+* @param[in]  diostream : Diostream pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     DIOCOREPROTOCOL_CONNECTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Add(DIOSTREAM* diostream)
@@ -587,9 +587,9 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Add(
 * @brief      Connections get
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
+* @param[in]  diostream : Diostream pointer to use.
 * 
-* @return     DIOCOREPROTOCOL_CONNECTION* : 
+* @return     DIOCOREPROTOCOL_CONNECTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Get(DIOSTREAM* diostream)
@@ -636,9 +636,9 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Get(
 * @brief      Connections get
 * @ingroup    DATAIO
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
-* @return     DIOCOREPROTOCOL_CONNECTION* : 
+* @return     DIOCOREPROTOCOL_CONNECTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Get(XDWORD index)
@@ -672,9 +672,9 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Get(
 * @brief      Connections delete
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
+* @param[in]  connection : Connection pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Delete(DIOCOREPROTOCOL_CONNECTION* connection)
@@ -707,7 +707,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_Delete(DIOCOREPROTOCOL_CONN
 * @brief      Connections GEN_DELETE all disconnected
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAllDisconnected()
@@ -759,7 +759,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAllDisconnected()
 * @brief      Connections GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAll()
@@ -805,9 +805,9 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_DeleteAll()
 * @brief      Create ID machine
 * @ingroup    DATAIO
 * 
-* @param[in]  ID : 
+* @param[in]  ID : Identifier to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateIDMachine(XUUID& ID)
@@ -874,7 +874,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateIDMachine(XUUID& ID)
 * @brief      Connections read messages
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_ReadMessages()
@@ -1036,10 +1036,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Connections_ReadMessages()
 * @brief      Received all command messages
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
-* @param[in]  message : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  message : Message text.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllCommandMessages(DIOCOREPROTOCOL_CONNECTION* connection, DIOCOREPROTOCOL_MESSAGE* message)
@@ -1121,10 +1121,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllCommandMessages(DIOCOREPROT
 * @brief      Received additional command messages
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
-* @param[in]  message : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  message : Message text.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AdditionalCommandMessages(DIOCOREPROTOCOL_CONNECTION* connection, DIOCOREPROTOCOL_MESSAGE* message)
@@ -1193,10 +1193,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AdditionalCommandMessages(DIOC
 * @brief      Received all update class messages
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
-* @param[in]  message : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  message : Message text.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllUpdateClassMessages(DIOCOREPROTOCOL_CONNECTION* connection, DIOCOREPROTOCOL_MESSAGE* message)
@@ -1282,10 +1282,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllUpdateClassMessages(DIOCORE
 * @brief      Received additional update class messages
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
-* @param[in]  message : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  message : Message text.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AdditionalUpdateClassMessages(DIOCOREPROTOCOL_CONNECTION* connection, DIOCOREPROTOCOL_MESSAGE* message)
@@ -1335,10 +1335,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AdditionalUpdateClassMessages(
 * @brief      Received all ask update class messages
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
-* @param[in]  message : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  message : Message text.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllAskUpdateClassMessages(DIOCOREPROTOCOL_CONNECTION* connection, DIOCOREPROTOCOL_MESSAGE* message)
@@ -1418,10 +1418,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AllAskUpdateClassMessages(DIOC
 * @brief      Received additional ask update class messages
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
-* @param[in]  message : 
+* @param[in]  connection : Connection pointer to use.
+* @param[in]  message : Message text.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AdditionalAskUpdateClassMessages(DIOCOREPROTOCOL_CONNECTION* connection, DIOCOREPROTOCOL_MESSAGE* message)
@@ -1472,10 +1472,10 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::Received_AdditionalAskUpdateClassMessag
 * @brief      Generate response update class
 * @ingroup    DATAIO
 * 
-* @param[in]  xfileJSON : 
-* @param[in]  statusresponse : 
+* @param[in]  xfileJSON : Xfile JSON value.
+* @param[in]  statusresponse : Statusresponse value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::GenerateResponseUpdateClass(XFILEJSON& xfileJSON, bool statusresponse)
@@ -1509,7 +1509,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::GenerateResponseUpdateClass(XFILEJSON& 
 * @brief      manager update class
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerUpdateClasses()
@@ -1626,13 +1626,11 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerUpdateClasses()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerHeartBet(DIOCOREPROTOCOL_CONNECTIONSMANAGER* connectionsmanager)
+* @fn         bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerHeartBet()
 * @brief      manager heart bet
 * @ingroup    DATAIO
 * 
-* @param[in]  connectionsmanager : 
-* 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerHeartBet()
@@ -1709,7 +1707,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER::ManagerHeartBet()
 * @note       INTERNAL
 * @ingroup    DATAIO
 * 
-* @param[in]  event : 
+* @param[in]  event : Event to process.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent_CoreProtocolConnectionsManager(DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT* event)
@@ -1728,7 +1726,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent_CoreProtocolConnectionsMana
 * @note       INTERNAL
 * @ingroup    DATAIO
 * 
-* @param[in]  event : 
+* @param[in]  event : Event to process.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
@@ -1808,7 +1806,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent_DIOStream(DIOSTREAM_XEVENT*
 * @note       INTERNAL
 * @ingroup    DATAIO
 * 
-* @param[in]  xevent : 
+* @param[in]  xevent : Xevent pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent(XEVENT* xevent)
@@ -1845,7 +1843,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::HandleEvent(XEVENT* xevent)
 * @brief      Thread connections
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
@@ -1968,7 +1966,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadConnections(void* param)
 * @brief      thread update connection
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadUpdateConnection(void* param)
@@ -2004,7 +2002,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadUpdateConnection(void* param)
 * @brief      Thread automatic operations
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER::ThreadAutomaticOperations(void* param)

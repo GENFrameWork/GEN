@@ -29,11 +29,6 @@
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-#if defined(__ANDROID__)
-#include <android/log.h>
-#endif
-
-
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
@@ -46,12 +41,9 @@
 #include "GRPFrameRate.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -59,16 +51,15 @@
 XMAP<void*, GRPSCREEN*>  GRPSCREEN::listscreens;
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPSCREEN::GRPSCREEN()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREEN::GRPSCREEN()
 {
@@ -90,12 +81,12 @@ GRPSCREEN::GRPSCREEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPSCREEN::~GRPSCREEN()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREEN::~GRPSCREEN()
 {
@@ -127,13 +118,13 @@ GRPSCREEN::~GRPSCREEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPSCREENTYPE GRPSCREEN::GetType()
 * @brief      Get type
 * @ingroup    GRAPHIC
-*
-* @return     GRPSCREENTYPE : Screen type
-*
+* 
+* @return     GRPSCREENTYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREENTYPE GRPSCREEN::GetType()
 {
@@ -142,13 +133,13 @@ GRPSCREENTYPE GRPSCREEN::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::IsValid()
 * @brief      Is valid
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::IsValid()
 {
@@ -157,13 +148,13 @@ bool GRPSCREEN::IsValid()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::IsActive()
 * @brief      Is active
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::IsActive()
 {
@@ -177,9 +168,9 @@ bool GRPSCREEN::IsActive()
 * @brief      Style is
 * @ingroup    GRAPHIC
 * 
-* @param[in]  style : 
+* @param[in]  style : Style value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Style_Is(XDWORD style)
@@ -194,7 +185,7 @@ bool GRPSCREEN::Style_Is(XDWORD style)
 * @brief      Style add
 * @ingroup    GRAPHIC
 * 
-* @param[in]  style : 
+* @param[in]  style : Style value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREEN::Style_Add(XDWORD style)
@@ -209,7 +200,7 @@ void GRPSCREEN::Style_Add(XDWORD style)
 * @brief      Style remove
 * @ingroup    GRAPHIC
 * 
-* @param[in]  style : 
+* @param[in]  style : Style value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREEN::Style_Remove(XDWORD style)
@@ -224,7 +215,7 @@ void GRPSCREEN::Style_Remove(XDWORD style)
 * @brief      Styles get
 * @ingroup    GRAPHIC
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRPSCREEN::Styles_Get()
@@ -239,7 +230,7 @@ XDWORD GRPSCREEN::Styles_Get()
 * @brief      Styles set
 * @ingroup    GRAPHIC
 * 
-* @param[in]  styles : 
+* @param[in]  styles : Styles value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREEN::Styles_Set(XDWORD styles)
@@ -261,7 +252,7 @@ void GRPSCREEN::Styles_Set(XDWORD styles)
 * @brief      Styles is full screen
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Styles_IsFullScreen()
@@ -282,13 +273,13 @@ bool GRPSCREEN::Styles_IsFullScreen()
 * @brief      Set propertys
 * @ingroup    GRAPHIC
 * 
-* @param[in]  width : 
-* @param[in]  height : 
-* @param[in]  DPIs : 
-* @param[in]  stride : 
-* @param[in]  mode : 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* @param[in]  DPIs : DP Is value.
+* @param[in]  stride : Stride value.
+* @param[in]  mode : Mode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::SetPropertys(int width, int height, float DPIs, int stride, GRPPROPERTYMODE mode)
@@ -312,7 +303,7 @@ bool GRPSCREEN::SetPropertys(int width, int height, float DPIs, int stride, GRPP
 * @brief      Get rotation
 * @ingroup    GRAPHIC
 * 
-* @return     GRPSCREENROTATION : 
+* @return     GRPSCREENROTATION : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREENROTATION GRPSCREEN::GetRotation()
@@ -327,7 +318,7 @@ GRPSCREENROTATION GRPSCREEN::GetRotation()
 * @brief      Set rotation
 * @ingroup    GRAPHIC
 * 
-* @param[in]  rotation : 
+* @param[in]  rotation : Rotation value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREEN::SetRotation(GRPSCREENROTATION rotation)
@@ -340,30 +331,11 @@ void GRPSCREEN::SetRotation(GRPSCREENROTATION rotation)
 * 
 * @fn         bool GRPSCREEN::Rotate(int degrees)
 * @brief      Configures the screen presentation rotation, expressed in degrees, CLOCKWISE.
-* 
-*             This is a screen-level configuration (it may be set before Create(), exactly like the
-*             resolution via SetWidth()/SetHeight()). The rotation is ONLY honoured by the OpenGL ES
-*             presentation path (GRPBLITGLES), which applies it on the GPU as part of the fullscreen
-*             quad model matrix — costing nothing per frame and working identically on Windows
-*             (ANGLE/D3D11), Linux/X11 (Mesa) and Android (NDK).
-* 
-*             Only the four axis-aligned orientations are supported (0, 90, 180, 270). Any other angle
-*             is snapped to the nearest one. Restricting to multiples of 90 keeps the transform a pure
-*             axis-aligned remap of the quad (no bilinear resampling, no fractional letterbox), which is
-*             both faster and pixel-exact.
-* 
-*             Width/height handling (this is the key point): the SCREEN width/height keep representing
-*             the CONTENT the application draws (canvas / viewport / UI), so SetWidth()/SetHeight() and
-*             every layout that relies on them are left untouched -> no resampling, no broken layouts.
-*             What changes is the NATIVE WINDOW: it is created in the rotated orientation through
-*             GetPresentationWidth()/GetPresentationHeight() (width and height swapped on 90/270), so the
-*             rotated content fills the window edge to edge with no letterbox.
-* 
 * @ingroup    GRAPHIC
 * 
 * @param[in]  degrees : clockwise rotation in degrees (snapped to 0, 90, 180 or 270).
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Rotate(int degrees)
@@ -397,7 +369,7 @@ bool GRPSCREEN::Rotate(int degrees)
 * @brief      true when the current rotation swaps the screen axes (90 / 270 degrees)
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if the rotation is 90 or 270 degrees. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::IsRotationOrthogonal()
@@ -409,12 +381,10 @@ bool GRPSCREEN::IsRotationOrthogonal()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XDWORD GRPSCREEN::GetPresentationWidth()
-* @brief      Width of the NATIVE WINDOW (presentation surface). On a 90/270 rotation the content is
-*             presented with its axes swapped, so the window width is the content HEIGHT. The content
-*             itself (canvas / viewport / UI, sized by GetWidth()/GetHeight()) is never changed.
+* @brief      Width of the NATIVE WINDOW (presentation surface). On a 90/270 rotation the content is presented with its axes swapped, so the window width is the content HEIGHT. The content itself (canvas / viewport / UI, sized by GetWidth()/GetHeight()) is never changed.
 * @ingroup    GRAPHIC
 * 
-* @return     XDWORD : window width in pixels. 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRPSCREEN::GetPresentationWidth()
@@ -429,7 +399,7 @@ XDWORD GRPSCREEN::GetPresentationWidth()
 * @brief      Height of the NATIVE WINDOW (presentation surface). See GetPresentationWidth().
 * @ingroup    GRAPHIC
 * 
-* @return     XDWORD : window height in pixels. 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD GRPSCREEN::GetPresentationHeight()
@@ -439,13 +409,15 @@ XDWORD GRPSCREEN::GetPresentationHeight()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPSCREEN::Create(void* handle)
-* @brief      Create
+* 
+* @fn         bool GRPSCREEN::Create(bool show)
+* @brief      Create resource
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  show : Show value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Create(bool show)
 {
@@ -476,9 +448,9 @@ bool GRPSCREEN::Create(bool show)
 * @brief      Update
 * @ingroup    GRAPHIC
 * 
-* @param[in]  canvas : 
+* @param[in]  canvas : Canvas object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Update(GRP2DCANVAS* canvas)
@@ -493,9 +465,9 @@ bool GRPSCREEN::Update(GRP2DCANVAS* canvas)
 * @brief      Update transparent
 * @ingroup    GRAPHIC
 * 
-* @param[in]  canvas : 
+* @param[in]  canvas : Canvas object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
@@ -505,13 +477,13 @@ bool GRPSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Delete()
 {
@@ -533,10 +505,10 @@ bool GRPSCREEN::Delete()
 * @brief      Get position
 * @ingroup    GRAPHIC
 * 
-* @param[in]  &x : 
-* @param[in]  &y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Get_Position(int &x, int &y)
@@ -551,10 +523,10 @@ bool GRPSCREEN::Get_Position(int &x, int &y)
 * @brief      Set position
 * @ingroup    GRAPHIC
 * 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Set_Position(int x, int y)
@@ -564,16 +536,16 @@ bool GRPSCREEN::Set_Position(int x, int y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::Resize(int width, int height)
-* @brief
+* @brief      Resize
 * @ingroup    GRAPHIC
-*
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Resize(int width, int height)
 {
@@ -582,13 +554,13 @@ bool GRPSCREEN::Resize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::IsShow()
 * @brief      Is show
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::IsShow()
 {
@@ -597,15 +569,15 @@ bool GRPSCREEN::IsShow()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::Show(bool active)
 * @brief      Show
 * @ingroup    GRAPHIC
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Show(bool active)
 {
@@ -616,15 +588,15 @@ bool GRPSCREEN::Show(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::ShowCursor(bool active)
 * @brief      Show cursor
 * @ingroup    GRAPHIC
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::ShowCursor(bool active)
 {
@@ -633,13 +605,13 @@ bool GRPSCREEN::ShowCursor(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* GRPSCREEN::GetHandle()
-* @brief
+* @brief      Get handle
 * @ingroup    GRAPHIC
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPSCREEN::GetHandle()
 {
@@ -649,11 +621,11 @@ void* GRPSCREEN::GetHandle()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPSCREEN::SetHandle(XDWORD handle_window)
+* @fn         void GRPSCREEN::SetHandle(void* handle_window)
 * @brief      Set handle
 * @ingroup    GRAPHIC
 * 
-* @param[in]  handle_window : 
+* @param[in]  handle_window : Handle window pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREEN::SetHandle(void* handle_window)
@@ -668,7 +640,7 @@ void GRPSCREEN::SetHandle(void* handle_window)
 * @brief      Set focus
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Set_Focus()
@@ -683,9 +655,9 @@ bool GRPSCREEN::Set_Focus()
 * @brief      Minimize
 * @ingroup    GRAPHIC
 * 
-* @param[in]  active : 
+* @param[in]  active : Active value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Minimize(bool active)
@@ -700,9 +672,9 @@ bool GRPSCREEN::Minimize(bool active)
 * @brief      Maximize
 * @ingroup    GRAPHIC
 * 
-* @param[in]  active : 
+* @param[in]  active : Active value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Maximize(bool active)
@@ -717,10 +689,10 @@ bool GRPSCREEN::Maximize(bool active)
 * @brief      Capture content
 * @ingroup    GRAPHIC
 * 
-* @param[in]  rect : 
-* @param[in]  handle_window : 
+* @param[in]  rect : Rectangle to use.
+* @param[in]  handle_window : Handle window pointer to use.
 * 
-* @return     GRPBITMAP* : 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPSCREEN::CaptureContent(GRPRECTINT* rect, void* handle_window)
@@ -735,7 +707,7 @@ GRPBITMAP* GRPSCREEN::CaptureContent(GRPRECTINT* rect, void* handle_window)
 * @brief      Get desktop handle
 * @ingroup    GRAPHIC
 * 
-* @return     void* : 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPSCREEN::GetDesktopHandle()
@@ -750,7 +722,7 @@ void* GRPSCREEN::GetDesktopHandle()
 * @brief      Get shell handle
 * @ingroup    GRAPHIC
 * 
-* @return     void* : 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPSCREEN::GetShellHandle()
@@ -765,7 +737,7 @@ void* GRPSCREEN::GetShellHandle()
 * @brief      can close
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::CanClose()
@@ -780,7 +752,7 @@ bool GRPSCREEN::CanClose()
 * @brief      set can close
 * @ingroup    GRAPHIC
 * 
-* @param[in]  canclose : 
+* @param[in]  canclose : Canclose value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREEN::SetCanClose(bool canclose)
@@ -795,7 +767,7 @@ void GRPSCREEN::SetCanClose(bool canclose)
 * @brief      Get title
 * @ingroup    GRAPHIC
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* GRPSCREEN::GetTitle()
@@ -805,16 +777,16 @@ XSTRING* GRPSCREEN::GetTitle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::UpdateSize(int width, int height)
-* @brief
+* @brief      Update Size
 * @ingroup    GRAPHIC
-*
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::UpdateSize(int width, int height)
 {
@@ -828,13 +800,13 @@ bool GRPSCREEN::UpdateSize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<GRPVIEWPORT*>* GRPSCREEN::GetViewports()
-* @brief
+* @brief      Get viewports
 * @ingroup    GRAPHIC
-*
-* @return     XVECTOR<GRPVIEWPORT*>* :
-*
+* 
+* @return     XVECTOR<GRPVIEWPORT*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<GRPVIEWPORT*>* GRPSCREEN::GetViewports()
 {
@@ -843,15 +815,15 @@ XVECTOR<GRPVIEWPORT*>* GRPSCREEN::GetViewports()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVIEWPORT* GRPSCREEN::GetViewport(int index)
-* @brief
+* @brief      Get viewport
 * @ingroup    GRAPHIC
-*
-* @param[in]  index :
-*
-* @return     GRPVIEWPORT* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     GRPVIEWPORT* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVIEWPORT* GRPSCREEN::GetViewport(int index)
 {
@@ -864,12 +836,12 @@ GRPVIEWPORT* GRPSCREEN::GetViewport(int index)
 * @fn         GRPVIEWPORT* GRPSCREEN::GetViewport(XCHAR* ID)
 * @brief      Get viewport
 * @ingroup    GRAPHIC
-*
-* @param[in]  ID : 
 * 
-* @return     GRPVIEWPORT* : 
+* @param[in]  ID : Identifier to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPVIEWPORT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPVIEWPORT* GRPSCREEN::GetViewport(XCHAR* ID)
 {
   for(XDWORD c=0; c<viewports.GetSize(); c++)
@@ -886,23 +858,23 @@ GRPVIEWPORT* GRPSCREEN::GetViewport(XCHAR* ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::CreateViewport(XCHAR* ID, float posx, float posy, float width, float height, XDWORD canvasposx, XDWORD canvasposy, XDWORD canvaswidth, XDWORD canvasheight)
 * @brief      Create viewport
 * @ingroup    GRAPHIC
-*
-* @param[in]  ID :
-* @param[in]  posx :
-* @param[in]  posy :
-* @param[in]  width :
-* @param[in]  height :
-* @param[in]  canvasposx :
-* @param[in]  canvasposy :
-* @param[in]  canvaswidth :
-* @param[in]  canvasheight :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  posx : Posx value.
+* @param[in]  posy : Posy value.
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* @param[in]  canvasposx : Canvasposx value.
+* @param[in]  canvasposy : Canvasposy value.
+* @param[in]  canvaswidth : Canvaswidth value.
+* @param[in]  canvasheight : Canvasheight value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::CreateViewport(XCHAR* ID, float posx, float posy, float width, float height, XDWORD canvasposx, XDWORD canvasposy, XDWORD canvaswidth, XDWORD canvasheight)
 {
@@ -936,19 +908,16 @@ bool GRPSCREEN::CreateViewport(XCHAR* ID, float posx, float posy, float width, f
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPSCREEN::UpdateViewports(int width, int height)
-* @brief
+* 
+* @fn         bool GRPSCREEN::UpdateViewports()
+* @brief      Update Viewports
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::UpdateViewports()
 {
-  #if defined(__ANDROID__)
-  __android_log_print(ANDROID_LOG_INFO, "GEN_BLIT", "PATH UpdateViewports ENTER screencanvas=%p transparent=%d nviewports=%d", (void*)screencanvas, (int)Style_Is(GRPSCREENSTYLE_TRANSPARENT), (int)viewports.GetSize());
-  #endif
   if(!screencanvas)
     {   
       return false;
@@ -975,15 +944,15 @@ bool GRPSCREEN::UpdateViewports()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::DeleteViewport(GRPVIEWPORT* viewport)
 * @brief      Delete viewport
 * @ingroup    GRAPHIC
-*
-* @param[in]  viewport :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  viewport : Viewport pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::DeleteViewport(GRPVIEWPORT* viewport)
 {
@@ -999,13 +968,13 @@ bool GRPSCREEN::DeleteViewport(GRPVIEWPORT* viewport)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPSCREEN::DeleteAllViewports()
 * @brief      Delete all viewports
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::DeleteAllViewports()
 {
@@ -1026,10 +995,10 @@ bool GRPSCREEN::DeleteAllViewports()
 * @fn         GRPFRAMERATE* GRPSCREEN::GetFrameRate()
 * @brief      Get frame rate
 * @ingroup    GRAPHIC
-*
-* @return     GRPFRAMERATE* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     GRPFRAMERATE* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPFRAMERATE* GRPSCREEN::GetFrameRate()
 {
   return framerate;
@@ -1042,7 +1011,7 @@ GRPFRAMERATE* GRPSCREEN::GetFrameRate()
 * @brief      Get desktop manager
 * @ingroup    GRAPHIC
 * 
-* @return     GRPDESKTOPMANAGER* : 
+* @return     GRPDESKTOPMANAGER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPDESKTOPMANAGER* GRPSCREEN::GetDesktopManager()
@@ -1057,7 +1026,7 @@ GRPDESKTOPMANAGER* GRPSCREEN::GetDesktopManager()
 * @brief      Get desktop screen selected
 * @ingroup    GRAPHIC
 * 
-* @return     GRPSCREENTYPE_DESKTOP : 
+* @return     GRPSCREENTYPE_DESKTOP : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREENTYPE_DESKTOP GRPSCREEN::GetDesktopScreenSelected()
@@ -1072,7 +1041,7 @@ GRPSCREENTYPE_DESKTOP GRPSCREEN::GetDesktopScreenSelected()
 * @brief      Set desktop screen selected
 * @ingroup    GRAPHIC
 * 
-* @param[in]  desktopscreenselected : 
+* @param[in]  desktopscreenselected : Desktopscreenselected value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREEN::SetDesktopScreenSelected(GRPSCREENTYPE_DESKTOP desktopscreenselected)
@@ -1087,7 +1056,7 @@ void GRPSCREEN::SetDesktopScreenSelected(GRPSCREENTYPE_DESKTOP desktopscreensele
 * @brief      Get list screens
 * @ingroup    GRAPHIC
 * 
-* @return     XMAP<void*, : 
+* @return     XMAP<void*, GRPSCREEN*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMAP<void*, GRPSCREEN*>* GRPSCREEN::GetListScreens()
@@ -1102,7 +1071,7 @@ XMAP<void*, GRPSCREEN*>* GRPSCREEN::GetListScreens()
 * @brief      Get screen canvas
 * @ingroup    GRAPHIC
 * 
-* @return     GRP2DCANVAS* : 
+* @return     GRP2DCANVAS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS* GRPSCREEN::GetScreenCanvas()
@@ -1117,9 +1086,9 @@ GRP2DCANVAS* GRPSCREEN::GetScreenCanvas()
 * @brief      Set screen canvas
 * @ingroup    GRAPHIC
 * 
-* @param[in]  screencanvas : 
+* @param[in]  screencanvas : Screencanvas pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::SetScreenCanvas(GRP2DCANVAS* screencanvas)
@@ -1131,12 +1100,12 @@ bool GRPSCREEN::SetScreenCanvas(GRP2DCANVAS* screencanvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPSCREEN::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREEN::Clean()
 {
@@ -1158,7 +1127,7 @@ void GRPSCREEN::Clean()
 
   isshow                  = false;
 
-  canclose                = false;
+  canclose                = true;
 }
 
 

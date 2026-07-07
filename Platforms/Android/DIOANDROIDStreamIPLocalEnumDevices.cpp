@@ -67,7 +67,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMIPLOCALENUMDEVICES::DIOANDROIDSTREAMIPLOCALENUMDEVICES()
+* @fn         DIOANDROIDSTREAMIPLOCALENUMDEVICES::DIOANDROIDSTREAMIPLOCALENUMDEVICES() : DIOSTREAMIPLOCALENUMDEVICES()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -98,7 +98,7 @@ DIOANDROIDSTREAMIPLOCALENUMDEVICES::~DIOANDROIDSTREAMIPLOCALENUMDEVICES()
 * @brief      Search
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMIPLOCALENUMDEVICES::Search()

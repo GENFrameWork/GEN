@@ -58,7 +58,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SNDOPENALPLAYITEM::SNDOPENALPLAYITEM()
+* @fn         SNDOPENALPLAYITEM::SNDOPENALPLAYITEM() : XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    SOUND
 * 
@@ -93,7 +93,7 @@ SNDOPENALPLAYITEM::~SNDOPENALPLAYITEM()
 * @brief      Ini FS machine
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALPLAYITEM::IniFSMachine()
@@ -146,7 +146,7 @@ bool SNDOPENALPLAYITEM::IniFSMachine()
 * @brief      Get item
 * @ingroup    SOUND
 * 
-* @return     SNDITEM* : 
+* @return     SNDITEM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDITEM* SNDOPENALPLAYITEM::GetItem()
@@ -161,7 +161,7 @@ SNDITEM* SNDOPENALPLAYITEM::GetItem()
 * @brief      Set item
 * @ingroup    SOUND
 * 
-* @param[in]  item : 
+* @param[in]  item : Item pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDOPENALPLAYITEM::SetItem(SNDITEM* item)
@@ -176,7 +176,7 @@ void SNDOPENALPLAYITEM::SetItem(SNDITEM* item)
 * @brief      Get source
 * @ingroup    SOUND
 * 
-* @return     SNDOPENALSOURCE* : 
+* @return     SNDOPENALSOURCE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDOPENALSOURCE* SNDOPENALPLAYITEM::GetSource()
@@ -191,7 +191,7 @@ SNDOPENALSOURCE* SNDOPENALPLAYITEM::GetSource()
 * @brief      Set source
 * @ingroup    SOUND
 * 
-* @param[in]  source : 
+* @param[in]  source : Source pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDOPENALPLAYITEM::SetSource(SNDOPENALSOURCE* source)
@@ -203,10 +203,10 @@ void SNDOPENALPLAYITEM::SetSource(SNDOPENALSOURCE* source)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool SNDOPENALPLAYITEM::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDOPENALPLAYITEM::Delete()

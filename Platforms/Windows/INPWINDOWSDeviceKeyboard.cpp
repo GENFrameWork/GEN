@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPWINDOWSDEVICEKEYBOARD::INPWINDOWSDEVICEKEYBOARD()
+* 
+* @fn         INPWINDOWSDEVICEKEYBOARD::INPWINDOWSDEVICEKEYBOARD() : INPDEVICE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPWINDOWSDEVICEKEYBOARD::INPWINDOWSDEVICEKEYBOARD() : INPDEVICE()
 {
@@ -76,12 +76,12 @@ INPWINDOWSDEVICEKEYBOARD::INPWINDOWSDEVICEKEYBOARD() : INPDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPWINDOWSDEVICEKEYBOARD::~INPWINDOWSDEVICEKEYBOARD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPWINDOWSDEVICEKEYBOARD::~INPWINDOWSDEVICEKEYBOARD()
 {
@@ -95,13 +95,13 @@ INPWINDOWSDEVICEKEYBOARD::~INPWINDOWSDEVICEKEYBOARD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPWINDOWSDEVICEKEYBOARD::Update()
 * @brief      Update
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSDEVICEKEYBOARD::Update()
 {
@@ -163,12 +163,12 @@ bool INPWINDOWSDEVICEKEYBOARD::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPWINDOWSDEVICEKEYBOARD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPWINDOWSDEVICEKEYBOARD::Clean()
 {
@@ -177,14 +177,14 @@ void INPWINDOWSDEVICEKEYBOARD::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPWINDOWSDEVICEKEYBOARD::CreateAllButtons()
 * @brief      Create all buttons
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSDEVICEKEYBOARD::CreateAllButtons()
 {

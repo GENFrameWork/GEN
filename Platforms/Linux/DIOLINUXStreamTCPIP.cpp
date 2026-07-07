@@ -95,7 +95,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOLINUXSTREAMTCPIP::DIOLINUXSTREAMTCPIP()
+* @fn         DIOLINUXSTREAMTCPIP::DIOLINUXSTREAMTCPIP() : DIOSTREAMTCPIP() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
 * 
@@ -167,7 +167,7 @@ DIOLINUXSTREAMTCPIP::~DIOLINUXSTREAMTCPIP()
 * @brief      Open
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIP::Open()
@@ -193,7 +193,7 @@ bool DIOLINUXSTREAMTCPIP::Open()
 * @brief      Disconnect
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIP::Disconnect()
@@ -236,7 +236,7 @@ bool DIOLINUXSTREAMTCPIP::Disconnect()
 * @brief      Close
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIP::Close()
@@ -287,7 +287,7 @@ bool DIOLINUXSTREAMTCPIP::Close()
 * @brief      Get handle socket
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMTCPIP::GetHandleSocket()
@@ -302,7 +302,7 @@ int DIOLINUXSTREAMTCPIP::GetHandleSocket()
 * @brief      Set handle socket
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  handlesocket : 
+* @param[in]  handlesocket : Handlesocket value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMTCPIP::SetHandleSocket(int handlesocket)
@@ -317,12 +317,12 @@ void DIOLINUXSTREAMTCPIP::SetHandleSocket(int handlesocket)
 * @brief      Accept
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  socket : 
-* @param[in]  addr : 
-* @param[in]  addrlen : 
-* @param[in]  usec : 
+* @param[in]  socket : Socket value.
+* @param[in]  addr : Addr pointer to use.
+* @param[in]  addrlen : Addrlen pointer to use.
+* @param[in]  usec : Usec value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMTCPIP::Accept(int socket, void* addr, void* addrlen, XDWORD usec)
@@ -354,9 +354,9 @@ int DIOLINUXSTREAMTCPIP::Accept(int socket, void* addr, void* addrlen, XDWORD us
 * @brief      Is ready connect
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  socket : 
+* @param[in]  socket : Socket value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMTCPIP::IsReadyConnect(int socket)
@@ -417,7 +417,7 @@ int DIOLINUXSTREAMTCPIP::IsReadyConnect(int socket)
 * @brief      Get handle server
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIP::GetHandleServer()
@@ -564,7 +564,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleServer()
 * @brief      Get handle client
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIP::GetHandleClient()
@@ -667,7 +667,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
 * @brief      Thread connection
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXSTREAMTCPIP::ThreadConnection(void* data)

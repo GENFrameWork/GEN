@@ -58,11 +58,11 @@ DIOSTM32STREAMI2C*        DIOSTM32STREAMI2C::handles[DIOSTM32STREAMI2C_MAXHANDLE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32STREAMI2CPORT::DIOSTM32STREAMI2CPORT()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMI2CPORT::DIOSTM32STREAMI2CPORT()
 {
@@ -72,12 +72,12 @@ DIOSTM32STREAMI2CPORT::DIOSTM32STREAMI2CPORT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32STREAMI2CPORT::~DIOSTM32STREAMI2CPORT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMI2CPORT::~DIOSTM32STREAMI2CPORT()
 {
@@ -87,13 +87,13 @@ DIOSTM32STREAMI2CPORT::~DIOSTM32STREAMI2CPORT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMI2CPORT::GetCounterRef()
 * @brief      Get counter ref
 * @ingroup    PLATFORM_STM32
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMI2CPORT::GetCounterRef()
 {
@@ -103,13 +103,13 @@ XDWORD DIOSTM32STREAMI2CPORT::GetCounterRef()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMI2CPORT::SetCounterRef(XDWORD counterref)
 * @brief      Set counter ref
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  counterref :
-*
+* 
+* @param[in]  counterref : Counterref value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMI2CPORT::SetCounterRef(XDWORD counterref)
 {
@@ -119,13 +119,13 @@ void DIOSTM32STREAMI2CPORT::SetCounterRef(XDWORD counterref)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         I2C_HandleTypeDef* DIOSTM32STREAMI2CPORT::GetHandleI2C()
 * @brief      Get handle I2C
 * @ingroup    PLATFORM_STM32
-*
-* @return     I2C_HandleTypeDef* :
-*
+* 
+* @return     I2C_HandleTypeDef* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 I2C_HandleTypeDef* DIOSTM32STREAMI2CPORT::GetHandleI2C()
 {
@@ -135,13 +135,13 @@ I2C_HandleTypeDef* DIOSTM32STREAMI2CPORT::GetHandleI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMI2CPORT::SetHandleI2C(I2C_HandleTypeDef* hi2c)
 * @brief      Set handle I2C
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  hi2c :
-*
+* 
+* @param[in]  hi2c : Hi2c pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMI2CPORT::SetHandleI2C(I2C_HandleTypeDef* hi2c)
 {
@@ -151,12 +151,12 @@ void DIOSTM32STREAMI2CPORT::SetHandleI2C(I2C_HandleTypeDef* hi2c)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMI2CPORT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMI2CPORT::Clean()
 {
@@ -173,11 +173,11 @@ void DIOSTM32STREAMI2CPORT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTM32STREAMI2C::DIOSTM32STREAMI2C()
+* 
+* @fn         DIOSTM32STREAMI2C::DIOSTM32STREAMI2C() : DIOSTREAMI2C()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMI2C::DIOSTM32STREAMI2C() : DIOSTREAMI2C()
 {
@@ -209,12 +209,12 @@ DIOSTM32STREAMI2C::DIOSTM32STREAMI2C() : DIOSTREAMI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32STREAMI2C::~DIOSTM32STREAMI2C()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMI2C::~DIOSTM32STREAMI2C()
 {
@@ -228,13 +228,13 @@ DIOSTM32STREAMI2C::~DIOSTM32STREAMI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSTATUS DIOSTM32STREAMI2C::GetStatus()
 * @brief      Get status
 * @ingroup    PLATFORM_STM32
-*
-* @return     DIOSTREAMSTATUS :
-*
+* 
+* @return     DIOSTREAMSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOSTM32STREAMI2C::GetStatus()
 {
@@ -246,13 +246,13 @@ DIOSTREAMSTATUS DIOSTM32STREAMI2C::GetStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMI2C::Open()
 * @brief      Open
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMI2C::Open()
 {
@@ -386,16 +386,16 @@ bool DIOSTM32STREAMI2C::Open()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMI2C::WaitToFilledReadingBuffer(int filledto, int timeout)
 * @brief      Wait to filled reading buffer
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  filledto :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filledto : Filledto value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMI2C::WaitToFilledReadingBuffer(int filledto, int timeout)
 {
@@ -418,16 +418,16 @@ bool DIOSTM32STREAMI2C::WaitToFilledReadingBuffer(int filledto, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMI2C::ReadDirect(XBYTE* buffer, XDWORD size)
 * @brief      Read direct
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMI2C::ReadDirect(XBYTE* buffer, XDWORD size)
 {
@@ -454,16 +454,16 @@ XDWORD DIOSTM32STREAMI2C::ReadDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMI2C::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMI2C::WriteDirect(XBYTE* buffer, XDWORD size)
 {
@@ -494,16 +494,16 @@ XDWORD DIOSTM32STREAMI2C::WriteDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMI2C::Write(XBYTE* buffer, XDWORD size)
 * @brief      Write
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMI2C::Write(XBYTE* buffer, XDWORD size)
 {
@@ -529,13 +529,13 @@ XDWORD DIOSTM32STREAMI2C::Write(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMI2C::Disconnect()
 * @brief      Disconnect
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMI2C::Disconnect()
 {
@@ -545,13 +545,13 @@ bool DIOSTM32STREAMI2C::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMI2C::Close()
 * @brief      Close
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMI2C::Close()
 {
@@ -585,14 +585,14 @@ bool DIOSTM32STREAMI2C::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMI2C::CleanBuffers()
 * @brief      Clean buffers
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMI2C::CleanBuffers()
 {
@@ -602,13 +602,13 @@ bool DIOSTM32STREAMI2C::CleanBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef* hi2c)
 * @brief      AL_I2C_MasterRxCpltCallback
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  hi2c :
-*
+* 
+* @param[in]  hi2c : Hi2c pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef* hi2c)
 {
@@ -653,13 +653,13 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef* hi2c)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef* hi2c)
 * @brief      AL_I2C_SlaveRxCpltCallback
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  hi2c :
-*
+* 
+* @param[in]  hi2c : Hi2c pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef* hi2c)
 {
@@ -669,13 +669,13 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef* hi2c)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void HAL_I2C_ErrorCallback(I2C_HandleTypeDef*hi2c)
+* 
+* @fn         void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 * @brief      AL_I2C_ErrorCallback
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  I2C_HandleTypeDef*hi2c :
-*
+* 
+* @param[in]  hi2c : Hi2c pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
@@ -685,13 +685,13 @@ void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMI2C::ThreadConnection(void* param)
 * @brief      Thread connection
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMI2C::ThreadConnection(void* param)
 {
@@ -777,12 +777,12 @@ void DIOSTM32STREAMI2C::ThreadConnection(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMI2C::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMI2C::Clean()
 {

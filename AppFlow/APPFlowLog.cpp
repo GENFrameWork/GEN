@@ -65,13 +65,13 @@ APPFLOWLOG* APPFLOWLOG::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWLOG::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWLOG::GetIsInstanced()
 {
@@ -80,13 +80,13 @@ bool APPFLOWLOG::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWLOG& APPFLOWLOG::GetInstance()
 * @brief      Get instance
 * @ingroup    APPFLOW
-*
-* @return     APPFLOWLOG& : 
-*
+* 
+* @return     APPFLOWLOG& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWLOG& APPFLOWLOG::GetInstance()
 {
@@ -97,13 +97,13 @@ APPFLOWLOG& APPFLOWLOG::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWLOG::DelInstance()
 * @brief      Del instance
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWLOG::DelInstance()
 {
@@ -124,13 +124,13 @@ bool APPFLOWLOG::DelInstance()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool APPFLOWLOG::Ini(APPFLOWCFG* cfg, XCHAR* applicationname)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    APPFLOW
 * 
-* @param[in]  cfg : 
-* @param[in]  applicationname : 
+* @param[in]  cfg : Configuration object to use.
+* @param[in]  applicationname : Application name.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWLOG::Ini(APPFLOWCFG* cfg, XCHAR* applicationname)
@@ -162,13 +162,13 @@ bool APPFLOWLOG::Ini(APPFLOWCFG* cfg, XCHAR* applicationname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWLOG::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWLOG::End()
 {
@@ -179,11 +179,11 @@ bool APPFLOWLOG::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWLOG::APPFLOWLOG()
 * @brief      Constructor of class
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWLOG::APPFLOWLOG()
 {
@@ -192,12 +192,12 @@ APPFLOWLOG::APPFLOWLOG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWLOG::~APPFLOWLOG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWLOG::~APPFLOWLOG()
 {
@@ -208,12 +208,12 @@ APPFLOWLOG::~APPFLOWLOG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWLOG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWLOG::Clean()
 {

@@ -54,7 +54,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMTCPIP::DIOANDROIDSTREAMTCPIP()
+* @fn         DIOANDROIDSTREAMTCPIP::DIOANDROIDSTREAMTCPIP() : DIOLINUXSTREAMTCPIP()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 

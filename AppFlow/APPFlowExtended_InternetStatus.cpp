@@ -59,11 +59,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         APPFLOWEXTENDED_INTERNETSTATUS::APPFLOWEXTENDED_INTERNETSTATUS(APPFLOWCFG* cfg)
+* @fn         APPFLOWEXTENDED_INTERNETSTATUS::APPFLOWEXTENDED_INTERNETSTATUS(APPFLOWCFG* cfg) : DIOWEBSERVER_RESOLVEENDPOINT()
 * @brief      Constructor of class
 * @ingroup    APPFLOW
 * 
-* @param[in]  cfg : 
+* @param[in]  DIOWEBSERVER_RESOLVEENDPOINT : DIOWEBSERVER RESOLVEENDPOINT pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED_INTERNETSTATUS::APPFLOWEXTENDED_INTERNETSTATUS(APPFLOWCFG* cfg) : DIOWEBSERVER_RESOLVEENDPOINT()
@@ -106,7 +106,7 @@ APPFLOWEXTENDED_INTERNETSTATUS::~APPFLOWEXTENDED_INTERNETSTATUS()
 * @brief      Get internet services
 * @ingroup    APPFLOW
 * 
-* @return     APPFLOWINTERNETSERVICES* : 
+* @return     APPFLOWINTERNETSERVICES* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWINTERNETSERVICES* APPFLOWEXTENDED_INTERNETSTATUS::GetInternetServices()
@@ -121,7 +121,7 @@ APPFLOWINTERNETSERVICES* APPFLOWEXTENDED_INTERNETSTATUS::GetInternetServices()
 * @brief      Get local IP
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWEXTENDED_INTERNETSTATUS::GetLocalIP()
@@ -136,7 +136,7 @@ XSTRING* APPFLOWEXTENDED_INTERNETSTATUS::GetLocalIP()
 * @brief      Get have internet connection
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_INTERNETSTATUS::GetHaveInternetConnection()
@@ -151,7 +151,7 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::GetHaveInternetConnection()
 * @brief      Get public IP
 * @ingroup    APPFLOW
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* APPFLOWEXTENDED_INTERNETSTATUS::GetPublicIP()
@@ -166,7 +166,7 @@ XSTRING* APPFLOWEXTENDED_INTERNETSTATUS::GetPublicIP()
 * @brief      Update
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_INTERNETSTATUS::Update()
@@ -198,9 +198,9 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Update()
 * @brief      Show
 * @ingroup    APPFLOW
 * 
-* @param[in]  console : 
+* @param[in]  console : Console pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_INTERNETSTATUS::Show(XCONSOLE* console)
@@ -238,7 +238,7 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Show(XCONSOLE* console)
 * @brief      Serialize
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_INTERNETSTATUS::Serialize()
@@ -258,7 +258,7 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Serialize()
 * @brief      Deserialize
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED_INTERNETSTATUS::Deserialize()

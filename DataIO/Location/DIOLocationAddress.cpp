@@ -85,7 +85,7 @@ DIOLOCATIONADDRESS::~DIOLOCATIONADDRESS()
 * @brief      Get street
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLOCATIONADDRESS::GetStreet()
@@ -100,7 +100,7 @@ XSTRING* DIOLOCATIONADDRESS::GetStreet()
 * @brief      Get city
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLOCATIONADDRESS::GetCity()
@@ -115,7 +115,7 @@ XSTRING* DIOLOCATIONADDRESS::GetCity()
 * @brief      Get state
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLOCATIONADDRESS::GetState()
@@ -130,7 +130,7 @@ XSTRING* DIOLOCATIONADDRESS::GetState()
 * @brief      Get country
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOLOCATIONADDRESS::GetCountry()
@@ -145,7 +145,7 @@ XSTRING* DIOLOCATIONADDRESS::GetCountry()
 * @brief      Get postal code
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOLOCATIONADDRESS::GetPostalCode()
@@ -160,7 +160,7 @@ XDWORD DIOLOCATIONADDRESS::GetPostalCode()
 * @brief      Set postal code
 * @ingroup    DATAIO
 * 
-* @param[in]  postalcode : 
+* @param[in]  postalcode : Postalcode value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLOCATIONADDRESS::SetPostalCode(XDWORD postalcode)

@@ -63,8 +63,8 @@
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  stateID : 
-* @param[in]  ntransitions : 
+* @param[in]  stateID : State ID value.
+* @param[in]  ntransitions : Ntransitions value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFSMACHINESTATE::XFSMACHINESTATE(int stateID, int ntransitions)
@@ -96,12 +96,12 @@ XFSMACHINESTATE::XFSMACHINESTATE(int stateID, int ntransitions)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFSMACHINESTATE::~XFSMACHINESTATE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFSMACHINESTATE::~XFSMACHINESTATE()
 {
@@ -113,13 +113,13 @@ XFSMACHINESTATE::~XFSMACHINESTATE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFSMACHINESTATE::GetID()
 * @brief      Get ID
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFSMACHINESTATE::GetID()
 {
@@ -128,16 +128,16 @@ int XFSMACHINESTATE::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINESTATE::AddTransition(int input,int outputID)
 * @brief      Add transition
 * @ingroup    XUTILS
-*
-* @param[in]  input :
-* @param[in]  outputID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  input : Input value.
+* @param[in]  outputID : Output output id.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINESTATE::AddTransition(int input,int outputID)
 {
@@ -161,15 +161,15 @@ bool XFSMACHINESTATE::AddTransition(int input,int outputID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFSMACHINESTATE::GetOutput(int input)
 * @brief      Get output
 * @ingroup    XUTILS
-*
-* @param[in]  input :
-*
-* @return     int :
-*
+* 
+* @param[in]  input : Input value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFSMACHINESTATE::GetOutput(int input)
 {
@@ -191,15 +191,15 @@ int XFSMACHINESTATE::GetOutput(int input)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINESTATE::DeleteTransition(int outputID)
 * @brief      Delete transition
 * @ingroup    XUTILS
-*
-* @param[in]  outputID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  outputID : Output output id.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINESTATE::DeleteTransition(int outputID)
 {
@@ -231,12 +231,12 @@ bool XFSMACHINESTATE::DeleteTransition(int outputID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFSMACHINESTATE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSMACHINESTATE::Clean()
 {
@@ -253,13 +253,13 @@ void XFSMACHINESTATE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFSMACHINE::XFSMACHINE(int stateID)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  stateID :
-*
+* 
+* @param[in]  stateID : State ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFSMACHINE::XFSMACHINE(int stateID)
 {
@@ -270,12 +270,12 @@ XFSMACHINE::XFSMACHINE(int stateID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFSMACHINE::~XFSMACHINE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFSMACHINE::~XFSMACHINE()
 {
@@ -286,13 +286,13 @@ XFSMACHINE::~XFSMACHINE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFSMACHINE::GetEvent()
 * @brief      Get event
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFSMACHINE::GetEvent()
 {
@@ -301,15 +301,15 @@ int XFSMACHINE::GetEvent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINE::SetEvent(int event)
 * @brief      Set event
 * @ingroup    XUTILS
-*
-* @param[in]  event :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  event : Event to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINE::SetEvent(int event)
 {
@@ -320,13 +320,13 @@ bool XFSMACHINE::SetEvent(int event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFSMACHINE::GetCurrentState()
 * @brief      Get current state
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFSMACHINE::GetCurrentState()
 {
@@ -335,13 +335,13 @@ int XFSMACHINE::GetCurrentState()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFSMACHINE::SetCurrentState(int stateID)
 * @brief      Set current state
 * @ingroup    XUTILS
-*
-* @param[in]  stateID :
-*
+* 
+* @param[in]  stateID : State ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSMACHINE::SetCurrentState(int stateID)
 {
@@ -350,15 +350,15 @@ void XFSMACHINE::SetCurrentState(int stateID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFSMACHINESTATE* XFSMACHINE::GetState(int stateID)
 * @brief      Get state
 * @ingroup    XUTILS
-*
-* @param[in]  stateID :
-*
-* @return     XFSMACHINESTATE* :
-*
+* 
+* @param[in]  stateID : State ID value.
+* 
+* @return     XFSMACHINESTATE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFSMACHINESTATE* XFSMACHINE::GetState(int stateID)
 {
@@ -375,15 +375,15 @@ XFSMACHINESTATE* XFSMACHINE::GetState(int stateID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINE::AddState(XFSMACHINESTATE* state)
 * @brief      Add state
 * @ingroup    XUTILS
-*
-* @param[in]  state :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  state : State pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINE::AddState(XFSMACHINESTATE* state)
 {
@@ -396,18 +396,18 @@ bool XFSMACHINE::AddState(XFSMACHINESTATE* state)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINE::AddState(int state, int event, int tostate,...)
 * @brief      Add state
 * @ingroup    XUTILS
-*
-* @param[in]  state :
-* @param[in]  event :
-* @param[in]  tostate :
-* @param[in]  ... :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  state : State value.
+* @param[in]  event : Event to process.
+* @param[in]  tostate : Tostate value.
+* @param[in]  ... : Variable argument list.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINE::AddState(int state, int event, int tostate,...)
 {
@@ -458,16 +458,16 @@ bool XFSMACHINE::AddState(int state, int event, int tostate,...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFSMACHINE::AddSecuencialStates(int state,int maxsecuencialtransitions)
+* 
+* @fn         bool XFSMACHINE::AddSecuencialStates(int state, int maxsecuencialtransitions)
 * @brief      Add secuencial states
 * @ingroup    XUTILS
-*
-* @param[in]  state :
-* @param[in]  maxsecuencialtransitions :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  state : State value.
+* @param[in]  maxsecuencialtransitions : Maxsecuencialtransitions value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINE::AddSecuencialStates(int state, int maxsecuencialtransitions)
 {
@@ -492,15 +492,15 @@ bool XFSMACHINE::AddSecuencialStates(int state, int maxsecuencialtransitions)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINE::DeleteState(int stateID)
 * @brief      Delete state
 * @ingroup    XUTILS
-*
-* @param[in]  stateID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  stateID : State ID value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINE::DeleteState(int stateID)
 {
@@ -517,13 +517,13 @@ bool XFSMACHINE::DeleteState(int stateID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINE::DeleteAllStates()
 * @brief      Delete all states
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINE::DeleteAllStates()
 {
@@ -537,15 +537,15 @@ bool XFSMACHINE::DeleteAllStates()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFSMACHINE::StateTransition(int input)
 * @brief      State transition
 * @ingroup    XUTILS
-*
-* @param[in]  input :
-*
-* @return     int :
-*
+* 
+* @param[in]  input : Input value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFSMACHINE::StateTransition(int input)
 {
@@ -564,15 +564,15 @@ int XFSMACHINE::StateTransition(int input)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINE::CheckTransition(int& event)
 * @brief      Check transition
 * @ingroup    XUTILS
-*
-* @param[in]  event :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  event : Event to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINE::CheckTransition(int& event)
 {
@@ -593,13 +593,13 @@ bool XFSMACHINE::CheckTransition(int& event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFSMACHINE::CheckTransition()
 * @brief      Check transition
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFSMACHINE::CheckTransition()
 {
@@ -616,12 +616,12 @@ bool XFSMACHINE::CheckTransition()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFSMACHINE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSMACHINE::Clean()
 {

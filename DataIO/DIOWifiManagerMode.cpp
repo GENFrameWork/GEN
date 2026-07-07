@@ -60,11 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWIFIMANAGERMODE::DIOWIFIMANAGERMODE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWIFIMANAGERMODE::DIOWIFIMANAGERMODE()    
 { 
@@ -73,12 +73,12 @@ DIOWIFIMANAGERMODE::DIOWIFIMANAGERMODE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWIFIMANAGERMODE::~DIOWIFIMANAGERMODE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWIFIMANAGERMODE::~DIOWIFIMANAGERMODE()    
 { 
@@ -90,15 +90,15 @@ DIOWIFIMANAGERMODE::~DIOWIFIMANAGERMODE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWIFIMANAGERMODE::GetSelectNetInterface(XSTRING& netinterface)
 * @brief      Get select net interface
 * @ingroup    DATAIO
-*
-* @param[in]  netinterface : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  netinterface : Netinterface value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::GetSelectNetInterface(XSTRING& netinterface)
 {
@@ -114,9 +114,9 @@ bool DIOWIFIMANAGERMODE::GetSelectNetInterface(XSTRING& netinterface)
 * @brief      Set select net interface
 * @ingroup    DATAIO
 * 
-* @param[in]  netinterface : 
+* @param[in]  netinterface : Netinterface pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::SetSelectNetInterface(XCHAR* netinterface)
@@ -133,9 +133,9 @@ bool DIOWIFIMANAGERMODE::SetSelectNetInterface(XCHAR* netinterface)
 * @brief      Set select net interface
 * @ingroup    DATAIO
 * 
-* @param[in]  netinterface : 
+* @param[in]  netinterface : Netinterface value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::SetSelectNetInterface(XSTRING& netinterface)
@@ -149,10 +149,10 @@ bool DIOWIFIMANAGERMODE::SetSelectNetInterface(XSTRING& netinterface)
 * @fn         DIOWIFIMANAGER_MODETYPE DIOWIFIMANAGERMODE::GetModeType()
 * @brief      Get mode type
 * @ingroup    DATAIO
-*
-* @return     DIOWIFIMANAGER_MODETYPE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOWIFIMANAGER_MODETYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOWIFIMANAGER_MODETYPE DIOWIFIMANAGERMODE::GetModeType()
 {
   return modetype;
@@ -164,10 +164,10 @@ DIOWIFIMANAGER_MODETYPE DIOWIFIMANAGERMODE::GetModeType()
 * @fn         void DIOWIFIMANAGERMODE::SetModeType(DIOWIFIMANAGER_MODETYPE modetype)
 * @brief      Set mode type
 * @ingroup    DATAIO
-*
-* @param[in]  modetype : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  modetype : Modetype value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWIFIMANAGERMODE::SetModeType(DIOWIFIMANAGER_MODETYPE modetype)
 {
   this->modetype = modetype;
@@ -175,15 +175,15 @@ void DIOWIFIMANAGERMODE::SetModeType(DIOWIFIMANAGER_MODETYPE modetype)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWIFIMANAGERMODE::CheckNetInterface(DIOIP* IP)
 * @brief      Check net interface
 * @ingroup    DATAIO
-*
-* @param[in]  IP : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  IP : IP address to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::CheckNetInterface(DIOIP* IP)
 {
@@ -239,15 +239,15 @@ bool DIOWIFIMANAGERMODE::CheckNetInterface(DIOIP* IP)
     
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWIFIMANAGERMODE::CheckNetInterface(XSTRING* IP)
 * @brief      Check net interface
 * @ingroup    DATAIO
-*
-* @param[in]  IP : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  IP : IP address to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::CheckNetInterface(XSTRING* IP)
 {
@@ -266,17 +266,17 @@ bool DIOWIFIMANAGERMODE::CheckNetInterface(XSTRING* IP)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWIFIMANAGERMODE::SetMode_AP(XCHAR* SSID, XCHAR* password, bool serialize)
 * @brief      Set mode AP
 * @ingroup    DATAIO
-*
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  SSID : SSID pointer to use.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::SetMode_AP(XCHAR* SSID, XCHAR* password,  bool serialize)
 {
@@ -285,17 +285,17 @@ bool DIOWIFIMANAGERMODE::SetMode_AP(XCHAR* SSID, XCHAR* password,  bool serializ
    
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWIFIMANAGERMODE::SetMode_AP(XSTRING& SSID, XSTRING& password, bool serialize)
 * @brief      Set mode AP
 * @ingroup    DATAIO
-*
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  SSID : SSID value.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::SetMode_AP(XSTRING& SSID, XSTRING& password, bool serialize)
 {
@@ -308,14 +308,14 @@ bool DIOWIFIMANAGERMODE::SetMode_AP(XSTRING& SSID, XSTRING& password, bool seria
 * @fn         bool DIOWIFIMANAGERMODE::SetMode_AP(XSTRING& SSID, XCHAR* password, bool serialize)
 * @brief      Set mode AP
 * @ingroup    DATAIO
-*
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  SSID : SSID value.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::SetMode_AP(XSTRING& SSID, XCHAR* password, bool serialize)
 {
   return SetMode_AP(SSID.Get(), password, serialize);
@@ -323,17 +323,17 @@ bool DIOWIFIMANAGERMODE::SetMode_AP(XSTRING& SSID, XCHAR* password, bool seriali
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, bool serialize)
 * @brief      Set mode client
 * @ingroup    DATAIO
-*
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  SSID : SSID pointer to use.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, bool serialize)
 {
@@ -347,11 +347,11 @@ bool DIOWIFIMANAGERMODE::SetMode_Client(XCHAR* SSID, XCHAR* password, bool seria
 * @brief      Set mode client
 * @ingroup    DATAIO
 * 
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
+* @param[in]  SSID : SSID value.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::SetMode_Client(XSTRING& SSID, XSTRING& password, bool serialize)
@@ -366,11 +366,11 @@ bool DIOWIFIMANAGERMODE::SetMode_Client(XSTRING& SSID, XSTRING& password, bool s
 * @brief      Set mode client
 * @ingroup    DATAIO
 * 
-* @param[in]  SSID : 
-* @param[in]  password : 
-* @param[in]  serialize : 
+* @param[in]  SSID : SSID value.
+* @param[in]  password : Password text.
+* @param[in]  serialize : Serialize value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::SetMode_Client(XSTRING& SSID, XCHAR* password, bool serialize)
@@ -384,10 +384,10 @@ bool DIOWIFIMANAGERMODE::SetMode_Client(XSTRING& SSID, XCHAR* password, bool ser
 * @fn         bool DIOWIFIMANAGERMODE::IsDisconnected()
 * @brief      Is disconnected
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::IsDisconnected()
 {
   return true;
@@ -399,10 +399,10 @@ bool DIOWIFIMANAGERMODE::IsDisconnected()
 * @fn         bool DIOWIFIMANAGERMODE::Disconnect()
 * @brief      Disconnect
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::Disconnect()
 {
   return false;
@@ -410,13 +410,13 @@ bool DIOWIFIMANAGERMODE::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWIFIMANAGERMODE::APList_Reload()
 * @brief      AP list reload
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWIFIMANAGERMODE::APList_Reload()
 {  
@@ -425,13 +425,13 @@ bool DIOWIFIMANAGERMODE::APList_Reload()
 
     
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<XSTRING*>* DIOWIFIMANAGERMODE::APList_Get()
 * @brief      AP list get
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<XSTRING*>* : 
-*
+* 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* DIOWIFIMANAGERMODE::APList_Get()
 {
@@ -440,12 +440,12 @@ XVECTOR<XSTRING*>* DIOWIFIMANAGERMODE::APList_Get()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWIFIMANAGERMODE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWIFIMANAGERMODE::Clean()
 {

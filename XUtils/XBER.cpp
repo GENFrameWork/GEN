@@ -62,11 +62,11 @@ XDWORD XBER::levels[_MAXBUFFER];
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBER::XBER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBER::XBER()
 {
@@ -81,12 +81,12 @@ XBER::XBER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBER::~XBER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBER::~XBER()
 {
@@ -106,7 +106,7 @@ XBER::~XBER()
 * @brief      Get tag type
 * @ingroup    XUTILS
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE XBER::GetTagType()
@@ -121,9 +121,9 @@ XBYTE XBER::GetTagType()
 * @brief      Get tag type name
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::GetTagTypeName(XSTRING& name)
@@ -181,7 +181,7 @@ bool XBER::GetTagTypeName(XSTRING& name)
 * @brief      Get tag class
 * @ingroup    XUTILS
 * 
-* @return     XBER_TAGCLASS : 
+* @return     XBER_TAGCLASS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBER_TAGCLASS XBER::GetTagClass()
@@ -196,7 +196,7 @@ XBER_TAGCLASS XBER::GetTagClass()
 * @brief      Is constructed
 * @ingroup    XUTILS
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::IsConstructed()
@@ -211,7 +211,7 @@ bool XBER::IsConstructed()
 * @brief      Get size head
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBER::GetSizeHead()
@@ -221,13 +221,13 @@ XDWORD XBER::GetSizeHead()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBER::GetSize()
 * @brief      Get size
 * @ingroup    XUTILS
-*
-* @return     XDWORD : size of BER
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBER::GetSize()
 {
@@ -236,13 +236,13 @@ XDWORD XBER::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER* XBER::GetData()
 * @brief      Get data
 * @ingroup    XUTILS
-*
-* @return     XBUFFER* : buffer of data
-*
+* 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* XBER::GetData()
 {
@@ -256,7 +256,7 @@ XBUFFER* XBER::GetData()
 * @brief      Get value
 * @ingroup    XUTILS
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* XBER::GetValue()
@@ -271,7 +271,7 @@ XVARIANT* XBER::GetValue()
 * @brief      Get level
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBER::GetLevel()
@@ -297,7 +297,7 @@ XDWORD XBER::GetLevel()
 * @brief      Get levels
 * @ingroup    XUTILS
 * 
-* @return     XDWORD* : 
+* @return     XDWORD* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD* XBER::GetLevels()
@@ -312,9 +312,9 @@ XDWORD* XBER::GetLevels()
 * @brief      Get levels
 * @ingroup    XUTILS
 * 
-* @param[in]  string : 
+* @param[in]  string : String to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::GetLevels(XSTRING& string)
@@ -347,13 +347,13 @@ bool XBER::GetLevels(XSTRING& string)
 * @fn         bool XBER::GetDump(XBUFFER& xbuffer, bool notheader)
 * @brief      Get dump
 * @ingroup    XUTILS
-*
-* @param[in]  xbuffer : 
-* @param[in]  notheader : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  xbuffer : Buffer to use.
+* @param[in]  notheader : Notheader value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::GetDump(XBUFFER& xbuffer, bool notheader)
 {
   if(!notheader)
@@ -391,10 +391,10 @@ bool XBER::GetDump(XBUFFER& xbuffer, bool notheader)
 * @brief      Set from dump
 * @ingroup    XUTILS
 * 
-* @param[in]  buffer : 
-* @param[in]  observer : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  observer : Observer pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetFromDump(XBUFFER& buffer, XOBSERVER* observer)
@@ -445,9 +445,9 @@ bool XBER::SetFromDump(XBUFFER& buffer, XOBSERVER* observer)
 * @brief      Set tag type
 * @ingroup    XUTILS
 * 
-* @param[in]  tagtype : 
+* @param[in]  tagtype : Tagtype value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetTagType(XBYTE tagtype)
@@ -463,12 +463,12 @@ bool XBER::SetTagType(XBYTE tagtype)
 * @fn         bool XBER::SetSize(XDWORD size)
 * @brief      Set size
 * @ingroup    XUTILS
-*
-* @param[in]  size : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  size : Size value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetSize(XDWORD size)
 {
   this->size = size;
@@ -478,13 +478,13 @@ bool XBER::SetSize(XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetNULL()
 * @brief      Set NULL
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetNULL()
 {
@@ -499,15 +499,15 @@ bool XBER::SetNULL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetINTEGER(XDWORD integer)
 * @brief      Set INTEGER
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  integer : integer to assign
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetINTEGER(XDWORD integer)
 { 
@@ -555,15 +555,15 @@ bool XBER::SetINTEGER(XDWORD integer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetINTEGER(XBUFFER& xbufferdata)
 * @brief      Set INTEGER
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xbufferdata : buffer to assign
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetINTEGER(XBUFFER& xbufferdata)
 {
@@ -579,15 +579,15 @@ bool XBER::SetINTEGER(XBUFFER& xbufferdata)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetBITSTRING(XBUFFER& xbuffer)
 * @brief      Set BITSTRING
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xbuffer : buffer to assign
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetBITSTRING(XBUFFER& xbuffer)
 {
@@ -605,16 +605,16 @@ bool XBER::SetBITSTRING(XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetBITSTRING(XBYTE* buffer, XDWORD size)
 * @brief      Set BITSTRING
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  buffer : pointer to buffer bytes
 * @param[in]  size : size buffer
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetBITSTRING(XBYTE* buffer, XDWORD size)
 {
@@ -633,15 +633,15 @@ bool XBER::SetBITSTRING(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetOCTETSTRING(XCHAR* string)
 * @brief      Set OCTETSTRING
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  string : string with octets
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetOCTETSTRING(XCHAR* string)
 {
@@ -668,15 +668,15 @@ bool XBER::SetOCTETSTRING(XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetOCTETSTRING(XBUFFER& xbuffer)
 * @brief      Set OCTETSTRING
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xbuffer : buffer with octets
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetOCTETSTRING(XBUFFER& xbuffer)
 {
@@ -694,16 +694,16 @@ bool XBER::SetOCTETSTRING(XBUFFER& xbuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetOCTETSTRING(XBYTE* buffer, XDWORD size)
 * @brief      Set OCTETSTRING
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  buffer : pointer buffer with octets
 * @param[in]  size : size of buffer
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetOCTETSTRING(XBYTE* buffer, XDWORD size)
 {
@@ -722,15 +722,15 @@ bool XBER::SetOCTETSTRING(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::SetOID(XCHAR* OIDstring)
 * @brief      Set OID
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  OIDstring : OID to assign
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetOID(XCHAR* OIDstring)
 {
@@ -803,15 +803,15 @@ bool XBER::SetOID(XCHAR* OIDstring)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::Copy(XBER* newxber)
 * @brief      Copy
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  newxber : pointer to GEN_NEW BER to assign
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::Copy(XBER* newxber)
 {
@@ -841,15 +841,15 @@ bool XBER::Copy(XBER* newxber)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::Sequence_AddTo(XBER& xber)
 * @brief      Sequence add to
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xber : XBER to add in secuence
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::Sequence_AddTo(XBER& xber)
 {
@@ -885,7 +885,7 @@ bool XBER::Sequence_AddTo(XBER& xber)
 * @brief      Sequence get sequences
 * @ingroup    XUTILS
 * 
-* @return     XVECTOR<XBER*>* : 
+* @return     XVECTOR<XBER*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XBER*>* XBER::Sequence_GetSequences()
@@ -899,13 +899,13 @@ XVECTOR<XBER*>* XBER::Sequence_GetSequences()
 * @fn         bool XBER::Sequence_AddCommandTo(XBYTE command, XBER& xber)
 * @brief      Sequence add command to
 * @ingroup    XUTILS
-*
-* @param[in]  command : 
-* @param[in]  xber : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  command : Command value.
+* @param[in]  xber : Xber value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::Sequence_AddCommandTo(XBYTE command, XBER& xber)
 { 
   data.Delete();
@@ -920,13 +920,13 @@ bool XBER::Sequence_AddCommandTo(XBYTE command, XBER& xber)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XBER::Sequence_GetSize()
 * @brief      Sequence get size
 * @ingroup    XUTILS
-*
-* @return     XDWORD : size secuence
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBER::Sequence_GetSize()
 {
@@ -954,13 +954,13 @@ XDWORD XBER::Sequence_GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::Sequence_DeleteAll()
 * @brief      Sequence GEN_DELETE all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::Sequence_DeleteAll()
 {
@@ -979,13 +979,14 @@ bool XBER::Sequence_DeleteAll()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XBER::SetFromDumpInternal(XBUFFER& buffer)
+* @fn         bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
 * @brief      Set from dump internal
 * @ingroup    XUTILS
 * 
-* @param[in]  buffer : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  observer : Observer pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
@@ -1261,10 +1262,10 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
 * @brief      Convert to boolean
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  variant : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  variant : Variant value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::ConvertToBoolean(XBUFFER& data, XVARIANT& variant)
@@ -1285,10 +1286,10 @@ bool XBER::ConvertToBoolean(XBUFFER& data, XVARIANT& variant)
 * @brief      Convert to integer
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  variant : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  variant : Variant value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::ConvertToInteger(XBUFFER& data, XVARIANT& variant)
@@ -1327,10 +1328,10 @@ bool XBER::ConvertToInteger(XBUFFER& data, XVARIANT& variant)
 * @brief      Convert to octet string
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  variant : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  variant : Variant value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::ConvertToOctetString(XBUFFER& data, XVARIANT& variant)
@@ -1354,10 +1355,10 @@ bool XBER::ConvertToOctetString(XBUFFER& data, XVARIANT& variant)
 * @brief      Convert to bit string
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  variant : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  variant : Variant value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::ConvertToBitString(XBUFFER& data, XVARIANT& variant)
@@ -1382,9 +1383,9 @@ bool XBER::ConvertToBitString(XBUFFER& data, XVARIANT& variant)
 * @brief      Convert to NULL
 * @ingroup    XUTILS
 * 
-* @param[in]  variant : 
+* @param[in]  variant : Variant value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::ConvertToNULL(XVARIANT& variant)
@@ -1399,10 +1400,10 @@ bool XBER::ConvertToNULL(XVARIANT& variant)
 * @brief      Convert to objet identifier
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  variant : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  variant : Variant value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::ConvertToObjetIdentifier(XBUFFER& data, XVARIANT& variant)
@@ -1456,10 +1457,10 @@ bool XBER::ConvertToObjetIdentifier(XBUFFER& data, XVARIANT& variant)
 * @brief      Convert to printable string
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  variant : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  variant : Variant value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::ConvertToPrintableString(XBUFFER& data, XVARIANT& variant)
@@ -1480,10 +1481,10 @@ bool XBER::ConvertToPrintableString(XBUFFER& data, XVARIANT& variant)
 * @brief      Convert to UTC time
 * @ingroup    XUTILS
 * 
-* @param[in]  data : 
-* @param[in]  variant : 
+* @param[in]  data : Data buffer to use.
+* @param[in]  variant : Variant value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::ConvertToUTCTime(XBUFFER& data, XVARIANT& variant)
@@ -1501,13 +1502,15 @@ bool XBER::ConvertToUTCTime(XBUFFER& data, XVARIANT& variant)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XDWORD XBER::CalculeSize(XBYTE& sizehead)
+* @fn         bool XBER::CalculeSize(XBUFFER& buffer, XDWORD& sizedataber, XBYTE& sizehead)
 * @brief      Calcule size
 * @ingroup    XUTILS
 * 
-* @param[in]  sizehead : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  sizedataber : Sizedataber value.
+* @param[in]  sizehead : Sizehead value.
 * 
-* @return     XDWORD : 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::CalculeSize(XBUFFER& buffer, XDWORD& sizedataber, XBYTE& sizehead)
@@ -1575,16 +1578,16 @@ bool XBER::CalculeSize(XBUFFER& buffer, XDWORD& sizedataber, XBYTE& sizehead)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::CodeBigNumber(XDWORD number, XBUFFER& data)
 * @brief      Code big number
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  number : number to code
 * @param[in]  data : buffer big numer coded
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::CodeBigNumber(XDWORD number, XBUFFER& data)
 {
@@ -1645,16 +1648,16 @@ bool XBER::CodeBigNumber(XDWORD number, XBUFFER& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XBER::CodeSize(XDWORD integer, XBUFFER& data)
 * @brief      Code size
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  integer : integer to code
 * @param[in]  data : buffer size coded
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBER::CodeSize(XDWORD integer, XBUFFER& data)
 {
@@ -1702,12 +1705,12 @@ bool XBER::CodeSize(XDWORD integer, XBUFFER& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XBER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBER::Clean()
 {

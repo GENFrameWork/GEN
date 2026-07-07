@@ -100,7 +100,7 @@ DIOCOREPROTOCOL_COMMAND::~DIOCOREPROTOCOL_COMMAND()
 * @brief      Get type
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCOREPROTOCOL_COMMAND::GetType()
@@ -115,7 +115,7 @@ int DIOCOREPROTOCOL_COMMAND::GetType()
 * @brief      Set type
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_COMMAND::SetType(int type)
@@ -130,7 +130,7 @@ void DIOCOREPROTOCOL_COMMAND::SetType(int type)
 * @brief      Get type string
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCOREPROTOCOL_COMMAND::GetTypeString()
@@ -145,7 +145,7 @@ XSTRING* DIOCOREPROTOCOL_COMMAND::GetTypeString()
 * @brief      Get bidirectionality mode
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_BIDIRECTIONALITYMODE : 
+* @return     DIOCOREPROTOCOL_BIDIRECTIONALITYMODE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_BIDIRECTIONALITYMODE DIOCOREPROTOCOL_COMMAND::GetBidirectionalityMode()
@@ -160,7 +160,7 @@ DIOCOREPROTOCOL_BIDIRECTIONALITYMODE DIOCOREPROTOCOL_COMMAND::GetBidirectionalit
 * @brief      Set bidirectionality mode
 * @ingroup    DATAIO
 * 
-* @param[in]  bidirectionalitymode : 
+* @param[in]  bidirectionalitymode : Bidirectionalitymode value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_COMMAND::SetBidirectionalityMode(DIOCOREPROTOCOL_BIDIRECTIONALITYMODE bidirectionalitymode)
@@ -229,7 +229,7 @@ DIOCOREPROTOCOL_UPDATECLASS::~DIOCOREPROTOCOL_UPDATECLASS()
 * @brief      Get class name
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCOREPROTOCOL_UPDATECLASS::GetClassName()
@@ -244,7 +244,7 @@ XSTRING* DIOCOREPROTOCOL_UPDATECLASS::GetClassName()
 * @brief      Init cache
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_UPDATECLASS::InitCache()
@@ -268,7 +268,7 @@ bool DIOCOREPROTOCOL_UPDATECLASS::InitCache()
 * @brief      Get class ptr
 * @ingroup    DATAIO
 * 
-* @return     XSERIALIZABLE* : 
+* @return     XSERIALIZABLE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSERIALIZABLE* DIOCOREPROTOCOL_UPDATECLASS::GetClassPtr()
@@ -283,7 +283,7 @@ XSERIALIZABLE* DIOCOREPROTOCOL_UPDATECLASS::GetClassPtr()
 * @brief      Set class ptr
 * @ingroup    DATAIO
 * 
-* @param[in]  classptr : 
+* @param[in]  classptr : Classptr pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_UPDATECLASS::SetClassPtr(XSERIALIZABLE* classptr)
@@ -298,7 +298,7 @@ void DIOCOREPROTOCOL_UPDATECLASS::SetClassPtr(XSERIALIZABLE* classptr)
 * @brief      requiered initial update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_UPDATECLASS::RequieredInitialUpdate()
@@ -313,7 +313,7 @@ bool DIOCOREPROTOCOL_UPDATECLASS::RequieredInitialUpdate()
 * @brief      set requiered initial update
 * @ingroup    DATAIO
 * 
-* @param[in]  requieredinitialupdate : 
+* @param[in]  requieredinitialupdate : Requieredinitialupdate value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_UPDATECLASS::SetRequieredInitialUpdate(bool requieredinitialupdate)
@@ -328,7 +328,7 @@ void DIOCOREPROTOCOL_UPDATECLASS::SetRequieredInitialUpdate(bool requieredinitia
 * @brief      get Nupdates
 * @ingroup    DATAIO
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOCOREPROTOCOL_UPDATECLASS::GetNUpdates()
@@ -343,7 +343,7 @@ XQWORD DIOCOREPROTOCOL_UPDATECLASS::GetNUpdates()
 * @brief      set Nupdates
 * @ingroup    DATAIO
 * 
-* @param[in]  nupdates : 
+* @param[in]  nupdates : Nupdates value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_UPDATECLASS::SetNUpdates(XQWORD nupdates)
@@ -371,7 +371,7 @@ void DIOCOREPROTOCOL_UPDATECLASS::AddOneToNUpdates()
 * @brief      Get time to update
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_UPDATECLASS::GetTimeToUpdate()
@@ -386,7 +386,7 @@ XDWORD DIOCOREPROTOCOL_UPDATECLASS::GetTimeToUpdate()
 * @brief      Set time to update
 * @ingroup    DATAIO
 * 
-* @param[in]  timetoupdate : 
+* @param[in]  timetoupdate : Timetoupdate value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_UPDATECLASS::SetTimeToUpdate(XDWORD timetoupdate)
@@ -401,7 +401,7 @@ void DIOCOREPROTOCOL_UPDATECLASS::SetTimeToUpdate(XDWORD timetoupdate)
 * @brief      Get timer last update
 * @ingroup    DATAIO
 * 
-* @return     XTIMER* : 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIOCOREPROTOCOL_UPDATECLASS::GetTimerLastUpdate()
@@ -416,7 +416,7 @@ XTIMER* DIOCOREPROTOCOL_UPDATECLASS::GetTimerLastUpdate()
 * @brief      get flags
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_UPDATECLASS::GetFlags()
@@ -431,7 +431,7 @@ XDWORD DIOCOREPROTOCOL_UPDATECLASS::GetFlags()
 * @brief      set flags
 * @ingroup    DATAIO
 * 
-* @param[in]  flags : 
+* @param[in]  flags : Flags value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_UPDATECLASS::SetFlags(XDWORD flags)
@@ -446,9 +446,9 @@ void DIOCOREPROTOCOL_UPDATECLASS::SetFlags(XDWORD flags)
 * @brief      is flag
 * @ingroup    DATAIO
 * 
-* @param[in]  flag : 
+* @param[in]  flag : Flag value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_UPDATECLASS::IsFlag(XDWORD flag)
@@ -494,8 +494,8 @@ void DIOCOREPROTOCOL_UPDATECLASS::Clean()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  protocolCFG : 
-* @param[in]  diostream : 
+* @param[in]  protocolCFG : Protocol configuration pointer to use.
+* @param[in]  diostream : Diostream pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL::DIOCOREPROTOCOL(DIOCOREPROTOCOL_CFG* protocolCFG, DIOSTREAM* diostream)
@@ -557,10 +557,10 @@ DIOCOREPROTOCOL::~DIOCOREPROTOCOL()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::Ini()
@@ -572,10 +572,10 @@ bool DIOCOREPROTOCOL::Ini()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::End()
@@ -590,7 +590,7 @@ bool DIOCOREPROTOCOL::End()
 * @brief      Get protocol CFG
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_CFG* : 
+* @return     DIOCOREPROTOCOL_CFG* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CFG* DIOCOREPROTOCOL::GetProtocolCFG()
@@ -605,7 +605,7 @@ DIOCOREPROTOCOL_CFG* DIOCOREPROTOCOL::GetProtocolCFG()
 * @brief      Get DIO stream
 * @ingroup    DATAIO
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOCOREPROTOCOL::GetDIOStream()
@@ -620,7 +620,7 @@ DIOSTREAM* DIOCOREPROTOCOL::GetDIOStream()
 * @brief      Set DIO stream
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
+* @param[in]  diostream : Diostream pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL::SetDIOStream(DIOSTREAM* diostream)
@@ -635,10 +635,10 @@ void DIOCOREPROTOCOL::SetDIOStream(DIOSTREAM* diostream)
 * @brief      send msg
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
-* @param[in]  contentresult : 
+* @param[in]  header : Header pointer to use.
+* @param[in]  contentresult : Output contentresult.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL::SendMsg(DIOCOREPROTOCOL_HEADER* header, XBUFFER& contentresult)
@@ -674,14 +674,14 @@ XDWORD DIOCOREPROTOCOL::SendMsg(DIOCOREPROTOCOL_HEADER* header, XBUFFER& content
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOCOREPROTOCOL::ReceivedMsg(DIOCOREPROTOCOL_HEADER& header, XBUFFER& content)
+* @fn         XDWORD DIOCOREPROTOCOL::ReceivedMsg(DIOCOREPROTOCOL_HEADER& header, XBUFFER& content)
 * @brief      Received msg
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
-* @param[in]  content : 
+* @param[in]  header : Header value.
+* @param[in]  content : Content value.
 * 
-* @return     bool : true if is succesful. 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL::ReceivedMsg(DIOCOREPROTOCOL_HEADER& header, XBUFFER& content)
@@ -1052,11 +1052,11 @@ XDWORD DIOCOREPROTOCOL::ReceivedMsg(DIOCOREPROTOCOL_HEADER& header, XBUFFER& con
 * @brief      Create header
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
 * 
-* @return     DIOCOREPROTOCOL_HEADER* : 
+* @return     DIOCOREPROTOCOL_HEADER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param)
@@ -1112,13 +1112,13 @@ DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCORE
 * @brief      Create header
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  content : 
-* @param[in]  contentresult : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  content : Content pointer to use.
+* @param[in]  contentresult : Output contentresult.
 * 
-* @return     DIOCOREPROTOCOL_HEADER* : 
+* @return     DIOCOREPROTOCOL_HEADER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, XBUFFER* content, XBUFFER* contentresult)
@@ -1169,13 +1169,13 @@ DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCORE
 * @brief      Create header
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message :  
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  content : 
-* @param[in]  contentresult : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  content : Content pointer to use.
+* @param[in]  contentresult : Output contentresult.
 * 
-* @return     DIOCOREPROTOCOL_HEADER* : 
+* @return     DIOCOREPROTOCOL_HEADER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, XSTRING* content, XBUFFER* contentresult)
@@ -1229,13 +1229,13 @@ DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCORE
 * @brief      Create header
 * @ingroup    DATAIO
 * 
-* @param[in]  ID_message : 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
-* @param[in]  content : 
-* @param[in]  contentresult : 
+* @param[in]  ID_message : ID message pointer to use.
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
+* @param[in]  content : Content pointer to use.
+* @param[in]  contentresult : Output contentresult.
 * 
-* @return     DIOCOREPROTOCOL_HEADER* : 
+* @return     DIOCOREPROTOCOL_HEADER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param, XFILEJSON* content, XBUFFER* contentresult)
@@ -1294,9 +1294,9 @@ DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL::CreateHeader(XUUID* ID_message, DIOCORE
 * @brief      Generate authentication challenge
 * @ingroup    DATAIO
 * 
-* @param[in]  autentication_challange : 
+* @param[in]  autentication_challange : Autentication challange value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::GenerateAuthenticationChallenge(XBUFFER& autentication_challange)
@@ -1311,10 +1311,10 @@ bool DIOCOREPROTOCOL::GenerateAuthenticationChallenge(XBUFFER& autentication_cha
 * @brief      Generate authentication response
 * @ingroup    DATAIO
 * 
-* @param[in]  autentication_challange : 
-* @param[in]  autentication_response : 
+* @param[in]  autentication_challange : Autentication challange value.
+* @param[in]  autentication_response : Autentication response value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::GenerateAuthenticationResponse(XBUFFER& autentication_challange, XBUFFER& autentication_response)
@@ -1329,11 +1329,11 @@ bool DIOCOREPROTOCOL::GenerateAuthenticationResponse(XBUFFER& autentication_chal
 * @brief      Mask key
 * @ingroup    DATAIO
 * 
-* @param[in]  key : 
-* @param[in]  size : 
-* @param[in]  mask : 
+* @param[in]  key : Key pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  mask : Mask value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::MaskKey(XBYTE* key, int size, XBYTE mask)
@@ -1359,7 +1359,7 @@ bool DIOCOREPROTOCOL::MaskKey(XBYTE* key, int size, XBYTE mask)
 * @brief      Commands get all
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIOCOREPROTOCOL_COMMAND*>* : 
+* @return     XVECTOR<DIOCOREPROTOCOL_COMMAND*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOCOREPROTOCOL_COMMAND*>* DIOCOREPROTOCOL::Commands_GetAll()
@@ -1374,11 +1374,11 @@ XVECTOR<DIOCOREPROTOCOL_COMMAND*>* DIOCOREPROTOCOL::Commands_GetAll()
 * @brief      Commands add
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
-* @param[in]  command : 
-* @param[in]  bidirectionalitymode : 
+* @param[in]  type : Type value.
+* @param[in]  command : Command pointer to use.
+* @param[in]  bidirectionalitymode : Bidirectionalitymode value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::Commands_Add(XDWORD type, XCHAR* command, DIOCOREPROTOCOL_BIDIRECTIONALITYMODE bidirectionalitymode)
@@ -1419,9 +1419,9 @@ bool DIOCOREPROTOCOL::Commands_Add(XDWORD type, XCHAR* command, DIOCOREPROTOCOL_
 * @brief      Commands get
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
+* @param[in]  command : Command pointer to use.
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL::Commands_Get(XCHAR* command)
@@ -1453,9 +1453,9 @@ XDWORD DIOCOREPROTOCOL::Commands_Get(XCHAR* command)
 * @brief      Commands get
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOCOREPROTOCOL::Commands_Get(XDWORD type)
@@ -1487,9 +1487,9 @@ XCHAR* DIOCOREPROTOCOL::Commands_Get(XDWORD type)
 * @brief      Commands get core protocol
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     DIOCOREPROTOCOL_COMMAND* : 
+* @return     DIOCOREPROTOCOL_COMMAND* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_COMMAND* DIOCOREPROTOCOL::Commands_GetCoreProtocol(XDWORD type)
@@ -1521,7 +1521,7 @@ DIOCOREPROTOCOL_COMMAND* DIOCOREPROTOCOL::Commands_GetCoreProtocol(XDWORD type)
 * @brief      Commands GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::Commands_DeleteAll()
@@ -1544,7 +1544,7 @@ bool DIOCOREPROTOCOL::Commands_DeleteAll()
 * @brief      Update class get all
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIOCOREPROTOCOL_UPDATECLASS*>* : 
+* @return     XVECTOR<DIOCOREPROTOCOL_UPDATECLASS*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIOCOREPROTOCOL_UPDATECLASS*>*  DIOCOREPROTOCOL::UpdateClass_GetAll()
@@ -1559,13 +1559,13 @@ XVECTOR<DIOCOREPROTOCOL_UPDATECLASS*>*  DIOCOREPROTOCOL::UpdateClass_GetAll()
 * @brief      update class  add
 * @ingroup    DATAIO
 * 
-* @param[in]  classname : 
-* @param[in]  classptr : 
-* @param[in]  requieredinitialupdate : 
-* @param[in]  timetoupdate : 
-* @param[in]  flags : 
+* @param[in]  classname : Classname pointer to use.
+* @param[in]  classptr : Classptr pointer to use.
+* @param[in]  requieredinitialupdate : Requieredinitialupdate value.
+* @param[in]  timetoupdate : Timetoupdate value.
+* @param[in]  flags : Flags value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::UpdateClass_Add(XCHAR* classname, XSERIALIZABLE* classptr, bool requieredinitialupdate, XDWORD timetoupdate, XDWORD flags)
@@ -1615,9 +1615,9 @@ bool DIOCOREPROTOCOL::UpdateClass_Add(XCHAR* classname, XSERIALIZABLE* classptr,
 * @brief      Update class get
 * @ingroup    DATAIO
 * 
-* @param[in]  classname : 
+* @param[in]  classname : Classname pointer to use.
 * 
-* @return     DIOCOREPROTOCOL_UPDATECLASS* : 
+* @return     DIOCOREPROTOCOL_UPDATECLASS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_UPDATECLASS* DIOCOREPROTOCOL::UpdateClass_Get(XCHAR* classname)
@@ -1649,7 +1649,7 @@ DIOCOREPROTOCOL_UPDATECLASS* DIOCOREPROTOCOL::UpdateClass_Get(XCHAR* classname)
 * @brief      Update class GEN_DELETE all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::UpdateClass_DeleteAll()
@@ -1672,13 +1672,13 @@ bool DIOCOREPROTOCOL::UpdateClass_DeleteAll()
 * @brief      Show debug
 * @ingroup    DATAIO
 * 
-* @param[in]  send : 
-* @param[in]  header : 
-* @param[in]  content : 
-* @param[in]  sizeallmessage : 
-* @param[in]  showlongformat : 
+* @param[in]  send : Send value.
+* @param[in]  header : Header pointer to use.
+* @param[in]  content : Content value.
+* @param[in]  sizeallmessage : Sizeallmessage value.
+* @param[in]  showlongformat : Showlongformat value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::ShowDebug(bool send, DIOCOREPROTOCOL_HEADER* header, XBUFFER& content, XDWORD sizeallmessage, bool showlongformat)
@@ -1777,11 +1777,11 @@ bool DIOCOREPROTOCOL::ShowDebug(bool send, DIOCOREPROTOCOL_HEADER* header, XBUFF
 * @brief      Generate header to send
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
-* @param[in]  headersenddata : 
-* @param[in]  headersize : 
+* @param[in]  header : Header pointer to use.
+* @param[in]  headersenddata : Headersenddata value.
+* @param[in]  headersize : Headersize pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::GenerateHeaderToSend(DIOCOREPROTOCOL_HEADER* header, XBUFFER& headersenddata, XWORD* headersize)
@@ -1883,9 +1883,9 @@ bool DIOCOREPROTOCOL::GenerateHeaderToSend(DIOCOREPROTOCOL_HEADER* header, XBUFF
 * @brief      Send data
 * @ingroup    DATAIO
 * 
-* @param[in]  senddata : 
+* @param[in]  senddata : Senddata value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::SendData(XBUFFER& senddata)
@@ -1978,11 +1978,11 @@ bool DIOCOREPROTOCOL::SendData(XBUFFER& senddata)
 * @brief      Compress content
 * @ingroup    DATAIO
 * 
-* @param[in]  header : 
-* @param[in]  content : 
-* @param[in]  contentresult : 
+* @param[in]  header : Header pointer to use.
+* @param[in]  content : Content value.
+* @param[in]  contentresult : Output contentresult.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL::CompressContent(DIOCOREPROTOCOL_HEADER* header, XBUFFER& content,  XBUFFER& contentresult)

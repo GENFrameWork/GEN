@@ -53,15 +53,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDRIVEIMAGEMANAGER_XEVENT::XDRIVEIMAGEMANAGER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         XDRIVEIMAGEMANAGER_XEVENT::XDRIVEIMAGEMANAGER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  subject :
-* @param[in]  type :
-* @param[in]  family :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDRIVEIMAGEMANAGER_XEVENT::XDRIVEIMAGEMANAGER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family) : XEVENT(subject, type, family)
 {
@@ -70,12 +70,12 @@ XDRIVEIMAGEMANAGER_XEVENT::XDRIVEIMAGEMANAGER_XEVENT(XSUBJECT* subject, XDWORD t
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDRIVEIMAGEMANAGER_XEVENT::~XDRIVEIMAGEMANAGER_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDRIVEIMAGEMANAGER_XEVENT::~XDRIVEIMAGEMANAGER_XEVENT()
 {
@@ -84,13 +84,13 @@ XDRIVEIMAGEMANAGER_XEVENT::~XDRIVEIMAGEMANAGER_XEVENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDRIVEIMAGEMANAGER_DRIVE* XDRIVEIMAGEMANAGER_XEVENT::GetDrive()
 * @brief      Get drive
 * @ingroup    XUTILS
-*
-* @return     XDRIVEIMAGE_DRIVE* :
-*
+* 
+* @return     XDRIVEIMAGEMANAGER_DRIVE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDRIVEIMAGEMANAGER_DRIVE* XDRIVEIMAGEMANAGER_XEVENT::GetDrive()
 {
@@ -99,13 +99,13 @@ XDRIVEIMAGEMANAGER_DRIVE* XDRIVEIMAGEMANAGER_XEVENT::GetDrive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDRIVEIMAGEMANAGER_XEVENT::SetDrive(XDRIVEIMAGEMANAGER_DRIVE* drive)
 * @brief      Set drive
 * @ingroup    XUTILS
-*
-* @param[in]  drive :
-*
+* 
+* @param[in]  drive : Drive pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDRIVEIMAGEMANAGER_XEVENT::SetDrive(XDRIVEIMAGEMANAGER_DRIVE* drive)
 {
@@ -114,13 +114,13 @@ void XDRIVEIMAGEMANAGER_XEVENT::SetDrive(XDRIVEIMAGEMANAGER_DRIVE* drive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD XDRIVEIMAGEMANAGER_XEVENT::GetIndexSector()
 * @brief      Get index sector
 * @ingroup    XUTILS
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XDRIVEIMAGEMANAGER_XEVENT::GetIndexSector()
 {
@@ -129,13 +129,13 @@ XQWORD XDRIVEIMAGEMANAGER_XEVENT::GetIndexSector()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDRIVEIMAGEMANAGER_XEVENT::SetIndexSector(XQWORD indexsector)
 * @brief      Set index sector
 * @ingroup    XUTILS
-*
-* @param[in]  indexsector :
-*
+* 
+* @param[in]  indexsector : Indexsector value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDRIVEIMAGEMANAGER_XEVENT::SetIndexSector(XQWORD indexsector)
 {
@@ -144,13 +144,13 @@ void XDRIVEIMAGEMANAGER_XEVENT::SetIndexSector(XQWORD indexsector)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD XDRIVEIMAGEMANAGER_XEVENT::GetNumberSectorsInOperation()
 * @brief      Get number sectors in operation
 * @ingroup    XUTILS
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD XDRIVEIMAGEMANAGER_XEVENT::GetNumberSectorsInOperation()
 {
@@ -159,13 +159,13 @@ XQWORD XDRIVEIMAGEMANAGER_XEVENT::GetNumberSectorsInOperation()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDRIVEIMAGEMANAGER_XEVENT::SetNumberSectorsInOperation(XQWORD numbersectorsinoperation)
 * @brief      Set number sectors in operation
 * @ingroup    XUTILS
-*
-* @param[in]  numbersectorsinoperation :
-*
+* 
+* @param[in]  numbersectorsinoperation : Numbersectorsinoperation value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDRIVEIMAGEMANAGER_XEVENT::SetNumberSectorsInOperation(XQWORD numbersectorsinoperation)
 {
@@ -174,13 +174,13 @@ void XDRIVEIMAGEMANAGER_XEVENT::SetNumberSectorsInOperation(XQWORD numbersectors
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float XDRIVEIMAGEMANAGER_XEVENT::GetOperationPercent()
 * @brief      Get operation percent
 * @ingroup    XUTILS
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XDRIVEIMAGEMANAGER_XEVENT::GetOperationPercent()
 {
@@ -189,13 +189,13 @@ float XDRIVEIMAGEMANAGER_XEVENT::GetOperationPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDRIVEIMAGEMANAGER_XEVENT::SetOperationPercent(float operationpercent)
 * @brief      Set operation percent
 * @ingroup    XUTILS
-*
-* @param[in]  operationpercent :
-*
+* 
+* @param[in]  operationpercent : Operationpercent value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDRIVEIMAGEMANAGER_XEVENT::SetOperationPercent(float operationpercent)
 {
@@ -204,13 +204,13 @@ void XDRIVEIMAGEMANAGER_XEVENT::SetOperationPercent(float operationpercent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDRIVEIMAGE_ERROR XDRIVEIMAGEMANAGER_XEVENT::GetError()
+* 
+* @fn         XDRIVEIMAGEMANAGER_ERROR XDRIVEIMAGEMANAGER_XEVENT::GetError()
 * @brief      Get error
 * @ingroup    XUTILS
-*
-* @return     XDRIVEIMAGE_ERROR :
-*
+* 
+* @return     XDRIVEIMAGEMANAGER_ERROR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDRIVEIMAGEMANAGER_ERROR XDRIVEIMAGEMANAGER_XEVENT::GetError()
 {
@@ -219,13 +219,13 @@ XDRIVEIMAGEMANAGER_ERROR XDRIVEIMAGEMANAGER_XEVENT::GetError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XDRIVEIMAGEMANAGER_XEVENT::SetError(XDRIVEIMAGE_ERROR error)
+* 
+* @fn         void XDRIVEIMAGEMANAGER_XEVENT::SetError(XDRIVEIMAGEMANAGER_ERROR error)
 * @brief      Set error
 * @ingroup    XUTILS
-*
-* @param[in]  error :
-*
+* 
+* @param[in]  error : Error value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDRIVEIMAGEMANAGER_XEVENT::SetError(XDRIVEIMAGEMANAGER_ERROR error)
 {
@@ -234,12 +234,12 @@ void XDRIVEIMAGEMANAGER_XEVENT::SetError(XDRIVEIMAGEMANAGER_ERROR error)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XDRIVEIMAGEMANAGER_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XDRIVEIMAGEMANAGER_XEVENT::Clean()
 {

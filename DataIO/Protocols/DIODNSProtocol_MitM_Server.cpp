@@ -93,10 +93,10 @@ DIODNSPROTOCOL_MITM_SERVER::~DIODNSPROTOCOL_MITM_SERVER()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODNSPROTOCOL_MITM_SERVER::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::Ini()
@@ -153,9 +153,9 @@ bool DIODNSPROTOCOL_MITM_SERVER::Ini()
 * @brief      Activate
 * @ingroup    DATAIO
 * 
-* @param[in]  active : 
+* @param[in]  active : Active value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::Activate(bool active)
@@ -192,7 +192,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::Activate(bool active)
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 /*
@@ -404,10 +404,10 @@ bool DIODNSPROTOCOL_MITM_SERVER::Update()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODNSPROTOCOL_MITM_SERVER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::End()
@@ -449,10 +449,10 @@ bool DIODNSPROTOCOL_MITM_SERVER::End()
 * @brief      Add DNS server
 * @ingroup    DATAIO
 * 
-* @param[in]  server : 
-* @param[in]  port : 
+* @param[in]  server : Server pointer to use.
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XCHAR* server, XWORD port)
@@ -481,10 +481,10 @@ bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XCHAR* server, XWORD port)
 * @brief      Add DNS server
 * @ingroup    DATAIO
 * 
-* @param[in]  server : 
-* @param[in]  port : 
+* @param[in]  server : Server value.
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XSTRING& server, XWORD port)
@@ -499,10 +499,10 @@ bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XSTRING& server, XWORD port)
 * @brief      Add DNS server
 * @ingroup    DATAIO
 * 
-* @param[in]  serverIP : 
-* @param[in]  port : 
+* @param[in]  serverIP : Server IP pointer to use.
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XBYTE* serverIP, XWORD port)
@@ -531,10 +531,10 @@ bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(XBYTE* serverIP, XWORD port)
 * @brief      Add DNS server
 * @ingroup    DATAIO
 * 
-* @param[in]  serverIP : 
-* @param[in]  port : 
+* @param[in]  serverIP : Server IP value.
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(DIOIP& serverIP, XWORD port)
@@ -558,7 +558,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::AddDNSServer(DIOIP& serverIP, XWORD port)
 * @brief      Delete all DNS servers
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::DeleteAllDNSServers()
@@ -581,7 +581,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::DeleteAllDNSServers()
 * @brief      Get server mutex
 * @ingroup    DATAIO
 * 
-* @return     XMUTEX* : 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* DIODNSPROTOCOL_MITM_SERVER::GetServerMutex()
@@ -596,11 +596,11 @@ XMUTEX* DIODNSPROTOCOL_MITM_SERVER::GetServerMutex()
 * @brief      Detour
 * @ingroup    DATAIO
 * 
-* @param[in]  DNSserver : 
-* @param[in]  sendbuffer : 
-* @param[in]  receivedbuffer : 
+* @param[in]  DNSserver : DN Sserver pointer to use.
+* @param[in]  sendbuffer : Sendbuffer value.
+* @param[in]  receivedbuffer : Receivedbuffer value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::Detour(DIODNSRESOLVER_DNSSERVER* DNSserver, XBUFFER& sendbuffer, XBUFFER& receivedbuffer)
@@ -673,7 +673,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::Detour(DIODNSRESOLVER_DNSSERVER* DNSserver, XBU
 * @brief      Thread server
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIODNSPROTOCOL_MITM_SERVER::ThreadServer(void* param)

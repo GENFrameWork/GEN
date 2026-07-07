@@ -57,7 +57,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         HASHCKS16::HASHCKS16()
+* @fn         HASHCKS16::HASHCKS16() : HASH()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -100,13 +100,13 @@ HASHCKS16::~HASHCKS16()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASHCKS16::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCKS16::Do(XBYTE* input, XQWORD size)
@@ -137,7 +137,7 @@ bool HASHCKS16::Do(XBYTE* input, XQWORD size)
 * @brief      Reset result
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCKS16::ResetResult()
@@ -159,7 +159,7 @@ bool HASHCKS16::ResetResult()
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASHCKS16::GetDefaultSize()
@@ -174,7 +174,7 @@ int HASHCKS16::GetDefaultSize()
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* HASHCKS16::GetResult()
@@ -191,9 +191,9 @@ XBUFFER* HASHCKS16::GetResult()
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @param[in]  resultsize : 
+* @param[in]  resultsize : Output resultsize.
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* HASHCKS16::GetResult(XDWORD& resultsize)
@@ -212,7 +212,7 @@ XBYTE* HASHCKS16::GetResult(XDWORD& resultsize)
 * @brief      Get result CKS16
 * @ingroup    CIPHER
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD HASHCKS16::GetResultCKS16()
@@ -234,10 +234,8 @@ XWORD HASHCKS16::GetResultCKS16()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void HASHCKS16::Ini(void)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    CIPHER
-* 
-* @param[in]  void : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHCKS16::Ini(void)
@@ -252,10 +250,10 @@ void HASHCKS16::Ini(void)
 * @brief      Update
 * @ingroup    CIPHER
 * 
-* @param[in]  CKS16 : 
-* @param[in]  c : 
+* @param[in]  CKS16 : CKS16 value.
+* @param[in]  c : C value.
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD HASHCKS16::Update(XWORD CKS16, XWORD c)

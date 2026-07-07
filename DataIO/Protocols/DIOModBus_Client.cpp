@@ -58,14 +58,14 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMODBUS_CLIENT::DIOMODBUS_CLIENT(DIOSTREAM* diostream, DIOMODBUS_CLIENTMODE mode)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  diostream :
-* @param[in]  mode :
-*
+* 
+* @param[in]  diostream : Diostream pointer to use.
+* @param[in]  mode : Mode value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMODBUS_CLIENT::DIOMODBUS_CLIENT(DIOSTREAM* diostream, DIOMODBUS_CLIENTMODE mode)
 {
@@ -79,12 +79,12 @@ DIOMODBUS_CLIENT::DIOMODBUS_CLIENT(DIOSTREAM* diostream, DIOMODBUS_CLIENTMODE mo
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMODBUS_CLIENT::~DIOMODBUS_CLIENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMODBUS_CLIENT::~DIOMODBUS_CLIENT()
 {
@@ -97,13 +97,13 @@ DIOMODBUS_CLIENT::~DIOMODBUS_CLIENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAM* DIOMODBUS_CLIENT::GetDIOStream()
 * @brief      Get DIO stream
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAM* :
-*
+* 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOMODBUS_CLIENT::GetDIOStream()
 {
@@ -112,13 +112,13 @@ DIOSTREAM* DIOMODBUS_CLIENT::GetDIOStream()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOMODBUS_CLIENTMODE DIOMODBUS_CLIENT::GetMode()
 * @brief      Get mode
 * @ingroup    DATAIO
-*
-* @return     DIOMODBUS_CLIENTMODE :
-*
+* 
+* @return     DIOMODBUS_CLIENTMODE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOMODBUS_CLIENTMODE DIOMODBUS_CLIENT::GetMode()
 {
@@ -127,15 +127,15 @@ DIOMODBUS_CLIENTMODE DIOMODBUS_CLIENT::GetMode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMODBUS_CLIENT::SetMode(DIOMODBUS_CLIENTMODE mode)
 * @brief      Set mode
 * @ingroup    DATAIO
-*
-* @param[in]  mode :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mode : Mode value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUS_CLIENT::SetMode(DIOMODBUS_CLIENTMODE mode)
 {
@@ -146,16 +146,16 @@ bool DIOMODBUS_CLIENT::SetMode(DIOMODBUS_CLIENTMODE mode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMODBUS_CLIENT::Connect(XBYTE unit, int timeout)
 * @brief      Connect
 * @ingroup    DATAIO
-*
-* @param[in]  unit :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  unit : Unit value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUS_CLIENT::Connect(XBYTE unit, int timeout)
 {
@@ -171,13 +171,13 @@ bool DIOMODBUS_CLIENT::Connect(XBYTE unit, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOMODBUS_CLIENT::GetUnit()
 * @brief      Get unit
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOMODBUS_CLIENT::GetUnit()
 {
@@ -186,13 +186,13 @@ XBYTE DIOMODBUS_CLIENT::GetUnit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOMODBUS_CLIENT::SetUnit(XBYTE unit)
 * @brief      Set unit
 * @ingroup    DATAIO
-*
-* @param[in]  unit :
-*
+* 
+* @param[in]  unit : Unit value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOMODBUS_CLIENT::SetUnit(XBYTE unit)
 {
@@ -201,18 +201,18 @@ void DIOMODBUS_CLIENT::SetUnit(XBYTE unit)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMODBUS_CLIENT::ReadHoldingRegisters(XWORD address, XWORD nregisters, XBUFFER& answer, int timeout)
 * @brief      Read holding registers
 * @ingroup    DATAIO
-*
-* @param[in]  address :
-* @param[in]  nregisters :
-* @param[in]  answer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  address : Address value.
+* @param[in]  nregisters : Nregisters value.
+* @param[in]  answer : Answer value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUS_CLIENT::ReadHoldingRegisters(XWORD address, XWORD nregisters, XBUFFER& answer, int timeout)
 {
@@ -278,18 +278,18 @@ bool DIOMODBUS_CLIENT::ReadHoldingRegisters(XWORD address, XWORD nregisters, XBU
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOMODBUS_CLIENT::ReadInputRegisters(XWORD address, XWORD nregisters, XBUFFER& answer, int timeout)
+* 
+* @fn         bool DIOMODBUS_CLIENT::ReadInputRegisters(XWORD address, XWORD nregisters, XMAP<XWORD, XWORD>& registers, int timeout)
 * @brief      Read input registers
 * @ingroup    DATAIO
-*
-* @param[in]  address :
-* @param[in]  nregisters :
-* @param[in]  answer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  address : Address value.
+* @param[in]  nregisters : Nregisters value.
+* @param[in]  registers : Registers value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUS_CLIENT::ReadInputRegisters(XWORD address, XWORD nregisters, XMAP<XWORD, XWORD>& registers, int timeout)
 {
@@ -330,17 +330,17 @@ bool DIOMODBUS_CLIENT::ReadInputRegisters(XWORD address, XWORD nregisters, XMAP<
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOMODBUS_CLIENT::WriteSingleRegister(XWORD address, XBUFFER& value, int timeout)
+* 
+* @fn         bool DIOMODBUS_CLIENT::WriteSingleRegister(XWORD address, XWORD value, int timeout)
 * @brief      Write single register
 * @ingroup    DATAIO
-*
-* @param[in]  address :
-* @param[in]  value :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  address : Address value.
+* @param[in]  value : Value value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUS_CLIENT::WriteSingleRegister(XWORD address, XWORD value, int timeout)
 {
@@ -369,13 +369,13 @@ bool DIOMODBUS_CLIENT::WriteSingleRegister(XWORD address, XWORD value, int timeo
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMODBUS_CLIENT::Disconnect()
 * @brief      Disconnect
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUS_CLIENT::Disconnect()
 {
@@ -392,18 +392,18 @@ bool DIOMODBUS_CLIENT::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOMODBUS_CLIENT::MakeCommand(DIOMODBUS_CLIENT_FUNCTION function, XBUFFER& ask, XBUFFER& answer, int timeout)
 * @brief      Make command
 * @ingroup    DATAIO
-*
-* @param[in]  function :
-* @param[in]  ask :
-* @param[in]  answer :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  function : Function value.
+* @param[in]  ask : Ask value.
+* @param[in]  answer : Answer value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMODBUS_CLIENT::MakeCommand(DIOMODBUS_CLIENT_FUNCTION function, XBUFFER& ask, XBUFFER& answer, int timeout)
 {
@@ -488,15 +488,15 @@ bool DIOMODBUS_CLIENT::MakeCommand(DIOMODBUS_CLIENT_FUNCTION function, XBUFFER& 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOMODBUS_CLIENT::CRC16(XBUFFER& data)
 * @brief      CRC16
 * @ingroup    DATAIO
-*
-* @param[in]  data :
-*
-* @return     XWORD :
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOMODBUS_CLIENT::CRC16(XBUFFER& data)
 {
@@ -524,12 +524,12 @@ XWORD DIOMODBUS_CLIENT::CRC16(XBUFFER& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOMODBUS_CLIENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOMODBUS_CLIENT::Clean()
 {

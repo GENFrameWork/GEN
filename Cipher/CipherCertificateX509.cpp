@@ -75,8 +75,8 @@ CIPHERCERTIFICATEX509_ID::CIPHERCERTIFICATEX509_ID()
 * 
 * @fn         CIPHERCERTIFICATEX509_ID::~CIPHERCERTIFICATEX509_ID()
 * @brief      Destructor of class
-* @ingroup    CIPHER
 * @note       VIRTUAL
+* @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509_ID::~CIPHERCERTIFICATEX509_ID()
@@ -91,7 +91,7 @@ CIPHERCERTIFICATEX509_ID::~CIPHERCERTIFICATEX509_ID()
 * @brief      get country name
 * @ingroup    CIPHER
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERCERTIFICATEX509_ID::GetCountryName()
@@ -106,7 +106,7 @@ XSTRING* CIPHERCERTIFICATEX509_ID::GetCountryName()
 * @brief      get organization name
 * @ingroup    CIPHER
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERCERTIFICATEX509_ID::GetOrganizationName()
@@ -121,7 +121,7 @@ XSTRING* CIPHERCERTIFICATEX509_ID::GetOrganizationName()
 * @brief      get organizational unit name
 * @ingroup    CIPHER
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERCERTIFICATEX509_ID::GetOrganizationalUnitName()
@@ -136,7 +136,7 @@ XSTRING* CIPHERCERTIFICATEX509_ID::GetOrganizationalUnitName()
 * @brief      get organizational unit name plus
 * @ingroup    CIPHER
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERCERTIFICATEX509_ID::GetOrganizationalUnitNamePlus()
@@ -151,7 +151,7 @@ XSTRING* CIPHERCERTIFICATEX509_ID::GetOrganizationalUnitNamePlus()
 * @brief      get common name
 * @ingroup    CIPHER
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERCERTIFICATEX509_ID::GetCommonName()
@@ -162,14 +162,14 @@ XSTRING* CIPHERCERTIFICATEX509_ID::GetCommonName()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         int CIPHERCERTIFICATEX509_ID::Compare(CIPHERCERTIFICATEX509_ID* certificateID, bool ignorecase)
+* @fn         int CIPHERCERTIFICATEX509_ID::Compare(CIPHERCERTIFICATEX509_ID* certificateID, bool ignorecase )
 * @brief      compare
 * @ingroup    CIPHER
 * 
-* @param[in]  certificateID : 
-* @param[in]  ignorecase : 
+* @param[in]  certificateID : Certificate ID pointer to use.
+* @param[in]  ignorecase : Ignorecase value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERCERTIFICATEX509_ID::Compare(CIPHERCERTIFICATEX509_ID* certificateID, bool ignorecase )
@@ -216,10 +216,10 @@ int CIPHERCERTIFICATEX509_ID::Compare(CIPHERCERTIFICATEX509_ID* certificateID, b
 * @brief      compare
 * @ingroup    CIPHER
 * 
-* @param[in]  certificateID : 
-* @param[in]  ignorecase : 
+* @param[in]  certificateID : Certificate ID value.
+* @param[in]  ignorecase : Ignorecase value.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHERCERTIFICATEX509_ID::Compare(CIPHERCERTIFICATEX509_ID& certificateID, bool ignorecase)
@@ -234,9 +234,9 @@ int CIPHERCERTIFICATEX509_ID::Compare(CIPHERCERTIFICATEX509_ID& certificateID, b
 * @brief      copy to
 * @ingroup    CIPHER
 * 
-* @param[in]  certificateID : 
+* @param[in]  certificateID : Certificate ID pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509_ID::CopyTo(CIPHERCERTIFICATEX509_ID* certificateID)
@@ -281,9 +281,9 @@ bool CIPHERCERTIFICATEX509_ID::CopyTo(CIPHERCERTIFICATEX509_ID* certificateID)
 * @brief      copy to
 * @ingroup    CIPHER
 * 
-* @param[in]  certificateID : 
+* @param[in]  certificateID : Certificate ID value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509_ID::CopyTo(CIPHERCERTIFICATEX509_ID& certificateID)
@@ -298,9 +298,9 @@ bool CIPHERCERTIFICATEX509_ID::CopyTo(CIPHERCERTIFICATEX509_ID& certificateID)
 * @brief      copy from
 * @ingroup    CIPHER
 * 
-* @param[in]  certificateID : 
+* @param[in]  certificateID : Certificate ID pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509_ID::CopyFrom(CIPHERCERTIFICATEX509_ID* certificateID)
@@ -345,9 +345,9 @@ bool CIPHERCERTIFICATEX509_ID::CopyFrom(CIPHERCERTIFICATEX509_ID* certificateID)
 * @brief      copy from
 * @ingroup    CIPHER
 * 
-* @param[in]  certificateID : 
+* @param[in]  certificateID : Certificate ID value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509_ID::CopyFrom(CIPHERCERTIFICATEX509_ID& certificateID)
@@ -360,8 +360,8 @@ bool CIPHERCERTIFICATEX509_ID::CopyFrom(CIPHERCERTIFICATEX509_ID& certificateID)
 * 
 * @fn         void CIPHERCERTIFICATEX509_ID::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    CIPHER
 * @note       INTERNAL
+* @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509_ID::Clean()
@@ -420,7 +420,7 @@ CIPHERCERTIFICATEX509::~CIPHERCERTIFICATEX509()
 * @brief      Get version
 * @ingroup    CIPHER
 * 
-* @return     XDWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD CIPHERCERTIFICATEX509::GetVersion()
@@ -435,7 +435,7 @@ XWORD CIPHERCERTIFICATEX509::GetVersion()
 * @brief      Set version
 * @ingroup    CIPHER
 * 
-* @param[in]  version : 
+* @param[in]  version : Version value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509::SetVersion(XWORD version)
@@ -450,7 +450,7 @@ void CIPHERCERTIFICATEX509::SetVersion(XWORD version)
 * @brief      Get serial
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* CIPHERCERTIFICATEX509::GetSerial()
@@ -465,7 +465,7 @@ XBUFFER* CIPHERCERTIFICATEX509::GetSerial()
 * @brief      get algorithm type
 * @ingroup    CIPHER
 * 
-* @return     CIPHERCERTIFICATEX509_ALGORITHM_TYPE : 
+* @return     CIPHERCERTIFICATEX509_ALGORITHM_TYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509_ALGORITHM_TYPE CIPHERCERTIFICATEX509::GetAlgorithmType()
@@ -480,9 +480,9 @@ CIPHERCERTIFICATEX509_ALGORITHM_TYPE CIPHERCERTIFICATEX509::GetAlgorithmType()
 * @brief      Set algorithm type
 * @ingroup    CIPHER
 * 
-* @param[in]  OID : 
+* @param[in]  OID : OID pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::SetAlgorithmType(XCHAR* OID)
@@ -581,7 +581,7 @@ bool CIPHERCERTIFICATEX509::SetAlgorithmType(XCHAR* OID)
 * @brief      get algorithm type str
 * @ingroup    CIPHER
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERCERTIFICATEX509::GetAlgorithmTypeStr()
@@ -596,7 +596,7 @@ XSTRING* CIPHERCERTIFICATEX509::GetAlgorithmTypeStr()
 * @brief      get issuer Id
 * @ingroup    CIPHER
 * 
-* @return     CIPHERCERTIFICATEX509_ID* : 
+* @return     CIPHERCERTIFICATEX509_ID* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetIssuerID()
@@ -611,7 +611,7 @@ CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetIssuerID()
 * @brief      is valid dates
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::IsValidDates()
@@ -652,7 +652,7 @@ bool CIPHERCERTIFICATEX509::IsValidDates()
 * @brief      Get date not before
 * @ingroup    CIPHER
 * 
-* @return     XDATETIME* : 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* CIPHERCERTIFICATEX509::GetDateNotBefore()
@@ -667,7 +667,7 @@ XDATETIME* CIPHERCERTIFICATEX509::GetDateNotBefore()
 * @brief      Get date not after
 * @ingroup    CIPHER
 * 
-* @return     XDATETIME* : 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* CIPHERCERTIFICATEX509::GetDateNotAfter()
@@ -682,7 +682,7 @@ XDATETIME* CIPHERCERTIFICATEX509::GetDateNotAfter()
 * @brief      is self signed
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::IsSelfSigned()
@@ -702,7 +702,7 @@ bool CIPHERCERTIFICATEX509::IsSelfSigned()
 * @brief      get subject Id
 * @ingroup    CIPHER
 * 
-* @return     CIPHERCERTIFICATEX509_ID* : 
+* @return     CIPHERCERTIFICATEX509_ID* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetSubjectID()
@@ -717,7 +717,7 @@ CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetSubjectID()
 * @brief      is public cipher key usage
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::IsPublicCipherKeyUsage()
@@ -729,10 +729,10 @@ bool CIPHERCERTIFICATEX509::IsPublicCipherKeyUsage()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHERCERTIFICATEX509::SetPublicCipherKeyUsage(bool isusage)
-* @brief      set public cipher key usage 
+* @brief      set public cipher key usage
 * @ingroup    CIPHER
 * 
-* @param[in]  isusage : 
+* @param[in]  isusage : Isusage value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509::SetPublicCipherKeyUsage(bool isusage)
@@ -747,7 +747,7 @@ void CIPHERCERTIFICATEX509::SetPublicCipherKeyUsage(bool isusage)
 * @brief      is public cipher key basic constraints
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::IsPublicCipherKeyBasicConstraints()
@@ -762,7 +762,7 @@ bool CIPHERCERTIFICATEX509::IsPublicCipherKeyBasicConstraints()
 * @brief      set public cipher key basic constraints
 * @ingroup    CIPHER
 * 
-* @param[in]  basicconstraints : 
+* @param[in]  basicconstraints : Basicconstraints value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509::SetPublicCipherKeyBasicConstraints(bool basicconstraints)
@@ -777,7 +777,7 @@ void CIPHERCERTIFICATEX509::SetPublicCipherKeyBasicConstraints(bool basicconstra
 * @brief      is public cipher key valid
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::IsPublicCipherKeyValid()
@@ -792,7 +792,7 @@ bool CIPHERCERTIFICATEX509::IsPublicCipherKeyValid()
 * @brief      set public cipher key valid
 * @ingroup    CIPHER
 * 
-* @param[in]  isvalid : 
+* @param[in]  isvalid : Isvalid value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509::SetPublicCipherKeyValid(bool isvalid)
@@ -803,11 +803,11 @@ void CIPHERCERTIFICATEX509::SetPublicCipherKeyValid(bool isvalid)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetPublicCipherKeyID()
+* @fn         XSTRING* CIPHERCERTIFICATEX509::GetPublicCipherKeyID()
 * @brief      get public cipher key Id
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERCERTIFICATEX509::GetPublicCipherKeyID()
@@ -822,7 +822,7 @@ XSTRING* CIPHERCERTIFICATEX509::GetPublicCipherKeyID()
 * @brief      get public cipher key
 * @ingroup    CIPHER
 * 
-* @return     CIPHERKEY* : 
+* @return     CIPHERKEY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEY* CIPHERCERTIFICATEX509::GetPublicCipherKey()
@@ -837,9 +837,9 @@ CIPHERKEY* CIPHERCERTIFICATEX509::GetPublicCipherKey()
 * @brief      Set public cipher key
 * @ingroup    CIPHER
 * 
-* @param[in]  publiccipherkey : 
+* @param[in]  publiccipherkey : Publiccipherkey pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::SetPublicCipherKey(CIPHERKEY* publiccipherkey)
@@ -861,7 +861,7 @@ bool CIPHERCERTIFICATEX509::SetPublicCipherKey(CIPHERKEY* publiccipherkey)
 * @brief      get hash
 * @ingroup    CIPHER
 * 
-* @return     HASH* : 
+* @return     HASH* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 HASH* CIPHERCERTIFICATEX509::GetHash()
@@ -876,7 +876,7 @@ HASH* CIPHERCERTIFICATEX509::GetHash()
 * @brief      set hash
 * @ingroup    CIPHER
 * 
-* @param[in]  hash : 
+* @param[in]  hash : Hash pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509::SetHash(HASH* hash)
@@ -891,7 +891,7 @@ void CIPHERCERTIFICATEX509::SetHash(HASH* hash)
 * @brief      get hash data
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* CIPHERCERTIFICATEX509::GetHashData()
@@ -906,10 +906,10 @@ XBUFFER* CIPHERCERTIFICATEX509::GetHashData()
 * @brief      Convert date time
 * @ingroup    CIPHER
 * 
-* @param[in]  datestr : 
-* @param[in]  datetime : 
+* @param[in]  datestr : Datestr pointer to use.
+* @param[in]  datetime : Datetime pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::ConvertDateTime(XCHAR* datestr, XDATETIME* datetime)
@@ -975,7 +975,7 @@ bool CIPHERCERTIFICATEX509::ConvertDateTime(XCHAR* datestr, XDATETIME* datetime)
 * @brief      Xtrace certificated propertys
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::XTraceCertificatedPropertys()

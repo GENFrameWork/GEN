@@ -77,7 +77,7 @@ COMPRESSBASE::COMPRESSBASE()
 * @brief      Constructor of class
 * @ingroup    COMPRESS
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 COMPRESSBASE::COMPRESSBASE(COMPRESSBASE_TYPE type)
@@ -106,7 +106,7 @@ COMPRESSBASE::~COMPRESSBASE()
 * @brief      Get type
 * @ingroup    COMPRESS
 * 
-* @return     COMPRESSBASE_TYPE : 
+* @return     COMPRESSBASE_TYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 COMPRESSBASE_TYPE COMPRESSBASE::GetType()
@@ -121,9 +121,9 @@ COMPRESSBASE_TYPE COMPRESSBASE::GetType()
 * @brief      Set type
 * @ingroup    COMPRESS
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     COMPRESSBASE_TYPE : 
+* @return     COMPRESSBASE_TYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 COMPRESSBASE_TYPE COMPRESSBASE::SetType(COMPRESSBASE_TYPE type)
@@ -140,11 +140,11 @@ COMPRESSBASE_TYPE COMPRESSBASE::SetType(COMPRESSBASE_TYPE type)
 * @brief      Compress
 * @ingroup    COMPRESS
 * 
-* @param[in]  origin : 
-* @param[in]  size : 
-* @param[in]  buffer : 
+* @param[in]  origin : Origin pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESSBASE::Compress(XBYTE* origin,XDWORD size,XBUFFER* buffer)
@@ -166,11 +166,11 @@ bool COMPRESSBASE::Compress(XBYTE* origin,XDWORD size,XBUFFER* buffer)
 * @brief      Decompress
 * @ingroup    COMPRESS
 * 
-* @param[in]  origin : 
-* @param[in]  size : 
-* @param[in]  buffer : 
+* @param[in]  origin : Origin pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  buffer : Buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESSBASE::Decompress(XBYTE* origin,XDWORD size,XBUFFER* buffer)
@@ -192,11 +192,11 @@ bool COMPRESSBASE::Decompress(XBYTE* origin,XDWORD size,XBUFFER* buffer)
 * @brief      Compress
 * @ingroup    COMPRESS
 * 
-* @param[in]  origin : 
-* @param[in]  size : 
-* @param[in]  param1 : 
+* @param[in]  origin : Origin pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  param1 : Param1 pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESSBASE::Compress(XBYTE* origin,XDWORD size,void* param1)
@@ -219,11 +219,11 @@ bool COMPRESSBASE::Compress(XBYTE* origin,XDWORD size,void* param1)
 * @brief      Decompress
 * @ingroup    COMPRESS
 * 
-* @param[in]  origin : 
-* @param[in]  size : 
-* @param[in]  param1 : 
+* @param[in]  origin : Origin pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  param1 : Param1 pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESSBASE::Decompress(XBYTE* origin,XDWORD size,void* param1)
@@ -246,11 +246,11 @@ bool COMPRESSBASE::Decompress(XBYTE* origin,XDWORD size,void* param1)
 * @brief      Compress result
 * @ingroup    COMPRESS
 * 
-* @param[in]  compress : 
-* @param[in]  data : 
-* @param[in]  param1 : 
+* @param[in]  compress : Compress value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  param1 : Param1 pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool COMPRESSBASE::CompressResult(bool compress,XBYTE data,void* param1)

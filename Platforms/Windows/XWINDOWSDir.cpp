@@ -59,11 +59,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XWINDOWSDIR::XWINDOWSDIR()
+* 
+* @fn         XWINDOWSDIR::XWINDOWSDIR(): XDIR()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSDIR::XWINDOWSDIR(): XDIR()
 {
@@ -72,12 +72,12 @@ XWINDOWSDIR::XWINDOWSDIR(): XDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSDIR::~XWINDOWSDIR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSDIR::~XWINDOWSDIR()
 {
@@ -86,15 +86,15 @@ XWINDOWSDIR::~XWINDOWSDIR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDIR::Exist(XCHAR* path)
 * @brief      Exist
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::Exist(XCHAR* path)
 {
@@ -135,13 +135,13 @@ bool XWINDOWSDIR::Exist(XCHAR* path)
 * @fn         bool XWINDOWSDIR::Make(XCHAR* path, bool recursive)
 * @brief      Make
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  path : 
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  path : Path to use.
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::Make(XCHAR* path, bool recursive)
 {
   if(!path)     
@@ -214,15 +214,15 @@ bool XWINDOWSDIR::Make(XCHAR* path, bool recursive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDIR::ChangeTo(XCHAR* path)
 * @brief      Change to
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  path :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::ChangeTo(XCHAR* path)
 {
@@ -243,16 +243,16 @@ bool XWINDOWSDIR::ChangeTo(XCHAR* path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDIR::Delete(XCHAR* path,bool all)
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  path :
-* @param[in]  all :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  path : Path to use.
+* @param[in]  all : All value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::Delete(XCHAR* path,bool all)
 {
@@ -286,15 +286,15 @@ bool XWINDOWSDIR::Delete(XCHAR* path,bool all)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDIR::GetActual(XPATH& xpath)
 * @brief      Get actual
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::GetActual(XPATH& xpath)
 {
@@ -314,17 +314,17 @@ bool XWINDOWSDIR::GetActual(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDIR::FirstSearch(XCHAR* xpath,XCHAR* patternsearch,XDIRELEMENT* searchelement)
 * @brief      First search
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  xpath :
-* @param[in]  patternsearch :
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  patternsearch : Patternsearch pointer to use.
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::FirstSearch(XCHAR* xpath,XCHAR* patternsearch,XDIRELEMENT* searchelement)
 {
@@ -382,15 +382,15 @@ bool XWINDOWSDIR::FirstSearch(XCHAR* xpath,XCHAR* patternsearch,XDIRELEMENT* sea
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDIR::NextSearch(XDIRELEMENT* searchelement)
 * @brief      Next search
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::NextSearch(XDIRELEMENT* searchelement)
 {
@@ -422,15 +422,15 @@ bool XWINDOWSDIR::NextSearch(XDIRELEMENT* searchelement)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XWINDOWSDIR::ReconvertSearchData(XDIRELEMENT* searchelement)
 * @brief      Reconvert search data
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  searchelement :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  searchelement : Searchelement pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::ReconvertSearchData(XDIRELEMENT* searchelement)
 {
@@ -458,12 +458,12 @@ bool XWINDOWSDIR::ReconvertSearchData(XDIRELEMENT* searchelement)
 * @fn         bool XWINDOWSDIR::SetFileDate(XDIRELEMENT* searchelement)
 * @brief      Set file date
 * @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  searchelement : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  searchelement : Searchelement pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XWINDOWSDIR::SetFileDate(XDIRELEMENT* searchelement)
 {
   WIN32_FIND_DATA*  search        = (WIN32_FIND_DATA*)searchelement->GetFindFileData();
@@ -504,12 +504,12 @@ bool XWINDOWSDIR::SetFileDate(XDIRELEMENT* searchelement)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSDIR::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSDIR::Clean()
 {

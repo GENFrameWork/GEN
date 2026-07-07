@@ -89,7 +89,7 @@ DIOCOREPROTOCOL_MESSAGE::~DIOCOREPROTOCOL_MESSAGE()
 * @brief      Get acquisition type
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION : 
+* @return     DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION DIOCOREPROTOCOL_MESSAGE::GetAcquisitionType()
@@ -104,7 +104,7 @@ DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION DIOCOREPROTOCOL_MESSAGE::GetAcquisition
 * @brief      Set acquisition type
 * @ingroup    DATAIO
 * 
-* @param[in]  acquisitiontype : 
+* @param[in]  acquisitiontype : Acquisitiontype value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_MESSAGE::SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_ACQUISITION acquisitiontype)
@@ -119,7 +119,7 @@ void DIOCOREPROTOCOL_MESSAGE::SetAcquisitionType(DIOCOREPROTOCOL_MESSAGE_TYPE_AC
 * @brief      Get header
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_HEADER* : 
+* @return     DIOCOREPROTOCOL_HEADER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL_MESSAGE::GetHeader()
@@ -134,7 +134,7 @@ DIOCOREPROTOCOL_HEADER* DIOCOREPROTOCOL_MESSAGE::GetHeader()
 * @brief      Get content
 * @ingroup    DATAIO
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOCOREPROTOCOL_MESSAGE::GetContent()
@@ -149,7 +149,7 @@ XBUFFER* DIOCOREPROTOCOL_MESSAGE::GetContent()
 * @brief      Is consumed
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_MESSAGE::IsConsumed()
@@ -164,7 +164,7 @@ bool DIOCOREPROTOCOL_MESSAGE::IsConsumed()
 * @brief      Set is consumed
 * @ingroup    DATAIO
 * 
-* @param[in]  isconsumed : 
+* @param[in]  isconsumed : Isconsumed value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_MESSAGE::SetIsConsumed(bool isconsumed)
@@ -179,7 +179,7 @@ void DIOCOREPROTOCOL_MESSAGE::SetIsConsumed(bool isconsumed)
 * @brief      Get size all message
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOCOREPROTOCOL_MESSAGE::GetSizeAllMessage()
@@ -194,7 +194,7 @@ XDWORD DIOCOREPROTOCOL_MESSAGE::GetSizeAllMessage()
 * @brief      Set size all message
 * @ingroup    DATAIO
 * 
-* @param[in]  sizeallmessage : 
+* @param[in]  sizeallmessage : Sizeallmessage value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_MESSAGE::SetSizeAllMessage(XDWORD sizeallmessage)
@@ -264,7 +264,7 @@ DIOCOREPROTOCOL_MESSAGES::~DIOCOREPROTOCOL_MESSAGES()
 * @brief      Get all
 * @ingroup    DATAIO
 * 
-* @return     XMAP<DIOCOREPROTOCOL_MESSAGE*, : 
+* @return     XMAP<DIOCOREPROTOCOL_MESSAGE*, DIOCOREPROTOCOL_MESSAGE*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMAP<DIOCOREPROTOCOL_MESSAGE*, DIOCOREPROTOCOL_MESSAGE*>*  DIOCOREPROTOCOL_MESSAGES::GetAll()
@@ -276,12 +276,12 @@ XMAP<DIOCOREPROTOCOL_MESSAGE*, DIOCOREPROTOCOL_MESSAGE*>*  DIOCOREPROTOCOL_MESSA
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCOREPROTOCOL_MESSAGES::Delete(XUUID* IDmessage)
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    DATAIO
 * 
-* @param[in]  IDmessage : 
+* @param[in]  IDmessage : I Dmessage pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_MESSAGES::Delete(XUUID* IDmessage)
@@ -378,7 +378,7 @@ bool DIOCOREPROTOCOL_MESSAGES::Delete(XUUID* IDmessage)
 * @brief      Delete all
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_MESSAGES::DeleteAll()
@@ -413,9 +413,9 @@ bool DIOCOREPROTOCOL_MESSAGES::DeleteAll()
 * @brief      Find request
 * @ingroup    DATAIO
 * 
-* @param[in]  IDmessage : 
+* @param[in]  IDmessage : I Dmessage pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCOREPROTOCOL_MESSAGES::FindRequest(XUUID* IDmessage)
@@ -455,9 +455,9 @@ int DIOCOREPROTOCOL_MESSAGES::FindRequest(XUUID* IDmessage)
 * @brief      Find response
 * @ingroup    DATAIO
 * 
-* @param[in]  IDmessage : 
+* @param[in]  IDmessage : I Dmessage pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCOREPROTOCOL_MESSAGES::FindResponse(XUUID* IDmessage)
@@ -497,10 +497,10 @@ int DIOCOREPROTOCOL_MESSAGES::FindResponse(XUUID* IDmessage)
 * @brief      Find request
 * @ingroup    DATAIO
 * 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCOREPROTOCOL_MESSAGES::FindRequest(DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param)
@@ -540,10 +540,10 @@ int DIOCOREPROTOCOL_MESSAGES::FindRequest(DIOCOREPROTOCOL_HEADER_OPERATION opera
 * @brief      Find response
 * @ingroup    DATAIO
 * 
-* @param[in]  operation : 
-* @param[in]  operation_param : 
+* @param[in]  operation : Operation value.
+* @param[in]  operation_param : Operation param pointer to use.
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCOREPROTOCOL_MESSAGES::FindResponse(DIOCOREPROTOCOL_HEADER_OPERATION operation, XCHAR* operation_param)
@@ -583,9 +583,9 @@ int DIOCOREPROTOCOL_MESSAGES::FindResponse(DIOCOREPROTOCOL_HEADER_OPERATION oper
 * @brief      Add request
 * @ingroup    DATAIO
 * 
-* @param[in]  message_request : 
+* @param[in]  message_request : Message request pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_MESSAGES::AddRequest(DIOCOREPROTOCOL_MESSAGE* message_request)
@@ -623,9 +623,9 @@ bool DIOCOREPROTOCOL_MESSAGES::AddRequest(DIOCOREPROTOCOL_MESSAGE* message_reque
 * @brief      Add response
 * @ingroup    DATAIO
 * 
-* @param[in]  message_response : 
+* @param[in]  message_response : Message response pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_MESSAGES::AddResponse(DIOCOREPROTOCOL_MESSAGE* message_response)
@@ -667,9 +667,9 @@ bool DIOCOREPROTOCOL_MESSAGES::AddResponse(DIOCOREPROTOCOL_MESSAGE* message_resp
 * @brief      Show debug
 * @ingroup    DATAIO
 * 
-* @param[in]  isserver : 
+* @param[in]  isserver : Isserver value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_MESSAGES::ShowDebug(bool isserver)

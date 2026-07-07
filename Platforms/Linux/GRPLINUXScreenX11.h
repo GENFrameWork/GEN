@@ -121,6 +121,8 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
     Window                                root;
     XVisualInfo                           vinfo;
 
+    Atom                                  wmdeletewindow;
+
     bool                                  isdesktop;
 
     #ifdef GRP_OPENGL_ACTIVE
@@ -134,6 +136,8 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
     bool                                  ChangeScreenResolution            (int width, int height);
 
     XImage*                               CreateXImageFromBuffer            (Display* display, int screen, XBYTE* buffer, int width, int height);
+
+    XBYTE*                                ScaleBufferNearestLetterbox       (XBYTE* src, int srcw, int srch, int dstw, int dsth);
 
     int                                   GetTaskBarHeight                  ();
 

@@ -109,7 +109,7 @@ CIPHER::~CIPHER()
 * @brief      Get type
 * @ingroup    CIPHER
 * 
-* @return     CIPHERTYPE : 
+* @return     CIPHERTYPE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERTYPE CIPHER::GetType()
@@ -124,7 +124,7 @@ CIPHERTYPE CIPHER::GetType()
 * @brief      Set type
 * @ingroup    CIPHER
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHER::SetType(CIPHERTYPE type)
@@ -139,7 +139,7 @@ void CIPHER::SetType(CIPHERTYPE type)
 * @brief      Get chaining mode
 * @ingroup    CIPHER
 * 
-* @return     CIPHERCHAININGMODE : 
+* @return     CIPHERCHAININGMODE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCHAININGMODE CIPHER::GetChainingMode()
@@ -154,7 +154,7 @@ CIPHERCHAININGMODE CIPHER::GetChainingMode()
 * @brief      Set chaining mode
 * @ingroup    CIPHER
 * 
-* @param[in]  chainingmode : 
+* @param[in]  chainingmode : Chainingmode value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHER::SetChainingMode(CIPHERCHAININGMODE chainingmode)
@@ -169,7 +169,7 @@ void CIPHER::SetChainingMode(CIPHERCHAININGMODE chainingmode)
 * @brief      Get padding type
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER_PADDINGTYPE : 
+* @return     XBUFFER_PADDINGTYPE : Requested buffer.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER_PADDINGTYPE CIPHER::GetPaddingType()
@@ -184,7 +184,7 @@ XBUFFER_PADDINGTYPE CIPHER::GetPaddingType()
 * @brief      Set padding type
 * @ingroup    CIPHER
 * 
-* @param[in]  paddingtype : 
+* @param[in]  paddingtype : Paddingtype value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHER::SetPaddingType(XBUFFER_PADDINGTYPE paddingtype)
@@ -199,7 +199,7 @@ void CIPHER::SetPaddingType(XBUFFER_PADDINGTYPE paddingtype)
 * @brief      Get padding adjust size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int CIPHER::GetPaddingAdjustSize()
@@ -214,7 +214,7 @@ int CIPHER::GetPaddingAdjustSize()
 * @brief      Set padding adjust size
 * @ingroup    CIPHER
 * 
-* @param[in]  paddingadjustsize : 
+* @param[in]  paddingadjustsize : Paddingadjustsize value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHER::SetPaddingAdjustSize(int paddingadjustsize)
@@ -229,9 +229,9 @@ void CIPHER::SetPaddingAdjustSize(int paddingadjustsize)
 * @brief      Get key
 * @ingroup    CIPHER
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     CIPHERKEY* : 
+* @return     CIPHERKEY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEY* CIPHER::GetKey(CIPHERKEYTYPE type)
@@ -256,10 +256,10 @@ CIPHERKEY* CIPHER::GetKey(CIPHERKEYTYPE type)
 * @brief      Set key
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
-* @param[in]  integritycheck : 
+* @param[in]  key : Key pointer to use.
+* @param[in]  integritycheck : Integritycheck value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::SetKey(CIPHERKEY* key, bool integritycheck)
@@ -286,7 +286,7 @@ bool CIPHER::SetKey(CIPHERKEY* key, bool integritycheck)
 * @brief      Get init vector
 * @ingroup    CIPHER
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* CIPHER::GetInitVector()
@@ -303,10 +303,10 @@ XBYTE* CIPHER::GetInitVector()
 * @brief      Set init vector
 * @ingroup    CIPHER
 * 
-* @param[in]  vector : 
-* @param[in]  size : 
+* @param[in]  vector : Vector pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::SetInitVector(XBYTE* vector, XDWORD size)
@@ -327,9 +327,9 @@ bool CIPHER::SetInitVector(XBYTE* vector, XDWORD size)
 * @brief      Set init vector
 * @ingroup    CIPHER
 * 
-* @param[in]  vector : 
+* @param[in]  vector : Vector value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::SetInitVector(XBUFFER& vector)
@@ -347,10 +347,10 @@ bool CIPHER::SetInitVector(XBUFFER& vector)
 * @brief      Cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::Cipher(XBYTE* input,XDWORD size)
@@ -382,9 +382,9 @@ bool CIPHER::Cipher(XBYTE* input,XDWORD size)
 * @brief      Cipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
+* @param[in]  input : Input value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::Cipher(XBUFFER& input)
@@ -399,10 +399,10 @@ bool CIPHER::Cipher(XBUFFER& input)
 * @brief      Uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::Uncipher(XBYTE* input,XDWORD size)
@@ -417,9 +417,9 @@ bool CIPHER::Uncipher(XBYTE* input,XDWORD size)
 * @brief      Uncipher
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
+* @param[in]  input : Input value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::Uncipher(XBUFFER& input)
@@ -434,9 +434,9 @@ bool CIPHER::Uncipher(XBUFFER& input)
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @param[in]  resultsize : 
+* @param[in]  resultsize : Output resultsize.
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* CIPHER::GetResult(int& resultsize)
@@ -455,7 +455,7 @@ XBYTE* CIPHER::GetResult(int& resultsize)
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* CIPHER::GetResult()
@@ -470,9 +470,9 @@ XBUFFER* CIPHER::GetResult()
 * @brief      Get result string
 * @ingroup    CIPHER
 * 
-* @param[in]  stringhex : 
+* @param[in]  stringhex : Stringhex value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::GetResultString(XSTRING& stringhex)
@@ -503,9 +503,9 @@ bool CIPHER::GetResultString(XSTRING& stringhex)
 * @brief      Get key
 * @ingroup    CIPHER
 * 
-* @param[in]  index : 
+* @param[in]  index : Index value.
 * 
-* @return     CIPHERKEY* : 
+* @return     CIPHERKEY* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEY* CIPHER::GetKey(int index)
@@ -523,10 +523,10 @@ CIPHERKEY* CIPHER::GetKey(int index)
 * @brief      Set key
 * @ingroup    CIPHER
 * 
-* @param[in]  index : 
-* @param[in]  key : 
+* @param[in]  index : Index value.
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHER::SetKey(int index, CIPHERKEY* key)

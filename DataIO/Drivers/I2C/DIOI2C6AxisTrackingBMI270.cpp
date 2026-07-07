@@ -554,7 +554,7 @@ const XBYTE bmi270_config_file[]                                                
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOI2C6AXISTRACKINGBMI270::DIOI2C6AXISTRACKINGBMI270()
+* @fn         DIOI2C6AXISTRACKINGBMI270::DIOI2C6AXISTRACKINGBMI270() : DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
@@ -586,10 +586,10 @@ DIOI2C6AXISTRACKINGBMI270::~DIOI2C6AXISTRACKINGBMI270()
 * @fn         XDWORD DIOI2C6AXISTRACKINGBMI270::GetGPIOInterruptEntryID()
 * @brief      Get GPIO interrupt entry ID
 * @ingroup    DATAIO
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOI2C6AXISTRACKINGBMI270::GetGPIOInterruptEntryID()
 {
   return GPIOinterruptentryID;
@@ -601,12 +601,12 @@ XDWORD DIOI2C6AXISTRACKINGBMI270::GetGPIOInterruptEntryID()
 * @fn         bool DIOI2C6AXISTRACKINGBMI270::SetGPIOInterruptEntryID(XDWORD GPIOentryID)
 * @brief      Set GPIO interrupt entry ID
 * @ingroup    DATAIO
-*
-* @param[in]  GPIOentryID : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  GPIOentryID : GPI Oentry ID value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::SetGPIOInterruptEntryID(XDWORD GPIOentryID)
 {
   GPIOinterruptentryID = GPIOentryID;
@@ -620,10 +620,10 @@ bool DIOI2C6AXISTRACKINGBMI270::SetGPIOInterruptEntryID(XDWORD GPIOentryID)
 * @fn         bool DIOI2C6AXISTRACKINGBMI270::IsNecessaryUpdate()
 * @brief      Is necessary update
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::IsNecessaryUpdate()
 {
   return isnecessaryupdate;
@@ -635,10 +635,10 @@ bool DIOI2C6AXISTRACKINGBMI270::IsNecessaryUpdate()
 * @fn         void DIOI2C6AXISTRACKINGBMI270::SetIsNecessaryUpdate(bool isnecessaryupdate)
 * @brief      Set is necessary update
 * @ingroup    DATAIO
-*
-* @param[in]  isnecessaryupdate : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  isnecessaryupdate : Isnecessaryupdate value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2C6AXISTRACKINGBMI270::SetIsNecessaryUpdate(bool isnecessaryupdate)
 {
    this->isnecessaryupdate = isnecessaryupdate; 
@@ -651,7 +651,7 @@ void DIOI2C6AXISTRACKINGBMI270::SetIsNecessaryUpdate(bool isnecessaryupdate)
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOI2C6AXISTRACKINGBMI270::Update()
@@ -738,7 +738,7 @@ XBYTE DIOI2C6AXISTRACKINGBMI270::Update()
 * @brief      Get set any move
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::GetSetAnyMove()
@@ -760,7 +760,7 @@ bool DIOI2C6AXISTRACKINGBMI270::GetSetAnyMove()
 * @brief      Get significant motion
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::GetSignificantMotion()
@@ -784,7 +784,7 @@ bool DIOI2C6AXISTRACKINGBMI270::GetSignificantMotion()
 * @brief      Get step add one
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::GetStep_AddOne()
@@ -807,7 +807,7 @@ bool DIOI2C6AXISTRACKINGBMI270::GetStep_AddOne()
 * @brief      Get tap add one
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::GetTap_AddOne()
@@ -831,7 +831,7 @@ bool DIOI2C6AXISTRACKINGBMI270::GetTap_AddOne()
 * @brief      Get high G motion
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::GetHighGMotion()
@@ -854,7 +854,7 @@ bool DIOI2C6AXISTRACKINGBMI270::GetHighGMotion()
 * @brief      Get low G motion
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::GetLowGMotion()
@@ -877,7 +877,7 @@ bool DIOI2C6AXISTRACKINGBMI270::GetLowGMotion()
 * @brief      Get not move
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::GetNotMove()
@@ -894,13 +894,13 @@ bool DIOI2C6AXISTRACKINGBMI270::GetNotMove()
  
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C6AXISTRACKINGBMI270::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::End()
 {
@@ -911,13 +911,13 @@ bool DIOI2C6AXISTRACKINGBMI270::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2C6AXISTRACKINGBMI270::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::IniDevice()
 {
@@ -942,10 +942,10 @@ bool DIOI2C6AXISTRACKINGBMI270::IniDevice()
 * @fn         bool DIOI2C6AXISTRACKINGBMI270::Inicializate()
 * @brief      Inicializate
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::Inicializate()
 {
   // Status of api are returned to this variable. 
@@ -1016,11 +1016,11 @@ bool DIOI2C6AXISTRACKINGBMI270::Inicializate()
 * @brief      Read register
 * @ingroup    DATAIO
 * 
-* @param[in]  offset : 
-* @param[in]  data : 
-* @param[in]  sizedata : 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizedata : Sizedata value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::ReadRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
@@ -1056,11 +1056,11 @@ bool DIOI2C6AXISTRACKINGBMI270::ReadRegister(XBYTE offset, XBYTE* data, XDWORD s
 * @brief      Write register
 * @ingroup    DATAIO
 * 
-* @param[in]  offset : 
-* @param[in]  data : 
-* @param[in]  sizedata : 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizedata : Sizedata value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2C6AXISTRACKINGBMI270::WriteRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
@@ -1085,15 +1085,15 @@ bool DIOI2C6AXISTRACKINGBMI270::WriteRegister(XBYTE offset, XBYTE* data, XDWORD 
 * @fn         BMI2_INTF_RETURN_TYPE DIOI2C6AXISTRACKINGBMI270::bmi2_i2c_read(XBYTE reg_addr, XBYTE* reg_data, XDWORD len, void* intf_ptr)
 * @brief      bmi2i2cread
 * @ingroup    DATAIO
-*
-* @param[in]  reg_addr : 
-* @param[in]  reg_data : 
-* @param[in]  len : 
-* @param[in]  intf_ptr : 
 * 
-* @return     BMI2_INTF_RETURN_TYPE : 
+* @param[in]  reg_addr : Reg addr value.
+* @param[in]  reg_data : Reg data pointer to use.
+* @param[in]  len : Len value.
+* @param[in]  intf_ptr : Intf ptr pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     BMI2_INTF_RETURN_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 BMI2_INTF_RETURN_TYPE DIOI2C6AXISTRACKINGBMI270::bmi2_i2c_read(XBYTE reg_addr, XBYTE* reg_data, XDWORD len, void* intf_ptr)
 {
   return ReadRegister(reg_addr, reg_data, len);    
@@ -1105,15 +1105,15 @@ BMI2_INTF_RETURN_TYPE DIOI2C6AXISTRACKINGBMI270::bmi2_i2c_read(XBYTE reg_addr, X
 * @fn         BMI2_INTF_RETURN_TYPE DIOI2C6AXISTRACKINGBMI270::bmi2_i2c_write(XBYTE reg_addr, const XBYTE* reg_data, XDWORD len, void* intf_ptr)
 * @brief      bmi2i2cwrite
 * @ingroup    DATAIO
-*
-* @param[in]  reg_addr : 
-* @param[in]  XBYTE* reg_data : 
-* @param[in]  len : 
-* @param[in]  intf_ptr : 
 * 
-* @return     BMI2_INTF_RETURN_TYPE : 
+* @param[in]  reg_addr : Reg addr value.
+* @param[in]  reg_data : Reg data value.
+* @param[in]  len : Len value.
+* @param[in]  intf_ptr : Intf ptr pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     BMI2_INTF_RETURN_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 BMI2_INTF_RETURN_TYPE DIOI2C6AXISTRACKINGBMI270::bmi2_i2c_write(XBYTE reg_addr, const XBYTE* reg_data, XDWORD len, void* intf_ptr)
 {
   return WriteRegister(reg_addr, (XBYTE*)reg_data, len);  
@@ -1122,15 +1122,13 @@ BMI2_INTF_RETURN_TYPE DIOI2C6AXISTRACKINGBMI270::bmi2_i2c_write(XBYTE reg_addr, 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::SetFeatureConfig(struct bmi2_dev*bmi2_dev)
-* @brief      Set feature config
-*             This internal API is used to set configurations for any-motion.
-*
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::SetFeatureConfig(struct bmi2_dev *bmi2_dev)
+* @brief      Set feature config This internal API is used to set configurations for any-motion.
 * @ingroup    DATAIO
 * 
-* @param[in]  bmi2_dev*bmi2_dev : 
+* @param[in]  bmi2_dev : Bmi2 dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::SetFeatureConfig(struct bmi2_dev *bmi2_dev)
@@ -1273,14 +1271,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::SetFeatureConfig(struct bmi2_dev *bmi2_dev)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOI2C6AXISTRACKINGBMI270::bmi2_delay_us(XDWORD period, void*intf_ptr)
+* @fn         void DIOI2C6AXISTRACKINGBMI270::bmi2_delay_us(XDWORD period, void *intf_ptr)
 * @brief      bmi2delayus
 * @ingroup    DATAIO
-*
-* @param[in]  period : 
-* @param[in]  void*intf_ptr : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  period : Period value.
+* @param[in]  intf_ptr : Intf ptr pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2C6AXISTRACKINGBMI270::bmi2_delay_us(XDWORD period, void *intf_ptr)
 {
     //coines_delay_usec(period);
@@ -1294,16 +1292,16 @@ void DIOI2C6AXISTRACKINGBMI270::bmi2_delay_us(XDWORD period, void *intf_ptr)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_interface_init(struct bmi2_dev*bmi, XBYTE intf)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_interface_init(struct bmi2_dev *bmi, XBYTE intf)
 * @brief      bmi2interfaceinit
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_dev*bmi : 
-* @param[in]  intf : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  bmi : Bmi pointer to use.
+* @param[in]  intf : Intf value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_interface_init(struct bmi2_dev *bmi, XBYTE intf)
 {
   XBYTESIG rslt = BMI2_OK;
@@ -1352,10 +1350,10 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_interface_init(struct bmi2_dev *bmi, XB
 * @fn         void DIOI2C6AXISTRACKINGBMI270::bmi2_error_codes_print_result(XBYTESIG rslt)
 * @brief      bmi2errorcodesprintresult
 * @ingroup    DATAIO
-*
-* @param[in]  rslt : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  rslt : Rslt value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2C6AXISTRACKINGBMI270::bmi2_error_codes_print_result(XBYTESIG rslt)
 {
 	
@@ -1401,15 +1399,15 @@ void DIOI2C6AXISTRACKINGBMI270::bmi2_error_codes_print_result(XBYTESIG rslt)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sec_init(struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sec_init(struct bmi2_dev *dev)
 * @brief      bmi2secinit
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sec_init(struct bmi2_dev *dev)
 {
   /* Variable to define error */
@@ -1469,20 +1467,19 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sec_init(struct bmi2_dev *dev)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_regs(XBYTE reg_addr, XBYTE*data, XWORD len, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_regs(XBYTE reg_addr, XBYTE *data, XWORD len, struct bmi2_dev *dev)
 * @brief      bmi2getregs
-* @note       For most of the registers auto address increment applies, with the exception of a few special registers, which trap the address. 
-              For e.g., Register address - 0x26, 0x5E.
+* @note       For most of the registers auto address increment applies, with the exception of a few special registers, which trap the address.
 * @ingroup    DATAIO
-*
-* @param[in]  reg_addr : 
-* @param[in]  XBYTE*data : 
-* @param[in]  len : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  reg_addr : Reg addr value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  len : Len value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_regs(XBYTE reg_addr, XBYTE *data, XWORD len, struct bmi2_dev *dev)
 {
   // Variable to define error 
@@ -1547,18 +1544,18 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_regs(XBYTE reg_addr, XBYTE *data, X
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_regs(XBYTE reg_addr, const XBYTE*data, XWORD len, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_regs(XBYTE reg_addr, const XBYTE *data, XWORD len, struct bmi2_dev *dev)
 * @brief      bmi2setregs
 * @ingroup    DATAIO
-*
-* @param[in]  reg_addr : 
-* @param[in]  XBYTE*data : 
-* @param[in]  len : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  reg_addr : Reg addr value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  len : Len value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_regs(XBYTE reg_addr, const XBYTE *data, XWORD len, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -1619,13 +1616,13 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_regs(XBYTE reg_addr, const XBYTE *d
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_soft_reset(struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_soft_reset(struct bmi2_dev *dev)
 * @brief      bmi2softreset
 * @ingroup    DATAIO
 * 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_soft_reset(struct bmi2_dev *dev)
@@ -1678,17 +1675,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_soft_reset(struct bmi2_dev *dev)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_config_file_version(XBYTE*config_major, XBYTE*config_minor, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_config_file_version(XBYTE *config_major, XBYTE *config_minor, struct bmi2_dev *dev)
 * @brief      bmi2getconfigfileversion
 * @ingroup    DATAIO
-*
-* @param[in]  XBYTE*config_major : 
-* @param[in]  XBYTE*config_minor : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  config_major : Config major pointer to use.
+* @param[in]  config_minor : Config minor pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_config_file_version(XBYTE *config_major, XBYTE *config_minor, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -1712,16 +1709,16 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_config_file_version(XBYTE *config_m
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_adv_power_save(XBYTE enable, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_adv_power_save(XBYTE enable, struct bmi2_dev *dev)
 * @brief      bmi2setadvpowersave
 * @ingroup    DATAIO
-*
-* @param[in]  enable : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  enable : Enable value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_adv_power_save(XBYTE enable, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -1759,16 +1756,16 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_adv_power_save(XBYTE enable, struct
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_adv_power_save(XBYTE*aps_status, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_adv_power_save(XBYTE *aps_status, struct bmi2_dev *dev)
 * @brief      bmi2getadvpowersave
 * @ingroup    DATAIO
-*
-* @param[in]  XBYTE*aps_status : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  aps_status : Aps status pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_adv_power_save(XBYTE *aps_status, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -1799,15 +1796,15 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_adv_power_save(XBYTE *aps_status, s
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_config_file(struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_config_file(struct bmi2_dev *dev)
 * @brief      bmi2writeconfigfile
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_config_file(struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -1856,17 +1853,16 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_config_file(struct bmi2_dev *dev)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_int_pin_config(const struct bmi2_int_pin_config*int_cfg, struct bmi2_dev*dev)
-* @brief      bmi2setintpinconfig
-*                                      2)The interrupt mode: permanently latched or non-latched.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_int_pin_config(const struct bmi2_int_pin_config *int_cfg, struct bmi2_dev *dev)
+* @brief      bmi2setintpinconfig 2)The interrupt mode: permanently latched or non-latched.
 * @ingroup    DATAIO
-*
-* @param[in]  struct bmi2_int_pin_config*int_cfg : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  int_cfg : Int configuration value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_int_pin_config(const struct bmi2_int_pin_config *int_cfg, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -1957,18 +1953,16 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_int_pin_config(const struct bmi2_in
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_int_pin_config(struct bmi2_int_pin_config*int_cfg, struct bmi2_dev*dev)
-* @brief      bmi2getintpinconfig
-*                                       1) The input output configuration of the selected interrupt pin: INT1 or INT2.
-*                                       2) The interrupt mode: permanently latched or non-latched.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_int_pin_config(struct bmi2_int_pin_config *int_cfg, struct bmi2_dev *dev)
+* @brief      bmi2getintpinconfig 1) The input output configuration of the selected interrupt pin: INT1 or INT2. 2) The interrupt mode: permanently latched or non-latched.
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_int_pin_config*int_cfg : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  int_cfg : Int configuration pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_int_pin_config(struct bmi2_int_pin_config *int_cfg, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2038,16 +2032,16 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_int_pin_config(struct bmi2_int_pin_
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_int_status(XWORD*int_status, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_int_status(XWORD *int_status, struct bmi2_dev *dev)
 * @brief      bmi2getintstatus
 * @ingroup    DATAIO
-*
-* @param[in]  XWORD*int_status : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  int_status : Int status pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_int_status(XWORD *int_status, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2078,17 +2072,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_int_status(XWORD *int_status, struc
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sensor_enable(const XBYTE*sens_list, XBYTE n_sens, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sensor_enable(const XBYTE *sens_list, XBYTE n_sens, struct bmi2_dev *dev)
 * @brief      bmi2sensorenable
 * @ingroup    DATAIO
-*
-* @param[in]  XBYTE*sens_list : 
-* @param[in]  n_sens : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  sens_list : Sens list value.
+* @param[in]  n_sens : N sens value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sensor_enable(const XBYTE *sens_list, XBYTE n_sens, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2120,17 +2114,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sensor_enable(const XBYTE *sens_list, X
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sensor_disable(const XBYTE*sens_list, XBYTE n_sens, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sensor_disable(const XBYTE *sens_list, XBYTE n_sens, struct bmi2_dev *dev)
 * @brief      bmi2sensordisable
 * @ingroup    DATAIO
-*
-* @param[in]  XBYTE*sens_list : 
-* @param[in]  n_sens : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  sens_list : Sens list value.
+* @param[in]  n_sens : N sens value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sensor_disable(const XBYTE *sens_list, XBYTE n_sens, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2162,17 +2156,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_sensor_disable(const XBYTE *sens_list, 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_sensor_config(struct bmi2_sens_config*sens_cfg, XBYTE n_sens, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_sensor_config(struct bmi2_sens_config *sens_cfg, XBYTE n_sens, struct bmi2_dev *dev)
 * @brief      bmi2setsensorconfig
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_sens_config*sens_cfg : 
-* @param[in]  n_sens : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  sens_cfg : Sens configuration pointer to use.
+* @param[in]  n_sens : N sens value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_sensor_config(struct bmi2_sens_config *sens_cfg, XBYTE n_sens, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2260,17 +2254,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_sensor_config(struct bmi2_sens_conf
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_sensor_config(struct bmi2_sens_config*sens_cfg, XBYTE n_sens, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_sensor_config(struct bmi2_sens_config *sens_cfg, XBYTE n_sens, struct bmi2_dev *dev)
 * @brief      bmi2getsensorconfig
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_sens_config*sens_cfg : 
-* @param[in]  n_sens : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  sens_cfg : Sens configuration pointer to use.
+* @param[in]  n_sens : N sens value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_sensor_config(struct bmi2_sens_config *sens_cfg, XBYTE n_sens, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2361,19 +2355,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_sensor_config(struct bmi2_sens_conf
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_sensor_data(struct bmi2_sensor_data*sensor_data, XBYTE n_sens, struct bmi2_dev*dev)
-* @brief      bmi2getsensordata
-*                                   auxiliary sensor, step counter, high-g, gyroscope user-gain update,
-*                                   orientation, gyroscope cross sensitivity and error status for NVM and VFRM.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_sensor_data(struct bmi2_sensor_data *sensor_data, XBYTE n_sens, struct bmi2_dev *dev)
+* @brief      bmi2getsensordata auxiliary sensor, step counter, high-g, gyroscope user-gain update, orientation, gyroscope cross sensitivity and error status for NVM and VFRM.
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_sensor_data*sensor_data : 
-* @param[in]  n_sens : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  sensor_data : Sensor data pointer to use.
+* @param[in]  n_sens : N sens value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_sensor_data(struct bmi2_sensor_data *sensor_data, XBYTE n_sens, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2470,17 +2462,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_sensor_data(struct bmi2_sensor_data
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_config(XWORD config, XBYTE enable, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_config(XWORD config, XBYTE enable, struct bmi2_dev *dev)
 * @brief      bmi2setfifoconfig
 * @ingroup    DATAIO
-*
-* @param[in]  config : 
-* @param[in]  enable : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  config : Configuration object to use.
+* @param[in]  enable : Enable value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_config(XWORD config, XBYTE enable, struct bmi2_dev *dev)
 {
     XBYTESIG rslt;
@@ -2549,16 +2541,16 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_config(XWORD config, XBYTE ena
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_config(XWORD*fifo_config, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_config(XWORD *fifo_config, struct bmi2_dev *dev)
 * @brief      bmi2getfifoconfig
 * @ingroup    DATAIO
-*
-* @param[in]  XWORD*fifo_config : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  fifo_config : Fifo config pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_config(XWORD *fifo_config, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2590,16 +2582,16 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_config(XWORD *fifo_config, str
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_read_fifo_data(struct bmi2_fifo_frame*fifo, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_read_fifo_data(struct bmi2_fifo_frame *fifo, struct bmi2_dev *dev)
 * @brief      bmi2readfifodata
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_fifo_frame*fifo : 
-* @param[in]  bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  fifo : Fifo pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_read_fifo_data(struct bmi2_fifo_frame *fifo, struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2653,19 +2645,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_read_fifo_data(struct bmi2_fifo_frame *
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_accel(struct bmi2_sens_axes_data* accel_data, XWORD* accel_length, struct bmi2_fifo_frame* fifo, const struct bmi2_dev* dev)
-* @brief      bmi2extractaccel
-*                                 read by the "bmi2_read_fifo_data" API and stores it in the "accel_data"
-*                                 structure instance.
+* @brief      bmi2extractaccel read by the "bmi2_read_fifo_data" API and stores it in the "accel_data" structure instance.
 * @ingroup    DATAIO
-*
-* @param[in]  accel_data : 
-* @param[in]  accel_length : 
-* @param[in]  fifo : 
-* @param[in]  dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  accel_data : Accel data pointer to use.
+* @param[in]  accel_length : Accel length pointer to use.
+* @param[in]  fifo : Fifo pointer to use.
+* @param[in]  dev : Dev value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_accel(struct bmi2_sens_axes_data* accel_data, XWORD* accel_length, struct bmi2_fifo_frame* fifo, const struct bmi2_dev* dev)
 {
     /* Variable to define error */
@@ -2731,20 +2721,18 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_accel(struct bmi2_sens_axes_dat
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_gyro(struct bmi2_sens_axes_data*gyro_data, XWORD*gyro_length, struct bmi2_fifo_frame*fifo, const struct bmi2_dev*dev)
-* @brief      bmi2extractgyro
-*                                 read by the "bmi2_read_fifo_data" API and stores it in the "gyro_data"
-*                                 structure instance.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_gyro(struct bmi2_sens_axes_data *gyro_data, XWORD *gyro_length, struct bmi2_fifo_frame *fifo, const struct bmi2_dev *dev)
+* @brief      bmi2extractgyro read by the "bmi2_read_fifo_data" API and stores it in the "gyro_data" structure instance.
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_sens_axes_data*gyro_data : 
-* @param[in]  XWORD*gyro_length : 
-* @param[in]  bmi2_fifo_frame*fifo : 
-* @param[in]  struct bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  gyro_data : Gyro data pointer to use.
+* @param[in]  gyro_length : Gyro length pointer to use.
+* @param[in]  fifo : Fifo pointer to use.
+* @param[in]  dev : Dev value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_gyro(struct bmi2_sens_axes_data *gyro_data, XWORD *gyro_length, struct bmi2_fifo_frame *fifo, const struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2808,19 +2796,18 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_gyro(struct bmi2_sens_axes_data
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_aux(struct bmi2_aux_fifo_data*aux, XWORD*aux_length, struct bmi2_fifo_frame*fifo, const struct bmi2_dev*dev)
-* @brief      bmi2extractaux
-*                                read by the "bmi2_read_fifo_data" API and stores it in "aux_data" buffer.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_aux(struct bmi2_aux_fifo_data *aux, XWORD *aux_length, struct bmi2_fifo_frame *fifo, const struct bmi2_dev *dev)
+* @brief      bmi2extractaux read by the "bmi2_read_fifo_data" API and stores it in "aux_data" buffer.
 * @ingroup    DATAIO
-*
-* @param[in]  bmi2_aux_fifo_data*aux : 
-* @param[in]  XWORD*aux_length : 
-* @param[in]  bmi2_fifo_frame*fifo : 
-* @param[in]  struct bmi2_dev*dev : 
 * 
-* @return     XBYTESIG : 
+* @param[in]  aux : Aux pointer to use.
+* @param[in]  aux_length : Aux length pointer to use.
+* @param[in]  fifo : Fifo pointer to use.
+* @param[in]  dev : Dev value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_aux(struct bmi2_aux_fifo_data *aux, XWORD *aux_length, struct bmi2_fifo_frame *fifo, const struct bmi2_dev *dev)
 {
     /* Variable to define error */
@@ -2887,14 +2874,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_extract_aux(struct bmi2_aux_fifo_data *
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_command_register(XBYTE command, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_command_register(XBYTE command, struct bmi2_dev *dev)
 * @brief      bmi2setcommandregister
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  command : Command value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_command_register(XBYTE command, struct bmi2_dev *dev)
@@ -2916,14 +2903,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_command_register(XBYTE command, str
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_self_wake_up(XBYTE fifo_self_wake_up, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_self_wake_up(XBYTE fifo_self_wake_up, struct bmi2_dev *dev)
 * @brief      bmi2setfifoselfwakeup
 * @ingroup    DATAIO
 * 
-* @param[in]  fifo_self_wake_up : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  fifo_self_wake_up : Fifo self wake up value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_self_wake_up(XBYTE fifo_self_wake_up, struct bmi2_dev *dev)
@@ -2953,14 +2940,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_self_wake_up(XBYTE fifo_self_w
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_self_wake_up(XBYTE*fifo_self_wake_up, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_self_wake_up(XBYTE *fifo_self_wake_up, struct bmi2_dev *dev)
 * @brief      bmi2getfifoselfwakeup
 * @ingroup    DATAIO
 * 
-* @param[in]  XBYTE*fifo_self_wake_up : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  fifo_self_wake_up : Fifo self wake up pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_self_wake_up(XBYTE *fifo_self_wake_up, struct bmi2_dev *dev)
@@ -2993,14 +2980,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_self_wake_up(XBYTE *fifo_self_
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_wm(XWORD fifo_wm, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_wm(XWORD fifo_wm, struct bmi2_dev *dev)
 * @brief      bmi2setfifowm
 * @ingroup    DATAIO
 * 
-* @param[in]  fifo_wm : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  fifo_wm : Fifo wm value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_wm(XWORD fifo_wm, struct bmi2_dev *dev)
@@ -3031,14 +3018,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_wm(XWORD fifo_wm, struct bmi2_
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_wm(XWORD*fifo_wm, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_wm(XWORD *fifo_wm, struct bmi2_dev *dev)
 * @brief      bmi2getfifowm
 * @ingroup    DATAIO
 * 
-* @param[in]  XWORD*fifo_wm : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  fifo_wm : Fifo wm pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_wm(XWORD *fifo_wm, struct bmi2_dev *dev)
@@ -3071,15 +3058,15 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_wm(XWORD *fifo_wm, struct bmi2
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_filter_data(XBYTE sens_sel, XBYTE fifo_filter_data, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_filter_data(XBYTE sens_sel, XBYTE fifo_filter_data, struct bmi2_dev *dev)
 * @brief      bmi2setfifofilterdata
 * @ingroup    DATAIO
 * 
-* @param[in]  sens_sel : 
-* @param[in]  fifo_filter_data : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  sens_sel : Sens sel value.
+* @param[in]  fifo_filter_data : Fifo filter data value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_filter_data(XBYTE sens_sel, XBYTE fifo_filter_data, struct bmi2_dev *dev)
@@ -3146,15 +3133,15 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_filter_data(XBYTE sens_sel, XB
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_filter_data(XBYTE sens_sel, XBYTE*fifo_filter_data, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_filter_data(XBYTE sens_sel, XBYTE *fifo_filter_data, struct bmi2_dev *dev)
 * @brief      bmi2getfifofilterdata
 * @ingroup    DATAIO
 * 
-* @param[in]  sens_sel : 
-* @param[in]  XBYTE*fifo_filter_data : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  sens_sel : Sens sel value.
+* @param[in]  fifo_filter_data : Fifo filter data pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_filter_data(XBYTE sens_sel, XBYTE *fifo_filter_data, struct bmi2_dev *dev)
@@ -3207,15 +3194,15 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_filter_data(XBYTE sens_sel, XB
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_down_sample(XBYTE sens_sel, XBYTE fifo_down_samp, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_down_sample(XBYTE sens_sel, XBYTE fifo_down_samp, struct bmi2_dev *dev)
 * @brief      bmi2setfifodownsample
 * @ingroup    DATAIO
 * 
-* @param[in]  sens_sel : 
-* @param[in]  fifo_down_samp : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  sens_sel : Sens sel value.
+* @param[in]  fifo_down_samp : Fifo down samp value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_down_sample(XBYTE sens_sel, XBYTE fifo_down_samp, struct bmi2_dev *dev)
@@ -3266,16 +3253,15 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_fifo_down_sample(XBYTE sens_sel, XB
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_down_sample(XBYTE sens_sel, XBYTE*fifo_down_samp, struct bmi2_dev*dev)
-* @brief      bmi2getfifodownsample
-*                                        accelerometer or gyroscope FIFO data.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_down_sample(XBYTE sens_sel, XBYTE *fifo_down_samp, struct bmi2_dev *dev)
+* @brief      bmi2getfifodownsample accelerometer or gyroscope FIFO data.
 * @ingroup    DATAIO
 * 
-* @param[in]  sens_sel : 
-* @param[in]  XBYTE*fifo_down_samp : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  sens_sel : Sens sel value.
+* @param[in]  fifo_down_samp : Fifo down samp pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_down_sample(XBYTE sens_sel, XBYTE *fifo_down_samp, struct bmi2_dev *dev)
@@ -3328,14 +3314,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_down_sample(XBYTE sens_sel, XB
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_length(XWORD*fifo_length, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_length(XWORD *fifo_length, struct bmi2_dev *dev)
 * @brief      bmi2getfifolength
 * @ingroup    DATAIO
 * 
-* @param[in]  XWORD*fifo_length : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  fifo_length : Fifo length pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_length(XWORD *fifo_length, struct bmi2_dev *dev)
@@ -3378,18 +3364,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_fifo_length(XWORD *fifo_length, str
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_read_aux_man_mode(XBYTE reg_addr, XBYTE*aux_data, XWORD len, struct bmi2_dev*dev)
-* @brief      bmi2readauxmanmode
-*                                     address of auxiliary sensor in manual mode.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_read_aux_man_mode(XBYTE reg_addr, XBYTE *aux_data, XWORD len, struct bmi2_dev *dev)
+* @brief      bmi2readauxmanmode address of auxiliary sensor in manual mode.
 * @note       Change of BMI2_AUX_RD_ADDR is only allowed if AUX is not busy.
 * @ingroup    DATAIO
 * 
-* @param[in]  reg_addr : 
-* @param[in]  XBYTE*aux_data : 
-* @param[in]  len : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  reg_addr : Reg addr value.
+* @param[in]  aux_data : Aux data pointer to use.
+* @param[in]  len : Len value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_read_aux_man_mode(XBYTE reg_addr, XBYTE *aux_data, XWORD len, struct bmi2_dev *dev)
@@ -3455,18 +3440,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_read_aux_man_mode(XBYTE reg_addr, XBYTE
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_aux_man_mode(XBYTE reg_addr, const XBYTE*aux_data, XWORD len, struct bmi2_dev*dev)
-* @brief      bmi2writeauxmanmode
-*                                     auxiliary sensor where data is to be written in manual mode.
-* @note       Change of BMI2_AUX_WR_ADDR is only allowed if AUX is not busy. 
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_aux_man_mode(XBYTE reg_addr, const XBYTE *aux_data, XWORD len, struct bmi2_dev *dev)
+* @brief      bmi2writeauxmanmode auxiliary sensor where data is to be written in manual mode.
+* @note       Change of BMI2_AUX_WR_ADDR is only allowed if AUX is not busy.
 * @ingroup    DATAIO
 * 
-* @param[in]  reg_addr : 
-* @param[in]  XBYTE*aux_data : 
-* @param[in]  len : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  reg_addr : Reg addr value.
+* @param[in]  aux_data : Aux data value.
+* @param[in]  len : Len value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_aux_man_mode(XBYTE reg_addr, const XBYTE *aux_data, XWORD len, struct bmi2_dev *dev)
@@ -3530,18 +3514,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_aux_man_mode(XBYTE reg_addr, cons
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_aux_interleaved(XBYTE reg_addr, const XBYTE*aux_data, XWORD len, struct bmi2_dev*dev)
-* @brief      bmi2writeauxinterleaved
-*                                         auxiliary sensor where data is to be written, from an interleaved input, in manual mode.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_aux_interleaved(XBYTE reg_addr, const XBYTE *aux_data, XWORD len, struct bmi2_dev *dev)
+* @brief      bmi2writeauxinterleaved auxiliary sensor where data is to be written, from an interleaved input, in manual mode.
 * @note       Change of BMI2_AUX_WR_ADDR is only allowed if AUX is not busy.
 * @ingroup    DATAIO
 * 
-* @param[in]  reg_addr : 
-* @param[in]  XBYTE*aux_data : 
-* @param[in]  len : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  reg_addr : Reg addr value.
+* @param[in]  aux_data : Aux data value.
+* @param[in]  len : Len value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_aux_interleaved(XBYTE reg_addr, const XBYTE *aux_data, XWORD len, struct bmi2_dev *dev)
@@ -3613,15 +3596,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_write_aux_interleaved(XBYTE reg_addr, c
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_status(XBYTE*status, struct bmi2_dev*dev)
-* @brief      bmi2getstatus
-*                             auxiliary, command decoder and busy status of auxiliary.
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_status(XBYTE *status, struct bmi2_dev *dev)
+* @brief      bmi2getstatus auxiliary, command decoder and busy status of auxiliary.
 * @ingroup    DATAIO
 * 
-* @param[in]  XBYTE*status : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  status : Status value to read or update.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_status(XBYTE *status, struct bmi2_dev *dev)
@@ -3646,14 +3628,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_get_status(XBYTE *status, struct bmi2_d
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_ois_interface(XBYTE enable, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_ois_interface(XBYTE enable, struct bmi2_dev *dev)
 * @brief      bmi2setoisinterface
 * @ingroup    DATAIO
 * 
-* @param[in]  enable : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  enable : Enable value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_set_ois_interface(XBYTE enable, struct bmi2_dev *dev)
@@ -9813,6 +9795,17 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::validate_foc_accel_axis(XWORDSIG avg_foc_dat
     return rslt;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_nvm_prog(struct bmi2_dev *dev)
+* @brief      Bmi2 nvm prog
+* @ingroup    DATAIO
+* 
+* @param[in]  dev : Dev pointer to use.
+* 
+* @return     XBYTESIG : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 /*! @brief This api is used for programming the non volatile memory(nvm) */
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::bmi2_nvm_prog(struct bmi2_dev *dev)
 {
@@ -13378,14 +13371,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_nvm_error_status(struct bmi2_nvm_err_sta
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_user_gain_upd_status(XBYTE*status, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_user_gain_upd_status(XBYTE *status, struct bmi2_dev *dev)
 * @brief      getusergainupdstatus
 * @ingroup    DATAIO
 * 
-* @param[in]  XBYTE*status : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  status : Status value to read or update.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_user_gain_upd_status(XBYTE *status, struct bmi2_dev *dev)
@@ -13450,14 +13443,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_user_gain_upd_status(XBYTE *status, stru
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_step_activity_output(XBYTE*step_act, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_step_activity_output(XBYTE *step_act, struct bmi2_dev *dev)
 * @brief      getstepactivityoutput
 * @ingroup    DATAIO
 * 
-* @param[in]  XBYTE*step_act : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  step_act : Step act pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_step_activity_output(XBYTE *step_act, struct bmi2_dev *dev)
@@ -13503,14 +13496,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_step_activity_output(XBYTE *step_act, st
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_vfrm_error_status(struct bmi2_vfrm_err_status*vfrm_err_stat, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_vfrm_error_status(struct bmi2_vfrm_err_status *vfrm_err_stat, struct bmi2_dev *dev)
 * @brief      getvfrmerrorstatus
 * @ingroup    DATAIO
 * 
-* @param[in]  bmi2_vfrm_err_status*vfrm_err_stat : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  vfrm_err_stat : Vfrm err stat pointer to use.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_vfrm_error_status(struct bmi2_vfrm_err_status *vfrm_err_stat, struct bmi2_dev *dev)
@@ -13565,14 +13558,14 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::get_vfrm_error_status(struct bmi2_vfrm_err_s
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::enable_gyro_gain(XBYTE enable, struct bmi2_dev*dev)
+* @fn         XBYTESIG DIOI2C6AXISTRACKINGBMI270::enable_gyro_gain(XBYTE enable, struct bmi2_dev *dev)
 * @brief      enablegyrogain
 * @ingroup    DATAIO
 * 
-* @param[in]  enable : 
-* @param[in]  bmi2_dev*dev : 
+* @param[in]  enable : Enable value.
+* @param[in]  dev : Dev pointer to use.
 * 
-* @return     XBYTESIG : 
+* @return     XBYTESIG : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTESIG DIOI2C6AXISTRACKINGBMI270::enable_gyro_gain(XBYTE enable, struct bmi2_dev *dev)
@@ -13631,10 +13624,10 @@ XBYTESIG DIOI2C6AXISTRACKINGBMI270::enable_gyro_gain(XBYTE enable, struct bmi2_d
 * @fn         void DIOI2C6AXISTRACKINGBMI270::Handler_Interrupt(void* param)
 * @brief      Handler interrupt
 * @ingroup    DATAIO
-*
-* @param[in]  param : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  param : Param pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2C6AXISTRACKINGBMI270::Handler_Interrupt(void* param)
 {
   DIOI2C6AXISTRACKINGBMI270* imu = (DIOI2C6AXISTRACKINGBMI270*)param;
@@ -13649,8 +13642,8 @@ void DIOI2C6AXISTRACKINGBMI270::Handler_Interrupt(void* param)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2C6AXISTRACKINGBMI270::Clean()
 {
   GPIOinterruptentryID  =  DIOGPIO_ID_NOTDEFINED;

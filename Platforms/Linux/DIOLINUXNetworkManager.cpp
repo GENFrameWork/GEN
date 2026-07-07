@@ -64,8 +64,8 @@
 * @fn         DIOLINUXNETWORKMANAGER::DIOLINUXNETWORKMANAGER()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXNETWORKMANAGER::DIOLINUXNETWORKMANAGER()
 { 
   Clean();   
@@ -81,8 +81,8 @@ DIOLINUXNETWORKMANAGER::DIOLINUXNETWORKMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXNETWORKMANAGER::~DIOLINUXNETWORKMANAGER()    
 { 
   End();
@@ -94,12 +94,12 @@ DIOLINUXNETWORKMANAGER::~DIOLINUXNETWORKMANAGER()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXNETWORKMANAGER::Ini()
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXNETWORKMANAGER::Ini()
 {
   bool status;
@@ -122,12 +122,12 @@ bool DIOLINUXNETWORKMANAGER::Ini()
 * @fn         bool DIOLINUXNETWORKMANAGER::Enable(bool on)
 * @brief      Enable
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  on : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  on : On value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXNETWORKMANAGER::Enable(bool on)
 {
   DIOLINUXDBUS_MESSAGE  message;  
@@ -173,10 +173,10 @@ bool DIOLINUXNETWORKMANAGER::Enable(bool on)
 * @fn         DIOLINUXNETWORKMANAGER_STATE DIOLINUXNETWORKMANAGER::GetConnectionState()
 * @brief      Get connection state
 * @ingroup    PLATFORM_LINUX
-*
-* @return     DIOLINUXNETWORKMANAGER_STATE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOLINUXNETWORKMANAGER_STATE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXNETWORKMANAGER_STATE DIOLINUXNETWORKMANAGER::GetConnectionState()
 {
   DIOLINUXDBUS_MESSAGE          message;  
@@ -234,12 +234,12 @@ DIOLINUXNETWORKMANAGER_STATE DIOLINUXNETWORKMANAGER::GetConnectionState()
 * @fn         bool DIOLINUXNETWORKMANAGER::GetDevices(XVECTOR<DIOSTREAMDEVICEIP*>& devices)
 * @brief      Get devices
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  devices : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  devices : Devices pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXNETWORKMANAGER::GetDevices(XVECTOR<DIOSTREAMDEVICEIP*>& devices)
 {
   XVECTOR<XSTRING*> pathdevices;
@@ -351,13 +351,13 @@ bool DIOLINUXNETWORKMANAGER::GetDevices(XVECTOR<DIOSTREAMDEVICEIP*>& devices)
 * @fn         bool DIOLINUXNETWORKMANAGER::Signal_Add(XCHAR* type, XCHAR* name)
 * @brief      Signal add
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  type : 
-* @param[in]  name : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXNETWORKMANAGER::Signal_Add(XCHAR* type, XCHAR* name)
 {
   if(!dbus)                 return false;
@@ -372,13 +372,13 @@ bool DIOLINUXNETWORKMANAGER::Signal_Add(XCHAR* type, XCHAR* name)
 * @fn         bool DIOLINUXNETWORKMANAGER::Signal_Add(XSTRING& type, XSTRING& name)
 * @brief      Signal add
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  type : 
-* @param[in]  name : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXNETWORKMANAGER::Signal_Add(XSTRING& type, XSTRING& name)
 {
   return Signal_Add(type.Get(), name.Get());
@@ -388,12 +388,12 @@ bool DIOLINUXNETWORKMANAGER::Signal_Add(XSTRING& type, XSTRING& name)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXNETWORKMANAGER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXNETWORKMANAGER::End()
 {
   if(dbus)
@@ -415,12 +415,12 @@ bool DIOLINUXNETWORKMANAGER::End()
 * @fn         bool DIOLINUXNETWORKMANAGER::GetDevicePathList(XVECTOR<XSTRING*>& pathdevices)
 * @brief      Get device path list
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  pathdevices : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  pathdevices : Pathdevices pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXNETWORKMANAGER::GetDevicePathList(XVECTOR<XSTRING*>& pathdevices)  
 {
   DIOLINUXDBUS_MESSAGE  message;  
@@ -469,15 +469,15 @@ bool DIOLINUXNETWORKMANAGER::GetDevicePathList(XVECTOR<XSTRING*>& pathdevices)
 * @fn         bool DIOLINUXNETWORKMANAGER::GetProperty(XCHAR* iface, XCHAR* pathdevice, XCHAR* propertyname, XVARIANT& result)
 * @brief      Get property
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  iface : 
-* @param[in]  pathdevice : 
-* @param[in]  propertyname : 
-* @param[in]  result : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  iface : Iface pointer to use.
+* @param[in]  pathdevice : Pathdevice pointer to use.
+* @param[in]  propertyname : Propertyname pointer to use.
+* @param[in]  result : Output result.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXNETWORKMANAGER::GetProperty(XCHAR* iface, XCHAR* pathdevice, XCHAR* propertyname, XVARIANT& result)
 {
   DIOLINUXDBUS_MESSAGE  message;  
@@ -552,10 +552,10 @@ bool DIOLINUXNETWORKMANAGER::GetProperty(XCHAR* iface, XCHAR* pathdevice, XCHAR*
 * @brief      Handle event signal
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  event : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  event : Event to process.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXNETWORKMANAGER::HandleEvent_Signal(DIOLINUXDBUS_XEVENT* event)
 {  
   switch(event->GetEventType())
@@ -580,10 +580,10 @@ void DIOLINUXNETWORKMANAGER::HandleEvent_Signal(DIOLINUXDBUS_XEVENT* event)
 * @brief      Handle event
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  xevent : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  xevent : Xevent pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXNETWORKMANAGER::HandleEvent(XEVENT* xevent)
 {
   if(!xevent) return;
@@ -609,8 +609,8 @@ void DIOLINUXNETWORKMANAGER::HandleEvent(XEVENT* xevent)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXNETWORKMANAGER::Clean()
 {
   dbus      = NULL;

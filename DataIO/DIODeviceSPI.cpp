@@ -64,8 +64,8 @@
 * @fn         DIODEVICESPI::DIODEVICESPI()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIODEVICESPI::DIODEVICESPI()
 {
   Clean();
@@ -80,8 +80,8 @@ DIODEVICESPI::DIODEVICESPI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIODEVICESPI::~DIODEVICESPI()
 {
   if(xtimerout) GEN_XFACTORY.DeleteTimer(xtimerout);
@@ -95,15 +95,15 @@ DIODEVICESPI::~DIODEVICESPI()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODEVICESPI::Ini(XCHAR* localdevicename, int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  localdevicename : 
-* @param[in]  timeout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  localdevicename : Localdevicename pointer to use.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICESPI::Ini(XCHAR* localdevicename, int timeout)
 {
   if(!xtimerout) return false;
@@ -120,16 +120,16 @@ bool DIODEVICESPI::Ini(XCHAR* localdevicename, int timeout)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODEVICESPI::Ini(int port, int chipselect, int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
-*
-* @param[in]  port : 
-* @param[in]  chipselect : 
-* @param[in]  timeout : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  port : Port number to use.
+* @param[in]  chipselect : Chipselect value.
+* @param[in]  timeout : Timeout value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICESPI::Ini(int port, int chipselect, int timeout)
 {
   if(!xtimerout) return false;
@@ -148,12 +148,12 @@ bool DIODEVICESPI::Ini(int port, int chipselect, int timeout)
 * @fn         DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(XCHAR* localdevicename)
 * @brief      Create config
 * @ingroup    DATAIO
-*
-* @param[in]  localdevicename : 
 * 
-* @return     DIOSTREAMSPICONFIG* : 
+* @param[in]  localdevicename : Localdevicename pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSTREAMSPICONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(XCHAR* localdevicename)
 {
   DIOSTREAMSPICONFIG* diostreamcfg = GEN_NEW DIOSTREAMSPICONFIG();
@@ -176,13 +176,13 @@ DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(XCHAR* localdevicename)
 * @fn         DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(int port, int chipselect)
 * @brief      Create config
 * @ingroup    DATAIO
-*
-* @param[in]  port : 
-* @param[in]  chipselect : 
 * 
-* @return     DIOSTREAMSPICONFIG* : 
+* @param[in]  port : Port number to use.
+* @param[in]  chipselect : Chipselect value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSTREAMSPICONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(int port, int chipselect)
 {
   DIOSTREAMSPICONFIG* diostreamcfg = GEN_NEW DIOSTREAMSPICONFIG();
@@ -207,10 +207,10 @@ DIOSTREAMSPICONFIG* DIODEVICESPI::CreateConfig(int port, int chipselect)
 * @fn         bool DIODEVICESPI::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICESPI::IniDevice()
 {
   diostream = (DIOSTREAMSPI*)GEN_DIOFACTORY.CreateStreamIO(diostreamcfg);
@@ -225,12 +225,12 @@ bool DIODEVICESPI::IniDevice()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIODEVICESPI::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODEVICESPI::End()
 {
   if(xtimerout) 
@@ -265,8 +265,8 @@ bool DIODEVICESPI::End()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIODEVICESPI::Clean()
 {
   timeout       = 0;

@@ -93,7 +93,7 @@ DIONODE::~DIONODE()
 * @brief      Get ID
 * @ingroup    DATAIO
 * 
-* @return     XUUID& : 
+* @return     XUUID& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XUUID& DIONODE::GetID()
@@ -108,7 +108,7 @@ XUUID& DIONODE::GetID()
 * @brief      Set ID
 * @ingroup    DATAIO
 * 
-* @param[in]  UUID : 
+* @param[in]  UUID : UUID value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODE::SetID(XUUID& UUID)
@@ -123,7 +123,7 @@ void DIONODE::SetID(XUUID& UUID)
 * @brief      Get items
 * @ingroup    DATAIO
 * 
-* @return     XVECTOR<DIONODEITEM*>* : 
+* @return     XVECTOR<DIONODEITEM*>* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<DIONODEITEM*>* DIONODE::GetItems()
@@ -138,7 +138,7 @@ XVECTOR<DIONODEITEM*>* DIONODE::GetItems()
 * @brief      Is local
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODE::IsLocal()
@@ -153,7 +153,7 @@ bool DIONODE::IsLocal()
 * @brief      Set is local
 * @ingroup    DATAIO
 * 
-* @param[in]  islocal : 
+* @param[in]  islocal : Islocal value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODE::SetIsLocal(bool islocal)
@@ -168,7 +168,7 @@ void DIONODE::SetIsLocal(bool islocal)
 * @brief      Get group
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIONODE::GetGroup()
@@ -183,9 +183,9 @@ XSTRING* DIONODE::GetGroup()
 * @brief      Get sub groups
 * @ingroup    DATAIO
 * 
-* @param[in]  listsubgroups : 
+* @param[in]  listsubgroups : Listsubgroups pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODE::GetSubGroups(XVECTOR<XSTRING*>& listsubgroups)
@@ -238,10 +238,10 @@ bool DIONODE::GetSubGroups(XVECTOR<XSTRING*>& listsubgroups)
 * @brief      Get sub group
 * @ingroup    DATAIO
 * 
-* @param[in]  level : 
-* @param[in]  subgroup : 
+* @param[in]  level : Level value.
+* @param[in]  subgroup : Subgroup value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODE::GetSubGroup(XDWORD level, XSTRING& subgroup)
@@ -275,7 +275,7 @@ bool DIONODE::GetSubGroup(XDWORD level, XSTRING& subgroup)
 * @brief      Update
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODE::Update()
@@ -299,7 +299,7 @@ bool DIONODE::Update()
 * @brief      Create JSON serialization
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODE::CreateJSONSerialization()
@@ -339,7 +339,7 @@ bool DIONODE::CreateJSONSerialization()
 * @brief      Serialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODE::Serialize()
@@ -362,7 +362,7 @@ bool DIONODE::Serialize()
 * @brief      Deserialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODE::Deserialize()

@@ -79,11 +79,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXLEDNEOPIXELWS2812BRPI::DIOLINUXLEDNEOPIXELWS2812BRPI()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXLEDNEOPIXELWS2812BRPI::DIOLINUXLEDNEOPIXELWS2812BRPI()
 {
@@ -117,12 +117,12 @@ DIOLINUXLEDNEOPIXELWS2812BRPI::DIOLINUXLEDNEOPIXELWS2812BRPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOLINUXLEDNEOPIXELWS2812BRPI::~DIOLINUXLEDNEOPIXELWS2812BRPI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXLEDNEOPIXELWS2812BRPI::~DIOLINUXLEDNEOPIXELWS2812BRPI()
 {
@@ -133,10 +133,12 @@ DIOLINUXLEDNEOPIXELWS2812BRPI::~DIOLINUXLEDNEOPIXELWS2812BRPI()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOLINUXLEDNEOPIXELWS2812BRPI::Ini(XDWORD nled)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    PLATFORM_LINUX
-*  
-* @return     bool : true if is succesful. 
+* 
+* @param[in]  nled : Nled value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXLEDNEOPIXELWS2812BRPI::Ini(XDWORD nled)
@@ -156,13 +158,13 @@ bool DIOLINUXLEDNEOPIXELWS2812BRPI::Ini(XDWORD nled)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXLEDNEOPIXELWS2812BRPI::Send()
 * @brief      Send
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXLEDNEOPIXELWS2812BRPI::Send()
 {
@@ -207,13 +209,13 @@ bool DIOLINUXLEDNEOPIXELWS2812BRPI::Send()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOLINUXLEDNEOPIXELWS2812BRPI::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXLEDNEOPIXELWS2812BRPI::End()
 {  
@@ -228,12 +230,12 @@ bool DIOLINUXLEDNEOPIXELWS2812BRPI::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOLINUXLEDNEOPIXELWS2812BRPI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOLINUXLEDNEOPIXELWS2812BRPI::Clean()
 {

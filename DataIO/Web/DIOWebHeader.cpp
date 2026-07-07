@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBHEADER::DIOWEBHEADER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBHEADER::DIOWEBHEADER()
 {
@@ -74,12 +74,12 @@ DIOWEBHEADER::DIOWEBHEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBHEADER::~DIOWEBHEADER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBHEADER::~DIOWEBHEADER()
 {
@@ -95,10 +95,10 @@ DIOWEBHEADER::~DIOWEBHEADER()
 * @brief      Read
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
-* @param[in]  timeout : 
+* @param[in]  diostream : Diostream pointer to use.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBHEADER::Read(DIOSTREAMTCPIP* diostream, int timeout)
@@ -146,16 +146,16 @@ bool DIOWEBHEADER::Read(DIOSTREAMTCPIP* diostream, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBHEADER::Write(DIOSTREAMTCPIP* diostream, int timeout)
 * @brief      Write
 * @ingroup    DATAIO
-*
-* @param[in]  diostream :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  diostream : Diostream pointer to use.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBHEADER::Write(DIOSTREAMTCPIP* diostream, int timeout)
 {
@@ -183,15 +183,15 @@ bool DIOWEBHEADER::Write(DIOSTREAMTCPIP* diostream, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBHEADER::AddLine(XCHAR* line)
 * @brief      Add line
 * @ingroup    DATAIO
-*
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  line : Line pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBHEADER::AddLine(XCHAR* line)
 {
@@ -209,15 +209,15 @@ bool DIOWEBHEADER::AddLine(XCHAR* line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBHEADER::AddLine(XSTRING& line)
 * @brief      Add line
 * @ingroup    DATAIO
-*
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  line : Line value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBHEADER::AddLine(XSTRING& line)
 {
@@ -226,13 +226,13 @@ bool DIOWEBHEADER::AddLine(XSTRING& line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<XSTRING*>* DIOWEBHEADER::GetLines()
 * @brief      Get lines
 * @ingroup    DATAIO
-*
-* @return     XVECTOR<XSTRING*>* :
-*
+* 
+* @return     XVECTOR<XSTRING*>* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XSTRING*>* DIOWEBHEADER::GetLines()
 {
@@ -241,15 +241,15 @@ XVECTOR<XSTRING*>* DIOWEBHEADER::GetLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBHEADER::GetLines(XSTRING& result)
 * @brief      Get lines
 * @ingroup    DATAIO
-*
-* @param[in]  result :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  result : Output result.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBHEADER::GetLines(XSTRING& result)
 {
@@ -272,15 +272,15 @@ bool DIOWEBHEADER::GetLines(XSTRING& result)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOWEBHEADER::GetFieldValue(XCHAR* field)
 * @brief      Get field value
 * @ingroup    DATAIO
-*
-* @param[in]  field :
-*
-* @return     XCHAR* :
-*
+* 
+* @param[in]  field : Field pointer to use.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOWEBHEADER::GetFieldValue(XCHAR* field)
 {
@@ -304,15 +304,15 @@ XCHAR* DIOWEBHEADER::GetFieldValue(XCHAR* field)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* DIOWEBHEADER::GetFieldValue(XSTRING& field)
 * @brief      Get field value
 * @ingroup    DATAIO
-*
-* @param[in]  field :
-*
-* @return     XCHAR* :
-*
+* 
+* @param[in]  field : Field value.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOWEBHEADER::GetFieldValue(XSTRING& field)
 {
@@ -321,13 +321,13 @@ XCHAR* DIOWEBHEADER::GetFieldValue(XSTRING& field)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBHEADER::DeleteAllLines()
 * @brief      Delete all lines
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBHEADER::DeleteAllLines()
 {
@@ -342,17 +342,17 @@ bool DIOWEBHEADER::DeleteAllLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBHEADER::GetFormat(bool isserver, int type, void* data)
 * @brief      Get format
 * @ingroup    DATAIO
-*
-* @param[in]  isserver :
-* @param[in]  type :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  isserver : Isserver value.
+* @param[in]  type : Type value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBHEADER::GetFormat(bool isserver, int type, void* data)
 {
@@ -411,12 +411,12 @@ bool DIOWEBHEADER::GetFormat(bool isserver, int type, void* data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBHEADER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBHEADER::Clean()
 {

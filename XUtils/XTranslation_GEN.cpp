@@ -62,11 +62,11 @@ XTRANSLATION_GEN* XTRANSLATION_GEN::instance  = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION_GEN_SENTENCE::XTRANSLATION_GEN_SENTENCE()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION_GEN_SENTENCE::XTRANSLATION_GEN_SENTENCE()
 {
@@ -75,12 +75,12 @@ XTRANSLATION_GEN_SENTENCE::XTRANSLATION_GEN_SENTENCE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION_GEN_SENTENCE::~XTRANSLATION_GEN_SENTENCE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION_GEN_SENTENCE::~XTRANSLATION_GEN_SENTENCE()
 {
@@ -91,12 +91,12 @@ XTRANSLATION_GEN_SENTENCE::~XTRANSLATION_GEN_SENTENCE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTRANSLATION_GEN_SENTENCE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRANSLATION_GEN_SENTENCE::Clean()
 {
@@ -112,13 +112,13 @@ void XTRANSLATION_GEN_SENTENCE::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION_GEN::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION_GEN::GetIsInstanced()
 {
@@ -127,13 +127,13 @@ bool XTRANSLATION_GEN::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION_GEN& XTRANSLATION_GEN::GetInstance()
 * @brief      Get instance
 * @ingroup    XUTILS
-*
-* @return     XTRANSLATION_GEN& : language instance
-*
+* 
+* @return     XTRANSLATION_GEN& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION_GEN& XTRANSLATION_GEN::GetInstance()
 {
@@ -144,13 +144,13 @@ XTRANSLATION_GEN& XTRANSLATION_GEN::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION_GEN::DelInstance()
 * @brief      Del instance
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION_GEN::DelInstance()
 {
@@ -167,11 +167,11 @@ bool XTRANSLATION_GEN::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION_GEN::XTRANSLATION_GEN()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION_GEN::XTRANSLATION_GEN()
 {
@@ -182,12 +182,12 @@ XTRANSLATION_GEN::XTRANSLATION_GEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION_GEN::~XTRANSLATION_GEN()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION_GEN::~XTRANSLATION_GEN()
 {
@@ -198,15 +198,15 @@ XTRANSLATION_GEN::~XTRANSLATION_GEN()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION_GEN::IsLanguageAvailable(XDWORD code)
 * @brief      Is language available
 * @ingroup    XUTILS
-*
-* @param[in]  code :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  code : Code value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION_GEN::IsLanguageAvailable(XDWORD code)
 {
@@ -220,18 +220,18 @@ bool XTRANSLATION_GEN::IsLanguageAvailable(XDWORD code)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION_GEN::Sentence_Add(XDWORD ID, XDWORD codelanguage, XCHAR* sentence, XDWORD fixed)
 * @brief      Sentence add
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-* @param[in]  codelanguage :
-* @param[in]  sentence :
-* @param[in]  fixed :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  codelanguage : Codelanguage value.
+* @param[in]  sentence : Sentence pointer to use.
+* @param[in]  fixed : Fixed value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION_GEN::Sentence_Add(XDWORD ID, XDWORD codelanguage, XCHAR* sentence, XDWORD fixed)
 {
@@ -266,16 +266,16 @@ bool XTRANSLATION_GEN::Sentence_Add(XDWORD ID, XDWORD codelanguage, XCHAR* sente
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTRANSLATION_GEN_SENTENCE* XTRANSLATION_GEN::Sentence_Get(XDWORD ID, XDWORD codelanguage)
 * @brief      Sentence get
 * @ingroup    XUTILS
-*
-* @param[in]  ID :
-* @param[in]  codelanguage :
-*
-* @return     XTRANSLATION_GEN_SENTENCE* :
-*
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  codelanguage : Codelanguage value.
+* 
+* @return     XTRANSLATION_GEN_SENTENCE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTRANSLATION_GEN_SENTENCE* XTRANSLATION_GEN::Sentence_Get(XDWORD ID, XDWORD codelanguage)
 {
@@ -293,13 +293,13 @@ XTRANSLATION_GEN_SENTENCE* XTRANSLATION_GEN::Sentence_Get(XDWORD ID, XDWORD code
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION_GEN::Sentences_AddAll()
 * @brief      Sentences add all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION_GEN::Sentences_AddAll()
 {
@@ -463,13 +463,13 @@ bool XTRANSLATION_GEN::Sentences_AddAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION_GEN::Sentences_DeleteAll()
 * @brief      Sentences GEN_DELETE all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION_GEN::Sentences_DeleteAll()
 {
@@ -483,15 +483,15 @@ bool XTRANSLATION_GEN::Sentences_DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTRANSLATION_GEN::Sentences_AddToTranslation(XDWORD codelanguage)
 * @brief      Sentences add to translation
 * @ingroup    XUTILS
-*
-* @param[in]  codelanguage :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  codelanguage : Codelanguage value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION_GEN::Sentences_AddToTranslation(XDWORD codelanguage)
 {
@@ -515,12 +515,12 @@ bool XTRANSLATION_GEN::Sentences_AddToTranslation(XDWORD codelanguage)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTRANSLATION_GEN::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRANSLATION_GEN::Clean()
 {

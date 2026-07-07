@@ -57,9 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJPATH::GRPVECTORFILESVGOBJPATH()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJPATH::GRPVECTORFILESVGOBJPATH()
 {
@@ -68,10 +70,12 @@ GRPVECTORFILESVGOBJPATH::GRPVECTORFILESVGOBJPATH()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJPATH::~GRPVECTORFILESVGOBJPATH()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJPATH::~GRPVECTORFILESVGOBJPATH()
 {
@@ -80,11 +84,15 @@ GRPVECTORFILESVGOBJPATH::~GRPVECTORFILESVGOBJPATH()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPATH::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read the common attributes and parse the 'd' geometry
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPATH::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -100,11 +108,15 @@ bool GRPVECTORFILESVGOBJPATH::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPATH::BuildPath(GRP2DPATH& path)
 * @brief      Build path : copy the already parsed path geometry into the output path
 * @ingroup    GRAPHIC
+* 
 * @param[in]  path : output path
-* @return     bool : true if geometry was emitted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPATH::BuildPath(GRP2DPATH& path)
 {
@@ -142,10 +154,13 @@ bool GRPVECTORFILESVGOBJPATH::BuildPath(GRP2DPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DPATH* GRPVECTORFILESVGOBJPATH::GetPathData()
 * @brief      Get path data
 * @ingroup    GRAPHIC
-* @return     GRP2DPATH* : parsed path data
+* 
+* @return     GRP2DPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DPATH* GRPVECTORFILESVGOBJPATH::GetPathData()
 {
@@ -154,12 +169,16 @@ GRP2DPATH* GRPVECTORFILESVGOBJPATH::GetPathData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPATH::ParsePathData(XCHAR* d)
 * @brief      Parse path data : parse the SVG 'd' mini language into the path
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  d : 'd' attribute value
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPATH::ParsePathData(XCHAR* d)
 {
@@ -310,14 +329,18 @@ bool GRPVECTORFILESVGOBJPATH::ParsePathData(XCHAR* d)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPATH::ReadNumber(XSTRING& source, int& pos, double& value)
 * @brief      Read number : read one floating point number from the current position
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  source : source string
 * @param[in]  pos : current position (in/out)
-* @param[out] value : parsed value
-* @return     bool : true if a number was read.
+* @param[in]  value : parsed value
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPATH::ReadNumber(XSTRING& source, int& pos, double& value)
 {
@@ -360,14 +383,18 @@ bool GRPVECTORFILESVGOBJPATH::ReadNumber(XSTRING& source, int& pos, double& valu
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPATH::ReadFlag(XSTRING& source, int& pos, bool& flag)
 * @brief      Read flag : read a single 0/1 arc flag
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  source : source string
 * @param[in]  pos : current position (in/out)
-* @param[out] flag : parsed flag
-* @return     bool : true if a flag was read.
+* @param[in]  flag : parsed flag
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPATH::ReadFlag(XSTRING& source, int& pos, bool& flag)
 {
@@ -386,12 +413,16 @@ bool GRPVECTORFILESVGOBJPATH::ReadFlag(XSTRING& source, int& pos, bool& flag)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPATH::IsSeparator(XCHAR character)
 * @brief      Is separator : space, comma, tab, new line
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  character : character to test
-* @return     bool : true if the character is a separator.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPATH::IsSeparator(XCHAR character)
 {
@@ -401,12 +432,16 @@ bool GRPVECTORFILESVGOBJPATH::IsSeparator(XCHAR character)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJPATH::IsCommand(XCHAR character)
 * @brief      Is command : an alphabetic path command letter
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  character : character to test
-* @return     bool : true if the character is a command letter.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJPATH::IsCommand(XCHAR character)
 {
@@ -416,10 +451,12 @@ bool GRPVECTORFILESVGOBJPATH::IsCommand(XCHAR character)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJPATH::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJPATH::Clean()
 {

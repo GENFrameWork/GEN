@@ -126,9 +126,9 @@
 * @brief      Create stream enum devices
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     DIOSTREAMENUMDEVICES* : 
+* @return     DIOSTREAMENUMDEVICES* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMENUMDEVICES* DIOANDROIDFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTYPE type)
@@ -173,9 +173,9 @@ DIOSTREAMENUMDEVICES* DIOANDROIDFACTORY::CreateStreamEnumDevices(DIOSTREAMENUMTY
 * @brief      Delete stream enum devices
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  enumdevices : 
+* @param[in]  enumdevices : Enumdevices pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevices)
@@ -194,9 +194,9 @@ bool DIOANDROIDFACTORY::DeleteStreamEnumDevices(DIOSTREAMENUMDEVICES* enumdevice
 * @brief      Create stream IO
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  config : 
+* @param[in]  config : Configuration object to use.
 * 
-* @return     DIOSTREAM* : 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOANDROIDFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
@@ -259,9 +259,9 @@ DIOSTREAM* DIOANDROIDFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 * @brief      Delete stream IO
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  diostream : 
+* @param[in]  diostream : Diostream pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
@@ -280,7 +280,7 @@ bool DIOANDROIDFACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 * @brief      Create ping
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     DIOPING* : 
+* @return     DIOPING* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPING* DIOANDROIDFACTORY::CreatePing()
@@ -297,9 +297,9 @@ DIOPING* DIOANDROIDFACTORY::CreatePing()
 * @brief      Delete ping
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  ping : 
+* @param[in]  ping : Ping pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDFACTORY::DeletePing(DIOPING* ping)
@@ -322,7 +322,7 @@ bool DIOANDROIDFACTORY::DeletePing(DIOPING* ping)
 * @brief      Create P cap
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     DIOPCAP* : 
+* @return     DIOPCAP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOPCAP* DIOANDROIDFACTORY::CreatePCap()
@@ -339,9 +339,9 @@ DIOPCAP* DIOANDROIDFACTORY::CreatePCap()
 * @brief      Delete P cap
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  pcap : 
+* @param[in]  pcap : Pcap pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDFACTORY::DeletePCap(DIOPCAP* pcap)
@@ -365,7 +365,7 @@ bool DIOANDROIDFACTORY::DeletePCap(DIOPCAP* pcap)
 * @brief      Create GPIO
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     DIOGPIO* : 
+* @return     DIOGPIO* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOGPIO* DIOANDROIDFACTORY::CreateGPIO()
@@ -382,9 +382,9 @@ DIOGPIO* DIOANDROIDFACTORY::CreateGPIO()
 * @brief      Delete GPIO
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  port : 
+* @param[in]  port : Port number to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDFACTORY::DeleteGPIO(DIOGPIO* port)

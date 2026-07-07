@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGTRANSFORM::GRPVECTORFILESVGTRANSFORM()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGTRANSFORM::GRPVECTORFILESVGTRANSFORM()
 {
@@ -74,12 +74,12 @@ GRPVECTORFILESVGTRANSFORM::GRPVECTORFILESVGTRANSFORM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPVECTORFILESVGTRANSFORM::~GRPVECTORFILESVGTRANSFORM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGTRANSFORM::~GRPVECTORFILESVGTRANSFORM()
 {
@@ -88,11 +88,11 @@ GRPVECTORFILESVGTRANSFORM::~GRPVECTORFILESVGTRANSFORM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGTRANSFORM::SetIdentity()
 * @brief      Set identity
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGTRANSFORM::SetIdentity()
 {
@@ -101,13 +101,13 @@ void GRPVECTORFILESVGTRANSFORM::SetIdentity()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGTRANSFORM::IsIdentity()
 * @brief      Is identity
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if the matrix is the identity.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGTRANSFORM::IsIdentity()
 {
@@ -116,18 +116,18 @@ bool GRPVECTORFILESVGTRANSFORM::IsIdentity()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGTRANSFORM::Set(double a, double b, double c, double d, double e, double f)
-* @brief      Set
+* @brief      Set value
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  a : matrix a
 * @param[in]  b : matrix b
 * @param[in]  c : matrix c
 * @param[in]  d : matrix d
 * @param[in]  e : matrix e
 * @param[in]  f : matrix f
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGTRANSFORM::Set(double a, double b, double c, double d, double e, double f)
 {
@@ -136,67 +136,85 @@ void GRPVECTORFILESVGTRANSFORM::Set(double a, double b, double c, double d, doub
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGTRANSFORM::GetA()
 * @brief      Get a
 * @ingroup    GRAPHIC
-* @return     double : matrix a
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGTRANSFORM::GetA()      { return a; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGTRANSFORM::GetB()
 * @brief      Get b
 * @ingroup    GRAPHIC
-* @return     double : matrix b
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGTRANSFORM::GetB()      { return b; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGTRANSFORM::GetC()
 * @brief      Get c
 * @ingroup    GRAPHIC
-* @return     double : matrix c
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGTRANSFORM::GetC()      { return c; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGTRANSFORM::GetD()
 * @brief      Get d
 * @ingroup    GRAPHIC
-* @return     double : matrix d
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGTRANSFORM::GetD()      { return d; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGTRANSFORM::GetE()
 * @brief      Get e
 * @ingroup    GRAPHIC
-* @return     double : matrix e
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGTRANSFORM::GetE()      { return e; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGTRANSFORM::GetF()
 * @brief      Get f
 * @ingroup    GRAPHIC
-* @return     double : matrix f
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGTRANSFORM::GetF()      { return f; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGTRANSFORM::CopyFrom(GRPVECTORFILESVGTRANSFORM& transform)
 * @brief      Copy from
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  transform : transform to copy from
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGTRANSFORM::CopyFrom(GRPVECTORFILESVGTRANSFORM& transform)
 {
@@ -210,13 +228,13 @@ void GRPVECTORFILESVGTRANSFORM::CopyFrom(GRPVECTORFILESVGTRANSFORM& transform)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGTRANSFORM::Multiply(GRPVECTORFILESVGTRANSFORM& transform)
 * @brief      Multiply : this = this * transform (transform is applied first to a point)
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  transform : right hand side matrix
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGTRANSFORM::Multiply(GRPVECTORFILESVGTRANSFORM& transform)
 {
@@ -239,14 +257,14 @@ void GRPVECTORFILESVGTRANSFORM::Multiply(GRPVECTORFILESVGTRANSFORM& transform)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGTRANSFORM::ApplyToPoint(double& x, double& y)
 * @brief      Apply to point
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  x : point x (in/out)
 * @param[in]  y : point y (in/out)
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGTRANSFORM::ApplyToPoint(double& x, double& y)
 {
@@ -259,15 +277,15 @@ void GRPVECTORFILESVGTRANSFORM::ApplyToPoint(double& x, double& y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGTRANSFORM::ParseFromString(XCHAR* string)
 * @brief      Parse from string : "translate(10,20) rotate(45) scale(2)" ...
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  string : transform attribute value
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGTRANSFORM::ParseFromString(XCHAR* string)
 {
@@ -309,17 +327,17 @@ bool GRPVECTORFILESVGTRANSFORM::ParseFromString(XCHAR* string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGTRANSFORM::ParsePrimitive(XSTRING& name, XSTRING& args)
 * @brief      Parse primitive : compose one transform primitive into the matrix
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  name : primitive name (translate, scale, rotate, matrix, skewX, skewY)
 * @param[in]  args : arguments inside the parenthesis
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGTRANSFORM::ParsePrimitive(XSTRING& name, XSTRING& args)
 {
@@ -394,19 +412,19 @@ bool GRPVECTORFILESVGTRANSFORM::ParsePrimitive(XSTRING& name, XSTRING& args)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPVECTORFILESVGTRANSFORM::ExtractNumbers(XSTRING& args, double* values, int maxvalues, int& nvalues)
 * @brief      Extract numbers from a comma/space separated argument list
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  args : argument string
 * @param[in]  values : output array
 * @param[in]  maxvalues : output array capacity
-* @param[out] nvalues : number of values extracted
-*
-* @return     bool : true if is succesful.
-*
+* @param[in]  nvalues : number of values extracted
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGTRANSFORM::ExtractNumbers(XSTRING& args, double* values, int maxvalues, int& nvalues)
 {
@@ -438,12 +456,12 @@ bool GRPVECTORFILESVGTRANSFORM::ExtractNumbers(XSTRING& args, double* values, in
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPVECTORFILESVGTRANSFORM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGTRANSFORM::Clean()
 {

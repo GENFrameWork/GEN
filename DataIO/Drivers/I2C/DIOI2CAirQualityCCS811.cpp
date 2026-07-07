@@ -65,12 +65,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CAIRQUALITYCCS811::DIOI2CAIRQUALITYCCS811() : DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CAIRQUALITYCCS811::DIOI2CAIRQUALITYCCS811() : DIODEVICEI2C()
 {
@@ -79,12 +78,12 @@ DIOI2CAIRQUALITYCCS811::DIOI2CAIRQUALITYCCS811() : DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CAIRQUALITYCCS811::~DIOI2CAIRQUALITYCCS811()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CAIRQUALITYCCS811::~DIOI2CAIRQUALITYCCS811()
 {
@@ -95,15 +94,15 @@ DIOI2CAIRQUALITYCCS811::~DIOI2CAIRQUALITYCCS811()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::GetHW_ID(XBYTE& ID)
 * @brief      Get HWID
 * @ingroup    DATAIO
-*
-* @param[in]  ID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  ID : Identifier to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::GetHW_ID(XBYTE& ID)
 {
@@ -116,15 +115,15 @@ bool DIOI2CAIRQUALITYCCS811::GetHW_ID(XBYTE& ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::GetHW_Version(XBYTE& hwversion)
 * @brief      Get HW version
 * @ingroup    DATAIO
-*
-* @param[in]  hwversion :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  hwversion : Hwversion value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::GetHW_Version(XBYTE& hwversion)
 {
@@ -137,15 +136,15 @@ bool DIOI2CAIRQUALITYCCS811::GetHW_Version(XBYTE& hwversion)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::GetBoot_Version(XWORD& bootversion)
 * @brief      Get boot version
 * @ingroup    DATAIO
-*
-* @param[in]  bootversion :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  bootversion : Bootversion value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::GetBoot_Version(XWORD& bootversion)
 {
@@ -166,15 +165,15 @@ bool DIOI2CAIRQUALITYCCS811::GetBoot_Version(XWORD& bootversion)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::GetApp_Version(XWORD& appversion)
 * @brief      Get app version
 * @ingroup    DATAIO
-*
-* @param[in]  appversion :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  appversion : Application major version.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::GetApp_Version(XWORD& appversion)
 {
@@ -195,13 +194,13 @@ bool DIOI2CAIRQUALITYCCS811::GetApp_Version(XWORD& appversion)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::ResetDevice()
 * @brief      Reset device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::ResetDevice()
 {
@@ -219,13 +218,15 @@ bool DIOI2CAIRQUALITYCCS811::ResetDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XBYTE DIOI2CAIRQUALITYCCS811::GetStatus()
+* 
+* @fn         XBYTE DIOI2CAIRQUALITYCCS811::GetStatus(XBYTE& sensorstatus)
 * @brief      Get status
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @param[in]  sensorstatus : Sensorstatus value.
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOI2CAIRQUALITYCCS811::GetStatus(XBYTE& sensorstatus)
 {
@@ -239,13 +240,13 @@ XBYTE DIOI2CAIRQUALITYCCS811::GetStatus(XBYTE& sensorstatus)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::IsAppValid()
 * @brief      Is app valid
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::IsAppValid()
 {
@@ -263,7 +264,7 @@ bool DIOI2CAIRQUALITYCCS811::IsAppValid()
 * @brief      Is data available
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::IsDataAvailable()
@@ -277,13 +278,13 @@ bool DIOI2CAIRQUALITYCCS811::IsDataAvailable()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::HaveStatusError()
 * @brief      Have status error
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::HaveStatusError()
 {
@@ -296,13 +297,13 @@ bool DIOI2CAIRQUALITYCCS811::HaveStatusError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE DIOI2CAIRQUALITYCCS811::GetStatusErrorCode()
 * @brief      Get status error code
 * @ingroup    DATAIO
-*
-* @return     XBYTE :
-*
+* 
+* @return     XBYTE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE DIOI2CAIRQUALITYCCS811::GetStatusErrorCode()
 {
@@ -316,13 +317,13 @@ XBYTE DIOI2CAIRQUALITYCCS811::GetStatusErrorCode()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD DIOI2CAIRQUALITYCCS811::GetBaseline()
 * @brief      Get baseline
 * @ingroup    DATAIO
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOI2CAIRQUALITYCCS811::GetBaseline()
 {
@@ -338,15 +339,15 @@ XWORD DIOI2CAIRQUALITYCCS811::GetBaseline()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::SetBaseline(XWORD baseline)
 * @brief      Set baseline
 * @ingroup    DATAIO
-*
-* @param[in]  baseline :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  baseline : Baseline value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::SetBaseline(XWORD baseline)
 {
@@ -360,19 +361,15 @@ bool DIOI2CAIRQUALITYCCS811::SetBaseline(XWORD baseline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::SetDriveMode(XBYTE mode)
 * @brief      Set drive mode
 * @ingroup    DATAIO
-*
+* 
 * @param[in]  mode : Mode 0 = Idle
-*                    Mode 1 = read every 1s
-*                    Mode 2 = every 10s
-*                    Mode 3 = every 60s
-*                    Mode 4 = RAW mode
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::SetDriveMode(XBYTE mode)
 {
@@ -393,16 +390,16 @@ bool DIOI2CAIRQUALITYCCS811::SetDriveMode(XBYTE mode)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::SetEnvironmentalData(float relativehumidity, float temperature)
 * @brief      Set environmental data
 * @ingroup    DATAIO
-*
-* @param[in]  relativehumidity :
-* @param[in]  temperature :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  relativehumidity : Relativehumidity value.
+* @param[in]  temperature : Temperature value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::SetEnvironmentalData(float relativehumidity, float temperature)
 {
@@ -447,13 +444,13 @@ bool DIOI2CAIRQUALITYCCS811::SetEnvironmentalData(float relativehumidity, float 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         float DIOI2CAIRQUALITYCCS811::GetReferenceResistance()
 * @brief      Get reference resistance
 * @ingroup    DATAIO
-*
-* @return     float :
-*
+* 
+* @return     float : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 float DIOI2CAIRQUALITYCCS811::GetReferenceResistance()
 {
@@ -462,13 +459,13 @@ float DIOI2CAIRQUALITYCCS811::GetReferenceResistance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CAIRQUALITYCCS811::SetReferenceResistance(float referenceresistance)
 * @brief      Set reference resistance
 * @ingroup    DATAIO
-*
-* @param[in]  referenceresistance :
-*
+* 
+* @param[in]  referenceresistance : Referenceresistance value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CAIRQUALITYCCS811::SetReferenceResistance(float referenceresistance)
 {
@@ -477,16 +474,16 @@ void DIOI2CAIRQUALITYCCS811::SetReferenceResistance(float referenceresistance)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::ReadNTC(float& temperature, float& resistance)
 * @brief      Read NTC
 * @ingroup    DATAIO
-*
-* @param[out] temperature :
-* @param[out] resistance :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  temperature : Temperature value.
+* @param[in]  resistance : Resistance value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::ReadNTC(float& temperature, float& resistance)
 {
@@ -516,10 +513,10 @@ bool DIOI2CAIRQUALITYCCS811::ReadNTC(float& temperature, float& resistance)
 * @brief      Read data
 * @ingroup    DATAIO
 * 
-* @param[in]  TVOC : 
-* @param[in]  CO2 : 
+* @param[in]  TVOC : TVOC value.
+* @param[in]  CO2 : CO2 value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::ReadData(XWORD& TVOC, XWORD& CO2)
@@ -552,9 +549,9 @@ bool DIOI2CAIRQUALITYCCS811::ReadData(XWORD& TVOC, XWORD& CO2)
 * @brief      Set interrupt
 * @ingroup    DATAIO
 * 
-* @param[in]  activated : 
+* @param[in]  activated : Activated value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::SetInterrupt(bool activated)
@@ -580,13 +577,13 @@ bool DIOI2CAIRQUALITYCCS811::SetInterrupt(bool activated)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::End()
 {
@@ -597,13 +594,13 @@ bool DIOI2CAIRQUALITYCCS811::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::IniDevice()
 {
@@ -637,10 +634,10 @@ bool DIOI2CAIRQUALITYCCS811::IniDevice()
 * @brief      Read register
 * @ingroup    DATAIO
 * 
-* @param[in]  offset : 
-* @param[in]  data : 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::ReadRegister(XBYTE offset, XBYTE& data)
@@ -650,17 +647,17 @@ bool DIOI2CAIRQUALITYCCS811::ReadRegister(XBYTE offset, XBYTE& data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::ReadRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
 * @brief      Read register
 * @ingroup    DATAIO
-*
-* @param[in]  offset :
-* @param[in]  data :
-* @param[in]  sizedata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizedata : Sizedata value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::ReadRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
 {
@@ -681,16 +678,16 @@ bool DIOI2CAIRQUALITYCCS811::ReadRegister(XBYTE offset, XBYTE* data, XDWORD size
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::WriteRegister(XBYTE offset, XBYTE data)
 * @brief      Write register
 * @ingroup    DATAIO
-*
-* @param[in]  offset :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::WriteRegister(XBYTE offset, XBYTE data)
 {
@@ -699,17 +696,17 @@ bool DIOI2CAIRQUALITYCCS811::WriteRegister(XBYTE offset, XBYTE data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CAIRQUALITYCCS811::WriteRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
 * @brief      Write register
 * @ingroup    DATAIO
-*
-* @param[in]  offset :
-* @param[in]  data :
-* @param[in]  sizedata :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  offset : Offset value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizedata : Sizedata value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CAIRQUALITYCCS811::WriteRegister(XBYTE offset, XBYTE* data, XDWORD sizedata)
 {
@@ -729,12 +726,12 @@ bool DIOI2CAIRQUALITYCCS811::WriteRegister(XBYTE offset, XBYTE* data, XDWORD siz
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CAIRQUALITYCCS811::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CAIRQUALITYCCS811::Clean()
 {

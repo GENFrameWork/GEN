@@ -60,11 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEINIKEY::XFILEINIKEY()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINIKEY::XFILEINIKEY()
 {
@@ -73,12 +73,12 @@ XFILEINIKEY::XFILEINIKEY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEINIKEY::~XFILEINIKEY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINIKEY::~XFILEINIKEY()
 {
@@ -87,13 +87,13 @@ XFILEINIKEY::~XFILEINIKEY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILEINIKEY::GetKey()
 * @brief      Get key
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEINIKEY::GetKey()
 {
@@ -102,15 +102,15 @@ XSTRING* XFILEINIKEY::GetKey()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINIKEY::SetKey(XSTRING& key)
 * @brief      Set key
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINIKEY::SetKey(XSTRING& key)
 {
@@ -121,13 +121,13 @@ bool XFILEINIKEY::SetKey(XSTRING& key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILEINIKEY::GetValue()
 * @brief      Get value
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEINIKEY::GetValue()
 {
@@ -136,15 +136,15 @@ XSTRING* XFILEINIKEY::GetValue()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINIKEY::SetValue(XSTRING& value)
 * @brief      Set value
 * @ingroup    XUTILS
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINIKEY::SetValue(XSTRING& value)
 {
@@ -155,12 +155,12 @@ bool XFILEINIKEY::SetValue(XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEINIKEY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEINIKEY::Clean()
 {
@@ -173,11 +173,11 @@ void XFILEINIKEY::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEINISECTION::XFILEINISECTION()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINISECTION::XFILEINISECTION()
 {
@@ -186,12 +186,12 @@ XFILEINISECTION::XFILEINISECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEINISECTION::~XFILEINISECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINISECTION::~XFILEINISECTION()
 {
@@ -200,13 +200,13 @@ XFILEINISECTION::~XFILEINISECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XFILEINISECTION::GetName()
 * @brief      Get name
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEINISECTION::GetName()
 {
@@ -215,15 +215,15 @@ XSTRING* XFILEINISECTION::GetName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINISECTION::SetName(XSTRING& section)
 * @brief      Set name
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINISECTION::SetName(XSTRING& section)
 {
@@ -234,15 +234,15 @@ bool XFILEINISECTION::SetName(XSTRING& section)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEINIKEY* XFILEINISECTION::FindKey(XSTRING& key)
 * @brief      Find key
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-*
-* @return     XFILEINIKEY* :
-*
+* 
+* @param[in]  key : Key value.
+* 
+* @return     XFILEINIKEY* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINIKEY* XFILEINISECTION::FindKey(XSTRING& key)
 {
@@ -265,16 +265,16 @@ XFILEINIKEY* XFILEINISECTION::FindKey(XSTRING& key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINISECTION::GetKey(XSTRING& key,XSTRING& value)
 * @brief      Get key
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINISECTION::GetKey(XSTRING& key,XSTRING& value)
 {
@@ -289,16 +289,16 @@ bool XFILEINISECTION::GetKey(XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINISECTION::SetKey(XSTRING& key,XSTRING& value)
 * @brief      Set key
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINISECTION::SetKey(XSTRING& key,XSTRING& value)
 {
@@ -323,15 +323,15 @@ bool XFILEINISECTION::SetKey(XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINISECTION::DeleteKey(XSTRING& key)
 * @brief      Delete key
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINISECTION::DeleteKey(XSTRING& key)
 {
@@ -346,16 +346,16 @@ bool XFILEINISECTION::DeleteKey(XSTRING& key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINISECTION::GetNextKey(XSTRING& key,XSTRING& value)
 * @brief      Get next key
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINISECTION::GetNextKey(XSTRING& key,XSTRING& value)
 {
@@ -374,13 +374,13 @@ bool XFILEINISECTION::GetNextKey(XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINISECTION::ResetSelectionKey()
 * @brief      Reset selection key
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINISECTION::ResetSelectionKey()
 {
@@ -391,12 +391,12 @@ bool XFILEINISECTION::ResetSelectionKey()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEINISECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEINISECTION::Clean()
 {
@@ -420,8 +420,8 @@ void XFILEINISECTION::Clean()
 * @fn         XFILEINIREMARK::XFILEINIREMARK()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEINIREMARK::XFILEINIREMARK()
 {
   Clean();
@@ -434,8 +434,8 @@ XFILEINIREMARK::XFILEINIREMARK()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEINIREMARK::~XFILEINIREMARK()
 {
   Clean();
@@ -447,10 +447,10 @@ XFILEINIREMARK::~XFILEINIREMARK()
 * @fn         XFILEINI_TYPEREMARK XFILEINIREMARK::GetType()
 * @brief      Get type
 * @ingroup    XUTILS
-*
-* @return     XFILEINI_TYPEREMARK : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEINI_TYPEREMARK : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEINI_TYPEREMARK XFILEINIREMARK::GetType()
 {
   return type;
@@ -462,10 +462,10 @@ XFILEINI_TYPEREMARK XFILEINIREMARK::GetType()
 * @fn         void XFILEINIREMARK::SetType(XFILEINI_TYPEREMARK type)
 * @brief      Set type
 * @ingroup    XUTILS
-*
-* @param[in]  type : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  type : Type value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XFILEINIREMARK::SetType(XFILEINI_TYPEREMARK type)
 {
   this->type = type;
@@ -477,10 +477,10 @@ void XFILEINIREMARK::SetType(XFILEINI_TYPEREMARK type)
 * @fn         XDWORD XFILEINIREMARK::GetXPos()
 * @brief      Get X pos
 * @ingroup    XUTILS
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILEINIREMARK::GetXPos()
 {
   return xpos;
@@ -492,10 +492,10 @@ XDWORD XFILEINIREMARK::GetXPos()
 * @fn         void XFILEINIREMARK::SetXPos(XDWORD xpos)
 * @brief      Set X pos
 * @ingroup    XUTILS
-*
-* @param[in]  xpos : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  xpos : Xpos value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XFILEINIREMARK::SetXPos(XDWORD xpos)
 {
   this->xpos = xpos;
@@ -507,10 +507,10 @@ void XFILEINIREMARK::SetXPos(XDWORD xpos)
 * @fn         int XFILEINIREMARK::GetRelativeYPos()
 * @brief      Get relative Y pos
 * @ingroup    XUTILS
-*
-* @return     int : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int XFILEINIREMARK::GetRelativeYPos()
 {
   return relativeypos;
@@ -522,10 +522,10 @@ int XFILEINIREMARK::GetRelativeYPos()
 * @fn         void XFILEINIREMARK::SetRelativeYPos(int relativeypos)
 * @brief      Set relative Y pos
 * @ingroup    XUTILS
-*
-* @param[in]  relativeypos : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  relativeypos : Relativeypos value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XFILEINIREMARK::SetRelativeYPos(int relativeypos)
 {
   this->relativeypos = relativeypos;
@@ -537,10 +537,10 @@ void XFILEINIREMARK::SetRelativeYPos(int relativeypos)
 * @fn         XSTRING* XFILEINIREMARK::GetRelativeSection()
 * @brief      Get relative section
 * @ingroup    XUTILS
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEINIREMARK::GetRelativeSection()
 {
   return &relativesection;
@@ -552,10 +552,10 @@ XSTRING* XFILEINIREMARK::GetRelativeSection()
 * @fn         XSTRING* XFILEINIREMARK::GetRelativeKey()
 * @brief      Get relative key
 * @ingroup    XUTILS
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEINIREMARK::GetRelativeKey()
 {
   return &relativekey;
@@ -568,7 +568,7 @@ XSTRING* XFILEINIREMARK::GetRelativeKey()
 * @brief      Get text remark
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILEINIREMARK::GetTextRemark()
@@ -582,12 +582,12 @@ XSTRING* XFILEINIREMARK::GetTextRemark()
 * @fn         bool XFILEINIREMARK::Compare(XFILEINIREMARK* remake)
 * @brief      Compare
 * @ingroup    XUTILS
-*
-* @param[in]  remake : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  remake : Remake pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINIREMARK::Compare(XFILEINIREMARK* remake)
 {
   if(!remake)  return false;
@@ -606,12 +606,12 @@ bool XFILEINIREMARK::Compare(XFILEINIREMARK* remake)
 * @fn         bool XFILEINIREMARK::CopyTo(XFILEINIREMARK* remake)
 * @brief      Copy to
 * @ingroup    XUTILS
-*
-* @param[in]  remake : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  remake : Remake pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINIREMARK::CopyTo(XFILEINIREMARK* remake)
 {
   if(!remake) return false;
@@ -632,12 +632,12 @@ bool XFILEINIREMARK::CopyTo(XFILEINIREMARK* remake)
 * @fn         bool XFILEINIREMARK::CopyFrom(XFILEINIREMARK* remake)
 * @brief      Copy from
 * @ingroup    XUTILS
-*
-* @param[in]  remake : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  remake : Remake pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINIREMARK::CopyFrom(XFILEINIREMARK* remake)
 {
   if(!remake) return false;
@@ -659,8 +659,8 @@ bool XFILEINIREMARK::CopyFrom(XFILEINIREMARK* remake)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void XFILEINIREMARK::Clean()
 {
   type              = XFILEINI_TYPEREMARK_UNKNOWN;
@@ -680,11 +680,11 @@ void XFILEINIREMARK::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEINI::XFILEINI()
+* 
+* @fn         XFILEINI::XFILEINI(): XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINI::XFILEINI(): XFILETXT()
 {
@@ -693,13 +693,13 @@ XFILEINI::XFILEINI(): XFILETXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEINI::XFILEINI(XPATH& xpath)
+* 
+* @fn         XFILEINI::XFILEINI(XPATH& xpath): XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
+* 
+* @param[in]  XFILETXT : XFILETXT value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINI::XFILEINI(XPATH& xpath): XFILETXT()
 {
@@ -710,13 +710,13 @@ XFILEINI::XFILEINI(XPATH& xpath): XFILETXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILEINI::XFILEINI(XFILE* file)
+* 
+* @fn         XFILEINI::XFILEINI(XFILE* file): XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  file :
-*
+* 
+* @param[in]  XFILETXT : XFILETXT pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINI::XFILEINI(XFILE* file): XFILETXT()
 {
@@ -727,12 +727,12 @@ XFILEINI::XFILEINI(XFILE* file): XFILETXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEINI::~XFILEINI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINI::~XFILEINI()
 {
@@ -743,16 +743,16 @@ XFILEINI::~XFILEINI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::Open(XPATH& xpath,bool readonly)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  readonly :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  readonly : Readonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::Open(XPATH& xpath,bool readonly)
 {
@@ -765,13 +765,13 @@ bool XFILEINI::Open(XPATH& xpath,bool readonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::Close()
 {
@@ -795,12 +795,12 @@ bool XFILEINI::Close()
 * @fn         XFILEINISECTION* XFILEINI::GetSection(XSTRING& section)
 * @brief      Get section
 * @ingroup    XUTILS
-*
-* @param[in]  section : 
 * 
-* @return     XFILEINISECTION* : 
+* @param[in]  section : Section value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEINISECTION* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEINISECTION* XFILEINI::GetSection(XSTRING& section)
 {
   if(sections.IsEmpty()) return NULL;
@@ -829,12 +829,12 @@ XFILEINISECTION* XFILEINI::GetSection(XSTRING& section)
 * @fn         XFILEINISECTION* XFILEINI::GetSection(XCHAR* section)
 * @brief      Get section
 * @ingroup    XUTILS
-*
-* @param[in]  section : 
 * 
-* @return     XFILEINISECTION* : 
+* @param[in]  section : Section pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEINISECTION* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEINISECTION* XFILEINI::GetSection(XCHAR* section)
 {
   XSTRING _section(section);
@@ -844,15 +844,15 @@ XFILEINISECTION* XFILEINI::GetSection(XCHAR* section)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::SelectSection(XSTRING& section)
 * @brief      Select section
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::SelectSection(XSTRING& section)
 {
@@ -881,15 +881,15 @@ bool XFILEINI::SelectSection(XSTRING& section)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::SelectSection(XCHAR* section)
 * @brief      Select section
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::SelectSection(XCHAR* section)
 {
@@ -900,15 +900,15 @@ bool XFILEINI::SelectSection(XCHAR* section)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::CreateSection(XSTRING& section)
 * @brief      Create section
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::CreateSection(XSTRING& section)
 {
@@ -929,15 +929,15 @@ bool XFILEINI::CreateSection(XSTRING& section)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::CreateSection(XCHAR* section)
 * @brief      Create section
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::CreateSection(XCHAR* section)
 {
@@ -948,15 +948,15 @@ bool XFILEINI::CreateSection(XCHAR* section)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::DeleteSection(XSTRING& section)
 * @brief      Delete section
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::DeleteSection(XSTRING& section)
 {
@@ -988,15 +988,15 @@ bool XFILEINI::DeleteSection(XSTRING& section)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::DeleteSection(XCHAR* section)
 * @brief      Delete section
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::DeleteSection(XCHAR* section)
 {
@@ -1011,13 +1011,13 @@ bool XFILEINI::DeleteSection(XCHAR* section)
 * @fn         XFILEINIKEY* XFILEINI::GetKey(XSTRING& section,XSTRING& key)
 * @brief      Get key
 * @ingroup    XUTILS
-*
-* @param[in]  section : 
-* @param[in]  key : 
 * 
-* @return     XFILEINIKEY* : 
+* @param[in]  section : Section value.
+* @param[in]  key : Key value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XFILEINIKEY* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XFILEINIKEY* XFILEINI::GetKey(XSTRING& section,XSTRING& key)
 {
   XFILEINISECTION* _section = GetSection(section);
@@ -1031,16 +1031,16 @@ XFILEINIKEY* XFILEINI::GetKey(XSTRING& section,XSTRING& key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::DeleteKey(XSTRING& section,XSTRING& key)
 * @brief      Delete key
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* @param[in]  key : Key value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::DeleteKey(XSTRING& section,XSTRING& key)
 {
@@ -1054,16 +1054,16 @@ bool XFILEINI::DeleteKey(XSTRING& section,XSTRING& key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::DeleteKey(XCHAR* section,XSTRING& key)
 * @brief      Delete key
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* @param[in]  key : Key value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::DeleteKey(XCHAR* section,XSTRING& key)
 {
@@ -1074,16 +1074,16 @@ bool XFILEINI::DeleteKey(XCHAR* section,XSTRING& key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::DeleteKey(XSTRING& section,XCHAR* key)
 * @brief      Delete key
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* @param[in]  key : Key pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::DeleteKey(XSTRING& section,XCHAR* key)
 {
@@ -1096,16 +1096,16 @@ bool XFILEINI::DeleteKey(XSTRING& section,XCHAR* key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::DeleteKey(XCHAR* section,XCHAR* key)
 * @brief      Delete key
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* @param[in]  key : Key pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::DeleteKey(XCHAR* section,XCHAR* key)
 {
@@ -1117,17 +1117,17 @@ bool XFILEINI::DeleteKey(XCHAR* section,XCHAR* key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ReadValue(XSTRING& section,XSTRING& key,XSTRING& value)
 * @brief      Read value
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ReadValue(XSTRING& section,XSTRING& key,XSTRING& value)
 {
@@ -1148,17 +1148,17 @@ bool XFILEINI::ReadValue(XSTRING& section,XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ReadValue(XCHAR* section,XSTRING& key,XSTRING& value)
 * @brief      Read value
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ReadValue(XCHAR* section,XSTRING& key,XSTRING& value)
 {
@@ -1169,17 +1169,17 @@ bool XFILEINI::ReadValue(XCHAR* section,XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ReadValue(XSTRING& section,XCHAR* key,XSTRING& value)
 * @brief      Read value
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ReadValue(XSTRING& section,XCHAR* key,XSTRING& value)
 {
@@ -1190,17 +1190,17 @@ bool XFILEINI::ReadValue(XSTRING& section,XCHAR* key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ReadValue(XCHAR* section,XCHAR* key,XSTRING& value)
 * @brief      Read value
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ReadValue(XCHAR* section,XCHAR* key,XSTRING& value)
 {
@@ -1212,16 +1212,16 @@ bool XFILEINI::ReadValue(XCHAR* section,XCHAR* key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ReadValue(XSTRING& key,XSTRING& value)
 * @brief      Read value
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ReadValue(XSTRING& key,XSTRING& value)
 {
@@ -1240,16 +1240,16 @@ bool XFILEINI::ReadValue(XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ReadValue(XCHAR* key,XSTRING& value)
 * @brief      Read value
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ReadValue(XCHAR* key,XSTRING& value)
 {
@@ -1260,17 +1260,17 @@ bool XFILEINI::ReadValue(XCHAR* key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::WriteValue(XSTRING& section,XSTRING& key,XSTRING& value)
 * @brief      Write value
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::WriteValue(XSTRING& section,XSTRING& key,XSTRING& value)
 {
@@ -1288,17 +1288,17 @@ bool XFILEINI::WriteValue(XSTRING& section,XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::WriteValue(XCHAR* section,XSTRING& key,XSTRING& value)
 * @brief      Write value
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::WriteValue(XCHAR* section,XSTRING& key,XSTRING& value)
 {
@@ -1309,17 +1309,17 @@ bool XFILEINI::WriteValue(XCHAR* section,XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::WriteValue(XSTRING& section,XCHAR* key,XSTRING& value)
 * @brief      Write value
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::WriteValue(XSTRING& section,XCHAR* key,XSTRING& value)
 {
@@ -1330,17 +1330,17 @@ bool XFILEINI::WriteValue(XSTRING& section,XCHAR* key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::WriteValue(XCHAR* section,XCHAR* key,XSTRING& value)
 * @brief      Write value
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::WriteValue(XCHAR* section,XCHAR* key,XSTRING& value)
 {
@@ -1352,16 +1352,16 @@ bool XFILEINI::WriteValue(XCHAR* section,XCHAR* key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::WriteValue(XSTRING& key,XSTRING& value)
 * @brief      Write value
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::WriteValue(XSTRING& key,XSTRING& value)
 {
@@ -1378,16 +1378,16 @@ bool XFILEINI::WriteValue(XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::WriteValue(XCHAR* key,XSTRING& value)
 * @brief      Write value
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key pointer to use.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::WriteValue(XCHAR* key,XSTRING& value)
 {
@@ -1398,16 +1398,16 @@ bool XFILEINI::WriteValue(XCHAR* key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::GetNextKey(XSTRING& key,XSTRING& value)
 * @brief      Get next key
 * @ingroup    XUTILS
-*
-* @param[in]  key :
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::GetNextKey(XSTRING& key,XSTRING& value)
 {
@@ -1423,17 +1423,17 @@ bool XFILEINI::GetNextKey(XSTRING& key,XSTRING& value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ReadKeyMap(XSTRING& section,XFILEINIKEYMAP* keymap,int nkeymap)
 * @brief      Read key map
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  keymap :
-* @param[in]  nkeymap :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section value.
+* @param[in]  keymap : Keymap pointer to use.
+* @param[in]  nkeymap : Nkeymap value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ReadKeyMap(XSTRING& section,XFILEINIKEYMAP* keymap,int nkeymap)
 {
@@ -1452,17 +1452,17 @@ bool XFILEINI::ReadKeyMap(XSTRING& section,XFILEINIKEYMAP* keymap,int nkeymap)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ReadKeyMap(XCHAR* section,XFILEINIKEYMAP* keymap,int nkeymap)
 * @brief      Read key map
 * @ingroup    XUTILS
-*
-* @param[in]  section :
-* @param[in]  keymap :
-* @param[in]  nkeymap :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  section : Section pointer to use.
+* @param[in]  keymap : Keymap pointer to use.
+* @param[in]  nkeymap : Nkeymap value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ReadKeyMap(XCHAR* section,XFILEINIKEYMAP* keymap,int nkeymap)
 {
@@ -1473,13 +1473,13 @@ bool XFILEINI::ReadKeyMap(XCHAR* section,XFILEINIKEYMAP* keymap,int nkeymap)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ConvertFromLines()
 * @brief      Convert from lines
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ConvertFromLines()
 {
@@ -1609,13 +1609,13 @@ bool XFILEINI::ConvertFromLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::ConvertToLines()
 * @brief      Convert to lines
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ConvertToLines()
 {
@@ -1759,15 +1759,15 @@ bool XFILEINI::ConvertToLines()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::Serialization(bool read)
 * @brief      Serialization
 * @ingroup    XUTILS
-*
-* @param[in]  read :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  read : Read value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::Serialization(bool read)
 {
@@ -1803,13 +1803,13 @@ bool XFILEINI::Serialization(bool read)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEINI::DeleteAllSections()
 * @brief      Delete all sections
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::DeleteAllSections()
 {
@@ -1829,10 +1829,10 @@ bool XFILEINI::DeleteAllSections()
 * @fn         XVECTOR<XFILEINIREMARK*>* XFILEINI::GetRemarks()
 * @brief      Get remarks
 * @ingroup    XUTILS
-*
-* @return     XVECTOR<XFILEINIREMARK*>* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XVECTOR<XFILEINIREMARK*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XFILEINIREMARK*>* XFILEINI::GetRemarks()
 {
   return &remarks;
@@ -1844,10 +1844,10 @@ XVECTOR<XFILEINIREMARK*>* XFILEINI::GetRemarks()
 * @fn         bool XFILEINI::DeleteAllRemarks()
 * @brief      Delete all remarks
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::DeleteAllRemarks()
 {
   if(remarks.IsEmpty()) return false;
@@ -1864,13 +1864,13 @@ bool XFILEINI::DeleteAllRemarks()
 * @fn         bool XFILEINI::Line_IsSection(XSTRING& line, XSTRING& section)
 * @brief      Line is section
 * @ingroup    XUTILS
-*
-* @param[in]  line : 
-* @param[in]  section : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  line : Line value.
+* @param[in]  section : Section value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::Line_IsSection(XSTRING& line, XSTRING& section)
 {
   section.Empty();
@@ -1893,14 +1893,14 @@ bool XFILEINI::Line_IsSection(XSTRING& line, XSTRING& section)
 * @fn         bool XFILEINI::Line_IsKey(XSTRING& line, XSTRING& key, XSTRING& value)
 * @brief      Line is key
 * @ingroup    XUTILS
-*
-* @param[in]  line : 
-* @param[in]  key : 
-* @param[in]  value : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  line : Line value.
+* @param[in]  key : Key value.
+* @param[in]  value : Value value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::Line_IsKey(XSTRING& line, XSTRING& key, XSTRING& value)
 {
   key.Empty();
@@ -1935,13 +1935,13 @@ bool XFILEINI::Line_IsKey(XSTRING& line, XSTRING& key, XSTRING& value)
 * @fn         bool XFILEINI::Line_GetRemark(XSTRING& line, XFILEINIREMARK& remark)
 * @brief      Line get remark
 * @ingroup    XUTILS
-*
-* @param[in]  line : 
-* @param[in]  remark : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  line : Line value.
+* @param[in]  remark : Remark value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::Line_GetRemark(XSTRING& line, XFILEINIREMARK& remark)
 {
   if(line.IsEmpty()) return false;
@@ -1972,12 +1972,12 @@ bool XFILEINI::Line_GetRemark(XSTRING& line, XFILEINIREMARK& remark)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEINI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEINI::Clean()
 {

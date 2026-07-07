@@ -59,8 +59,8 @@
 * @fn         UI_TEXT::UI_TEXT()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_TEXT::UI_TEXT()    
 { 
   Clean();                            
@@ -73,8 +73,8 @@ UI_TEXT::UI_TEXT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_TEXT::~UI_TEXT()    
 { 
   Clean();                            
@@ -86,10 +86,10 @@ UI_TEXT::~UI_TEXT()
 * @fn         XSTRING* UI_TEXT::GetName()
 * @brief      Get name
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_TEXT::GetName()
 {
   return &name;
@@ -101,10 +101,10 @@ XSTRING* UI_TEXT::GetName()
 * @fn         XSTRING* UI_TEXT::GetText()
 * @brief      Get text
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_TEXT::GetText()
 {
   return &text;
@@ -117,8 +117,8 @@ XSTRING* UI_TEXT::GetText()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_TEXT::Clean()
 {
  

@@ -60,11 +60,11 @@ XTHREADSCOLLECTEDMANAGER* XTHREADSCOLLECTEDMANAGER::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADCOLLECTED::XTHREADCOLLECTED()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADCOLLECTED::XTHREADCOLLECTED()
 {
@@ -75,16 +75,16 @@ XTHREADCOLLECTED::XTHREADCOLLECTED()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XTHREADCOLLECTED::XTHREADCOLLECTED(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
+* 
+* @fn         XTHREADCOLLECTED::XTHREADCOLLECTED(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-* @param[in]  ID :
-* @param[in]  function :
-* @param[in]  param :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADCOLLECTED::XTHREADCOLLECTED(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
 {
@@ -101,12 +101,12 @@ XTHREADCOLLECTED::XTHREADCOLLECTED(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUN
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADCOLLECTED::~XTHREADCOLLECTED()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADCOLLECTED::~XTHREADCOLLECTED()
 {
@@ -118,15 +118,15 @@ XTHREADCOLLECTED::~XTHREADCOLLECTED()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADCOLLECTED::Ini(bool run)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    XUTILS
-*
-* @param[in]  run :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  run : Run value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADCOLLECTED::Ini(bool run)
 {
@@ -152,13 +152,13 @@ bool XTHREADCOLLECTED::Ini(bool run)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::Wait(int milliseconds)
 * @brief      Wait
 * @ingroup    XUTILS
-*
-* @param[in]  milliseconds :
-*
+* 
+* @param[in]  milliseconds : Milliseconds value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::Wait(int milliseconds)
 {
@@ -173,13 +173,13 @@ void XTHREADCOLLECTED::Wait(int milliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADCOLLECTED::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADCOLLECTED::End()
 {
@@ -203,13 +203,13 @@ bool XTHREADCOLLECTED::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADCOLLECTED::IsRunning()
 * @brief      Is running
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADCOLLECTED::IsRunning()
 {
@@ -221,15 +221,15 @@ bool XTHREADCOLLECTED::IsRunning()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADCOLLECTED::Run(bool activate)
-* @brief      Run
+* @brief      Run operation
 * @ingroup    XUTILS
-*
-* @param[in]  activate :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  activate : Activate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADCOLLECTED::Run(bool activate)
 {
@@ -251,13 +251,13 @@ bool XTHREADCOLLECTED::Run(bool activate)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADCOLLECTED::Exit()
 * @brief      Exit
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADCOLLECTED::Exit()
 {
@@ -269,13 +269,13 @@ bool XTHREADCOLLECTED::Exit()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADGROUPID XTHREADCOLLECTED::GetGroupID()
 * @brief      Get group ID
 * @ingroup    XUTILS
-*
-* @return     XTHREADGROUPID :
-*
+* 
+* @return     XTHREADGROUPID : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADGROUPID XTHREADCOLLECTED::GetGroupID()
 {
@@ -284,13 +284,13 @@ XTHREADGROUPID XTHREADCOLLECTED::GetGroupID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::SetGroupID(XTHREADGROUPID groupID)
 * @brief      Set group ID
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetGroupID(XTHREADGROUPID groupID)
 {
@@ -299,13 +299,13 @@ void XTHREADCOLLECTED::SetGroupID(XTHREADGROUPID groupID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* XTHREADCOLLECTED::GetID()
 * @brief      Get ID
 * @ingroup    XUTILS
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XTHREADCOLLECTED::GetID()
 {
@@ -321,13 +321,13 @@ XSTRING* XTHREADCOLLECTED::GetID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADFUNCTION XTHREADCOLLECTED::GetFunction()
 * @brief      Get function
 * @ingroup    XUTILS
-*
-* @return     XTHREADFUNCTION :
-*
+* 
+* @return     XTHREADFUNCTION : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADFUNCTION  XTHREADCOLLECTED::GetFunction()
 {
@@ -343,13 +343,13 @@ XTHREADFUNCTION  XTHREADCOLLECTED::GetFunction()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::SetFunction(XTHREADFUNCTION function)
 * @brief      Set function
 * @ingroup    XUTILS
-*
-* @param[in]  function :
-*
+* 
+* @param[in]  function : Function value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetFunction(XTHREADFUNCTION function)
 {
@@ -358,13 +358,13 @@ void XTHREADCOLLECTED::SetFunction(XTHREADFUNCTION function)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* XTHREADCOLLECTED::GetParam()
 * @brief      Get param
 * @ingroup    XUTILS
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* XTHREADCOLLECTED::GetParam()
 {
@@ -374,13 +374,13 @@ void* XTHREADCOLLECTED::GetParam()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::SetParam(void* param)
 * @brief      Set param
 * @ingroup    XUTILS
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetParam(void* param)
 {
@@ -389,13 +389,13 @@ void XTHREADCOLLECTED::SetParam(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XTHREADCOLLECTED::GetWaitYield()
 * @brief      Get wait yield
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XTHREADCOLLECTED::GetWaitYield()
 {
@@ -405,13 +405,13 @@ XDWORD XTHREADCOLLECTED::GetWaitYield()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::SetWaitYield(XDWORD waityield)
 * @brief      Set wait yield
 * @ingroup    XUTILS
-*
-* @param[in]  waityield :
-*
+* 
+* @param[in]  waityield : Waityield value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetWaitYield(XDWORD waityield)
 {
@@ -421,13 +421,13 @@ void XTHREADCOLLECTED::SetWaitYield(XDWORD waityield)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADPRIORITY XTHREADCOLLECTED::GetPriority()
 * @brief      Get priority
 * @ingroup    XUTILS
-*
-* @return     XTHREADPRIORITY :
-*
+* 
+* @return     XTHREADPRIORITY : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADPRIORITY XTHREADCOLLECTED::GetPriority()
 {
@@ -437,13 +437,13 @@ XTHREADPRIORITY XTHREADCOLLECTED::GetPriority()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::SetPriority(XTHREADPRIORITY priority)
 * @brief      Set priority
 * @ingroup    XUTILS
-*
-* @param[in]  priority :
-*
+* 
+* @param[in]  priority : Priority value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetPriority(XTHREADPRIORITY priority)
 {
@@ -453,13 +453,13 @@ void XTHREADCOLLECTED::SetPriority(XTHREADPRIORITY priority)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XTHREADCOLLECTED::GetStackSize()
 * @brief      Get stack size
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XTHREADCOLLECTED::GetStackSize()
 {
@@ -468,13 +468,13 @@ XDWORD XTHREADCOLLECTED::GetStackSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::SetStackSize(XDWORD stacksize)
 * @brief      Set stack size
 * @ingroup    XUTILS
-*
-* @param[in]  stacksize :
-*
+* 
+* @param[in]  stacksize : Stacksize value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetStackSize(XDWORD stacksize)
 {
@@ -483,13 +483,13 @@ void XTHREADCOLLECTED::SetStackSize(XDWORD stacksize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADCOLLECTED::IsInFunction()
 * @brief      Is in function
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADCOLLECTED::IsInFunction()
 {
@@ -499,13 +499,13 @@ bool XTHREADCOLLECTED::IsInFunction()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::SetIsInFunction(bool isinfunction)
 * @brief      Set is in function
 * @ingroup    XUTILS
-*
-* @param[in]  isinfunction :
-*
+* 
+* @param[in]  isinfunction : Isinfunction value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetIsInFunction(bool isinfunction)
 {
@@ -514,13 +514,13 @@ void XTHREADCOLLECTED::SetIsInFunction(bool isinfunction)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADSTATUS XTHREADCOLLECTED::GetStatus()
 * @brief      Get status
 * @ingroup    XUTILS
-*
-* @return     XTHREADSTATUS :
-*
+* 
+* @return     XTHREADSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSTATUS XTHREADCOLLECTED::GetStatus()
 {
@@ -532,13 +532,13 @@ XTHREADSTATUS XTHREADCOLLECTED::GetStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::SetStatus(XTHREADSTATUS status)
 * @brief      Set status
 * @ingroup    XUTILS
-*
-* @param[in]  status :
-*
+* 
+* @param[in]  status : Status value to read or update.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetStatus(XTHREADSTATUS status)
 {
@@ -547,13 +547,13 @@ void XTHREADCOLLECTED::SetStatus(XTHREADSTATUS status)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADCOLLECTED::WaitToEnd()
 * @brief      Wait to end
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADCOLLECTED::WaitToEnd()
 {
@@ -567,12 +567,12 @@ bool XTHREADCOLLECTED::WaitToEnd()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADCOLLECTED::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::Clean()
 {
@@ -600,13 +600,13 @@ void XTHREADCOLLECTED::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADSCOLLECTED::XTHREADSCOLLECTED(XTHREADGROUPID groupID)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  XTHREADGROUPID :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSCOLLECTED::XTHREADSCOLLECTED(XTHREADGROUPID groupID)
 {
@@ -629,11 +629,11 @@ XTHREADSCOLLECTED::XTHREADSCOLLECTED(XTHREADGROUPID groupID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XTHREADSCOLLECTEDMANAGER::XTHREADSCOLLECTED::XTHREADSCOLLECTED()
+* 
+* @fn         XTHREADSCOLLECTED::XTHREADSCOLLECTED()
 * @brief      XTHREADSCOLLECTED::XTHREADSCOLLECTED
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSCOLLECTED::XTHREADSCOLLECTED()
 {
@@ -642,12 +642,12 @@ XTHREADSCOLLECTED::XTHREADSCOLLECTED()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADSCOLLECTED::~XTHREADSCOLLECTED()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSCOLLECTED::~XTHREADSCOLLECTED()
 {
@@ -668,13 +668,13 @@ XTHREADSCOLLECTED::~XTHREADSCOLLECTED()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADGROUPID XTHREADSCOLLECTED::GetGroupID()
 * @brief      Get group ID
 * @ingroup    XUTILS
-*
-* @return     XTHREADGROUPID :
-*
+* 
+* @return     XTHREADGROUPID : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADGROUPID XTHREADSCOLLECTED::GetGroupID()
 {
@@ -683,13 +683,13 @@ XTHREADGROUPID XTHREADSCOLLECTED::GetGroupID()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADSCOLLECTED::SetGroupID(XTHREADGROUPID groupID)
 * @brief      Set group ID
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADSCOLLECTED::SetGroupID(XTHREADGROUPID groupID)
 {
@@ -698,18 +698,18 @@ void XTHREADSCOLLECTED::SetGroupID(XTHREADGROUPID groupID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADCOLLECTED* XTHREADSCOLLECTED::Create(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-* @param[in]  ID :
-* @param[in]  function :
-* @param[in]  param :
-*
-* @return     XTHREADCOLLECTED* :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  param : Param pointer to use.
+* 
+* @return     XTHREADCOLLECTED* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADCOLLECTED* XTHREADSCOLLECTED::Create(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
 {
@@ -756,16 +756,16 @@ XTHREADCOLLECTED* XTHREADSCOLLECTED::Create(XTHREADGROUPID groupID, XCHAR* ID, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTED::Delete(XTHREADGROUPID groupID, XTHREADCOLLECTED* xthreadcollected)
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-* @param[in]  xthreadcollected :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  xthreadcollected : Xthreadcollected pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTED::Delete(XTHREADGROUPID groupID, XTHREADCOLLECTED* xthreadcollected)
 {
@@ -815,13 +815,13 @@ bool XTHREADSCOLLECTED::Delete(XTHREADGROUPID groupID, XTHREADCOLLECTED* xthread
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTED::ExitAll()
 * @brief      Exit all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTED::ExitAll()
 {
@@ -842,13 +842,13 @@ bool XTHREADSCOLLECTED::ExitAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTED::DeleteAll()
 * @brief      Delete all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTED::DeleteAll()
 {
@@ -866,15 +866,13 @@ bool XTHREADSCOLLECTED::DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         static void XTHREADSCOLLECTED::ThreadRunFunction(void* param)
+* 
+* @fn         void XTHREADSCOLLECTED::ThreadRunFunction(void* param)
 * @brief      Thread run function
 * @ingroup    XUTILS
-*
-* @param[in]  param :
-*
-* @return     static :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADSCOLLECTED::ThreadRunFunction(void* param)
 {
@@ -912,15 +910,15 @@ void XTHREADSCOLLECTED::ThreadRunFunction(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTED::GetGroupThreadIDString(XSTRING& stringID)
 * @brief      Get group thread ID string
 * @ingroup    XUTILS
-*
-* @param[in]  stringID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  stringID : String ID value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTED::GetGroupThreadIDString(XSTRING& stringID)
 {
@@ -962,12 +960,12 @@ bool XTHREADSCOLLECTED::GetGroupThreadIDString(XSTRING& stringID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADSCOLLECTED::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADSCOLLECTED::Clean()
 {
@@ -982,13 +980,13 @@ void XTHREADSCOLLECTED::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADSCOLLECTEDMANAGER& XTHREADSCOLLECTEDMANAGER::GetInstance()
 * @brief      Get instance
 * @ingroup    XUTILS
-*
-* @return     XTHREADSCOLLECTEDMANAGER& :
-*
+* 
+* @return     XTHREADSCOLLECTEDMANAGER& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSCOLLECTEDMANAGER& XTHREADSCOLLECTEDMANAGER::GetInstance()
 {
@@ -999,13 +997,13 @@ XTHREADSCOLLECTEDMANAGER& XTHREADSCOLLECTEDMANAGER::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTEDMANAGER::DelInstance()
 * @brief      Del instance
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTEDMANAGER::DelInstance()
 {
@@ -1024,15 +1022,15 @@ bool XTHREADSCOLLECTEDMANAGER::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTEDMANAGER::ActivateGroup(XTHREADGROUPID groupID)
 * @brief      Activate group
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  groupID : Group ID value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTEDMANAGER::ActivateGroup(XTHREADGROUPID groupID)
 {
@@ -1042,15 +1040,15 @@ bool XTHREADSCOLLECTEDMANAGER::ActivateGroup(XTHREADGROUPID groupID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTEDMANAGER::DeactivateGroup(XTHREADGROUPID groupID)
 * @brief      Deactivate group
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  groupID : Group ID value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTEDMANAGER::DeactivateGroup(XTHREADGROUPID groupID)
 {
@@ -1060,15 +1058,15 @@ bool XTHREADSCOLLECTEDMANAGER::DeactivateGroup(XTHREADGROUPID groupID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTEDMANAGER::IsActivateGroup(XTHREADGROUPID groupID)
 * @brief      Is activate group
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  groupID : Group ID value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTEDMANAGER::IsActivateGroup(XTHREADGROUPID groupID)
 {
@@ -1083,15 +1081,15 @@ bool XTHREADSCOLLECTEDMANAGER::IsActivateGroup(XTHREADGROUPID groupID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADSCOLLECTED* XTHREADSCOLLECTEDMANAGER::GetThreadsCollectedByGroupID(XTHREADGROUPID groupID)
 * @brief      Get threads collected by group ID
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-*
-* @return     XTHREADSCOLLECTED* :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* 
+* @return     XTHREADSCOLLECTED* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSCOLLECTED* XTHREADSCOLLECTEDMANAGER::GetThreadsCollectedByGroupID(XTHREADGROUPID groupID)
 {
@@ -1115,18 +1113,18 @@ XTHREADSCOLLECTED* XTHREADSCOLLECTEDMANAGER::GetThreadsCollectedByGroupID(XTHREA
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADCOLLECTED* XTHREADSCOLLECTEDMANAGER::CreateThread(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
 * @brief      Create thread
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-* @param[in]  ID :
-* @param[in]  function :
-* @param[in]  param :
-*
-* @return     XTHREADCOLLECTED* :
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  param : Param pointer to use.
+* 
+* @return     XTHREADCOLLECTED* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADCOLLECTED* XTHREADSCOLLECTEDMANAGER::CreateThread(XTHREADGROUPID groupID, XCHAR* ID, XTHREADFUNCTION function, void* param)
 {
@@ -1165,16 +1163,16 @@ XTHREADCOLLECTED* XTHREADSCOLLECTEDMANAGER::CreateThread(XTHREADGROUPID groupID,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTEDMANAGER::DeleteThread(XTHREADGROUPID groupID, XTHREADCOLLECTED* xthreadcollected)
 * @brief      Delete thread
 * @ingroup    XUTILS
-*
-* @param[in]  groupID :
-* @param[in]  xthreadcollected :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  xthreadcollected : Xthreadcollected pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTEDMANAGER::DeleteThread(XTHREADGROUPID groupID, XTHREADCOLLECTED* xthreadcollected)
 {
@@ -1210,13 +1208,13 @@ bool XTHREADSCOLLECTEDMANAGER::DeleteThread(XTHREADGROUPID groupID, XTHREADCOLLE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XTHREADSCOLLECTEDMANAGER::DeleteAll()
 * @brief      Delete all
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTHREADSCOLLECTEDMANAGER::DeleteAll()
 {
@@ -1234,11 +1232,11 @@ bool XTHREADSCOLLECTEDMANAGER::DeleteAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADSCOLLECTEDMANAGER::XTHREADSCOLLECTEDMANAGER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSCOLLECTEDMANAGER::XTHREADSCOLLECTEDMANAGER()
 {
@@ -1249,12 +1247,12 @@ XTHREADSCOLLECTEDMANAGER::XTHREADSCOLLECTEDMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREADSCOLLECTEDMANAGER::~XTHREADSCOLLECTEDMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREADSCOLLECTEDMANAGER::~XTHREADSCOLLECTEDMANAGER()
 {
@@ -1269,12 +1267,12 @@ XTHREADSCOLLECTEDMANAGER::~XTHREADSCOLLECTEDMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XTHREADSCOLLECTEDMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADSCOLLECTEDMANAGER::Clean()
 {

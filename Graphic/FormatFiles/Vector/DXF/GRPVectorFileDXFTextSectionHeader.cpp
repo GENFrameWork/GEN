@@ -388,9 +388,9 @@ GRPVECTORFILEDXFTEXTSECTIONHEADER::~GRPVECTORFILEDXFTEXTSECTIONHEADER()
 * @brief      Is known variable
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
+* @param[in]  namevar : Namevar value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONHEADER::IsKnownVariable(XSTRING& namevar)
@@ -417,10 +417,10 @@ bool GRPVECTORFILEDXFTEXTSECTIONHEADER::IsKnownVariable(XSTRING& namevar)
 * @brief      Add variable
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
-* @param[in]  variant : 
+* @param[in]  namevar : Namevar pointer to use.
+* @param[in]  variant : Variant pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONHEADER::AddVariable(XCHAR* namevar, XVARIANT* variant)
@@ -453,7 +453,7 @@ bool GRPVECTORFILEDXFTEXTSECTIONHEADER::AddVariable(XCHAR* namevar, XVARIANT* va
 * @brief      Get variables
 * @ingroup    GRAPHIC
 * 
-* @return     XMAP<XSTRING*, : 
+* @return     XMAP<XSTRING*, XVARIANT*>* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMAP<XSTRING*, XVARIANT*>* GRPVECTORFILEDXFTEXTSECTIONHEADER::GetVariables()
@@ -468,9 +468,9 @@ XMAP<XSTRING*, XVARIANT*>* GRPVECTORFILEDXFTEXTSECTIONHEADER::GetVariables()
 * @brief      Get variable
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
+* @param[in]  namevar : Namevar pointer to use.
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* GRPVECTORFILEDXFTEXTSECTIONHEADER::GetVariable(XCHAR* namevar)
@@ -502,9 +502,9 @@ XVARIANT* GRPVECTORFILEDXFTEXTSECTIONHEADER::GetVariable(XCHAR* namevar)
 * @brief      Delete variable
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
+* @param[in]  namevar : Namevar pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONHEADER::DeleteVariable(XCHAR* namevar)
@@ -536,9 +536,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONHEADER::DeleteVariable(XCHAR* namevar)
 * @brief      Delete all variables
 * @ingroup    GRAPHIC
 * 
-* @param[in]  withcontens : 
+* @param[in]  withcontens : Withcontens value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONHEADER::DeleteAllVariables(bool withcontens)
@@ -567,9 +567,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONHEADER::DeleteAllVariables(bool withcontens)
 * @brief      Get variable remark
 * @ingroup    GRAPHIC
 * 
-* @param[in]  namevar : 
+* @param[in]  namevar : Namevar value.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* GRPVECTORFILEDXFTEXTSECTIONHEADER::GetVariableRemark(XSTRING& namevar)
@@ -596,12 +596,12 @@ XCHAR* GRPVECTORFILEDXFTEXTSECTIONHEADER::GetVariableRemark(XSTRING& namevar)
 * @brief      Parser variable
 * @ingroup    GRAPHIC
 * 
-* @param[in]  file : 
-* @param[in]  part : 
-* @param[in]  namevar : 
-* @param[in]  ... : 
+* @param[in]  file : File object to use.
+* @param[in]  part : Part pointer to use.
+* @param[in]  namevar : Namevar pointer to use.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONHEADER::ParserVariable(XFILETXT* file, GRPVECTORFILEDXFTEXTPART* part, XCHAR* namevar, ...)
@@ -676,9 +676,9 @@ bool GRPVECTORFILEDXFTEXTSECTIONHEADER::ParserVariable(XFILETXT* file, GRPVECTOR
 * @brief      Parser text section
 * @ingroup    GRAPHIC
 * 
-* @param[in]  fileTXT : 
+* @param[in]  fileTXT : File TXT pointer to use.
 * 
-* @return     GRPVECTORFILERESULT : 
+* @return     GRPVECTORFILERESULT : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONHEADER::ParserTextSection(XFILETXT* fileTXT)
@@ -810,7 +810,7 @@ GRPVECTORFILERESULT GRPVECTORFILEDXFTEXTSECTIONHEADER::ParserTextSection(XFILETX
 * @brief      Show trace all variables
 * @ingroup    GRAPHIC
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFTEXTSECTIONHEADER::ShowTraceAllVariables()

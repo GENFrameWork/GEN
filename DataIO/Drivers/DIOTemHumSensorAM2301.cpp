@@ -65,12 +65,12 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOTEMHUMSENSORAM2301::DIOTEMHUMSENSORAM2301(int pindata, bool activatecache)
+* @fn         DIOTEMHUMSENSORAM2301::DIOTEMHUMSENSORAM2301(int pindata, bool activatecache) : DIODEVICE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  pindata : 
-* @param[in]  activatecache : 
+* @param[in]  pindata : Pindata value.
+* @param[in]  DIODEVICE : DIODEVICE value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOTEMHUMSENSORAM2301::DIOTEMHUMSENSORAM2301(int pindata, bool activatecache) : DIODEVICE()
@@ -119,12 +119,12 @@ DIOTEMHUMSENSORAM2301::~DIOTEMHUMSENSORAM2301()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOTEMHUMSENSORAM2301::Ini(int cadenceread)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @param[in]  cadenceread : 
+* @param[in]  cadenceread : Cadenceread value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOTEMHUMSENSORAM2301::Ini(int cadenceread)
@@ -145,7 +145,7 @@ bool DIOTEMHUMSENSORAM2301::Ini(int cadenceread)
 * @brief      Get pin data
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOTEMHUMSENSORAM2301::GetPinData()
@@ -160,10 +160,10 @@ int DIOTEMHUMSENSORAM2301::GetPinData()
 * @brief      Read from cache
 * @ingroup    DATAIO
 * 
-* @param[in]  temperature : 
-* @param[in]  humidity : 
+* @param[in]  temperature : Temperature value.
+* @param[in]  humidity : Humidity value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOTEMHUMSENSORAM2301::ReadFromCache(float& temperature, float& humidity)
@@ -190,10 +190,10 @@ bool DIOTEMHUMSENSORAM2301::ReadFromCache(float& temperature, float& humidity)
 * @brief      Read direct
 * @ingroup    DATAIO
 * 
-* @param[in]  temperature : 
-* @param[in]  humidity : 
+* @param[in]  temperature : Temperature value.
+* @param[in]  humidity : Humidity value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOTEMHUMSENSORAM2301::ReadDirect(float& temperature, float& humidity)
@@ -269,10 +269,10 @@ bool DIOTEMHUMSENSORAM2301::ReadDirect(float& temperature, float& humidity)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOTEMHUMSENSORAM2301::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOTEMHUMSENSORAM2301::End()
@@ -291,11 +291,11 @@ bool DIOTEMHUMSENSORAM2301::End()
 * @brief      Wait to
 * @ingroup    DATAIO
 * 
-* @param[in]  tohigh : 
-* @param[in]  timeout : 
-* @param[in]  timeelapsed : 
+* @param[in]  tohigh : Tohigh value.
+* @param[in]  timeout : Timeout value.
+* @param[in]  timeelapsed : Timeelapsed pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOTEMHUMSENSORAM2301::WaitTo(bool tohigh, int timeout, int* timeelapsed)
@@ -340,7 +340,7 @@ bool DIOTEMHUMSENSORAM2301::WaitTo(bool tohigh, int timeout, int* timeelapsed)
 * @brief      Thread run function
 * @ingroup    DATAIO
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOTEMHUMSENSORAM2301::ThreadRunFunction(void* param)

@@ -66,9 +66,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DVECTORFILERENDERAGG::GRP2DVECTORFILERENDERAGG()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVECTORFILERENDERAGG::GRP2DVECTORFILERENDERAGG()
 {
@@ -77,10 +79,12 @@ GRP2DVECTORFILERENDERAGG::GRP2DVECTORFILERENDERAGG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DVECTORFILERENDERAGG::~GRP2DVECTORFILERENDERAGG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVECTORFILERENDERAGG::~GRP2DVECTORFILERENDERAGG()
 {
@@ -91,12 +95,16 @@ GRP2DVECTORFILERENDERAGG::~GRP2DVECTORFILERENDERAGG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILERENDERAGG::Render(GRPVECTORFILE* file, GRP2DCANVAS* canvas)
 * @brief      Render : paint the vector file fitted into the whole canvas, choosing the backend by file type
 * @ingroup    GRAPHIC
+* 
 * @param[in]  file : loaded vector file (any supported type)
 * @param[in]  canvas : target canvas
-* @return     bool : true if a backend handled the file.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILERENDERAGG::Render(GRPVECTORFILE* file, GRP2DCANVAS* canvas)
 {
@@ -121,16 +129,20 @@ bool GRP2DVECTORFILERENDERAGG::Render(GRPVECTORFILE* file, GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILERENDERAGG::Render(GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 * @brief      Render : paint the vector file fitted into the target rectangle, choosing the backend by file type
 * @ingroup    GRAPHIC
+* 
 * @param[in]  file : loaded vector file (any supported type)
 * @param[in]  canvas : target canvas
 * @param[in]  targetx : target rectangle x
 * @param[in]  targety : target rectangle y
 * @param[in]  targetwidth : target rectangle width
 * @param[in]  targetheight : target rectangle height
-* @return     bool : true if a backend handled the file.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILERENDERAGG::Render(GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 {
@@ -155,17 +167,20 @@ bool GRP2DVECTORFILERENDERAGG::Render(GRPVECTORFILE* file, GRP2DCANVAS* canvas, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILERENDERAGG::RenderCached(GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
-* @brief      Render cached : rasterize any supported vector file once into a transparent offscreen bitmap and blit it
-*             on every frame. The cache is owned by this common front end; SVG and DXF backends only render vectors.
+* @brief      Render cached : rasterize any supported vector file once into a transparent offscreen bitmap and blit it on every frame. The cache is owned by this common front end; SVG and DXF backends only render vectors.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  file : loaded vector file (any supported type)
 * @param[in]  canvas : target canvas
 * @param[in]  targetx : target rectangle x
 * @param[in]  targety : target rectangle y
 * @param[in]  targetwidth : target rectangle width
 * @param[in]  targetheight : target rectangle height
-* @return     bool : true if a backend handled the file.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILERENDERAGG::RenderCached(GRPVECTORFILE* file, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 {
@@ -229,15 +244,19 @@ bool GRP2DVECTORFILERENDERAGG::RenderCached(GRPVECTORFILE* file, GRP2DCANVAS* ca
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILERENDERAGG::BuildCacheBitmap(GRPVECTORFILE* file, GRP2DCANVAS* referencecanvas, double width, double height)
 * @brief      Build cache bitmap : rasterize the vector file into a transparent offscreen canvas and capture it
 * @note       INTERNAL. Common CANVAS cache path shared by SVG and DXF.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  file : loaded vector file
 * @param[in]  referencecanvas : destination canvas (its pixel format is reused for the offscreen)
 * @param[in]  width : sprite width
 * @param[in]  height : sprite height
-* @return     bool : true if the cache bitmap was built.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILERENDERAGG::BuildCacheBitmap(GRPVECTORFILE* file, GRP2DCANVAS* referencecanvas, double width, double height)
 {
@@ -277,9 +296,11 @@ bool GRP2DVECTORFILERENDERAGG::BuildCacheBitmap(GRPVECTORFILE* file, GRP2DCANVAS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILERENDERAGG::InvalidateCache()
 * @brief      Invalidate cache : free the common cached bitmap and force a new rasterization on the next RenderCached
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILERENDERAGG::InvalidateCache()
 {
@@ -300,10 +321,13 @@ void GRP2DVECTORFILERENDERAGG::InvalidateCache()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILERENDERAGG::GetBackgroundIsDark()
 * @brief      Get background is dark (DXF backend)
 * @ingroup    GRAPHIC
-* @return     bool : true if the DXF backend treats the background as dark.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILERENDERAGG::GetBackgroundIsDark()
 {
@@ -316,10 +340,13 @@ bool GRP2DVECTORFILERENDERAGG::GetBackgroundIsDark()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILERENDERAGG::SetBackgroundIsDark(bool isdark)
 * @brief      Set background is dark (DXF backend; ignored for SVG)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  isdark : true if the destination background is dark
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILERENDERAGG::SetBackgroundIsDark(bool isdark)
 {
@@ -336,10 +363,13 @@ void GRP2DVECTORFILERENDERAGG::SetBackgroundIsDark(bool isdark)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILERENDERAGG::GetForceColorActive()
 * @brief      Get force color active (DXF backend)
 * @ingroup    GRAPHIC
-* @return     bool : true if the DXF backend is overriding every color.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILERENDERAGG::GetForceColorActive()
 {
@@ -352,11 +382,14 @@ bool GRP2DVECTORFILERENDERAGG::GetForceColorActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILERENDERAGG::SetForceColor(bool active, GRP2DCOLOR_RGBA8 color)
 * @brief      Set force color (DXF backend; ignored for SVG) : paint the whole drawing with a single color
 * @ingroup    GRAPHIC
+* 
 * @param[in]  active : true to override the file colors
 * @param[in]  color : the override color
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILERENDERAGG::SetForceColor(bool active, GRP2DCOLOR_RGBA8 color)
 {
@@ -374,10 +407,13 @@ void GRP2DVECTORFILERENDERAGG::SetForceColor(bool active, GRP2DCOLOR_RGBA8 color
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRP2DVECTORFILERENDERAGG::GetLineWidth()
 * @brief      Get line width (DXF backend)
 * @ingroup    GRAPHIC
-* @return     double : the DXF backend stroke width.
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DVECTORFILERENDERAGG::GetLineWidth()
 {
@@ -390,10 +426,13 @@ double GRP2DVECTORFILERENDERAGG::GetLineWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILERENDERAGG::SetLineWidth(double linewidth)
 * @brief      Set line width (DXF backend; ignored for SVG)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  linewidth : device stroke width (pixels)
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILERENDERAGG::SetLineWidth(double linewidth)
 {
@@ -410,10 +449,13 @@ void GRP2DVECTORFILERENDERAGG::SetLineWidth(double linewidth)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILERENDERAGG::GetDrawText()
 * @brief      Get draw text (DXF backend)
 * @ingroup    GRAPHIC
-* @return     bool : true if the DXF backend paints TEXT / MTEXT.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILERENDERAGG::GetDrawText()
 {
@@ -426,10 +468,13 @@ bool GRP2DVECTORFILERENDERAGG::GetDrawText()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILERENDERAGG::SetDrawText(bool drawtext)
 * @brief      Set draw text (DXF backend; ignored for SVG)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  drawtext : true to paint TEXT / MTEXT (needs a vector font on the canvas)
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILERENDERAGG::SetDrawText(bool drawtext)
 {
@@ -447,10 +492,13 @@ void GRP2DVECTORFILERENDERAGG::SetDrawText(bool drawtext)
 
 #ifdef GRP_VECTOR_FILE_SVG_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DVECTORFILESVGRENDERAGG* GRP2DVECTORFILERENDERAGG::GetSVGRender()
 * @brief      Get SVG render : direct access to the SVG backend
 * @ingroup    GRAPHIC
-* @return     GRP2DVECTORFILESVGRENDERAGG* : the SVG backend.
+* 
+* @return     GRP2DVECTORFILESVGRENDERAGG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVECTORFILESVGRENDERAGG* GRP2DVECTORFILERENDERAGG::GetSVGRender()
 {
@@ -461,10 +509,13 @@ GRP2DVECTORFILESVGRENDERAGG* GRP2DVECTORFILERENDERAGG::GetSVGRender()
 
 #ifdef GRP_VECTOR_FILE_DXF_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DVECTORFILEDXFRENDERAGG* GRP2DVECTORFILERENDERAGG::GetDXFRender()
 * @brief      Get DXF render : direct access to the DXF backend
 * @ingroup    GRAPHIC
-* @return     GRP2DVECTORFILEDXFRENDERAGG* : the DXF backend.
+* 
+* @return     GRP2DVECTORFILEDXFRENDERAGG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVECTORFILEDXFRENDERAGG* GRP2DVECTORFILERENDERAGG::GetDXFRender()
 {
@@ -474,10 +525,12 @@ GRP2DVECTORFILEDXFRENDERAGG* GRP2DVECTORFILERENDERAGG::GetDXFRender()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILERENDERAGG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL. The backends initialize themselves through their own constructors.
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILERENDERAGG::Clean()
 {

@@ -94,13 +94,13 @@ DIOSTREAMDEVICEBLUETOOTHLE::~DIOSTREAMDEVICEBLUETOOTHLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBUFFER* DIOSTREAMDEVICEBLUETOOTHLE::GetAdvertisingData()
 * @brief      Get advertising data
 * @ingroup    DATAIO
-*
-* @return     XBUFFER* : 
-*
+* 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMDEVICEBLUETOOTHLE::GetAdvertisingData()
 {
@@ -109,13 +109,13 @@ XBUFFER* DIOSTREAMDEVICEBLUETOOTHLE::GetAdvertisingData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTIMER* DIOSTREAMDEVICEBLUETOOTHLE::GetLastScanTimer()
 * @brief      Get last scan timer
 * @ingroup    DATAIO
-*
-* @return     XTIMER* : 
-*
+* 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* DIOSTREAMDEVICEBLUETOOTHLE::GetLastScanTimer()
 {
@@ -124,13 +124,13 @@ XTIMER* DIOSTREAMDEVICEBLUETOOTHLE::GetLastScanTimer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEBLUETOOTHLE::IsReadLastScan()
 * @brief      Is read last scan
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEBLUETOOTHLE::IsReadLastScan()
 {
@@ -139,13 +139,13 @@ bool DIOSTREAMDEVICEBLUETOOTHLE::IsReadLastScan()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHLE::SetIsReadLastScan(bool isreadlastscan)
 * @brief      Set is read last scan
 * @ingroup    DATAIO
-*
-* @param[in]  isreadlastscan : 
-*
+* 
+* @param[in]  isreadlastscan : Isreadlastscan value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHLE::SetIsReadLastScan(bool isreadlastscan)
 {
@@ -154,13 +154,13 @@ void DIOSTREAMDEVICEBLUETOOTHLE::SetIsReadLastScan(bool isreadlastscan)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMDEVICEBLUETOOTHLE::DebugPrintInfo()
 * @brief      Debug print info
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMDEVICEBLUETOOTHLE::DebugPrintInfo()
 {
@@ -178,12 +178,12 @@ bool DIOSTREAMDEVICEBLUETOOTHLE::DebugPrintInfo()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMDEVICEBLUETOOTHLE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMDEVICEBLUETOOTHLE::Clean()
 {

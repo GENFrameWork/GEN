@@ -57,7 +57,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         HASHCRC16::HASHCRC16()
+* @fn         HASHCRC16::HASHCRC16() : HASH()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
@@ -101,13 +101,13 @@ HASHCRC16::~HASHCRC16()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool HASHCRC16::Do(XBYTE* input, XQWORD size)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    CIPHER
 * 
-* @param[in]  input : 
-* @param[in]  size : 
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCRC16::Do(XBYTE* input, XQWORD size)
@@ -136,7 +136,7 @@ bool HASHCRC16::Do(XBYTE* input, XQWORD size)
 * @brief      Reset result
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool HASHCRC16::ResetResult()
@@ -158,7 +158,7 @@ bool HASHCRC16::ResetResult()
 * @brief      Get default size
 * @ingroup    CIPHER
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int HASHCRC16::GetDefaultSize()
@@ -173,7 +173,7 @@ int HASHCRC16::GetDefaultSize()
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* HASHCRC16::GetResult()
@@ -190,9 +190,9 @@ XBUFFER* HASHCRC16::GetResult()
 * @brief      Get result
 * @ingroup    CIPHER
 * 
-* @param[in]  resultsize : 
+* @param[in]  resultsize : Output resultsize.
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* HASHCRC16::GetResult(XDWORD& resultsize)
@@ -211,7 +211,7 @@ XBYTE* HASHCRC16::GetResult(XDWORD& resultsize)
 * @brief      Get result CRC16
 * @ingroup    CIPHER
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD HASHCRC16::GetResultCRC16()
@@ -234,10 +234,8 @@ XWORD HASHCRC16::GetResultCRC16()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void HASHCRC16::Ini(void)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    CIPHER
-* 
-* @param[in]  void : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HASHCRC16::Ini(void)
@@ -289,10 +287,10 @@ void HASHCRC16::Ini(void)
 * @brief      Update
 * @ingroup    CIPHER
 * 
-* @param[in]  CRC16 : 
-* @param[in]  c : 
+* @param[in]  CRC16 : CRC16 value.
+* @param[in]  c : C value.
 * 
-* @return     XWORD : 
+* @return     XWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD HASHCRC16::Update(XWORD CRC16, XBYTE c)

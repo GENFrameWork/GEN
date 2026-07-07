@@ -86,9 +86,11 @@ static void MTextDecode(XCHAR* raw, XVECTOR<XSTRING*>& lines);                 /
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DVECTORFILEDXFRENDERAGG::GRP2DVECTORFILEDXFRENDERAGG()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVECTORFILEDXFRENDERAGG::GRP2DVECTORFILEDXFRENDERAGG()
 {
@@ -97,10 +99,12 @@ GRP2DVECTORFILEDXFRENDERAGG::GRP2DVECTORFILEDXFRENDERAGG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DVECTORFILEDXFRENDERAGG::~GRP2DVECTORFILEDXFRENDERAGG()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DVECTORFILEDXFRENDERAGG::~GRP2DVECTORFILEDXFRENDERAGG()
 {
@@ -109,12 +113,16 @@ GRP2DVECTORFILEDXFRENDERAGG::~GRP2DVECTORFILEDXFRENDERAGG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::Render(GRPVECTORFILEDXF* dxf, GRP2DCANVAS* canvas)
 * @brief      Render : paint the DXF fitted into the whole canvas
 * @ingroup    GRAPHIC
+* 
 * @param[in]  dxf : loaded DXF file
 * @param[in]  canvas : target canvas
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::Render(GRPVECTORFILEDXF* dxf, GRP2DCANVAS* canvas)
 {
@@ -125,16 +133,20 @@ bool GRP2DVECTORFILEDXFRENDERAGG::Render(GRPVECTORFILEDXF* dxf, GRP2DCANVAS* can
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::Render(GRPVECTORFILEDXF* dxf, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 * @brief      Render : paint the DXF fitted into the target rectangle (uniform scale, centered, Y axis flipped)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  dxf : loaded DXF file
 * @param[in]  canvas : target canvas
 * @param[in]  targetx : target rectangle x
 * @param[in]  targety : target rectangle y
 * @param[in]  targetwidth : target rectangle width
 * @param[in]  targetheight : target rectangle height
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::Render(GRPVECTORFILEDXF* dxf, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight)
 {
@@ -172,10 +184,13 @@ bool GRP2DVECTORFILEDXFRENDERAGG::Render(GRPVECTORFILEDXF* dxf, GRP2DCANVAS* can
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::GetBackgroundIsDark()
 * @brief      Get background is dark
 * @ingroup    GRAPHIC
-* @return     bool : true if the destination background is treated as dark (ACI 7 -> white).
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::GetBackgroundIsDark()
 {
@@ -184,10 +199,13 @@ bool GRP2DVECTORFILEDXFRENDERAGG::GetBackgroundIsDark()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::SetBackgroundIsDark(bool isdark)
 * @brief      Set background is dark : selects how ACI 7 (black/white), ByLayer and ByBlock map to a foreground color
 * @ingroup    GRAPHIC
+* 
 * @param[in]  isdark : true -> foreground is white ; false -> foreground is black.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::SetBackgroundIsDark(bool isdark)
 {
@@ -196,10 +214,13 @@ void GRP2DVECTORFILEDXFRENDERAGG::SetBackgroundIsDark(bool isdark)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::GetForceColorActive()
 * @brief      Get force color active
 * @ingroup    GRAPHIC
-* @return     bool : true if every entity is painted with the forced color (ACI ignored).
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::GetForceColorActive()
 {
@@ -208,11 +229,14 @@ bool GRP2DVECTORFILEDXFRENDERAGG::GetForceColorActive()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::SetForceColor(bool active, GRP2DCOLOR_RGBA8 color)
 * @brief      Set force color : ignore the per entity ACI and paint everything with one color
 * @ingroup    GRAPHIC
+* 
 * @param[in]  active : true to enable the override
 * @param[in]  color : override color
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::SetForceColor(bool active, GRP2DCOLOR_RGBA8 color)
 {
@@ -222,10 +246,13 @@ void GRP2DVECTORFILEDXFRENDERAGG::SetForceColor(bool active, GRP2DCOLOR_RGBA8 co
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRP2DVECTORFILEDXFRENDERAGG::GetLineWidth()
 * @brief      Get line width
 * @ingroup    GRAPHIC
-* @return     double : device stroke width (pixels).
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRP2DVECTORFILEDXFRENDERAGG::GetLineWidth()
 {
@@ -234,10 +261,13 @@ double GRP2DVECTORFILEDXFRENDERAGG::GetLineWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::SetLineWidth(double linewidth)
 * @brief      Set line width : device stroke width used for every entity (DXF lineweights are not applied)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  linewidth : device stroke width (pixels)
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::SetLineWidth(double linewidth)
 {
@@ -246,10 +276,13 @@ void GRP2DVECTORFILEDXFRENDERAGG::SetLineWidth(double linewidth)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::GetDrawText()
 * @brief      Get draw text
 * @ingroup    GRAPHIC
-* @return     bool : true if TEXT / MTEXT entities are painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::GetDrawText()
 {
@@ -258,10 +291,13 @@ bool GRP2DVECTORFILEDXFRENDERAGG::GetDrawText()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::SetDrawText(bool drawtext)
 * @brief      Set draw text : enable TEXT / MTEXT painting (a vector font must be loaded on the canvas)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  drawtext : true to paint text entities
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::SetDrawText(bool drawtext)
 {
@@ -270,18 +306,22 @@ void GRP2DVECTORFILEDXFRENDERAGG::SetDrawText(bool drawtext)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool GRP2DVECTORFILEDXFRENDERAGG::ComputeExtents(GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, GRPVECTORFILEDXF* dxf, double& minx, double& miny, double& maxx, double& maxy)
+* 
+* @fn         bool GRP2DVECTORFILEDXFRENDERAGG::ComputeExtents(GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, GRPVECTORFILEDXF* dxf, double& minx, double& miny, double& maxx, double& maxy, int depth)
 * @brief      Compute extents : world space bounding box of all renderable geometry (the "zoom extents" of the drawing)
 * @note       INTERNAL. Circles / arcs / ellipses contribute center +/- radius (a safe over estimate so nothing is
-*             ever clipped). If no geometry is found, the header $EXTMIN / $EXTMAX variables are used as a fallback.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entities : entities section
 * @param[in]  dxf : loaded DXF file (for the header fallback)
-* @param[out] minx : bounding box min x
-* @param[out] miny : bounding box min y
-* @param[out] maxx : bounding box max x
-* @param[out] maxy : bounding box max y
-* @return     bool : true if a valid bounding box was produced.
+* @param[in]  minx : bounding box min x
+* @param[in]  miny : bounding box min y
+* @param[in]  maxx : bounding box max x
+* @param[in]  maxy : bounding box max y
+* @param[in]  depth : Depth value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::ComputeExtents(GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, GRPVECTORFILEDXF* dxf, double& minx, double& miny, double& maxx, double& maxy, int depth)
 {
@@ -625,18 +665,21 @@ bool GRP2DVECTORFILEDXFRENDERAGG::ComputeExtents(GRPVECTORFILEDXFTEXTSECTIONENTI
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::CalculateFitTransform(GRPVECTORFILEDXF* dxf, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, double targetx, double targety, double targetwidth, double targetheight)
-* @brief      Calculate fit transform : map the drawing extents into the target rectangle (uniform scale, centered,
-*             flipping the Y axis : DXF world Y grows upwards, the canvas Y grows downwards)
+* @brief      Calculate fit transform : map the drawing extents into the target rectangle (uniform scale, centered, flipping the Y axis : DXF world Y grows upwards, the canvas Y grows downwards)
 * @note       INTERNAL. Sets scale / offsetx / offsety used by MapPoint().
 * @ingroup    GRAPHIC
+* 
 * @param[in]  dxf : loaded DXF file
 * @param[in]  entities : entities section
 * @param[in]  targetx : target rectangle x
 * @param[in]  targety : target rectangle y
 * @param[in]  targetwidth : target rectangle width
 * @param[in]  targetheight : target rectangle height
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::CalculateFitTransform(GRPVECTORFILEDXF* dxf, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, double targetx, double targety, double targetwidth, double targetheight)
 {
@@ -673,14 +716,17 @@ bool GRP2DVECTORFILEDXFRENDERAGG::CalculateFitTransform(GRPVECTORFILEDXF* dxf, G
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::MapPoint(double ux, double uy, double& dx, double& dy)
 * @brief      Map point : world (Y up) -> device (Y down) using the fit transform
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  ux : world x
 * @param[in]  uy : world y
-* @param[out] dx : device x
-* @param[out] dy : device y
+* @param[in]  dx : device x
+* @param[in]  dy : device y
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::MapPoint(double ux, double uy, double& dx, double& dy)
 {
@@ -693,14 +739,16 @@ void GRP2DVECTORFILEDXFRENDERAGG::MapPoint(double ux, double uy, double& dx, dou
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderEntityList(GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities)
-* @brief      Render entity list : walk an entities list (the model space, or a block when expanded by INSERT) and
-*             paint each entity. Some handlers advance the index over the entities they consume (POLYLINE -> VERTEX
-*             ... SEQEND).
+* @brief      Render entity list : walk an entities list (the model space, or a block when expanded by INSERT) and paint each entity. Some handlers advance the index over the entities they consume (POLYLINE -> VERTEX ... SEQEND).
 * @note       INTERNAL. The current block transform (blocka..blockf) is applied through MapPoint while this runs.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entities : entities list to render
-* @return     bool : true if the list was walked.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderEntityList(GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities)
 {
@@ -723,14 +771,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderEntityList(GRPVECTORFILEDXFTEXTSECTIONEN
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderEntity(GRPVECTORFILEDXFENTITY* entity, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, XDWORD& index)
 * @brief      Render entity : dispatch one raw entity to its handler
 * @note       INTERNAL. For the old style POLYLINE the index is advanced over the following VERTEX ... SEQEND entities.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw entity
 * @param[in]  entities : entities section (for the POLYLINE vertex scan)
-* @param[in,out] index : current position in the entities stream (advanced for POLYLINE)
-* @return     bool : true if the entity was handled.
+* @param[in]  index : current position in the entities stream (advanced for POLYLINE)
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderEntity(GRPVECTORFILEDXFENTITY* entity, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, XDWORD& index)
 {
@@ -761,14 +813,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderEntity(GRPVECTORFILEDXFENTITY* entity, G
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderLine(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 * @brief      Render line : LINE entity (codes 10/20 ini, 11/21 end)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw LINE entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderLine(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -794,14 +850,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderLine(GRPVECTORFILEDXFENTITY* entity, GRP
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderCircle(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 * @brief      Render circle : CIRCLE entity (codes 10/20 center, 40 radius) tessellated as a closed polyline
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw CIRCLE entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderCircle(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -823,14 +883,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderCircle(GRPVECTORFILEDXFENTITY* entity, G
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderArc(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 * @brief      Render arc : ARC entity (codes 10/20 center, 40 radius, 50 start angle, 51 end angle, degrees, CCW)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw ARC entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderArc(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -857,15 +921,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderArc(GRPVECTORFILEDXFENTITY* entity, GRP2
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderEllipse(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render ellipse : ELLIPSE entity (10/20 center, 11/21 major axis endpoint relative to center,
-*             40 ratio minor/major, 41 start parameter, 42 end parameter, radians)
+* @brief      Render ellipse : ELLIPSE entity (10/20 center, 11/21 major axis endpoint relative to center, 40 ratio minor/major, 41 start parameter, 42 end parameter, radians)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw ELLIPSE entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderEllipse(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -921,15 +988,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderEllipse(GRPVECTORFILEDXFENTITY* entity, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderLWPolyLine(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render LW polyline : LWPOLYLINE entity (90 vertex count, 70 flag (bit 1 = closed),
-*             repeated 10/20 vertex coordinates, optional 42 bulge per vertex segment)
+* @brief      Render LW polyline : LWPOLYLINE entity (90 vertex count, 70 flag (bit 1 = closed), repeated 10/20 vertex coordinates, optional 42 bulge per vertex segment)
 * @note       INTERNAL. Vertices are read in stream order (the typed object does not keep them).
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw LWPOLYLINE entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderLWPolyLine(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -1004,17 +1074,20 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderLWPolyLine(GRPVECTORFILEDXFENTITY* entit
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderPolyLine(GRPVECTORFILEDXFENTITY* entity, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, XDWORD& index, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render polyline : old style POLYLINE (70 flag), whose vertices are stored in the following VERTEX
-*             entities and terminated by a SEQEND entity. The index is advanced over the consumed entities.
+* @brief      Render polyline : old style POLYLINE (70 flag), whose vertices are stored in the following VERTEX entities and terminated by a SEQEND entity. The index is advanced over the consumed entities.
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw POLYLINE entity
 * @param[in]  entities : entities section
-* @param[in,out] index : position of the POLYLINE in the stream (advanced to the SEQEND on return)
+* @param[in]  index : position of the POLYLINE in the stream (advanced to the SEQEND on return)
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderPolyLine(GRPVECTORFILEDXFENTITY* entity, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, XDWORD& index, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -1097,14 +1170,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderPolyLine(GRPVECTORFILEDXFENTITY* entity,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderPoint(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 * @brief      Render point : POINT entity (codes 10/20) drawn as a small device space cross
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw POINT entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderPoint(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -1129,15 +1206,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderPoint(GRPVECTORFILEDXFENTITY* entity, GR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderText(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render text : TEXT / MTEXT entity (1 string, 10/20 insertion point, 40 height) using the canvas
-*             vector font. The text is drawn upright (rotation and MTEXT inline formatting are not applied).
+* @brief      Render text : TEXT / MTEXT entity (1 string, 10/20 insertion point, 40 height) using the canvas vector font. The text is drawn upright (rotation and MTEXT inline formatting are not applied).
 * @note       INTERNAL. A vector font must be loaded on the canvas.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw TEXT / MTEXT entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderText(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -1167,9 +1247,15 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderText(GRPVECTORFILEDXFENTITY* entity, GRP
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         static bool MTextIsArgCode(XCHAR d)
 * @brief      MTEXT inline format code that carries an argument terminated by ';' (font, height, colour, width, ...).
+* @ingroup    GRAPHIC
+* 
+* @param[in]  d : D value.
+* 
+* @return     static bool : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static bool MTextIsArgCode(XCHAR d)
 {
@@ -1179,9 +1265,15 @@ static bool MTextIsArgCode(XCHAR d)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         static bool MTextIsToggle(XCHAR d)
 * @brief      MTEXT inline format toggle with no argument (underline / overline / strikethrough on-off).
+* @ingroup    GRAPHIC
+* 
+* @param[in]  d : D value.
+* 
+* @return     static bool : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static bool MTextIsToggle(XCHAR d)
 {
@@ -1190,17 +1282,17 @@ static bool MTextIsToggle(XCHAR d)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         static void MTextDecode(XCHAR* raw, XVECTOR<XSTRING*>& lines)
-* @brief      MTEXT decode : turn the MTEXT inline mini-language into plain text lines. Handles paragraph breaks (\P),
-*             escapes (\~ \\ \{ \}), grouping braces, formatting codes with an argument (\f \H \C \W \Q \A \T \p),
-*             on-off toggles (\L \O \K), and stacked text (\S num ^|/|# den ;) flattened to "num/den". The actual
-*             font / height / colour changes are not applied (single style per entity); the codes are stripped so the
-*             text reads cleanly. The caller owns the XSTRING* in the vector.
+* @brief      MTEXT decode : turn the MTEXT inline mini-language into plain text lines. Handles paragraph breaks (\P), escapes (\~ \\ \{ \}), grouping braces, formatting codes with an argument (\f \H \C \W \Q \A \T \p), on-off toggles (\L \O \K), and stacked text (\S num ^|/|# den ;) flattened to "num/den". The actual font / height / colour changes are not applied (single style per entity); the codes are stripped so the text reads cleanly. The caller owns the XSTRING* in the vector.
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  raw : assembled MTEXT string (codes 3* + 1)
-* @param[out] lines : decoded lines (one XSTRING per line)
+* @param[in]  lines : decoded lines (one XSTRING per line)
+* 
+* @return     static void : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void MTextDecode(XCHAR* raw, XVECTOR<XSTRING*>& lines)
 {
@@ -1255,21 +1347,18 @@ static void MTextDecode(XCHAR* raw, XVECTOR<XSTRING*>& lines)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderMText(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render mtext : multi-line MTEXT entity. Assembles the text (code 3 fragments + code 1), decodes the
-*             inline mini-language (see MTextDecode), and lays the lines out from the insertion point (10/20) using the
-*             text height (40), the line-spacing factor (44) and the attachment point (71) for vertical
-*             (top/middle/bottom) and horizontal (left/centre/right) anchoring (line widths measured with
-*             VectorFont_GetWidth).
+* @brief      Render mtext : multi-line MTEXT entity. Assembles the text (code 3 fragments + code 1), decodes the inline mini-language (see MTextDecode), and lays the lines out from the insertion point (10/20) using the text height (40), the line-spacing factor (44) and the attachment point (71) for vertical (top/middle/bottom) and horizontal (left/centre/right) anchoring (line widths measured with VectorFont_GetWidth).
 * @note       INTERNAL. A vector font must be loaded on the canvas. Rotation (code 50) is applied via
-*             VectorFont_PrintAngle. Approximations: no word wrap by the reference width (41), and a single
-*             colour / height per entity (per-span formatting is stripped).
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw MTEXT entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderMText(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -1374,15 +1463,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderMText(GRPVECTORFILEDXFENTITY* entity, GR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::Render3DFace(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render 3D face : 3DFACE entity (corners 10/20, 11/21, 12/22, 13/23) painted as a closed wire quad
-*             projected onto the XY plane
+* @brief      Render 3D face : 3DFACE entity (corners 10/20, 11/21, 12/22, 13/23) painted as a closed wire quad projected onto the XY plane
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw 3DFACE entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::Render3DFace(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -1422,18 +1514,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::Render3DFace(GRPVECTORFILEDXFENTITY* entity, G
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderSpline(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render spline : SPLINE entity (71 degree, 72 knot count, 73 control point count, 74 fit point count,
-*             repeated 40 knots, repeated 10/20 control points, optional repeated 11/21 fit points). The B-spline is
-*             evaluated with de Boor's algorithm and tessellated to line segments. Non rational (no weights) curves
-*             are assumed; if no usable control points / knots are present it falls back to the fit points, and then
-*             to the control polygon.
+* @brief      Render spline : SPLINE entity (71 degree, 72 knot count, 73 control point count, 74 fit point count, repeated 40 knots, repeated 10/20 control points, optional repeated 11/21 fit points). The B-spline is evaluated with de Boor's algorithm and tessellated to line segments. Non rational (no weights) curves are assumed; if no usable control points / knots are present it falls back to the fit points, and then to the control polygon.
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw SPLINE entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderSpline(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -1555,15 +1647,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderSpline(GRPVECTORFILEDXFENTITY* entity, G
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILEDXFTEXTSECTIONENTITIES* GRP2DVECTORFILEDXFRENDERAGG::GetBlockEntities(GRPVECTORFILEDXFENTITY* entity, double& basex, double& basey)
-* @brief      Get block entities : resolve the block referenced by an INSERT entity (code 2) from the BLOCKS section
-*             and return its entities list, also reading the block base point (codes 10 / 20 in the block header)
+* @brief      Get block entities : resolve the block referenced by an INSERT entity (code 2) from the BLOCKS section and return its entities list, also reading the block base point (codes 10 / 20 in the block header)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw INSERT entity
-* @param[out] basex : block base point x (0 if absent)
-* @param[out] basey : block base point y (0 if absent)
-* @return     GRPVECTORFILEDXFTEXTSECTIONENTITIES* : the block entities, or NULL if not resolvable.
+* @param[in]  basex : block base point x (0 if absent)
+* @param[in]  basey : block base point y (0 if absent)
+* 
+* @return     GRPVECTORFILEDXFTEXTSECTIONENTITIES* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTIONENTITIES* GRP2DVECTORFILEDXFRENDERAGG::GetBlockEntities(GRPVECTORFILEDXFENTITY* entity, double& basex, double& basey)
 {
@@ -1603,11 +1698,12 @@ GRPVECTORFILEDXFTEXTSECTIONENTITIES* GRP2DVECTORFILEDXFRENDERAGG::GetBlockEntiti
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::BuildInsertCellTransform(double cellx, double celly, double sx, double sy, double cosr, double sinr, double basex, double basey, double& a, double& b, double& c, double& d, double& e, double& f)
-* @brief      Build insert cell transform : the affine that maps a block local point to the parent space for one INSERT
-*             cell : P = cellinsertion + Rot * Scale * (P_local - base). Returned as [a c e ; b d f].
+* @brief      Build insert cell transform : the affine that maps a block local point to the parent space for one INSERT cell : P = cellinsertion + Rot * Scale * (P_local - base). Returned as [a c e ; b d f].
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  cellx : cell insertion point x (array offset already applied)
 * @param[in]  celly : cell insertion point y
 * @param[in]  sx : x scale
@@ -1616,7 +1712,13 @@ GRPVECTORFILEDXFTEXTSECTIONENTITIES* GRP2DVECTORFILEDXFRENDERAGG::GetBlockEntiti
 * @param[in]  sinr : sine of the rotation angle
 * @param[in]  basex : block base point x
 * @param[in]  basey : block base point y
-* @param[out] a,b,c,d,e,f : affine components
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* @param[in]  e : E value.
+* @param[in]  f : F value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::BuildInsertCellTransform(double cellx, double celly, double sx, double sy, double cosr, double sinr, double basex, double basey, double& a, double& b, double& c, double& d, double& e, double& f)
 {
@@ -1631,15 +1733,16 @@ void GRP2DVECTORFILEDXFRENDERAGG::BuildInsertCellTransform(double cellx, double 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderInsert(GRPVECTORFILEDXFENTITY* entity)
-* @brief      Render insert : block reference. Reads the insertion point (10/20), scale (41/42), rotation (50) and the
-*             optional MINSERT array (70/71 counts, 44/45 spacing), composes the insertion transform with the current
-*             block transform and renders the referenced block entities once per array cell.
+* @brief      Render insert : block reference. Reads the insertion point (10/20), scale (41/42), rotation (50) and the optional MINSERT array (70/71 counts, 44/45 spacing), composes the insertion transform with the current block transform and renders the referenced block entities once per array cell.
 * @note       INTERNAL. Nested INSERT (block within block) is supported up to MAXINSERTDEPTH. The OCS extrusion
-*             (codes 210/220/230) is not applied (the insertion is assumed to lie on the XY plane).
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw INSERT entity
-* @return     bool : true (handled).
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderInsert(GRPVECTORFILEDXFENTITY* entity)
 {
@@ -1703,17 +1806,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderInsert(GRPVECTORFILEDXFENTITY* entity)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderSolid(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render solid : SOLID / TRACE filled triangle or quadrilateral (corners at 10/20, 11/21, 12/22, 13/23).
-*             The DXF corner order is a "bowtie" (the third and fourth corners are swapped), so the filled outline is
-*             corner1 -> corner2 -> corner4 -> corner3. When the fourth corner is absent it falls back to the third
-*             (triangle).
+* @brief      Render solid : SOLID / TRACE filled triangle or quadrilateral (corners at 10/20, 11/21, 12/22, 13/23). The DXF corner order is a "bowtie" (the third and fourth corners are swapped), so the filled outline is corner1 -> corner2 -> corner4 -> corner3. When the fourth corner is absent it falls back to the third (triangle).
 * @note       INTERNAL. SOLID / TRACE are area fills, so this is one of the few handlers that fills instead of strokes.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw SOLID / TRACE entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if painted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderSolid(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -1749,8 +1853,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderSolid(GRPVECTORFILEDXFENTITY* entity, GR
 /*---- HATCH boundary stream helpers (file local) --------------------------------------------------------------------*/
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         static bool HatchPeekType(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD i, XDWORD n, int& outtype)
 * @brief      Peek the group code of the value at position i without advancing.
+* @ingroup    GRAPHIC
+* 
+* @param[in]  values : Values pointer to use.
+* @param[in]  i : I value.
+* @param[in]  n : N value.
+* @param[in]  outtype : Output outtype.
+* 
+* @return     static bool : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static bool HatchPeekType(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD i, XDWORD n, int& outtype)
 {
@@ -1765,8 +1879,19 @@ static bool HatchPeekType(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD i, XDW
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         static bool HatchReadValue(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD& i, XDWORD n, int code, double& out)
 * @brief      If the value at i has the expected group code, read it and advance i.
+* @ingroup    GRAPHIC
+* 
+* @param[in]  values : Values pointer to use.
+* @param[in]  i : I value.
+* @param[in]  n : N value.
+* @param[in]  code : Code value.
+* @param[in]  out : Output out.
+* 
+* @return     static bool : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static bool HatchReadValue(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD& i, XDWORD n, int code, double& out)
 {
@@ -1790,8 +1915,21 @@ static bool HatchReadValue(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD& i, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         static bool HatchReadPoint(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD& i, XDWORD n, int codex, int codey, double& x, double& y)
 * @brief      Read a (codex, codey) coordinate pair and advance i past both. Atomic : i is left untouched on failure.
+* @ingroup    GRAPHIC
+* 
+* @param[in]  values : Values pointer to use.
+* @param[in]  i : I value.
+* @param[in]  n : N value.
+* @param[in]  codex : Codex value.
+* @param[in]  codey : Codey value.
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* 
+* @return     static bool : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static bool HatchReadPoint(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD& i, XDWORD n, int codex, int codey, double& x, double& y)
 {
@@ -1805,19 +1943,18 @@ static bool HatchReadPoint(XVECTOR<GRPVECTORFILEDXFVALUE*>* values, XDWORD& i, X
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderHatch(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
-* @brief      Render hatch : HATCH boundary loops filled as a single even-odd region (so nested loops cut holes). The
-*             boundary data is a structured value stream that has to be walked sequentially (the group codes repeat),
-*             so this parses it by position rather than by group-code lookup. Each loop is either a polyline (with
-*             optional bulges) or a list of edges (line / arc / elliptic arc / spline).
+* @brief      Render hatch : HATCH boundary loops filled as a single even-odd region (so nested loops cut holes). The boundary data is a structured value stream that has to be walked sequentially (the group codes repeat), so this parses it by position rather than by group-code lookup. Each loop is either a polyline (with optional bulges) or a list of edges (line / arc / elliptic arc / spline).
 * @note       INTERNAL. The fill is solid with the resolved color : SOLID hatches are exact, pattern hatches are
-*             approximated by their boundary fill (the pattern lines themselves are not generated). OCS / extrusion is
-*             not applied. Spline edges are approximated by their control polygon.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw HATCH entity
 * @param[in]  color : resolved color
 * @param[in]  canvas : target canvas
-* @return     bool : true if a fillable boundary was produced.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderHatch(GRPVECTORFILEDXFENTITY* entity, GRP2DCOLOR_RGBA8 color, GRP2DCANVAS* canvas)
 {
@@ -2055,14 +2192,16 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderHatch(GRPVECTORFILEDXFENTITY* entity, GR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::RenderDimension(GRPVECTORFILEDXFENTITY* entity)
-* @brief      Render dimension : a DIMENSION carries its drawn geometry (lines, arrowheads, text) in an anonymous block
-*             referenced by code 2, already laid out in the dimension coordinate space. This renders that block under
-*             the current block transform, without any extra insertion transform.
+* @brief      Render dimension : a DIMENSION carries its drawn geometry (lines, arrowheads, text) in an anonymous block referenced by code 2, already laid out in the dimension coordinate space. This renders that block under the current block transform, without any extra insertion transform.
 * @note       INTERNAL. Shares the INSERT recursion guard.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw DIMENSION entity
-* @return     bool : true (handled).
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::RenderDimension(GRPVECTORFILEDXFENTITY* entity)
 {
@@ -2082,16 +2221,19 @@ bool GRP2DVECTORFILEDXFRENDERAGG::RenderDimension(GRPVECTORFILEDXFENTITY* entity
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int GRP2DVECTORFILEDXFRENDERAGG::FindBSplineSpan(XVECTOR<double>& knots, int ncontrolpoints, int degree, double u)
-* @brief      Find B-spline span : knot span index k such that knots[k] <= u < knots[k+1] (clamped to the valid range),
-*             using the binary search of The NURBS Book (algorithm A2.1)
+* @brief      Find B-spline span : knot span index k such that knots[k] <= u < knots[k+1] (clamped to the valid range), using the binary search of The NURBS Book (algorithm A2.1)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  knots : knot vector
 * @param[in]  ncontrolpoints : number of control points
 * @param[in]  degree : curve degree
 * @param[in]  u : parameter
-* @return     int : span index.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRP2DVECTORFILEDXFRENDERAGG::FindBSplineSpan(XVECTOR<double>& knots, int ncontrolpoints, int degree, double u)
 {
@@ -2119,18 +2261,21 @@ int GRP2DVECTORFILEDXFRENDERAGG::FindBSplineSpan(XVECTOR<double>& knots, int nco
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::EvalBSplinePoint(XVECTOR<double>& knots, XVECTOR<double>& cpx, XVECTOR<double>& cpy, int degree, int span, double u, double& outx, double& outy)
 * @brief      Eval B-spline point : evaluate a non rational B-spline curve at parameter u using de Boor's algorithm
 * @note       INTERNAL. Repeated knots (zero denominator) are handled with alpha = 0.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  knots : knot vector
 * @param[in]  cpx : control point x coordinates
 * @param[in]  cpy : control point y coordinates
 * @param[in]  degree : curve degree
 * @param[in]  span : knot span containing u (from FindBSplineSpan)
 * @param[in]  u : parameter
-* @param[out] outx : evaluated x
-* @param[out] outy : evaluated y
+* @param[in]  outx : evaluated x
+* @param[in]  outy : evaluated y
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::EvalBSplinePoint(XVECTOR<double>& knots, XVECTOR<double>& cpx, XVECTOR<double>& cpy, int degree, int span, double u, double& outx, double& outy)
 {
@@ -2167,10 +2312,12 @@ void GRP2DVECTORFILEDXFRENDERAGG::EvalBSplinePoint(XVECTOR<double>& knots, XVECT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::EmitArcWorld(GRP2DPATH& devicepath, double cx, double cy, double radius, double startangle, double endangle, bool moveto)
 * @brief      Emit arc world : tessellate a circular arc (world space, radians, CCW) into the (device space) path
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  devicepath : output path (device space)
 * @param[in]  cx : world center x
 * @param[in]  cy : world center y
@@ -2178,6 +2325,7 @@ void GRP2DVECTORFILEDXFRENDERAGG::EvalBSplinePoint(XVECTOR<double>& knots, XVECT
 * @param[in]  startangle : start angle (radians)
 * @param[in]  endangle : end angle (radians, >= start angle)
 * @param[in]  moveto : true to emit a MoveTo for the first point, false to LineTo (continue the current sub path)
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::EmitArcWorld(GRP2DPATH& devicepath, double cx, double cy, double radius, double startangle, double endangle, bool moveto)
 {
@@ -2201,17 +2349,19 @@ void GRP2DVECTORFILEDXFRENDERAGG::EmitArcWorld(GRP2DPATH& devicepath, double cx,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::EmitBulgeWorld(GRP2DPATH& devicepath, double x0, double y0, double x1, double y1, double bulge)
-* @brief      Emit bulge world : add the segment p0 -> p1 to the (device space) path. A non zero bulge defines a
-*             circular arc (bulge = tan(includedangle / 4)); the previous point must already be the path pen.
+* @brief      Emit bulge world : add the segment p0 -> p1 to the (device space) path. A non zero bulge defines a circular arc (bulge = tan(includedangle / 4)); the previous point must already be the path pen.
 * @note       INTERNAL. Degenerate cases fall back to a straight line.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  devicepath : output path (device space)
 * @param[in]  x0 : world segment start x
 * @param[in]  y0 : world segment start y
 * @param[in]  x1 : world segment end x
 * @param[in]  y1 : world segment end y
 * @param[in]  bulge : arc bulge (0 = straight)
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::EmitBulgeWorld(GRP2DPATH& devicepath, double x0, double y0, double x1, double y1, double bulge)
 {
@@ -2275,14 +2425,17 @@ void GRP2DVECTORFILEDXFRENDERAGG::EmitBulgeWorld(GRP2DPATH& devicepath, double x
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int GRP2DVECTORFILEDXFRENDERAGG::SegmentsForArc(double radius, double sweepradians)
-* @brief      Segments for arc : number of line segments to tessellate an arc so the chord error stays below the
-*             configured device tolerance (clamped to sane bounds)
+* @brief      Segments for arc : number of line segments to tessellate an arc so the chord error stays below the configured device tolerance (clamped to sane bounds)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  radius : world radius
 * @param[in]  sweepradians : arc sweep (radians)
-* @return     int : segment count (>= 1).
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRP2DVECTORFILEDXFRENDERAGG::SegmentsForArc(double radius, double sweepradians)
 {
@@ -2325,14 +2478,18 @@ int GRP2DVECTORFILEDXFRENDERAGG::SegmentsForArc(double radius, double sweepradia
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::GetValueDouble(GRPVECTORFILEDXFENTITY* entity, int groupcode, double& out)
 * @brief      Get value double : first entity value matching the DXF group code, as a double
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw entity
 * @param[in]  groupcode : DXF group code
-* @param[out] out : value
-* @return     bool : true if the value was found.
+* @param[in]  out : value
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::GetValueDouble(GRPVECTORFILEDXFENTITY* entity, int groupcode, double& out)
 {
@@ -2361,14 +2518,18 @@ bool GRP2DVECTORFILEDXFRENDERAGG::GetValueDouble(GRPVECTORFILEDXFENTITY* entity,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILEDXFRENDERAGG::GetValueInt(GRPVECTORFILEDXFENTITY* entity, int groupcode, int& out)
 * @brief      Get value int : first entity value matching the DXF group code, as an int
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw entity
 * @param[in]  groupcode : DXF group code
-* @param[out] out : value
-* @return     bool : true if the value was found.
+* @param[in]  out : value
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILEDXFRENDERAGG::GetValueInt(GRPVECTORFILEDXFENTITY* entity, int groupcode, int& out)
 {
@@ -2391,13 +2552,17 @@ bool GRP2DVECTORFILEDXFRENDERAGG::GetValueInt(GRPVECTORFILEDXFENTITY* entity, in
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XCHAR* GRP2DVECTORFILEDXFRENDERAGG::GetValueString(GRPVECTORFILEDXFENTITY* entity, int groupcode)
 * @brief      Get value string : first entity value matching the DXF group code, as a string
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw entity
 * @param[in]  groupcode : DXF group code
-* @return     XCHAR* : value string or NULL.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* GRP2DVECTORFILEDXFRENDERAGG::GetValueString(GRPVECTORFILEDXFENTITY* entity, int groupcode)
 {
@@ -2419,12 +2584,16 @@ XCHAR* GRP2DVECTORFILEDXFRENDERAGG::GetValueString(GRPVECTORFILEDXFENTITY* entit
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DCOLOR_RGBA8 GRP2DVECTORFILEDXFRENDERAGG::ResolveColor(GRPVECTORFILEDXFENTITY* entity)
 * @brief      Resolve color : color for an entity (forced color, or the ACI code 62 / G_COLOR_NUMBER, or foreground)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw entity
-* @return     GRP2DCOLOR_RGBA8 : resolved opaque color.
+* 
+* @return     GRP2DCOLOR_RGBA8 : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR_RGBA8 GRP2DVECTORFILEDXFRENDERAGG::ResolveColor(GRPVECTORFILEDXFENTITY* entity)
 {
@@ -2456,15 +2625,14 @@ GRP2DCOLOR_RGBA8 GRP2DVECTORFILEDXFRENDERAGG::ResolveColor(GRPVECTORFILEDXFENTIT
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::BuildLayerTable(GRPVECTORFILEDXF* dxf)
-* @brief      Build layer table : parse the LAYER records of the TABLES section directly from the file (the interpreter
-*             does not parse TABLES), so entities coloured ByLayer can resolve their colour. Each LAYER record carries
-*             its name (code 2) and its ACI colour (code 62; negative means the layer is off, the absolute value is the
-*             colour). The table is cached per file and only rebuilt when the file changes.
+* @brief      Build layer table : parse the LAYER records of the TABLES section directly from the file (the interpreter does not parse TABLES), so entities coloured ByLayer can resolve their colour. Each LAYER record carries its name (code 2) and its ACI colour (code 62; negative means the layer is off, the absolute value is the colour). The table is cached per file and only rebuilt when the file changes.
 * @note       INTERNAL. "0 / LAYER" only appears in the LAYER table, so scanning the whole file is safe.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  dxf : loaded DXF file
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::BuildLayerTable(GRPVECTORFILEDXF* dxf)
 {
@@ -2545,13 +2713,16 @@ void GRP2DVECTORFILEDXFRENDERAGG::BuildLayerTable(GRPVECTORFILEDXF* dxf)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRP2DVECTORFILEDXFRENDERAGG::LayerColorACI(XCHAR* layername)
 * @brief      Layer color ACI : ACI colour of a layer by name (case-insensitive)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  layername : layer name
-* @return     int : ACI colour, or 256 if the layer is unknown.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRP2DVECTORFILEDXFRENDERAGG::LayerColorACI(XCHAR* layername)
 {
@@ -2568,13 +2739,16 @@ int GRP2DVECTORFILEDXFRENDERAGG::LayerColorACI(XCHAR* layername)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* GRP2DVECTORFILEDXFRENDERAGG::GetLayerName(GRPVECTORFILEDXFENTITY* entity)
 * @brief      Get layer name : the entity's layer (group code 8 / G_LAYER_NAME)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  entity : raw entity
-* @return     XCHAR* : layer name or NULL.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* GRP2DVECTORFILEDXFRENDERAGG::GetLayerName(GRPVECTORFILEDXFENTITY* entity)
 {
@@ -2597,11 +2771,12 @@ XCHAR* GRP2DVECTORFILEDXFRENDERAGG::GetLayerName(GRPVECTORFILEDXFENTITY* entity)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::CleanLayerTable()
 * @brief      Clean layer table : free the cached LAYER table
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::CleanLayerTable()
 {
@@ -2619,16 +2794,16 @@ void GRP2DVECTORFILEDXFRENDERAGG::CleanLayerTable()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRP2DCOLOR_RGBA8 GRP2DVECTORFILEDXFRENDERAGG::ColorFromACI(int aci)
-* @brief      Color from ACI : map an AutoCAD Color Index (1..255) to its standard RGB color. ByBlock (0), ByLayer
-*             (256) and the auto color (7) follow the foreground (white on a dark background, black on a light one),
-*             so they stay visible whatever the destination background is.
+* @brief      Color from ACI : map an AutoCAD Color Index (1..255) to its standard RGB color. ByBlock (0), ByLayer (256) and the auto color (7) follow the foreground (white on a dark background, black on a light one), so they stay visible whatever the destination background is.
 * @note       INTERNAL. The full 255 entry standard AutoCAD palette is used. Note that the gray ramp (250..255) is
-*             intentionally near the background in CAD; if a drawing colored entirely with such indices looks faint,
-*             use SetForceColor() or SetBackgroundIsDark() to control visibility.
 * @ingroup    GRAPHIC
+* 
 * @param[in]  aci : AutoCAD Color Index
-* @return     GRP2DCOLOR_RGBA8 : opaque color.
+* 
+* @return     GRP2DCOLOR_RGBA8 : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCOLOR_RGBA8 GRP2DVECTORFILEDXFRENDERAGG::ColorFromACI(int aci)
 {
@@ -2701,10 +2876,12 @@ GRP2DCOLOR_RGBA8 GRP2DVECTORFILEDXFRENDERAGG::ColorFromACI(int aci)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILEDXFRENDERAGG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILEDXFRENDERAGG::Clean()
 {

@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSSLEEP::XWINDOWSSLEEP()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSSLEEP::XWINDOWSSLEEP()
 {
@@ -73,12 +73,12 @@ XWINDOWSSLEEP::XWINDOWSSLEEP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWINDOWSSLEEP::~XWINDOWSSLEEP()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWINDOWSSLEEP::~XWINDOWSSLEEP()
 {
@@ -87,13 +87,13 @@ XWINDOWSSLEEP::~XWINDOWSSLEEP()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSSLEEP::Seconds(int seconds)
 * @brief      Seconds
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  seconds : seconds to sleep
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSSLEEP::Seconds(int seconds)
 {
@@ -102,13 +102,13 @@ void XWINDOWSSLEEP::Seconds(int seconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSSLEEP::MilliSeconds(int milliseconds)
 * @brief      Milli seconds
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  milliseconds : milliseconds to sleep
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSSLEEP::MilliSeconds(int milliseconds)
 {
@@ -117,13 +117,13 @@ void XWINDOWSSLEEP::MilliSeconds(int milliseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XWINDOWSSLEEP::MicroSeconds(int microseconds)
 * @brief      Micro seconds
 * @ingroup    PLATFORM_WINDOWS
-*
+* 
 * @param[in]  microseconds : microseconds to sleep
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XWINDOWSSLEEP::MicroSeconds(int microseconds)
 {

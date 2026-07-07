@@ -60,8 +60,8 @@
 * @fn         UI_PROPERTY_SCROLLEABLE_STATUS::UI_PROPERTY_SCROLLEABLE_STATUS()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SCROLLEABLE_STATUS::UI_PROPERTY_SCROLLEABLE_STATUS()
 {
   Clean();
@@ -74,8 +74,8 @@ UI_PROPERTY_SCROLLEABLE_STATUS::UI_PROPERTY_SCROLLEABLE_STATUS()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SCROLLEABLE_STATUS::~UI_PROPERTY_SCROLLEABLE_STATUS()
 {
   Clean();
@@ -88,8 +88,8 @@ UI_PROPERTY_SCROLLEABLE_STATUS::~UI_PROPERTY_SCROLLEABLE_STATUS()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE_STATUS::Clean()
 {
   active        = false;
@@ -120,8 +120,8 @@ void UI_PROPERTY_SCROLLEABLE_STATUS::Clean()
 * @fn         UI_PROPERTY_SCROLLEABLE::UI_PROPERTY_SCROLLEABLE()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SCROLLEABLE::UI_PROPERTY_SCROLLEABLE()    
 { 
   Clean(); 
@@ -137,8 +137,8 @@ UI_PROPERTY_SCROLLEABLE::UI_PROPERTY_SCROLLEABLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SCROLLEABLE::~UI_PROPERTY_SCROLLEABLE()    
 {   
   Clean();                            
@@ -150,12 +150,12 @@ UI_PROPERTY_SCROLLEABLE::~UI_PROPERTY_SCROLLEABLE()
 * @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_GetActive(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Scroll get active
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_GetActive(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   bool status = false;  
@@ -180,13 +180,13 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_GetActive(UI_PROPERTY_SCROLLEABLE_TYPE type
 * @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_SetActivate(UI_PROPERTY_SCROLLEABLE_TYPE type, bool on)
 * @brief      Scroll set activate
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
-* @param[in]  on : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
+* @param[in]  on : On value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_SetActivate(UI_PROPERTY_SCROLLEABLE_TYPE type, bool on)
 {
   UI_PROPERTY_SCROLLEABLE_ACTIVATE mode = on ? UI_PROPERTY_SCROLLEABLE_ACTIVATE_ON : UI_PROPERTY_SCROLLEABLE_ACTIVATE_OFF;
@@ -209,16 +209,16 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_SetActivate(UI_PROPERTY_SCROLLEABLE_TYPE ty
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_SetActivateAuto(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Clears the user activation override: activation goes back to following the overflow policy.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
-*
-* @return     bool : true if is succesful.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_SetActivateAuto(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   switch(type)
@@ -239,17 +239,16 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_SetActivateAuto(UI_PROPERTY_SCROLLEABLE_TYP
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UI_PROPERTY_SCROLLEABLE_ACTIVATE UI_PROPERTY_SCROLLEABLE::Scroll_GetActivateMode(UI_PROPERTY_SCROLLEABLE_TYPE type)
-* @brief      Returns the user activation override (AUTO / ON / OFF) for an axis. This is the user intent, not the
-*             resolved state (use Scroll_GetActive for the resolved state).
+* @brief      Returns the user activation override (AUTO / ON / OFF) for an axis. This is the user intent, not the resolved state (use Scroll_GetActive for the resolved state).
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
-*
-* @return     UI_PROPERTY_SCROLLEABLE_ACTIVATE : 
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* 
+* @return     UI_PROPERTY_SCROLLEABLE_ACTIVATE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_PROPERTY_SCROLLEABLE_ACTIVATE UI_PROPERTY_SCROLLEABLE::Scroll_GetActivateMode(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   if(type == UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) return horizontal.activateoverride;
@@ -264,9 +263,9 @@ UI_PROPERTY_SCROLLEABLE_ACTIVATE UI_PROPERTY_SCROLLEABLE::Scroll_GetActivateMode
 * @brief      Scroll get visible
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_GetVisible(UI_PROPERTY_SCROLLEABLE_TYPE type)
@@ -293,13 +292,13 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_GetVisible(UI_PROPERTY_SCROLLEABLE_TYPE typ
 * @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_SetVisible(UI_PROPERTY_SCROLLEABLE_TYPE type, bool on)
 * @brief      Scroll set visible
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
-* @param[in]  on : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  type : Type value.
+* @param[in]  on : On value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_SetVisible(UI_PROPERTY_SCROLLEABLE_TYPE type, bool on)
 {
   switch(type)
@@ -327,12 +326,12 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_SetVisible(UI_PROPERTY_SCROLLEABLE_TYPE typ
 * @fn         double UI_PROPERTY_SCROLLEABLE::Scroll_GetLimit(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Scroll get limit
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
 * 
-* @return     double : 
+* @param[in]  type : Type value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_PROPERTY_SCROLLEABLE::Scroll_GetLimit(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   double limit = 0.0f;
@@ -356,11 +355,11 @@ double UI_PROPERTY_SCROLLEABLE::Scroll_GetLimit(UI_PROPERTY_SCROLLEABLE_TYPE typ
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetLimit(UI_PROPERTY_SCROLLEABLE_TYPE type, double limit)
 * @brief      Scroll set limit
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
-* @param[in]  limit : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  type : Type value.
+* @param[in]  limit : Limit value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_SetLimit(UI_PROPERTY_SCROLLEABLE_TYPE type, double limit)
 {
   switch(type)
@@ -380,12 +379,12 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_SetLimit(UI_PROPERTY_SCROLLEABLE_TYPE type,
 * @fn         double UI_PROPERTY_SCROLLEABLE::Scroll_GetDisplacement(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Scroll get displacement
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
 * 
-* @return     double : 
+* @param[in]  type : Type value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_PROPERTY_SCROLLEABLE::Scroll_GetDisplacement(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   double displacement = 0.0f;
@@ -409,12 +408,12 @@ double UI_PROPERTY_SCROLLEABLE::Scroll_GetDisplacement(UI_PROPERTY_SCROLLEABLE_T
 * @fn         double UI_PROPERTY_SCROLLEABLE::Scroll_GetStep(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Scroll get step
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
 * 
-* @return     double : 
+* @param[in]  type : Type value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_PROPERTY_SCROLLEABLE::Scroll_GetStep(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   double step = 0.0f;
@@ -438,11 +437,11 @@ double UI_PROPERTY_SCROLLEABLE::Scroll_GetStep(UI_PROPERTY_SCROLLEABLE_TYPE type
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetStep(UI_PROPERTY_SCROLLEABLE_TYPE type, double step)
 * @brief      Scroll set step
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
-* @param[in]  step : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  type : Type value.
+* @param[in]  step : Step value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_SetStep(UI_PROPERTY_SCROLLEABLE_TYPE type, double step)
 {
   switch(type)
@@ -501,10 +500,10 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_SetStep(UI_PROPERTY_SCROLLEABLE_TYPE type, 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_ResetStep(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Scroll reset step
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  type : Type value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_ResetStep(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   switch(type)
@@ -528,16 +527,16 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_ResetStep(UI_PROPERTY_SCROLLEABLE_TYPE type
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         UI_OVERFLOW_MODE UI_PROPERTY_SCROLLEABLE::Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Get overflow mode for an axis
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-*
-* @return     UI_OVERFLOW_MODE :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* 
+* @return     UI_OVERFLOW_MODE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_OVERFLOW_MODE UI_PROPERTY_SCROLLEABLE::Scroll_GetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   switch(type)
@@ -552,15 +551,15 @@ UI_OVERFLOW_MODE UI_PROPERTY_SCROLLEABLE::Scroll_GetOverflow(UI_PROPERTY_SCROLLE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE type, UI_OVERFLOW_MODE mode)
 * @brief      Set overflow mode for an axis (or both with ALL)
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-* @param[in]  mode :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  mode : Mode value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_SetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE type, UI_OVERFLOW_MODE mode)
 {
   switch(type)
@@ -577,14 +576,14 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_SetOverflow(UI_PROPERTY_SCROLLEABLE_TYPE ty
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_NeedClip()
 * @brief      Whether the container must clip its content (any axis overflow != visible)
 * @ingroup    USERINTERFACE
-*
-* @return     bool :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_NeedClip()
 {
   if(horizontal.overflow != UI_OVERFLOW_VISIBLE) return true;
@@ -595,18 +594,18 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_NeedClip()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double UI_PROPERTY_SCROLLEABLE::Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE type, double fullviewport)
 * @brief      Single overlay-vs-classic seam. Overlay (default): the scrollbar floats, content keeps the full viewport.
 * @note       Classic mode (future) will subtract the perpendicular scrollbar width here; nothing else changes.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-* @param[in]  fullviewport :
-*
-* @return     double :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  fullviewport : Fullviewport value.
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_PROPERTY_SCROLLEABLE::Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABLE_TYPE type, double fullviewport)
 {
   (void)type;
@@ -617,18 +616,18 @@ double UI_PROPERTY_SCROLLEABLE::Scroll_GetContentViewport(UI_PROPERTY_SCROLLEABL
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_ResolvePolicy(UI_PROPERTY_SCROLLEABLE_TYPE type, double viewport, double contentextent)
 * @brief      Resolve active/visible/limit for an axis from its overflow mode and content vs viewport.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-* @param[in]  viewport :
-* @param[in]  contentextent :
-*
-* @return     bool : whether clip is needed on this axis (overflow != visible).
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  viewport : Viewport value.
+* @param[in]  contentextent : Contentextent value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_ResolvePolicy(UI_PROPERTY_SCROLLEABLE_TYPE type, double viewport, double contentextent)
 {
   if((type != UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) && (type != UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL)) return false;
@@ -669,15 +668,15 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_ResolvePolicy(UI_PROPERTY_SCROLLEABLE_TYPE 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetFraction(UI_PROPERTY_SCROLLEABLE_TYPE type, double fraction)
 * @brief      Sets the scroll position from a 0..1 fraction (0 = start, 1 = end). Back-channel for interactive bars.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-* @param[in]  fraction :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  fraction : Fraction value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_SetFraction(UI_PROPERTY_SCROLLEABLE_TYPE type, double fraction)
 {
   if(fraction < 0.0f) fraction = 0.0f;
@@ -693,15 +692,15 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_SetFraction(UI_PROPERTY_SCROLLEABLE_TYPE ty
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarWidth(UI_PROPERTY_SCROLLEABLE_TYPE type, double width)
 * @brief      Sets the scrollbar thickness (vertical: width, horizontal: height) for an axis (ALL = both).
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-* @param[in]  width :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  width : Width value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarWidth(UI_PROPERTY_SCROLLEABLE_TYPE type, double width)
 {
   switch(type)
@@ -717,16 +716,16 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarWidth(UI_PROPERTY_SCROLLEABLE_TYPE ty
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         double UI_PROPERTY_SCROLLEABLE::Scroll_GetBarWidth(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Gets the scrollbar thickness for an axis.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-*
-* @return     double :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* 
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_PROPERTY_SCROLLEABLE::Scroll_GetBarWidth(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   switch(type)
@@ -741,15 +740,15 @@ double UI_PROPERTY_SCROLLEABLE::Scroll_GetBarWidth(UI_PROPERTY_SCROLLEABLE_TYPE 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarShown(UI_PROPERTY_SCROLLEABLE_TYPE type, bool shown)
 * @brief      If false the bar is not drawn nor interactive, but scrolling keeps working (swipe / programmatic).
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-* @param[in]  shown :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  shown : Shown value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarShown(UI_PROPERTY_SCROLLEABLE_TYPE type, bool shown)
 {
   switch(type)
@@ -765,16 +764,16 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarShown(UI_PROPERTY_SCROLLEABLE_TYPE ty
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_GetBarShown(UI_PROPERTY_SCROLLEABLE_TYPE type)
 * @brief      Whether the bar is configured to be drawn/interactive for an axis.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  type :
-*
-* @return     bool :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_GetBarShown(UI_PROPERTY_SCROLLEABLE_TYPE type)
 {
   switch(type)
@@ -789,12 +788,16 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_GetBarShown(UI_PROPERTY_SCROLLEABLE_TYPE ty
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarColors(UI_PROPERTY_SCROLLEABLE_TYPE type, int thumb_r, ...)
+* 
+* @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarColors(UI_PROPERTY_SCROLLEABLE_TYPE type, UI_COLOR& thumbcolor, UI_COLOR& trackcolor)
 * @brief      Sets thumb and track RGBA colors (0..255) for an axis (ALL = both).
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  thumbcolor : Thumbcolor value.
+* @param[in]  trackcolor : Trackcolor value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarColors(UI_PROPERTY_SCROLLEABLE_TYPE type, UI_COLOR& thumbcolor, UI_COLOR& trackcolor)
 {
   UI_PROPERTY_SCROLLEABLE_STATUS* targets[2] = { NULL, NULL };
@@ -821,12 +824,18 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarColors(UI_PROPERTY_SCROLLEABLE_TYPE t
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarThumbColor(UI_PROPERTY_SCROLLEABLE_TYPE type, int& r, int& g, int& b, int& a)
 * @brief      Gets the thumb RGBA color for an axis.
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  r : R value.
+* @param[in]  g : G value.
+* @param[in]  b : B value.
+* @param[in]  a : A value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarThumbColor(UI_PROPERTY_SCROLLEABLE_TYPE type, int& r, int& g, int& b, int& a)
 {
   UI_PROPERTY_SCROLLEABLE_STATUS* status = (type == UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) ? &horizontal : &vertical;
@@ -836,12 +845,18 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarThumbColor(UI_PROPERTY_SCROLLEABLE_TY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarTrackColor(UI_PROPERTY_SCROLLEABLE_TYPE type, int& r, int& g, int& b, int& a)
 * @brief      Gets the track RGBA color for an axis.
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  r : R value.
+* @param[in]  g : G value.
+* @param[in]  b : B value.
+* @param[in]  a : A value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarTrackColor(UI_PROPERTY_SCROLLEABLE_TYPE type, int& r, int& g, int& b, int& a)
 {
   UI_PROPERTY_SCROLLEABLE_STATUS* status = (type == UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) ? &horizontal : &vertical;
@@ -851,12 +866,16 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarTrackColor(UI_PROPERTY_SCROLLEABLE_TY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarSeparation(UI_PROPERTY_SCROLLEABLE_TYPE type, double separationedge, double separationalong)
 * @brief      Sets the bar separation (gap) from the frame, horizontal and vertical, for an axis (ALL = both).
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  separationedge : Separationedge value.
+* @param[in]  separationalong : Separationalong value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarSeparation(UI_PROPERTY_SCROLLEABLE_TYPE type, double separationedge, double separationalong)
 {
   switch(type)
@@ -872,12 +891,16 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_SetBarSeparation(UI_PROPERTY_SCROLLEABLE_TY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarSeparation(UI_PROPERTY_SCROLLEABLE_TYPE type, double& separationedge, double& separationalong)
 * @brief      Gets the bar separation (gap) from the frame for an axis.
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  separationedge : Separationedge value.
+* @param[in]  separationalong : Separationalong value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarSeparation(UI_PROPERTY_SCROLLEABLE_TYPE type, double& separationedge, double& separationalong)
 {
   UI_PROPERTY_SCROLLEABLE_STATUS* status = (type == UI_PROPERTY_SCROLLEABLE_TYPE_HORIZONTAL) ? &horizontal : &vertical;
@@ -888,15 +911,25 @@ void UI_PROPERTY_SCROLLEABLE::Scroll_GetBarSeparation(UI_PROPERTY_SCROLLEABLE_TY
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_GetTrackRect(UI_PROPERTY_SCROLLEABLE_TYPE type, double box_left, ...)
-* @brief      Inset track (gutter) rectangle for an axis, shortened by the container corner radius so the bar clears
-*             rounded corners. Single geometry source for draw and hit-test. Returns false if no bar must be shown.
+* 
+* @fn         bool UI_PROPERTY_SCROLLEABLE::Scroll_GetTrackRect(UI_PROPERTY_SCROLLEABLE_TYPE type, double box_left, double box_top, double box_right, double box_bottom, double radius, double& track_left, double& track_top, double& track_right, double& track_bottom)
+* @brief      Inset track (gutter) rectangle for an axis, shortened by the container corner radius so the bar clears rounded corners. Single geometry source for draw and hit-test. Returns false if no bar must be shown.
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if a bar must be shown on this axis.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  type : Type value.
+* @param[in]  box_left : Box left value.
+* @param[in]  box_top : Box top value.
+* @param[in]  box_right : Box right value.
+* @param[in]  box_bottom : Box bottom value.
+* @param[in]  radius : Radius value.
+* @param[in]  track_left : Track left value.
+* @param[in]  track_top : Track top value.
+* @param[in]  track_right : Track right value.
+* @param[in]  track_bottom : Track bottom value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_PROPERTY_SCROLLEABLE::Scroll_GetTrackRect(UI_PROPERTY_SCROLLEABLE_TYPE type, double box_left, double box_top, double box_right, double box_bottom, double radius, double& track_left, double& track_top, double& track_right, double& track_bottom)
 {
   if(!Scroll_GetVisible(type))  return false;
@@ -952,8 +985,8 @@ bool UI_PROPERTY_SCROLLEABLE::Scroll_GetTrackRect(UI_PROPERTY_SCROLLEABLE_TYPE t
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_PROPERTY_SCROLLEABLE::Clean()
 {  
   

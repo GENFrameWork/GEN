@@ -79,7 +79,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOANDROIDSTREAMI2C::DIOANDROIDSTREAMI2C()
+* @fn         DIOANDROIDSTREAMI2C::DIOANDROIDSTREAMI2C() : DIOSTREAMI2C()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_ANDROID
 * 
@@ -119,7 +119,7 @@ DIOANDROIDSTREAMI2C::~DIOANDROIDSTREAMI2C()
 * @brief      Open
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMI2C::Open()
@@ -153,10 +153,10 @@ bool DIOANDROIDSTREAMI2C::Open()
 * @brief      Wait to filled reading buffer
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  filledto : 
-* @param[in]  timeout : 
+* @param[in]  filledto : Filledto value.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMI2C::WaitToFilledReadingBuffer(int filledto, int timeout)
@@ -175,7 +175,7 @@ bool DIOANDROIDSTREAMI2C::WaitToFilledReadingBuffer(int filledto, int timeout)
 * @brief      Close
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMI2C::Close()
@@ -200,7 +200,7 @@ bool DIOANDROIDSTREAMI2C::Close()
 * @brief      Thread connection
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  data : 
+* @param[in]  data : Data buffer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOANDROIDSTREAMI2C::ThreadConnection(void* data)
@@ -309,11 +309,11 @@ void DIOANDROIDSTREAMI2C::ThreadConnection(void* data)
 * @brief      I2C read
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  address : 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  address : Address value.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMI2C::I2C_Read(XWORD address, XBYTE* buffer, XWORD size)
@@ -351,11 +351,11 @@ bool DIOANDROIDSTREAMI2C::I2C_Read(XWORD address, XBYTE* buffer, XWORD size)
 * @brief      I2C write
 * @ingroup    PLATFORM_ANDROID
 * 
-* @param[in]  address : 
-* @param[in]  buffer : 
-* @param[in]  size : 
+* @param[in]  address : Address value.
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOANDROIDSTREAMI2C::I2C_Write(XWORD address, XBYTE* buffer, XWORD size)

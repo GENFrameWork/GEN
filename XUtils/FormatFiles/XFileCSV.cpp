@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECSV_RECORD::XFILECSV_RECORD()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV_RECORD::XFILECSV_RECORD()
 {
@@ -74,12 +74,12 @@ XFILECSV_RECORD::XFILECSV_RECORD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECSV_RECORD::~XFILECSV_RECORD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV_RECORD::~XFILECSV_RECORD()
 {
@@ -90,13 +90,13 @@ XFILECSV_RECORD::~XFILECSV_RECORD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILECSV_RECORD::GetNElements()
 * @brief      Get N elements
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILECSV_RECORD::GetNElements()
 {
@@ -105,16 +105,16 @@ int XFILECSV_RECORD::GetNElements()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV_RECORD::GetElement(int index, XSTRING& element)
 * @brief      Get element
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-* @param[in]  element :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV_RECORD::GetElement(int index, XSTRING& element)
 {
@@ -130,15 +130,15 @@ bool XFILECSV_RECORD::GetElement(int index, XSTRING& element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR* XFILECSV_RECORD::GetElement(int index)
 * @brief      Get element
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     XCHAR* :
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XFILECSV_RECORD::GetElement(int index)
 {
@@ -152,15 +152,15 @@ XCHAR* XFILECSV_RECORD::GetElement(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV_RECORD::AddElement(XSTRING& element)
 * @brief      Add element
 * @ingroup    XUTILS
-*
-* @param[in]  element :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV_RECORD::AddElement(XSTRING& element)
 {
@@ -178,15 +178,15 @@ bool XFILECSV_RECORD::AddElement(XSTRING& element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV_RECORD::AddElement(XCHAR* element)
 * @brief      Add element
 * @ingroup    XUTILS
-*
-* @param[in]  element :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV_RECORD::AddElement(XCHAR* element)
 {
@@ -205,15 +205,15 @@ bool XFILECSV_RECORD::AddElement(XCHAR* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV_RECORD::Copy(XFILECSV_RECORD* header)
 * @brief      Copy
 * @ingroup    XUTILS
-*
-* @param[in]  header :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  header : Header pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV_RECORD::Copy(XFILECSV_RECORD* header)
 {
@@ -240,15 +240,15 @@ bool XFILECSV_RECORD::Copy(XFILECSV_RECORD* header)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV_RECORD::DeleteElement(int index)
 * @brief      Delete element
 * @ingroup    XUTILS
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV_RECORD::DeleteElement(int index)
 {
@@ -264,13 +264,13 @@ bool XFILECSV_RECORD::DeleteElement(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV_RECORD::DeleteAllElements()
 * @brief      Delete all elements
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV_RECORD::DeleteAllElements()
 {
@@ -285,12 +285,12 @@ bool XFILECSV_RECORD::DeleteAllElements()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILECSV_RECORD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECSV_RECORD::Clean()
 {
@@ -303,11 +303,11 @@ void XFILECSV_RECORD::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILECSV::XFILECSV()
+* 
+* @fn         XFILECSV::XFILECSV(): XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV::XFILECSV(): XFILETXT()
 {
@@ -316,13 +316,13 @@ XFILECSV::XFILECSV(): XFILETXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILECSV::XFILECSV(XPATH& xpath)
+* 
+* @fn         XFILECSV::XFILECSV(XPATH& xpath) : XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
+* 
+* @param[in]  XFILETXT : XFILETXT value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV::XFILECSV(XPATH& xpath) : XFILETXT()
 {
@@ -333,13 +333,13 @@ XFILECSV::XFILECSV(XPATH& xpath) : XFILETXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XFILECSV::XFILECSV(XFILE* file)
+* 
+* @fn         XFILECSV::XFILECSV(XFILE* file) : XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  file :
-*
+* 
+* @param[in]  XFILETXT : XFILETXT pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV::XFILECSV(XFILE* file) : XFILETXT()
 {
@@ -350,12 +350,12 @@ XFILECSV::XFILECSV(XFILE* file) : XFILETXT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECSV::~XFILECSV()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV::~XFILECSV()
 {
@@ -368,16 +368,16 @@ XFILECSV::~XFILECSV()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::Open(XPATH& xpath, bool readonly)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  xpath : 
-* @param[in]  readonly : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  readonly : Readonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::Open(XPATH& xpath, bool readonly)
 {
@@ -390,13 +390,13 @@ bool XFILECSV::Open(XPATH& xpath, bool readonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::Close()
 {
@@ -412,13 +412,13 @@ bool XFILECSV::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCHAR XFILECSV::GetSeparator()
 * @brief      Get separator
 * @ingroup    XUTILS
-*
-* @return     XCHAR :
-*
+* 
+* @return     XCHAR : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR XFILECSV::GetSeparator()
 {
@@ -427,15 +427,15 @@ XCHAR XFILECSV::GetSeparator()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::SetSeparator(XCHAR separator)
 * @brief      Set separator
 * @ingroup    XUTILS
-*
-* @param[in]  separator :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  separator : Separator value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::SetSeparator(XCHAR separator)
 {
@@ -448,13 +448,13 @@ bool XFILECSV::SetSeparator(XCHAR separator)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::HaveHeader()
 * @brief      Have header
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::HaveHeader()
 {
@@ -465,13 +465,13 @@ bool XFILECSV::HaveHeader()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECSV_RECORD* XFILECSV::GetHeader()
 * @brief      Get header
 * @ingroup    XUTILS
-*
-* @return     XFILECSV_RECORD* :
-*
+* 
+* @return     XFILECSV_RECORD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV_RECORD* XFILECSV::GetHeader()
 {
@@ -480,15 +480,15 @@ XFILECSV_RECORD* XFILECSV::GetHeader()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::SetHeader(XFILECSV_RECORD* header)
 * @brief      Set header
 * @ingroup    XUTILS
-*
-* @param[in]  header :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  header : Header pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::SetHeader(XFILECSV_RECORD* header)
 {
@@ -499,13 +499,13 @@ bool XFILECSV::SetHeader(XFILECSV_RECORD* header)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILECSV::GetNRecords()
 * @brief      Get N records
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILECSV::GetNRecords()
 {
@@ -514,15 +514,15 @@ int XFILECSV::GetNRecords()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILECSV_RECORD* XFILECSV::ReadRecord(XDWORD nrecord)
 * @brief      Read record
 * @ingroup    XUTILS
-*
-* @param[in]  nrecord :
-*
-* @return     XFILECSV_RECORD* :
-*
+* 
+* @param[in]  nrecord : Nrecord value.
+* 
+* @return     XFILECSV_RECORD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV_RECORD* XFILECSV::ReadRecord(XDWORD nrecord)
 {
@@ -537,16 +537,16 @@ XFILECSV_RECORD* XFILECSV::ReadRecord(XDWORD nrecord)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::WriteRecord(XDWORD nrecord,XFILECSV_RECORD* record)
 * @brief      Write record
 * @ingroup    XUTILS
-*
-* @param[in]  nrecord :
-* @param[in]  record :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nrecord : Nrecord value.
+* @param[in]  record : Record pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::WriteRecord(XDWORD nrecord,XFILECSV_RECORD* record)
 {
@@ -565,15 +565,15 @@ bool XFILECSV::WriteRecord(XDWORD nrecord,XFILECSV_RECORD* record)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::AddRecord(XFILECSV_RECORD* record)
 * @brief      Add record
 * @ingroup    XUTILS
-*
-* @param[in]  record :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  record : Record pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::AddRecord(XFILECSV_RECORD* record)
 {
@@ -586,15 +586,15 @@ bool XFILECSV::AddRecord(XFILECSV_RECORD* record)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::DeleteRecord(XDWORD nrecord)
 * @brief      Delete record
 * @ingroup    XUTILS
-*
-* @param[in]  nrecord :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nrecord : Nrecord value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::DeleteRecord(XDWORD nrecord)
 {
@@ -610,13 +610,13 @@ bool XFILECSV::DeleteRecord(XDWORD nrecord)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::DeleteAllRecords()
 * @brief      Delete all records
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::DeleteAllRecords()
 {
@@ -630,16 +630,16 @@ bool XFILECSV::DeleteAllRecords()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILECSV::Serialization(bool read,bool haveheader)
+* 
+* @fn         bool XFILECSV::Serialization(bool read, bool haveheader)
 * @brief      Serialization
 * @ingroup    XUTILS
-*
-* @param[in]  read :
-* @param[in]  haveheader :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  read : Read value.
+* @param[in]  haveheader : Haveheader value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::Serialization(bool read, bool haveheader)
 {
@@ -726,16 +726,16 @@ bool XFILECSV::Serialization(bool read, bool haveheader)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool XFILECSV::CreateRecordOfLine(XSTRING& line,XFILECSV_RECORD* record)
+* 
+* @fn         bool XFILECSV::CreateRecordOfLine(XSTRING& line, XFILECSV_RECORD* record)
 * @brief      Create record of line
 * @ingroup    XUTILS
-*
-* @param[in]  line :
-* @param[in]  record :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  line : Line value.
+* @param[in]  record : Record pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::CreateRecordOfLine(XSTRING& line, XFILECSV_RECORD* record)
 {
@@ -777,16 +777,16 @@ bool XFILECSV::CreateRecordOfLine(XSTRING& line, XFILECSV_RECORD* record)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILECSV::CreateLineOfRecord(XFILECSV_RECORD* record,XSTRING& line)
 * @brief      Create line of record
 * @ingroup    XUTILS
-*
-* @param[in]  record :
-* @param[in]  line :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  record : Record pointer to use.
+* @param[in]  line : Line value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILECSV::CreateLineOfRecord(XFILECSV_RECORD* record,XSTRING& line)
 {
@@ -809,12 +809,12 @@ bool XFILECSV::CreateLineOfRecord(XFILECSV_RECORD* record,XSTRING& line)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILECSV::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILECSV::Clean()
 {

@@ -60,11 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_FIELD::XFILEDBF_FIELD()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_FIELD::XFILEDBF_FIELD()
 {
@@ -73,12 +73,12 @@ XFILEDBF_FIELD::XFILEDBF_FIELD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_FIELD::~XFILEDBF_FIELD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_FIELD::~XFILEDBF_FIELD()
 {
@@ -87,12 +87,12 @@ XFILEDBF_FIELD::~XFILEDBF_FIELD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEDBF_FIELD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEDBF_FIELD::Clean()
 {
@@ -108,13 +108,13 @@ void XFILEDBF_FIELD::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_RECORD::XFILEDBF_RECORD(XVECTOR<XFILEDBF_FIELD*>* fields)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  fields :
-*
+* 
+* @param[in]  fields : Fields pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_RECORD::XFILEDBF_RECORD(XVECTOR<XFILEDBF_FIELD*>* fields)
 {
@@ -141,12 +141,12 @@ XFILEDBF_RECORD::XFILEDBF_RECORD(XVECTOR<XFILEDBF_FIELD*>* fields)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_RECORD::~XFILEDBF_RECORD()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_RECORD::~XFILEDBF_RECORD()
 {
@@ -156,13 +156,13 @@ XFILEDBF_RECORD::~XFILEDBF_RECORD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_RECORD::IsDelete()
 * @brief      Is delete
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_RECORD::IsDelete()
 {
@@ -175,15 +175,15 @@ bool XFILEDBF_RECORD::IsDelete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_RECORD::IsFieldEmpty(int indexfield)
 * @brief      Is field empty
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_RECORD::IsFieldEmpty(int indexfield)
 {
@@ -208,15 +208,15 @@ bool XFILEDBF_RECORD::IsFieldEmpty(int indexfield)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XFILEDBF_RECORD::GetData(int indexfield)
 * @brief      Get data
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-*
-* @return     XBYTE* :
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XFILEDBF_RECORD::GetData(int indexfield)
 {
@@ -238,17 +238,17 @@ XBYTE* XFILEDBF_RECORD::GetData(int indexfield)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_RECORD::SetData(int indexfield, XBYTE* data, int limitsize)
 * @brief      Set data
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-* @param[in]  data :
-* @param[in]  limitsize :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* @param[in]  data : Data buffer to use.
+* @param[in]  limitsize : Limitsize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_RECORD::SetData(int indexfield, XBYTE* data, int limitsize)
 {
@@ -269,16 +269,16 @@ bool XFILEDBF_RECORD::SetData(int indexfield, XBYTE* data, int limitsize)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_RECORD::GetDataString(int indexfield, XSTRING& string)
 * @brief      Get data string
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_RECORD::GetDataString(int indexfield, XSTRING& string)
 {
@@ -313,16 +313,16 @@ bool XFILEDBF_RECORD::GetDataString(int indexfield, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_RECORD::SetDataString(int indexfield, XSTRING& string)
 * @brief      Set data string
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-* @param[in]  string :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* @param[in]  string : String to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_RECORD::SetDataString(int indexfield, XSTRING& string)
 {
@@ -355,16 +355,16 @@ bool XFILEDBF_RECORD::SetDataString(int indexfield, XSTRING& string)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_RECORD::SetCharacterType(int indexfield,XCHAR* data)
 * @brief      Set character type
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_RECORD::SetCharacterType(int indexfield,XCHAR* data)
 {
@@ -389,16 +389,16 @@ bool XFILEDBF_RECORD::SetCharacterType(int indexfield,XCHAR* data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_RECORD::SetData(XBYTE* data,XDWORD size)
 * @brief      Set data
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_RECORD::SetData(XBYTE* data,XDWORD size)
 {
@@ -409,13 +409,13 @@ bool XFILEDBF_RECORD::SetData(XBYTE* data,XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEDBF_RECORD::GetSize()
 * @brief      Get size
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEDBF_RECORD::GetSize()
 {
@@ -424,15 +424,15 @@ int XFILEDBF_RECORD::GetSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEDBF_RECORD::GetSizeField(int indexfield)
 * @brief      Get size field
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-*
-* @return     int :
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEDBF_RECORD::GetSizeField(int indexfield)
 {
@@ -448,15 +448,15 @@ int XFILEDBF_RECORD::GetSizeField(int indexfield)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEDBF_RECORD::GetOffset(int indexfield)
 * @brief      Get offset
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-*
-* @return     int :
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEDBF_RECORD::GetOffset(int indexfield)
 {
@@ -482,12 +482,12 @@ int XFILEDBF_RECORD::GetOffset(int indexfield)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEDBF_RECORD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEDBF_RECORD::Clean()
 {
@@ -501,11 +501,11 @@ void XFILEDBF_RECORD::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_HEADER::XFILEDBF_HEADER()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_HEADER::XFILEDBF_HEADER()
 {
@@ -514,13 +514,13 @@ XFILEDBF_HEADER::XFILEDBF_HEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_HEADER::XFILEDBF_HEADER(XFILE* fileb)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  fileb :
-*
+* 
+* @param[in]  fileb : Fileb pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_HEADER::XFILEDBF_HEADER(XFILE* fileb)
 {
@@ -531,12 +531,12 @@ XFILEDBF_HEADER::XFILEDBF_HEADER(XFILE* fileb)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_HEADER::~XFILEDBF_HEADER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_HEADER::~XFILEDBF_HEADER()
 {
@@ -553,15 +553,15 @@ XFILEDBF_HEADER::~XFILEDBF_HEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_HEADER::Load(XFILE* xfile)
 * @brief      Load
 * @ingroup    XUTILS
-*
-* @param[in]  xfile :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xfile : Xfile pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_HEADER::Load(XFILE* xfile)
 {
@@ -623,15 +623,15 @@ bool XFILEDBF_HEADER::Load(XFILE* xfile)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_HEADER::Create(XFILE* fileb)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  fileb :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  fileb : Fileb pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_HEADER::Create(XFILE* fileb)
 {
@@ -721,15 +721,15 @@ bool XFILEDBF_HEADER::Create(XFILE* fileb)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_HEADER::Update(XFILE* fileb)
 * @brief      Update
 * @ingroup    XUTILS
-*
-* @param[in]  fileb :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  fileb : Fileb pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_HEADER::Update(XFILE* fileb)
 {
@@ -746,13 +746,13 @@ bool XFILEDBF_HEADER::Update(XFILE* fileb)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_TYPE XFILEDBF_HEADER::GetType()
 * @brief      Get type
 * @ingroup    XUTILS
-*
-* @return     XFILEDBF_TYPE :
-*
+* 
+* @return     XFILEDBF_TYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_TYPE XFILEDBF_HEADER::GetType()
 {
@@ -775,13 +775,13 @@ XFILEDBF_TYPE XFILEDBF_HEADER::GetType()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XWORD XFILEDBF_HEADER::GetHeaderSize()
 * @brief      Get header size
 * @ingroup    XUTILS
-*
-* @return     XWORD :
-*
+* 
+* @return     XWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD XFILEDBF_HEADER::GetHeaderSize()
 {
@@ -792,13 +792,13 @@ XWORD XFILEDBF_HEADER::GetHeaderSize()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XBYTE* XFILEDBF_HEADER::GetHeaderData()
 * @brief      Get header data
 * @ingroup    XUTILS
-*
-* @return     XBYTE* :
-*
+* 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* XFILEDBF_HEADER::GetHeaderData()
 {
@@ -807,13 +807,13 @@ XBYTE* XFILEDBF_HEADER::GetHeaderData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XFILEDBF_HEADER::GetReservedData()
 * @brief      Get reserved data
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILEDBF_HEADER::GetReservedData()
 {
@@ -826,15 +826,15 @@ XDWORD XFILEDBF_HEADER::GetReservedData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_HEADER::SetReservedData(XDWORD data)
 * @brief      Set reserved data
 * @ingroup    XUTILS
-*
-* @param[in]  data :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  data : Data buffer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_HEADER::SetReservedData(XDWORD data)
 {
@@ -849,13 +849,13 @@ bool XFILEDBF_HEADER::SetReservedData(XDWORD data)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEDBF_HEADER::GetNFields()
 * @brief      Get N fields
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEDBF_HEADER::GetNFields()
 {
@@ -864,13 +864,13 @@ int XFILEDBF_HEADER::GetNFields()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XFILEDBF_HEADER::GetNRecords()
 * @brief      Get N records
 * @ingroup    XUTILS
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XFILEDBF_HEADER::GetNRecords()
 {
@@ -883,15 +883,15 @@ XDWORD XFILEDBF_HEADER::GetNRecords()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_HEADER::SetNRecords(XDWORD nrecords)
 * @brief      Set N records
 * @ingroup    XUTILS
-*
-* @param[in]  nrecords :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nrecords : Nrecords value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_HEADER::SetNRecords(XDWORD nrecords)
 {
@@ -905,13 +905,13 @@ bool XFILEDBF_HEADER::SetNRecords(XDWORD nrecords)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XFILEDBF_HEADER::GetSizeRecord()
 * @brief      Get size record
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XFILEDBF_HEADER::GetSizeRecord()
 {
@@ -935,13 +935,13 @@ int XFILEDBF_HEADER::GetSizeRecord()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XVECTOR<XFILEDBF_FIELD*>* XFILEDBF_HEADER::GetFields()
 * @brief      Get fields
 * @ingroup    XUTILS
-*
-* @return     XVECTOR<XFILEDBF_FIELD*>* :
-*
+* 
+* @return     XVECTOR<XFILEDBF_FIELD*>* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XFILEDBF_FIELD*>* XFILEDBF_HEADER::GetFields()
 {
@@ -950,15 +950,15 @@ XVECTOR<XFILEDBF_FIELD*>* XFILEDBF_HEADER::GetFields()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_FIELD* XFILEDBF_HEADER::GetField(int indexfield)
 * @brief      Get field
 * @ingroup    XUTILS
-*
-* @param[in]  indexfield :
-*
-* @return     XFILEDBF_FIELD* :
-*
+* 
+* @param[in]  indexfield : Indexfield value.
+* 
+* @return     XFILEDBF_FIELD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_FIELD* XFILEDBF_HEADER::GetField(int indexfield)
 {
@@ -971,17 +971,17 @@ XFILEDBF_FIELD* XFILEDBF_HEADER::GetField(int indexfield)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_HEADER::CreateField(XFILEDBF_FIELDTYPE type,XCHAR* name,XBYTE size)
 * @brief      Create field
 * @ingroup    XUTILS
-*
-* @param[in]  type :
-* @param[in]  name :
-* @param[in]  size :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  type : Type value.
+* @param[in]  name : Name to use.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_HEADER::CreateField(XFILEDBF_FIELDTYPE type,XCHAR* name,XBYTE size)
 {
@@ -1022,15 +1022,15 @@ bool XFILEDBF_HEADER::CreateField(XFILEDBF_FIELDTYPE type,XCHAR* name,XBYTE size
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_HEADER::CopyFrom(XFILEDBF_HEADER* header)
 * @brief      Copy from
 * @ingroup    XUTILS
-*
-* @param[in]  header :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  header : Header pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_HEADER::CopyFrom(XFILEDBF_HEADER* header)
 {
@@ -1061,13 +1061,13 @@ bool XFILEDBF_HEADER::CopyFrom(XFILEDBF_HEADER* header)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF_HEADER::DeleteAllFields()
 * @brief      Delete all fields
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF_HEADER::DeleteAllFields()
 {
@@ -1081,12 +1081,12 @@ bool XFILEDBF_HEADER::DeleteAllFields()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEDBF_HEADER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEDBF_HEADER::Clean()
 {
@@ -1100,11 +1100,11 @@ void XFILEDBF_HEADER::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF::XFILEDBF()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF::XFILEDBF()
 {
@@ -1117,13 +1117,13 @@ XFILEDBF::XFILEDBF()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF::XFILEDBF(XPATH& xpath)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF::XFILEDBF(XPATH& xpath)
 {
@@ -1140,13 +1140,13 @@ XFILEDBF::XFILEDBF(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF::XFILEDBF(XFILE* fileb)
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
-* @param[in]  fileb :
-*
+* 
+* @param[in]  fileb : Fileb pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF::XFILEDBF(XFILE* fileb)
 {
@@ -1161,12 +1161,12 @@ XFILEDBF::XFILEDBF(XFILE* fileb)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF::~XFILEDBF()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF::~XFILEDBF()
 {
@@ -1181,16 +1181,16 @@ XFILEDBF::~XFILEDBF()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::Open(XPATH& xpath,bool readonly)
 * @brief      Open
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-* @param[in]  readonly :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* @param[in]  readonly : Readonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::Open(XPATH& xpath,bool readonly)
 {
@@ -1207,15 +1207,15 @@ bool XFILEDBF::Open(XPATH& xpath,bool readonly)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::Create(XPATH& xpath)
-* @brief      Create
+* @brief      Create resource
 * @ingroup    XUTILS
-*
-* @param[in]  xpath :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  xpath : Path to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::Create(XPATH& xpath)
 {
@@ -1235,13 +1235,13 @@ bool XFILEDBF::Create(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::IsOpen()
 * @brief      Is open
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::IsOpen()
 {
@@ -1252,13 +1252,13 @@ bool XFILEDBF::IsOpen()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::Close()
 * @brief      Close
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::Close()
 {
@@ -1275,13 +1275,13 @@ bool XFILEDBF::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XPATH* XFILEDBF::GetXPath()
 * @brief      Get X path
 * @ingroup    XUTILS
-*
-* @return     XPATH* :
-*
+* 
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XPATH* XFILEDBF::GetXPath()
 {
@@ -1290,13 +1290,13 @@ XPATH* XFILEDBF::GetXPath()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_HEADER* XFILEDBF::GetHeader()
 * @brief      Get header
 * @ingroup    XUTILS
-*
-* @return     XFILEDBF_HEADER* :
-*
+* 
+* @return     XFILEDBF_HEADER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_HEADER* XFILEDBF::GetHeader()
 {
@@ -1305,15 +1305,15 @@ XFILEDBF_HEADER* XFILEDBF::GetHeader()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILEDBF_RECORD* XFILEDBF::ReadRecord(XDWORD nrecord)
 * @brief      Read record
 * @ingroup    XUTILS
-*
-* @param[in]  nrecord :
-*
-* @return     XFILEDBF_RECORD* :
-*
+* 
+* @param[in]  nrecord : Nrecord value.
+* 
+* @return     XFILEDBF_RECORD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEDBF_RECORD* XFILEDBF::ReadRecord(XDWORD nrecord)
 {
@@ -1358,16 +1358,16 @@ XFILEDBF_RECORD* XFILEDBF::ReadRecord(XDWORD nrecord)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::WriteRecord(XDWORD nrecord,XFILEDBF_RECORD* record)
 * @brief      Write record
 * @ingroup    XUTILS
-*
-* @param[in]  nrecord :
-* @param[in]  record :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nrecord : Nrecord value.
+* @param[in]  record : Record pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::WriteRecord(XDWORD nrecord,XFILEDBF_RECORD* record)
 {
@@ -1388,16 +1388,16 @@ bool XFILEDBF::WriteRecord(XDWORD nrecord,XFILEDBF_RECORD* record)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::InsertRecord(XDWORD nrecord, XFILEDBF_RECORD* record)
 * @brief      Insert record
 * @ingroup    XUTILS
-*
-* @param[in]  nrecord :
-* @param[in]  record :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nrecord : Nrecord value.
+* @param[in]  record : Record pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::InsertRecord(XDWORD nrecord, XFILEDBF_RECORD* record)
 {
@@ -1425,15 +1425,15 @@ bool XFILEDBF::InsertRecord(XDWORD nrecord, XFILEDBF_RECORD* record)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::AddRecord(XFILEDBF_RECORD* record)
 * @brief      Add record
 * @ingroup    XUTILS
-*
-* @param[in]  record :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  record : Record pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::AddRecord(XFILEDBF_RECORD* record)
 {
@@ -1471,15 +1471,15 @@ bool XFILEDBF::AddRecord(XFILEDBF_RECORD* record)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::DeleteRecord(XDWORD nrecord)
 * @brief      Delete record
 * @ingroup    XUTILS
-*
-* @param[in]  nrecord :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  nrecord : Nrecord value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::DeleteRecord(XDWORD nrecord)
 {
@@ -1510,13 +1510,13 @@ bool XFILEDBF::DeleteRecord(XDWORD nrecord)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::Pack()
 * @brief      Pack
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::Pack()
 {
@@ -1592,16 +1592,16 @@ bool XFILEDBF::Pack()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::Reduction(int maxrecords, int reductionpercent)
 * @brief      Reduction
 * @ingroup    XUTILS
-*
-* @param[in]  maxrecords :
-* @param[in]  reductionpercent :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  maxrecords : Maxrecords value.
+* @param[in]  reductionpercent : Reductionpercent value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::Reduction(int maxrecords, int reductionpercent)
 {
@@ -1625,13 +1625,13 @@ bool XFILEDBF::Reduction(int maxrecords, int reductionpercent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFILEDBF::CreateHeader()
 * @brief      Create header
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEDBF::CreateHeader()
 {
@@ -1643,12 +1643,12 @@ bool XFILEDBF::CreateHeader()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFILEDBF::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFILEDBF::Clean()
 {

@@ -49,23 +49,18 @@
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFRAME::GRPBITMAPFRAME()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFRAME::GRPBITMAPFRAME()
 {
@@ -74,12 +69,12 @@ GRPBITMAPFRAME::GRPBITMAPFRAME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFRAME::~GRPBITMAPFRAME()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFRAME::~GRPBITMAPFRAME()
 {
@@ -89,13 +84,13 @@ GRPBITMAPFRAME::~GRPBITMAPFRAME()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* GRPBITMAPFRAME::GetBitmap()
 * @brief      Get bitmap
 * @ingroup    GRAPHIC
-*
-* @return     GRPBITMAP* : Bitmap of frame class
-*
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* GRPBITMAPFRAME::GetBitmap()
 {
@@ -104,13 +99,13 @@ GRPBITMAP* GRPBITMAPFRAME::GetBitmap()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPBITMAPFRAME::GetAjustX()
 * @brief      Get ajust x
 * @ingroup    GRAPHIC
-*
-* @return     int : ajust x of frame
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPBITMAPFRAME::GetAjustX()
 {
@@ -119,13 +114,13 @@ int GRPBITMAPFRAME::GetAjustX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPBITMAPFRAME::GetAjustY()
 * @brief      Get ajust y
 * @ingroup    GRAPHIC
-*
-* @return     int : ajust y of frame
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPBITMAPFRAME::GetAjustY()
 {
@@ -134,13 +129,13 @@ int GRPBITMAPFRAME::GetAjustY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAPFRAME::SetBitmap(GRPBITMAP* bitmap)
 * @brief      Set bitmap
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  bitmap : GEN_NEW bitmap of frame
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFRAME::SetBitmap(GRPBITMAP* bitmap)
 {
@@ -149,13 +144,13 @@ void GRPBITMAPFRAME::SetBitmap(GRPBITMAP* bitmap)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void GRPBITMAPFRAME::SetAjustX(int x)
+* 
+* @fn         void GRPBITMAPFRAME::SetAjustX(int ajustx)
 * @brief      Set ajust x
 * @ingroup    GRAPHIC
-*
-* @param[in]  x : GEN_NEW ajust x
-*
+* 
+* @param[in]  ajustx : Ajustx value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFRAME::SetAjustX(int ajustx)
 {
@@ -164,13 +159,13 @@ void GRPBITMAPFRAME::SetAjustX(int ajustx)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void GRPBITMAPFRAME::SetAjustY(int y)
+* 
+* @fn         void GRPBITMAPFRAME::SetAjustY(int ajusty)
 * @brief      Set ajust y
 * @ingroup    GRAPHIC
-*
-* @param[in]  y : GEN_NEW ajust y
-*
+* 
+* @param[in]  ajusty : Ajusty value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFRAME::SetAjustY(int ajusty)
 {
@@ -179,12 +174,12 @@ void GRPBITMAPFRAME::SetAjustY(int ajusty)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAPFRAME::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPFRAME::Clean()
 {
@@ -194,16 +189,12 @@ void GRPBITMAPFRAME::Clean()
 }
 
 
-
-
-
-
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPSEQUENCE::GRPBITMAPSEQUENCE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPSEQUENCE::GRPBITMAPSEQUENCE()
 {
@@ -216,12 +207,12 @@ GRPBITMAPSEQUENCE::GRPBITMAPSEQUENCE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPSEQUENCE::~GRPBITMAPSEQUENCE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPSEQUENCE::~GRPBITMAPSEQUENCE()
 {
@@ -234,17 +225,17 @@ GRPBITMAPSEQUENCE::~GRPBITMAPSEQUENCE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPBITMAPSEQUENCE::AddFrame(GRPBITMAP* bitmap,int ajustx,int ajusty)
+* 
+* @fn         bool GRPBITMAPSEQUENCE::AddFrame(GRPBITMAP* bitmap, int ajustx, int ajusty)
 * @brief      Add frame
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  bitmap : bitmap to add
 * @param[in]  ajustx : x ajust into sequence
 * @param[in]  ajusty : y ajust into sequence
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::AddFrame(GRPBITMAP* bitmap, int ajustx, int ajusty)
 {
@@ -262,15 +253,15 @@ bool GRPBITMAPSEQUENCE::AddFrame(GRPBITMAP* bitmap, int ajustx, int ajusty)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::DelAllSequence(bool full)
 * @brief      Del all sequence
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  full : deletes content
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::DelAllSequence(bool full)
 {
@@ -285,13 +276,13 @@ bool GRPBITMAPSEQUENCE::DelAllSequence(bool full)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFRAME* GRPBITMAPSEQUENCE::GetActualFrame()
 * @brief      Get actual frame
 * @ingroup    GRAPHIC
-*
-* @return     GRPBITMAPFRAME* : Actual frame class
-*
+* 
+* @return     GRPBITMAPFRAME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFRAME* GRPBITMAPSEQUENCE::GetActualFrame()
 {
@@ -300,13 +291,13 @@ GRPBITMAPFRAME* GRPBITMAPSEQUENCE::GetActualFrame()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPBITMAPSEQUENCE::GetActualFrameIndex()
 * @brief      Get actual frame index
 * @ingroup    GRAPHIC
-*
-* @return     int : actual frame index
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPBITMAPSEQUENCE::GetActualFrameIndex()
 {
@@ -315,15 +306,15 @@ int GRPBITMAPSEQUENCE::GetActualFrameIndex()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFRAME* GRPBITMAPSEQUENCE::GetFrame(XWORD nframe)
 * @brief      Get frame
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  nframe : index frame class
-*
-* @return     GRPBITMAPFRAME* : frame class
-*
+* 
+* @return     GRPBITMAPFRAME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFRAME* GRPBITMAPSEQUENCE::GetFrame(XWORD nframe)
 {
@@ -333,13 +324,13 @@ GRPBITMAPFRAME* GRPBITMAPSEQUENCE::GetFrame(XWORD nframe)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPBITMAPSEQUENCE::GetNFrames()
 * @brief      Get N frames
 * @ingroup    GRAPHIC
-*
-* @return     int : number of frames
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPBITMAPSEQUENCE::GetNFrames()
 {
@@ -348,13 +339,13 @@ int GRPBITMAPSEQUENCE::GetNFrames()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPBITMAPSEQUENCE::GetNLoops()
 * @brief      Get N loops
 * @ingroup    GRAPHIC
-*
-* @return     int : number of loops to made in the sequence
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPBITMAPSEQUENCE::GetNLoops()
 {
@@ -363,13 +354,13 @@ int GRPBITMAPSEQUENCE::GetNLoops()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int GRPBITMAPSEQUENCE::GetNLoopsMade()
 * @brief      Get N loops made
 * @ingroup    GRAPHIC
-*
-* @return     int : Number of Loops Made
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int GRPBITMAPSEQUENCE::GetNLoopsMade()
 {
@@ -378,15 +369,15 @@ int GRPBITMAPSEQUENCE::GetNLoopsMade()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::SetNLoops(int nloops)
 * @brief      Set N loops
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  nloops : number of loops
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::SetNLoops(int nloops)
 {
@@ -397,15 +388,15 @@ bool GRPBITMAPSEQUENCE::SetNLoops(int nloops)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::SetNLoopsMade(int nloopsmade)
 * @brief      Set N loops made
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  nloopsmade : number of loops made
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::SetNLoopsMade(int nloopsmade)
 {
@@ -416,16 +407,16 @@ bool GRPBITMAPSEQUENCE::SetNLoopsMade(int nloopsmade)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::AjustAllSequence(int ajustx, int ajusty)
 * @brief      Ajust all sequence
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  ajustx : x ajust for all frames
 * @param[in]  ajusty : y ajust for all frames
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::AjustAllSequence(int ajustx, int ajusty)
 {
@@ -447,17 +438,17 @@ bool GRPBITMAPSEQUENCE::AjustAllSequence(int ajustx, int ajusty)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFRAME* GRPBITMAPSEQUENCE::Play(int nloops, bool ajusttimeauto, bool reverse)
 * @brief      Play
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  nloops : nloops to made
 * @param[in]  ajusttimeauto : is time ajust automatic
 * @param[in]  reverse : is reverse sequence
-*
-* @return     GRPBITMAPFRAME* : frame to show
-*
+* 
+* @return     GRPBITMAPFRAME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFRAME* GRPBITMAPSEQUENCE::Play(int nloops, bool ajusttimeauto, bool reverse)
 {
@@ -482,13 +473,13 @@ GRPBITMAPFRAME* GRPBITMAPSEQUENCE::Play(int nloops, bool ajusttimeauto, bool rev
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::Stop()
 * @brief      Stop
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::Stop()
 {
@@ -508,13 +499,13 @@ bool GRPBITMAPSEQUENCE::Stop()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::Pause()
 * @brief      Pause
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::Pause()
 {
@@ -528,13 +519,13 @@ bool GRPBITMAPSEQUENCE::Pause()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::Finished()
 * @brief      Finished
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::Finished()
 {
@@ -548,13 +539,13 @@ bool GRPBITMAPSEQUENCE::Finished()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::IsPlaying()
 * @brief      Is playing
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::IsPlaying()
 {
@@ -565,13 +556,13 @@ bool GRPBITMAPSEQUENCE::IsPlaying()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::IsEndSequence()
 * @brief      Is end sequence
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::IsEndSequence()
 {
@@ -582,13 +573,13 @@ bool GRPBITMAPSEQUENCE::IsEndSequence()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAPFRAME* GRPBITMAPSEQUENCE::Update()
 * @brief      Update
 * @ingroup    GRAPHIC
-*
-* @return     GRPBITMAPFRAME* : frame to show
-*
+* 
+* @return     GRPBITMAPFRAME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPFRAME* GRPBITMAPSEQUENCE::Update()
 {
@@ -629,15 +620,15 @@ GRPBITMAPFRAME* GRPBITMAPSEQUENCE::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPBITMAPSEQUENCE::AjustTime(int framebysec)
 * @brief      Ajust time
 * @ingroup    GRAPHIC
-*
+* 
 * @param[in]  framebysec : frame by sec to ajust
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::AjustTime(int framebysec)
 {
@@ -656,7 +647,7 @@ bool GRPBITMAPSEQUENCE::AjustTime(int framebysec)
 * @brief      Copy
 * @ingroup    GRAPHIC
 * 
-* @return     GRPBITMAPSEQUENCE* : 
+* @return     GRPBITMAPSEQUENCE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAPSEQUENCE* GRPBITMAPSEQUENCE::Copy()
@@ -690,9 +681,9 @@ GRPBITMAPSEQUENCE* GRPBITMAPSEQUENCE::Copy()
 * @brief      Flip
 * @ingroup    GRAPHIC
 * 
-* @param[in]  horizontal : 
+* @param[in]  horizontal : Horizontal value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPBITMAPSEQUENCE::Flip(bool horizontal)
@@ -724,12 +715,12 @@ bool GRPBITMAPSEQUENCE::Flip(bool horizontal)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPBITMAPSEQUENCE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPBITMAPSEQUENCE::Clean()
 {

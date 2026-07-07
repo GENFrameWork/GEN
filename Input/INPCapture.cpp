@@ -88,7 +88,7 @@ INPCAPTURE::~INPCAPTURE()
 * @brief      Application set handle
 * @ingroup    INPUT
 * 
-* @param[in]  applicationhandle : 
+* @param[in]  applicationhandle : Applicationhandle pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE::Application_SetHandle(void* applicationhandle)
@@ -103,7 +103,7 @@ void INPCAPTURE::Application_SetHandle(void* applicationhandle)
 * @brief      Activate
 * @ingroup    INPUT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCAPTURE::Activate()
@@ -118,7 +118,7 @@ bool INPCAPTURE::Activate()
 * @brief      Deactivate
 * @ingroup    INPUT
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPCAPTURE::Deactivate()
@@ -133,7 +133,7 @@ bool INPCAPTURE::Deactivate()
 * @brief      Get N keys
 * @ingroup    INPUT
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD INPCAPTURE::GetNKeys()
@@ -148,7 +148,7 @@ XDWORD INPCAPTURE::GetNKeys()
 * @brief      Set N keys
 * @ingroup    INPUT
 * 
-* @param[in]  nkeys : 
+* @param[in]  nkeys : Nkeys value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE::SetNKeys(XDWORD nkeys)
@@ -163,7 +163,7 @@ void INPCAPTURE::SetNKeys(XDWORD nkeys)
 * @brief      Get limit
 * @ingroup    INPUT
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD INPCAPTURE::GetLimit()
@@ -178,7 +178,7 @@ XDWORD INPCAPTURE::GetLimit()
 * @brief      Set limit
 * @ingroup    INPUT
 * 
-* @param[in]  limit : 
+* @param[in]  limit : Limit value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPCAPTURE::SetLimit(XDWORD limit)
@@ -193,7 +193,7 @@ void INPCAPTURE::SetLimit(XDWORD limit)
 * @brief      Get buffer
 * @ingroup    INPUT
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* INPCAPTURE::GetBuffer()
@@ -208,7 +208,7 @@ XBUFFER* INPCAPTURE::GetBuffer()
 * @brief      Get string
 * @ingroup    INPUT
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* INPCAPTURE::GetString()

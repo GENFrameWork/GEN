@@ -85,8 +85,8 @@ CIPHERKEYSFILEPEM_ENTRYBUFFER::CIPHERKEYSFILEPEM_ENTRYBUFFER()
 * 
 * @fn         CIPHERKEYSFILEPEM_ENTRYBUFFER::~CIPHERKEYSFILEPEM_ENTRYBUFFER()
 * @brief      Destructor of class
-* @ingroup    CIPHER
 * @note       VIRTUAL
+* @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERKEYSFILEPEM_ENTRYBUFFER::~CIPHERKEYSFILEPEM_ENTRYBUFFER()
@@ -99,8 +99,8 @@ CIPHERKEYSFILEPEM_ENTRYBUFFER::~CIPHERKEYSFILEPEM_ENTRYBUFFER()
 * 
 * @fn         void CIPHERKEYSFILEPEM_ENTRYBUFFER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @ingroup    CIPHER
 * @note       INTERNAL
+* @ingroup    CIPHER
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERKEYSFILEPEM_ENTRYBUFFER::Clean()
@@ -151,9 +151,9 @@ CIPHERKEYSFILEPEM::~CIPHERKEYSFILEPEM()
 * @brief      Key add
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEPEM::Key_Add(CIPHERKEY* key)
@@ -173,9 +173,9 @@ bool CIPHERKEYSFILEPEM::Key_Add(CIPHERKEY* key)
 * @brief      Key del
 * @ingroup    CIPHER
 * 
-* @param[in]  key : 
+* @param[in]  key : Key pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEPEM::Key_Del(CIPHERKEY* key)
@@ -198,7 +198,7 @@ bool CIPHERKEYSFILEPEM::Key_Del(CIPHERKEY* key)
 * @brief      Key del all
 * @ingroup    CIPHER
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEPEM::Key_DelAll()
@@ -221,9 +221,9 @@ bool CIPHERKEYSFILEPEM::Key_DelAll()
 * @brief      decode certificates
 * @ingroup    CIPHER
 * 
-* @param[in]  lines : 
+* @param[in]  lines : Lines pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
@@ -382,14 +382,14 @@ bool CIPHERKEYSFILEPEM::DecodeCertificates(XVECTOR<XSTRING*>* lines)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERKEYCERTIFICATE* certificate, XBER_XEVENT* event)
+* @fn         bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certificate, XBER_XEVENT* event)
 * @brief      get certificated propertys
 * @ingroup    CIPHER
 * 
-* @param[in]  certificate : 
-* @param[in]  event : 
+* @param[in]  certificate : Certificate pointer to use.
+* @param[in]  event : Event to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certificate, XBER_XEVENT* event)
@@ -846,7 +846,7 @@ bool CIPHERKEYSFILEPEM::GetCertificatedPropertys(CIPHERCERTIFICATEX509* certific
 * @note       INTERNAL
 * @ingroup    CIPHER
 * 
-* @param[in]  event : 
+* @param[in]  event : Event to process.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERKEYSFILEPEM::HandleEvent_XBER(XBER_XEVENT* event)
@@ -897,7 +897,7 @@ void CIPHERKEYSFILEPEM::HandleEvent_XBER(XBER_XEVENT* event)
 * @note       INTERNAL
 * @ingroup    CIPHER
 * 
-* @param[in]  xevent : 
+* @param[in]  xevent : Xevent pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERKEYSFILEPEM::HandleEvent(XEVENT* xevent)

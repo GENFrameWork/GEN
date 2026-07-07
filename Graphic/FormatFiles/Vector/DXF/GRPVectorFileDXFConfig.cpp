@@ -98,7 +98,7 @@ GRPVECTORFILEDXFCONFIG::~GRPVECTORFILEDXFCONFIG()
 * @brief      Get header
 * @ingroup    GRAPHIC
 * 
-* @return     GRPVECTORFILEDXFTEXTSECTIONHEADER* : 
+* @return     GRPVECTORFILEDXFTEXTSECTIONHEADER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILEDXFTEXTSECTIONHEADER* GRPVECTORFILEDXFCONFIG::GetHeader()
@@ -113,9 +113,9 @@ GRPVECTORFILEDXFTEXTSECTIONHEADER* GRPVECTORFILEDXFCONFIG::GetHeader()
 * @brief      Set header
 * @ingroup    GRAPHIC
 * 
-* @param[in]  header : 
+* @param[in]  header : Header pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFCONFIG::SetHeader(GRPVECTORFILEDXFTEXTSECTIONHEADER* header)
@@ -169,9 +169,9 @@ bool GRPVECTORFILEDXFCONFIG::SetHeader(GRPVECTORFILEDXFTEXTSECTIONHEADER* header
 * @brief      Create file
 * @ingroup    GRAPHIC
 * 
-* @param[in]  pathfile : 
+* @param[in]  pathfile : Pathfile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFCONFIG::Create_File(XCHAR* pathfile)
@@ -195,9 +195,9 @@ bool GRPVECTORFILEDXFCONFIG::Create_File(XCHAR* pathfile)
 * @brief      Load file
 * @ingroup    GRAPHIC
 * 
-* @param[in]  pathfile : 
+* @param[in]  pathfile : Pathfile pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILEDXFCONFIG::Load_File(XCHAR* pathfile)

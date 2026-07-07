@@ -87,18 +87,18 @@ DELETEFUNC(XLINUXFACTORY, XMUTEX     , XLINUXMUTEX      , Delete_Mutex)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREAD* XLINUXFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* param)
 * @brief      Create thread
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  groupID : group ID of threads
 * @param[in]  ID : ID for thread
 * @param[in]  function : callback to thread
 * @param[in]  param : param to callback
-*
-* @return     XTHREAD* : thread created
-*
+* 
+* @return     XTHREAD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XLINUXFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function,void* param)
 {
@@ -108,16 +108,16 @@ XTHREAD* XLINUXFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFU
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 * @brief      Delete thread
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  groupID : group ID of threads
 * @param[in]  xthread : thread to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 {

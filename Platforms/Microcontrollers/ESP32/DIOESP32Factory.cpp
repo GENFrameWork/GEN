@@ -72,15 +72,15 @@
 #ifdef ANYTYPEOFDIOSTREAMIO
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAM* DIOESP32FACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 * @brief      Create stream IO
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  config :
-*
-* @return     DIOSTREAM* :
-*
+* 
+* @param[in]  config : Configuration object to use.
+* 
+* @return     DIOSTREAM* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAM* DIOESP32FACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 {
@@ -123,15 +123,15 @@ DIOSTREAM* DIOESP32FACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOESP32FACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 * @brief      Delete stream IO
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  diostream :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  diostream : Diostream pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOESP32FACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 {
@@ -150,10 +150,10 @@ bool DIOESP32FACTORY::DeleteStreamIO(DIOSTREAM* diostream)
 * @fn         DIOLEDNEOPIXELWS2812B* DIOESP32FACTORY::CreateLedNeopixelWS2812B()
 * @brief      Create led neopixel WS2812B
 * @ingroup    PLATFORM_ESP32
-*
-* @return     DIOLEDNEOPIXELWS2812B* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOLEDNEOPIXELWS2812B* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLEDNEOPIXELWS2812B* DIOESP32FACTORY::CreateLedNeopixelWS2812B()
 {
   DIOESP32LEDNEOPIXELWS2812B* ledneopixelws2812b = GEN_NEW DIOESP32LEDNEOPIXELWS2812B();
@@ -168,12 +168,12 @@ DIOLEDNEOPIXELWS2812B* DIOESP32FACTORY::CreateLedNeopixelWS2812B()
 * @fn         bool DIOESP32FACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixelws2812b)
 * @brief      Delete led neopixel WS2812B
 * @ingroup    PLATFORM_ESP32
-*
-* @param[in]  ledneopixelws2812b : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  ledneopixelws2812b : Ledneopixelws2812b pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOESP32FACTORY::DeleteLedNeopixelWS2812B(DIOLEDNEOPIXELWS2812B* ledneopixelws2812b)
 {
   if(!ledneopixelws2812b) return false;

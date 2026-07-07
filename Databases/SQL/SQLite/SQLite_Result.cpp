@@ -58,12 +58,12 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SQLITE_RESULT::~SQLITE_RESULT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SQLITE_RESULT::~SQLITE_RESULT()
 {
@@ -74,13 +74,13 @@ SQLITE_RESULT::~SQLITE_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD SQLITE_RESULT::GetNumRows()
 * @brief      Get num rows
 * @ingroup    DATABASE
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD SQLITE_RESULT::GetNumRows()
 {
@@ -89,13 +89,13 @@ XQWORD SQLITE_RESULT::GetNumRows()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD SQLITE_RESULT::GetNumColumns()
 * @brief      Get num columns
 * @ingroup    DATABASE
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD SQLITE_RESULT::GetNumColumns()
 {
@@ -104,15 +104,15 @@ XQWORD SQLITE_RESULT::GetNumColumns()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_RESULT::Seek(int index)
 * @brief      Seek
 * @ingroup    DATABASE
-*
-* @param[in]  index :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  index : Index value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_RESULT::Seek(int index)
 {
@@ -122,13 +122,13 @@ bool SQLITE_RESULT::Seek(int index)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_RESULT::First()
 * @brief      First
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_RESULT::First()
 {
@@ -149,13 +149,13 @@ bool SQLITE_RESULT::First()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_RESULT::Last()
 * @brief      Last
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_RESULT::Last()
 {
@@ -165,13 +165,13 @@ bool SQLITE_RESULT::Last()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_RESULT::Next()
 * @brief      Next
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_RESULT::Next()
 {
@@ -188,13 +188,13 @@ bool SQLITE_RESULT::Next()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_RESULT::ProcessRow()
 * @brief      Process row
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_RESULT::ProcessRow()
 {
@@ -261,13 +261,13 @@ bool SQLITE_RESULT::ProcessRow()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_RESULT::Abort()
 * @brief      Abort
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_RESULT::Abort()
 {
@@ -276,13 +276,13 @@ bool SQLITE_RESULT::Abort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool SQLITE_RESULT::HasNext()
 * @brief      Has next
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SQLITE_RESULT::HasNext()
 {
@@ -291,11 +291,11 @@ bool SQLITE_RESULT::HasNext()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SQLITE_RESULT::SQLITE_RESULT()
+* 
+* @fn         SQLITE_RESULT::SQLITE_RESULT(): DB_SQL_RESULT()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SQLITE_RESULT::SQLITE_RESULT(): DB_SQL_RESULT()
 {
@@ -304,12 +304,12 @@ SQLITE_RESULT::SQLITE_RESULT(): DB_SQL_RESULT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SQLITE_RESULT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SQLITE_RESULT::Clean()
 {

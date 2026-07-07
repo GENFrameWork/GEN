@@ -78,13 +78,13 @@ APPFLOWEXTENDED* APPFLOWEXTENDED::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWEXTENDED::GetIsInstanced()
 * @brief      Get is instanced
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED::GetIsInstanced()
 {
@@ -93,13 +93,13 @@ bool APPFLOWEXTENDED::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWEXTENDED& APPFLOWEXTENDED::GetInstance()
 * @brief      Get instance
 * @ingroup    APPFLOW
-*
-* @return     APPFLOWEXTENDED& : 
-*
+* 
+* @return     APPFLOWEXTENDED& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED& APPFLOWEXTENDED::GetInstance()
 {
@@ -110,13 +110,13 @@ APPFLOWEXTENDED& APPFLOWEXTENDED::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool APPFLOWEXTENDED::DelInstance()
 * @brief      Del instance
 * @ingroup    APPFLOW
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED::DelInstance()
 {
@@ -138,10 +138,10 @@ bool APPFLOWEXTENDED::DelInstance()
 * @brief      APP start
 * @ingroup    APPFLOW
 * 
-* @param[in]  appcfg : 
-* @param[in]  appconsole : 
+* @param[in]  appcfg : Appconfiguration pointer to use.
+* @param[in]  appconsole : Appconsole pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED::APPStart(APPFLOWCFG* appcfg, APPFLOWCONSOLE* appconsole)
@@ -291,7 +291,7 @@ bool APPFLOWEXTENDED::APPStart(APPFLOWCFG* appcfg, APPFLOWCONSOLE* appconsole)
 * @brief      APP end
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED::APPEnd()
@@ -408,7 +408,7 @@ bool APPFLOWEXTENDED::APPEnd()
 * @brief      Get CFG
 * @ingroup    APPFLOW
 * 
-* @return     APPFLOWCFG* : 
+* @return     APPFLOWCFG* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCFG* APPFLOWEXTENDED::GetCFG()
@@ -423,7 +423,7 @@ APPFLOWCFG* APPFLOWEXTENDED::GetCFG()
 * @brief      Get console
 * @ingroup    APPFLOW
 * 
-* @return     APPFLOWCONSOLE* : 
+* @return     APPFLOWCONSOLE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWCONSOLE* APPFLOWEXTENDED::GetConsole()
@@ -439,7 +439,7 @@ APPFLOWCONSOLE* APPFLOWEXTENDED::GetConsole()
 * @brief      Get application status
 * @ingroup    APPFLOW
 * 
-* @return     APPFLOWEXTENDED_APPLICATIONSTATUS* : 
+* @return     APPFLOWEXTENDED_APPLICATIONSTATUS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED_APPLICATIONSTATUS* APPFLOWEXTENDED::GetApplicationStatus()
@@ -456,7 +456,7 @@ APPFLOWEXTENDED_APPLICATIONSTATUS* APPFLOWEXTENDED::GetApplicationStatus()
 * @brief      Get internet status
 * @ingroup    APPFLOW
 * 
-* @return     APPFLOWEXTENDED_INTERNETSTATUS* : 
+* @return     APPFLOWEXTENDED_INTERNETSTATUS* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED_INTERNETSTATUS* APPFLOWEXTENDED::GetInternetStatus()
@@ -472,7 +472,7 @@ APPFLOWEXTENDED_INTERNETSTATUS* APPFLOWEXTENDED::GetInternetStatus()
 * @brief      Show all
 * @ingroup    APPFLOW
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWEXTENDED::ShowAll()
@@ -530,11 +530,11 @@ bool APPFLOWEXTENDED::ShowAll()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWEXTENDED::APPFLOWEXTENDED()
 * @brief      Constructor of class
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED::APPFLOWEXTENDED()
 {
@@ -543,12 +543,12 @@ APPFLOWEXTENDED::APPFLOWEXTENDED()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         APPFLOWEXTENDED::~APPFLOWEXTENDED()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED::~APPFLOWEXTENDED()
 {
@@ -562,7 +562,7 @@ APPFLOWEXTENDED::~APPFLOWEXTENDED()
 * @brief      Thread function update
 * @ingroup    APPFLOW
 * 
-* @param[in]  param : 
+* @param[in]  param : Param pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWEXTENDED::ThreadFunction_Update(void* param)
@@ -605,12 +605,12 @@ void APPFLOWEXTENDED::ThreadFunction_Update(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void APPFLOWEXTENDED::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    APPFLOW
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void APPFLOWEXTENDED::Clean()
 {

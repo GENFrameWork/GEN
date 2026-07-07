@@ -57,11 +57,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         SNDFILEWAV::SNDFILEWAV()
+* 
+* @fn         SNDFILEWAV::SNDFILEWAV() : SNDFILE()
 * @brief      Constructor of class
 * @ingroup    SOUND
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDFILEWAV::SNDFILEWAV() : SNDFILE()
 {
@@ -70,12 +70,12 @@ SNDFILEWAV::SNDFILEWAV() : SNDFILE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SNDFILEWAV::~SNDFILEWAV()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    SOUND
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SNDFILEWAV::~SNDFILEWAV()
 {
@@ -89,7 +89,7 @@ SNDFILEWAV::~SNDFILEWAV()
 * @brief      Load file
 * @ingroup    SOUND
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFILEWAV::LoadFile()
@@ -122,16 +122,15 @@ bool SNDFILEWAV::LoadFile()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool SNDFILEWAV::Open(XCHAR* path, XCHAR* ID)
+* @fn         bool SNDFILEWAV::Open(XCHAR* path)
 * @brief      Open
 * @ingroup    SOUND
-*
-* @param[in]  path : 
-* @param[in]  ID : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  path : Path to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFILEWAV::Open(XCHAR* path)
 {
   fileRIFF = GEN_NEW XFILERIFF();
@@ -173,17 +172,17 @@ bool SNDFILEWAV::Open(XCHAR* path)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool SNDFILEWAV::ReadData(XBYTE* data, XDWORD& sizeread, bool isfinished)
+* @fn         bool SNDFILEWAV::ReadData(XBYTE* data, XDWORD& sizeread, bool& isfinished)
 * @brief      Read data
 * @ingroup    SOUND
-*
-* @param[in]  data : 
-* @param[in]  sizeread : 
-* @param[in]  isfinished : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  data : Data buffer to use.
+* @param[in]  sizeread : Sizeread value.
+* @param[in]  isfinished : Isfinished value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFILEWAV::ReadData(XBYTE* data, XDWORD& sizeread, bool& isfinished)
 {
   if(!fileRIFF)         return false;
@@ -223,10 +222,10 @@ bool SNDFILEWAV::ReadData(XBYTE* data, XDWORD& sizeread, bool& isfinished)
 * @fn         XDWORD SNDFILEWAV::GetDataSize()
 * @brief      Get data size
 * @ingroup    SOUND
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDFILEWAV::GetDataSize()
 {
   return datasizeinfile;
@@ -238,10 +237,10 @@ XDWORD SNDFILEWAV::GetDataSize()
 * @fn         XDWORD SNDFILEWAV::GetReadSize()
 * @brief      Get read size
 * @ingroup    SOUND
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD SNDFILEWAV::GetReadSize()
 {
   return datasizeread;
@@ -253,10 +252,10 @@ XDWORD SNDFILEWAV::GetReadSize()
 * @fn         bool SNDFILEWAV::Close()
 * @brief      Close
 * @ingroup    SOUND
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool SNDFILEWAV::Close()
 {
   if(fileRIFF) 
@@ -279,10 +278,10 @@ bool SNDFILEWAV::Close()
 * @fn         SNDFILEWAV_FORMAT* SNDFILEWAV::GetFormat()
 * @brief      Get format
 * @ingroup    SOUND
-*
-* @return     SNDFILEWAV_FORMAT* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     SNDFILEWAV_FORMAT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 SNDFILEWAV_FORMAT*  SNDFILEWAV::GetFormat()
 {
   return &format;
@@ -290,12 +289,12 @@ SNDFILEWAV_FORMAT*  SNDFILEWAV::GetFormat()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void SNDFILEWAV::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    SOUND
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void SNDFILEWAV::Clean()
 {

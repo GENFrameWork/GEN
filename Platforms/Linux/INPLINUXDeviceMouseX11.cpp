@@ -68,11 +68,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         INPLINUXDEVICEMOUSEX11::INPLINUXDEVICEMOUSEX11()
+* 
+* @fn         INPLINUXDEVICEMOUSEX11::INPLINUXDEVICEMOUSEX11() : INPDEVICE()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPLINUXDEVICEMOUSEX11::INPLINUXDEVICEMOUSEX11() : INPDEVICE()
 {
@@ -93,12 +93,12 @@ INPLINUXDEVICEMOUSEX11::INPLINUXDEVICEMOUSEX11() : INPDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         INPLINUXDEVICEMOUSEX11::~INPLINUXDEVICEMOUSEX11()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 INPLINUXDEVICEMOUSEX11::~INPLINUXDEVICEMOUSEX11()
 {  
@@ -116,13 +116,13 @@ INPLINUXDEVICEMOUSEX11::~INPLINUXDEVICEMOUSEX11()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEMOUSEX11::Update()
 * @brief      Update
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEMOUSEX11::Update()
 {
@@ -202,11 +202,14 @@ bool INPLINUXDEVICEMOUSEX11::Update()
     }
     
   XEvent event; 
- 
-  if(XPending(display))
-    {       
-      XNextEvent(display, &event);
-    
+
+  // XCheckWindowEvent only dequeues events matching this mask for this
+  // window, leaving everything else (ConfigureNotify, ClientMessage, etc.)
+  // untouched in the queue for its own handler. The previous XNextEvent call
+  // dequeued whatever was next regardless of type, silently dropping it if it
+  // wasn't a button event.
+  while(XCheckWindowEvent(display, (*grpscreenx11->GetWindow()), ButtonPressMask | ButtonReleaseMask, &event))
+    {
       switch(event.type)
         {
           case ButtonPress   : {  INPBUTTON* button = GetButtonByCode(event.xbutton.button);
@@ -253,15 +256,15 @@ bool INPLINUXDEVICEMOUSEX11::Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEMOUSEX11::SetScreen(void* screenhandle)
 * @brief      Set screen
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  screenhandle : handle to screen
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEMOUSEX11::SetScreen(void* screenhandle)
 {
@@ -273,11 +276,12 @@ bool INPLINUXDEVICEMOUSEX11::SetScreen(void* screenhandle)
     
   XSelectInput(grpscreenx11->GetDisplay(), (*grpscreenx11->GetWindow()), KeyPressMask | KeyReleaseMask);
 
-  XGrabButton(grpscreenx11->GetDisplay(), AnyButton, AnyModifier, (*grpscreenx11->GetWindowRoot()), False, ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeAsync, None, None);  
-    
-  // XSetWindowAttributes attr;
-  // attr.event_mask = ButtonPressMask | ButtonReleaseMask;  
-  // XChangeWindowAttributes(grpscreenx11->GetDisplay(), (*grpscreenx11->GetWindowRoot()), CWEventMask, &attr);
+  // Grab on our own window, not on the X11 root window. Grabbing on root
+  // intercepts every button click on the whole display, including clicks on
+  // the window manager's own decorations (minimize/maximize/close), so they
+  // never reach the WM. Grabbing on our window only captures clicks that
+  // land on our client area.
+  XGrabButton(grpscreenx11->GetDisplay(), AnyButton, AnyModifier, (*grpscreenx11->GetWindow()), False, ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeAsync, None, None);  
    
   XFlush(grpscreenx11->GetDisplay());
 
@@ -286,12 +290,12 @@ bool INPLINUXDEVICEMOUSEX11::SetScreen(void* screenhandle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void INPLINUXDEVICEMOUSEX11::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void INPLINUXDEVICEMOUSEX11::Clean()
 { 
@@ -300,14 +304,14 @@ void INPLINUXDEVICEMOUSEX11::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEMOUSEX11::CreateAllButtons()
 * @brief      Create all buttons
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEMOUSEX11::CreateAllButtons()
 {
@@ -320,14 +324,14 @@ bool INPLINUXDEVICEMOUSEX11::CreateAllButtons()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool INPLINUXDEVICEMOUSEX11::CreateAllCursors()
 * @brief      Create all cursors
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPLINUXDEVICEMOUSEX11::CreateAllCursors()
 {

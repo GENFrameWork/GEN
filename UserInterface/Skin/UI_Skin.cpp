@@ -68,8 +68,8 @@
 * @fn         UI_SKIN_TEXTBOX_PART::UI_SKIN_TEXTBOX_PART()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN_TEXTBOX_PART::UI_SKIN_TEXTBOX_PART()
 {
   Clean();
@@ -82,8 +82,8 @@ UI_SKIN_TEXTBOX_PART::UI_SKIN_TEXTBOX_PART()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN_TEXTBOX_PART::~UI_SKIN_TEXTBOX_PART()
 {
   Clean();
@@ -95,10 +95,10 @@ UI_SKIN_TEXTBOX_PART::~UI_SKIN_TEXTBOX_PART()
 * @fn         XDWORD UI_SKIN_TEXTBOX_PART::GetLineNumber()
 * @brief      Get line number
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_SKIN_TEXTBOX_PART::GetLineNumber()
 {
   return linenumber;
@@ -110,10 +110,10 @@ XDWORD UI_SKIN_TEXTBOX_PART::GetLineNumber()
 * @fn         void UI_SKIN_TEXTBOX_PART::SetLineNumber(XDWORD linenumber)
 * @brief      Set line number
 * @ingroup    USERINTERFACE
-*
-* @param[in]  linenumber : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  linenumber : Linenumber value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKIN_TEXTBOX_PART::SetLineNumber(XDWORD linenumber)
 {
   this->linenumber = linenumber;
@@ -125,10 +125,10 @@ void UI_SKIN_TEXTBOX_PART::SetLineNumber(XDWORD linenumber)
 * @fn         XDWORD UI_SKIN_TEXTBOX_PART::GetXPos()
 * @brief      Get X pos
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_SKIN_TEXTBOX_PART::GetXPos()
 {
   return xpos;
@@ -140,10 +140,10 @@ XDWORD UI_SKIN_TEXTBOX_PART::GetXPos()
 * @fn         void UI_SKIN_TEXTBOX_PART::SetXPos(XDWORD xpos)
 * @brief      Set X pos
 * @ingroup    USERINTERFACE
-*
-* @param[in]  xpos : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  xpos : Xpos value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKIN_TEXTBOX_PART::SetXPos(XDWORD xpos)
 {
   this->xpos = xpos;
@@ -155,10 +155,10 @@ void UI_SKIN_TEXTBOX_PART::SetXPos(XDWORD xpos)
 * @fn         XDWORD UI_SKIN_TEXTBOX_PART::GetYPos()
 * @brief      Get Y pos
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_SKIN_TEXTBOX_PART::GetYPos()
 {
   return ypos;
@@ -170,10 +170,10 @@ XDWORD UI_SKIN_TEXTBOX_PART::GetYPos()
 * @fn         void UI_SKIN_TEXTBOX_PART::SetYPos(XDWORD ypos)
 * @brief      Set Y pos
 * @ingroup    USERINTERFACE
-*
-* @param[in]  ypos : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  ypos : Ypos value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKIN_TEXTBOX_PART::SetYPos(XDWORD ypos)
 {
   this->ypos = ypos;    
@@ -185,10 +185,10 @@ void UI_SKIN_TEXTBOX_PART::SetYPos(XDWORD ypos)
 * @fn         UI_COLOR* UI_SKIN_TEXTBOX_PART::GetColor()
 * @brief      Get color
 * @ingroup    USERINTERFACE
-*
-* @return     UI_COLOR* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_COLOR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_COLOR* UI_SKIN_TEXTBOX_PART::GetColor()
 {
   return &color;
@@ -200,10 +200,10 @@ UI_COLOR* UI_SKIN_TEXTBOX_PART::GetColor()
 * @fn         XDWORD UI_SKIN_TEXTBOX_PART::GetWidth()
 * @brief      Get width
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_SKIN_TEXTBOX_PART::GetWidth()
 {
   return width;
@@ -215,10 +215,10 @@ XDWORD UI_SKIN_TEXTBOX_PART::GetWidth()
 * @fn         void UI_SKIN_TEXTBOX_PART::SetWidth(XDWORD width)
 * @brief      Set width
 * @ingroup    USERINTERFACE
-*
-* @param[in]  width : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  width : Width value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKIN_TEXTBOX_PART::SetWidth(XDWORD width)
 {
   this->width = width;
@@ -230,10 +230,10 @@ void UI_SKIN_TEXTBOX_PART::SetWidth(XDWORD width)
 * @fn         XDWORD UI_SKIN_TEXTBOX_PART::GetHeight()
 * @brief      Get height
 * @ingroup    USERINTERFACE
-*
-* @return     XDWORD : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD UI_SKIN_TEXTBOX_PART::GetHeight()
 {
   return height;
@@ -245,10 +245,10 @@ XDWORD UI_SKIN_TEXTBOX_PART::GetHeight()
 * @fn         void UI_SKIN_TEXTBOX_PART::SetHeight(XDWORD height)
 * @brief      Set height
 * @ingroup    USERINTERFACE
-*
-* @param[in]  height : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @param[in]  height : Height value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKIN_TEXTBOX_PART::SetHeight(XDWORD height)
 {
   this->height = height;
@@ -260,10 +260,10 @@ void UI_SKIN_TEXTBOX_PART::SetHeight(XDWORD height)
 * @fn         XSTRING* UI_SKIN_TEXTBOX_PART::GetText()
 * @brief      Get text
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_SKIN_TEXTBOX_PART::GetText()
 {
   return &text;
@@ -271,14 +271,14 @@ XSTRING* UI_SKIN_TEXTBOX_PART::GetText()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPBITMAP* UI_SKIN_TEXTBOX_PART::GetImage()
 * @brief      Get inline image (non-NULL means this part is an image, not text)
 * @ingroup    USERINTERFACE
-*
-* @return     GRPBITMAP* :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 GRPBITMAP* UI_SKIN_TEXTBOX_PART::GetImage()
 {
   return image;
@@ -286,14 +286,14 @@ GRPBITMAP* UI_SKIN_TEXTBOX_PART::GetImage()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void UI_SKIN_TEXTBOX_PART::SetImage(GRPBITMAP* image)
 * @brief      Set inline image. The bitmap is owned by the manager's animation cache, so it is NOT freed by this part.
 * @ingroup    USERINTERFACE
-*
-* @param[in]  image :
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  image : Image pointer to use.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKIN_TEXTBOX_PART::SetImage(GRPBITMAP* image)
 {
   this->image = image;
@@ -306,8 +306,8 @@ void UI_SKIN_TEXTBOX_PART::SetImage(GRPBITMAP* image)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKIN_TEXTBOX_PART::Clean()
 {  
   linenumber  = 0;
@@ -331,8 +331,8 @@ void UI_SKIN_TEXTBOX_PART::Clean()
 * @fn         UI_SKIN::UI_SKIN()
 * @brief      Constructor of class
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN::UI_SKIN()    
 { 
   Clean();     
@@ -347,8 +347,8 @@ UI_SKIN::UI_SKIN()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN::~UI_SKIN()    
 { 
   Clean();                            
@@ -360,10 +360,10 @@ UI_SKIN::~UI_SKIN()
 * @fn         XSTRING* UI_SKIN::GetName()
 * @brief      Get name
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_SKIN::GetName()
 {
   return &name;
@@ -375,12 +375,12 @@ XSTRING* UI_SKIN::GetName()
 * @fn         UI_SKIN_TYPE UI_SKIN::GetType(XCHAR* name)
 * @brief      Get type
 * @ingroup    USERINTERFACE
-*
-* @param[in]  name : 
 * 
-* @return     UI_SKIN_TYPE : 
+* @param[in]  name : Name to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_SKIN_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN_TYPE UI_SKIN::GetType(XCHAR* name)
 {
   XSTRING _name;
@@ -402,10 +402,10 @@ UI_SKIN_TYPE UI_SKIN::GetType(XCHAR* name)
 * @fn         UI_SKIN_DRAWMODE UI_SKIN::GetDrawMode()
 * @brief      Get draw mode
 * @ingroup    USERINTERFACE
-*
-* @return     UI_SKIN_DRAWMODE : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     UI_SKIN_DRAWMODE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 UI_SKIN_DRAWMODE UI_SKIN::GetDrawMode()
 {
   return drawmode;
@@ -417,12 +417,12 @@ UI_SKIN_DRAWMODE UI_SKIN::GetDrawMode()
 * @fn         bool UI_SKIN::SetDrawMode(UI_SKIN_DRAWMODE drawmode)
 * @brief      Set draw mode
 * @ingroup    USERINTERFACE
-*
-* @param[in]  drawmode : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  drawmode : Drawmode value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::SetDrawMode(UI_SKIN_DRAWMODE drawmode)
 {
   this->drawmode  = drawmode;
@@ -436,10 +436,10 @@ bool UI_SKIN::SetDrawMode(UI_SKIN_DRAWMODE drawmode)
 * @fn         XSTRING* UI_SKIN::GetRasterFont()
 * @brief      Get raster font
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_SKIN::GetRasterFont()
 {
   return &rasterfontname;
@@ -451,10 +451,10 @@ XSTRING* UI_SKIN::GetRasterFont()
 * @fn         XSTRING* UI_SKIN::GetVectorFont()
 * @brief      Get vector font
 * @ingroup    USERINTERFACE
-*
-* @return     XSTRING* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* UI_SKIN::GetVectorFont()
 {
   return &vectorfontname;
@@ -466,10 +466,10 @@ XSTRING* UI_SKIN::GetVectorFont()
 * @fn         bool UI_SKIN::LoadFonts()
 * @brief      Load fonts
 * @ingroup    USERINTERFACE
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::LoadFonts()
 {
   return false;
@@ -481,13 +481,13 @@ bool UI_SKIN::LoadFonts()
 * @fn         double UI_SKIN::GetWidthString(XCHAR* string, XDWORD sizefont)
 * @brief      Get with string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  string : 
-* @param[in]  sizefont : 
 * 
-* @return     double : 
+* @param[in]  string : String to use.
+* @param[in]  sizefont : Sizefont value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_SKIN::GetWidthString(XCHAR* string, XDWORD sizefont)
 {
   return 0;
@@ -499,13 +499,13 @@ double UI_SKIN::GetWidthString(XCHAR* string, XDWORD sizefont)
 * @fn         double UI_SKIN::GetWidthString(XSTRING& string, XDWORD sizefont)
 * @brief      Get with string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  string : 
-* @param[in]  sizefont : 
 * 
-* @return     double : 
+* @param[in]  string : String to use.
+* @param[in]  sizefont : Sizefont value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_SKIN::GetWidthString(XSTRING& string, XDWORD sizefont)
 {
   return GetWidthString(string.Get(), sizefont);
@@ -517,13 +517,13 @@ double UI_SKIN::GetWidthString(XSTRING& string, XDWORD sizefont)
 * @fn         double UI_SKIN::GetHeightString(XCHAR* string, XDWORD sizefont)
 * @brief      Get height string
 * @ingroup    USERINTERFACE
-*
-* @param[in]  string : 
-* @param[in]  sizefont : 
 * 
-* @return     double : 
+* @param[in]  string : String to use.
+* @param[in]  sizefont : Sizefont value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     double : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 double UI_SKIN::GetHeightString(XCHAR* string, XDWORD sizefont)
 {
   return 0;
@@ -536,10 +536,10 @@ double UI_SKIN::GetHeightString(XCHAR* string, XDWORD sizefont)
 * @brief      Get height string
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  string : 
-* @param[in]  sizefont : 
+* @param[in]  string : String to use.
+* @param[in]  sizefont : Sizefont value.
 * 
-* @return     double : 
+* @return     double : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 double UI_SKIN::GetHeightString(XSTRING& string, XDWORD sizefont)
@@ -554,10 +554,10 @@ double UI_SKIN::GetHeightString(XSTRING& string, XDWORD sizefont)
 * @brief      Calculate boundary line
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine(UI_ELEMENT* element, bool adjustsizemargin)
@@ -595,10 +595,10 @@ bool UI_SKIN::CalculateBoundaryLine(UI_ELEMENT* element, bool adjustsizemargin)
 * @brief      Calculate boundary line scroll
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_Scroll(UI_ELEMENT* element, bool adjustsizemargin)
@@ -613,10 +613,10 @@ bool UI_SKIN::CalculateBoundaryLine_Scroll(UI_ELEMENT* element, bool adjustsizem
 * @brief      Calculate boundary line text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_Text(UI_ELEMENT* element, bool adjustsizemargin)
@@ -631,10 +631,10 @@ bool UI_SKIN::CalculateBoundaryLine_Text(UI_ELEMENT* element, bool adjustsizemar
 * @brief      Calculate boundary line text box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_TextBox(UI_ELEMENT* element, bool adjustsizemargin)
@@ -649,10 +649,10 @@ bool UI_SKIN::CalculateBoundaryLine_TextBox(UI_ELEMENT* element, bool adjustsize
 * @brief      Calculate boundary line image
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_Image(UI_ELEMENT* element, bool adjustsizemargin)
@@ -667,10 +667,10 @@ bool UI_SKIN::CalculateBoundaryLine_Image(UI_ELEMENT* element, bool adjustsizema
 * @brief      Calculate boundary line animation
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_Animation(UI_ELEMENT* element, bool adjustsizemargin)
@@ -685,10 +685,10 @@ bool UI_SKIN::CalculateBoundaryLine_Animation(UI_ELEMENT* element, bool adjustsi
 * @brief      Calculate boundary line option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_Option(UI_ELEMENT* element, bool adjustsizemargin)
@@ -703,10 +703,10 @@ bool UI_SKIN::CalculateBoundaryLine_Option(UI_ELEMENT* element, bool adjustsizem
 * @brief      Calculate boundary line multi option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_MultiOption(UI_ELEMENT* element, bool adjustsizemargin)
@@ -721,10 +721,10 @@ bool UI_SKIN::CalculateBoundaryLine_MultiOption(UI_ELEMENT* element, bool adjust
 * @brief      Calculate boundary line button
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_Button(UI_ELEMENT* element, bool adjustsizemargin)
@@ -739,10 +739,10 @@ bool UI_SKIN::CalculateBoundaryLine_Button(UI_ELEMENT* element, bool adjustsizem
 * @brief      Calculate boundary line check box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_CheckBox(UI_ELEMENT* element, bool adjustsizemargin)
@@ -757,10 +757,10 @@ bool UI_SKIN::CalculateBoundaryLine_CheckBox(UI_ELEMENT* element, bool adjustsiz
 * @brief      Calculate boundary line edit text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_EditText(UI_ELEMENT* element, bool adjustsizemargin)
@@ -775,10 +775,10 @@ bool UI_SKIN::CalculateBoundaryLine_EditText(UI_ELEMENT* element, bool adjustsiz
 * @brief      Calculate boundary line form
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_Form(UI_ELEMENT* element, bool adjustsizemargin)
@@ -793,10 +793,10 @@ bool UI_SKIN::CalculateBoundaryLine_Form(UI_ELEMENT* element, bool adjustsizemar
 * @brief      Calculate boundary line menu
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_Menu(UI_ELEMENT* element, bool adjustsizemargin)
@@ -811,10 +811,10 @@ bool UI_SKIN::CalculateBoundaryLine_Menu(UI_ELEMENT* element, bool adjustsizemar
 * @brief      Calculate boundary line list box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_ListBox(UI_ELEMENT* element, bool adjustsizemargin)
@@ -829,10 +829,10 @@ bool UI_SKIN::CalculateBoundaryLine_ListBox(UI_ELEMENT* element, bool adjustsize
 * @brief      Calculate boundary line progress bar
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool adjustsizemargin)
@@ -842,16 +842,16 @@ bool UI_SKIN::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool adjust
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_SKIN::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bool adjustsizemargin)
 * @brief      Calculate boundary line radial progress
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-* @param[in]  adjustsizemargin :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bool adjustsizemargin)
 {
@@ -865,10 +865,10 @@ bool UI_SKIN::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bool adj
 * @brief      calculate boundary line  progress image
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  adjustsizemargin : 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, bool adjustsizemargin)
@@ -883,10 +883,10 @@ bool UI_SKIN::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, bool adju
 * @brief      Calcule boundary line all elements
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
-* @param[in]  recursive : 
+* @param[in]  element : Element to process.
+* @param[in]  recursive : Recursive value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::CalculeBoundaryLine_AllElements(UI_ELEMENT* element, bool recursive)
@@ -908,14 +908,14 @@ bool UI_SKIN::CalculeBoundaryLine_AllElements(UI_ELEMENT* element, bool recursiv
 * @fn         bool UI_SKIN::GetAddPositionScrollSteps(UI_ELEMENT* element, double& x_positionwithscroll, double& y_positionwithscroll)
 * @brief      Get add position scroll steps
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  x_positionwithscroll : 
-* @param[in]  y_positionwithscroll : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  x_positionwithscroll : X positionwithscroll value.
+* @param[in]  y_positionwithscroll : Y positionwithscroll value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::GetAddPositionScrollSteps(UI_ELEMENT* element, double& x_positionwithscroll, double& y_positionwithscroll)
 {  
   if(!element) return false;
@@ -938,14 +938,14 @@ bool UI_SKIN::GetAddPositionScrollSteps(UI_ELEMENT* element, double& x_positionw
 * @fn         bool UI_SKIN::SetElementPosition(UI_ELEMENT* element, double x_position, double y_position)
 * @brief      Set element position
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  x_position : 
-* @param[in]  y_position : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  x_position : X position value.
+* @param[in]  y_position : Y position value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::SetElementPosition(UI_ELEMENT* element, double x_position, double y_position)
 {
   return false;
@@ -957,13 +957,13 @@ bool UI_SKIN::SetElementPosition(UI_ELEMENT* element, double x_position, double 
 * @fn         bool UI_SKIN::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 * @brief      Elements set to redraw
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
-* @param[in]  recursive : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
+* @param[in]  recursive : Recursive value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 {
   if(!element) return false;
@@ -995,9 +995,9 @@ bool UI_SKIN::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 * @brief      Draw
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw(UI_ELEMENT* element)  
@@ -1051,12 +1051,12 @@ bool UI_SKIN::Draw(UI_ELEMENT* element)
 * @fn         bool UI_SKIN::Draw_Scroll(UI_ELEMENT* element)
 * @brief      Draw scroll
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_Scroll(UI_ELEMENT* element)  
 {
   return false;
@@ -1069,9 +1069,9 @@ bool UI_SKIN::Draw_Scroll(UI_ELEMENT* element)
 * @brief      Draw text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_Text(UI_ELEMENT* element)  
@@ -1086,9 +1086,9 @@ bool UI_SKIN::Draw_Text(UI_ELEMENT* element)
 * @brief      Draw text box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_TextBox(UI_ELEMENT* element)  
@@ -1103,9 +1103,9 @@ bool UI_SKIN::Draw_TextBox(UI_ELEMENT* element)
 * @brief      Draw image
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_Image(UI_ELEMENT* element)  
@@ -1120,9 +1120,9 @@ bool UI_SKIN::Draw_Image(UI_ELEMENT* element)
 * @brief      Draw animation
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_Animation(UI_ELEMENT* element)  
@@ -1137,9 +1137,9 @@ bool UI_SKIN::Draw_Animation(UI_ELEMENT* element)
 * @brief      Draw option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_Option(UI_ELEMENT* element)  
@@ -1154,9 +1154,9 @@ bool UI_SKIN::Draw_Option(UI_ELEMENT* element)
 * @brief      Draw multi option
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_MultiOption(UI_ELEMENT* element)  
@@ -1171,9 +1171,9 @@ bool UI_SKIN::Draw_MultiOption(UI_ELEMENT* element)
 * @brief      Draw button
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_Button(UI_ELEMENT* element)  
@@ -1188,9 +1188,9 @@ bool UI_SKIN::Draw_Button(UI_ELEMENT* element)
 * @brief      Draw check box
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_CheckBox(UI_ELEMENT* element)  
@@ -1205,9 +1205,9 @@ bool UI_SKIN::Draw_CheckBox(UI_ELEMENT* element)
 * @brief      Draw edit text
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_EditText(UI_ELEMENT* element)  
@@ -1222,9 +1222,9 @@ bool UI_SKIN::Draw_EditText(UI_ELEMENT* element)
 * @brief      Draw form
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_Form(UI_ELEMENT* element)
@@ -1239,9 +1239,9 @@ bool UI_SKIN::Draw_Form(UI_ELEMENT* element)
 * @brief      Draw menu
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_Menu(UI_ELEMENT* element)  
@@ -1255,12 +1255,12 @@ bool UI_SKIN::Draw_Menu(UI_ELEMENT* element)
 * @fn         bool UI_SKIN::Draw_ListBox(UI_ELEMENT* element)
 * @brief      Draw list box
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_ListBox(UI_ELEMENT* element)  
 {
   return false;
@@ -1272,12 +1272,12 @@ bool UI_SKIN::Draw_ListBox(UI_ELEMENT* element)
 * @fn         bool UI_SKIN::Draw_ProgressBar(UI_ELEMENT* element)
 * @brief      Draw progress bar
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  element : Element to process.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_ProgressBar(UI_ELEMENT* element)
 {
   return false;
@@ -1285,16 +1285,16 @@ bool UI_SKIN::Draw_ProgressBar(UI_ELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool UI_SKIN::Draw_ProgressRadial(UI_ELEMENT* element)
 * @brief      Draw radial progress
 * @ingroup    USERINTERFACE
-*
-* @param[in]  element :
-*
-* @return     bool : true if is succesful.
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_ProgressRadial(UI_ELEMENT* element)
 {
   return false;
@@ -1307,9 +1307,9 @@ bool UI_SKIN::Draw_ProgressRadial(UI_ELEMENT* element)
 * @brief      draw  progress image
 * @ingroup    USERINTERFACE
 * 
-* @param[in]  element : 
+* @param[in]  element : Element to process.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_ProgressImage(UI_ELEMENT* element)
@@ -1324,8 +1324,8 @@ bool UI_SKIN::Draw_ProgressImage(UI_ELEMENT* element)
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void UI_SKIN::Clean()
 {
   drawmode           = UI_SKIN_DRAWMODE_UNKNOWN;  

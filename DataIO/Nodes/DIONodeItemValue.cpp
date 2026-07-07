@@ -95,7 +95,7 @@ DIONODEITEMVALUE::~DIONODEITEMVALUE()
 * @brief      Get type
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIONODEITEMVALUE::GetType()
@@ -106,11 +106,11 @@ XDWORD DIONODEITEMVALUE::GetType()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIONODEITEMVALUE::SetType(DIONODEITEMVALUE_TYPE type)
+* @fn         void DIONODEITEMVALUE::SetType(XDWORD type)
 * @brief      Set type
 * @ingroup    DATAIO
 * 
-* @param[in]  type : 
+* @param[in]  type : Type value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMVALUE::SetType(XDWORD type)
@@ -125,9 +125,9 @@ void DIONODEITEMVALUE::SetType(XDWORD type)
 * @brief      Get description
 * @ingroup    DATAIO
 * 
-* @param[in]  description : 
+* @param[in]  description : Description value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUE::GetDescription(XSTRING& description)
@@ -169,7 +169,7 @@ bool DIONODEITEMVALUE::GetDescription(XSTRING& description)
 * @brief      Get mode
 * @ingroup    DATAIO
 * 
-* @return     DIONODEITEMVALUE_MODE : 
+* @return     DIONODEITEMVALUE_MODE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEMVALUE_MODE DIONODEITEMVALUE::GetMode()
@@ -184,7 +184,7 @@ DIONODEITEMVALUE_MODE DIONODEITEMVALUE::GetMode()
 * @brief      Set mode
 * @ingroup    DATAIO
 * 
-* @param[in]  mode : 
+* @param[in]  mode : Mode value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMVALUE::SetMode(DIONODEITEMVALUE_MODE mode)
@@ -199,7 +199,7 @@ void DIONODEITEMVALUE::SetMode(DIONODEITEMVALUE_MODE mode)
 * @brief      Get mode string
 * @ingroup    DATAIO
 * 
-* @param[in]  modestring : 
+* @param[in]  modestring : Modestring value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMVALUE::GetModeString(XSTRING& modestring)
@@ -230,7 +230,7 @@ void DIONODEITEMVALUE::GetModeString(XSTRING& modestring)
 * @brief      Get date time last update
 * @ingroup    DATAIO
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* DIONODEITEMVALUE::GetDateTimeLastUpdate()
@@ -245,7 +245,7 @@ XVARIANT* DIONODEITEMVALUE::GetDateTimeLastUpdate()
 * @brief      Get value
 * @ingroup    DATAIO
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* DIONODEITEMVALUE::GetValue()
@@ -260,7 +260,7 @@ XVARIANT* DIONODEITEMVALUE::GetValue()
 * @brief      Get min value
 * @ingroup    DATAIO
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* DIONODEITEMVALUE::GetMinValue()
@@ -275,7 +275,7 @@ XVARIANT* DIONODEITEMVALUE::GetMinValue()
 * @brief      Get max value
 * @ingroup    DATAIO
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* DIONODEITEMVALUE::GetMaxValue()
@@ -290,7 +290,7 @@ XVARIANT* DIONODEITEMVALUE::GetMaxValue()
 * @brief      Get difference for change
 * @ingroup    DATAIO
 * 
-* @return     XVARIANT* : 
+* @return     XVARIANT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XVARIANT* DIONODEITEMVALUE::GetDifferenceForChange()
@@ -305,7 +305,7 @@ XVARIANT* DIONODEITEMVALUE::GetDifferenceForChange()
 * @brief      Value has changed
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUE::ValueHasChanged()
@@ -320,7 +320,7 @@ bool DIONODEITEMVALUE::ValueHasChanged()
 * @brief      Set value has changed
 * @ingroup    DATAIO
 * 
-* @param[in]  haschanged : 
+* @param[in]  haschanged : Haschanged value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONODEITEMVALUE::SetValueHasChanged(bool haschanged)
@@ -335,7 +335,7 @@ void DIONODEITEMVALUE::SetValueHasChanged(bool haschanged)
 * @brief      Get unit format
 * @ingroup    DATAIO
 * 
-* @return     DIONODEITEMVALUEUNITFORMAT* : 
+* @return     DIONODEITEMVALUEUNITFORMAT* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONODEITEMVALUEUNITFORMAT* DIONODEITEMVALUE::GetUnitFormat()
@@ -350,7 +350,7 @@ DIONODEITEMVALUEUNITFORMAT* DIONODEITEMVALUE::GetUnitFormat()
 * @brief      Read update date time
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUE::ReadUpdateDateTime()
@@ -374,7 +374,7 @@ bool DIONODEITEMVALUE::ReadUpdateDateTime()
 * @brief      Serialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUE::Serialize()
@@ -414,7 +414,7 @@ bool DIONODEITEMVALUE::Serialize()
 * @brief      Deserialize
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONODEITEMVALUE::Deserialize()

@@ -65,11 +65,11 @@ XFACTORY* XFACTORY::instance = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFACTORY::XFACTORY()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFACTORY::XFACTORY()
 {
@@ -78,12 +78,12 @@ XFACTORY::XFACTORY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFACTORY::~XFACTORY()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFACTORY::~XFACTORY()
 {
@@ -92,14 +92,14 @@ XFACTORY::~XFACTORY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::GetIsInstanced()
 * @brief      Get is instanced
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::GetIsInstanced()
 {
@@ -108,14 +108,14 @@ bool XFACTORY::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFACTORY& XFACTORY::GetInstance()
 * @brief      Get instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     XFACTORY& :
-*
+* 
+* @return     XFACTORY& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFACTORY& XFACTORY::GetInstance()
 {
@@ -129,15 +129,15 @@ XFACTORY& XFACTORY::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::SetInstance(XFACTORY* _instance)
 * @brief      Set instance
 * @ingroup    XUTILS
-*
-* @param[in]  _instance : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  _instance : Instance pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::SetInstance(XFACTORY* _instance)
 {
@@ -152,14 +152,14 @@ bool XFACTORY::SetInstance(XFACTORY* _instance)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::DelInstance()
 * @brief      Del instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::DelInstance()
 {
@@ -173,14 +173,14 @@ bool XFACTORY::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTIMER* XFACTORY::CreateTimer()
 * @brief      Create timer
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     XTIMER* : Timer Created
-*
+* 
+* @return     XTIMER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTIMER* XFACTORY::CreateTimer()
 {
@@ -189,16 +189,16 @@ XTIMER* XFACTORY::CreateTimer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::DeleteTimer(XTIMER* timer)
 * @brief      Delete timer
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  timer : timer to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::DeleteTimer(XTIMER* timer)
 {
@@ -207,14 +207,14 @@ bool XFACTORY::DeleteTimer(XTIMER* timer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDATETIME* XFACTORY::CreateDateTime()
 * @brief      Create date time
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     XDATETIME* : datetime created
-*
+* 
+* @return     XDATETIME* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDATETIME* XFACTORY::CreateDateTime()
 {
@@ -223,16 +223,16 @@ XDATETIME* XFACTORY::CreateDateTime()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::DeleteDateTime(XDATETIME* datetime)
 * @brief      Delete date time
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  datetime : datetime to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::DeleteDateTime(XDATETIME* datetime)
 {
@@ -241,14 +241,14 @@ bool XFACTORY::DeleteDateTime(XDATETIME* datetime)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XRAND* XFACTORY::CreateRand()
 * @brief      Create rand
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     XRAND* : Rand created
-*
+* 
+* @return     XRAND* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XRAND* XFACTORY::CreateRand()
 {
@@ -257,16 +257,16 @@ XRAND* XFACTORY::CreateRand()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::DeleteRand(XRAND* rand)
 * @brief      Delete rand
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  rand : rand to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::DeleteRand(XRAND* rand)
 {
@@ -275,14 +275,14 @@ bool XFACTORY::DeleteRand(XRAND* rand)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XFILE* XFACTORY::Create_File()
 * @brief      Create file
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     XFILE* : File created
-*
+* 
+* @return     XFILE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILE* XFACTORY::Create_File()
 {
@@ -291,16 +291,16 @@ XFILE* XFACTORY::Create_File()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::Delete_File(XFILE* file)
 * @brief      Delete file
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  file : file to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::Delete_File(XFILE* file)
 {
@@ -309,14 +309,14 @@ bool XFACTORY::Delete_File(XFILE* file)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDIR* XFACTORY::Create_Dir()
 * @brief      Create dir
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     XDIR* : dir created
-*
+* 
+* @return     XDIR* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDIR* XFACTORY::Create_Dir()
 {
@@ -325,16 +325,16 @@ XDIR* XFACTORY::Create_Dir()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::Delete_Dir(XDIR* dir)
 * @brief      Delete dir
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  dir : dir to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::Delete_Dir(XDIR* dir)
 {
@@ -344,14 +344,14 @@ bool XFACTORY::Delete_Dir(XDIR* dir)
 
 #ifdef XCONSOLE_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XCONSOLE* XFACTORY::CreateConsole()
 * @brief      Create console
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     XCONSOLE* : console created
-*
+* 
+* @return     XCONSOLE* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCONSOLE* XFACTORY::CreateConsole()
 {
@@ -360,16 +360,16 @@ XCONSOLE* XFACTORY::CreateConsole()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::DeleteConsole(XCONSOLE* xconsole)
 * @brief      Delete console
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  xconsole : xconsole to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::DeleteConsole(XCONSOLE* xconsole)
 {
@@ -379,14 +379,14 @@ bool XFACTORY::DeleteConsole(XCONSOLE* xconsole)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XMUTEX* XFACTORY::Create_Mutex()
 * @brief      Create mutex
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @return     XMUTEX* : mutex created
-*
+* 
+* @return     XMUTEX* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XMUTEX* XFACTORY::Create_Mutex()
 {
@@ -400,9 +400,9 @@ XMUTEX* XFACTORY::Create_Mutex()
 * @brief      Delete mutex
 * @ingroup    XUTILS
 * 
-* @param[in]  mutex : 
+* @param[in]  mutex : Mutex pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::Delete_Mutex(XMUTEX* mutex)
@@ -412,18 +412,18 @@ bool XFACTORY::Delete_Mutex(XMUTEX* mutex)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XTHREAD* XFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function, void* param)
 * @brief      Create thread
 * @ingroup    XUTILS
-*
-* @param[in]  groupID : 
-* @param[in]  ID : 
-* @param[in]  function : 
-* @param[in]  param : 
-*
-* @return     XTHREAD* : 
-*
+* 
+* @param[in]  groupID : Group ID value.
+* @param[in]  ID : Identifier to use.
+* @param[in]  function : Function value.
+* @param[in]  param : Param pointer to use.
+* 
+* @return     XTHREAD* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XTHREAD* XFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTION function, void* param)
 {
@@ -432,17 +432,17 @@ XTHREAD* XFACTORY::CreateThread(XTHREADGROUPID groupID, XCHAR* ID,XTHREADFUNCTIO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 * @brief      Delete thread
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  groupID : group ID of threads
 * @param[in]  xthread : thread to delete
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 {
@@ -451,12 +451,12 @@ bool XFACTORY::DeleteThread(XTHREADGROUPID groupID, XTHREAD* xthread)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XFACTORY::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFACTORY::Clean()
 {

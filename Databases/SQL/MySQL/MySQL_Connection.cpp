@@ -58,13 +58,13 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         MYSQL_CONNECTION::MYSQL_CONNECTION(DB_SQL_DATABASE* database)
+* 
+* @fn         MYSQL_CONNECTION::MYSQL_CONNECTION(DB_SQL_DATABASE* database): DB_SQL_CONNECTION(database)
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  DB_SQL_DATABASE* :
-*
+* 
+* @param[in]  database : Database pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_CONNECTION::MYSQL_CONNECTION(DB_SQL_DATABASE* database): DB_SQL_CONNECTION(database)
 {
@@ -73,12 +73,12 @@ MYSQL_CONNECTION::MYSQL_CONNECTION(DB_SQL_DATABASE* database): DB_SQL_CONNECTION
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         MYSQL_CONNECTION::~MYSQL_CONNECTION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 MYSQL_CONNECTION::~MYSQL_CONNECTION()
 {
@@ -87,13 +87,13 @@ MYSQL_CONNECTION::~MYSQL_CONNECTION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_CONNECTION::Connect()
 * @brief      Connect
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_CONNECTION::Connect()
 {
@@ -184,13 +184,13 @@ bool MYSQL_CONNECTION::Connect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool MYSQL_CONNECTION::Disconnect()
 * @brief      Disconnect
 * @ingroup    DATABASE
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool MYSQL_CONNECTION::Disconnect()
 {
@@ -201,12 +201,12 @@ bool MYSQL_CONNECTION::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void MYSQL_CONNECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void MYSQL_CONNECTION::Clean()
 {

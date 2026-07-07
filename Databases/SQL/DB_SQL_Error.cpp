@@ -56,11 +56,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_ERROR::DB_SQL_ERROR()
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_ERROR::DB_SQL_ERROR()
 {
@@ -69,13 +69,13 @@ DB_SQL_ERROR::DB_SQL_ERROR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_ERROR::DB_SQL_ERROR(DB_SQL_ERROR_TYPE type)
 * @brief      Constructor of class
 * @ingroup    DATABASE
-*
-* @param[in]  DB_SQL_ERROR_TYPE :
-*
+* 
+* @param[in]  type : Type value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_ERROR::DB_SQL_ERROR(DB_SQL_ERROR_TYPE type)
 {
@@ -84,12 +84,12 @@ DB_SQL_ERROR::DB_SQL_ERROR(DB_SQL_ERROR_TYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DB_SQL_ERROR::~DB_SQL_ERROR()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DB_SQL_ERROR::~DB_SQL_ERROR()
 {
@@ -98,12 +98,12 @@ DB_SQL_ERROR::~DB_SQL_ERROR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DB_SQL_ERROR::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATABASE
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DB_SQL_ERROR::Clean()
 {

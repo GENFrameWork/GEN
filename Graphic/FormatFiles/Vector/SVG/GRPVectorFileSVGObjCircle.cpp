@@ -60,9 +60,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJCIRCLE::GRPVECTORFILESVGOBJCIRCLE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJCIRCLE::GRPVECTORFILESVGOBJCIRCLE()
 {
@@ -71,10 +73,12 @@ GRPVECTORFILESVGOBJCIRCLE::GRPVECTORFILESVGOBJCIRCLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         GRPVECTORFILESVGOBJCIRCLE::~GRPVECTORFILESVGOBJCIRCLE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPVECTORFILESVGOBJCIRCLE::~GRPVECTORFILESVGOBJCIRCLE()
 {
@@ -83,11 +87,15 @@ GRPVECTORFILESVGOBJCIRCLE::~GRPVECTORFILESVGOBJCIRCLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJCIRCLE::ApplyData(XFILEXMLELEMENT* element)
 * @brief      Apply data : read the common attributes and the circle geometry (cx, cy, r)
 * @ingroup    GRAPHIC
+* 
 * @param[in]  element : xml element
-* @return     bool : true if is succesful.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJCIRCLE::ApplyData(XFILEXMLELEMENT* element)
 {
@@ -104,11 +112,15 @@ bool GRPVECTORFILESVGOBJCIRCLE::ApplyData(XFILEXMLELEMENT* element)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPVECTORFILESVGOBJCIRCLE::BuildPath(GRP2DPATH& path)
 * @brief      Build path : emit the circle as 4 cubic bezier curves
 * @ingroup    GRAPHIC
+* 
 * @param[in]  path : output path
-* @return     bool : true if geometry was emitted.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGOBJCIRCLE::BuildPath(GRP2DPATH& path)
 {
@@ -128,37 +140,48 @@ bool GRPVECTORFILESVGOBJCIRCLE::BuildPath(GRP2DPATH& path)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJCIRCLE::GetCX()
 * @brief      Get cx
 * @ingroup    GRAPHIC
-* @return     double : cx
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJCIRCLE::GetCX()   { return cx; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJCIRCLE::GetCY()
 * @brief      Get cy
 * @ingroup    GRAPHIC
-* @return     double : cy
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJCIRCLE::GetCY()   { return cy; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         double GRPVECTORFILESVGOBJCIRCLE::GetR()
 * @brief      Get r
 * @ingroup    GRAPHIC
-* @return     double : r
+* 
+* @return     double : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 double GRPVECTORFILESVGOBJCIRCLE::GetR()    { return r;  }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRPVECTORFILESVGOBJCIRCLE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILESVGOBJCIRCLE::Clean()
 {

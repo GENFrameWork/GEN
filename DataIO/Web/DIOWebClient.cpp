@@ -69,11 +69,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT_HEADER::DIOWEBCLIENT_HEADER()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_HEADER::DIOWEBCLIENT_HEADER()
 {
@@ -82,12 +82,12 @@ DIOWEBCLIENT_HEADER::DIOWEBCLIENT_HEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT_HEADER::~DIOWEBCLIENT_HEADER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_HEADER::~DIOWEBCLIENT_HEADER()
 {
@@ -98,15 +98,15 @@ DIOWEBCLIENT_HEADER::~DIOWEBCLIENT_HEADER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT_HEADER::GetMethod(XSTRING& method)
 * @brief      Get method
 * @ingroup    DATAIO
-*
-* @param[in]  method :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  method : Method descriptor to call.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT_HEADER::GetMethod(XSTRING& method)
 {
@@ -117,15 +117,15 @@ bool DIOWEBCLIENT_HEADER::GetMethod(XSTRING& method)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT_HEADER::GetResource(XSTRING& resource)
 * @brief      Get resource
 * @ingroup    DATAIO
-*
-* @param[in]  resource :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  resource : Resource value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT_HEADER::GetResource(XSTRING& resource)
 {
@@ -136,13 +136,13 @@ bool DIOWEBCLIENT_HEADER::GetResource(XSTRING& resource)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBCLIENT_HEADER::GetVersion()
 * @brief      Get version
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBCLIENT_HEADER::GetVersion()
 {
@@ -155,13 +155,13 @@ int DIOWEBCLIENT_HEADER::GetVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBCLIENT_HEADER::GetSubVersion()
 * @brief      Get sub version
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBCLIENT_HEADER::GetSubVersion()
 {
@@ -174,13 +174,13 @@ int DIOWEBCLIENT_HEADER::GetSubVersion()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBCLIENT_HEADER::GetResultServer()
 * @brief      Get result server
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBCLIENT_HEADER::GetResultServer()
 {
@@ -193,13 +193,13 @@ int DIOWEBCLIENT_HEADER::GetResultServer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XQWORD DIOWEBCLIENT_HEADER::GetContentLength()
 * @brief      Get content length
 * @ingroup    DATAIO
-*
-* @return     XQWORD :
-*
+* 
+* @return     XQWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOWEBCLIENT_HEADER::GetContentLength()
 {
@@ -231,15 +231,15 @@ XQWORD DIOWEBCLIENT_HEADER::GetContentLength()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT_HEADER::GetETag(XSTRING& etag)
 * @brief      Get E tag
 * @ingroup    DATAIO
-*
-* @param[in]  etag :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  etag : Etag value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT_HEADER::GetETag(XSTRING& etag)
 {
@@ -275,9 +275,9 @@ bool DIOWEBCLIENT_HEADER::GetETag(XSTRING& etag)
 * @brief      Get WWW authenticate
 * @ingroup    DATAIO
 * 
-* @param[in]  authenticate : 
+* @param[in]  authenticate : Authenticate value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT_HEADER::GetWWWAuthenticate(XSTRING& authenticate)
@@ -292,12 +292,12 @@ bool DIOWEBCLIENT_HEADER::GetWWWAuthenticate(XSTRING& authenticate)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT_HEADER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_HEADER::Clean()
 {
@@ -310,13 +310,13 @@ void DIOWEBCLIENT_HEADER::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  maxsizebuffer :
-*
+* 
+* @param[in]  maxsizebuffer : Maxsizebuffer value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
 {
@@ -339,12 +339,12 @@ DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT::~DIOWEBCLIENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT::~DIOWEBCLIENT()
 {
@@ -378,13 +378,13 @@ DIOWEBCLIENT::~DIOWEBCLIENT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBCLIENT::Get_Port()
 * @brief      Get port
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBCLIENT::Get_Port()
 {
@@ -393,13 +393,13 @@ int DIOWEBCLIENT::Get_Port()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT::Set_Port(int port)
 * @brief      Set port
 * @ingroup    DATAIO
-*
-* @param[in]  port :
-*
+* 
+* @param[in]  port : Port number to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::Set_Port(int port)
 {
@@ -408,13 +408,13 @@ void DIOWEBCLIENT::Set_Port(int port)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOURL* DIOWEBCLIENT::GetProxyURL()
 * @brief      Get proxy URL
 * @ingroup    DATAIO
-*
-* @return     DIOURL* :
-*
+* 
+* @return     DIOURL* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOWEBCLIENT::GetProxyURL()
 {
@@ -423,13 +423,13 @@ DIOURL* DIOWEBCLIENT::GetProxyURL()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int DIOWEBCLIENT::GetProxyPort()
 * @brief      Get proxy port
 * @ingroup    DATAIO
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBCLIENT::GetProxyPort()
 {
@@ -438,13 +438,13 @@ int DIOWEBCLIENT::GetProxyPort()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT::SetProxyPort(int port)
 * @brief      Set proxy port
 * @ingroup    DATAIO
-*
-* @param[in]  port :
-*
+* 
+* @param[in]  port : Port number to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::SetProxyPort(int port)
 {
@@ -453,13 +453,13 @@ void DIOWEBCLIENT::SetProxyPort(int port)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT_AUTHENTICATION_METHOD DIOWEBCLIENT::GetAuthenticationMethod()
 * @brief      Get authentication method
 * @ingroup    DATAIO
-*
-* @return     DIOWEBCLIENT_AUTHENTICATION_METHOD : 
-*
+* 
+* @return     DIOWEBCLIENT_AUTHENTICATION_METHOD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_AUTHENTICATION_METHOD DIOWEBCLIENT::GetAuthenticationMethod()
 {
@@ -468,13 +468,13 @@ DIOWEBCLIENT_AUTHENTICATION_METHOD DIOWEBCLIENT::GetAuthenticationMethod()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT::SetAuthenticationMethod(DIOWEBCLIENT_AUTHENTICATION_METHOD authenticationmethod)
 * @brief      Set authentication method
 * @ingroup    DATAIO
-*
-* @param[in]  authenticationmethod : 
-*
+* 
+* @param[in]  authenticationmethod : Authenticationmethod value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::SetAuthenticationMethod(DIOWEBCLIENT_AUTHENTICATION_METHOD authenticationmethod)
 {
@@ -483,13 +483,13 @@ void DIOWEBCLIENT::SetAuthenticationMethod(DIOWEBCLIENT_AUTHENTICATION_METHOD au
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBCLIENT::GetLogin()
 * @brief      Get login
 * @ingroup    DATAIO
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING*  DIOWEBCLIENT::GetLogin()
 {
@@ -498,13 +498,13 @@ XSTRING*  DIOWEBCLIENT::GetLogin()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIOWEBCLIENT::GetPassword()
 * @brief      Get password
 * @ingroup    DATAIO
-*
-* @return     XSTRING* : 
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING*  DIOWEBCLIENT::GetPassword()
 {
@@ -513,13 +513,13 @@ XSTRING*  DIOWEBCLIENT::GetPassword()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMTCPIPCONFIG* DIOWEBCLIENT::GetStreamCFG()
 * @brief      Get stream CFG
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMTCPIPCONFIG* :
-*
+* 
+* @return     DIOSTREAMTCPIPCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPCONFIG* DIOWEBCLIENT::GetStreamCFG()
 {
@@ -528,13 +528,13 @@ DIOSTREAMTCPIPCONFIG* DIOWEBCLIENT::GetStreamCFG()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOWEBCLIENT_HEADER* DIOWEBCLIENT::GetHeader()
 * @brief      Get header
 * @ingroup    DATAIO
-*
-* @return     DIOWEBCLIENT_HEADER* :
-*
+* 
+* @return     DIOWEBCLIENT_HEADER* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_HEADER* DIOWEBCLIENT::GetHeader()
 {
@@ -543,13 +543,13 @@ DIOWEBCLIENT_HEADER* DIOWEBCLIENT::GetHeader()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::IsActiveDoStopHTTPError()
 * @brief      Is active do stop HTTP error
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::IsActiveDoStopHTTPError()
 {
@@ -563,7 +563,7 @@ bool DIOWEBCLIENT::IsActiveDoStopHTTPError()
 * @brief      Do stop HTTP error
 * @ingroup    DATAIO
 * 
-* @param[in]  activate : 
+* @param[in]  activate : Activate value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::DoStopHTTPError(bool activate)
@@ -573,19 +573,19 @@ void DIOWEBCLIENT::DoStopHTTPError(bool activate)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Get(DIOURL& url, XBUFFER& tobuffer, XCHAR* addheader, int timeout, XSTRING* localIP)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  tobuffer :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  tobuffer : Tobuffer value.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Get(DIOURL& url, XBUFFER& tobuffer, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -594,19 +594,19 @@ bool DIOWEBCLIENT::Get(DIOURL& url, XBUFFER& tobuffer, XCHAR* addheader, int tim
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Get(XCHAR* url, XBUFFER& tobuffer, XCHAR* addheader, int timeout, XSTRING* localIP)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  tobuffer :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  tobuffer : Tobuffer value.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Get(XCHAR* url, XBUFFER& tobuffer, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -618,19 +618,19 @@ bool DIOWEBCLIENT::Get(XCHAR* url, XBUFFER& tobuffer, XCHAR* addheader, int time
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Get(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  pathfile :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Get(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -664,19 +664,19 @@ bool DIOWEBCLIENT::Get(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeo
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Get(XCHAR* url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  pathfile :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Get(XCHAR* url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -688,19 +688,19 @@ bool DIOWEBCLIENT::Get(XCHAR* url, XPATH& pathfile, XCHAR* addheader, int timeou
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Put(DIOURL& url, XBUFFER& tobuffer, XCHAR* addheader, int timeout, XSTRING* localIP)
 * @brief      Put
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  tobuffer :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  tobuffer : Tobuffer value.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Put(DIOURL& url, XBUFFER& tobuffer, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -709,19 +709,19 @@ bool DIOWEBCLIENT::Put(DIOURL& url, XBUFFER& tobuffer, XCHAR* addheader, int tim
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Put(XCHAR* url, XBUFFER& tobuffer, XCHAR* addheader, int timeout, XSTRING* localIP)
 * @brief      Put
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  tobuffer :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  tobuffer : Tobuffer value.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Put(XCHAR* url, XBUFFER& tobuffer, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -733,19 +733,19 @@ bool DIOWEBCLIENT::Put(XCHAR* url, XBUFFER& tobuffer, XCHAR* addheader, int time
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Put(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
 * @brief      Put
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  pathfile :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Put(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -781,19 +781,19 @@ bool DIOWEBCLIENT::Put(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeo
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Put(XCHAR* url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
 * @brief      Put
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  pathfile :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Put(XCHAR* url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -805,20 +805,20 @@ bool DIOWEBCLIENT::Put(XCHAR* url, XPATH& pathfile, XCHAR* addheader, int timeou
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Post(DIOURL& url, XBUFFER& tobuffer, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 * @brief      Post
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  tobuffer :
-* @param[in]  postdata :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  tobuffer : Tobuffer value.
+* @param[in]  postdata : Postdata pointer to use.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Post(DIOURL& url, XBUFFER& tobuffer, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -827,20 +827,20 @@ bool DIOWEBCLIENT::Post(DIOURL& url, XBUFFER& tobuffer, XBUFFER* postdata, XCHAR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Post(XCHAR* url, XBUFFER& tobuffer, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 * @brief      Post
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  tobuffer :
-* @param[in]  postdata :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  tobuffer : Tobuffer value.
+* @param[in]  postdata : Postdata pointer to use.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Post(XCHAR* url, XBUFFER& tobuffer, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -852,20 +852,20 @@ bool DIOWEBCLIENT::Post(XCHAR* url, XBUFFER& tobuffer, XBUFFER* postdata, XCHAR*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Post(DIOURL& url, XPATH& pathfile, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 * @brief      Post
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  pathfile :
-* @param[in]  postdata :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  postdata : Postdata pointer to use.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Post(DIOURL& url, XPATH& pathfile, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -893,20 +893,20 @@ bool DIOWEBCLIENT::Post(DIOURL& url, XPATH& pathfile, XBUFFER* postdata, XCHAR* 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::Post(XCHAR* url, XPATH& pathfile, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 * @brief      Post
 * @ingroup    DATAIO
-*
-* @param[in]  url :
-* @param[in]  pathfile :
-* @param[in]  postdata :
-* @param[in]  addheader :
-* @param[in]  timeout :
-* @param[in]  localIP :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  url : URL to use.
+* @param[in]  pathfile : Pathfile value.
+* @param[in]  postdata : Postdata pointer to use.
+* @param[in]  addheader : Addheader pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Post(XCHAR* url, XPATH& pathfile, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
@@ -918,22 +918,22 @@ bool DIOWEBCLIENT::Post(XCHAR* url, XPATH& pathfile, XBUFFER* postdata, XCHAR* a
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to)
 * @brief      Make operation
 * @ingroup    DATAIO
-*
-* @param[in]  method :
-* @param[in]  url :
-* @param[in]  postdata :
-* @param[in]  addhead :
-* @param[in]  timeout :
-* @param[in]  localIP :
-* @param[in]  istobuffer :
-* @param[in]  to :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  method : Method descriptor to call.
+* @param[in]  url : URL to use.
+* @param[in]  postdata : Postdata pointer to use.
+* @param[in]  addhead : Addhead pointer to use.
+* @param[in]  timeout : Timeout value.
+* @param[in]  localIP : Local IP pointer to use.
+* @param[in]  istobuffer : Istobuffer value.
+* @param[in]  to : To pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to)
 {
@@ -1365,18 +1365,18 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOWEBCLIENT::GetSubStringWWWWAuthenticate(XSTRING& www_authenticate, XCHAR* field, XSTRING& value, bool betweenquotation)
 * @brief      Get sub string WWWW authenticate
 * @ingroup    DATAIO
-*
-* @param[in]  www_authenticate : 
-* @param[in]  field : 
-* @param[in]  value : 
-* @param[in]  betweenquotation : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  www_authenticate : Www authenticate value.
+* @param[in]  field : Field pointer to use.
+* @param[in]  value : Value value.
+* @param[in]  betweenquotation : Betweenquotation value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::GetSubStringWWWWAuthenticate(XSTRING& www_authenticate, XCHAR* field, XSTRING& value, bool betweenquotation)
 {
@@ -1417,12 +1417,12 @@ bool DIOWEBCLIENT::GetSubStringWWWWAuthenticate(XSTRING& www_authenticate, XCHAR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOWEBCLIENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::Clean()
 {

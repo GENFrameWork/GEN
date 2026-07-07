@@ -61,11 +61,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CADDACONVERTERPCF8591::DIOI2CADDACONVERTERPCF8591() : DIODEVICEI2C()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CADDACONVERTERPCF8591::DIOI2CADDACONVERTERPCF8591() : DIODEVICEI2C()
 {
@@ -74,12 +74,12 @@ DIOI2CADDACONVERTERPCF8591::DIOI2CADDACONVERTERPCF8591() : DIODEVICEI2C()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOI2CADDACONVERTERPCF8591::~DIOI2CADDACONVERTERPCF8591()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2CADDACONVERTERPCF8591::~DIOI2CADDACONVERTERPCF8591()
 {
@@ -90,15 +90,15 @@ DIOI2CADDACONVERTERPCF8591::~DIOI2CADDACONVERTERPCF8591()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DIOI2CADDACONVERTERPCF8591::ReadADChannels(XBYTE values)
+* 
+* @fn         bool DIOI2CADDACONVERTERPCF8591::ReadADChannels(XBYTE values[4])
 * @brief      Read AD channels
 * @ingroup    DATAIO
-*
-* @param[in]  values :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  values : Values value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CADDACONVERTERPCF8591::ReadADChannels(XBYTE values[4])
 {
@@ -136,15 +136,15 @@ bool DIOI2CADDACONVERTERPCF8591::ReadADChannels(XBYTE values[4])
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CADDACONVERTERPCF8591::WriteDAChannel(XBYTE value)
 * @brief      Write DA channel
 * @ingroup    DATAIO
-*
-* @param[in]  value :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CADDACONVERTERPCF8591::WriteDAChannel(XBYTE value)
 {
@@ -165,13 +165,13 @@ bool DIOI2CADDACONVERTERPCF8591::WriteDAChannel(XBYTE value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CADDACONVERTERPCF8591::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CADDACONVERTERPCF8591::End()
 {  
@@ -189,13 +189,13 @@ bool DIOI2CADDACONVERTERPCF8591::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOI2CADDACONVERTERPCF8591::IniDevice()
 * @brief      Ini device
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOI2CADDACONVERTERPCF8591::IniDevice()
 {
@@ -219,12 +219,12 @@ bool DIOI2CADDACONVERTERPCF8591::IniDevice()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOI2CADDACONVERTERPCF8591::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOI2CADDACONVERTERPCF8591::Clean()
 {

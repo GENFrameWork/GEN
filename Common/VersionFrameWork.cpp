@@ -63,7 +63,7 @@ VERSIONFRAMEWORK* VERSIONFRAMEWORK::instance = NULL;
 * @brief      Get is instanced
 * @ingroup    COMMON
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool VERSIONFRAMEWORK::GetIsInstanced()
@@ -78,7 +78,7 @@ bool VERSIONFRAMEWORK::GetIsInstanced()
 * @brief      Get instance
 * @ingroup    COMMON
 * 
-* @return     VERSIONFRAMEWORK& : 
+* @return     VERSIONFRAMEWORK& : Reference to the requested object.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 VERSIONFRAMEWORK& VERSIONFRAMEWORK::GetInstance()
@@ -98,7 +98,7 @@ VERSIONFRAMEWORK& VERSIONFRAMEWORK::GetInstance()
 * @brief      Del instance
 * @ingroup    COMMON
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool VERSIONFRAMEWORK::DelInstance()
@@ -121,7 +121,7 @@ bool VERSIONFRAMEWORK::DelInstance()
 * @brief      Get name
 * @ingroup    COMMON
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* VERSIONFRAMEWORK::GetName()
@@ -136,7 +136,7 @@ XSTRING* VERSIONFRAMEWORK::GetName()
 * @brief      Get version
 * @ingroup    COMMON
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* VERSIONFRAMEWORK::GetVersion()
@@ -153,9 +153,9 @@ XSTRING* VERSIONFRAMEWORK::GetVersion()
 * @brief      Get version
 * @ingroup    COMMON
 * 
-* @param[in]  version : 
-* @param[in]  subversion : 
-* @param[in]  suberror : 
+* @param[in]  version : Version value.
+* @param[in]  subversion : Subversion value.
+* @param[in]  suberror : Suberror value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void VERSIONFRAMEWORK::GetVersion(XDWORD& version, XDWORD& subversion, XDWORD& suberror)
@@ -172,7 +172,7 @@ void VERSIONFRAMEWORK::GetVersion(XDWORD& version, XDWORD& subversion, XDWORD& s
 * @brief      Get code name
 * @ingroup    COMMON
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* VERSIONFRAMEWORK::GetCodeName()
@@ -187,7 +187,7 @@ XSTRING* VERSIONFRAMEWORK::GetCodeName()
 * @brief      Get app name
 * @ingroup    COMMON
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* VERSIONFRAMEWORK::GetAppName()
@@ -202,7 +202,7 @@ XSTRING* VERSIONFRAMEWORK::GetAppName()
 * @brief      Get app exec name
 * @ingroup    COMMON
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* VERSIONFRAMEWORK::GetAppExecName()
@@ -217,9 +217,9 @@ XSTRING* VERSIONFRAMEWORK::GetAppExecName()
 * @brief      Get app versions
 * @ingroup    COMMON
 * 
-* @param[in]  app_version : 
-* @param[in]  app_subversion : 
-* @param[in]  app_versionerror : 
+* @param[in]  app_version : Application version value.
+* @param[in]  app_subversion : Application subversion value.
+* @param[in]  app_versionerror : Application versionerror value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void VERSIONFRAMEWORK::GetAppVersions(XDWORD& app_version, XDWORD& app_subversion, XDWORD& app_versionerror)
@@ -236,7 +236,7 @@ void VERSIONFRAMEWORK::GetAppVersions(XDWORD& app_version, XDWORD& app_subversio
 * @brief      Get app owner
 * @ingroup    COMMON
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* VERSIONFRAMEWORK::GetAppOwner()
@@ -251,7 +251,7 @@ XSTRING* VERSIONFRAMEWORK::GetAppOwner()
 * @brief      Get app creation year
 * @ingroup    COMMON
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD VERSIONFRAMEWORK::GetAppCreationYear()
@@ -266,7 +266,7 @@ XDWORD VERSIONFRAMEWORK::GetAppCreationYear()
 * @brief      Get app title
 * @ingroup    COMMON
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* VERSIONFRAMEWORK::GetAppTitle()
@@ -292,7 +292,7 @@ XSTRING* VERSIONFRAMEWORK::GetAppTitle()
 * @brief      Get app version
 * @ingroup    COMMON
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* VERSIONFRAMEWORK::GetAppVersion()
@@ -307,12 +307,12 @@ XSTRING* VERSIONFRAMEWORK::GetAppVersion()
 * @brief      Get app version status
 * @ingroup    COMMON
 * 
-* @param[in]  app_version : 
-* @param[in]  app_subversion : 
-* @param[in]  app_versionerror : 
-* @param[in]  statusstr : 
+* @param[in]  app_version : Application version value.
+* @param[in]  app_subversion : Application subversion value.
+* @param[in]  app_versionerror : Application versionerror value.
+* @param[in]  statusstr : Statusstr value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool VERSIONFRAMEWORK::GetAppVersionStatus(XDWORD app_version, XDWORD app_subversion, XDWORD app_versionerror, XSTRING& statusstr)
@@ -336,12 +336,12 @@ bool VERSIONFRAMEWORK::GetAppVersionStatus(XDWORD app_version, XDWORD app_subver
 * @brief      Get app version
 * @ingroup    COMMON
 * 
-* @param[in]  app_version : 
-* @param[in]  app_subversion : 
-* @param[in]  app_versionerror : 
-* @param[in]  versionstr : 
+* @param[in]  app_version : Application version value.
+* @param[in]  app_subversion : Application subversion value.
+* @param[in]  app_versionerror : Application versionerror value.
+* @param[in]  versionstr : Versionstr value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool VERSIONFRAMEWORK::GetAppVersion(XDWORD app_version, XDWORD app_subversion, XDWORD app_versionerror, XSTRING& versionstr)
@@ -369,15 +369,15 @@ bool VERSIONFRAMEWORK::GetAppVersion(XDWORD app_version, XDWORD app_subversion, 
 * @brief      Set app version
 * @ingroup    COMMON
 * 
-* @param[in]  app_name : 
-* @param[in]  app_execname : 
-* @param[in]  app_version : 
-* @param[in]  app_subversion : 
-* @param[in]  app_versionerror : 
-* @param[in]  app_owner : 
-* @param[in]  app_creationyear : 
+* @param[in]  app_name : Application name pointer to use.
+* @param[in]  app_execname : Application execname pointer to use.
+* @param[in]  app_version : Application version value.
+* @param[in]  app_subversion : Application subversion value.
+* @param[in]  app_versionerror : Application versionerror value.
+* @param[in]  app_owner : Application owner pointer to use.
+* @param[in]  app_creationyear : Application creationyear value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool VERSIONFRAMEWORK::SetAppVersion(XCHAR* app_name, XCHAR* app_execname, XDWORD app_version, XDWORD app_subversion, XDWORD app_versionerror, XCHAR* app_owner, XDWORD app_creationyear)
@@ -426,7 +426,7 @@ bool VERSIONFRAMEWORK::SetAppVersion(XCHAR* app_name, XCHAR* app_execname, XDWOR
 * @brief      Update year app version
 * @ingroup    COMMON
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool VERSIONFRAMEWORK::UpdateYearAppVersion()

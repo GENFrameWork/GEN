@@ -64,11 +64,11 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DIOSTREAMI2C::DIOSTREAMI2C()
+* @fn         DIOSTREAMI2C::DIOSTREAMI2C() : DIOSTREAM() , XFSMACHINE(0)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMI2C::DIOSTREAMI2C() : DIOSTREAM() , XFSMACHINE(0)
 {
   Clean();
@@ -105,8 +105,8 @@ DIOSTREAMI2C::DIOSTREAMI2C() : DIOSTREAM() , XFSMACHINE(0)
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMI2C::~DIOSTREAMI2C()
 {
   Close();
@@ -120,10 +120,10 @@ DIOSTREAMI2C::~DIOSTREAMI2C()
 * @fn         DIOSTREAMCONFIG* DIOSTREAMI2C::GetConfig()
 * @brief      Get config
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMCONFIG* : 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     DIOSTREAMCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIG* DIOSTREAMI2C::GetConfig()
 {
   return (DIOSTREAMCONFIG*)config;
@@ -135,12 +135,12 @@ DIOSTREAMCONFIG* DIOSTREAMI2C::GetConfig()
 * @fn         bool DIOSTREAMI2C::SetConfig(DIOSTREAMCONFIG* config)
 * @brief      Set config
 * @ingroup    DATAIO
-*
-* @param[in]  config : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  config : Configuration object to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMI2C::SetConfig(DIOSTREAMCONFIG* config)
 {
   if(!config) return false;
@@ -155,10 +155,10 @@ bool DIOSTREAMI2C::SetConfig(DIOSTREAMCONFIG* config)
 * @fn         bool DIOSTREAMI2C::Open()
 * @brief      Open
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMI2C::Open()
 {
   if(!config) return false;
@@ -177,13 +177,13 @@ bool DIOSTREAMI2C::Open()
 * @fn         XDWORD DIOSTREAMI2C::ReadDirect(XBYTE* buffer, XDWORD size)
 * @brief      Read direct
 * @ingroup    DATAIO
-*
-* @param[in]  buffer : 
-* @param[in]  size : 
 * 
-* @return     XDWORD : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMI2C::ReadDirect(XBYTE* buffer, XDWORD size)  
 { 
   return 0;                  
@@ -195,13 +195,13 @@ XDWORD DIOSTREAMI2C::ReadDirect(XBYTE* buffer, XDWORD size)
 * @fn         XDWORD DIOSTREAMI2C::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    DATAIO
-*
-* @param[in]  buffer : 
-* @param[in]  size : 
 * 
-* @return     XDWORD : 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMI2C::WriteDirect(XBYTE* buffer, XDWORD size)  
 { 
   return 0;                  
@@ -213,10 +213,10 @@ XDWORD DIOSTREAMI2C::WriteDirect(XBYTE* buffer, XDWORD size)
 * @fn         bool DIOSTREAMI2C::Close()
 * @brief      Close
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful. 
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMI2C::Close()
 {
   if(!threadconnection) return false;
@@ -233,8 +233,8 @@ bool DIOSTREAMI2C::Close()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMI2C::Clean()
 {
   config          = NULL;

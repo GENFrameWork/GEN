@@ -31,7 +31,6 @@
 #include "GEN_Defines.h"
 
 
-
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "GRPDisplayDevice.h"
@@ -41,12 +40,9 @@
 #include "GRPViewPort.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -57,11 +53,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPDISPLAYDEVICE::GRPDISPLAYDEVICE()
 * @brief      Constructor of class
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPDISPLAYDEVICE::GRPDISPLAYDEVICE()
 {
@@ -70,12 +66,12 @@ GRPDISPLAYDEVICE::GRPDISPLAYDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         GRPDISPLAYDEVICE::~GRPDISPLAYDEVICE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPDISPLAYDEVICE::~GRPDISPLAYDEVICE()
 {
@@ -84,13 +80,15 @@ GRPDISPLAYDEVICE::~GRPDISPLAYDEVICE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool GRPDISPLAYDEVICE::Create(void* handle)
-* @brief      Create
+* 
+* @fn         bool GRPDISPLAYDEVICE::Create(bool show)
+* @brief      Create resource
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  show : Show value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPDISPLAYDEVICE::Create(bool show)
 {
@@ -100,13 +98,13 @@ bool GRPDISPLAYDEVICE::Create(bool show)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPDISPLAYDEVICE::Update()
 * @brief      Update
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPDISPLAYDEVICE::Update()
 {
@@ -120,9 +118,9 @@ bool GRPDISPLAYDEVICE::Update()
 * @brief      Update
 * @ingroup    GRAPHIC
 * 
-* @param[in]  canvas : 
+* @param[in]  canvas : Canvas object to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPDISPLAYDEVICE::Update(GRP2DCANVAS* canvas)
@@ -132,13 +130,13 @@ bool GRPDISPLAYDEVICE::Update(GRP2DCANVAS* canvas)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPDISPLAYDEVICE::Delete()
-* @brief      Delete
+* @brief      Delete resource
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPDISPLAYDEVICE::Delete()
 {
@@ -147,16 +145,16 @@ bool GRPDISPLAYDEVICE::Delete()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPDISPLAYDEVICE::Resize(int width, int height)
-* @brief
+* @brief      Resize
 * @ingroup    GRAPHIC
-*
-* @param[in]  width :
-* @param[in]  height :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  width : Width value.
+* @param[in]  height : Height value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPDISPLAYDEVICE::Resize(int width, int height)
 {
@@ -165,13 +163,13 @@ bool GRPDISPLAYDEVICE::Resize(int width, int height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPDISPLAYDEVICE::IsShow()
 * @brief      Is show
 * @ingroup    GRAPHIC
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPDISPLAYDEVICE::IsShow()
 {
@@ -180,15 +178,15 @@ bool GRPDISPLAYDEVICE::IsShow()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPDISPLAYDEVICE::Show(bool active)
 * @brief      Show
 * @ingroup    GRAPHIC
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPDISPLAYDEVICE::Show(bool active)
 {
@@ -199,15 +197,15 @@ bool GRPDISPLAYDEVICE::Show(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool GRPDISPLAYDEVICE::ShowCursor(bool active)
 * @brief      Show cursor
 * @ingroup    GRAPHIC
-*
-* @param[in]  active :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPDISPLAYDEVICE::ShowCursor(bool active)
 {
@@ -216,13 +214,13 @@ bool GRPDISPLAYDEVICE::ShowCursor(bool active)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* GRPDISPLAYDEVICE::GetHandle()
-* @brief
+* @brief      Get handle
 * @ingroup    GRAPHIC
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* GRPDISPLAYDEVICE::GetHandle()
 {
@@ -231,12 +229,12 @@ void* GRPDISPLAYDEVICE::GetHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void GRPDISPLAYDEVICE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    GRAPHIC
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPDISPLAYDEVICE::Clean()
 {

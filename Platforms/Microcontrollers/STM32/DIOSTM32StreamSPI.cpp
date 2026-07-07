@@ -59,11 +59,11 @@ DIOSTM32STREAMSPI*        DIOSTM32STREAMSPI::handles[DIOSTM32STREAMSPI_MAXHANDLE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32STREAMSPIPORT::DIOSTM32STREAMSPIPORT()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMSPIPORT::DIOSTM32STREAMSPIPORT()
 {
@@ -73,12 +73,12 @@ DIOSTM32STREAMSPIPORT::DIOSTM32STREAMSPIPORT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32STREAMSPIPORT::~DIOSTM32STREAMSPIPORT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMSPIPORT::~DIOSTM32STREAMSPIPORT()
 {
@@ -88,13 +88,13 @@ DIOSTM32STREAMSPIPORT::~DIOSTM32STREAMSPIPORT()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMSPIPORT::GetCounterRef()
 * @brief      Get counter ref
 * @ingroup    PLATFORM_STM32
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMSPIPORT::GetCounterRef()
 {
@@ -104,13 +104,13 @@ XDWORD DIOSTM32STREAMSPIPORT::GetCounterRef()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMSPIPORT::SetCounterRef(XDWORD counterref)
 * @brief      Set counter ref
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  counterref :
-*
+* 
+* @param[in]  counterref : Counterref value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMSPIPORT::SetCounterRef(XDWORD counterref)
 {
@@ -120,13 +120,13 @@ void DIOSTM32STREAMSPIPORT::SetCounterRef(XDWORD counterref)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         SPI_HandleTypeDef* DIOSTM32STREAMSPIPORT::GetHandleSPI()
 * @brief      Get handle SPI
 * @ingroup    PLATFORM_STM32
-*
-* @return     SPI_HandleTypeDef* :
-*
+* 
+* @return     SPI_HandleTypeDef* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 SPI_HandleTypeDef* DIOSTM32STREAMSPIPORT::GetHandleSPI()
 {
@@ -136,13 +136,13 @@ SPI_HandleTypeDef* DIOSTM32STREAMSPIPORT::GetHandleSPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMSPIPORT::SetHandleSPI(SPI_HandleTypeDef* hspi)
 * @brief      Set handle SPI
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  hspi :
-*
+* 
+* @param[in]  hspi : Hspi pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMSPIPORT::SetHandleSPI(SPI_HandleTypeDef* hspi)
 {
@@ -152,12 +152,12 @@ void DIOSTM32STREAMSPIPORT::SetHandleSPI(SPI_HandleTypeDef* hspi)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMSPIPORT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMSPIPORT::Clean()
 {
@@ -175,11 +175,11 @@ void DIOSTM32STREAMSPIPORT::Clean()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTM32STREAMSPI::DIOSTM32STREAMSPI()
+* 
+* @fn         DIOSTM32STREAMSPI::DIOSTM32STREAMSPI() : DIOSTREAMSPI()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMSPI::DIOSTM32STREAMSPI() : DIOSTREAMSPI()
 {
@@ -211,12 +211,12 @@ DIOSTM32STREAMSPI::DIOSTM32STREAMSPI() : DIOSTREAMSPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTM32STREAMSPI::~DIOSTM32STREAMSPI()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTM32STREAMSPI::~DIOSTM32STREAMSPI()
 {
@@ -230,13 +230,13 @@ DIOSTM32STREAMSPI::~DIOSTM32STREAMSPI()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSTATUS DIOSTM32STREAMSPI::GetStatus()
 * @brief      Get status
 * @ingroup    PLATFORM_STM32
-*
-* @return     DIOSTREAMSTATUS :
-*
+* 
+* @return     DIOSTREAMSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOSTM32STREAMSPI::GetStatus()
 {
@@ -248,13 +248,13 @@ DIOSTREAMSTATUS DIOSTM32STREAMSPI::GetStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMSPI::Open()
 * @brief      Open
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMSPI::Open()
 {
@@ -341,16 +341,16 @@ bool DIOSTM32STREAMSPI::Open()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMSPI::WaitToFilledReadingBuffer(int filledto, int timeout)
 * @brief      Wait to filled reading buffer
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  filledto :
-* @param[in]  timeout :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  filledto : Filledto value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMSPI::WaitToFilledReadingBuffer(int filledto, int timeout)
 {
@@ -371,16 +371,16 @@ bool DIOSTM32STREAMSPI::WaitToFilledReadingBuffer(int filledto, int timeout)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMSPI::ReadDirect(XBYTE* buffer, XDWORD size)
 * @brief      Read direct
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMSPI::ReadDirect(XBYTE* buffer, XDWORD size)
 {
@@ -404,16 +404,16 @@ XDWORD DIOSTM32STREAMSPI::ReadDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMSPI::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMSPI::WriteDirect(XBYTE* buffer, XDWORD size)
 {
@@ -439,16 +439,16 @@ XDWORD DIOSTM32STREAMSPI::WriteDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTM32STREAMSPI::Write(XBYTE* buffer, XDWORD size)
 * @brief      Write
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTM32STREAMSPI::Write(XBYTE* buffer, XDWORD size)
 {
@@ -472,13 +472,13 @@ XDWORD DIOSTM32STREAMSPI::Write(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMSPI::Disconnect()
 * @brief      Disconnect
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMSPI::Disconnect()
 {
@@ -488,13 +488,13 @@ bool DIOSTM32STREAMSPI::Disconnect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMSPI::Close()
 * @brief      Close
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMSPI::Close()
 {
@@ -528,14 +528,14 @@ bool DIOSTM32STREAMSPI::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTM32STREAMSPI::CleanBuffers()
 * @brief      Clean buffers
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTM32STREAMSPI::CleanBuffers()
 {
@@ -544,13 +544,13 @@ bool DIOSTM32STREAMSPI::CleanBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void HAL_SPI_MasterRxCpltCallback(SPI_HandleTypeDef* hspi)
 * @brief      AL_SPI_MasterRxCpltCallback
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  hspi :
-*
+* 
+* @param[in]  hspi : Hspi pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HAL_SPI_MasterRxCpltCallback(SPI_HandleTypeDef* hspi)
 {
@@ -581,13 +581,13 @@ void HAL_SPI_MasterRxCpltCallback(SPI_HandleTypeDef* hspi)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void HAL_SPI_SlaveRxCpltCallback(SPI_HandleTypeDef* hspi)
 * @brief      AL_SPI_SlaveRxCpltCallback
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  hspi :
-*
+* 
+* @param[in]  hspi : Hspi pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HAL_SPI_SlaveRxCpltCallback(SPI_HandleTypeDef* hspi)
 {
@@ -597,13 +597,13 @@ void HAL_SPI_SlaveRxCpltCallback(SPI_HandleTypeDef* hspi)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void HAL_SPI_ErrorCallback(SPI_HandleTypeDef*hspi)
+* 
+* @fn         void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
 * @brief      AL_SPI_ErrorCallback
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  SPI_HandleTypeDef*hspi :
-*
+* 
+* @param[in]  hspi : Hspi pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
 {
@@ -613,13 +613,13 @@ void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMSPI::ThreadConnection(void* param)
 * @brief      Thread connection
 * @ingroup    PLATFORM_STM32
-*
-* @param[in]  param :
-*
+* 
+* @param[in]  param : Param pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMSPI::ThreadConnection(void* param)
 {
@@ -705,12 +705,12 @@ void DIOSTM32STREAMSPI::ThreadConnection(void* param)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTM32STREAMSPI::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_STM32
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTM32STREAMSPI::Clean()
 {

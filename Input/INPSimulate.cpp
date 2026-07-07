@@ -304,9 +304,9 @@ INPSIMULATE::~INPSIMULATE()
 * @brief      Key press
 * @ingroup    INPUT
 * 
-* @param[in]  code : 
+* @param[in]  code : Code value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Key_Press(XBYTE code)
@@ -321,9 +321,9 @@ bool INPSIMULATE::Key_Press(XBYTE code)
 * @brief      Key un press
 * @ingroup    INPUT
 * 
-* @param[in]  code : 
+* @param[in]  code : Code value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Key_UnPress(XBYTE code)
@@ -338,10 +338,10 @@ bool INPSIMULATE::Key_UnPress(XBYTE code)
 * @brief      Key click
 * @ingroup    INPUT
 * 
-* @param[in]  code : 
-* @param[in]  pressuretime : 
+* @param[in]  code : Code value.
+* @param[in]  pressuretime : Pressuretime value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Key_Click(XBYTE code, int pressuretime)
@@ -356,9 +356,9 @@ bool INPSIMULATE::Key_Click(XBYTE code, int pressuretime)
 * @brief      Key press by literal
 * @ingroup    INPUT
 * 
-* @param[in]  literal : 
+* @param[in]  literal : Literal pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Key_PressByLiteral(XCHAR* literal)
@@ -373,9 +373,9 @@ bool INPSIMULATE::Key_PressByLiteral(XCHAR* literal)
 * @brief      Key un press by literal
 * @ingroup    INPUT
 * 
-* @param[in]  literal : 
+* @param[in]  literal : Literal pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Key_UnPressByLiteral(XCHAR* literal)
@@ -390,10 +390,10 @@ bool INPSIMULATE::Key_UnPressByLiteral(XCHAR* literal)
 * @brief      Key click by literal
 * @ingroup    INPUT
 * 
-* @param[in]  literal : 
-* @param[in]  pressuretime : 
+* @param[in]  literal : Literal pointer to use.
+* @param[in]  pressuretime : Pressuretime value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Key_ClickByLiteral(XCHAR* literal, int pressuretime)
@@ -408,10 +408,10 @@ bool INPSIMULATE::Key_ClickByLiteral(XCHAR* literal, int pressuretime)
 * @brief      Key click by text
 * @ingroup    INPUT
 * 
-* @param[in]  text : 
-* @param[in]  pressuretimeinterval : 
+* @param[in]  text : Text to use.
+* @param[in]  pressuretimeinterval : Pressuretimeinterval value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Key_ClickByText(XCHAR* text, int pressuretimeinterval)
@@ -426,10 +426,10 @@ bool INPSIMULATE::Key_ClickByText(XCHAR* text, int pressuretimeinterval)
 * @brief      Mouse set pos
 * @ingroup    INPUT
 * 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Mouse_SetPos(int x, int y)
@@ -440,12 +440,14 @@ bool INPSIMULATE::Mouse_SetPos(int x, int y)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void INPSIMULATE::Mouse_Click(int x, int y)
+* @fn         bool INPSIMULATE::Mouse_Click(int x, int y)
 * @brief      Mouse click
 * @ingroup    INPUT
 * 
-* @param[in]  x : 
-* @param[in]  y : 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPSIMULATE::Mouse_Click(int x, int y)
@@ -460,10 +462,10 @@ bool INPSIMULATE::Mouse_Click(int x, int y)
 * @brief      Get KDB code by literal
 * @ingroup    INPUT
 * 
-* @param[in]  literal : 
-* @param[in]  altkey : 
+* @param[in]  literal : Literal pointer to use.
+* @param[in]  altkey : Altkey value.
 * 
-* @return     XBYTE : 
+* @return     XBYTE : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE INPSIMULATE::GetKDBCodeByLiteral(XCHAR* literal, ALTERNATIVE_KEY& altkey)

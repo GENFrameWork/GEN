@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOSTREAMUART::DIOSTREAMUART()
+* 
+* @fn         DIOSTREAMUART::DIOSTREAMUART(): DIOSTREAM()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUART::DIOSTREAMUART(): DIOSTREAM()
 {
@@ -70,12 +70,12 @@ DIOSTREAMUART::DIOSTREAMUART(): DIOSTREAM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMUART::~DIOSTREAMUART()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUART::~DIOSTREAMUART()
 {
@@ -86,13 +86,13 @@ DIOSTREAMUART::~DIOSTREAMUART()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMCONFIG* DIOSTREAMUART::GetConfig()
 * @brief      Get config
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMCONFIG* :
-*
+* 
+* @return     DIOSTREAMCONFIG* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCONFIG* DIOSTREAMUART::GetConfig()
 {
@@ -101,15 +101,15 @@ DIOSTREAMCONFIG* DIOSTREAMUART::GetConfig()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::SetConfig(DIOSTREAMCONFIG* config)
 * @brief      Set config
 * @ingroup    DATAIO
-*
-* @param[in]  config :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  config : Configuration object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::SetConfig(DIOSTREAMCONFIG* config)
 {
@@ -122,13 +122,13 @@ bool DIOSTREAMUART::SetConfig(DIOSTREAMCONFIG* config)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOSTREAMSTATUS DIOSTREAMUART::GetStatus()
 * @brief      Get status
 * @ingroup    DATAIO
-*
-* @return     DIOSTREAMSTATUS :
-*
+* 
+* @return     DIOSTREAMSTATUS : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMSTATUS DIOSTREAMUART::GetStatus()
 {
@@ -137,13 +137,13 @@ DIOSTREAMSTATUS DIOSTREAMUART::GetStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::Open()
 * @brief      Open
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::Open()
 {
@@ -152,15 +152,15 @@ bool DIOSTREAMUART::Open()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::Config(XWORD mask)
 * @brief      Config
 * @ingroup    DATAIO
-*
-* @param[in]  mask :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  mask : Mask value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::Config(XWORD mask)
 {
@@ -169,16 +169,16 @@ bool DIOSTREAMUART::Config(XWORD mask)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
 * @brief      Read direct
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
 {
@@ -187,16 +187,16 @@ XDWORD DIOSTREAMUART::ReadDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD DIOSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 * @brief      Write direct
 * @ingroup    DATAIO
-*
-* @param[in]  buffer :
-* @param[in]  size :
-*
-* @return     XDWORD :
-*
+* 
+* @param[in]  buffer : Buffer to use.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 {
@@ -205,13 +205,13 @@ XDWORD DIOSTREAMUART::WriteDirect(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::Close()
 * @brief      Close
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::Close()
 {
@@ -220,13 +220,13 @@ bool DIOSTREAMUART::Close()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::GetCTS()
 * @brief      Get CTS
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::GetCTS()
 {
@@ -235,13 +235,13 @@ bool DIOSTREAMUART::GetCTS()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::GetDSR()
 * @brief      Get DSR
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::GetDSR()
 {
@@ -250,13 +250,13 @@ bool DIOSTREAMUART::GetDSR()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::GetRing()
 * @brief      Get ring
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::GetRing()
 {
@@ -265,13 +265,13 @@ bool DIOSTREAMUART::GetRing()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::GetRLSD()
 * @brief      Get RLSD
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::GetRLSD()
 {
@@ -280,15 +280,15 @@ bool DIOSTREAMUART::GetRLSD()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::SetRTS(bool on)
 * @brief      Set RTS
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::SetRTS(bool on)
 {
@@ -297,15 +297,15 @@ bool DIOSTREAMUART::SetRTS(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::SetDTR(bool on)
 * @brief      Set DTR
 * @ingroup    DATAIO
-*
-* @param[in]  on :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::SetDTR(bool on)
 {
@@ -314,14 +314,14 @@ bool DIOSTREAMUART::SetDTR(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIOSTREAMUART::CleanBuffers()
 * @brief      Clean buffers
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMUART::CleanBuffers()
 {
@@ -330,12 +330,12 @@ bool DIOSTREAMUART::CleanBuffers()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOSTREAMUART::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMUART::Clean()
 {

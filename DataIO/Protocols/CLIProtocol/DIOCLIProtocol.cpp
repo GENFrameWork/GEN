@@ -102,7 +102,7 @@ DIOCLIPROTOCOLCOMMAND::~DIOCLIPROTOCOLCOMMAND()
 * @brief      Get command
 * @ingroup    DATAIO
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOCLIPROTOCOLCOMMAND::GetCommand()
@@ -117,7 +117,7 @@ XCHAR* DIOCLIPROTOCOLCOMMAND::GetCommand()
 * @brief      Get N params
 * @ingroup    DATAIO
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOCLIPROTOCOLCOMMAND::GetNParams()
@@ -129,13 +129,13 @@ int DIOCLIPROTOCOLCOMMAND::GetNParams()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCLIPROTOCOLCOMMAND::Set(XCHAR* command, int nparams)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
-* @param[in]  nparams : 
+* @param[in]  command : Command pointer to use.
+* @param[in]  nparams : Nparams value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOLCOMMAND::Set(XCHAR* command, int nparams)
@@ -199,7 +199,7 @@ DIOCLIPROTOCOLANSWER::~DIOCLIPROTOCOLANSWER()
 * @brief      Get origin ID
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCLIPROTOCOLANSWER::GetOriginID()
@@ -214,7 +214,7 @@ XSTRING* DIOCLIPROTOCOLANSWER::GetOriginID()
 * @brief      Get command
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCLIPROTOCOLANSWER::GetCommand()
@@ -229,7 +229,7 @@ XSTRING* DIOCLIPROTOCOLANSWER::GetCommand()
 * @brief      Get answer
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCLIPROTOCOLANSWER::GetAnswer()
@@ -295,14 +295,14 @@ DIOCLIPROTOCOL::~DIOCLIPROTOCOL()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOCLIPROTOCOL::Ini(DIOSTREAM* diostream, XCHAR* ID, int timeout)
-* @brief      Ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @param[in]  diostream : 
-* @param[in]  ID : 
-* @param[in]  timeout : 
+* @param[in]  diostream : Diostream pointer to use.
+* @param[in]  ID : Identifier to use.
+* @param[in]  timeout : Timeout value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::Ini(DIOSTREAM* diostream, XCHAR* ID, int timeout)
@@ -335,7 +335,7 @@ bool DIOCLIPROTOCOL::Ini(DIOSTREAM* diostream, XCHAR* ID, int timeout)
 * @brief      Is ini
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::IsIni()
@@ -350,7 +350,7 @@ bool DIOCLIPROTOCOL::IsIni()
 * @brief      Active CRC
 * @ingroup    DATAIO
 * 
-* @param[in]  activated : 
+* @param[in]  activated : Activated value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCLIPROTOCOL::ActiveCRC(bool activated)
@@ -365,13 +365,13 @@ void DIOCLIPROTOCOL::ActiveCRC(bool activated)
 * @brief      Send command
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
-* @param[in]  target : 
-* @param[in]  answer : 
-* @param[in]  timeoutanswer : 
-* @param[in]  ... : 
+* @param[in]  command : Command pointer to use.
+* @param[in]  target : Target pointer to use.
+* @param[in]  answer : Answer pointer to use.
+* @param[in]  timeoutanswer : Timeoutanswer value.
+* @param[in]  ... : Variable argument list.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::SendCommand(XCHAR* command, XSTRING* target, XSTRING* answer, int timeoutanswer, ...)
@@ -394,13 +394,13 @@ bool DIOCLIPROTOCOL::SendCommand(XCHAR* command, XSTRING* target, XSTRING* answe
 * @brief      Send command arg
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
-* @param[in]  target : 
-* @param[in]  answer : 
-* @param[in]  timeoutanswer : 
-* @param[in]  arg : 
+* @param[in]  command : Command pointer to use.
+* @param[in]  target : Target pointer to use.
+* @param[in]  answer : Answer pointer to use.
+* @param[in]  timeoutanswer : Timeoutanswer value.
+* @param[in]  arg : Arg pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::SendCommandArg(XCHAR* command, XSTRING* target, XSTRING* answer, int timeoutanswer, va_list* arg)
@@ -528,12 +528,12 @@ bool DIOCLIPROTOCOL::SendCommandArg(XCHAR* command, XSTRING* target, XSTRING* an
 * @brief      Received command
 * @ingroup    DATAIO
 * 
-* @param[in]  originID : 
-* @param[in]  command : 
-* @param[in]  params : 
-* @param[in]  answer : 
+* @param[in]  originID : Origin ID value.
+* @param[in]  command : Command value.
+* @param[in]  params : Params pointer to use.
+* @param[in]  answer : Answer value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::ReceivedCommand(XSTRING& originID, XSTRING& command, XVECTOR<XSTRING*>& params, XSTRING& answer)
@@ -548,11 +548,11 @@ bool DIOCLIPROTOCOL::ReceivedCommand(XSTRING& originID, XSTRING& command, XVECTO
 * @brief      Received answer
 * @ingroup    DATAIO
 * 
-* @param[in]  origin : 
-* @param[in]  command : 
-* @param[in]  answer : 
+* @param[in]  origin : Origin value.
+* @param[in]  command : Command value.
+* @param[in]  answer : Answer value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::ReceivedAnswer(XSTRING& origin, XSTRING& command, XSTRING& answer)
@@ -772,15 +772,15 @@ void DIOCLIPROTOCOL::ReceivedCommandManager()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOCLIPROTOCOL::AddAnswer(XSTRING& origin, XSTRING& command, XSTRING& answer)
+* @fn         bool DIOCLIPROTOCOL::AddAnswer(XSTRING& originID, XSTRING& command, XSTRING& answer)
 * @brief      Add answer
 * @ingroup    DATAIO
 * 
-* @param[in]  origin : 
-* @param[in]  command : 
-* @param[in]  answer : 
+* @param[in]  originID : Origin ID value.
+* @param[in]  command : Command value.
+* @param[in]  answer : Answer value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::AddAnswer(XSTRING& originID, XSTRING& command, XSTRING& answer)
@@ -808,9 +808,9 @@ bool DIOCLIPROTOCOL::AddAnswer(XSTRING& originID, XSTRING& command, XSTRING& ans
 * @brief      Get first answer
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
+* @param[in]  command : Command pointer to use.
 * 
-* @return     DIOCLIPROTOCOLANSWER* : 
+* @return     DIOCLIPROTOCOLANSWER* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCLIPROTOCOLANSWER* DIOCLIPROTOCOL::GetFirstAnswer(XCHAR* command)
@@ -846,9 +846,9 @@ DIOCLIPROTOCOLANSWER* DIOCLIPROTOCOL::GetFirstAnswer(XCHAR* command)
 * @brief      Delete first answer
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
+* @param[in]  command : Command pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::DeleteFirstAnswer(XCHAR* command)
@@ -887,7 +887,7 @@ bool DIOCLIPROTOCOL::DeleteFirstAnswer(XCHAR* command)
 * @brief      Delete all answers
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::DeleteAllAnswers()
@@ -908,7 +908,7 @@ bool DIOCLIPROTOCOL::DeleteAllAnswers()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOCLIPROTOCOL::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -942,10 +942,10 @@ void DIOCLIPROTOCOL::End()
 * @brief      Add command
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
-* @param[in]  nparams : 
+* @param[in]  command : Command pointer to use.
+* @param[in]  nparams : Nparams value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::AddCommand(XCHAR* command, int nparams)
@@ -974,9 +974,9 @@ bool DIOCLIPROTOCOL::AddCommand(XCHAR* command, int nparams)
 * @brief      Get command
 * @ingroup    DATAIO
 * 
-* @param[in]  command : 
+* @param[in]  command : Command pointer to use.
 * 
-* @return     DIOCLIPROTOCOLCOMMAND* : 
+* @return     DIOCLIPROTOCOLCOMMAND* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCLIPROTOCOLCOMMAND* DIOCLIPROTOCOL::GetCommand(XCHAR* command)
@@ -1010,7 +1010,7 @@ DIOCLIPROTOCOLCOMMAND* DIOCLIPROTOCOL::GetCommand(XCHAR* command)
 * @brief      Delete all command
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::DeleteAllCommand()
@@ -1030,11 +1030,11 @@ bool DIOCLIPROTOCOL::DeleteAllCommand()
 * @brief      Extract params from command
 * @ingroup    DATAIO
 * 
-* @param[in]  stringreceived : 
-* @param[in]  command : 
-* @param[in]  params : 
+* @param[in]  stringreceived : Stringreceived value.
+* @param[in]  command : Command value.
+* @param[in]  params : Params pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCLIPROTOCOL::ExtractParamsFromCommand(XSTRING& stringreceived, XSTRING& command, XVECTOR<XSTRING*>& params)

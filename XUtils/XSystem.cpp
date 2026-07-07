@@ -61,11 +61,11 @@ XSYSTEM* XSYSTEM::instance            = NULL;
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSYSTEM::XSYSTEM()
 * @brief      Constructor of class
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM::XSYSTEM()
 {
@@ -76,12 +76,12 @@ XSYSTEM::XSYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSYSTEM::~XSYSTEM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM::~XSYSTEM()
 {
@@ -95,14 +95,14 @@ XSYSTEM::~XSYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::GetIsInstanced()
 * @brief      Get is instanced
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::GetIsInstanced()
 {
@@ -111,14 +111,14 @@ bool XSYSTEM::GetIsInstanced()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSYSTEM& XSYSTEM::GetInstance()
 * @brief      Get instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     XSYSTEM& :
-*
+* 
+* @return     XSYSTEM& : Reference to the requested object.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM& XSYSTEM::GetInstance()
 {
@@ -129,16 +129,16 @@ XSYSTEM& XSYSTEM::GetInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::SetInstance(XSYSTEM* _instance)
 * @brief      Set instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  _instance : GEN_NEW instance
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::SetInstance(XSYSTEM* _instance)
 {
@@ -151,14 +151,14 @@ bool XSYSTEM::SetInstance(XSYSTEM* _instance)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::DelInstance()
 * @brief      Del instance
 * @note       STATIC
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::DelInstance()
 {
@@ -175,16 +175,16 @@ bool XSYSTEM::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSYSTEM_HARDWARETYPE XSYSTEM::GetTypeHardware(int* revision)
 * @brief      Get type hardware
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  revision : revision (Pi rules)
-*
-* @return     XSYSTEM_HARDWARETYPE : Type Hardware (enum XSYSTEM_HARDWARETYPE)
-*
+* 
+* @return     XSYSTEM_HARDWARETYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_HARDWARETYPE  XSYSTEM::GetTypeHardware(int* revision)
 {
@@ -193,14 +193,14 @@ XSYSTEM_HARDWARETYPE  XSYSTEM::GetTypeHardware(int* revision)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::HardwareUseLittleEndian()
 * @brief      Hardware use little endian
 * @note       In ARM can be changed, can be used BIG ENDIAN or LITTLE ENDIAN
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::HardwareUseLittleEndian()
 {
@@ -232,15 +232,15 @@ bool XSYSTEM::HardwareUseLittleEndian()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XSYSTEM_PLATFORM XSYSTEM::GetPlatform(XSTRING* namestring = NULL)
+* @fn         XSYSTEM_PLATFORM XSYSTEM::GetPlatform(XSTRING* namestring)
 * @brief      Get platform
 * @ingroup    XUTILS
-*
-* @param[in]  namestring : 
 * 
-* @return     XSYSTEM_PLATFORM : 
+* @param[in]  namestring : Namestring pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSYSTEM_PLATFORM : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_PLATFORM XSYSTEM::GetPlatform(XSTRING* namestring)
 {
   if(namestring)  namestring->Set(__L("Unknown"));
@@ -254,12 +254,12 @@ XSYSTEM_PLATFORM XSYSTEM::GetPlatform(XSTRING* namestring)
 * @fn         bool XSYSTEM::GetOperativeSystemID(XSTRING& ID)
 * @brief      Get operative system ID
 * @ingroup    XUTILS
-*
-* @param[in]  ID : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  ID : Identifier to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::GetOperativeSystemID(XSTRING& ID)
 {
   ID.Empty();
@@ -274,7 +274,7 @@ bool XSYSTEM::GetOperativeSystemID(XSTRING& ID)
 * @brief      Get language SO
 * @ingroup    XUTILS
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XSYSTEM::GetLanguageSO()
@@ -289,7 +289,7 @@ XDWORD XSYSTEM::GetLanguageSO()
 * @brief      Get BIOS serial number
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XSYSTEM::GetBIOSSerialNumber()
@@ -304,7 +304,7 @@ XSTRING* XSYSTEM::GetBIOSSerialNumber()
 * @brief      Get CPU serial number
 * @ingroup    XUTILS
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XSYSTEM::GetCPUSerialNumber()
@@ -319,7 +319,7 @@ XSTRING* XSYSTEM::GetCPUSerialNumber()
 * @brief      Get CPU temperature
 * @ingroup    XUTILS
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XSYSTEM::GetCPUTemperature()
@@ -329,17 +329,17 @@ float XSYSTEM::GetCPUTemperature()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 * @brief      Get memory info
 * @note       VIRTUAL
 * @ingroup    XUTILS
-*
-* @param[out] total : total memory in bytes.
-* @param[out] free :  free  memory in bytes
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  total : total memory in bytes.
+* @param[in]  free : free  memory in bytes
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 {
@@ -351,13 +351,13 @@ bool XSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XSYSTEM::GetFreeMemoryPercent()
 * @brief      Get free memory percent
 * @ingroup    XUTILS
-*
-* @return     int :
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSYSTEM::GetFreeMemoryPercent()
 {
@@ -381,13 +381,13 @@ int XSYSTEM::GetFreeMemoryPercent()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::FreeCacheMemory()
 * @brief      Free cache memory
 * @ingroup    XUTILS
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::FreeCacheMemory()
 {
@@ -396,13 +396,13 @@ bool XSYSTEM::FreeCacheMemory()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XSYSTEM::GetCPUUsageTotal()
 * @brief      Get CPU usage total
 * @ingroup    XUTILS
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSYSTEM::GetCPUUsageTotal()
 {
@@ -411,15 +411,15 @@ int XSYSTEM::GetCPUUsageTotal()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
 * @brief      Get CPU usage for process name
 * @ingroup    XUTILS
-*
-* @param[in]  processname : 
-*
-* @return     int : 
-*
+* 
+* @param[in]  processname : Processname pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
 {
@@ -428,15 +428,15 @@ int XSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XSYSTEM::GetCPUUsageForProcessID(XDWORD processID)
 * @brief      Get CPU usage for process ID
 * @ingroup    XUTILS
-*
-* @param[in]  processID : 
-*
-* @return     int : 
-*
+* 
+* @param[in]  processID : Process ID value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSYSTEM::GetCPUUsageForProcessID(XDWORD processID)
 {
@@ -450,9 +450,9 @@ int XSYSTEM::GetCPUUsageForProcessID(XDWORD processID)
 * @brief      Get enviroment variable
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XSYSTEM::GetEnviromentVariable(XCHAR* name)
@@ -467,9 +467,9 @@ XCHAR* XSYSTEM::GetEnviromentVariable(XCHAR* name)
 * @brief      Get enviroment variable
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XSYSTEM::GetEnviromentVariable(XSTRING& name)
@@ -484,10 +484,10 @@ XCHAR* XSYSTEM::GetEnviromentVariable(XSTRING& name)
 * @brief      Set enviroment variable
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
-* @param[in]  value : 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::SetEnviromentVariable(XCHAR* name, XCHAR* value)
@@ -502,10 +502,10 @@ bool XSYSTEM::SetEnviromentVariable(XCHAR* name, XCHAR* value)
 * @brief      Set enviroment variable
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
-* @param[in]  value : 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::SetEnviromentVariable(XSTRING& name, XSTRING& value)
@@ -520,9 +520,9 @@ bool XSYSTEM::SetEnviromentVariable(XSTRING& name, XSTRING& value)
 * @brief      Del enviroment variable
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::DelEnviromentVariable(XCHAR* name)
@@ -537,9 +537,9 @@ bool XSYSTEM::DelEnviromentVariable(XCHAR* name)
 * @brief      Del enviroment variable
 * @ingroup    XUTILS
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::DelEnviromentVariable(XSTRING& name)
@@ -549,16 +549,16 @@ bool XSYSTEM::DelEnviromentVariable(XSTRING& name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::GetUserAndDomain(XSTRING& user, XSTRING& domain)
 * @brief      Get user and domain
 * @ingroup    XUTILS
-*
-* @param[in]  user : 
-* @param[in]  domain : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  user : User name.
+* @param[in]  domain : Domain value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::GetUserAndDomain(XSTRING& user, XSTRING& domain)
 {
@@ -567,15 +567,15 @@ bool XSYSTEM::GetUserAndDomain(XSTRING& user, XSTRING& domain)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 * @brief      Shut down
 * @ingroup    XUTILS
-*
+* 
 * @param[in]  type : type of shutdown (enum XSYSTEM_CHANGESTATUSTYPE)
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 {
@@ -584,13 +584,13 @@ bool XSYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XSYSTEM::Sound_GetLevel()
 * @brief      Sound get level
 * @ingroup    XUTILS
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSYSTEM::Sound_GetLevel()
 {
@@ -599,15 +599,15 @@ int XSYSTEM::Sound_GetLevel()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::Sound_SetLevel(int level)
 * @brief      Sound set level
 * @ingroup    XUTILS
-*
-* @param[in]  level : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  level : Level value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::Sound_SetLevel(int level)
 {
@@ -616,15 +616,15 @@ bool XSYSTEM::Sound_SetLevel(int level)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XSYSTEM::Sound_SetMutex(bool on)
 * @brief      Sound set mutex
 * @ingroup    XUTILS
-*
-* @param[in]  on : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::Sound_SetMutex(bool on)
 {
@@ -635,15 +635,15 @@ bool XSYSTEM::Sound_SetMutex(bool on)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSYSTEM::GetBatteryLevel (bool& isincharge, XBYTE& levelpercent)
-* @brief      Get battery level 
+* @brief      Get battery level
 * @ingroup    XUTILS
-*
-* @param[in]  isincharge : 
-* @param[in]  levelpercent : 
 * 
-* @return     virtual : 
+* @param[in]  isincharge : Isincharge value.
+* @param[in]  levelpercent : Levelpercent value.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::GetBatteryLevel (bool& isincharge, XBYTE& levelpercent)
 {
   return false;
@@ -656,7 +656,7 @@ bool XSYSTEM::GetBatteryLevel (bool& isincharge, XBYTE& levelpercent)
 * @brief      get wifi RSSIlevel
 * @ingroup    XUTILS
 * 
-* @return     int : 
+* @return     int : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XSYSTEM::GetWifiRSSILevel()
@@ -671,10 +671,10 @@ int XSYSTEM::GetWifiRSSILevel()
 * @brief      get path exec application
 * @ingroup    XUTILS
 * 
-* @param[in]  appname : 
-* @param[in]  apppath : 
+* @param[in]  appname : Appname pointer to use.
+* @param[in]  apppath : Apppath value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
@@ -691,10 +691,10 @@ bool XSYSTEM::GetPathExecApplication(XCHAR* appname, XPATH& apppath)
 * @brief      get path exec application
 * @ingroup    XUTILS
 * 
-* @param[in]  appname : 
-* @param[in]  apppath : 
+* @param[in]  appname : Appname pointer to use.
+* @param[in]  apppath : Apppath value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::GetPathExecApplication(XSTRING* appname, XPATH& apppath)
@@ -715,14 +715,14 @@ bool XSYSTEM::GetPathExecApplication(XSTRING* appname, XPATH& apppath)
 * @fn         bool XSYSTEM::HostFile(bool add, XCHAR* domain, XCHAR* IP)
 * @brief      Host file
 * @ingroup    XUTILS
-*
-* @param[in]  add : 
-* @param[in]  domain : 
-* @param[in]  IP : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  add : Add value.
+* @param[in]  domain : Domain pointer to use.
+* @param[in]  IP : IP address to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::HostFile(bool add, XCHAR* domain, XCHAR* IP)
 {
   XPATH     xpath;
@@ -776,14 +776,14 @@ bool XSYSTEM::HostFile(bool add, XCHAR* domain, XCHAR* IP)
 * @fn         bool XSYSTEM::HostFile(bool add, XSTRING& domain, XSTRING& IP)
 * @brief      Host file
 * @ingroup    XUTILS
-*
-* @param[in]  add : 
-* @param[in]  domain : 
-* @param[in]  IP : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  add : Add value.
+* @param[in]  domain : Domain value.
+* @param[in]  IP : IP address to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::HostFile(bool add, XSTRING& domain, XSTRING& IP)
 {
   return HostFile(add, domain.Get(), IP.Get());
@@ -795,14 +795,14 @@ bool XSYSTEM::HostFile(bool add, XSTRING& domain, XSTRING& IP)
 * @fn         int XSYSTEM::IsLineInHostFile(XFILETXT& xfileTXT, XCHAR* domain, XCHAR* IP)
 * @brief      Is line in host file
 * @ingroup    XUTILS
-*
-* @param[in]  xfileTXT : 
-* @param[in]  domain : 
-* @param[in]  IP : 
 * 
-* @return     int : 
+* @param[in]  xfileTXT : Xfile TXT value.
+* @param[in]  domain : Domain pointer to use.
+* @param[in]  IP : IP address to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int XSYSTEM::IsLineInHostFile(XFILETXT& xfileTXT, XCHAR* domain, XCHAR* IP)
 {
   bool found = false;    
@@ -850,12 +850,12 @@ int XSYSTEM::IsLineInHostFile(XFILETXT& xfileTXT, XCHAR* domain, XCHAR* IP)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XSYSTEM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    XUTILS
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XSYSTEM::Clean()
 {

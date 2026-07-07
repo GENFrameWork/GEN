@@ -89,7 +89,7 @@ DIOMAC::~DIOMAC()
 * @brief      Is zero
 * @ingroup    DATAIO
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMAC::IsZero()
@@ -106,10 +106,10 @@ bool DIOMAC::IsZero()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XBYTE* DIOMAC::Get()
-* @brief      Get
+* @brief      Get value
 * @ingroup    DATAIO
 * 
-* @return     XBYTE* : 
+* @return     XBYTE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBYTE* DIOMAC::Get()
@@ -124,7 +124,7 @@ XBYTE* DIOMAC::Get()
 * @brief      Get manufactured
 * @ingroup    DATAIO
 * 
-* @return     XDWORD : 
+* @return     XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOMAC::GetManufactured()
@@ -145,10 +145,10 @@ XDWORD DIOMAC::GetManufactured()
 * @brief      Get X string
 * @ingroup    DATAIO
 * 
-* @param[in]  MACstring : 
-* @param[in]  separator : 
+* @param[in]  MACstring : MA Cstring value.
+* @param[in]  separator : Separator value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMAC::GetXString(XSTRING& MACstring, XCHAR separator)
@@ -176,7 +176,7 @@ bool DIOMAC::GetXString(XSTRING& MACstring, XCHAR separator)
 * @brief      Get long number
 * @ingroup    DATAIO
 * 
-* @return     XQWORD : 
+* @return     XQWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOMAC::GetLongNumber()
@@ -198,12 +198,12 @@ XQWORD DIOMAC::GetLongNumber()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOMAC::Set(XBYTE* MAC)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  MAC : 
+* @param[in]  MAC : MAC pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMAC::Set(XBYTE* MAC)
@@ -220,12 +220,12 @@ bool DIOMAC::Set(XBYTE* MAC)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOMAC::Set(XSTRING& MAC)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  MAC : 
+* @param[in]  MAC : MAC value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMAC::Set(XSTRING& MAC)
@@ -255,12 +255,12 @@ bool DIOMAC::Set(XSTRING& MAC)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOMAC::Set(char* MAC)
-* @brief      Set
+* @brief      Set value
 * @ingroup    DATAIO
 * 
-* @param[in]  MAC : 
+* @param[in]  MAC : MAC pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMAC::Set(char* MAC)
@@ -279,9 +279,9 @@ bool DIOMAC::Set(char* MAC)
 * @brief      Is equal
 * @ingroup    DATAIO
 * 
-* @param[in]  MAC : 
+* @param[in]  MAC : MAC pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMAC::IsEqual(DIOMAC* MAC)
@@ -303,9 +303,9 @@ bool DIOMAC::IsEqual(DIOMAC* MAC)
 * @brief      Is equal
 * @ingroup    DATAIO
 * 
-* @param[in]  MAC : 
+* @param[in]  MAC : MAC value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOMAC::IsEqual(DIOMAC& MAC)

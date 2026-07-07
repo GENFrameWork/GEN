@@ -108,11 +108,11 @@ void    unmount_disks_ourselves         ();
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XLINUXSYSTEM::XLINUXSYSTEM()
+* 
+* @fn         XLINUXSYSTEM::XLINUXSYSTEM(): XSYSTEM()
 * @brief      Constructor of class
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXSYSTEM::XLINUXSYSTEM(): XSYSTEM()
 {
@@ -121,12 +121,12 @@ XLINUXSYSTEM::XLINUXSYSTEM(): XSYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XLINUXSYSTEM::~XLINUXSYSTEM()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XLINUXSYSTEM::~XLINUXSYSTEM()
 {
@@ -135,15 +135,15 @@ XLINUXSYSTEM::~XLINUXSYSTEM()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSYSTEM_HARDWARETYPE XLINUXSYSTEM::GetTypeHardware(int* revision)
 * @brief      Get type hardware
 * @ingroup    PLATFORM_LINUX
-*
-* @param[out]  revision : revision of hardware
-*
-* @return     XSYSTEM_HARDWARETYPE : hardware type
-*
+* 
+* @param[in]  revision : revision of hardware
+* 
+* @return     XSYSTEM_HARDWARETYPE : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_HARDWARETYPE XLINUXSYSTEM::GetTypeHardware(int* revision)
 {
@@ -238,12 +238,12 @@ XSYSTEM_HARDWARETYPE XLINUXSYSTEM::GetTypeHardware(int* revision)
 * @fn         XSYSTEM_PLATFORM XLINUXSYSTEM::GetPlatform(XSTRING* namestring)
 * @brief      Get platform
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  namestring : 
 * 
-* @return     XSYSTEM_PLATFORM : 
+* @param[in]  namestring : Namestring pointer to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     XSYSTEM_PLATFORM : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSYSTEM_PLATFORM XLINUXSYSTEM::GetPlatform(XSTRING* namestring)
 {
  
@@ -292,12 +292,12 @@ XSYSTEM_PLATFORM XLINUXSYSTEM::GetPlatform(XSTRING* namestring)
 * @fn         bool XLINUXSYSTEM::GetOperativeSystemID(XSTRING& ID)
 * @brief      Get operative system ID
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  ID : 
 * 
-* @return     bool : true if is succesful. 
+* @param[in]  ID : Identifier to use.
 * 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::GetOperativeSystemID(XSTRING& ID)
 {
   ID.Empty();
@@ -318,13 +318,13 @@ bool XLINUXSYSTEM::GetOperativeSystemID(XSTRING& ID)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XDWORD XLINUXSYSTEM::GetLanguageSO()
 * @brief      Get language SO
 * @ingroup    PLATFORM_LINUX
-*
-* @return     XDWORD :
-*
+* 
+* @return     XDWORD : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XLINUXSYSTEM::GetLanguageSO()
 {
@@ -354,7 +354,7 @@ XDWORD XLINUXSYSTEM::GetLanguageSO()
 * @brief      Get BIOS serial number
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XLINUXSYSTEM::GetBIOSSerialNumber()
@@ -369,7 +369,7 @@ XSTRING* XLINUXSYSTEM::GetBIOSSerialNumber()
 * @brief      Get CPU serial number
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XLINUXSYSTEM::GetCPUSerialNumber()
@@ -396,7 +396,7 @@ XSTRING* XLINUXSYSTEM::GetCPUSerialNumber()
 * @brief      Get CPU temperature
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     float : 
+* @return     float : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 float XLINUXSYSTEM::GetCPUTemperature()
@@ -406,16 +406,16 @@ float XLINUXSYSTEM::GetCPUTemperature()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 * @brief      Get memory info
 * @ingroup    PLATFORM_LINUX
-*
-* @param[out] total : total memory
-* @param[out] free : free memory
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  total : total memory
+* @param[in]  free : free memory
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 {
@@ -446,7 +446,7 @@ bool XLINUXSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 * @brief      Free cache memory
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::FreeCacheMemory()
@@ -460,13 +460,13 @@ bool XLINUXSYSTEM::FreeCacheMemory()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XLINUXSYSTEM::GetCPUUsageTotal()
 * @brief      Get CPU usage total
 * @ingroup    PLATFORM_LINUX
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XLINUXSYSTEM::GetCPUUsageTotal()
 {
@@ -515,15 +515,15 @@ int XLINUXSYSTEM::GetCPUUsageTotal()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XLINUXSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
 * @brief      Get CPU usage for process name
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  processname : 
-*
-* @return     int : 
-*
+* 
+* @param[in]  processname : Processname pointer to use.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XLINUXSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
 {  
@@ -562,15 +562,15 @@ int XLINUXSYSTEM::GetCPUUsageForProcessName(XCHAR* processname)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XLINUXSYSTEM::GetCPUUsageForProcessID(XDWORD processID)
 * @brief      Get CPU usage for process ID
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  processID : 
-*
-* @return     int : 
-*
+* 
+* @param[in]  processID : Process ID value.
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XLINUXSYSTEM::GetCPUUsageForProcessID(XDWORD processID)
 {
@@ -614,9 +614,9 @@ int XLINUXSYSTEM::GetCPUUsageForProcessID(XDWORD processID)
 * @brief      Get enviroment variable
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  name : 
+* @param[in]  name : Name to use.
 * 
-* @return     XCHAR* : 
+* @return     XCHAR* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* XLINUXSYSTEM::GetEnviromentVariable(XCHAR* name)
@@ -639,10 +639,10 @@ XCHAR* XLINUXSYSTEM::GetEnviromentVariable(XCHAR* name)
 * @brief      Set enviroment variable
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  name : 
-* @param[in]  value : 
+* @param[in]  name : Name to use.
+* @param[in]  value : Value pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::SetEnviromentVariable(XCHAR* name, XCHAR* value)
@@ -666,15 +666,15 @@ bool XLINUXSYSTEM::SetEnviromentVariable(XCHAR* name, XCHAR* value)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXSYSTEM::DelEnviromentVariable(XCHAR* name)
 * @brief      Del enviroment variable
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  name :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  name : Name to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::DelEnviromentVariable(XCHAR* name)
 {
@@ -693,15 +693,15 @@ bool XLINUXSYSTEM::DelEnviromentVariable(XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXSYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 * @brief      Shut down
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  type : type of shutdown of SO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 {
@@ -773,13 +773,13 @@ bool XLINUXSYSTEM::ShutDown(XSYSTEM_CHANGESTATUSTYPE type)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         int XLINUXSYSTEM::Sound_GetLevel()
 * @brief      Sound get level
 * @ingroup    PLATFORM_LINUX
-*
-* @return     int : 
-*
+* 
+* @return     int : Requested value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 int XLINUXSYSTEM::Sound_GetLevel()
 {
@@ -793,15 +793,15 @@ int XLINUXSYSTEM::Sound_GetLevel()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXSYSTEM::Sound_SetLevel(int level)
 * @brief      Sound set level
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  level : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  level : Level value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::Sound_SetLevel(int level)
 {
@@ -812,15 +812,15 @@ bool XLINUXSYSTEM::Sound_SetLevel(int level)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool XLINUXSYSTEM::Sound_SetMutex(bool on)
 * @brief      Sound set mutex
 * @ingroup    PLATFORM_LINUX
-*
-* @param[in]  on : 
-*
-* @return     bool : true if is succesful. 
-*
+* 
+* @param[in]  on : On value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::Sound_SetMutex(bool on)
 {
@@ -841,12 +841,12 @@ bool XLINUXSYSTEM::Sound_SetMutex(bool on)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void XLINUXSYSTEM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XLINUXSYSTEM::Clean()
 {
@@ -856,11 +856,13 @@ void XLINUXSYSTEM::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void int_handler()
+* @fn         void int_handler(int code)
 * @brief      nt_handler
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @param[in]  code : Code value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void int_handler(int code)
 {
   #ifdef _PATH_NOLOGIN
@@ -878,8 +880,8 @@ void int_handler(int code)
 * @fn         void swap_off()
 * @brief      wap_off
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void swap_off()
 {
 	/// swapoff esp. swap FILES so the underlying partition can be
@@ -920,8 +922,8 @@ void swap_off()
 * @fn         void unmount_disks()
 * @brief      nmount_disks
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void unmount_disks()
 {
 	// better to use umount directly because it may be smarter than us 
@@ -964,8 +966,8 @@ void unmount_disks()
 * @fn         void unmount_disks_ourselves()
 * @brief      nmount_disks_ourselves
 * @ingroup    PLATFORM_LINUX
-*
-* ---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void unmount_disks_ourselves()
 {
 	// unmount all disks 
@@ -1014,10 +1016,10 @@ void unmount_disks_ourselves()
 * @brief      Sound set level
 * @ingroup    PLATFORM_LINUX
 * 
-* @param[in]  read : 
-* @param[in]  level : 
+* @param[in]  read : Read value.
+* @param[in]  level : Level value.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXSYSTEM::Sound_SetLevel(bool read, long* level)

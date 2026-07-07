@@ -53,15 +53,15 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family)
+* 
+* @fn         DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
-* @param[in]  subject :
-* @param[in]  family :
-* @param[in]  type :
-*
+* 
+* @param[in]  subject : Subject pointer to use.
+* @param[in]  type : Type value.
+* @param[in]  family : Family value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT(XSUBJECT* subject, XDWORD type, XDWORD family): XEVENT(subject, type, family)
 {
@@ -70,12 +70,12 @@ DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::DIOCOREPROTOCOL_CONNECTIONSMANAGER_XE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::~DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::~DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT()
 {
@@ -89,7 +89,7 @@ DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::~DIOCOREPROTOCOL_CONNECTIONSMANAGER_X
 * @brief      Get connection
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_CONNECTION* : 
+* @return     DIOCOREPROTOCOL_CONNECTION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetConnection()
@@ -104,9 +104,9 @@ DIOCOREPROTOCOL_CONNECTION* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetConnec
 * @brief      Set connection
 * @ingroup    DATAIO
 * 
-* @param[in]  connection : 
+* @param[in]  connection : Connection pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::SetConnection(DIOCOREPROTOCOL_CONNECTION* connection)
@@ -127,7 +127,7 @@ bool DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::SetConnection(DIOCOREPROTOCOL_CO
 * @brief      Get actual status
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_CONNECTION_STATUS : 
+* @return     DIOCOREPROTOCOL_CONNECTION_STATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION_STATUS DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetActualStatus()
@@ -142,7 +142,7 @@ DIOCOREPROTOCOL_CONNECTION_STATUS DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::Get
 * @brief      Set actual status
 * @ingroup    DATAIO
 * 
-* @param[in]  actualstatus : 
+* @param[in]  actualstatus : Actualstatus value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::SetActualStatus(DIOCOREPROTOCOL_CONNECTION_STATUS actualstatus)
@@ -157,7 +157,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::SetActualStatus(DIOCOREPROTOCOL_
 * @brief      Get next status
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_CONNECTION_STATUS : 
+* @return     DIOCOREPROTOCOL_CONNECTION_STATUS : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_CONNECTION_STATUS DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetNextStatus()
@@ -172,7 +172,7 @@ DIOCOREPROTOCOL_CONNECTION_STATUS DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::Get
 * @brief      Set next status
 * @ingroup    DATAIO
 * 
-* @param[in]  nextstatus : 
+* @param[in]  nextstatus : Nextstatus value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::SetNextStatus(DIOCOREPROTOCOL_CONNECTION_STATUS nextstatus)
@@ -187,7 +187,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::SetNextStatus(DIOCOREPROTOCOL_CO
 * @brief      Get msg
 * @ingroup    DATAIO
 * 
-* @return     DIOCOREPROTOCOL_MESSAGE* : 
+* @return     DIOCOREPROTOCOL_MESSAGE* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOCOREPROTOCOL_MESSAGE* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetMsg()
@@ -202,7 +202,7 @@ DIOCOREPROTOCOL_MESSAGE* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetMsg()
 * @brief      Set msg
 * @ingroup    DATAIO
 * 
-* @param[in]  message : 
+* @param[in]  message : Message text.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::SetMsg(DIOCOREPROTOCOL_MESSAGE* message)
@@ -217,7 +217,7 @@ void DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::SetMsg(DIOCOREPROTOCOL_MESSAGE* 
 * @brief      Get content response buffer
 * @ingroup    DATAIO
 * 
-* @return     XBUFFER* : 
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseBuffer()
@@ -232,7 +232,7 @@ XBUFFER* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseBuffer()
 * @brief      get content response string
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseString()
@@ -247,7 +247,7 @@ XSTRING* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseString()
 * @brief      get content response Xfile JSOn
 * @ingroup    DATAIO
 * 
-* @return     XFILEJSON* : 
+* @return     XFILEJSON* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEJSON* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseXFileJSON()
@@ -257,12 +257,12 @@ XFILEJSON* DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::GetContentResponseXFileJSO
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOCOREPROTOCOL_CONNECTIONSMANAGER_XEVENT::Clean()
 {

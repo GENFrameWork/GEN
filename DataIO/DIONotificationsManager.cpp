@@ -55,11 +55,11 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIONOTIFICATION::DIONOTIFICATION()
 * @brief      Constructor of class
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONOTIFICATION::DIONOTIFICATION()
 {
@@ -68,12 +68,12 @@ DIONOTIFICATION::DIONOTIFICATION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIONOTIFICATION::~DIONOTIFICATION()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONOTIFICATION::~DIONOTIFICATION()
 {
@@ -82,13 +82,13 @@ DIONOTIFICATION::~DIONOTIFICATION()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIONOTIFICATION::Get_Title()
 * @brief      Get title
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIONOTIFICATION::Get_Title()
 {
@@ -97,13 +97,13 @@ XSTRING* DIONOTIFICATION::Get_Title()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         XSTRING* DIONOTIFICATION::Get_Message()
 * @brief      Get message
 * @ingroup    DATAIO
-*
-* @return     XSTRING* :
-*
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIONOTIFICATION::Get_Message()
 {
@@ -112,13 +112,13 @@ XSTRING* DIONOTIFICATION::Get_Message()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* DIONOTIFICATION::Application_GetHandle()
 * @brief      Application get handle
 * @ingroup    DATAIO
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* DIONOTIFICATION::Application_GetHandle()
 {
@@ -127,13 +127,13 @@ void* DIONOTIFICATION::Application_GetHandle()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIONOTIFICATION::Application_SetHandle(void* applicationhandle)
 * @brief      Application set handle
 * @ingroup    DATAIO
-*
-* @param[in]  applicationhandle :
-*
+* 
+* @param[in]  applicationhandle : Applicationhandle pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONOTIFICATION::Application_SetHandle(void* applicationhandle)
 {
@@ -142,13 +142,13 @@ void DIONOTIFICATION::Application_SetHandle(void* applicationhandle)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void* DIONOTIFICATION::GetApplicationIcon()
 * @brief      Get application icon
 * @ingroup    DATAIO
-*
-* @return     void* :
-*
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void* DIONOTIFICATION::GetApplicationIcon()
 {
@@ -157,13 +157,13 @@ void* DIONOTIFICATION::GetApplicationIcon()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIONOTIFICATION::SetApplicationIcon(void* applicationicon)
 * @brief      Set application icon
 * @ingroup    DATAIO
-*
-* @param[in]  applicationicon :
-*
+* 
+* @param[in]  applicationicon : Applicationicon pointer to use.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONOTIFICATION::SetApplicationIcon(void* applicationicon)
 {
@@ -172,12 +172,12 @@ void DIONOTIFICATION::SetApplicationIcon(void* applicationicon)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIONOTIFICATION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONOTIFICATION::Clean()
 {
@@ -204,12 +204,12 @@ DIONOTIFICATIONSMANAGER::DIONOTIFICATIONSMANAGER()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         DIONOTIFICATIONSMANAGER::~DIONOTIFICATIONSMANAGER()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIONOTIFICATIONSMANAGER::~DIONOTIFICATIONSMANAGER()
 {
@@ -220,13 +220,13 @@ DIONOTIFICATIONSMANAGER::~DIONOTIFICATIONSMANAGER()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIONOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
-* @brief      ini
+* @brief      Initialize the object
 * @ingroup    DATAIO
 * 
-* @param[in]  ownertitle : 
-* @param[in]  appname : 
+* @param[in]  ownertitle : Ownertitle pointer to use.
+* @param[in]  appname : Appname pointer to use.
 * 
-* @return     bool : true if is succesful. 
+* @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
@@ -241,7 +241,7 @@ bool DIONOTIFICATIONSMANAGER::Ini(XCHAR* ownertitle, XCHAR* appname)
 * @brief      get owner title
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIONOTIFICATIONSMANAGER::GetOwnerTitle()
@@ -256,7 +256,7 @@ XSTRING* DIONOTIFICATIONSMANAGER::GetOwnerTitle()
 * @brief      get app name
 * @ingroup    DATAIO
 * 
-* @return     XSTRING* : 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIONOTIFICATIONSMANAGER::GetAppName()
@@ -266,15 +266,15 @@ XSTRING* DIONOTIFICATIONSMANAGER::GetAppName()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    DATAIO
-*
-* @param[in]  notification :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  notification : Notification pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
 {
@@ -283,15 +283,15 @@ bool DIONOTIFICATIONSMANAGER::Do(DIONOTIFICATION* notification)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONOTIFICATIONSMANAGER::Do(DIONOTIFICATION& notification)
-* @brief      Do
+* @brief      Execute the operation
 * @ingroup    DATAIO
-*
-* @param[in]  notification :
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @param[in]  notification : Notification value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONOTIFICATIONSMANAGER::Do(DIONOTIFICATION& notification)
 {
@@ -300,13 +300,13 @@ bool DIONOTIFICATIONSMANAGER::Do(DIONOTIFICATION& notification)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         bool DIONOTIFICATIONSMANAGER::End()
-* @brief      End
+* @brief      End the object
 * @ingroup    DATAIO
-*
-* @return     bool : true if is succesful.
-*
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIONOTIFICATIONSMANAGER::End()
 {
@@ -315,12 +315,12 @@ bool DIONOTIFICATIONSMANAGER::End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @fn         void DIONOTIFICATIONSMANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIONOTIFICATIONSMANAGER::Clean()
 {
