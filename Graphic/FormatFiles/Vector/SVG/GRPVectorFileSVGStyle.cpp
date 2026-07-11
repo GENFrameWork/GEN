@@ -36,6 +36,8 @@
 
 #include "GRPVectorFileSVGStyle.h"
 
+#include "GRPVectorFileSVGCSSStyleSheet.h"
+
 #include "XFileXML.h"
 #include "XVector.h"
 
@@ -86,16 +88,18 @@ GRPVECTORFILESVGSTYLE::~GRPVECTORFILESVGSTYLE()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element)
-* @brief      Apply data : read presentation attributes and the inline style attribute (style overrides)
+* @fn         bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element, GRPVECTORFILESVGCSSSTYLESHEET* stylesheet)
+* @brief      Apply data : read presentation attributes, then the class="" CSS rules, then the inline style
+*             attribute (each step overrides the previous one, same cascade order browsers use)
 * @ingroup    GRAPHIC
 * 
 * @param[in]  element : xml element
+* @param[in]  stylesheet : document-wide CSS class rules collected from every <style> element (NULL = ignore class="")
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element)
+bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element, GRPVECTORFILESVGCSSSTYLESHEET* stylesheet)
 {
   if(!element) return false;
 
@@ -120,7 +124,35 @@ bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element)
         }
     }
 
-  // The inline style attribute overrides the presentation attributes.
+  // class="fil0 fil1" : resolved against the <style> CSS rules collected document wide (CorelDRAW/Illustrator/Figma
+  // exports commonly use this instead of direct fill="" attributes). A class rule overrides a presentation
+  // attribute, same as in a browser.
+  if(stylesheet)
+    {
+      XCHAR* valueclass = element->GetValueAttribute(__L("class"));
+      if(valueclass)
+        {
+          XSTRING classnames(valueclass);
+
+          XVECTOR<XSTRING*> classlist;
+          classnames.Split(__C(' '), classlist, false);
+
+          for(XDWORD c=0; c<classlist.GetSize(); c++)
+            {
+              XSTRING* classname = classlist.Get(c);
+              if(classname && !classname->IsEmpty())
+                {
+                  XSTRING* declarations = stylesheet->Get(*classname);
+                  if(declarations) ParseStyleAttribute(*declarations);
+                }
+            }
+
+          classlist.DeleteContents();
+          classlist.DeleteAll();
+        }
+    }
+
+  // The inline style attribute overrides the presentation attributes and the class="" CSS rules.
   XCHAR* style = element->GetValueAttribute(__L("style"));
   if(style)
     {

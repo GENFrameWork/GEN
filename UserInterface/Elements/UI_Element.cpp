@@ -164,6 +164,36 @@ XSTRING* UI_ELEMENT::GetTypeString()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         UI_ELEMENT_CHROMEROLE UI_ELEMENT::GetChromeRole()
+* @brief      Get chrome role
+* @ingroup    USERINTERFACE
+* 
+* @return     UI_ELEMENT_CHROMEROLE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT_CHROMEROLE UI_ELEMENT::GetChromeRole()
+{
+  return chromerole;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void UI_ELEMENT::SetChromeRole(UI_ELEMENT_CHROMEROLE chromerole)
+* @brief      Set chrome role
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  chromerole : Chromerole value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetChromeRole(UI_ELEMENT_CHROMEROLE chromerole)
+{
+  this->chromerole = chromerole;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         UI_ELEMENT* UI_ELEMENT::GetFather()
 * @brief      Get father
 * @ingroup    USERINTERFACE
@@ -999,6 +1029,7 @@ bool UI_ELEMENT::DeleteAllComposeElements()
 void UI_ELEMENT::Clean()
 {
   type                    = UI_ELEMENT_TYPE_UNKNOWN;
+  chromerole              = UI_ELEMENT_CHROMEROLE_NONE;
 
   father                  = NULL;
   isdetached              = false;

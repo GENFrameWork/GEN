@@ -62,6 +62,7 @@ class UI_LAYOUT
     bool                            Elements_Add                  (UI_ELEMENT* element);
     XVECTOR<UI_ELEMENT*>*           Elements_Get                  ();
     UI_ELEMENT*                     Elements_Get                  (XCHAR* nameelement, UI_ELEMENT_TYPE type = UI_ELEMENT_TYPE_UNKNOWN);    
+    UI_ELEMENT*                     Elements_Get                  (UI_ELEMENT_CHROMEROLE chromerole);
     bool                            Elements_DeleteAll            ();
 
     bool                            Elements_SetToRedraw          (bool recursive = true);
@@ -74,6 +75,7 @@ class UI_LAYOUT
   private:
 
     UI_ELEMENT*                     Elements_Get                  (UI_ELEMENT* element, XCHAR* nameelement, UI_ELEMENT_TYPE type);
+    UI_ELEMENT*                     Elements_Get                  (UI_ELEMENT* element, UI_ELEMENT_CHROMEROLE chromerole);
 
     void                            Clean                         ();    
 

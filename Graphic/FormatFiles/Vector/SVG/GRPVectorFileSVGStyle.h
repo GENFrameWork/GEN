@@ -44,6 +44,7 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 class XFILEXMLELEMENT;
+class GRPVECTORFILESVGCSSSTYLESHEET;
 
 
 class GRPVECTORFILESVGSTYLE
@@ -52,7 +53,7 @@ class GRPVECTORFILESVGSTYLE
                                     GRPVECTORFILESVGSTYLE      ();
     virtual                        ~GRPVECTORFILESVGSTYLE      ();
 
-    bool                            ApplyData                  (XFILEXMLELEMENT* element);
+    bool                            ApplyData                  (XFILEXMLELEMENT* element, GRPVECTORFILESVGCSSSTYLESHEET* stylesheet = NULL);
 
     void                            InheritFrom                (GRPVECTORFILESVGSTYLE& parent);
 

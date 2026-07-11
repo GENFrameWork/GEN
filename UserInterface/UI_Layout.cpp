@@ -232,7 +232,43 @@ UI_ELEMENT* UI_LAYOUT::Elements_Get(XCHAR* nameelement, UI_ELEMENT_TYPE type)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_LAYOUT::Elements_DeleteAll()
+* @fn         UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT_CHROMEROLE chromerole)
+* @brief      Elements get
+* @note       Finds the element carrying a given Chromes role ("the close button", "the title"...), so a custom
+*             Chromes (window caption) can be wired up without depending on element names.
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  chromerole : Chromerole value.
+* 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT_CHROMEROLE chromerole)
+{
+  if(chromerole == UI_ELEMENT_CHROMEROLE_NONE) return NULL;
+
+  if(elements.IsEmpty()) return NULL;
+
+  for(XDWORD c=0; c<elements.GetSize(); c++)
+    {
+      UI_ELEMENT* element = elements.Get(c);
+      if(element)
+        {
+          if(element->GetChromeRole() == chromerole) return element;
+
+          if(element->GetComposeElements()->GetSize())
+            {
+              UI_ELEMENT* subelement = Elements_Get(element, chromerole);
+              if(subelement) return subelement;
+            }
+        }
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * @brief      Elements GEN_DELETE all
 * @ingroup    USERINTERFACE
 * 
@@ -371,6 +407,41 @@ UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT* element, XCHAR* nameelement, UI_
           if(subelement->GetComposeElements()->GetSize()) 
             {
               UI_ELEMENT* _subelement = Elements_Get(subelement, nameelement, type);
+              if(_subelement) return _subelement;
+            }
+        }          
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT* element, UI_ELEMENT_CHROMEROLE chromerole)
+* @brief      Elements get
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : Element to process.
+* @param[in]  chromerole : Chromerole value.
+* 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT* element, UI_ELEMENT_CHROMEROLE chromerole)
+{
+  if(!element) return NULL;
+
+  for(XDWORD c=0; c<element->GetComposeElements()->GetSize(); c++)
+    {
+      UI_ELEMENT* subelement = element->GetComposeElements()->Get(c);
+      if(subelement)
+        {
+          if(subelement->GetChromeRole() == chromerole) return subelement;
+
+          if(subelement->GetComposeElements()->GetSize()) 
+            {
+              UI_ELEMENT* _subelement = Elements_Get(subelement, chromerole);
               if(_subelement) return _subelement;
             }
         }          

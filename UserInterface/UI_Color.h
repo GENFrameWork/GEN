@@ -74,6 +74,7 @@ class UI_COLOR
   private:
 
     int                GetAlphaForPercent   (int percent);
+    int                HexValue             (XCHAR character);
 
     void               Clean                ();
 

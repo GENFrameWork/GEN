@@ -92,6 +92,21 @@ enum UI_ELEMENT_TRANSITION_STATE_SHOW
 	UI_ELEMENT_TRANSITION_STATE_SHOW_TOHIDE						,
 };
 
+// NOTE: reserved roles a layout element can take in a GEN custom Chromes (window caption) layout. Set via the
+// "role" XML attribute (see UI_MANAGER::GetLayoutElement_Base); NONE means "just a regular element", the default
+// for every element that is not part of a Chromes layout.
+enum UI_ELEMENT_CHROMEROLE
+{
+	UI_ELEMENT_CHROMEROLE_NONE											= 0	,
+
+	UI_ELEMENT_CHROMEROLE_CAPTION											,	// Draggable caption background/area
+	UI_ELEMENT_CHROMEROLE_ICON												,	// Application icon
+	UI_ELEMENT_CHROMEROLE_TITLE											,	// Window title text
+	UI_ELEMENT_CHROMEROLE_MINIMIZE										,	// Minimize button
+	UI_ELEMENT_CHROMEROLE_MAXIMIZE										,	// Maximize / restore button
+	UI_ELEMENT_CHROMEROLE_CLOSE											,	// Close button
+};
+
 #define UI_ELEMENT_MARGIN_MAX										  4	
 
 
@@ -116,6 +131,9 @@ class UI_ELEMENT : public XSUBJECT
 		void																	SetType											(UI_ELEMENT_TYPE type);
 
 		XSTRING*															GetTypeString								();
+
+		UI_ELEMENT_CHROMEROLE									GetChromeRole								();
+		void																	SetChromeRole								(UI_ELEMENT_CHROMEROLE chromerole);
 
 		UI_ELEMENT*														GetFather										();	
 		void																	SetFather										(UI_ELEMENT* father);	
@@ -199,6 +217,7 @@ class UI_ELEMENT : public XSUBJECT
 		XSTRING																name;
 		UI_ELEMENT_TYPE												type;
 		XSTRING																type_string;
+		UI_ELEMENT_CHROMEROLE									chromerole;
 		
 		UI_ELEMENT*														father;	
 		bool																	isdetached;

@@ -1,10 +1,10 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UI_Animation.h
+* @file       GRPVectorFileSVGCSSStyleSheet.h
 * 
-* @class      UI_ANIMATION
-* @brief      User Interface Animation class
-* @ingroup    USERINTERFACE
+* @class      GRPVECTORFILESVGCSSSTYLESHEET
+* @brief      Graphic Vector File SVG CSS StyleSheet class
+* @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
 * 
@@ -31,63 +31,45 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "XString.h"
-
-#include "GRPProperties.h"
-#include "GRPBitmap.h"
-#include "GRPBitmapFile.h"
+#include "XMap.h"
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-
-#define UI_ANIMATION_FRAME_INI          __L("#[")
-#define UI_ANIMATION_FRAME_END          __L("]")
 
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
+class XFILEXMLELEMENT;
 
-class GRP2DCANVAS;
 
-
-class UI_ANIMATION
+class GRPVECTORFILESVGCSSSTYLESHEET
 {
   public:
-                               UI_ANIMATION         ();
-    virtual                   ~UI_ANIMATION         ();
+                                    GRPVECTORFILESVGCSSSTYLESHEET     ();
+    virtual                        ~GRPVECTORFILESVGCSSSTYLESHEET     ();
 
-    bool                       LoadFromFile         (XSTRING& resourcename, GRPPROPERTYMODE mode);
+    bool                            ParseDocument                     (XFILEXMLELEMENT* root);          // scans the whole document for <style> elements
 
-    // NOTE: vector resources (SVG, DXF...) have no intrinsic pixel size of their own; unlike a bitmap file, the
-    // caller must always supply the target width/height to rasterize at (see GRP2DVECTORFILERENDERAGG). The
-    // referencecanvas provides the pixel format and the loaded vector font to rasterize with.
-    bool                       LoadFromFileVector   (XSTRING& resourcename, GRP2DCANVAS* referencecanvas, double width, double height);
-
-    XSTRING*                   GetName              ();
-    XSTRING*                   GetResource          ();
-    XVECTOR<GRPBITMAP*>*       GetBitmaps           ();
-    GRPBITMAP*                 GetBitmap            (int index = 0);
-
-    bool                       DeleteAll            (); 
+    XSTRING*                        Get                                (XCHAR* classname);
+    XSTRING*                        Get                                (XSTRING& classname);
 
   private:
 
-    GRPPROPERTYMODE            ChangeModeWithAlpha  (GRPBITMAPFILE_TYPE typefile, GRPPROPERTYMODE modescreen);
-    
-    void                       Clean                ();
+    bool                            Add                                (XCHAR* classname, XCHAR* declarations);
 
-    XSTRING                    name;
-    XSTRING                    resource;
-    XVECTOR<GRPBITMAP*>        bitmaps;
-  
+    bool                            CollectStyleElements               (XFILEXMLELEMENT* element);       // recursive
+    bool                            ParseStyleSheetText                (XSTRING& text);                  // ".fil0{fill:white} .fil1{fill:black;fill-rule:nonzero}"
+
+    void                            Clean                              ();
+
+    XMAP<XSTRING*, XSTRING*>        classes;                                                              // classname -> "prop:value;prop:value" (same syntax as the style="" attribute)
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 

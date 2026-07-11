@@ -133,7 +133,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            Elements_RebuildDrawAreas                 (XCHAR* layoutname, UI_ELEMENT* element);
     
     int                             GetOutputTextChangeID                     (XSTRING* text, int start, XSTRING& value);
-    UI_ANIMATION*                   GetOrAddAnimationCache                    (UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, XCHAR* name, XCHAR* resource);
+    UI_ANIMATION*                   GetOrAddAnimationCache                    (UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, XCHAR* name, XCHAR* resource, GRP2DCANVAS* referencecanvas = NULL, double width = 0.0, double height = 0.0);
     
     bool                            SetLevelAuto                              (UI_ELEMENT* element, UI_ELEMENT* father, XDWORD addlevel = 0);
 
@@ -174,6 +174,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     UI_ELEMENT*                     GetLayoutElement_Text                     (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_TextBox                  (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_Image                    (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
+    bool                            IsVectorResource                          (XCHAR* resource);
     UI_ELEMENT*                     GetLayoutElement_Animation                (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_Option                   (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_MultiOption              (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);

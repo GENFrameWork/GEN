@@ -41,6 +41,7 @@
 #include "XFileXML.h"
 
 #include "GRPVectorFileSVGObj.h"
+#include "GRPVectorFileSVGCSSStyleSheet.h"
 
 
 
@@ -290,7 +291,10 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::BuildFromXML(XFILEXML* file)
           root = NULL;
         }
 
-      root = GRPVECTORFILESVGOBJ::CreateInstance(xmlroot);
+      GRPVECTORFILESVGCSSSTYLESHEET cssstylesheet;
+      cssstylesheet.ParseDocument(xmlroot);                            // class="" + <style> resolution (CorelDRAW/Illustrator/Figma exports)
+
+      root = GRPVECTORFILESVGOBJ::CreateInstance(xmlroot, &cssstylesheet);
 
       result = root ? GRPVECTORFILERESULT_OK : GRPVECTORFILERESULT_ERRORNOTMEMORY;
     }

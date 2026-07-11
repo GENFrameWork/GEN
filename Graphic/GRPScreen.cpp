@@ -40,6 +40,13 @@
 #include "GRPViewPort.h"
 #include "GRPFrameRate.h"
 
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+#include "XPathsManager.h"
+#include "UI_Manager.h"
+#include "UI_Layout.h"
+#include "INPManager.h"
+#endif
+
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
@@ -778,6 +785,209 @@ XSTRING* GRPSCREEN::GetTitle()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         GRPSCREENCFGCHROMES* GRPSCREEN::GetCFGChromes()
+* @brief      Get CFG chromes
+* @ingroup    GRAPHIC
+* 
+* @return     GRPSCREENCFGCHROMES* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPSCREENCFGCHROMES* GRPSCREEN::GetCFGChromes()
+{
+  return &cfgchromes;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::SetCFGChromes(GRPSCREENCFGCHROMES& cfgchromes)
+* @brief      Set CFG chromes
+* @ingroup    GRAPHIC
+* 
+* @param[in]  cfgchromes : Chromes configuration value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::SetCFGChromes(GRPSCREENCFGCHROMES& cfgchromes)
+{
+  if(!this->cfgchromes.CopyFrom(cfgchromes)) return false;
+
+  cfgchromesactive = true;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::IsCFGChromesActive()
+* @brief      Is CFG chromes active
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if a chromes configuration has been assigned to the screen; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::IsCFGChromesActive()
+{
+  return cfgchromesactive;
+}
+
+
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::LoadCFGChromesLayout()
+* @brief      Load CFG chromes layout
+* @note       Resolves and loads the .xml (or .zip bundle) + layout named in GetCFGChromes(), and keeps a weak
+*             reference to it (see GetCFGChromesLayout()). A no-op (returns false) when there is no active
+*             Chromes configuration, when native chromes are requested (nothing to load, by design), when the
+*             screen has no viewport/canvas yet (call this once the native window is created), or when the
+*             file/layout name have not been set.
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::LoadCFGChromesLayout()
+{
+  if(!IsCFGChromesActive())               return false;
+  if(cfgchromes.GetUseNativeChromes())    return false;
+
+  GRPVIEWPORT* viewport = GetViewport(0);
+  if(!viewport)                           return false;
+  if(!viewport->GetCanvas())              return false;
+
+  XSTRING* namelayoutfile = cfgchromes.GetCustomLayoutFile();
+  XSTRING* namelayout     = cfgchromes.GetCustomLayoutName();
+
+  if(!namelayoutfile || namelayoutfile->IsEmpty())  return false;
+  if(!namelayout      || namelayout->IsEmpty())     return false;
+
+  // Already loaded (e.g. shared with other layouts/layers that loaded this same file earlier): just reuse it.
+  cfgchromeslayout = GEN_USERINTERFACE.Layouts_Get(namelayout->Get());
+  if(cfgchromeslayout) return true;
+
+  XPATH pathfile;
+
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_UI_LAYOUTS, pathfile);
+  pathfile.Slash_Add();
+  pathfile.Add(*namelayoutfile);
+
+  // UI_MANAGER::Load() already tells a plain .xml apart from a compressed .zip bundle by extension.
+  if(!GEN_USERINTERFACE.Load(pathfile, this, 0)) return false;
+
+  cfgchromeslayout = GEN_USERINTERFACE.Layouts_Get(namelayout->Get());
+
+  return (cfgchromeslayout != NULL);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         UI_LAYOUT* GRPSCREEN::GetCFGChromesLayout()
+* @brief      Get CFG chromes layout
+* @ingroup    GRAPHIC
+* 
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_LAYOUT* GRPSCREEN::GetCFGChromesLayout()
+{
+  return cfgchromeslayout;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::UpdateCFGChromesDrag()
+* @brief      Update CFG chromes drag
+* @note       Reads GEN_INPMANAGER's mouse device directly (raw cursor position + raw button held state) -- not
+*             the UserInterface event pipeline, and not whatever input polling the running application does for
+*             its own purposes; those stay entirely separate. On the frame the button goes down, hit-tests the
+*             layout's role="caption" element (if any); while still held, moves this screen by exactly how much
+*             the mouse has moved in real desktop coordinates since the drag started (rebuilt every frame from
+*             the window's CURRENT position, so the window's own movement never feeds back into the next
+*             frame's delta). Releasing the button ends the drag.
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::UpdateCFGChromesDrag()
+{
+  if(!IsCFGChromesActive())            return false;
+  if(cfgchromes.GetUseNativeChromes()) return false;
+  if(!cfgchromeslayout)                return false;
+
+  INPDEVICE* mousedevice = GEN_INPMANAGER.GetDevice(INPDEVICE_TYPE_MOUSE);
+  if(!mousedevice) return false;
+
+  INPCURSOR* inpcursor = mousedevice->GetCursor(INPCURSOR_ID_MOUSE);
+  INPBUTTON* inpbutton = mousedevice->GetButton(INPBUTTON_ID_MOUSE_LEFT);
+  if(!inpcursor || !inpbutton) return false;
+
+  if(!inpbutton->IsPressed())
+    {
+      cfgchromesdragging = false;
+      return true;
+    }
+
+  // Raw, client-relative to this window, and bottom-up (0 at the bottom of the client area, increasing
+  // upward) -- this is how the Windows mouse device stores it internally, independently confirmed by tracing
+  // INPWINDOWSDEVICEMOUSE::Update(). "height - rawy" turns it into a top-down distance from the window's own
+  // top edge, matching both UI_ELEMENT's own coordinate convention (for the hit-test) and, once the window's
+  // desktop position is added on top of it, plain top-down desktop coordinates (for the drag delta).
+  int rawx = (int)inpcursor->GetX();
+  int rawy = (int)inpcursor->GetY();
+
+  // The mouse device reports (-1,-1) as a sentinel whenever the cursor is currently outside this window's
+  // client bounds (see INPWINDOWSDEVICEMOUSE::Update()) -- easy to hit for a frame or two during a fast drag,
+  // since the window is still catching up to the cursor. Treat it as "no new reading this frame" rather than
+  // a real coordinate: feeding it into the position math below was exactly what sent the window flying off to
+  // a bogus position when dragging quickly. Skipping it just holds the window in place for a frame; the very
+  // next valid reading picks the drag back up seamlessly.
+  if((rawx == -1) && (rawy == -1)) return true;
+
+  if(!cfgchromesdragging)
+    {
+      UI_ELEMENT* captionelement = cfgchromeslayout->Elements_Get(UI_ELEMENT_CHROMEROLE_CAPTION);
+      if(!captionelement)                                                return false;
+      if(!captionelement->IsActive() || !captionelement->IsVisible())    return false;
+
+      UI_BOUNDARYLINE bline;
+
+      bline.x      = captionelement->GetXPosition();
+      bline.y      = captionelement->GetYPosition();
+      bline.width  = captionelement->GetBoundaryLine()->width;
+      bline.height = captionelement->GetBoundaryLine()->height;
+
+      if(!bline.IsWithin(rawx, GetHeight() - rawy)) return false;
+
+      cfgchromesdragging         = true;
+      cfgchromesdragstartscreenx = GetPositionX();
+      cfgchromesdragstartscreeny = GetPositionY();
+      cfgchromesdragstartcursorx = rawx                        + cfgchromesdragstartscreenx;
+      cfgchromesdragstartcursory = (GetHeight() - rawy)         + cfgchromesdragstartscreeny;
+
+      return true;
+    }
+
+  int desktopcursorx = rawx                + GetPositionX();
+  int desktopcursory = (GetHeight() - rawy) + GetPositionY();
+
+  Set_Position(cfgchromesdragstartscreenx + (desktopcursorx - cfgchromesdragstartcursorx),
+               cfgchromesdragstartscreeny + (desktopcursory - cfgchromesdragstartcursory));
+
+  return true;
+}
+
+#endif
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPSCREEN::UpdateSize(int width, int height)
 * @brief      Update Size
 * @ingroup    GRAPHIC
@@ -900,7 +1110,17 @@ bool GRPSCREEN::CreateViewport(XCHAR* ID, float posx, float posy, float width, f
     {
       viewport->SetCanvasPosition(posx, posy);
       viewports.Add(viewport);
-             
+
+      #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+      // First viewport+canvas just became available: this is the natural, platform-independent moment to load
+      // a custom (non native) Chromes layout, if one is configured (LoadCFGChromesLayout() itself is a no-op
+      // for every other screen: no Chromes configuration at all -- the default -- or native chromes).
+      if(viewports.GetSize() == 1) 
+        {
+          LoadCFGChromesLayout();
+        }
+      #endif
+
     } else return false;
 
   return true;
@@ -922,6 +1142,10 @@ bool GRPSCREEN::UpdateViewports()
     {   
       return false;
     }
+
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  UpdateCFGChromesDrag();
+  #endif
 
   for(XDWORD c=0; c<viewports.GetSize(); c++)
     {      
@@ -1128,6 +1352,18 @@ void GRPSCREEN::Clean()
   isshow                  = false;
 
   canclose                = true;
+
+  cfgchromesactive        = false;
+
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  cfgchromeslayout        = NULL;
+
+  cfgchromesdragging         = false;
+  cfgchromesdragstartcursorx = 0;
+  cfgchromesdragstartcursory = 0;
+  cfgchromesdragstartscreenx = 0;
+  cfgchromesdragstartscreeny = 0;
+  #endif
 }
 
 

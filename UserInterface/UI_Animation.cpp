@@ -42,6 +42,12 @@
 
 #include "APPFlowBase.h"
 
+#include "GRPFactory.h"
+#include "GRP2DCanvas.h"
+#include "GRP2DColor.h"
+#include "GRPVectorFile.h"
+#include "GRP2DVectorFileRenderAGG.h"
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -203,6 +209,112 @@ bool UI_ANIMATION::LoadFromFile(XSTRING& resourcename, GRPPROPERTYMODE mode)
     }                                                          
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_ANIMATION::LoadFromFileVector(XSTRING& resourcename, GRP2DCANVAS* referencecanvas, double width, double height)
+* @brief      Load from file vector
+* @note       Rasterizes a vector resource (SVG, DXF...) into a single bitmap frame, at the given target size, and
+*             stores it the same way LoadFromFile() stores a bitmap-file frame (so GetBitmap()/GetBitmaps() work
+*             unchanged regardless of the resource's origin). Unlike a bitmap file, a vector file has no pixel size
+*             of its own, so width/height are mandatory here; the caller (see UI_MANAGER::GetOrAddAnimationCache)
+*             is also responsible for folding width/height into the cache key, since the very same vector file
+*             requested at two different sizes must never share the same cached bitmap.
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  resourcename : Resourcename value.
+* @param[in]  referencecanvas : Canvas to copy the pixel format and the loaded vector font from.
+* @param[in]  width : Target width, in pixels, to rasterize at.
+* @param[in]  height : Target height, in pixels, to rasterize at.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ANIMATION::LoadFromFileVector(XSTRING& resourcename, GRP2DCANVAS* referencecanvas, double width, double height)
+{
+  if(!referencecanvas)                  return false;
+  if((width <= 0.0) || (height <= 0.0)) return false;
+
+  XPATH pathvector;
+
+  if(GEN_USERINTERFACE.IsZippedFile())
+    {
+      XFILEUNZIP* unzipfile = GEN_USERINTERFACE.GetUnzipFile();
+      if(!unzipfile) return false;
+
+      XPATH pathnamefilecmp(APPFLOW_DEFAULT_DIRECTORY_GRAPHICS);
+      XPATH namefileonly;
+
+      pathnamefilecmp.Slash_Add();
+      pathnamefilecmp += resourcename;
+
+      pathnamefilecmp.GetNamefileExt(namefileonly);
+
+      if(!unzipfile->DecompressFile(pathnamefilecmp, (*GEN_USERINTERFACE.GetUnzipPathFile()), namefileonly.Get())) return false;
+
+      pathvector  = GEN_USERINTERFACE.GetUnzipPathFile()->Get();
+      pathvector += namefileonly;
+    }
+   else
+    {
+      GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS, pathvector);
+      pathvector.Slash_Add();
+      pathvector.Add(resourcename);
+    }
+
+  bool           status     = false;
+  GRPVECTORFILE* vectorfile = GRPVECTORFILE::CreateInstance(pathvector);
+
+  if(vectorfile)
+    {
+      if(vectorfile->Load() == GRPVECTORFILERESULT_OK)
+        {
+          GRPPROPERTIES properties;
+
+          properties.CopyPropertysFrom(referencecanvas);
+          properties.SetPosition(0, 0);
+          properties.SetSize((XDWORD)width, (XDWORD)height);
+
+          GRP2DCANVAS* offscreen = GEN_GRPFACTORY.CreateCanvas(&properties);
+          if(offscreen)
+            {
+              offscreen->SetWidth(width);
+              offscreen->SetHeight(height);
+
+              if(offscreen->Buffer_Create())
+                {
+                  offscreen->VectorFont_CopyFrom(referencecanvas);          // SVG text needs the same loaded vector font as the real canvas
+
+                  GRP2DCOLOR_RGBA8 transparent(0, 0, 0, 0);
+                  offscreen->Clear(&transparent);                          // transparent background
+
+                  GRP2DVECTORFILERENDERAGG vectorrender;
+
+                  status = vectorrender.Render(vectorfile, offscreen, 0.0, 0.0, width, height);
+                  if(status)
+                    {
+                      GRPBITMAP* bitmap = offscreen->GetBitmap(0.0, 0.0, width, height);   // capture with its own alpha
+
+                      if(bitmap) bitmaps.Add(bitmap);
+                        else     status = false;
+                    }
+                }
+
+              GEN_GRPFACTORY.DeleteCanvas(offscreen);
+            }
+        }
+
+      GEN_DELETE vectorfile;
+    }
+
+  if(GEN_USERINTERFACE.IsZippedFile())
+    {
+      GEN_USERINTERFACE.DeleteTemporalUnZipFile(pathvector);
+    }
+
+  return status;
 }
 
 

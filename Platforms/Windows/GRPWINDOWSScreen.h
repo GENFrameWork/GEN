@@ -101,6 +101,9 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
 
     bool                                  Create_Window                       (bool show);
 
+    void                                  Chromes_ApplyStyle                  (DWORD& style, DWORD& exstyle);
+    void                                  Chromes_ApplyPostCreate             ();
+
     static  LRESULT CALLBACK              BaseWndProc                         (HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam); 
 
     void                                  Clean                               ();

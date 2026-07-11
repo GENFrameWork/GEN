@@ -1,0 +1,321 @@
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @file       GRPVectorFileSVGCSSStyleSheet.cpp
+* 
+* @class      GRPVECTORFILESVGCSSSTYLESHEET
+* @brief      Graphic Vector File SVG CSS StyleSheet class
+* @ingroup    GRAPHIC
+* 
+* @copyright  EndoraSoft. All rights reserved.
+* 
+* @cond
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+* documentation files(the "Software"), to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
+* and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+* the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+* THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* @endcond
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+
+#include "GEN_Defines.h"
+
+
+
+/*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
+
+#include "GRPVectorFileSVGCSSStyleSheet.h"
+
+#include "XFileXML.h"
+#include "XVector.h"
+
+
+
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+
+#include "GEN_Control.h"
+
+
+
+
+/*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+
+
+
+/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPVECTORFILESVGCSSSTYLESHEET::GRPVECTORFILESVGCSSSTYLESHEET()
+* @brief      Constructor of class
+* @ingroup    GRAPHIC
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILESVGCSSSTYLESHEET::GRPVECTORFILESVGCSSSTYLESHEET()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPVECTORFILESVGCSSSTYLESHEET::~GRPVECTORFILESVGCSSSTYLESHEET()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    GRAPHIC
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILESVGCSSSTYLESHEET::~GRPVECTORFILESVGCSSSTYLESHEET()
+{
+  classes.DeleteKeyContents();
+  classes.DeleteElementContents();
+  classes.DeleteAll();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPVECTORFILESVGCSSSTYLESHEET::ParseDocument(XFILEXMLELEMENT* root)
+* @brief      Parse document : find every <style> element anywhere in the document and parse its CSS text
+* @ingroup    GRAPHIC
+* 
+* @param[in]  root : root xml element (normally the <svg> element)
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGCSSSTYLESHEET::ParseDocument(XFILEXMLELEMENT* root)
+{
+  return CollectStyleElements(root);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* GRPVECTORFILESVGCSSSTYLESHEET::Get(XCHAR* classname)
+* @brief      Get value
+* @ingroup    GRAPHIC
+* 
+* @param[in]  classname : Classname pointer to use.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* GRPVECTORFILESVGCSSSTYLESHEET::Get(XCHAR* classname)
+{
+  if(!classname) return NULL;
+
+  for(XDWORD c=0; c<classes.GetSize(); c++)
+    {
+      XSTRING* key = classes.GetKey(c);
+      if(key)
+        {
+          if(!key->Compare(classname)) return classes.GetElement(c);
+        }
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* GRPVECTORFILESVGCSSSTYLESHEET::Get(XSTRING& classname)
+* @brief      Get value
+* @ingroup    GRAPHIC
+* 
+* @param[in]  classname : Classname value.
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* GRPVECTORFILESVGCSSSTYLESHEET::Get(XSTRING& classname)
+{
+  return Get(classname.Get());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPVECTORFILESVGCSSSTYLESHEET::Add(XCHAR* classname, XCHAR* declarations)
+* @brief      Add value
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* 
+* @param[in]  classname : Classname pointer to use.
+* @param[in]  declarations : Declarations pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGCSSSTYLESHEET::Add(XCHAR* classname, XCHAR* declarations)
+{
+  if(!classname)          return false;
+  if(!classname[0])       return false;
+  if(!declarations)       return false;
+
+  XSTRING* _classname = GEN_NEW XSTRING();
+  if(!_classname) return false;
+
+  _classname->Set(classname);
+
+  XSTRING* _declarations = GEN_NEW XSTRING();
+  if(_declarations)
+    {
+      _declarations->Set(declarations);
+
+      classes.Add(_classname, _declarations);
+      return true;
+    }
+
+  GEN_DELETE _classname;
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPVECTORFILESVGCSSSTYLESHEET::CollectStyleElements(XFILEXMLELEMENT* element)
+* @brief      Collect style elements : recursively find every <style> element and parse it
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* 
+* @param[in]  element : xml element to process
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGCSSSTYLESHEET::CollectStyleElements(XFILEXMLELEMENT* element)
+{
+  if(!element) return false;
+
+  if(!element->GetName().Compare(__L("style"), true))
+    {
+      // NOTE: the CSS text of <style>...</style> is NOT held in this element's own GetValue(); the XML reader
+      // parses it as a separate child node (typically of type XFILEXMLELEMENTTYPE_CDATA). Gather this element's
+      // own value (defensive) plus every direct child's value, so the actual CSS text is never missed.
+      XSTRING text;
+
+      text += element->GetValue();
+
+      for(int c=0; c<element->GetNElements(); c++)
+        {
+          XFILEXMLELEMENT* child = element->GetElement(c);
+          if(child) text += child->GetValue();
+        }
+
+      ParseStyleSheetText(text);
+    }
+
+  for(int c=0; c<element->GetNElements(); c++)
+    {
+      XFILEXMLELEMENT* child = element->GetElement(c);
+      if(child) CollectStyleElements(child);
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPVECTORFILESVGCSSSTYLESHEET::ParseStyleSheetText(XSTRING& text)
+* @brief      Parse style sheet text : minimal CSS subset, only flat class selectors are recognized
+* @note       INTERNAL: ".fil0{fill:white} .fil1,.fil2{fill:black;fill-rule:nonzero}" -> "fil0"->"fill:white" ,
+*             "fil1"->"fill:black;fill-rule:nonzero" , "fil2"->"fill:black;fill-rule:nonzero". Any selector that
+*             does not start with '.' (tag, id, '*', @media...) is ignored; only what CorelDRAW/Illustrator/Figma
+*             exports actually use.
+* @ingroup    GRAPHIC
+* 
+* @param[in]  text : raw <style> element text content
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGCSSSTYLESHEET::ParseStyleSheetText(XSTRING& text)
+{
+  XSTRING sheet(text);
+
+  // Defensive: some XML readers leave the CDATA delimiters in the element text content instead of stripping
+  // them; if present, remove them here so they never get mistaken for part of the first/last selector.
+  sheet.Replace(__L("<![CDATA["), __L(""));
+  sheet.Replace(__L("]]>")      , __L(""));
+
+  XVECTOR<XSTRING*> rules;
+  sheet.Split(__C('}'), rules, false);
+
+  for(XDWORD c=0; c<rules.GetSize(); c++)
+    {
+      XSTRING* rule = rules.Get(c);
+      if(rule && !rule->IsEmpty())
+        {
+          int brace = rule->Find(__L("{"), false, 0);
+          if(brace > 0)
+            {
+              XSTRING selectors;
+              XSTRING declarations;
+
+              rule->Copy(0, brace, selectors);
+              rule->Copy(brace+1, (int)rule->GetSize(), declarations);
+
+              XVECTOR<XSTRING*> selectorlist;
+              selectors.Split(__C(','), selectorlist, false);
+
+              for(XDWORD s=0; s<selectorlist.GetSize(); s++)
+                {
+                  XSTRING* selector = selectorlist.Get(s);
+                  if(selector)
+                    {
+                      XSTRING classname(*selector);
+
+                      classname.DeleteCharacter(__C(' '));
+                      classname.DeleteCharacter(__C('\r'));
+                      classname.DeleteCharacter(__C('\n'));
+                      classname.DeleteCharacter(__C('\t'));
+
+                      if((!classname.IsEmpty()) && (classname[0] == __C('.')))
+                        {
+                          classname.DeleteCharacters(0, 1);                        // strip the leading '.'
+                          if(!classname.IsEmpty()) Add(classname.Get(), declarations.Get());
+                        }
+                    }
+                }
+
+              selectorlist.DeleteContents();
+              selectorlist.DeleteAll();
+            }
+        }
+    }
+
+  rules.DeleteContents();
+  rules.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPVECTORFILESVGCSSSTYLESHEET::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPVECTORFILESVGCSSSTYLESHEET::Clean()
+{
+}

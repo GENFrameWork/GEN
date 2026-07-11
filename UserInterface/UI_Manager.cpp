@@ -1704,22 +1704,44 @@ int UI_MANAGER::GetOutputTextChangeID(XSTRING* text, int start, XSTRING& value)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, XCHAR* name, XCHAR* resource)
+* @fn         UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, XCHAR* name, XCHAR* resource, GRP2DCANVAS* referencecanvas, double width, double height)
 * @brief      Get or add animation cache
+* @note       When resource is a vector file (SVG, DXF...) AND referencecanvas/width/height are supplied, the
+*             resource is rasterized at that exact size and the cache key folds in the size (e.g. "icon.svg@32x32"),
+*             so the same vector file requested at two different sizes never collides in the cache and each size
+*             gets its own cached bitmap. Bitmap-file callers (referencecanvas = NULL, the default) are completely
+*             unaffected: same lookup, same key, same LoadFromFile() path as before.
 * @ingroup    USERINTERFACE
 * 
 * @param[in]  drawmode : Drawmode value.
 * @param[in]  grppropertymode : Grppropertymode value.
 * @param[in]  name : Name to use.
 * @param[in]  resource : Resource pointer to use.
+* @param[in]  referencecanvas : Canvas to rasterize vector resources with (NULL = bitmap-only, legacy behavior).
+* @param[in]  width : Target width, in pixels, to rasterize a vector resource at (ignored for bitmap files).
+* @param[in]  height : Target height, in pixels, to rasterize a vector resource at (ignored for bitmap files).
 * 
 * @return     UI_ANIMATION* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, XCHAR* name, XCHAR* resource)
+UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, XCHAR* name, XCHAR* resource, GRP2DCANVAS* referencecanvas, double width, double height)
 {
   UI_ANIMATION* animation = NULL;
   bool          status    = false; 
+
+  bool isvectorsized = (referencecanvas && (width > 0.0) && (height > 0.0) && IsVectorResource(resource));
+
+  XSTRING cachekey;
+
+  cachekey = resource;
+
+  if(isvectorsized)
+    {
+      XSTRING sizepart;
+
+      sizepart.Format(__L("@%dx%d"), (int)width, (int)height);
+      cachekey.Add(sizepart);
+    }
 
   animation = GEN_UI_ANIMATIONS.Get(name);
   if(animation) 
@@ -1727,7 +1749,7 @@ UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPP
       return animation;
     }
 
-  animation = GEN_UI_ANIMATIONS.Get(resource);
+  animation = GEN_UI_ANIMATIONS.Get(cachekey);
   if(animation) 
     {
       return animation;
@@ -1743,20 +1765,27 @@ UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPP
   
   resourcename = resource;
 
-  switch(drawmode)
+  if(isvectorsized)
     {
-      case UI_SKIN_DRAWMODE_UNKNOWN   : break;
+      status = animation->LoadFromFileVector(resourcename, referencecanvas, width, height);
+    }
+   else
+    {
+      switch(drawmode)
+        {
+          case UI_SKIN_DRAWMODE_UNKNOWN   : break;
 
-      case UI_SKIN_DRAWMODE_CANVAS    : status = animation->LoadFromFile(resourcename, grppropertymode);                                                                           
-                                        break;
+          case UI_SKIN_DRAWMODE_CANVAS    : status = animation->LoadFromFile(resourcename, grppropertymode);                                                                           
+                                            break;
 
-      case UI_SKIN_DRAWMODE_CONTEXT   : break;
-    } 
+          case UI_SKIN_DRAWMODE_CONTEXT   : break;
+        } 
+    }
 
   if(status)   
     {      
       animation->GetName()->Set(name);  
-      animation->GetResource()->Set(resource);
+      animation->GetResource()->Set(cachekey.Get());
 
       GEN_UI_ANIMATIONS.Add(animation);
 
@@ -1766,6 +1795,38 @@ UI_ANIMATION* UI_MANAGER::GetOrAddAnimationCache(UI_SKIN_DRAWMODE drawmode, GRPP
   GEN_DELETE animation;
 
   return NULL;  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_MANAGER::IsVectorResource(XCHAR* resource)
+* @brief      Is vector resource
+* @note       Detects a vector resource (SVG, DXF...) by its file extension, the same way GRPBITMAPFILE::GetTypeFromExtenxion
+*             detects a bitmap file type, so GetOrAddAnimationCache() knows whether to rasterize it (mandatory
+*             target size) instead of decoding it as a regular bitmap file.
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  resource : Resource pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::IsVectorResource(XCHAR* resource)
+{
+  if(!resource) return false;
+
+  XPATH   pathresource;
+  XSTRING ext;
+
+  pathresource = resource;
+
+  if(!pathresource.GetExt(ext)) return false;
+
+  if(!ext.Compare(__L(".svg"), true)) return true;
+  if(!ext.Compare(__L(".dxf"), true)) return true;
+
+  return false;
 }
 
 
@@ -2768,6 +2829,20 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
         else if(!directionstr.Compare(__L("vertical"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_VERTICAL);
     }
 
+  // NOTE: "role" is reserved for GEN custom Chromes (window caption) layouts: it lets GRPSCREEN find "the close
+  // button", "the title", etc. without depending on element names. Any element type (image, button, text, a plain
+  // rectangle...) can carry it; unrecognized/absent values leave chromerole at UI_ELEMENT_CHROMEROLE_NONE.
+  XSTRING rolestr;
+  if(style.Get(__L("role"), rolestr))
+    {
+      if(!rolestr.Compare(__L("caption")  , true))  element->SetChromeRole(UI_ELEMENT_CHROMEROLE_CAPTION);
+        else if(!rolestr.Compare(__L("icon")     , true))  element->SetChromeRole(UI_ELEMENT_CHROMEROLE_ICON);
+          else if(!rolestr.Compare(__L("title")    , true))  element->SetChromeRole(UI_ELEMENT_CHROMEROLE_TITLE);
+            else if(!rolestr.Compare(__L("minimize") , true))  element->SetChromeRole(UI_ELEMENT_CHROMEROLE_MINIMIZE);
+              else if(!rolestr.Compare(__L("maximize") , true))  element->SetChromeRole(UI_ELEMENT_CHROMEROLE_MAXIMIZE);
+                else if(!rolestr.Compare(__L("close")    , true))  element->SetChromeRole(UI_ELEMENT_CHROMEROLE_CLOSE);
+    }
+
   XSTRING color;
   style.Get(__L("color"), color);
   if(!color.IsEmpty()) element->GetColor()->SetFromString(color);
@@ -3158,6 +3233,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
     {
       GRPPROPERTYMODE   grppropertymode = GRPPROPERTYMODE_XX_UNKNOWN;
       UI_SKIN_DRAWMODE  drawmode        = UI_SKIN_DRAWMODE_UNKNOWN;
+      GRP2DCANVAS*      referencecanvas = NULL;
 
       if(layout->GetSkin())
         {
@@ -3170,7 +3246,8 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
               case UI_SKIN_DRAWMODE_CANVAS    : { UI_SKINCANVAS* skincanvas = (UI_SKINCANVAS*)layout->GetSkin(); 
                                                   if(skincanvas)
                                                     {
-                                                      grppropertymode = skincanvas->GetCanvas()->GetMode();
+                                                      referencecanvas = skincanvas->GetCanvas();
+                                                      grppropertymode = referencecanvas->GetMode();
                                                     }
                                                 }
                                                 break;
@@ -3179,7 +3256,13 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
             }  
         }
 
-      UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), namefileimg.Get());
+      // NOTE: a vector resource (SVG, DXF...) has no pixel size of its own, so it is always rasterized at the
+      // element's own configured width/height (already resolved by GetLayoutElement_Base() above). Bitmap files
+      // ignore these two values entirely (see GetOrAddAnimationCache()).
+      double width  = element_image->GetBoundaryLine()->width;
+      double height = element_image->GetBoundaryLine()->height;
+
+      UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), namefileimg.Get(), referencecanvas, width, height);
       if(animation) 
         { 
           GRPBITMAP* bitmap = NULL; 
@@ -3282,6 +3365,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
 
               GRPPROPERTYMODE   grppropertymode = GRPPROPERTYMODE_XX_UNKNOWN;
               UI_SKIN_DRAWMODE  drawmode        = UI_SKIN_DRAWMODE_UNKNOWN;
+              GRP2DCANVAS*      referencecanvas = NULL;
 
               if(layout->GetSkin())
                 {
@@ -3294,7 +3378,8 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
                       case UI_SKIN_DRAWMODE_CANVAS    : { UI_SKINCANVAS* skincanvas = (UI_SKINCANVAS*)layout->GetSkin(); 
                                                           if(skincanvas)
                                                             {
-                                                              grppropertymode = skincanvas->GetCanvas()->GetMode();
+                                                              referencecanvas = skincanvas->GetCanvas();
+                                                              grppropertymode = referencecanvas ? referencecanvas->GetMode() : GRPPROPERTYMODE_XX_UNKNOWN;
                                                             }
                                                         }
                                                         break;
@@ -3303,7 +3388,16 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
                     }  
                 }      
 
-              UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), namefileimg.Get());
+              // NOTE: a vector resource (SVG, DXF...) has no pixel size of its own, so it is always rasterized at
+              // the <image> tag's own width/height (same size-aware cache as GetLayoutElement_Image). Bitmap
+              // frames (the usual case for sprite animations) ignore these two values entirely.
+              double framewidth  = 0.0;
+              double frameheight = 0.0;
+
+              GetLayoutElementValue(nodeelement, __L("width") , framewidth);
+              GetLayoutElementValue(nodeelement, __L("height"), frameheight);
+
+              UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), namefileimg.Get(), referencecanvas, framewidth, frameheight);
               if(animation)
                 {
                   for(XDWORD d=0; d<animation->GetBitmaps()->GetSize(); d++)

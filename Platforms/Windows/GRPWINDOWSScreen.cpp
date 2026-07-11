@@ -795,6 +795,93 @@ int GRPWINDOWSSCREEN::GetTaskbarHeight()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         void GRPWINDOWSSCREEN::Chromes_ApplyStyle(DWORD& style, DWORD& exstyle)
+* @brief      Chromes apply style
+* @note       INTERNAL: resolves the current GRPSCREENCFGCHROMES configuration (native Windows chromes only, for now)
+*             into the WS_* / WS_EX_* bits used when creating the window. Only called when a Chromes
+*             configuration is active, native chromes are requested, and the screen is not transparent
+*             (Fullscreen and Transparent styles are prioritary over the Chromes configuration).
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  style : Window style (WS_*) bits to complete.
+* @param[in]  exstyle : Window extended style (WS_EX_*) bits to complete.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPWINDOWSSCREEN::Chromes_ApplyStyle(DWORD& style, DWORD& exstyle)
+{
+  GRPSCREENCFGCHROMES* cfgchromes = GetCFGChromes();
+  if(!cfgchromes) return;
+
+  if(cfgchromes->GetCaptionActive())
+    {
+      style |= WS_CAPTION | WS_SYSMENU | WS_OVERLAPPED;
+
+      if(cfgchromes->GetMinimizeActive()) style |= WS_MINIMIZEBOX;
+      if(cfgchromes->GetMaximizeActive()) style |= WS_MAXIMIZEBOX;
+    }
+   else
+    {
+      style |= WS_POPUP;
+    }
+
+  if(cfgchromes->GetResizeActive())
+    {
+      style |= WS_THICKFRAME;
+    }
+
+  (void)exstyle; // Reserved for future (custom GEN-drawn chromes) use.
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPWINDOWSSCREEN::Chromes_ApplyPostCreate()
+* @brief      Chromes apply post create
+* @note       INTERNAL: applies the parts of the GRPSCREENCFGCHROMES configuration that require the window
+*             handle to already exist (application icon and close button), for native Windows chromes.
+*             The close configuration also reuses the existing CanClose() mechanism, so WM_CLOSE keeps
+*             being blocked consistently regardless of how the window is asked to close.
+* @ingroup    PLATFORM_WINDOWS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPWINDOWSSCREEN::Chromes_ApplyPostCreate()
+{
+  if(!hwnd) return;
+
+  GRPSCREENCFGCHROMES* cfgchromes = GetCFGChromes();
+  if(!cfgchromes) return;
+
+  if(cfgchromes->GetCaptionActive() && !cfgchromes->GetIconActive())
+    {
+      SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)NULL);
+      SendMessage(hwnd, WM_SETICON, ICON_BIG  , (LPARAM)NULL);
+
+      // NOTE: WM_SETICON alone only affects the taskbar/Alt+Tab icon; the caption itself still reserves
+      // and paints an icon slot. WS_EX_DLGMODALFRAME is the standard Win32 technique to make the caption
+      // stop reserving that icon slot; SWP_FRAMECHANGED forces the non-client area to be recalculated and
+      // repainted so the change is actually visible (it has a minor side effect: the window border is
+      // drawn with the thin dialog-style double line instead of the usual raised border).
+      LONG_PTR exstylebits = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+      SetWindowLongPtr(hwnd, GWL_EXSTYLE, exstylebits | WS_EX_DLGMODALFRAME);
+
+      SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+    }
+
+  SetCanClose(cfgchromes->GetCloseActive());
+
+  if(!cfgchromes->GetCloseActive())
+    {
+      HMENU hsysmenu = GetSystemMenu(hwnd, FALSE);
+      if(hsysmenu)
+        {
+          EnableMenuItem(hsysmenu, SC_CLOSE, MF_BYCOMMAND | MF_GRAYED);
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPWINDOWSSCREEN::Create_Window(bool show)
 * @brief      Create window
 * @ingroup    PLATFORM_WINDOWS
@@ -952,11 +1039,39 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
           posy = positiony; 
         }
    
-      if(Style_Is(GRPSCREENSTYLE_NOWINDOWICONS))
+      // NOTE: Fullscreen and Transparent styles are prioritary over any Chromes configuration (see below).
+      bool usecfgchromesnative = (IsCFGChromesActive()                       &&
+                                   GetCFGChromes()->GetUseNativeChromes()    &&
+                                   !Style_Is(GRPSCREENSTYLE_TRANSPARENT));
+
+      // Custom (non native) Chromes: GEN's own UI layout draws the whole caption (icon, title, min/max/close),
+      // so the native window must show NO decoration of its own at all -- no caption, no system menu, no
+      // native icon/buttons. WS_THICKFRAME (native resize, if requested) is the only native bit kept; the
+      // leftover sizing-frame bar that combination would otherwise show is already stripped generically by the
+      // WM_NCCALCSIZE/WM_NCHITTEST handling in BaseWndProc (it keys off the style bits themselves, not off
+      // which Chromes mode set them), so nothing else is needed here for that.
+      bool usecfgchromescustom = (IsCFGChromesActive()                       &&
+                                   !GetCFGChromes()->GetUseNativeChromes()   &&
+                                   !Style_Is(GRPSCREENSTYLE_TRANSPARENT));
+
+      if(usecfgchromesnative)
         {
-          _style |= WS_OVERLAPPED;  // _exstyle |= WS_EX_TOOLWINDOW;
+          Chromes_ApplyStyle(_style, _exstyle);
         }
-       else _style |= WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+       else if(usecfgchromescustom)
+        {
+          _style |= WS_POPUP;
+
+          if(GetCFGChromes()->GetResizeActive()) _style |= WS_THICKFRAME;
+        }
+       else
+        {
+          if(Style_Is(GRPSCREENSTYLE_NOWINDOWICONS))
+            {
+              _style |= WS_OVERLAPPED;  // _exstyle |= WS_EX_TOOLWINDOW;
+            }
+           else _style |= WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+        }
 
 
       if(Style_Is(GRPSCREENSTYLE_ONTOP))
@@ -971,13 +1086,16 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
         }
        else
         {
-          if(Style_Is(GRPSCREENSTYLE_TITLE))
+          if(!usecfgchromesnative && !usecfgchromescustom)
             {
-              _style |= WS_OVERLAPPED;
-            }
-           else
-            {
-              _style |= WS_POPUP;
+              if(Style_Is(GRPSCREENSTYLE_TITLE))
+                {
+                  _style |= WS_OVERLAPPED;
+                }
+               else
+                {
+                  _style |= WS_POPUP;
+                }
             }
         }
 
@@ -988,7 +1106,7 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
 
       hwnd = CreateWindowEx(_exstyle          ,
                             classname.Get()   ,
-                            GetTitle()->Get() ,
+                            (usecfgchromesnative && !GetCFGChromes()->GetTitleActive()) ? __L("") : GetTitle()->Get() ,
                             _style            ,
                             posx              , 
                             posy              ,
@@ -1001,6 +1119,11 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
       if(!hwnd) 
         {
           return false;
+        }
+
+      if(usecfgchromesnative)
+        {
+          Chromes_ApplyPostCreate();
         }
 
       // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen Windows] Part 1 Ini: x=%04d, y=%04d (%04d,%04d)  Bitxpixel (%d)"), posx, posy, width, height, GetBitsperPixel());
@@ -1122,6 +1245,49 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
                                       break;
 
       case WM_ENDSESSION            : break;
+
+      // NOTE: only taken for windows created with Chromes caption OFF and resize ON (WS_THICKFRAME without
+      // WS_CAPTION). In that combination Windows still reserves/paints the standard sizing-frame non-client
+      // area (visible as a thin bar/border), even though there is no caption; these two messages remove it
+      // while keeping the edges/corners resizable by hand-testing the cursor position ourselves.
+      case WM_NCCALCSIZE            : { LONG stylebits = GetWindowLong(hwnd, GWL_STYLE);
+
+                                        if(wparam && (stylebits & WS_THICKFRAME) && !(stylebits & WS_CAPTION))
+                                          {
+                                            return 0; // Client area = whole window (no non-client border).
+                                          }
+                                      }
+                                      break;
+
+      case WM_NCHITTEST              : { LONG stylebits = GetWindowLong(hwnd, GWL_STYLE);
+
+                                        if((stylebits & WS_THICKFRAME) && !(stylebits & WS_CAPTION))
+                                          {
+                                            RECT rect;
+                                            GetWindowRect(hwnd, &rect);
+
+                                            int x       = (int)(short)LOWORD(lparam);
+                                            int y       = (int)(short)HIWORD(lparam);
+                                            int border  = GetSystemMetrics(SM_CXSIZEFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER);
+
+                                            bool onleft   = (x >= rect.left)   && (x <  rect.left   + border);
+                                            bool onright  = (x <  rect.right)  && (x >= rect.right  - border);
+                                            bool ontop    = (y >= rect.top)    && (y <  rect.top    + border);
+                                            bool onbottom = (y <  rect.bottom) && (y >= rect.bottom - border);
+
+                                            if(ontop    && onleft)  return HTTOPLEFT;
+                                            if(ontop    && onright) return HTTOPRIGHT;
+                                            if(onbottom && onleft)  return HTBOTTOMLEFT;
+                                            if(onbottom && onright) return HTBOTTOMRIGHT;
+                                            if(onleft)              return HTLEFT;
+                                            if(onright)             return HTRIGHT;
+                                            if(ontop)               return HTTOP;
+                                            if(onbottom)            return HTBOTTOM;
+
+                                            return HTCLIENT;
+                                          }
+                                      }
+                                      break;
 
       case WM_MOVE                  : { GRPWINDOWSSCREEN* screen =  (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
                                         if(screen)

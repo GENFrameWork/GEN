@@ -66,6 +66,7 @@ enum GRPVECTORFILESVGOBJTYPE
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 class XFILEXMLELEMENT;
+class GRPVECTORFILESVGCSSSTYLESHEET;
 
 
 class GRPVECTORFILESVGOBJ
@@ -74,7 +75,7 @@ class GRPVECTORFILESVGOBJ
                                     GRPVECTORFILESVGOBJ        ();
     virtual                        ~GRPVECTORFILESVGOBJ        ();
 
-    static GRPVECTORFILESVGOBJ*     CreateInstance             (XFILEXMLELEMENT* element);
+    static GRPVECTORFILESVGOBJ*     CreateInstance             (XFILEXMLELEMENT* element, GRPVECTORFILESVGCSSSTYLESHEET* stylesheet = NULL);
 
     static GRPVECTORFILESVGOBJTYPE  GetObjType                 (XSTRING& name);
     static XCHAR*                   GetObjTypeName             (GRPVECTORFILESVGOBJTYPE type);
@@ -96,6 +97,9 @@ class GRPVECTORFILESVGOBJ
     XFILEXMLELEMENT*                GetXMLElement              ();
     void                            SetXMLElement              (XFILEXMLELEMENT* element);
 
+    GRPVECTORFILESVGCSSSTYLESHEET*  GetCSSStyleSheet           ();
+    void                            SetCSSStyleSheet           (GRPVECTORFILESVGCSSSTYLESHEET* stylesheet);
+
     XVECTOR<GRPVECTORFILESVGOBJ*>*  GetChilds                  ();
     XDWORD                          GetNChilds                 ();
     GRPVECTORFILESVGOBJ*            GetChild                   (int index);
@@ -116,6 +120,8 @@ class GRPVECTORFILESVGOBJ
     GRPVECTORFILESVGTRANSFORM       transform;
 
     XFILEXMLELEMENT*                xmlelement;                                  // weak reference (owned by the XFILEXML tree)
+
+    GRPVECTORFILESVGCSSSTYLESHEET*  cssstylesheet;                               // weak reference (owned by the loader, only valid during CreateInstance)
 
     XVECTOR<GRPVECTORFILESVGOBJ*>   childs;
 

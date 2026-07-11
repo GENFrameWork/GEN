@@ -41,6 +41,7 @@
 
 #include "GRPProperties.h"
 #include "GRPRect.h"
+#include "GRPScreenCFGChromes.h"
 
 
 
@@ -111,6 +112,10 @@ class GRPFRAMERATE;
 class GRPBITMAP;
 class GRPDESKTOPMANAGER;
 
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+class UI_LAYOUT;
+#endif
+
 
 class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 {
@@ -176,6 +181,30 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     void                                  SetCanClose                   (bool canclose);    
 
     XSTRING*                              GetTitle                      ();
+
+    GRPSCREENCFGCHROMES*                  GetCFGChromes                 ();
+    bool                                  SetCFGChromes                 (GRPSCREENCFGCHROMES& cfgchromes);
+    bool                                  IsCFGChromesActive            ();
+
+    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+
+    // NOTE: only meaningful when a Chromes configuration is active AND GetCFGChromes()->GetUseNativeChromes()
+    // is false; a native-chromes screen (the default, and every screen that never calls SetCFGChromes()) never
+    // needs any of this, and this whole feature can be compiled out entirely with GRP_SCREEN_CUSTOMCHROMES_FEATURE.
+    // Call once the screen already has a viewport/canvas (native window created); resolves and loads
+    // GetCFGChromes()->GetCustomLayoutFile()/GetCustomLayoutName() (a plain .xml, a .xml shared with other
+    // layouts, or a whole .xml+resources bundle compressed as .zip -- UI_MANAGER::Load() already tells these
+    // apart by extension) and keeps a (weak, UI_MANAGER-owned) reference to the resulting layout.
+    bool                                  LoadCFGChromesLayout          ();
+    UI_LAYOUT*                            GetCFGChromesLayout           ();
+
+    // Window drag over the layout's role="caption" element (see UI_ELEMENT_CHROMEROLE). Reads GEN's own INPUT
+    // module directly (INPMANAGER/INPDEVICE/INPCURSOR/INPBUTTON) -- entirely independent of whatever input
+    // handling the running application does for its own purposes; call once per frame (e.g. alongside
+    // UpdateViewports()). A no-op for a native-chromes screen, or one with no role="caption" element at all.
+    bool                                  UpdateCFGChromesDrag          ();
+
+    #endif
     
     bool                                  UpdateSize                    (int width, int height);
 
@@ -216,6 +245,19 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     bool                                  canclose;  
 
     XSTRING                               title; 
+
+    GRPSCREENCFGCHROMES                   cfgchromes;
+    bool                                  cfgchromesactive;
+
+    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+    UI_LAYOUT*                            cfgchromeslayout;              // weak reference (owned by UI_MANAGER)
+
+    bool                                  cfgchromesdragging;
+    int                                   cfgchromesdragstartcursorx;
+    int                                   cfgchromesdragstartcursory;
+    int                                   cfgchromesdragstartscreenx;
+    int                                   cfgchromesdragstartscreeny;
+    #endif
 
   private:
 

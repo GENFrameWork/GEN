@@ -36,6 +36,8 @@
 
 #include "GRPVectorFileSVGObj.h"
 
+#include "GRPVectorFileSVGCSSStyleSheet.h"
+
 #include "GRPVectorFileSVGObjRect.h"
 #include "GRPVectorFileSVGObjCircle.h"
 #include "GRPVectorFileSVGObjEllipse.h"
@@ -100,16 +102,17 @@ GRPVECTORFILESVGOBJ::~GRPVECTORFILESVGOBJ()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* element)
+* @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* element, GRPVECTORFILESVGCSSSTYLESHEET* stylesheet)
 * @brief      Create instance : build a SVG object (and its sub tree) from a XML element
 * @ingroup    GRAPHIC
 * 
 * @param[in]  element : xml element
+* @param[in]  stylesheet : document-wide CSS class rules (class="" resolution), NULL if the document has none
 * 
 * @return     GRPVECTORFILESVGOBJ* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* element)
+GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* element, GRPVECTORFILESVGCSSSTYLESHEET* stylesheet)
 {
   if(!element) return NULL;
 
@@ -140,6 +143,7 @@ GRPVECTORFILESVGOBJ* GRPVECTORFILESVGOBJ::CreateInstance(XFILEXMLELEMENT* elemen
 
   obj->SetObjType(type);
   obj->SetXMLElement(element);
+  obj->SetCSSStyleSheet(stylesheet);
 
   obj->ApplyData(element);
 
@@ -239,7 +243,7 @@ bool GRPVECTORFILESVGOBJ::ApplyData(XFILEXMLELEMENT* element)
   XCHAR* valuetransform = element->GetValueAttribute(__L("transform"));
   if(valuetransform)  transform.ParseFromString(valuetransform);
 
-  style.ApplyData(element);
+  style.ApplyData(element, cssstylesheet);
 
   BuildChilds(element);
 
@@ -389,6 +393,36 @@ void GRPVECTORFILESVGOBJ::SetXMLElement(XFILEXMLELEMENT* element)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         GRPVECTORFILESVGCSSSTYLESHEET* GRPVECTORFILESVGOBJ::GetCSSStyleSheet()
+* @brief      Get CSS style sheet
+* @ingroup    GRAPHIC
+* 
+* @return     GRPVECTORFILESVGCSSSTYLESHEET* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPVECTORFILESVGCSSSTYLESHEET* GRPVECTORFILESVGOBJ::GetCSSStyleSheet()
+{
+  return cssstylesheet;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPVECTORFILESVGOBJ::SetCSSStyleSheet(GRPVECTORFILESVGCSSSTYLESHEET* stylesheet)
+* @brief      Set CSS style sheet
+* @ingroup    GRAPHIC
+* 
+* @param[in]  stylesheet : document-wide CSS class rules
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPVECTORFILESVGOBJ::SetCSSStyleSheet(GRPVECTORFILESVGCSSSTYLESHEET* stylesheet)
+{
+  this->cssstylesheet = stylesheet;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XVECTOR<GRPVECTORFILESVGOBJ*>* GRPVECTORFILESVGOBJ::GetChilds()
 * @brief      Get childs
 * @ingroup    GRAPHIC
@@ -519,7 +553,7 @@ bool GRPVECTORFILESVGOBJ::BuildChilds(XFILEXMLELEMENT* element)
         {
           if(childelement->GetType() == XFILEXMLELEMENTTYPE_NORMAL)
             {
-              GRPVECTORFILESVGOBJ* childobj = GRPVECTORFILESVGOBJ::CreateInstance(childelement);
+              GRPVECTORFILESVGOBJ* childobj = GRPVECTORFILESVGOBJ::CreateInstance(childelement, cssstylesheet);
               if(childobj)  childs.Add(childobj);
             }
         }
@@ -541,6 +575,7 @@ void GRPVECTORFILESVGOBJ::Clean()
 {
   type        = GRPVECTORFILESVGOBJTYPE_UNKNOWN;
   xmlelement  = NULL;
+  cssstylesheet = NULL;
 }
 
 

@@ -316,7 +316,27 @@ bool UI_COLOR::SetFromString(XCHAR* string)
     {
       return false;
     }
-  
+
+  // "#RRGGBB" / "#RRGGBBAA" (CSS-style hex notation)
+  if(colorstr.Get()[0] == __C('#'))
+    {
+      XDWORD length = colorstr.GetSize() - 1;
+
+      if((length == 6) || (length == 8))
+        {
+          red   = (HexValue(colorstr.Get()[1]) * 16) + HexValue(colorstr.Get()[2]);
+          green = (HexValue(colorstr.Get()[3]) * 16) + HexValue(colorstr.Get()[4]);
+          blue  = (HexValue(colorstr.Get()[5]) * 16) + HexValue(colorstr.Get()[6]);
+          alpha = (length == 8) ? (HexValue(colorstr.Get()[7]) * 16) + HexValue(colorstr.Get()[8]) : 255;
+
+          valid = true;
+
+          return true;
+        }
+
+      return false;
+    }
+
   for(XDWORD c=0; c<colorstr.GetSize(); c++)
     {
       XCHAR character = colorstr.Get()[c];
@@ -471,6 +491,28 @@ int UI_COLOR::GetAlphaForPercent(int percent)
   if(_percent > 100) _percent = 100;
 
   return (int)((_percent * 255) / 100);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int UI_COLOR::HexValue(XCHAR character)
+* @brief      Hex value : convert one hexadecimal character to its numeric value (0..15)
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  character : hexadecimal character
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+int UI_COLOR::HexValue(XCHAR character)
+{
+  if((character >= __C('0')) && (character <= __C('9')))  return (int)(character - __C('0'));
+  if((character >= __C('a')) && (character <= __C('f')))  return (int)(character - __C('a')) + 10;
+  if((character >= __C('A')) && (character <= __C('F')))  return (int)(character - __C('A')) + 10;
+
+  return 0;
 }
 
 
