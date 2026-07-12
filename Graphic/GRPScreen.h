@@ -114,6 +114,7 @@ class GRPDESKTOPMANAGER;
 
 #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
 class UI_LAYOUT;
+class XTIMER;
 #endif
 
 
@@ -204,6 +205,12 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     // UpdateViewports()). A no-op for a native-chromes screen, or one with no role="caption" element at all.
     bool                                  UpdateCFGChromesDrag          ();
 
+    // Auto-hide/show the layout's role="caption" element based on GetCFGChromes()->GetCustomAutoHide() and
+    // whether the cursor is currently over its own area; see GRPSCREENCFGCHROMES::GetCustomAutoHide(). Same
+    // INPUT-module-direct approach as UpdateCFGChromesDrag(); call once per frame alongside it. A no-op when
+    // auto-hide is 0 (disabled, the default), for a native-chromes screen, or one with no role="caption".
+    bool                                  UpdateCFGChromesAutoHide      ();
+
     #endif
     
     bool                                  UpdateSize                    (int width, int height);
@@ -257,11 +264,19 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     int                                   cfgchromesdragstartcursory;
     int                                   cfgchromesdragstartscreenx;
     int                                   cfgchromesdragstartscreeny;
+
+    bool                                  cfgchromesautohidevisible;      // current actual shown/hidden state
+    bool                                  cfgchromesautohidedesired;      // last computed "cursor is over it" state
+    XTIMER*                               cfgchromesautohidetimer;        // how long "desired" has stayed stable
     #endif
 
   private:
 
     void                                  Clean                         ();
+
+    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+    bool                                  GetCFGChromesCursorPosition   (int& uix, int& uiy);
+    #endif
      
     GRPDESKTOPMANAGER*                    desktopmanager;
     GRPSCREENTYPE_DESKTOP                 desktopscreenselected;

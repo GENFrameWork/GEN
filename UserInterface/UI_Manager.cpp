@@ -188,6 +188,8 @@ bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
 {
   bool status = false;  
 
+  iszippedfile = false;
+
   if(pathfile.Find(__L(".zip"), true) != XSTRING_NOTFOUND) 
     {
       iszippedfile = true;
@@ -205,7 +207,8 @@ bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
           return false;
         }
 
-      if(unzipfile->Open(pathfile))
+      bool openresult = unzipfile->Open(pathfile);
+      if(openresult)
         {
           XSTRING origin_drive;
           XPATH   origin_path;
@@ -224,7 +227,8 @@ bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
 
           namefile    = origin_namefile;
           namefile   += __L(".xml");
-                  
+
+          
           status = unzipfile->DecompressFile(namefile, unzippathfile, namefile.Get());
           if(status)
             {
@@ -232,7 +236,7 @@ bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
 
               unzippathfile_tmp  = unzippathfile;
               unzippathfile_tmp += namefile;
-
+           
               status = LoadLayout(unzippathfile_tmp, screen, viewportindex);                
 
               DeleteTemporalUnZipFile(unzippathfile_tmp);                          
@@ -265,7 +269,7 @@ bool UI_MANAGER::LoadLayout(XPATH& pathfile, GRPSCREEN* screen, int viewportinde
 {
   XFILEXML xml;
   bool     status = false;  
-      
+
   if(xml.Open(pathfile, true))
     {      
       CreateLayouts(xml, screen, viewportindex);

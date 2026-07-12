@@ -44,7 +44,9 @@
 #include "XPathsManager.h"
 #include "UI_Manager.h"
 #include "UI_Layout.h"
+#include "UI_Element_Text.h"
 #include "INPManager.h"
+#include "XTimer.h"
 #endif
 
 
@@ -108,6 +110,14 @@ GRPSCREEN::~GRPSCREEN()
       GEN_GRPFACTORY.DeleteDesktopManager(desktopmanager);
       desktopmanager = NULL;
     }
+
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  if(cfgchromesautohidetimer)
+    {
+      GEN_XFACTORY.DeleteTimer(cfgchromesautohidetimer);
+      cfgchromesautohidetimer = NULL;
+    }
+  #endif
 
   DeRegisterEvent(GRPXEVENT_TYPE_SCREEN_CREATING);
   DeRegisterEvent(GRPXEVENT_TYPE_SCREEN_CANVASCREATING);
@@ -867,20 +877,36 @@ bool GRPSCREEN::LoadCFGChromesLayout()
 
   // Already loaded (e.g. shared with other layouts/layers that loaded this same file earlier): just reuse it.
   cfgchromeslayout = GEN_USERINTERFACE.Layouts_Get(namelayout->Get());
-  if(cfgchromeslayout) return true;
 
-  XPATH pathfile;
+  if(!cfgchromeslayout)
+    {
+      // namelayoutfile is already a full, resolved path (either the class' own default -- see
+      // GRPSCREENCFGCHROMES::Clean() -- or whatever the app itself set via SetCustomLayoutFile()); no section
+      // path gets prepended here. UI_MANAGER::Load() already tells a plain .xml apart from a compressed .zip
+      // bundle by extension.
+      XPATH pathfile;
 
-  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_UI_LAYOUTS, pathfile);
-  pathfile.Slash_Add();
-  pathfile.Add(*namelayoutfile);
+      pathfile = namelayoutfile->Get();
 
-  // UI_MANAGER::Load() already tells a plain .xml apart from a compressed .zip bundle by extension.
-  if(!GEN_USERINTERFACE.Load(pathfile, this, 0)) return false;
+      if(!GEN_USERINTERFACE.Load(pathfile, this, 0)) return false;
 
-  cfgchromeslayout = GEN_USERINTERFACE.Layouts_Get(namelayout->Get());
+      cfgchromeslayout = GEN_USERINTERFACE.Layouts_Get(namelayout->Get());
+    }
 
-  return (cfgchromeslayout != NULL);
+  if(!cfgchromeslayout) return false;
+
+  // The layout's own role="title" element (if any) keeps whatever static text it was authored with in the
+  // .xml; once custom chromes are active, this screen's own title (GetTitle(), the same string a native
+  // caption would show) is what must actually be displayed, always -- so it is pushed into that element here,
+  // every time this function runs (fresh load or an already-loaded layout shared with something else, e.g. a
+  // different screen with a different title of its own).
+  UI_ELEMENT* titleelement = cfgchromeslayout->Elements_Get(UI_ELEMENT_CHROMEROLE_TITLE);
+  if(titleelement && (titleelement->GetType() == UI_ELEMENT_TYPE_TEXT))
+    {
+      ((UI_ELEMENT_TEXT*)titleelement)->GetText()->Set(GetTitle()->Get());
+    }
+
+  return true;
 }
 
 
@@ -924,9 +950,8 @@ bool GRPSCREEN::UpdateCFGChromesDrag()
   INPDEVICE* mousedevice = GEN_INPMANAGER.GetDevice(INPDEVICE_TYPE_MOUSE);
   if(!mousedevice) return false;
 
-  INPCURSOR* inpcursor = mousedevice->GetCursor(INPCURSOR_ID_MOUSE);
   INPBUTTON* inpbutton = mousedevice->GetButton(INPBUTTON_ID_MOUSE_LEFT);
-  if(!inpcursor || !inpbutton) return false;
+  if(!inpbutton) return false;
 
   if(!inpbutton->IsPressed())
     {
@@ -934,21 +959,15 @@ bool GRPSCREEN::UpdateCFGChromesDrag()
       return true;
     }
 
-  // Raw, client-relative to this window, and bottom-up (0 at the bottom of the client area, increasing
-  // upward) -- this is how the Windows mouse device stores it internally, independently confirmed by tracing
-  // INPWINDOWSDEVICEMOUSE::Update(). "height - rawy" turns it into a top-down distance from the window's own
-  // top edge, matching both UI_ELEMENT's own coordinate convention (for the hit-test) and, once the window's
-  // desktop position is added on top of it, plain top-down desktop coordinates (for the drag delta).
-  int rawx = (int)inpcursor->GetX();
-  int rawy = (int)inpcursor->GetY();
+  int uix = 0;
+  int uiy = 0;
 
-  // The mouse device reports (-1,-1) as a sentinel whenever the cursor is currently outside this window's
-  // client bounds (see INPWINDOWSDEVICEMOUSE::Update()) -- easy to hit for a frame or two during a fast drag,
-  // since the window is still catching up to the cursor. Treat it as "no new reading this frame" rather than
-  // a real coordinate: feeding it into the position math below was exactly what sent the window flying off to
-  // a bogus position when dragging quickly. Skipping it just holds the window in place for a frame; the very
-  // next valid reading picks the drag back up seamlessly.
-  if((rawx == -1) && (rawy == -1)) return true;
+  // GetCFGChromesCursorPosition() returns false whenever the cursor is currently outside this window's client
+  // bounds -- easy to hit for a frame or two during a fast drag, since the window is still catching up to the
+  // cursor. Treat it as "no new reading this frame" rather than a real coordinate: feeding a bogus one into the
+  // position math below was exactly what sent the window flying off when dragging quickly. Skipping it just
+  // holds the window in place for a frame; the very next valid reading picks the drag back up seamlessly.
+  if(!GetCFGChromesCursorPosition(uix, uiy)) return true;
 
   if(!cfgchromesdragging)
     {
@@ -963,22 +982,150 @@ bool GRPSCREEN::UpdateCFGChromesDrag()
       bline.width  = captionelement->GetBoundaryLine()->width;
       bline.height = captionelement->GetBoundaryLine()->height;
 
-      if(!bline.IsWithin(rawx, GetHeight() - rawy)) return false;
+      if(!bline.IsWithin(uix, uiy)) return false;
 
       cfgchromesdragging         = true;
       cfgchromesdragstartscreenx = GetPositionX();
       cfgchromesdragstartscreeny = GetPositionY();
-      cfgchromesdragstartcursorx = rawx                        + cfgchromesdragstartscreenx;
-      cfgchromesdragstartcursory = (GetHeight() - rawy)         + cfgchromesdragstartscreeny;
+      cfgchromesdragstartcursorx = uix + cfgchromesdragstartscreenx;
+      cfgchromesdragstartcursory = uiy + cfgchromesdragstartscreeny;
 
       return true;
     }
 
-  int desktopcursorx = rawx                + GetPositionX();
-  int desktopcursory = (GetHeight() - rawy) + GetPositionY();
+  int desktopcursorx = uix + GetPositionX();
+  int desktopcursory = uiy + GetPositionY();
 
   Set_Position(cfgchromesdragstartscreenx + (desktopcursorx - cfgchromesdragstartcursorx),
                cfgchromesdragstartscreeny + (desktopcursory - cfgchromesdragstartcursory));
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::GetCFGChromesCursorPosition(int& uix, int& uiy)
+* @brief      Get CFG chromes cursor position
+* @note       INTERNAL: reads GEN_INPMANAGER's mouse device directly (raw, client-relative, bottom-up -- 0 at the
+*             bottom of the client area, increasing upward, confirmed by tracing INPWINDOWSDEVICEMOUSE::Update())
+*             and converts it into the same top-down UI-space coordinates UI_ELEMENT's own
+*             GetXPosition()/GetYPosition() use. Returns false (uix/uiy left untouched) when the cursor is
+*             currently outside this window's client area (the device reports (-1,-1) in that case) or the
+*             mouse device itself is unavailable. Shared by UpdateCFGChromesDrag() and UpdateCFGChromesAutoHide().
+* @ingroup    GRAPHIC
+* 
+* @param[out] uix : X coordinate, UI-space (top-down, client-relative).
+* @param[out] uiy : Y coordinate, UI-space (top-down, client-relative).
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::GetCFGChromesCursorPosition(int& uix, int& uiy)
+{
+  INPDEVICE* mousedevice = GEN_INPMANAGER.GetDevice(INPDEVICE_TYPE_MOUSE);
+  if(!mousedevice) return false;
+
+  INPCURSOR* inpcursor = mousedevice->GetCursor(INPCURSOR_ID_MOUSE);
+  if(!inpcursor) return false;
+
+  int rawx = (int)inpcursor->GetX();
+  int rawy = (int)inpcursor->GetY();
+
+  if((rawx == -1) && (rawy == -1)) return false;
+
+  uix = rawx;
+  uiy = GetHeight() - rawy;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void GRPSCREEN_SetElementVisibleRecursive(UI_ELEMENT* element, bool visible)
+* @brief      INTERNAL: sets an element and every one of its compose (child) elements visible/invisible.
+*             UI_ELEMENT::SetVisible() only ever affects the element itself, so hiding just the caption's own
+*             "form" element would leave its icon/title/buttons drawn on their own.
+* @ingroup    GRAPHIC
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+static void GRPSCREEN_SetElementVisibleRecursive(UI_ELEMENT* element, bool visible)
+{
+  if(!element) return;
+
+  element->SetVisible(visible);
+
+  for(XDWORD c=0; c<element->GetComposeElements()->GetSize(); c++)
+    {
+      GRPSCREEN_SetElementVisibleRecursive(element->GetComposeElements()->Get(c), visible);
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::UpdateCFGChromesAutoHide()
+* @brief      Update CFG chromes auto hide
+* @note       Hides the layout's role="caption" element (and everything inside it: icon, title, min/max/close)
+*             when the cursor has stayed steadily outside its own area for GetCFGChromes()->GetCustomAutoHide()
+*             milliseconds, and shows it again once the cursor has stayed steadily inside that same area for the
+*             same amount of time. The debounce timer resets every time the cursor moves in or out, so a quick
+*             pass through the caption's edge never triggers a transition by itself. A no-op when auto-hide is 0
+*             (disabled, the default): the caption is left exactly as it already is.
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::UpdateCFGChromesAutoHide()
+{
+  if(!IsCFGChromesActive())            return false;
+  if(cfgchromes.GetUseNativeChromes()) return false;
+  if(!cfgchromeslayout)                return false;
+
+  XDWORD timehidden = cfgchromes.GetCustomAutoHide();
+  if(!timehidden) return false;
+
+  UI_ELEMENT* captionelement = cfgchromeslayout->Elements_Get(UI_ELEMENT_CHROMEROLE_CAPTION);
+  if(!captionelement) return false;
+
+  if(!cfgchromesautohidetimer)
+    {
+      cfgchromesautohidetimer = GEN_XFACTORY.CreateTimer();
+      if(!cfgchromesautohidetimer) return false;
+
+      cfgchromesautohidetimer->Reset();
+    }
+
+  int  uix             = 0;
+  int  uiy             = 0;
+  bool cursoravailable = GetCFGChromesCursorPosition(uix, uiy);
+
+  UI_BOUNDARYLINE bline;
+
+  bline.x      = captionelement->GetXPosition();
+  bline.y      = captionelement->GetYPosition();
+  bline.width  = captionelement->GetBoundaryLine()->width;
+  bline.height = captionelement->GetBoundaryLine()->height;
+
+  // A cursor reading unavailable (e.g. the cursor is outside this window entirely) definitely counts as "not
+  // over the caption".
+  bool cursorover = cursoravailable && bline.IsWithin(uix, uiy);
+
+  if(cursorover != cfgchromesautohidedesired)
+    {
+      cfgchromesautohidedesired = cursorover;
+      cfgchromesautohidetimer->Reset();
+    }
+
+  if((cfgchromesautohidedesired != cfgchromesautohidevisible) &&
+     (cfgchromesautohidetimer->GetMeasureMilliSeconds() >= timehidden))
+    {
+      cfgchromesautohidevisible = cfgchromesautohidedesired;
+
+      GRPSCREEN_SetElementVisibleRecursive(captionelement, cfgchromesautohidevisible);
+    }
 
   return true;
 }
@@ -1112,9 +1259,7 @@ bool GRPSCREEN::CreateViewport(XCHAR* ID, float posx, float posy, float width, f
       viewports.Add(viewport);
 
       #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
-      // First viewport+canvas just became available: this is the natural, platform-independent moment to load
-      // a custom (non native) Chromes layout, if one is configured (LoadCFGChromesLayout() itself is a no-op
-      // for every other screen: no Chromes configuration at all -- the default -- or native chromes).
+      
       if(viewports.GetSize() == 1) 
         {
           LoadCFGChromesLayout();
@@ -1145,6 +1290,7 @@ bool GRPSCREEN::UpdateViewports()
 
   #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
   UpdateCFGChromesDrag();
+  UpdateCFGChromesAutoHide();
   #endif
 
   for(XDWORD c=0; c<viewports.GetSize(); c++)
@@ -1363,6 +1509,10 @@ void GRPSCREEN::Clean()
   cfgchromesdragstartcursory = 0;
   cfgchromesdragstartscreenx = 0;
   cfgchromesdragstartscreeny = 0;
+
+  cfgchromesautohidevisible  = true;      // starts shown, matching a freshly loaded/unaffected layout
+  cfgchromesautohidedesired  = true;
+  cfgchromesautohidetimer    = NULL;      // created lazily, on first actual use (see UpdateCFGChromesAutoHide())
   #endif
 }
 

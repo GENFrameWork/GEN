@@ -35,6 +35,11 @@
 
 #include "GRPScreenCFGChromes.h"
 
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+#include "XPath.h"
+#include "XPathsManager.h"
+#endif
+
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
@@ -91,29 +96,16 @@ bool GRPSCREENCFGCHROMES::GetUseNativeChromes()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPSCREENCFGCHROMES::SetUseNativeChromes(bool usenativechromes)
-* @brief      Set use native chromes
-* @ingroup    GRAPHIC
-* 
-* @param[in]  usenativechromes : Usenativechromes value.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-void GRPSCREENCFGCHROMES::SetUseNativeChromes(bool usenativechromes)
-{
-  this->usenativechromes = usenativechromes;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool GRPSCREENCFGCHROMES::GetCaptionActive()
-* @brief      Get caption active
+* @fn         bool GRPSCREENCFGCHROMES::GetNativeCaptionActive()
+* @brief      Get native caption active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the caption's own presence and
+*             look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREENCFGCHROMES::GetCaptionActive()
+bool GRPSCREENCFGCHROMES::GetNativeCaptionActive()
 {
   return captionactive;
 }
@@ -121,14 +113,16 @@ bool GRPSCREENCFGCHROMES::GetCaptionActive()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPSCREENCFGCHROMES::SetCaptionActive(bool active)
-* @brief      Set caption active
+* @fn         void GRPSCREENCFGCHROMES::SetNativeCaptionActive(bool active)
+* @brief      Set native caption active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the caption's own presence and
+*             look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  active : Active value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPSCREENCFGCHROMES::SetCaptionActive(bool active)
+void GRPSCREENCFGCHROMES::SetNativeCaptionActive(bool active)
 {
   captionactive = active;
 }
@@ -136,14 +130,16 @@ void GRPSCREENCFGCHROMES::SetCaptionActive(bool active)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSCREENCFGCHROMES::GetTitleActive()
-* @brief      Get title active
+* @fn         bool GRPSCREENCFGCHROMES::GetNativeTitleActive()
+* @brief      Get native title active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the title's own presence and
+*             look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREENCFGCHROMES::GetTitleActive()
+bool GRPSCREENCFGCHROMES::GetNativeTitleActive()
 {
   return titleactive;
 }
@@ -151,14 +147,16 @@ bool GRPSCREENCFGCHROMES::GetTitleActive()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPSCREENCFGCHROMES::SetTitleActive(bool active)
-* @brief      Set title active
+* @fn         void GRPSCREENCFGCHROMES::SetNativeTitleActive(bool active)
+* @brief      Set native title active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the title's own presence and
+*             look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  active : Active value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPSCREENCFGCHROMES::SetTitleActive(bool active)
+void GRPSCREENCFGCHROMES::SetNativeTitleActive(bool active)
 {
   titleactive = active;
 }
@@ -166,14 +164,16 @@ void GRPSCREENCFGCHROMES::SetTitleActive(bool active)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSCREENCFGCHROMES::GetIconActive()
-* @brief      Get icon active
+* @fn         bool GRPSCREENCFGCHROMES::GetNativeIconActive()
+* @brief      Get native icon active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the icon's own presence and
+*             look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREENCFGCHROMES::GetIconActive()
+bool GRPSCREENCFGCHROMES::GetNativeIconActive()
 {
   return iconactive;
 }
@@ -181,14 +181,16 @@ bool GRPSCREENCFGCHROMES::GetIconActive()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPSCREENCFGCHROMES::SetIconActive(bool active)
-* @brief      Set icon active
+* @fn         void GRPSCREENCFGCHROMES::SetNativeIconActive(bool active)
+* @brief      Set native icon active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the icon's own presence and
+*             look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  active : Active value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPSCREENCFGCHROMES::SetIconActive(bool active)
+void GRPSCREENCFGCHROMES::SetNativeIconActive(bool active)
 {
   iconactive = active;
 }
@@ -196,14 +198,16 @@ void GRPSCREENCFGCHROMES::SetIconActive(bool active)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSCREENCFGCHROMES::GetMaximizeActive()
-* @brief      Get maximize active
+* @fn         bool GRPSCREENCFGCHROMES::GetNativeMaximizeActive()
+* @brief      Get native maximize active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the maximize button's own
+*             presence and look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREENCFGCHROMES::GetMaximizeActive()
+bool GRPSCREENCFGCHROMES::GetNativeMaximizeActive()
 {
   return maximizeactive;
 }
@@ -211,14 +215,16 @@ bool GRPSCREENCFGCHROMES::GetMaximizeActive()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPSCREENCFGCHROMES::SetMaximizeActive(bool active)
-* @brief      Set maximize active
+* @fn         void GRPSCREENCFGCHROMES::SetNativeMaximizeActive(bool active)
+* @brief      Set native maximize active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the maximize button's own
+*             presence and look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  active : Active value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPSCREENCFGCHROMES::SetMaximizeActive(bool active)
+void GRPSCREENCFGCHROMES::SetNativeMaximizeActive(bool active)
 {
   maximizeactive = active;
 }
@@ -226,14 +232,16 @@ void GRPSCREENCFGCHROMES::SetMaximizeActive(bool active)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSCREENCFGCHROMES::GetMinimizeActive()
-* @brief      Get minimize active
+* @fn         bool GRPSCREENCFGCHROMES::GetNativeMinimizeActive()
+* @brief      Get native minimize active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the minimize button's own
+*             presence and look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREENCFGCHROMES::GetMinimizeActive()
+bool GRPSCREENCFGCHROMES::GetNativeMinimizeActive()
 {
   return minimizeactive;
 }
@@ -241,14 +249,16 @@ bool GRPSCREENCFGCHROMES::GetMinimizeActive()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPSCREENCFGCHROMES::SetMinimizeActive(bool active)
-* @brief      Set minimize active
+* @fn         void GRPSCREENCFGCHROMES::SetNativeMinimizeActive(bool active)
+* @brief      Set native minimize active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the minimize button's own
+*             presence and look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  active : Active value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPSCREENCFGCHROMES::SetMinimizeActive(bool active)
+void GRPSCREENCFGCHROMES::SetNativeMinimizeActive(bool active)
 {
   minimizeactive = active;
 }
@@ -256,14 +266,16 @@ void GRPSCREENCFGCHROMES::SetMinimizeActive(bool active)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool GRPSCREENCFGCHROMES::GetCloseActive()
-* @brief      Get close active
+* @fn         bool GRPSCREENCFGCHROMES::GetNativeCloseActive()
+* @brief      Get native close active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the close button's own
+*             presence and look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the condition is met; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool GRPSCREENCFGCHROMES::GetCloseActive()
+bool GRPSCREENCFGCHROMES::GetNativeCloseActive()
 {
   return closeactive;
 }
@@ -271,14 +283,16 @@ bool GRPSCREENCFGCHROMES::GetCloseActive()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void GRPSCREENCFGCHROMES::SetCloseActive(bool active)
-* @brief      Set close active
+* @fn         void GRPSCREENCFGCHROMES::SetNativeCloseActive(bool active)
+* @brief      Set native close active
+* @note       Native chromes only (see GetUseNativeChromes()); in custom chromes the close button's own
+*             presence and look are decided entirely by the layout.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  active : Active value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void GRPSCREENCFGCHROMES::SetCloseActive(bool active)
+void GRPSCREENCFGCHROMES::SetNativeCloseActive(bool active)
 {
   closeactive = active;
 }
@@ -375,6 +389,37 @@ void GRPSCREENCFGCHROMES::SetCustomLayoutName(XCHAR* namelayout)
   customlayoutname.Set(namelayout);
 }
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD GRPSCREENCFGCHROMES::GetCustomAutoHide()
+* @brief      Get custom auto hide
+* @ingroup    GRAPHIC
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD GRPSCREENCFGCHROMES::GetCustomAutoHide()
+{
+  return customautohide;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPSCREENCFGCHROMES::SetCustomAutoHide(XDWORD timehidden)
+* @brief      Set custom auto hide
+* @ingroup    GRAPHIC
+* 
+* @param[in]  timehidden : delay, in milliseconds, the cursor must stay steadily outside/inside the caption's
+*             own area before it actually hides/shows. 0 disables auto-hide (the caption stays always visible).
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPSCREENCFGCHROMES::SetCustomAutoHide(XDWORD timehidden)
+{
+  customautohide = timehidden;
+}
+
 #endif
 
 
@@ -403,6 +448,7 @@ bool GRPSCREENCFGCHROMES::CopyTo(GRPSCREENCFGCHROMES& cfgchromes)
   #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
   cfgchromes.customlayoutfile = customlayoutfile;
   cfgchromes.customlayoutname = customlayoutname;
+  cfgchromes.customautohide   = customautohide;
   #endif
 
   return true;
@@ -434,6 +480,7 @@ bool GRPSCREENCFGCHROMES::CopyFrom(GRPSCREENCFGCHROMES& cfgchromes)
   #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
   customlayoutfile = cfgchromes.customlayoutfile;
   customlayoutname = cfgchromes.customlayoutname;
+  customautohide   = cfgchromes.customautohide;
   #endif
 
   return true;
@@ -450,7 +497,11 @@ bool GRPSCREENCFGCHROMES::CopyFrom(GRPSCREENCFGCHROMES& cfgchromes)
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPSCREENCFGCHROMES::Clean()
 {
-  usenativechromes  = true;
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  usenativechromes  = false;               // custom chromes feature compiled in: custom is the default
+  #else
+  usenativechromes  = true;                // custom chromes feature not compiled in at all: native is the only option
+  #endif
 
   captionactive     = true;
 
@@ -465,8 +516,20 @@ void GRPSCREENCFGCHROMES::Clean()
   resizeactive      = true;
 
   #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
-  customlayoutfile.Empty();
-  customlayoutname.Empty();
+
+  // Sensible defaults, used unless the app calls SetCustomLayoutFile()/SetCustomLayoutName() itself: a bundled
+  // .zip (layout + its own graphics/fonts, self-contained) named "defaultwindowschromes.zip", resolved the same
+  // way any other UI layout path is, and a "chrome" layout name within it.
+  XPATH defaultlayoutfile;
+
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_UI_LAYOUTS, defaultlayoutfile);
+  defaultlayoutfile.Slash_Add();
+  defaultlayoutfile.Add(__L("defaultwindowschromes.zip"));
+
+  customlayoutfile = defaultlayoutfile;
+  customlayoutname = __L("chrome");
+  customautohide   = 0;
+
   #endif
 }
 

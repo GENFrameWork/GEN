@@ -51,25 +51,24 @@ class GRPSCREENCFGCHROMES
     virtual                               ~GRPSCREENCFGCHROMES          ();
 
     bool                                  GetUseNativeChromes           ();
-    void                                  SetUseNativeChromes           (bool usenativechromes);
 
-    bool                                  GetCaptionActive              ();
-    void                                  SetCaptionActive              (bool active);
+    bool                                  GetNativeCaptionActive        ();
+    void                                  SetNativeCaptionActive        (bool active);
 
-    bool                                  GetTitleActive                ();
-    void                                  SetTitleActive                (bool active);
+    bool                                  GetNativeTitleActive          ();
+    void                                  SetNativeTitleActive          (bool active);
 
-    bool                                  GetIconActive                 ();
-    void                                  SetIconActive                 (bool active);
+    bool                                  GetNativeIconActive           ();
+    void                                  SetNativeIconActive           (bool active);
 
-    bool                                  GetMaximizeActive             ();
-    void                                  SetMaximizeActive             (bool active);
+    bool                                  GetNativeMaximizeActive       ();
+    void                                  SetNativeMaximizeActive       (bool active);
 
-    bool                                  GetMinimizeActive             ();
-    void                                  SetMinimizeActive             (bool active);
+    bool                                  GetNativeMinimizeActive       ();
+    void                                  SetNativeMinimizeActive       (bool active);
 
-    bool                                  GetCloseActive                ();
-    void                                  SetCloseActive                (bool active);
+    bool                                  GetNativeCloseActive          ();
+    void                                  SetNativeCloseActive          (bool active);
 
     bool                                  GetResizeActive               ();
     void                                  SetResizeActive               (bool active);
@@ -84,6 +83,12 @@ class GRPSCREENCFGCHROMES
 
     XSTRING*                              GetCustomLayoutName           ();
     void                                  SetCustomLayoutName           (XCHAR* namelayout);
+
+    // Custom chromes only. 0 (the default) disables auto-hide entirely -- the caption stays always visible,
+    // as before. A value > 0 is the delay, in milliseconds, the cursor must stay steadily outside (to hide) or
+    // inside (to show) the caption's own area before it actually happens; see GRPSCREEN::UpdateCFGChromesAutoHide().
+    XDWORD                                GetCustomAutoHide             ();
+    void                                  SetCustomAutoHide             (XDWORD timehidden);
 
     #endif
 
@@ -111,6 +116,7 @@ class GRPSCREENCFGCHROMES
     #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
     XSTRING                               customlayoutfile;
     XSTRING                               customlayoutname;
+    XDWORD                                customautohide;
     #endif
 };
 

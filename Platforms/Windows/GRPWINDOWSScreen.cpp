@@ -812,12 +812,12 @@ void GRPWINDOWSSCREEN::Chromes_ApplyStyle(DWORD& style, DWORD& exstyle)
   GRPSCREENCFGCHROMES* cfgchromes = GetCFGChromes();
   if(!cfgchromes) return;
 
-  if(cfgchromes->GetCaptionActive())
+  if(cfgchromes->GetNativeCaptionActive())
     {
       style |= WS_CAPTION | WS_SYSMENU | WS_OVERLAPPED;
 
-      if(cfgchromes->GetMinimizeActive()) style |= WS_MINIMIZEBOX;
-      if(cfgchromes->GetMaximizeActive()) style |= WS_MAXIMIZEBOX;
+      if(cfgchromes->GetNativeMinimizeActive()) style |= WS_MINIMIZEBOX;
+      if(cfgchromes->GetNativeMaximizeActive()) style |= WS_MAXIMIZEBOX;
     }
    else
     {
@@ -851,7 +851,7 @@ void GRPWINDOWSSCREEN::Chromes_ApplyPostCreate()
   GRPSCREENCFGCHROMES* cfgchromes = GetCFGChromes();
   if(!cfgchromes) return;
 
-  if(cfgchromes->GetCaptionActive() && !cfgchromes->GetIconActive())
+  if(cfgchromes->GetNativeCaptionActive() && !cfgchromes->GetNativeIconActive())
     {
       SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)NULL);
       SendMessage(hwnd, WM_SETICON, ICON_BIG  , (LPARAM)NULL);
@@ -867,9 +867,9 @@ void GRPWINDOWSSCREEN::Chromes_ApplyPostCreate()
       SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
     }
 
-  SetCanClose(cfgchromes->GetCloseActive());
+  SetCanClose(cfgchromes->GetNativeCloseActive());
 
-  if(!cfgchromes->GetCloseActive())
+  if(!cfgchromes->GetNativeCloseActive())
     {
       HMENU hsysmenu = GetSystemMenu(hwnd, FALSE);
       if(hsysmenu)
@@ -1106,7 +1106,7 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
 
       hwnd = CreateWindowEx(_exstyle          ,
                             classname.Get()   ,
-                            (usecfgchromesnative && !GetCFGChromes()->GetTitleActive()) ? __L("") : GetTitle()->Get() ,
+                            (usecfgchromesnative && !GetCFGChromes()->GetNativeTitleActive()) ? __L("") : GetTitle()->Get() ,
                             _style            ,
                             posx              , 
                             posy              ,
