@@ -45,8 +45,10 @@
 #include "UI_Manager.h"
 #include "UI_Layout.h"
 #include "UI_Element_Text.h"
+#include "UI_SkinCanvas.h"
 #include "INPManager.h"
 #include "XTimer.h"
+#include "XTrace.h"
 #endif
 
 
@@ -1126,6 +1128,41 @@ bool GRPSCREEN::UpdateCFGChromesAutoHide()
 
       GRPSCREEN_SetElementVisibleRecursive(captionelement, cfgchromesautohidevisible);
     }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::DrawCFGChromesOnTop()
+* @brief      Draw CFG chromes on top
+* @note       Must be called by the running application, once, from within its OWN frame-drawing function,
+*             immediately after that function's own GEN_USERINTERFACE.Update() call for the current frame (see
+*             the note on the declaration in GRPScreen.h for why). Forces the chrome layout's own elements to
+*             redraw again, on top of whatever the app's content layout just painted, and does so correctly:
+*             the chrome layout's rebuild areas from its OWN first draw earlier this same frame (captured
+*             before the content layout drew, so no longer valid) are cleared first, so the normal per-element
+*             draw path captures a fresh one against what is on screen right now, keeping a future frame able
+*             to restore/undo this draw correctly.
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::DrawCFGChromesOnTop()
+{
+  if(!IsCFGChromesActive())            return false;
+  if(cfgchromes.GetUseNativeChromes()) return false;
+  if(!cfgchromeslayout)                return false;
+
+ 
+
+  
+
+  cfgchromeslayout->Elements_SetToRedraw();
+
+  //GEN_USERINTERFACE.Update(cfgchromeslayout);
 
   return true;
 }

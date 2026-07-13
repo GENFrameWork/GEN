@@ -211,6 +211,17 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     // auto-hide is 0 (disabled, the default), for a native-chromes screen, or one with no role="caption".
     bool                                  UpdateCFGChromesAutoHide      ();
 
+    // The chrome layout and the app's own content layout are two entirely separate UI_LAYOUT objects, each
+    // with its own independent rebuild-area bookkeeping, even though both share the same physical canvas;
+    // GEN_USERINTERFACE.Update() draws every loaded layout in load order (chrome first, content afterwards --
+    // see LoadCFGChromesLayout()), so whenever the content redraws a region overlapping the caption, it paints
+    // right over it. Call this once, from within the app's OWN frame-drawing function, immediately after its
+    // own GEN_USERINTERFACE.Update() call for that frame (NOT from UpdateViewports(), which runs later and
+    // outside that frame's rebuild-area cycle): it redraws the chrome layout's own elements again, so the
+    // caption ends up on top regardless of what the content just did, correctly participating in this frame's
+    // capture/restore cycle so a future frame can still undo it properly.
+    bool                                  DrawCFGChromesOnTop           ();
+
     #endif
     
     bool                                  UpdateSize                    (int width, int height);

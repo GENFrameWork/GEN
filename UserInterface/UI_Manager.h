@@ -163,6 +163,13 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
 
     UI_SKIN*                        Skin_Create                               (XSTRING& skintypename, UI_SKIN_DRAWMODE drawmode, GRPSCREEN* screen, int viewportindex = 0);
 
+    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+    // true when this layout IS the custom chrome layout of the screen it is drawn on (see
+    // GRPSCREEN::GetCFGChromesLayout()); used by Update() to always draw it last, regardless of "layouts"
+    // order, which the running application does not control.
+    bool                            IsCFGChromesLayout                        (UI_LAYOUT* layout);
+    #endif
+
     bool                            GetLayoutElementValue                     (XFILEXMLELEMENT* node, XCHAR* leyend, double& value);
     bool                            GetLayoutElementValue                     (XFILEXMLELEMENT* node, XCHAR* leyend, XSTRING& value);    
 

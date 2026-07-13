@@ -967,6 +967,33 @@ bool UI_MANAGER::Update()
 {
   bool status = false;
 
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+
+  for(XDWORD c=0; c<layouts.GetSize(); c++)
+    {
+      UI_LAYOUT* layout = layouts.Get(c);
+      if(!layout)                    continue;
+      if(IsCFGChromesLayout(layout)) continue;
+
+      status = Update(layout);
+      if(!status) return status;
+    }
+
+  for(XDWORD c=0; c<layouts.GetSize(); c++)
+    {
+      UI_LAYOUT* layout = layouts.Get(c);
+      if(!layout)                     continue;
+      if(!IsCFGChromesLayout(layout)) continue;
+
+  
+      status = Update(layout);
+      if(!status) return status; 
+
+      layout->Elements_SetToRedraw();
+    }
+
+  #else
+
   for(XDWORD c=0; c<layouts.GetSize(); c++)
     { 
       UI_LAYOUT* layout = layouts.Get(c);
@@ -980,8 +1007,45 @@ bool UI_MANAGER::Update()
         }
     } 
 
+  #endif
+
   return status;
 }
+
+
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_MANAGER::IsCFGChromesLayout(UI_LAYOUT* layout)
+* @brief      Is CFG chromes layout
+* @note       true when this layout IS the custom chrome layout of the screen it is drawn on -- identity, not
+*             position: walks layout -> its own UI_SKINCANVAS -> the GRPSCREEN it belongs to, and compares
+*             against that screen's own GRPSCREEN::GetCFGChromesLayout(). A layout that is not on a canvas skin,
+*             not tied to any screen, or belongs to a screen without custom chromes active, is never one.
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  layout : Layout pointer to use.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::IsCFGChromesLayout(UI_LAYOUT* layout)
+{
+  if(!layout)                                                      return false;
+  if(!layout->GetSkin())                                           return false;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS)   return false;
+
+  GRPSCREEN* screen = ((UI_SKINCANVAS*)layout->GetSkin())->GetScreen();
+  if(!screen)                                 return false;
+  if(!screen->IsCFGChromesActive())           return false;
+  if(!screen->GetCFGChromes())                return false;
+  if(screen->GetCFGChromes()->GetUseNativeChromes()) return false;
+
+  return (screen->GetCFGChromesLayout() == layout);
+}
+
+#endif
 
 
 /**-------------------------------------------------------------------------------------------------------------------

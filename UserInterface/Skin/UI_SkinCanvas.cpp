@@ -408,6 +408,10 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
         }
     }
 
+  #ifdef XTRACE_ACTIVE
+  //XTRACE_PRINTCOLOR(XTRACE_COLOR_INFO, __L("[DEBUGCAPTION] UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas: nareas=%d max_z_level=%d"), (int)nareas, (int)max_z_level);
+  #endif
+
   if(!max_z_level) return false;
 
   for(XDWORD level = max_z_level; level>0; level--)  
@@ -3722,6 +3726,19 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XR
           if(sc && sc->Scroll_NeedClip()) { createarea = false; break; }
           ancestor = ancestor->GetFather();
         }
+
+      #ifdef XTRACE_ACTIVE
+      /*
+      if(element->GetName() && (element->GetName()->Find(__L("chrome"), true) != XSTRING_NOTFOUND || !element->GetName()->Compare(__L("caption"), true)))
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_INFO, __L("[DEBUGCAPTION] PreDrawFunction: element=[%s] zlevel=%d createarea=%d hadexistingarea=%d"),
+                                                                                element->GetName()->Get(),
+                                                                                (int)element->GetZLevel(),
+                                                                                createarea?1:0,
+                                                                                GetRebuildAreaByElement(element)?1:0);
+        }
+      */
+      #endif
     }
 
   if(createarea)
