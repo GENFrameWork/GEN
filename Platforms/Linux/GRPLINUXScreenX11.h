@@ -54,6 +54,7 @@ class GRPLINUXBLITGLES;
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
+#define GRPLINUXSCREENX11_MWM_HINTS_FUNCTIONS   (1L << 0)
 #define GRPLINUXSCREENX11_MWM_HINTS_DECORATIONS (1L << 1)
 
 #define GRPLINUXSCREENX11_MWM_FUNC_ALL          (1L << 0)
@@ -62,6 +63,14 @@ class GRPLINUXBLITGLES;
 #define GRPLINUXSCREENX11_MWM_FUNC_MINIMIZE     (1L << 3)
 #define GRPLINUXSCREENX11_MWM_FUNC_MAXIMIZE     (1L << 4)
 #define GRPLINUXSCREENX11_MWM_FUNC_CLOSE        (1L << 5)
+
+#define GRPLINUXSCREENX11_MWM_DECOR_ALL         (1L << 0)
+#define GRPLINUXSCREENX11_MWM_DECOR_BORDER      (1L << 1)
+#define GRPLINUXSCREENX11_MWM_DECOR_RESIZEH     (1L << 2)
+#define GRPLINUXSCREENX11_MWM_DECOR_TITLE       (1L << 3)
+#define GRPLINUXSCREENX11_MWM_DECOR_MENU        (1L << 4)
+#define GRPLINUXSCREENX11_MWM_DECOR_MINIMIZE    (1L << 5)
+#define GRPLINUXSCREENX11_MWM_DECOR_MAXIMIZE    (1L << 6)
 
 
 
@@ -95,8 +104,13 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
 
     bool                                  Resize                            (int width, int height);
 
+    bool                                  Set_Position                      (int x, int y);
+
     bool                                  Show                              (bool active);
     bool                                  ShowCursor                        (bool active);
+
+    bool                                  Minimize                          (bool active);
+    bool                                  Maximize                          (bool active);
 
     void*                                 GetHandle                         ();
     
@@ -117,6 +131,14 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
   protected:
 
     Display*                              display;
+
+    // A SEPARATE X11 connection, used only by Set_Position() to move the window. WSLg's compositor appears to
+    // silently ignore geometry-change requests for a window's frame when they arrive on the SAME connection
+    // that owns the underlying client window (confirmed empirically: xdotool, a completely separate X client,
+    // moves it just fine; the exact same XMoveWindow() on our own "display" connection does nothing) -- opening
+    // a second connection and issuing the request from that one instead reproduces what an external tool does.
+    Display*                              movedisplay;
+
     Window                                window;
     Window                                root;
     XVisualInfo                           vinfo;
@@ -132,6 +154,9 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
   private:
 
     bool                                  Create_Window                     (bool show);
+
+    void                                  Chromes_ApplyStyle                ();
+    void                                  Chromes_ApplyPostCreate           ();
 
     bool                                  ChangeScreenResolution            (int width, int height);
 

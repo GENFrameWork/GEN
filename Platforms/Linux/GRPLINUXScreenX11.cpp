@@ -48,6 +48,8 @@
 #include "MainProcLINUX.h"
 #include "APPFlowGraphics.h"
 
+#include <unistd.h>
+
 
 #ifdef GRP_OPENGL_ACTIVE
 #include "GRPLINUXBlitGLES.h"
@@ -158,6 +160,12 @@ GRPLINUXSCREENX11::~GRPLINUXSCREENX11()
   //ScreenResolution(display, root, originalwidth, originalheight, 60, false);
 
   Delete();
+
+  if(movedisplay)
+    {
+      XCloseDisplay(movedisplay);
+      movedisplay = NULL;
+    }
 
   //XCloseDisplay(display);
  
@@ -376,6 +384,119 @@ bool GRPLINUXSCREENX11::Resize(int width, int height)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool GRPLINUXSCREENX11::Set_Position(int x, int y)
+* @brief      Set position
+* @note       Base GRPSCREEN::Set_Position() is a stub (returns false); this is the X11 override actually
+*             moving the window, needed for e.g. custom-chrome window dragging (see
+*             GRPSCREEN::UpdateCFGChromesDrag(), entirely platform-independent, calls this virtual).
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  x : X coordinate.
+* @param[in]  y : Y coordinate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::Set_Position(int x, int y)
+{
+  if(!display) return false;
+  if(!window)  return false;
+
+  SetPosition(x, y);
+
+ 
+  Window towindow      = window;
+  Window current       = window;
+  int    totaloffsetx  = 0;
+  int    totaloffsety  = 0;
+
+  while(true)
+    {
+      Window       rootcheck = 0;
+      Window       parent    = 0;
+      Window*      children  = NULL;
+      unsigned int nchildren = 0;
+
+      if(!XQueryTree(display, current, &rootcheck, &parent, &children, &nchildren)) break;
+      if(children) XFree(children);
+
+      if((parent == None) || (parent == root)) break;    // current already hangs directly off the root
+
+      XWindowAttributes currentattr;
+
+      memset(&currentattr, 0, sizeof(currentattr));
+
+      if(XGetWindowAttributes(display, current, &currentattr))
+        {
+          totaloffsetx += currentattr.x;
+          totaloffsety += currentattr.y;
+        }
+      
+      current  = parent;
+      towindow = current;
+    }
+
+  #ifdef XTRACE_ACTIVE
+  {
+    // Checking the PID-ownership theory: if WSLg is deliberately ignoring geometry requests coming from the
+    // very process it recorded as this window's owner (_NET_WM_PID), that property should read back as our
+    // own getpid() here.
+    Atom          netwmpidatom = XInternAtom(display, "_NET_WM_PID", True);
+    Atom          actualtype   = None;
+    int           actualformat = 0;
+    unsigned long nitems       = 0;
+    unsigned long bytesafter   = 0;
+    unsigned char* proplinux   = NULL;
+
+    long ourpid    = (long)getpid();
+    long windowpid = -1;
+    long towinpid  = -1;
+
+    if((netwmpidatom != None) &&
+       (XGetWindowProperty(display, window, netwmpidatom, 0, 1, False, XA_CARDINAL, &actualtype, &actualformat, &nitems, &bytesafter, &proplinux) == Success) &&
+       proplinux && (nitems > 0))
+      {
+        windowpid = (long)(*(unsigned long*)proplinux);
+        XFree(proplinux);
+      }
+
+    proplinux = NULL;
+
+    if((netwmpidatom != None) && (towindow != window) &&
+       (XGetWindowProperty(display, towindow, netwmpidatom, 0, 1, False, XA_CARDINAL, &actualtype, &actualformat, &nitems, &bytesafter, &proplinux) == Success) &&
+       proplinux && (nitems > 0))
+      {
+        towinpid = (long)(*(unsigned long*)proplinux);
+        XFree(proplinux);
+      }
+   
+  }
+  #endif
+
+  if(!movedisplay)
+    {
+      movedisplay = XOpenDisplay(NULL);
+    }
+
+  if(movedisplay)
+    {
+      XMoveWindow(movedisplay, towindow, x - totaloffsetx, y - totaloffsety);
+      XSync(movedisplay, False);
+    }
+   else
+    {
+      // Extremely unlikely (the main connection to the very same server already succeeded), but keep a
+      // fallback so a move is at least attempted rather than silently doing nothing.
+      XMoveWindow(display, towindow, x - totaloffsetx, y - totaloffsety);
+      XSync(display, False);
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPLINUXSCREENX11::Show(bool active)
 * @brief      Show
 * @ingroup    PLATFORM_LINUX
@@ -428,6 +549,88 @@ bool GRPLINUXSCREENX11::ShowCursor(bool active)
     {
       XUndefineCursor(display, window);
     }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPLINUXSCREENX11::Minimize(bool active)
+* @brief      Minimize
+* @note       Base GRPSCREEN::Minimize() is a stub (returns false); this is the X11 override. active=true
+*             iconifies the window (ICCCM XIconifyWindow()); active=false maps it back, which is the standard
+*             way of asking an EWMH-compliant window manager to de-iconify a window it manages.
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::Minimize(bool active)
+{
+  if(!display) return false;
+  if(!window)  return false;
+
+  if(active)
+    {
+      return (XIconifyWindow(display, window, DefaultScreen(display)) != 0);
+    }
+
+  XMapWindow(display, window);
+  XFlush(display);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPLINUXSCREENX11::Maximize(bool active)
+* @brief      Maximize
+* @note       Base GRPSCREEN::Maximize() is a stub (returns false); this is the X11 override. There is no
+*             single "maximize" call in X11 the way Win32 has ShowWindow(SW_SHOWMAXIMIZED): the standard EWMH
+*             way is asking the window manager, via a _NET_WM_STATE client message sent to the root window, to
+*             add (active=true) or remove (active=false) both _NET_WM_STATE_MAXIMIZED_HORZ and
+*             _NET_WM_STATE_MAXIMIZED_VERT -- unlike the window-creation-time state hints elsewhere in this
+*             file (set directly via XChangeProperty before the window is ever mapped), a state change at
+*             runtime like this one must go through the WM using this message, per the EWMH spec.
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  active : Active value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::Maximize(bool active)
+{
+  if(!display) return false;
+  if(!window)  return false;
+
+  Atom wm_state      = XInternAtom(display, "_NET_WM_STATE"                 , False);
+  Atom wm_state_maxh = XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_HORZ"  , False);
+  Atom wm_state_maxv = XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_VERT"  , False);
+
+  if((wm_state == None) || (wm_state_maxh == None) || (wm_state_maxv == None)) return false;
+
+  XEvent xevent;
+
+  memset(&xevent, 0, sizeof(xevent));
+
+  xevent.type                 = ClientMessage;
+  xevent.xclient.window       = window;
+  xevent.xclient.message_type = wm_state;
+  xevent.xclient.format       = 32;
+  xevent.xclient.data.l[0]    = active ? 1 : 0;    // 1 = _NET_WM_STATE_ADD, 0 = _NET_WM_STATE_REMOVE
+  xevent.xclient.data.l[1]    = (long)wm_state_maxh;
+  xevent.xclient.data.l[2]    = (long)wm_state_maxv;
+  xevent.xclient.data.l[3]    = 1;                 // source indication: normal application
+  xevent.xclient.data.l[4]    = 0;
+
+  XSendEvent(display, root, False, SubstructureRedirectMask | SubstructureNotifyMask, &xevent);
+
+  XFlush(display);
 
   return true;
 }
@@ -576,6 +779,129 @@ GRPLINUXBLITGLES* GRPLINUXSCREENX11::GetBlitGLES()
   return blitgles;
 }
 #endif
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPLINUXSCREENX11::Chromes_ApplyStyle()
+* @brief      Chromes apply style
+* @note       INTERNAL: resolves the current GRPSCREENCFGCHROMES configuration (native X11 chromes only, for now)
+*             into a _MOTIF_WM_HINTS property on the already-created window -- the X11 counterpart of
+*             GRPWINDOWSSCREEN::Chromes_ApplyStyle()'s WS_ / WS_EX_ bits: caption on/off drives the whole set of
+*             border/title/menu decorations at once, minimize/maximize/close/resize are each added independently
+*             on top of that. Needs the window to already exist (unlike Windows' style bits, _MOTIF_WM_HINTS is a
+*             window property, not a creation-time flag), so this always runs after XCreateWindow(). Only called
+*             when a Chromes configuration is active, native chromes are requested, and the screen is not
+*             transparent (Fullscreen and Transparent styles are prioritary over the Chromes configuration).
+* @ingroup    PLATFORM_LINUX
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXSCREENX11::Chromes_ApplyStyle()
+{
+  GRPSCREENCFGCHROMES* cfgchromes = GetCFGChromes();
+  if(!cfgchromes) return;
+
+  Atom wmhintsatom = XInternAtom(display, "_MOTIF_WM_HINTS", True);
+  if(wmhintsatom == None) return;
+
+  HITNS hints;
+
+  memset(&hints, 0, sizeof(hints));
+
+  hints.flags = GRPLINUXSCREENX11_MWM_HINTS_DECORATIONS | GRPLINUXSCREENX11_MWM_HINTS_FUNCTIONS;
+
+  if(cfgchromes->GetNativeCaptionActive())
+    {
+      hints.decorations = GRPLINUXSCREENX11_MWM_DECOR_BORDER | GRPLINUXSCREENX11_MWM_DECOR_TITLE | GRPLINUXSCREENX11_MWM_DECOR_MENU;
+      hints.functions   = GRPLINUXSCREENX11_MWM_FUNC_MOVE;
+
+      if(cfgchromes->GetNativeMinimizeActive())
+        {
+          hints.decorations |= GRPLINUXSCREENX11_MWM_DECOR_MINIMIZE;
+          hints.functions   |= GRPLINUXSCREENX11_MWM_FUNC_MINIMIZE;
+        }
+
+      if(cfgchromes->GetNativeMaximizeActive())
+        {
+          hints.decorations |= GRPLINUXSCREENX11_MWM_DECOR_MAXIMIZE;
+          hints.functions   |= GRPLINUXSCREENX11_MWM_FUNC_MAXIMIZE;
+        }
+
+      if(cfgchromes->GetNativeCloseActive())
+        {
+          hints.functions |= GRPLINUXSCREENX11_MWM_FUNC_CLOSE;
+        }
+    }
+   else
+    {
+      hints.decorations = 0;
+      hints.functions    = GRPLINUXSCREENX11_MWM_FUNC_MOVE;
+    }
+
+  if(cfgchromes->GetResizeActive())
+    {
+      hints.decorations |= GRPLINUXSCREENX11_MWM_DECOR_RESIZEH;
+      hints.functions   |= GRPLINUXSCREENX11_MWM_FUNC_RESIZE;
+    }
+
+  XChangeProperty(display, window, wmhintsatom, wmhintsatom, 32, PropModeReplace, (unsigned char*)&hints, 5);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRPLINUXSCREENX11::Chromes_ApplyPostCreate()
+* @brief      Chromes apply post create
+* @note       INTERNAL: applies the parts of the GRPSCREENCFGCHROMES configuration that only make sense once the
+*             window already exists (title text, application icon, close), for native X11 chromes. The close
+*             configuration reuses the existing CanClose() mechanism (GRPSCREEN base class), already checked by
+*             Update() on every WM_DELETE_WINDOW, so it keeps being honoured exactly like on every other platform.
+* @ingroup    PLATFORM_LINUX
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXSCREENX11::Chromes_ApplyPostCreate()
+{
+  if(!window) return;
+
+  GRPSCREENCFGCHROMES* cfgchromes = GetCFGChromes();
+  if(!cfgchromes) return;
+
+  if(cfgchromes->GetNativeTitleActive() && !title.IsEmpty())
+    {
+      XBUFFER xbuffer;
+
+      title.ConvertToASCII(xbuffer);
+
+      XStoreName(display, window, (char*)xbuffer.Get());
+    }
+   else
+    {
+      XStoreName(display, window, "");
+    }
+
+  if(cfgchromes->GetNativeCaptionActive() && !cfgchromes->GetNativeIconActive())
+    {
+      // NOTE: best-effort only -- whether/how a WM shows an app icon in the titlebar (or anywhere else) at
+      // all is entirely up to its own theme; clearing both the modern (_NET_WM_ICON) and legacy (WM_HINTS)
+      // icon sources is the standard way to ask for none, mirroring what WM_SETICON(NULL) does on Windows.
+      Atom netwmicon = XInternAtom(display, "_NET_WM_ICON", True);
+      if(netwmicon != None)
+        {
+          XDeleteProperty(display, window, netwmicon);
+        }
+
+      XWMHints wmhints;
+
+      memset(&wmhints, 0, sizeof(wmhints));
+
+      wmhints.flags       = IconPixmapHint;
+      wmhints.icon_pixmap = None;
+
+      XSetWMHints(display, window, &wmhints);
+    }
+
+  SetCanClose(cfgchromes->GetNativeCloseActive());
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -802,7 +1128,52 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
   */
  
 
-  if(!Style_Is(GRPSCREENSTYLE_TITLE))
+  // NOTE: Fullscreen and Transparent styles are prioritary over any Chromes configuration (see below).
+  bool usecfgchromesnative = (IsCFGChromesActive()                       &&
+                               GetCFGChromes()->GetUseNativeChromes()    &&
+                               !Style_Is(GRPSCREENSTYLE_TRANSPARENT));
+
+  // Custom (non native) Chromes: GEN's own UI layout draws the whole caption (icon, title, min/max/close), so
+  // the native window must show as little of its own decoration as possible -- no border/title/menu/min/max at
+  // all; a resize grip is the only thing kept (and only if requested), the same way GRPWINDOWSSCREEN keeps
+  // WS_THICKFRAME without WS_CAPTION for its own custom mode.
+  bool usecfgchromescustom = (IsCFGChromesActive()                       &&
+                               !GetCFGChromes()->GetUseNativeChromes()   &&
+                               !Style_Is(GRPSCREENSTYLE_TRANSPARENT));
+
+  if(usecfgchromesnative)
+    {
+      Chromes_ApplyStyle();
+      Chromes_ApplyPostCreate();
+    }
+   else if(usecfgchromescustom)
+    {
+      Atom wmhintsatom = XInternAtom(display, "_MOTIF_WM_HINTS", True);
+
+      if(wmhintsatom != None)
+        {
+          HITNS hints;
+
+          memset(&hints, 0, sizeof(hints));
+
+          hints.flags       = GRPLINUXSCREENX11_MWM_HINTS_DECORATIONS;
+          hints.decorations = GetCFGChromes()->GetResizeActive() ? GRPLINUXSCREENX11_MWM_DECOR_RESIZEH : 0;
+
+          XChangeProperty(display, window, wmhintsatom, wmhintsatom, 32, PropModeReplace, (unsigned char*)&hints, 5);
+        }
+
+      // The window title property itself is still set even though no titlebar is drawn to show it -- Alt+Tab
+      // switchers, taskbars and window-list docks read it regardless of whether any decoration is visible.
+      if(!title.IsEmpty())
+        {
+          XBUFFER xbuffer;
+
+          title.ConvertToASCII(xbuffer);
+
+          XStoreName(display, window, (char*)xbuffer.Get());
+        }
+    }
+   else if(!Style_Is(GRPSCREENSTYLE_TITLE))
     {
       Atom          wmhintsatom = XInternAtom(display , "_MOTIF_WM_HINTS", True);
       MOTIFWMHINTS  hints; 
@@ -1348,6 +1719,7 @@ int GRPLINUXSCREENX11::ErrorHandler(Display* display, XErrorEvent* errorevent)
 void GRPLINUXSCREENX11::Clean()
 {
   display        = NULL;
+  movedisplay    = NULL;
   window         = 0;
 
   wmdeletewindow = None;

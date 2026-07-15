@@ -349,6 +349,10 @@ bool XWINDOWSWINGET::List(XWINDOWSWINGET_LISTRESULT* listresult)
                       XWINDOWSWINGET_ELEMENTRESULT* elementresult = GEN_NEW XWINDOWSWINGET_ELEMENTRESULT();
                       if(elementresult)  
                         {
+
+                          // list_name.Get(c)->DeleteCharacter(__C('\\'), XSTRINGCONTEXT_ALLSTRING);
+                          // list_ID.Get(c)->DeleteCharacter(__C('\\'), XSTRINGCONTEXT_ALLSTRING);
+
                           elementresult->name = list_name.Get(c)->Get();
                           elementresult->ID   = list_ID.Get(c)->Get();
 
@@ -755,10 +759,6 @@ bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
   //cmd_str.Format(__L("powershell.exe -NonInteractive -Command \"%s\" 2>&1"), params);
   cmd_str.Format(__L("pwsh.exe -NonInteractive -Command \"%s\" 2>&1"), params);
 
-
-  #ifdef SHOW_EXTRA_TRACE
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[WinGet] Command ejecuted: %s"), cmd_str.Get());
-  #endif      
   
   // Crear pipe para capturar salida
   SECURITY_ATTRIBUTES sa;  
@@ -825,12 +825,6 @@ bool XWINDOWSWINGET::Exec(XCHAR* params, XBUFFER& output)
   CloseHandle(pi.hProcess);
 
   NormalizeUnicode(output.Get());
-
-  #ifdef SHOW_EXTRA_TRACE
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[WinGet] Result: %s"), cmd_str.Get());
-  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, output);
-  #endif
-
 
   return true;
 }

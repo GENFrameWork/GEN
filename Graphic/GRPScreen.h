@@ -188,40 +188,10 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     bool                                  IsCFGChromesActive            ();
 
     #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
-
-    // NOTE: only meaningful when a Chromes configuration is active AND GetCFGChromes()->GetUseNativeChromes()
-    // is false; a native-chromes screen (the default, and every screen that never calls SetCFGChromes()) never
-    // needs any of this, and this whole feature can be compiled out entirely with GRP_SCREEN_CUSTOMCHROMES_FEATURE.
-    // Call once the screen already has a viewport/canvas (native window created); resolves and loads
-    // GetCFGChromes()->GetCustomLayoutFile()/GetCustomLayoutName() (a plain .xml, a .xml shared with other
-    // layouts, or a whole .xml+resources bundle compressed as .zip -- UI_MANAGER::Load() already tells these
-    // apart by extension) and keeps a (weak, UI_MANAGER-owned) reference to the resulting layout.
     bool                                  LoadCFGChromesLayout          ();
     UI_LAYOUT*                            GetCFGChromesLayout           ();
-
-    // Window drag over the layout's role="caption" element (see UI_ELEMENT_CHROMEROLE). Reads GEN's own INPUT
-    // module directly (INPMANAGER/INPDEVICE/INPCURSOR/INPBUTTON) -- entirely independent of whatever input
-    // handling the running application does for its own purposes; call once per frame (e.g. alongside
-    // UpdateViewports()). A no-op for a native-chromes screen, or one with no role="caption" element at all.
     bool                                  UpdateCFGChromesDrag          ();
-
-    // Auto-hide/show the layout's role="caption" element based on GetCFGChromes()->GetCustomAutoHide() and
-    // whether the cursor is currently over its own area; see GRPSCREENCFGCHROMES::GetCustomAutoHide(). Same
-    // INPUT-module-direct approach as UpdateCFGChromesDrag(); call once per frame alongside it. A no-op when
-    // auto-hide is 0 (disabled, the default), for a native-chromes screen, or one with no role="caption".
     bool                                  UpdateCFGChromesAutoHide      ();
-
-    // The chrome layout and the app's own content layout are two entirely separate UI_LAYOUT objects, each
-    // with its own independent rebuild-area bookkeeping, even though both share the same physical canvas;
-    // GEN_USERINTERFACE.Update() draws every loaded layout in load order (chrome first, content afterwards --
-    // see LoadCFGChromesLayout()), so whenever the content redraws a region overlapping the caption, it paints
-    // right over it. Call this once, from within the app's OWN frame-drawing function, immediately after its
-    // own GEN_USERINTERFACE.Update() call for that frame (NOT from UpdateViewports(), which runs later and
-    // outside that frame's rebuild-area cycle): it redraws the chrome layout's own elements again, so the
-    // caption ends up on top regardless of what the content just did, correctly participating in this frame's
-    // capture/restore cycle so a future frame can still undo it properly.
-    bool                                  DrawCFGChromesOnTop           ();
-
     #endif
     
     bool                                  UpdateSize                    (int width, int height);
