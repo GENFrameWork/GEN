@@ -195,8 +195,14 @@ bool GRPEGLCONTEXT::ChooseConfig(EGLNativeDisplayType native_display, bool with_
 
 #else
 
-  // Attempt 1 - eglGetPlatformDisplay (EGL 1.5 core) with X11 platform
-  #if defined(EGL_VERSION_1_5) && defined(EGL_PLATFORM_X11_KHR)
+  // Attempt 1 - eglGetPlatformDisplay (EGL 1.5 core) with X11 platform. Gated behind
+  // LINUX_X11_ACTIVE (not just the EGL header capability macros): EGL_PLATFORM_X11_KHR is
+  // declared by any stock Mesa/EGL headers regardless of which GEN platform features this
+  // build actually has active, so without this guard a Wayland-only build (LINUX_X11_ACTIVE
+  // NOT defined) would still reach here and hand a wl_display* to eglGetPlatformDisplay while
+  // claiming it is an X11 Display* -- Mesa's X11 platform backend dereferences it as such and
+  // crashes inside its own xcb call chain instead of returning EGL_BAD_PARAMETER.
+  #if defined(LINUX_X11_ACTIVE) && defined(EGL_VERSION_1_5) && defined(EGL_PLATFORM_X11_KHR)
   if(display == EGL_NO_DISPLAY)
     {
       typedef EGLDisplay (EGLAPIENTRYP PFN_GETPLATDISP)(EGLenum, void*, const EGLAttrib*);
@@ -219,8 +225,43 @@ bool GRPEGLCONTEXT::ChooseConfig(EGLNativeDisplayType native_display, bool with_
     }
   #endif
 
-  // Attempt 2 - eglGetPlatformDisplayEXT with X11 platform
-  #if defined(EGL_EXT_platform_base) && defined(EGL_PLATFORM_X11_EXT)
+  // Attempt 1b - eglGetPlatformDisplay (EGL 1.5 core) with Wayland platform. Tightly guarded
+  // behind LINUX_WAYLAND_ACTIVE (in addition to the EGL headers actually declaring the
+  // Wayland platform tokens): this whole block does not exist in the compiled binary at all
+  // unless Wayland support was actually built in, so it carries zero risk for X11/Windows/
+  // Android builds. Symmetric with Attempt 1's LINUX_X11_ACTIVE guard above -- in a build with
+  // both LINUX_X11_ACTIVE and LINUX_WAYLAND_ACTIVE defined, GRPLINUXFACTORY::CreateScreen()'s
+  // compile-time priority (X11 first) means only GRPLINUXBLITGLESX11 ever calls ChooseConfig(),
+  // so this attempt is simply skipped at runtime (display already resolved by Attempt 1); in a
+  // Wayland-only build (LINUX_X11_ACTIVE not defined) Attempt 1 above is compiled out entirely,
+  // so this is the first attempt made, and gets a real wl_display* as expected.
+  #if defined(LINUX_WAYLAND_ACTIVE) && defined(EGL_VERSION_1_5) && defined(EGL_PLATFORM_WAYLAND_KHR)
+  if(display == EGL_NO_DISPLAY)
+    {
+      typedef EGLDisplay (EGLAPIENTRYP PFN_GETPLATDISP)(EGLenum, void*, const EGLAttrib*);
+      PFN_GETPLATDISP fn = (PFN_GETPLATDISP)eglGetProcAddress("eglGetPlatformDisplay");
+      if(fn)
+        {
+          eglGetError();  // clear any previous error
+          display = fn(EGL_PLATFORM_WAYLAND_KHR, (void*)native_display, NULL);
+          err     = eglGetError();
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE,
+            __L("[EGL] (1b) eglGetPlatformDisplay(WAYLAND_KHR, native=0x%lx) -> %s (err=%s)"),
+            (long long)(uintptr_t)native_display,
+            (display != EGL_NO_DISPLAY) ? __L("OK") : __L("NO_DISPLAY"),
+            EGLErrorToString(err));
+        }
+       else
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[EGL] (1b) eglGetPlatformDisplay symbol not exported"));
+        }
+    }
+  #endif
+
+  // Attempt 2 - eglGetPlatformDisplayEXT with X11 platform. Same LINUX_X11_ACTIVE guard
+  // rationale as Attempt 1 above -- EGL_EXT_platform_base/EGL_PLATFORM_X11_EXT are also just
+  // header capability macros, not a signal that this build actually wants an X11 display.
+  #if defined(LINUX_X11_ACTIVE) && defined(EGL_EXT_platform_base) && defined(EGL_PLATFORM_X11_EXT)
   if(display == EGL_NO_DISPLAY)
     {
       PFNEGLGETPLATFORMDISPLAYEXTPROC fn =
@@ -243,7 +284,36 @@ bool GRPEGLCONTEXT::ChooseConfig(EGLNativeDisplayType native_display, bool with_
     }
   #endif
 
-  // Attempt 3 - legacy eglGetDisplay with the native X11 display pointer
+  // Attempt 2b - eglGetPlatformDisplayEXT with Wayland platform. Same rationale/guard as
+  // Attempt 1b above -- only compiled into a Wayland-enabled build, tried only if the EGL 1.5
+  // core entry point from Attempt 1b was unavailable (older EGL without EGL_VERSION_1_5, using
+  // the EXT_platform_base extension path instead, same fallback shape as Attempts 1/2 for X11).
+  #if defined(LINUX_WAYLAND_ACTIVE) && defined(EGL_EXT_platform_base) && defined(EGL_PLATFORM_WAYLAND_EXT)
+  if(display == EGL_NO_DISPLAY)
+    {
+      PFNEGLGETPLATFORMDISPLAYEXTPROC fn =
+          (PFNEGLGETPLATFORMDISPLAYEXTPROC)eglGetProcAddress("eglGetPlatformDisplayEXT");
+      if(fn)
+        {
+          eglGetError();
+          display = fn(EGL_PLATFORM_WAYLAND_EXT, (void*)native_display, NULL);
+          err     = eglGetError();
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE,
+            __L("[EGL] (2c) eglGetPlatformDisplayEXT(WAYLAND_EXT, native=0x%lx) -> %s (err=%s)"),
+            (long long)(uintptr_t)native_display,
+            (display != EGL_NO_DISPLAY) ? __L("OK") : __L("NO_DISPLAY"),
+            EGLErrorToString(err));
+        }
+       else
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[EGL] (2c) eglGetPlatformDisplayEXT symbol not exported"));
+        }
+    }
+  #endif
+
+  // Attempt 3 - legacy eglGetDisplay with the native display pointer (X11 Display* or
+  // wl_display*, whichever platform is actually active -- eglGetDisplay's legacy signature is
+  // platform-agnostic, it just wraps whatever native handle it is given)
   if(display == EGL_NO_DISPLAY)
     {
       eglGetError();

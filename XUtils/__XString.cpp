@@ -1271,7 +1271,20 @@ bool XSTRING::Add(XSTRING& string)
       return false;
     }
 
-  ini = ssize;                                                                  // current logical length (GetSize is O(1)) : avoids an O(n) rescan on every append
+  ini = 0;
+
+  if(text)
+    {
+      while(text[ini])
+        {
+          ini++;
+          if(ini>=(ssize+tsize))
+            {
+              ini--;
+              break;
+            }
+        }
+  }
 
   if(!ReAllocBuffer(ssize+tsize)) return false;
 
@@ -6446,22 +6459,7 @@ bool XSTRING::ReAllocBuffer(XDWORD sizechar)
       return true;
     }
 
-  //  Enough capacity already allocated : reuse the buffer and only adjust the logical size,
-  //  keeping the null terminator. This turns repeated appends (operator +=) from O(n^2) into
-  //  amortized O(n). Split() stays correct because it stops at the terminator (start >= size).
-  if(text && ((sizechar + XSTRING_EXCESSCHARS) <= sizemem))
-    {
-      this->size     = sizechar;
-      text[sizechar] = 0;
-
-      return true;
-    }
-
-  //  Grow the capacity geometrically (~1.5x) so a sequence of appends does not reallocate every time.
-  XDWORD needed           = (sizechar + XSTRING_EXCESSCHARS);
-  XDWORD newsizechar      = sizemem ? sizemem : needed;
-  while(newsizechar < needed)  newsizechar = (newsizechar + (newsizechar >> 1) + 1);
-
+  XDWORD newsizechar      = (sizechar + XSTRING_EXCESSCHARS);
   XDWORD newsizecharbytes = (newsizechar * sizeof(XCHAR));
   XCHAR* newtext          = (XCHAR*)GEN_NEW XBYTE[newsizecharbytes];
   if(!newtext) 

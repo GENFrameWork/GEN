@@ -161,7 +161,7 @@ bool XMEMORY_CONTROL::Activate(bool isactive)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void* XMEMORY_CONTROL::Assign(XDWORD size, char* pathfile, int line)
+* @fn         void* XMEMORY_CONTROL::Assign(XDWORD size, const char* pathfile, int line)
 * @brief      Assign
 * @ingroup    XUTILS
 * 
@@ -172,7 +172,7 @@ bool XMEMORY_CONTROL::Activate(bool isactive)
 * @return     void* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void* XMEMORY_CONTROL::Assign(XDWORD size, char* pathfile, int line)
+void* XMEMORY_CONTROL::Assign(XDWORD size, const char* pathfile, int line)
 {
   if(!size) 
     {
@@ -490,7 +490,7 @@ XDWORD XMEMORY_CONTROL::CRC32(XBYTE* data, XWORD size)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, char* pathfile, int line)
+* @fn         bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, const char* pathfile, int line)
 * @brief      Register assign
 * @ingroup    XUTILS
 * 
@@ -502,34 +502,52 @@ XDWORD XMEMORY_CONTROL::CRC32(XBYTE* data, XWORD size)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, char* pathfile, int line)
+bool XMEMORY_CONTROL::RegisterAssign(void* ptr, XDWORD size, const char* pathfile, int line)
 {
   XDWORD index = 0;
 
   if(!SearchAssignIndex(true, ptr, index))
     {
-      if(!ResizeAssignList())             return false;
+      if(!ResizeAssignList())                    return false;
       if(!SearchAssignIndex(true, NULL, index)) return false;
     }
 
   assignlist[index].ptr         = ptr;
   assignlist[index].size        = size;
-
-  XDWORD sizenamemodule = (XDWORD)strlen(pathfile)+1;
-  int    c              = (int)sizenamemodule;
-
-  while(c>=0)
-    {
-      if((pathfile[c] == '\\')  || (pathfile[c] == '/')) break;
-      c--;
-    }
-
-  sizenamemodule    -= c;
-  if(sizenamemodule >= XMEMORY_CONTROL_MAXNAMEMODULESIZE) sizenamemodule = (XMEMORY_CONTROL_MAXNAMEMODULESIZE-1);
-
-  memcpy(assignlist[index].namemodule, &pathfile[c+1], sizenamemodule);
-
   assignlist[index].linemodule  = line;
+
+  memset(assignlist[index].namemodule, 0, XMEMORY_CONTROL_MAXNAMEMODULESIZE);
+
+  if(pathfile)
+    {
+      const char* namemodule       = pathfile;
+      const char* separator        = strrchr(pathfile, '/');
+      const char* separatorwindows = strrchr(pathfile, '\\');
+
+      if(separatorwindows && (!separator || (separatorwindows > separator)))
+        {
+          separator = separatorwindows;
+        }
+
+      if(separator)
+        {
+          namemodule = separator + 1;
+        }
+
+      size_t sizenamemodule = strlen(namemodule);
+
+      if(sizenamemodule >= XMEMORY_CONTROL_MAXNAMEMODULESIZE)
+        {
+          sizenamemodule = XMEMORY_CONTROL_MAXNAMEMODULESIZE - 1;
+        }
+
+      if(sizenamemodule)
+        {
+          memcpy(assignlist[index].namemodule, namemodule, sizenamemodule);
+        }
+
+      assignlist[index].namemodule[sizenamemodule] = 0;
+    }
 
   return true;
 }
@@ -713,7 +731,7 @@ void* operator new(size_t size, char const* namefile, int line)
 {
   if(XMemory_Control.IsActive())
     {
-      return XMemory_Control.Assign((XDWORD)size, (char*)namefile, line);
+      return XMemory_Control.Assign((XDWORD)size, namefile, line);
     }
    else
     {
@@ -739,7 +757,7 @@ void* operator new[](size_t size, char const* namefile, int line)
 {
   if(XMemory_Control.IsActive())
     {
-      return XMemory_Control.Assign((XDWORD)size, (char*)namefile, line);
+      return XMemory_Control.Assign((XDWORD)size, namefile, line);
     }
    else
     {

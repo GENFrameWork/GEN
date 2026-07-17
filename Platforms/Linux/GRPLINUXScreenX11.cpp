@@ -52,7 +52,7 @@
 
 
 #ifdef GRP_OPENGL_ACTIVE
-#include "GRPLINUXBlitGLES.h"
+#include "GRPLINUXBlitGLESX11.h"
 #include <stdio.h>
 #include <string.h>
 #endif
@@ -767,14 +767,14 @@ XVisualInfo* GRPLINUXSCREENX11::GetVisualInfo()
 #ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPLINUXBLITGLES* GRPLINUXSCREENX11::GetBlitGLES()
+* @fn         GRPLINUXBLITGLESX11* GRPLINUXSCREENX11::GetBlitGLES()
 * @brief      Get OpenGL ES blitter (only present when GRP_OPENGL_ACTIVE is defined)
 * @ingroup    PLATFORM_LINUX
 * 
-* @return     GRPLINUXBLITGLES* : Pointer to the requested object; NULL if it is not available.
+* @return     GRPLINUXBLITGLESX11* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPLINUXBLITGLES* GRPLINUXSCREENX11::GetBlitGLES()
+GRPLINUXBLITGLESX11* GRPLINUXSCREENX11::GetBlitGLES()
 {
   return blitgles;
 }
@@ -1033,7 +1033,7 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
     {
       if(!blitgles)
         {
-          blitgles = GEN_NEW GRPLINUXBLITGLES();
+          blitgles = GEN_NEW GRPLINUXBLITGLESX11();
         }
 
       if(blitgles)

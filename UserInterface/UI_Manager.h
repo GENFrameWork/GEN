@@ -98,11 +98,13 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
            
     bool                            Layout_PutBackground                      (XCHAR* layoutname);    
     bool                            Layout_PutBackgroundColor                 (XCHAR* layoutname);    
-    bool                            Layout_PutBackgroundBitmap                (XCHAR* layoutname);    
+    bool                            Layout_PutBackgroundImage                 (XCHAR* layoutname);    
+    bool                            Layout_PutBackgroundSeamlessPattern       (XCHAR* layoutname);    
 
     bool                            Layout_PutBackground                      (bool scale = false);    
     bool                            Layout_PutBackgroundColor                 ();    
-    bool                            Layout_PutBackgroundBitmap                (bool scale = false);    
+    bool                            Layout_PutBackgroundImage                 (bool scale = false);    
+    bool                            Layout_PutBackgroundSeamlessPattern       ();    
 
     bool                            Update                                    (UI_LAYOUT* layout);
     bool                            Update                                    (XCHAR* layoutname);
@@ -164,9 +166,6 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     UI_SKIN*                        Skin_Create                               (XSTRING& skintypename, UI_SKIN_DRAWMODE drawmode, GRPSCREEN* screen, int viewportindex = 0);
 
     #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
-    // true when this layout IS the custom chrome layout of the screen it is drawn on (see
-    // GRPSCREEN::GetCFGChromesLayout()); used by Update() to always draw it last, regardless of "layouts"
-    // order, which the running application does not control.
     bool                            IsCFGChromesLayout                        (UI_LAYOUT* layout);
     #endif
 
@@ -198,7 +197,9 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     UI_ELEMENT*                     CreatePartialLayout                       (XFILEXMLELEMENT* nodeelement, UI_LAYOUT* layout, UI_ELEMENT* father);
     bool                            CreateLayouts                             (XFILEXML& xml, GRPSCREEN* screen, int viewportindex = 0);
     
-    GRPBITMAP*                      LoadBackgroundBitmap                      (XSTRING& namefilebitmap, GRPPROPERTYMODE mode);
+    GRPBITMAP*                      LoadBackgroundBitmap                      (XSTRING& namefilebitmap, GRPPROPERTYMODE mode, GRP2DCANVAS* referencecanvas = NULL, double width = 0.0, double height = 0.0);
+    GRPBITMAP*                      LoadBackgroundVectorFileToBitmap          (XSTRING& namefilevector, GRP2DCANVAS* referencecanvas, double width, double height);
+    bool                            PutBitmapAsSeamlessPattern                (GRP2DCANVAS* canvas, GRPSCREEN* screen, GRPBITMAP* pattern);
 
     bool                            CreateCacheElements                       (XFILEXMLELEMENT* nodeelement, UI_SKIN_DRAWMODE drawmode, GRPPROPERTYMODE grppropertymode, bool recursive = true); 
     

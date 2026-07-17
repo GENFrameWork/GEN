@@ -1,11 +1,12 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @file       UI_Background.h
-* 
-* @class      UI_BACKGROUND
-* @brief      User Interface Background class
-* @ingroup    USERINTERFACE
-* 
+*
+* @file       GRPLINUXBlitGLESX11.h
+*
+* @class      GRPLINUXBLITGLESX11
+* @brief      Linux X11 specialisation of GRPBLITGLES (uses Mesa EGL).
+*             Works on PC Linux and Raspberry Pi 4/5 with Bullseye+ (KMS V3D).
+* @ingroup    PLATFORM_LINUX
+*
 * @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
@@ -23,61 +24,35 @@
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 
 #pragma once
 
+#if defined(GRP_OPENGL_ACTIVE) && defined(LINUX_X11_ACTIVE)
+
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "XString.h"
+#include <X11/X.h>
+#include <X11/Xlib.h>
 
-#include "GRPBitmap.h"
-
-#include "UI_Color.h"
-
-
-
-/*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-
-
+#include "GRPBlitGLES.h"
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class UI_BACKGROUND
+
+class GRPLINUXBLITGLESX11 : public GRPBLITGLES
 {
   public:
-                             UI_BACKGROUND            ();
-    virtual                 ~UI_BACKGROUND            ();
+                                          GRPLINUXBLITGLESX11               ();
+    virtual                              ~GRPLINUXBLITGLESX11               ();
 
-    UI_COLOR*                GetColor                 ();
+    EGLNativeDisplayType                  GetNativeDisplay                  ();
+    EGLNativeWindowType                   GetNativeWindow                   ();
 
-    XSTRING*                 GetBitmapFileName        ();
-    GRPBITMAP*               GetBitmap                (); 
-    bool                     SetBitmap                (GRPBITMAP* bitmap);       
-
-    GRPBITMAP*               GetPatternBitmap         (); 
-    bool                     SetPatternBitmap         (GRPBITMAP* patternbitmap);       
-    
-  private:
-
-    void                     Clean                    ();
-
-    UI_COLOR                 color;
-    XSTRING                  bitmapfilename;  
-    GRPBITMAP*               bitmap;
-
-    GRPBITMAP*               patternbitmap;
+    bool                                   GetNativeWindowSize                (int& width, int& height);
 };
 
 
-
-/*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-
-
-
-
-
+#endif // GRP_OPENGL_ACTIVE && LINUX_X11_ACTIVE

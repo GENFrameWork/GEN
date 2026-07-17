@@ -1,75 +1,81 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @file       UI_Background.h
-* 
-* @class      UI_BACKGROUND
-* @brief      User Interface Background class
-* @ingroup    USERINTERFACE
-* 
+*
+* @file       INPLINUXDeviceMouseWayland.h
+*
+* @class      INPLINUXDEVICEMOUSEWAYLAND
+* @brief      LINUX Input Wayland device mouse class
+* @ingroup    PLATFORM_LINUX
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 
 #pragma once
 
+
+#ifdef LINUX_WAYLAND_ACTIVE
+
+
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "XString.h"
 
-#include "GRPBitmap.h"
+#include "INPCursor.h"
+#include "INPDevice.h"
 
-#include "UI_Color.h"
+#include "GRPLINUXScreenWayland.h"
+
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
+#define INPLINUXDEVICEMOUSEWAYLAND_EVRELEASED    0
+#define INPLINUXDEVICEMOUSEWAYLAND_EVPRESSED     1
+#define INPLINUXDEVICEMOUSEWAYLAND_EVREPEAT      2
+
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class UI_BACKGROUND
+
+class INPLINUXDEVICEMOUSEWAYLAND : public INPDEVICE
 {
   public:
-                             UI_BACKGROUND            ();
-    virtual                 ~UI_BACKGROUND            ();
+                            INPLINUXDEVICEMOUSEWAYLAND    ();
+    virtual                ~INPLINUXDEVICEMOUSEWAYLAND    ();
 
-    UI_COLOR*                GetColor                 ();
+    bool                    Update                        ();
 
-    XSTRING*                 GetBitmapFileName        ();
-    GRPBITMAP*               GetBitmap                (); 
-    bool                     SetBitmap                (GRPBITMAP* bitmap);       
+    bool                    SetScreen                     (void* param);
 
-    GRPBITMAP*               GetPatternBitmap         (); 
-    bool                     SetPatternBitmap         (GRPBITMAP* patternbitmap);       
-    
   private:
 
-    void                     Clean                    ();
+    void                    Clean                         ();
 
-    UI_COLOR                 color;
-    XSTRING                  bitmapfilename;  
-    GRPBITMAP*               bitmap;
+    bool                    CreateAllButtons              ();
+    bool                    CreateAllCursors              ();
 
-    GRPBITMAP*               patternbitmap;
+    GRPLINUXSCREENWAYLAND*  grpscreenwayland;
 };
+
 
 
 
@@ -78,6 +84,5 @@ class UI_BACKGROUND
 
 
 
-
-
+#endif
 

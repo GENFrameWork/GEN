@@ -56,6 +56,7 @@ enum GRPSCREENTYPE
 
   GRPSCREENTYPE_LINUX_FRAMEBUFFER                   ,
   GRPSCREENTYPE_LINUX_X11                           ,
+  GRPSCREENTYPE_LINUX_WAYLAND                       ,
   GRPSCREENTYPE_LINUX_DISPMAN                       ,
 
   GRPSCREENTYPE_ANDROID
@@ -268,7 +269,7 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 
 
 
-/*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
+/*---- INLINE FUNCTIONS + PROTOTYPES ----------------------------------------------------------------------------------------------------------*/
 
 
 

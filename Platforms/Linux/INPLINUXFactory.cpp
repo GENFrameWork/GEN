@@ -49,6 +49,9 @@
 #ifdef LINUX_X11_ACTIVE
 #include "INPLINUXDeviceKeyboardX11.h"
 #include "INPLINUXDeviceMouseX11.h"
+#elif defined(LINUX_WAYLAND_ACTIVE)
+#include "INPLINUXDeviceKeyboardWayland.h"
+#include "INPLINUXDeviceMouseWayland.h"
 #endif
 
 #include "INPLINUXSimulate.h"
@@ -85,10 +88,12 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
   INPDEVICE* inpdevice    = NULL;
   GRPSCREEN* grpscreen    = (GRPSCREEN*)param;
   bool       isX11        = false;
+  bool       isWayland    = false;
 
   if(grpscreen)
     {
-      if(grpscreen->GetType() == GRPSCREENTYPE_LINUX_X11) isX11 = true;
+      if(grpscreen->GetType() == GRPSCREENTYPE_LINUX_X11)     isX11     = true;
+      if(grpscreen->GetType() == GRPSCREENTYPE_LINUX_WAYLAND) isWayland = true;
     }
 
   #ifdef LINUX_X11_ACTIVE
@@ -115,7 +120,35 @@ INPDEVICE* INPLINUXFACTORY::CreateDevice(INPDEVICE_TYPE type, void* param)
                                             }
                                             break;
 
-                             default      : break; 
+                             default      : break;
+        }
+    }
+
+  #elif defined(LINUX_WAYLAND_ACTIVE)
+
+  if(isWayland)
+    {
+      switch(type)
+        {
+          case INPDEVICE_TYPE_KEYBOARD    : { INPLINUXDEVICEKEYBOARDWAYLAND* keyboard = GEN_NEW INPLINUXDEVICEKEYBOARDWAYLAND();
+                                              if(keyboard)
+                                                {
+                                                  keyboard->SetScreen(param);
+                                                  inpdevice = keyboard;
+                                                }
+                                            }
+                                            break;
+
+          case INPDEVICE_TYPE_MOUSE       : { INPLINUXDEVICEMOUSEWAYLAND* mouse= GEN_NEW INPLINUXDEVICEMOUSEWAYLAND();
+                                              if(mouse)
+                                                {
+                                                  mouse->SetScreen(param);
+                                                  inpdevice = mouse;
+                                                }
+                                            }
+                                            break;
+
+                             default      : break;
         }
     }
 
@@ -392,6 +425,5 @@ bool INPLINUXFACTORY::DeleteSimulator(INPSIMULATE* inputsimulated)
   return true;
 }
 #endif
-
 
 

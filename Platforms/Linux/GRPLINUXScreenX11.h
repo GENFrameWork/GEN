@@ -46,7 +46,7 @@
 
 
 #ifdef GRP_OPENGL_ACTIVE
-class GRPLINUXBLITGLES;
+class GRPLINUXBLITGLESX11;
 #endif
 
 
@@ -125,7 +125,7 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
     XVisualInfo*                          GetVisualInfo                     ();
 
     #ifdef GRP_OPENGL_ACTIVE
-    GRPLINUXBLITGLES*                     GetBlitGLES                       ();
+    GRPLINUXBLITGLESX11*                  GetBlitGLES                       ();
     #endif
 
   protected:
@@ -148,7 +148,7 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
     bool                                  isdesktop;
 
     #ifdef GRP_OPENGL_ACTIVE
-    GRPLINUXBLITGLES*                     blitgles;
+    GRPLINUXBLITGLESX11*                  blitgles;
     #endif
 
   private:

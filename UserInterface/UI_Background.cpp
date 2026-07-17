@@ -84,6 +84,11 @@ UI_BACKGROUND::~UI_BACKGROUND()
       GEN_DELETE bitmap;
     }
 
+  if(patternbitmap)
+    {
+      GEN_DELETE patternbitmap;
+    }
+
   Clean();
 }
 
@@ -107,6 +112,9 @@ UI_COLOR* UI_BACKGROUND::GetColor()
 * 
 * @fn         XSTRING* UI_BACKGROUND::GetBitmapFileName()
 * @brief      Get bitmap file name
+* @note       This is also the source file for GetPatternBitmap() when the layout uses "backgroundseamlesspattern" -
+*             the same "backgroundimg" resource is either stretched to the layout (GetBitmap()) or tiled
+*             (GetPatternBitmap()), never both, depending on that flag.
 * @ingroup    USERINTERFACE
 * 
 * @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
@@ -154,6 +162,45 @@ bool UI_BACKGROUND::SetBitmap(GRPBITMAP* bitmap)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         GRPBITMAP* UI_BACKGROUND::GetPatternBitmap()
+* @brief      Get pattern bitmap
+* @note       Unlike GetBitmap(), the returned bitmap is meant to be tiled (seamless pattern) rather than drawn
+*             once covering the whole layout; see UI_MANAGER::Layout_PutBackgroundSeamlessPattern(). It is loaded
+*             from the very same "backgroundimg" resource as GetBitmap() - see GetBitmapFileName() - only routed
+*             here instead, at CreateLayouts() time, when "backgroundseamlesspattern" resolves to true; a layout
+*             therefore never has both GetBitmap() and GetPatternBitmap() set at the same time.
+* @ingroup    USERINTERFACE
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPBITMAP* UI_BACKGROUND::GetPatternBitmap()
+{
+  return patternbitmap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_BACKGROUND::SetPatternBitmap(GRPBITMAP* patternbitmap)
+* @brief      Set pattern bitmap
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  patternbitmap : Patternbitmap pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_BACKGROUND::SetPatternBitmap(GRPBITMAP* patternbitmap)
+{
+  this->patternbitmap = patternbitmap;
+
+  return patternbitmap?true:false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void UI_BACKGROUND::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
@@ -162,7 +209,8 @@ bool UI_BACKGROUND::SetBitmap(GRPBITMAP* bitmap)
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_BACKGROUND::Clean()
 {
-  bitmap  = NULL;
+  bitmap         = NULL;
+  patternbitmap  = NULL;
 }
 
 

@@ -243,6 +243,24 @@ bool GRPVECTORFILESVGOBJ::ApplyData(XFILEXMLELEMENT* element)
   XCHAR* valuetransform = element->GetValueAttribute(__L("transform"));
   if(valuetransform)  transform.ParseFromString(valuetransform);
 
+  //  clip-path="url(#id)" : keep the referenced id (without '#').
+  XCHAR* valueclippath = element->GetValueAttribute(__L("clip-path"));
+  if(valueclippath)
+    {
+      XSTRING clipstr(valueclippath);
+
+      int start = clipstr.Find(__L("url(#"), true, 0);
+      if(start >= 0)
+        {
+          start += 5;                                                           // skip "url(#"
+          int end = clipstr.Find(__L(")"), false, start);
+          if(end < 0)  end = (int)clipstr.GetSize();
+
+          clipstr.Copy(start, end, clippathid);
+          clippathid.DeleteCharacter(__C(' '));
+        }
+    }
+
   style.ApplyData(element, cssstylesheet);
 
   BuildChilds(element);
@@ -328,6 +346,21 @@ bool GRPVECTORFILESVGOBJ::IsContainer()
 XSTRING* GRPVECTORFILESVGOBJ::GetID()
 {
   return &id;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* GRPVECTORFILESVGOBJ::GetClipPathID()
+* @brief      Get clip path id : referenced clipPath id (without '#'), empty if none
+* @ingroup    GRAPHIC
+* 
+* @return     XSTRING* : Pointer to the requested string.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* GRPVECTORFILESVGOBJ::GetClipPathID()
+{
+  return &clippathid;
 }
 
 

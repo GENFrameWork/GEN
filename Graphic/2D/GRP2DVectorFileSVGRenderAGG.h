@@ -68,6 +68,9 @@ class GRP2DVECTORFILESVGRENDERAGG
     bool                            CalculateViewBoxTransform  (GRPVECTORFILESVG* svg, double targetx, double targety, double targetwidth, double targetheight, GRPVECTORFILESVGTRANSFORM& transform);
 
     bool                            RenderNode                 (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRP2DCANVAS* canvas);
+    bool                            RenderNodeContent          (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& nodetransform, GRPVECTORFILESVGSTYLE& nodestyle, GRP2DCANVAS* canvas);
+    bool                            ComputeClipDeviceBox       (GRPVECTORFILESVGOBJ* clipobj, GRPVECTORFILESVGTRANSFORM& transform, double& x1, double& y1, double& x2, double& y2);
+    void                            AccumulateClipShape        (GRPVECTORFILESVGOBJ* shape, GRPVECTORFILESVGTRANSFORM& transform, int depth, bool& found, double& x1, double& y1, double& x2, double& y2);
     bool                            RenderShape                (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas);
     bool                            RenderText                 (GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas);
     double                          DrawTextRun                (XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRP2DCANVAS* canvas);

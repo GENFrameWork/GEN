@@ -108,7 +108,7 @@ class XMEMORY_CONTROL
     bool                        IsActive                    ();
     bool                        Activate                    (bool isactive);
 
-    void*                       Assign                      (XDWORD size, char* namefile, int line);
+    void*                       Assign                      (XDWORD size, const char* namefile, int line);
     void                        Free                        (void* ptr);
 
     bool                        FreeAll                     ();
@@ -126,7 +126,7 @@ class XMEMORY_CONTROL
     XDWORD                      CRC32ForByte                (XDWORD ini);
     XDWORD                      CRC32                       (XBYTE* data, XWORD size);
 
-    bool                        RegisterAssign              (void* ptr, XDWORD size, char* pathfile, int line);
+    bool                        RegisterAssign              (void* ptr, XDWORD size, const char* pathfile, int line);
     bool                        DeRegisterAssign            (void* ptr, XDWORD& size);
 
     bool                        ResizeAssignList            ();

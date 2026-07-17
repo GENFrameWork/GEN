@@ -94,6 +94,8 @@ class GRPVECTORFILESVGOBJ
     GRPVECTORFILESVGSTYLE*          GetStyle                   ();
     GRPVECTORFILESVGTRANSFORM*      GetTransform               ();
 
+    XSTRING*                        GetClipPathID              ();              // referenced clipPath id (without '#'), empty if none
+
     XFILEXMLELEMENT*                GetXMLElement              ();
     void                            SetXMLElement              (XFILEXMLELEMENT* element);
 
@@ -116,6 +118,7 @@ class GRPVECTORFILESVGOBJ
 
     GRPVECTORFILESVGOBJTYPE         type;
     XSTRING                         id;
+    XSTRING                         clippathid;                                  // referenced clipPath id (without '#'), empty if none
     GRPVECTORFILESVGSTYLE           style;
     GRPVECTORFILESVGTRANSFORM       transform;
 

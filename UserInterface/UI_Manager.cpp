@@ -55,7 +55,11 @@
 #include "GRPProperties.h"
 #include "GRPScreen.h"
 #include "GRP2DCanvas.h"
+#include "GRP2DColor.h"
 #include "GRPBitmapFile.h"
+#include "GRPFactory.h"
+#include "GRPVectorFile.h"
+#include "GRP2DVectorFileRenderAGG.h"
 
 #include "APPFlowBase.h"
 
@@ -551,6 +555,11 @@ UI_LAYOUT* UI_MANAGER::Layouts_GetCommonLayout()
 * 
 * @fn         bool UI_MANAGER::Layout_PutBackground(XCHAR* layoutname)
 * @brief      Layout put background
+* @note       Whether the layout's background is tiled (seamless pattern) or drawn once covering the whole layout
+*             is decided by the "backgroundseamlesspattern" skin/layout attribute, resolved once at
+*             CreateLayouts() time: it is stored as UI_BACKGROUND::GetPatternBitmap() instead of GetBitmap() when
+*             the attribute is "yes"/"true"/"1", so at most one of the two is ever set for a given layout, and
+*             this function simply routes to whichever one is present.
 * @ingroup    USERINTERFACE
 * 
 * @param[in]  layoutname : Layoutname pointer to use.
@@ -560,9 +569,18 @@ UI_LAYOUT* UI_MANAGER::Layouts_GetCommonLayout()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Layout_PutBackground(XCHAR* layoutname)
 {
-  bool status = false;
+  bool        status = false;
+  UI_LAYOUT*  layout = Layouts_Get(layoutname);
 
-  status = Layout_PutBackgroundBitmap(layoutname);
+  if(layout && layout->GetBackground()->GetPatternBitmap())
+    {
+      status = Layout_PutBackgroundSeamlessPattern(layoutname);
+    }
+   else
+    {
+      status = Layout_PutBackgroundImage(layoutname);
+    }
+
   if(!status) 
     {
       status = Layout_PutBackgroundColor(layoutname);
@@ -634,7 +652,7 @@ bool UI_MANAGER::Layout_PutBackgroundColor(XCHAR* layoutname)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_MANAGER::Layout_PutBackgroundBitmap(XCHAR* layoutname)
+* @fn         bool UI_MANAGER::Layout_PutBackgroundImage(XCHAR* layoutname)
 * @brief      Layout put background bitmap
 * @ingroup    USERINTERFACE
 * 
@@ -643,7 +661,7 @@ bool UI_MANAGER::Layout_PutBackgroundColor(XCHAR* layoutname)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_MANAGER::Layout_PutBackgroundBitmap(XCHAR* layoutname)
+bool UI_MANAGER::Layout_PutBackgroundImage(XCHAR* layoutname)
 {
   UI_LAYOUT*  layout = NULL;
   UI_SKIN*    skin   = NULL;
@@ -691,8 +709,72 @@ bool UI_MANAGER::Layout_PutBackgroundBitmap(XCHAR* layoutname)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool UI_MANAGER::Layout_PutBackgroundSeamlessPattern(XCHAR* layoutname)
+* @brief      Layout put background seamless pattern
+* @note       Tiles layout->GetBackground()->GetPatternBitmap() (the "backgroundimg" resource - bitmap or a
+*             rasterized vector file - loaded by CreateLayouts()/LoadBackgroundBitmap() as a pattern instead of a
+*             stretched background because "backgroundseamlesspattern" resolved to true) across the whole layout
+*             area, repeating it as a mosaic instead of stretching a single copy like Layout_PutBackgroundImage()
+*             does. Unlike Layout_PutBackgroundImage(), it has no "scale" parameter: the tile is always drawn at
+*             its own loaded size and simply repeated, since scaling the tile up or down is what would break the
+*             "seamless" look.
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  layoutname : Layoutname pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::Layout_PutBackgroundSeamlessPattern(XCHAR* layoutname)
+{
+  UI_LAYOUT*  layout = NULL;
+  UI_SKIN*    skin   = NULL;
+  bool        status = false;
+
+  layout = Layouts_Get(layoutname);
+  if(!layout)
+    {
+      return false;
+    }
+
+  skin = layout->GetSkin();
+  if(!skin)
+    {
+      return false;
+    }
+ 
+  switch(skin->GetDrawMode())
+    {
+      case UI_SKIN_DRAWMODE_UNKNOWN  :  break;
+
+      case UI_SKIN_DRAWMODE_CANVAS   :  { UI_SKINCANVAS* skin_canvas  = (UI_SKINCANVAS*)skin;
+                                          if(layout->GetBackground()->GetPatternBitmap()) 
+                                            { 
+                                              GRPSCREEN*   screen = skin_canvas->GetScreen();      
+                                              GRP2DCANVAS* canvas = skin_canvas->GetCanvas();    
+
+                                              status = PutBitmapAsSeamlessPattern(canvas, screen, layout->GetBackground()->GetPatternBitmap());
+                                            }
+                                        }
+                                        break;
+
+      case UI_SKIN_DRAWMODE_CONTEXT  :  break;
+    }
+   
+                      
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool UI_MANAGER::Layout_PutBackground(bool scale)
 * @brief      Layout put background
+* @note       Layout_PutBackgroundImage(scale) only draws layouts whose UI_BACKGROUND has GetBitmap() set, and
+*             Layout_PutBackgroundSeamlessPattern() only draws layouts whose GetPatternBitmap() is set instead
+*             (see CreateLayouts()/Layout_PutBackground(XCHAR*) note) - the two are mutually exclusive per layout,
+*             so both are attempted here to cover every layout regardless of its "backgroundseamlesspattern"
+*             setting. This is purely additive: layouts without a pattern bitmap behave exactly as before.
 * @ingroup    USERINTERFACE
 * 
 * @param[in]  scale : Scale value.
@@ -704,7 +786,13 @@ bool UI_MANAGER::Layout_PutBackground(bool scale)
 {
   bool status = false;
 
-  status = Layout_PutBackgroundBitmap(scale);
+  status = Layout_PutBackgroundImage(scale);
+
+  if(Layout_PutBackgroundSeamlessPattern())
+    {
+      status = true;
+    }
+
   if(!status) 
     {
       status = Layout_PutBackgroundColor();
@@ -776,7 +864,7 @@ bool UI_MANAGER::Layout_PutBackgroundColor()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_MANAGER::Layout_PutBackgroundBitmap(bool scale)
+* @fn         bool UI_MANAGER::Layout_PutBackgroundImage(bool scale)
 * @brief      Layout put background bitmap
 * @ingroup    USERINTERFACE
 * 
@@ -785,7 +873,7 @@ bool UI_MANAGER::Layout_PutBackgroundColor()
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_MANAGER::Layout_PutBackgroundBitmap(bool scale)
+bool UI_MANAGER::Layout_PutBackgroundImage(bool scale)
 {  
   bool status = false;
 
@@ -833,6 +921,109 @@ bool UI_MANAGER::Layout_PutBackgroundBitmap(bool scale)
     }   
                       
   return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_MANAGER::Layout_PutBackgroundSeamlessPattern()
+* @brief      Layout put background seamless pattern
+* @note       Tiles layout->GetBackground()->GetPatternBitmap() across every loaded layout, same tiling behavior
+*             as the by-name overload; see that overload's note for details. Has no "scale" parameter, matching
+*             the requested UI_MANAGER::Layout_PutBackgroundSeamlessPattern() signature: a tiled pattern is always
+*             drawn at its own loaded size.
+* @ingroup    USERINTERFACE
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::Layout_PutBackgroundSeamlessPattern()
+{  
+  bool status = false;
+
+  for(XDWORD c=0; c<Layouts_GetAll()->GetSize(); c++)
+    { 
+      UI_LAYOUT*  layout = NULL;
+      UI_SKIN*    skin   = NULL;
+
+      layout = Layouts_Get(c);
+      if(layout)
+        {    
+          skin = layout->GetSkin();
+          if(!skin)
+            {
+              return false;
+            }
+ 
+          switch(skin->GetDrawMode())
+            {
+              case UI_SKIN_DRAWMODE_UNKNOWN  :  break;
+
+              case UI_SKIN_DRAWMODE_CANVAS   :  { UI_SKINCANVAS* skin_canvas  = (UI_SKINCANVAS*)skin;
+                                                  if(layout->GetBackground()->GetPatternBitmap()) 
+                                                    { 
+                                                      GRPSCREEN*   screen = skin_canvas->GetScreen();      
+                                                      GRP2DCANVAS* canvas = skin_canvas->GetCanvas();    
+
+                                                      if(PutBitmapAsSeamlessPattern(canvas, screen, layout->GetBackground()->GetPatternBitmap()))
+                                                        {
+                                                          status = true;
+                                                        }
+                                                    }
+                                                }
+                                                break;
+
+              case UI_SKIN_DRAWMODE_CONTEXT  :  break;
+            }
+        }
+    }   
+                      
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_MANAGER::PutBitmapAsSeamlessPattern(GRP2DCANVAS* canvas, GRPSCREEN* screen, GRPBITMAP* pattern)
+* @brief      Put bitmap as seamless pattern
+* @note       Shared tiling core used by both Layout_PutBackgroundSeamlessPattern() overloads. Repeats "pattern"
+*             at its own natural size, left-to-right/top-to-bottom, starting at (0, 0), until the whole
+*             (screen width, screen height) area is covered. The last column/row of tiles is naturally cropped
+*             by GRP2DCANVAS::PutBitmapNoAlpha()'s own clipping against the canvas render area, so no partial-tile
+*             bookkeeping is needed here.
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  canvas : Canvas to tile the pattern onto.
+* @param[in]  screen : Screen used to know the area, in pixels, that must be covered.
+* @param[in]  pattern : Bitmap : the seamless pattern tile to repeat; must have a non-zero size.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::PutBitmapAsSeamlessPattern(GRP2DCANVAS* canvas, GRPSCREEN* screen, GRPBITMAP* pattern)
+{
+  if(!canvas)  return false;
+  if(!screen)  return false;
+  if(!pattern) return false;
+
+  XDWORD patternwidth  = pattern->GetWidth();
+  XDWORD patternheight = pattern->GetHeight();
+
+  if(!patternwidth)  return false;
+  if(!patternheight) return false;
+
+  XDWORD screenwidth  = screen->GetWidth();
+  XDWORD screenheight = screen->GetHeight();
+
+  for(XDWORD ypos=0; ypos<screenheight; ypos+=patternheight)
+    {
+      for(XDWORD xpos=0; xpos<screenwidth; xpos+=patternwidth)
+        {
+          canvas->PutBitmapNoAlpha((double)xpos, (double)ypos, pattern);
+        }
+    }
+
+  return true;
 }
 
 
@@ -4527,6 +4718,9 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
   XSTRING           vector_fontname; 
   XSTRING           background_color[2]; 
   XSTRING           background_namefile[2]; 
+  XSTRING           background_seamlesspattern[2]; 
+  XSTRING           background_patternwidth[2]; 
+  XSTRING           background_patternheight[2]; 
   
   if(!root) 
     {
@@ -4561,6 +4755,15 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
 
               value = nodeskin->GetValueAttribute(__L("backgroundimg"));                          
               if(value) background_namefile[1] = value;                                       
+
+              value = nodeskin->GetValueAttribute(__L("backgroundseamlesspattern"));                          
+              if(value) background_seamlesspattern[1] = value;                                       
+
+              value = nodeskin->GetValueAttribute(__L("backgroundpatternwidth"));                          
+              if(value) background_patternwidth[1] = value;                                       
+
+              value = nodeskin->GetValueAttribute(__L("backgroundpatternheight"));                          
+              if(value) background_patternheight[1] = value;                                       
             }                  
         }
     }
@@ -4579,7 +4782,10 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
       return false;
     }
 
-  GRPPROPERTYMODE grppropertymode = GRPPROPERTYMODE_XX_UNKNOWN;
+  GRPPROPERTYMODE grppropertymode      = GRPPROPERTYMODE_XX_UNKNOWN;
+  GRP2DCANVAS*    backgroundcanvas     = NULL;
+  double          backgroundwidth      = 0.0;
+  double          backgroundheight     = 0.0;
 
   for(int c=0; c<root->GetNElements(); c++)
     {
@@ -4608,6 +4814,29 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
         }
     }
 
+  // Vector (SVG, DXF...) backgrounds need a canvas to rasterize into and a target size to rasterize at, since,
+  // unlike a raster bitmap file, they have no pixel size of their own. Backgrounds are always rasterized to fit
+  // the destination screen, so the reference canvas/size are resolved once here, before the layouts loop below.
+  if(ui_skin && screen)
+    {
+      switch(drawmode)
+        {
+          case UI_SKIN_DRAWMODE_UNKNOWN   : break;
+
+          case UI_SKIN_DRAWMODE_CANVAS    : { UI_SKINCANVAS* skincanvas = (UI_SKINCANVAS*)ui_skin;
+                                              if(skincanvas)
+                                                {
+                                                  backgroundcanvas = skincanvas->GetCanvas();
+                                                  backgroundwidth  = (double)screen->GetWidth();
+                                                  backgroundheight = (double)screen->GetHeight();
+                                                }
+                                            }
+                                            break;
+
+          case UI_SKIN_DRAWMODE_CONTEXT   : break;
+        }
+    }
+
   for(int c=0; c<root->GetNElements(); c++)
     {
       XFILEXMLELEMENT* nodelayout = root->GetElement(c);
@@ -4627,6 +4856,15 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
 
                   value = nodelayout->GetValueAttribute(__L("backgroundimg"));                          
                   if(value) background_namefile[0] = value;                  
+
+                  value = nodelayout->GetValueAttribute(__L("backgroundseamlesspattern"));                          
+                  if(value) background_seamlesspattern[0] = value;                  
+
+                  value = nodelayout->GetValueAttribute(__L("backgroundpatternwidth"));                          
+                  if(value) background_patternwidth[0] = value;                  
+
+                  value = nodelayout->GetValueAttribute(__L("backgroundpatternheight"));                          
+                  if(value) background_patternheight[0] = value;                  
 
                   UI_LAYOUT* layout = GEN_NEW UI_LAYOUT(ui_skin);
                   if(layout)
@@ -4662,11 +4900,76 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
                             }
                         }  
 
-                       GRPBITMAP* background = LoadBackgroundBitmap(bcknamefile, grppropertymode);
-                       if(background)
-                         {
-                           layout->GetBackground()->SetBitmap(background);          
-                         }
+                      XSTRING  bckseamlesspatternstr;
+                      XSTRING  bckpatternwidthstr;
+                      XSTRING  bckpatternheightstr;
+
+                      if(!background_seamlesspattern[0].IsEmpty())
+                        {
+                          bckseamlesspatternstr = background_seamlesspattern[0];
+                        }
+                       else
+                        {
+                          if(!background_seamlesspattern[1].IsEmpty())
+                            {
+                              bckseamlesspatternstr = background_seamlesspattern[1];
+                            }
+                        }
+
+                      if(!background_patternwidth[0].IsEmpty())
+                        {
+                          bckpatternwidthstr = background_patternwidth[0];
+                        }
+                       else
+                        {
+                          if(!background_patternwidth[1].IsEmpty())
+                            {
+                              bckpatternwidthstr = background_patternwidth[1];
+                            }
+                        }
+
+                      if(!background_patternheight[0].IsEmpty())
+                        {
+                          bckpatternheightstr = background_patternheight[0];
+                        }
+                       else
+                        {
+                          if(!background_patternheight[1].IsEmpty())
+                            {
+                              bckpatternheightstr = background_patternheight[1];
+                            }
+                        }
+
+                      bool isseamlesspattern = false;
+
+                      if(!bckseamlesspatternstr.Compare(__L("yes"),  true) ||
+                         !bckseamlesspatternstr.Compare(__L("true"), true) ||
+                         !bckseamlesspatternstr.Compare(__L("1"),    true))   isseamlesspattern = true;
+
+                      // "backgroundimg" is always the same single resource, whether it ends up being drawn once,
+                      // stretched to the layout (GetBitmap(), the default) or repeated as a tile (GetPatternBitmap(),
+                      // when "backgroundseamlesspattern" resolves to true) - see UI_MANAGER::Layout_PutBackground().
+                      // A layout never has both set: only one of the two branches below runs.
+                      if(isseamlesspattern)
+                        {
+                          // Raster pattern files (bmp, jpg, png...) are loaded at their own natural pixel size -
+                          // width/height are only used by LoadBackgroundBitmap() for the vector (SVG, DXF...) case,
+                          // via "backgroundpatternwidth"/"backgroundpatternheight", to know the tile size to
+                          // rasterize at, since a vector file has no pixel size of its own.
+                          GRPBITMAP* pattern = LoadBackgroundBitmap(bcknamefile, grppropertymode, backgroundcanvas, bckpatternwidthstr.ConvertToDouble(), bckpatternheightstr.ConvertToDouble());
+                          if(pattern)
+                            {
+                              layout->GetBackground()->SetPatternBitmap(pattern);
+                            }
+                        }
+                       else
+                        {
+                          GRPBITMAP* background = LoadBackgroundBitmap(bcknamefile, grppropertymode, backgroundcanvas, backgroundwidth, backgroundheight);
+                          if(background)
+                            {
+                              layout->GetBackground()->SetBitmap(background);          
+                            }
+                        }
 
                       if(!layout->GetNameID()->Compare(UI_MANAGER_LAYOUT_COMMON, true))
                         {
@@ -4696,18 +4999,34 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTYMODE mode)
+* @fn         GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTYMODE mode, GRP2DCANVAS* referencecanvas, double width, double height)
 * @brief      Load background bitmap
+* @note       Accepts both raster (bmp, jpg, png...) and vector (SVG, DXF...) background files, detected by their
+*             file extension via IsVectorResource(). Raster files follow the original GRPBITMAPFILE path, unchanged.
+*             Vector files are rasterized once, at load time, into a bitmap that already fits (width, height) -
+*             typically the destination screen size - through LoadBackgroundVectorFileToBitmap(), so the rest of the
+*             background pipeline (UI_BACKGROUND::SetBitmap()/GetBitmap(), Layout_PutBackgroundImage()) keeps
+*             working exactly as before, unaware of whether the original resource was raster or vector.
+*             referencecanvas/width/height are only required for vector resources; raster loading ignores them,
+*             so existing callers that do not pass them keep their original behavior.
 * @ingroup    USERINTERFACE
 * 
 * @param[in]  namefilebitmap : Namefilebitmap value.
 * @param[in]  mode : Mode value.
+* @param[in]  referencecanvas : Canvas to rasterize a vector resource with (NULL = vector resources are skipped).
+* @param[in]  width : Target width, in pixels, to rasterize a vector resource at (ignored for raster files).
+* @param[in]  height : Target height, in pixels, to rasterize a vector resource at (ignored for raster files).
 * 
 * @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTYMODE mode)
+GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTYMODE mode, GRP2DCANVAS* referencecanvas, double width, double height)
 {  
+  if(IsVectorResource(namefilebitmap.Get()))
+    {
+      return LoadBackgroundVectorFileToBitmap(namefilebitmap, referencecanvas, width, height);
+    }
+
   GRPBITMAPFILE*  bitmapfile;
   GRPBITMAP*      bitmap  = NULL;  
   bool            status  = false; 
@@ -4757,6 +5076,113 @@ GRPBITMAP* UI_MANAGER::LoadBackgroundBitmap(XSTRING& namefilebitmap, GRPPROPERTY
 
   return bitmap;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         GRPBITMAP* UI_MANAGER::LoadBackgroundVectorFileToBitmap(XSTRING& namefilevector, GRP2DCANVAS* referencecanvas, double width, double height)
+* @brief      Load background vector bitmap
+* @note       Rasterizes a vector background file (SVG, DXF...) into a single opaque-sized bitmap that already
+*             fits (width, height), following the same offscreen-canvas render approach as
+*             UI_ANIMATION::LoadFromFileVector(). Unlike a raster bitmap, a vector file has no pixel size of its
+*             own, and a real GRPBITMAP::Scale() resample is not currently implemented; asking the vector renderer
+*             to draw straight at the final target size avoids that limitation entirely, which is the reason
+*             vector backgrounds are always rasterized already scaled to (width, height) at load time, rather
+*             than loaded at some "native" size and rescaled later on each Layout_PutBackgroundImage() call.
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  namefilevector : Namefilevector value.
+* @param[in]  referencecanvas : Canvas to copy the pixel format and the loaded vector font from.
+* @param[in]  width : Target width, in pixels, to rasterize at.
+* @param[in]  height : Target height, in pixels, to rasterize at.
+* 
+* @return     GRPBITMAP* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPBITMAP* UI_MANAGER::LoadBackgroundVectorFileToBitmap(XSTRING& namefilevector, GRP2DCANVAS* referencecanvas, double width, double height)
+{
+  if(!referencecanvas)                  return NULL;
+  if((width <= 0.0) || (height <= 0.0)) return NULL;
+
+  XPATH pathvector;
+  bool  usedunzip = false;
+
+  if(iszippedfile && unzipfile)
+    {
+      XPATH pathnamefilecmp;
+
+      pathnamefilecmp = APPFLOW_DEFAULT_DIRECTORY_GRAPHICS;
+      pathnamefilecmp.Slash_Add();
+      pathnamefilecmp += namefilevector;
+
+      if(!unzipfile->DecompressFile(pathnamefilecmp, unzippathfile, namefilevector.Get()))
+        {
+          return NULL;
+        }
+
+      pathvector  = unzippathfile.Get();
+      pathvector += namefilevector;
+
+      usedunzip = true;
+    }
+   else
+    {
+      GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS, pathvector);
+      pathvector.Slash_Add();
+      pathvector.Add(namefilevector.Get());
+    }
+
+  bool           status     = false;
+  GRPBITMAP*     bitmap     = NULL;
+  GRPVECTORFILE* vectorfile = GRPVECTORFILE::CreateInstance(pathvector);
+
+  if(vectorfile)
+    {
+      if(vectorfile->Load() == GRPVECTORFILERESULT_OK)
+        {
+          GRPPROPERTIES properties;
+
+          properties.CopyPropertysFrom(referencecanvas);
+          properties.SetPosition(0, 0);
+          properties.SetSize((XDWORD)width, (XDWORD)height);
+
+          GRP2DCANVAS* offscreen = GEN_GRPFACTORY.CreateCanvas(&properties);
+          if(offscreen)
+            {
+              offscreen->SetWidth(width);
+              offscreen->SetHeight(height);
+
+              if(offscreen->Buffer_Create())
+                {
+                  offscreen->VectorFont_CopyFrom(referencecanvas);          // SVG text needs the same loaded vector font as the real canvas
+
+                  GRP2DCOLOR_RGBA8 opaque(0, 0, 0, 255);
+                  offscreen->Clear(&opaque);                                // a background has no transparent holes to show through
+
+                  GRP2DVECTORFILERENDERAGG vectorrender;
+
+                  status = vectorrender.Render(vectorfile, offscreen, 0.0, 0.0, width, height);
+                  if(status)
+                    {
+                      bitmap = offscreen->GetBitmap(0.0, 0.0, width, height);
+                    }
+                }
+
+              GEN_GRPFACTORY.DeleteCanvas(offscreen);
+            }
+        }
+
+      GEN_DELETE vectorfile;
+    }
+
+  if(usedunzip)
+    {
+      DeleteTemporalUnZipFile(pathvector);
+    }
+
+  return bitmap;
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 

@@ -241,6 +241,57 @@ bool GRP2DVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTOR
   GRPVECTORFILESVGSTYLE nodestyle = (*obj->GetStyle());
   nodestyle.InheritFrom(parentstyle);
 
+  //  clip-path : restrict drawing to the bounding box of the referenced clipPath content
+  //  (rectangular clip; exact for rect clips, an approximation for non rectangular ones).
+  bool  hasclip = false;
+  XRECT oldclip;
+
+  if(contextsvg && (!obj->GetClipPathID()->IsEmpty()))
+    {
+      GRPVECTORFILESVGOBJ* clipobj = contextsvg->FindObjByID(obj->GetClipPathID()->Get());
+
+      if(clipobj)
+        {
+          double cx1 = 0.0, cy1 = 0.0, cx2 = 0.0, cy2 = 0.0;
+
+          if(ComputeClipDeviceBox(clipobj, nodetransform, cx1, cy1, cx2, cy2))
+            {
+              oldclip = canvas->GetClipBox();
+
+              double nx1 = (oldclip.x1 > cx1) ? oldclip.x1 : cx1;
+              double ny1 = (oldclip.y1 > cy1) ? oldclip.y1 : cy1;
+              double nx2 = (oldclip.x2 < cx2) ? oldclip.x2 : cx2;
+              double ny2 = (oldclip.y2 < cy2) ? oldclip.y2 : cy2;
+
+              if((nx2 < nx1) || (ny2 < ny1)) { nx2 = nx1; ny2 = ny1; }          // empty intersection : nothing visible
+
+              canvas->SetClipBox(nx1, ny1, nx2, ny2);
+              hasclip = true;
+            }
+        }
+    }
+
+  RenderNodeContent(obj, nodetransform, nodestyle, canvas);
+
+  if(hasclip)  canvas->SetClipBox(oldclip);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderNodeContent(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& nodetransform, GRPVECTORFILESVGSTYLE& nodestyle, GRP2DCANVAS* canvas)
+* @brief      Render node content : dispatch a node (use / text / container / shape) with its resolved transform + style
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* @param[in]  obj : node
+* @param[in]  nodetransform : accumulated transform
+* @param[in]  nodestyle : effective style
+* @param[in]  canvas : target canvas
+* @return     bool : true if handled.
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRP2DVECTORFILESVGRENDERAGG::RenderNodeContent(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& nodetransform, GRPVECTORFILESVGSTYLE& nodestyle, GRP2DCANVAS* canvas)
+{
   if(obj->GetObjType() == GRPVECTORFILESVGOBJTYPE_USE)
     {
       GRPVECTORFILESVGOBJUSE* useobj = (GRPVECTORFILESVGOBJUSE*)obj;
@@ -286,6 +337,107 @@ bool GRP2DVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTOR
     }
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         bool GRP2DVECTORFILESVGRENDERAGG::ComputeClipDeviceBox(GRPVECTORFILESVGOBJ* clipobj, GRPVECTORFILESVGTRANSFORM& transform, double& x1, double& y1, double& x2, double& y2)
+* @brief      Compute clip device box : device space bounding box of the union of the clipPath shapes (rectangular approximation)
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRP2DVECTORFILESVGRENDERAGG::ComputeClipDeviceBox(GRPVECTORFILESVGOBJ* clipobj, GRPVECTORFILESVGTRANSFORM& transform, double& x1, double& y1, double& x2, double& y2)
+{
+  bool found = false;
+
+  x1 = 0.0;  y1 = 0.0;  x2 = 0.0;  y2 = 0.0;
+
+  GRPVECTORFILESVGTRANSFORM cliptransform;
+  cliptransform.CopyFrom(transform);
+  cliptransform.Multiply(*clipobj->GetTransform());
+
+  for(XDWORD c=0; c<clipobj->GetNChilds(); c++)
+    {
+      AccumulateClipShape(clipobj->GetChild(c), cliptransform, 0, found, x1, y1, x2, y2);
+    }
+
+  return found;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* @fn         void GRP2DVECTORFILESVGRENDERAGG::AccumulateClipShape(GRPVECTORFILESVGOBJ* shape, GRPVECTORFILESVGTRANSFORM& transform, int depth, bool& found, double& x1, double& y1, double& x2, double& y2)
+* @brief      Accumulate clip shape : add one clip shape (resolving <use>) device bounding box into the running union
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRP2DVECTORFILESVGRENDERAGG::AccumulateClipShape(GRPVECTORFILESVGOBJ* shape, GRPVECTORFILESVGTRANSFORM& transform, int depth, bool& found, double& x1, double& y1, double& x2, double& y2)
+{
+  if(!shape)      return;
+  if(depth > 16)  return;
+
+  GRPVECTORFILESVGTRANSFORM shapetransform;
+  shapetransform.CopyFrom(transform);
+  shapetransform.Multiply(*shape->GetTransform());
+
+  //  <use> inside the clipPath : resolve the reference at its offset.
+  if(shape->GetObjType() == GRPVECTORFILESVGOBJTYPE_USE)
+    {
+      if(contextsvg)
+        {
+          GRPVECTORFILESVGOBJUSE* useobj    = (GRPVECTORFILESVGOBJUSE*)shape;
+          GRPVECTORFILESVGOBJ*    reference = contextsvg->FindObjByID(useobj->GetHRef()->Get());
+
+          if(reference && (reference != shape))
+            {
+              GRPVECTORFILESVGTRANSFORM offset;
+              offset.Set(1.0, 0.0, 0.0, 1.0, useobj->GetX(), useobj->GetY());
+              shapetransform.Multiply(offset);
+
+              AccumulateClipShape(reference, shapetransform, depth + 1, found, x1, y1, x2, y2);
+            }
+        }
+
+      return;
+    }
+
+  //  Leaf shape geometry : fold its four transformed corners into the running box.
+  GRP2DPATH path;
+
+  if(shape->BuildPath(path))
+    {
+      double bx = 0.0, by = 0.0, bw = 0.0, bh = 0.0;
+      ComputePathBBox(path, bx, by, bw, bh);
+
+      double cornersx[4] = { bx, bx + bw, bx + bw, bx      };
+      double cornersy[4] = { by, by,      by + bh, by + bh };
+
+      for(int i=0; i<4; i++)
+        {
+          double px = cornersx[i];
+          double py = cornersy[i];
+          shapetransform.ApplyToPoint(px, py);
+
+          if(!found)
+            {
+              x1 = px;  y1 = py;  x2 = px;  y2 = py;
+              found = true;
+            }
+           else
+            {
+              if(px < x1) x1 = px;
+              if(py < y1) y1 = py;
+              if(px > x2) x2 = px;
+              if(py > y2) y2 = py;
+            }
+        }
+    }
+
+  //  Groups inside the clipPath : recurse into children.
+  for(XDWORD c=0; c<shape->GetNChilds(); c++)
+    {
+      AccumulateClipShape(shape->GetChild(c), shapetransform, depth + 1, found, x1, y1, x2, y2);
+    }
 }
 
 
