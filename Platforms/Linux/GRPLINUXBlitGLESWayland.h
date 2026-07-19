@@ -54,6 +54,16 @@ class GRPLINUXBLITGLESWAYLAND : public GRPBLITGLES
 
     bool                                   GetNativeWindowSize                (int& width, int& height);
 
+    // Wayland: no bitmap rescaling. The canvas is presented at its native pixel size (1 texel = 1
+    // pixel), growing/shrinking independently on each axis with the window instead of being
+    // stretched/letterboxed to fill it. It is anchored to the window's TOP-LEFT corner (not
+    // centered): growing the window reveals more background at the bottom/right, and shrinking it
+    // crops the canvas' bottom/right edges first, regardless of which edge/corner was dragged. See
+    // GRPLINUXSCREENWAYLAND::ApplyMaxSizeHint (xdg_toplevel_set_max_size) for the native-window-side
+    // growth cap at the viewport's max size; this method is what makes the content itself hide,
+    // rather than shrink, below the viewport's min size.
+    void                                   ComputePresentationScale          (GLsizei surfacewidth, GLsizei surfaceheight, float& scalex, float& scaley, float& translatex, float& translatey, bool& visible);
+
   private:
 
     // Wayland has no equivalent of X11's raw XID-as-EGLNativeWindowType: EGL needs a

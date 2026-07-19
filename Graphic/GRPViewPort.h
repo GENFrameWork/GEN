@@ -80,6 +80,14 @@ class GRPVIEWPORT
 
     void                          SetSize                             (float  width, float  height);
 
+    float                         GetMinWidth                         ();
+    float                         GetMinHeight                        ();
+    void                          SetMinSize                          (float  minwidth, float  minheight);
+
+    float                         GetMaxWidth                         ();
+    float                         GetMaxHeight                        ();
+    void                          SetMaxSize                          (float  maxwidth, float  maxheight);
+
     float                         GetCanvasPositionX                  ();
     float                         GetCanvasPositionY                  ();
     bool                          SetCanvasPosition                   (float  x, float  y);
@@ -98,7 +106,17 @@ class GRPVIEWPORT
     float                         width;
     float                         height;
 
-    
+    // Optional resize limits for the NATIVE WINDOW hosting this viewport (0 = not set / no limit).
+    // Currently honoured by the Windows screen (GRPWINDOWSSCREEN) to stop the window growing past
+    // GetMaxWidth()/GetMaxHeight() (native resize border + Maximize, via WM_GETMINMAXINFO) and to
+    // hide (instead of shrinking) the rendered content when the window is smaller than
+    // GetMinWidth()/GetMinHeight(). Width and height are independent of one another.
+    float                         minwidth;
+    float                         minheight;
+    float                         maxwidth;
+    float                         maxheight;
+
+
     float                         canvas_x;
     float                         canvas_y;
     GRP2DCANVAS*                  canvas;

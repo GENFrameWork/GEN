@@ -53,6 +53,7 @@
 #endif
 
 #include "GRP2DCanvas.h"
+#include "GRPViewPort.h"
 
 #include "XBuffer.h"
 #include "XString.h"
@@ -152,6 +153,13 @@ GRPLINUXSCREENWAYLAND::GRPLINUXSCREENWAYLAND(): GRPSCREEN()
   // screen before Create_Window() runs.
   SetSize(GRPLINUXSCREENWAYLAND_DEFAULT_WIDTH, GRPLINUXSCREENWAYLAND_DEFAULT_HEIGHT);
   SetMaxSize(GRPLINUXSCREENWAYLAND_DEFAULT_WIDTH, GRPLINUXSCREENWAYLAND_DEFAULT_HEIGHT);
+
+  // Live window size kept in sync with the canvas design size only here, at construction time --
+  // see the windowwidth/windowheight member comment in the header for why the two must never be
+  // conflated again afterwards (Resize()/XDGToplevel_Configure() update windowwidth/windowheight
+  // only, never SetSize()).
+  windowwidth  = GRPLINUXSCREENWAYLAND_DEFAULT_WIDTH;
+  windowheight = GRPLINUXSCREENWAYLAND_DEFAULT_HEIGHT;
 
   SetMode(GRPPROPERTYMODE_32_BGRA_8888);
 
@@ -280,6 +288,119 @@ bool GRPLINUXSCREENWAYLAND::BindGlobals()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         void GRPLINUXSCREENWAYLAND::ResolveViewportMax(float& maxw, float& maxh)
+* @brief      Resolves the GRPVIEWPORT_ID_MAIN viewport's max size, shared by ClampToViewportMax()
+*             and ApplyMaxSizeHint() below: an EXPLICIT GRPVIEWPORT::SetMaxSize() on an axis wins;
+*             otherwise that axis falls back to the viewport's own declared size
+*             (GetWidth()/GetHeight() -- the design/content resolution), same fallback
+*             GRPLINUXSCREENX11::ApplyWMNormalHints() and GRPWINDOWSSCREEN::ApplyResizeLimits() use,
+*             so the window is capped even when the app never calls the new SetMaxSize() API
+*             explicitly.
+* @note       INTERNAL
+* @ingroup    PLATFORM_LINUX
+*
+* @param[out] maxw : Resolved max width. Left UNTOUCHED if no viewport is configured yet.
+* @param[out] maxh : Resolved max height. Left UNTOUCHED if no viewport is configured yet.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXSCREENWAYLAND::ResolveViewportMax(float& maxw, float& maxh)
+{
+  GRPVIEWPORT* mainviewport = GetViewport(GRPVIEWPORT_ID_MAIN);
+  if(!mainviewport)
+    {
+      return; // no viewport configured yet: caller keeps whatever it had
+    }
+
+  maxw = mainviewport->GetMaxWidth();
+  maxh = mainviewport->GetMaxHeight();
+
+  if(maxw <= 0.0f) maxw = mainviewport->GetWidth();
+  if(maxh <= 0.0f) maxh = mainviewport->GetHeight();
+
+  // Final safety net: if one axis is still unresolved (e.g. a viewport whose width/height were
+  // never both set) while the other DOES have a real value, never hand xdg_toplevel_set_max_size()/
+  // a caller a literal 0 on just that one axis -- fall back to this screen's own GRPPROPERTIES max
+  // (set in the constructor to the display's own resolution, see GRPLINUXSCREENWAYLAND::Clean()/
+  // constructor), so both axes always end up with a real, non-zero ceiling together.
+  if(maxw <= 0.0f) maxw = (float)GetMaxWidth();
+  if(maxh <= 0.0f) maxh = (float)GetMaxHeight();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPLINUXSCREENWAYLAND::ClampToViewportMax(int& w, int& h)
+* @brief      In/out clamp of a requested (w,h) pair down to the GRPVIEWPORT_ID_MAIN viewport's
+*             resolved max (see ResolveViewportMax() above), per axis independently -- the Wayland
+*             analogue of GRPWINDOWSSCREEN::ApplyResizeLimits() clamping ptMaxTrackSize, applied
+*             in-process here since xdg-shell gives clients no equivalent OS-level drag-limit hook
+*             (see ApplyMaxSizeHint() below for the proactive xdg_toplevel_set_max_size() request
+*             that covers the compositor side of the same cap). Called from both Resize() (locally
+*             requested size) and XDGToplevel_Configure() (compositor-confirmed size).
+* @note       INTERNAL
+* @ingroup    PLATFORM_LINUX
+*
+* @param[in,out] w : Requested width in; clamped width out. Untouched if no cap applies on this axis.
+* @param[in,out] h : Requested height in; clamped height out. Untouched if no cap applies on this axis.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXSCREENWAYLAND::ClampToViewportMax(int& w, int& h)
+{
+  float maxw = 0.0f;
+  float maxh = 0.0f;
+
+  ResolveViewportMax(maxw, maxh);
+
+  if(maxw > 0.0f && w > (int)maxw) w = (int)maxw;
+  if(maxh > 0.0f && h > (int)maxh) h = (int)maxh;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPLINUXSCREENWAYLAND::ApplyMaxSizeHint()
+* @brief      Proactive Wayland analogue of GRPLINUXSCREENX11::ApplyWMNormalHints()/
+*             GRPWINDOWSSCREEN::ApplyResizeLimits(): resolves the GRPVIEWPORT_ID_MAIN viewport's
+*             max size (see ResolveViewportMax() above) and, if xdgtoplevel already exists, issues
+*             the standard xdg_toplevel_set_max_size() request so the compositor's own interactive
+*             resize grab AND its own maximize logic both respect it. Unlike X11's
+*             XSetWMNormalHints (a property the WM re-reads whenever it needs to), this is a live
+*             protocol request that must be reissued -- called once from Create_Surface() (in case
+*             the app already created its viewport before Create()) and again on every
+*             XDGToplevel_Configure() (in case it created it only afterwards; both call sites are
+*             cheap/idempotent, so this redundancy just makes the hint self-heal regardless of
+*             ordering).
+* @note       Deliberately does NOT call xdg_toplevel_set_min_size() (no OS-enforced minimum, same
+*             policy as X11/Windows) -- see the Update() raster-path guard and
+*             GRPLINUXBLITGLESWAYLAND::ComputePresentationScale (GL path) for how content below the
+*             viewport's min is hidden instead.
+* @note       INTERNAL
+* @ingroup    PLATFORM_LINUX
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXSCREENWAYLAND::ApplyMaxSizeHint()
+{
+  if(!xdgtoplevel)
+    {
+      return;
+    }
+
+  float maxw = 0.0f;
+  float maxh = 0.0f;
+
+  ResolveViewportMax(maxw, maxh);
+
+  if(maxw <= 0.0f && maxh <= 0.0f)
+    {
+      return; // no viewport configured yet, or it has no usable size at all
+    }
+
+  xdg_toplevel_set_max_size(xdgtoplevel, (int)maxw, (int)maxh);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool GRPLINUXSCREENWAYLAND::Create(bool show)
 * @brief      Create
 * @ingroup    PLATFORM_LINUX
@@ -349,6 +470,12 @@ bool GRPLINUXSCREENWAYLAND::Create_Surface(bool show)
     }
 
   xdg_toplevel_add_listener(xdgtoplevel, &grplinuxscreenwayland_xdgtoplevel_listener, this);
+
+  // Cap this toplevel's growth (interactive resize grab and the compositor's own maximize logic)
+  // at the GRPVIEWPORT_ID_MAIN viewport's max size, in case the app already created that viewport
+  // before calling Create() -- ApplyMaxSizeHint() is called again on every XDGToplevel_Configure()
+  // below, so it self-heals even if the viewport is only created afterwards.
+  ApplyMaxSizeHint();
 
   if(!title.IsEmpty())
     {
@@ -543,39 +670,105 @@ bool GRPLINUXSCREENWAYLAND::Update(GRP2DCANVAS* canvas)
       return true;   // nothing to paint into yet -- no configure/ack round-trip completed
     }
 
-  XDWORD neww = GetWidth();
-  XDWORD newh = GetHeight();
+  // No bitmap rescaling on Wayland: the canvas is always blitted 1:1, cropped to the smaller of
+  // the canvas' own (fixed design) size (width/height) and the window's current LIVE size
+  // (windowwidth/windowheight, kept fresh by Resize()/XDGToplevel_Configure() -- see the
+  // windowwidth/windowheight member comment in the header), on each axis independently, and
+  // anchored to the window's TOP-LEFT corner -- growing the window reveals more background instead
+  // of stretching the canvas to fill it, mirroring the X11 raster path in
+  // GRPLINUXSCREENX11::Update(). If the window's live size is below the GRPVIEWPORT_ID_MAIN
+  // viewport's declared minimum (either axis), the content is hidden -- but unlike X11 (where
+  // simply skipping XPutImage leaves the OS-painted window background visible), a wl_surface shows
+  // whatever was PREVIOUSLY committed if nothing new is attached this frame (a STALE frame, not a
+  // blank one), so a freshly allocated all-zero buffer is attached/committed instead, actually
+  // blanking the surface.
+  GRPVIEWPORT* mainviewport = GetViewport(GRPVIEWPORT_ID_MAIN);
 
-  XBYTE* srcbuffer  = (XBYTE*)canvas->Buffer_Get();
-  XBYTE* blitbuffer = srcbuffer;
-  bool   scaled     = false;
+  bool belowviewportminimum = mainviewport &&
+                               ((mainviewport->GetMinWidth()  > 0.0f && windowwidth  < (int)mainviewport->GetMinWidth())  ||
+                                (mainviewport->GetMinHeight() > 0.0f && windowheight < (int)mainviewport->GetMinHeight()));
 
-  if(srcbuffer && ((neww != width) || (newh != height)) && (neww > 0) && (newh > 0))
+  if(belowviewportminimum)
     {
-      XBYTE* scaledbuffer = ScaleBufferNearestLetterbox(srcbuffer, (int)width, (int)height, (int)neww, (int)newh);
-      if(scaledbuffer)
+      if((windowwidth > 0) && (windowheight > 0))
         {
-          blitbuffer = scaledbuffer;
-          scaled     = true;
+          size_t blankbytes  = (size_t)windowwidth * (size_t)windowheight * 4;
+          XBYTE* blankbuffer = (XBYTE*)malloc(blankbytes);
+
+          if(blankbuffer)
+            {
+              memset(blankbuffer, 0, blankbytes);
+
+              struct wl_buffer* wlbuffer = NULL;
+              void*             shmdata  = NULL;
+
+              if(CreateSHMBuffer(windowwidth, windowheight, blankbuffer, &wlbuffer, &shmdata))
+                {
+                  wl_surface_attach(surface, wlbuffer, 0, 0);
+                  wl_surface_damage_buffer(surface, 0, 0, windowwidth, windowheight);
+                  wl_surface_commit(surface);
+                }
+
+              free(blankbuffer);
+            }
         }
+
+      wl_display_flush(display);
+
+      return true;
     }
 
-  int blitw = scaled ? (int)neww : (int)width;
-  int blith = scaled ? (int)newh : (int)height;
+  XBYTE* srcbuffer = (XBYTE*)canvas->Buffer_Get();
 
-  struct wl_buffer* wlbuffer = NULL;
-  void*              shmdata  = NULL;
-
-  if(CreateSHMBuffer(blitw, blith, blitbuffer, &wlbuffer, &shmdata))
+  if(srcbuffer && (windowwidth > 0) && (windowheight > 0))
     {
-      wl_surface_attach(surface, wlbuffer, 0, 0);
-      wl_surface_damage_buffer(surface, 0, 0, blitw, blith);
-      wl_surface_commit(surface);
-    }
+      int bw = ((int)width  < windowwidth)  ? (int)width  : windowwidth;
+      int bh = ((int)height < windowheight) ? (int)height : windowheight;
 
-  if(scaled)
-    {
-      free(blitbuffer);
+      XBYTE* blitbuffer = srcbuffer;
+      bool   cropped    = false;
+      bool   canblit    = true;
+
+      if((bw != (int)width) || (bh != (int)height))
+        {
+          // Window smaller than the canvas on at least one axis: crop to the top-left bw x bh
+          // region instead of blitting the whole (width x height) canvas.
+          XBYTE* croppedbuffer = (XBYTE*)malloc((size_t)bw * (size_t)bh * 4);
+          if(croppedbuffer)
+            {
+              for(int y=0; y<bh; y++)
+                {
+                  memcpy(croppedbuffer + (size_t)y * (size_t)bw    * 4,
+                         srcbuffer      + (size_t)y * (size_t)width * 4,
+                         (size_t)bw * 4);
+                }
+
+              blitbuffer = croppedbuffer;
+              cropped    = true;
+            }
+           else
+            {
+              canblit = false;
+            }
+        }
+
+      if(canblit)
+        {
+          struct wl_buffer* wlbuffer = NULL;
+          void*             shmdata  = NULL;
+
+          if(CreateSHMBuffer(bw, bh, blitbuffer, &wlbuffer, &shmdata))
+            {
+              wl_surface_attach(surface, wlbuffer, 0, 0);
+              wl_surface_damage_buffer(surface, 0, 0, bw, bh);
+              wl_surface_commit(surface);
+            }
+        }
+
+      if(cropped)
+        {
+          free(blitbuffer);
+        }
     }
 
   wl_display_flush(display);
@@ -647,10 +840,24 @@ bool GRPLINUXSCREENWAYLAND::Delete()
 *
 * @fn         bool GRPLINUXSCREENWAYLAND::Resize(int width, int height)
 * @brief      Resize
+* @note       Tracks the requested LIVE window size (windowwidth/windowheight) separately from the
+*             canvas' fixed design size (inherited GRPPROPERTIES::width/height via GetWidth()/
+*             GetHeight()) -- SetSize() is deliberately NOT called here, matching the invariant
+*             GRPLINUXSCREENX11::Resize() already preserves (by never calling SetSize() either) and
+*             GRPWINDOWSSCREEN relies on: the canvas' design size is set once by the app and never
+*             touched again by window-resize code. Prior to this port this method called SetSize()
+*             directly, conflating live window size with canvas design size (a Wayland-only bug --
+*             see the windowwidth/windowheight member comment in the header). blitgles->Resize() is
+*             likewise deliberately NOT called here: it reallocates the GL TEXTURE that holds the
+*             canvas' pixel CONTENT, sized to match canvas->GetWidth()/GetHeight() (see
+*             GRPBLITGLES::Update(), which calls Resize() itself whenever it detects a texture-size
+*             mismatch) -- calling it with the WINDOW's size here would corrupt/thrash that texture
+*             size for no benefit, since it gets silently corrected back on the very next Update()
+*             call anyway.
 * @ingroup    PLATFORM_LINUX
 *
-* @param[in]  width : Width value.
-* @param[in]  height : Height value.
+* @param[in]  width : Requested LIVE window width.
+* @param[in]  height : Requested LIVE window height.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -666,14 +873,10 @@ bool GRPLINUXSCREENWAYLAND::Resize(int width, int height)
   // interactive grab -- the compositor decides and tells the client via configure. GEN records
   // the request locally so content already looks right even before any compositor round-trip
   // confirms it, same spirit as GRPLINUXSCREENX11::Resize().
-  SetSize((XDWORD)width, (XDWORD)height);
+  ClampToViewportMax(width, height);
 
-  #ifdef GRP_OPENGL_ACTIVE
-  if(blitgles)
-    {
-      blitgles->Resize(width, height);
-    }
-  #endif
+  windowwidth  = width;
+  windowheight = height;
 
   return true;
 }
@@ -853,7 +1056,9 @@ bool GRPLINUXSCREENWAYLAND::Maximize(bool active)
   // Unlike X11's Maximize() (a fire-and-forget _NET_WM_STATE ClientMessage with no
   // confirmation), the compositor answers this with an xdg_toplevel::configure carrying the
   // XDG_TOPLEVEL_STATE_MAXIMIZED state, handled asynchronously in XDGToplevel_Configure() --
-  // the resize GEN applies (SetSize()) happens there, once the compositor actually agrees.
+  // the resulting live-size update (windowwidth/windowheight, NOT SetSize() -- see the
+  // windowwidth/windowheight member comment in the header) happens there, once the compositor
+  // actually agrees.
   return true;
 }
 
@@ -1138,6 +1343,40 @@ int GRPLINUXSCREENWAYLAND::GetAndResetScrollDelta()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int GRPLINUXSCREENWAYLAND::GetWindowWidth()
+* @brief      Get the LIVE compositor-driven window width -- see the windowwidth member comment in
+*             the header for why this is deliberately separate from GetWidth() (the canvas' fixed
+*             design size).
+* @ingroup    PLATFORM_LINUX
+*
+* @return     int : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int GRPLINUXSCREENWAYLAND::GetWindowWidth()
+{
+  return windowwidth;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int GRPLINUXSCREENWAYLAND::GetWindowHeight()
+* @brief      Get the LIVE compositor-driven window height -- see the windowwidth member comment in
+*             the header for why this is deliberately separate from GetHeight() (the canvas' fixed
+*             design size).
+* @ingroup    PLATFORM_LINUX
+*
+* @return     int : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int GRPLINUXSCREENWAYLAND::GetWindowHeight()
+{
+  return windowheight;
+}
+
+
 #ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -1313,6 +1552,16 @@ void GRPLINUXSCREENWAYLAND::XDGSurface_Configure(void* data, struct xdg_surface*
 *             GRPLINUXSCREENWAYLAND_DEFAULT_WIDTH/HEIGHT already seeded in the constructor. This
 *             is the asynchronous counterpart of the synchronous resize GRPLINUXSCREENX11 gets
 *             for free from XGetWindowAttributes() inside its own Update().
+* @note       Re-asserts ApplyMaxSizeHint() on every call (cheap/idempotent), mirroring how
+*             GRPWINDOWSSCREEN recomputes its cap fresh on every WM_GETMINMAXINFO call rather than
+*             once at creation -- covers the case where the app only creates GRPVIEWPORT_ID_MAIN
+*             after Create_Surface() already ran its own one-shot call. Updates windowwidth/
+*             windowheight (the LIVE window size), clamped to the viewport's max via
+*             ClampToViewportMax() -- NOT SetSize() (which now represents only the canvas' fixed
+*             design size, see the windowwidth/windowheight member comment in the header) and NOT
+*             blitgles->Resize() (which resizes the canvas content TEXTURE, driven instead by
+*             canvas->GetWidth()/GetHeight() inside GRPBLITGLES::Update() -- see the Resize() @note
+*             above for the full rationale, identical here).
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
 *
@@ -1329,16 +1578,14 @@ void GRPLINUXSCREENWAYLAND::XDGToplevel_Configure(void* data, struct xdg_topleve
   GRPLINUXSCREENWAYLAND* screen = (GRPLINUXSCREENWAYLAND*)data;
   if(!screen) return;
 
+  screen->ApplyMaxSizeHint();
+
   if((width > 0) && (height > 0))
     {
-      screen->SetSize(width, height);
+      screen->ClampToViewportMax(width, height);
 
-      #ifdef GRP_OPENGL_ACTIVE
-      if(screen->blitgles)
-        {
-          screen->blitgles->Resize((int)width, (int)height);
-        }
-      #endif
+      screen->windowwidth  = width;
+      screen->windowheight = height;
     }
 }
 
@@ -1931,14 +2178,24 @@ void GRPLINUXSCREENWAYLAND::PushKeyEvent(XDWORD keysym, bool pressed)
 *
 * @fn         XBYTE* GRPLINUXSCREENWAYLAND::ScaleBufferNearestLetterbox(XBYTE* src, int srcw, int srch, int dstw, int dsth)
 * @brief      Nearest-neighbour scale of a 32bpp BGRA buffer from (srcw x srch) to (dstw x dsth),
-*             letterboxed (aspect ratio preserved, remaining border filled opaque black). Needed
-*             only by the wl_shm software-blit path (GRP_OPENGL_ACTIVE off, see Update() above):
-*             xdg-shell's compositor-driven resize means the surface size can change out from
-*             under GEN between one Update() and the next, unlike X11 where GRPLINUXSCREENX11 can
-*             rely on ConfigureNotify plus the framework's own Resize()/UpdateSize() sequencing to
-*             keep the canvas and window size in lockstep before a blit is attempted. GRP_OPENGL_ACTIVE
-*             builds never need this: the GPU handles arbitrary viewport/window size mismatches for
-*             free, exactly as on the X11 GLES path.
+*             letterboxed (aspect ratio preserved, remaining border filled opaque black).
+* @note       DEAD CODE, kept only for reference/possible future reuse. No longer called: both the
+*             X11 raster path (GRPLINUXSCREENX11::Update()) and this class's own raster path
+*             (Update() above) now crop-to-top-left-anchor instead of rescaling, matching the
+*             native-1:1/top-left-anchored presentation policy this whole port establishes (see
+*             GRPLINUXBLITGLESX11::ComputePresentationScale / GRPLINUXBLITGLESWAYLAND::
+*             ComputePresentationScale for the GL-path equivalent). The stale claim this comment
+*             used to make -- that "X11 can rely on ConfigureNotify plus the framework's own
+*             Resize()/UpdateSize() sequencing to keep the canvas and window size in lockstep" --
+*             was never actually true: GRPLINUXSCREENX11 has no ConfigureNotify handling anywhere,
+*             and its Resize()/UpdateSize() never touch width/height at all (confirmed by direct
+*             reading of that file). What both platforms actually rely on now is the SAME
+*             invariant: GetWidth()/GetHeight() (GRPPROPERTIES::width/height) always reflect the
+*             canvas' FIXED design size, never the live window size, on every platform -- X11 always
+*             preserved this (by omission: Resize()/UpdateSize() never called SetSize()); Wayland
+*             did NOT (Resize()/XDGToplevel_Configure() used to call SetSize() with the live size,
+*             a Wayland-only bug fixed by this port -- see the windowwidth/windowheight member
+*             comment in the header for the live-size tracking that replaces it).
 * @note       INTERNAL
 * @ingroup    PLATFORM_LINUX
 *
@@ -2181,6 +2438,9 @@ void GRPLINUXSCREENWAYLAND::Clean()
   configured          = false;
   haskeyboardfocus    = false;
   haspointerfocus     = false;
+
+  windowwidth         = 0;
+  windowheight        = 0;
 
   pointerx            = 0;
   pointery            = 0;

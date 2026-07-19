@@ -66,6 +66,8 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
     bool                                  Get_Position                        (int &x, int &y);
     bool                                  Set_Position                        (int x, int y);
 
+    bool                                  GetClientSize                       (int& width, int& height);
+
     bool                                  Delete                              ();
 
     bool                                  Resize                              (int width, int height);
@@ -104,7 +106,15 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
     void                                  Chromes_ApplyStyle                  (DWORD& style, DWORD& exstyle);
     void                                  Chromes_ApplyPostCreate             ();
 
-    static  LRESULT CALLBACK              BaseWndProc                         (HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam); 
+    // NOTE: resize/rescale behaviour (no bitmap stretching -- growth capped at the
+    // GRPVIEWPORT_ID_MAIN viewport's max size, content hidden below its min size). See the
+    // WM_GETMINMAXINFO handling in BaseWndProc, and GRPWINDOWSBLITGLES::ComputePresentationScale
+    // for the OpenGL presentation path.
+    void                                  ApplyResizeLimits                   (MINMAXINFO* minmaxinfo);
+    bool                                  IsAboveViewportMinimumSize          ();
+    void                                  ClientSizeToWindowSize              (int clientwidth, int clientheight, DWORD style, int& windowwidth, int& windowheight);
+
+    static  LRESULT CALLBACK              BaseWndProc                         (HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
     void                                  Clean                               ();
 

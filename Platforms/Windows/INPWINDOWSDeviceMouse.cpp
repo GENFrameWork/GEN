@@ -225,16 +225,29 @@ void INPWINDOWSDEVICEMOUSE::Clean()
 * 
 * @fn         bool INPWINDOWSDEVICEMOUSE::GetWindowPosition(int& screenx,int& screeny,int& screenw,int& screenh)
 * @brief      Get window position
-* @note       INTERNAL
+* @note       INTERNAL. screenx/screeny are the reference point Update() subtracts the raw cursor
+*             screen position from (screeny using the bottom-up convention the canvas is stored in --
+*             see GRPBLITGLES::Clean()'s flipy comment); screenw/screenh are the valid coordinate
+*             range used there to decide whether the cursor is over the content at all.
+*             IMPORTANT: these must be the CANVAS' own (fixed) design position/size, NOT the native
+*             window's current (possibly resized) client rect. The canvas is anchored to the window's
+*             TOP-LEFT corner and never rescaled (see GRPWINDOWSSCREEN/GRPWINDOWSBLITGLES): its LEFT
+*             and TOP always coincide with the window's, but its RIGHT and BOTTOM only coincide with
+*             the window's when the window happens to be exactly the canvas' size. Using the window's
+*             own (resized) client rect here -- as this used to do -- puts the Y reference at the
+*             window's bottom edge instead of the canvas', and the valid range at the window's current
+*             size instead of the canvas' fixed one: correct only while the window is untouched, but
+*             wrong (misaligned clicks on every menu/button/custom-chrome hit-test) as soon as it is
+*             resized to anything other than the canvas' own size.
 * @ingroup    PLATFORM_WINDOWS
-* 
+*
 * @param[in]  screenx : x position of screen
 * @param[in]  screeny : y position of screen
 * @param[in]  screenw : width of screen
 * @param[in]  screenh : height of screen
-* 
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool INPWINDOWSDEVICEMOUSE::GetWindowPosition(int& screenx,int& screeny,int& screenw,int& screenh)
 {
@@ -242,13 +255,19 @@ bool INPWINDOWSDEVICEMOUSE::GetWindowPosition(int& screenx,int& screeny,int& scr
 
   WINDOWINFO info;
 
-  GetWindowInfo((HWND)grpscreen->GetHandle(),&info);
+  memset(&info, 0, sizeof(WINDOWINFO));
+  info.cbSize = sizeof(WINDOWINFO);
+
+  if(!GetWindowInfo((HWND)grpscreen->GetHandle(),&info))
+    {
+      return false;
+    }
+
+  screenw = (int)grpscreen->GetWidth();
+  screenh = (int)grpscreen->GetHeight();
 
   screenx = info.rcClient.left;
-  screeny = info.rcClient.bottom;
-
-  screenw = abs(info.rcClient.right  - info.rcClient.left);
-  screenh = abs(info.rcClient.bottom - info.rcClient.top);
+  screeny = info.rcClient.top + screenh;   // bottom edge of the CANVAS (top-left anchored), not of the window
 
   return true;
 }

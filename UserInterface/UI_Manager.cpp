@@ -202,11 +202,16 @@ bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
   if(!iszippedfile)
     {
       status = LoadLayout(pathfile, screen, viewportindex);
+
+      if(!status)
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[UI Load] ERROR: cannot open layout XML [%s] (file missing? name case mismatch on a case-sensitive filesystem?)"), pathfile.Get());
+        }
     }
    else
     {
       unzipfile = GEN_NEW XFILEUNZIP();
-      if(!unzipfile) 
+      if(!unzipfile)
         {
           return false;
         }
@@ -218,38 +223,66 @@ bool UI_MANAGER::Load(XPATH& pathfile, GRPSCREEN* screen, int viewportindex)
           XPATH   origin_path;
           XSTRING origin_namefile;
           XSTRING origin_ext;
-          
+
           pathfile.GetDrive(origin_drive);
           pathfile.GetPath(origin_path);
           pathfile.GetNamefile(origin_namefile);
           pathfile.GetExt(origin_ext);
-                          
+
           unzippathfile  = origin_drive;
-          unzippathfile += origin_path; 
+          unzippathfile += origin_path;
 
           XSTRING namefile;
 
           namefile    = origin_namefile;
           namefile   += __L(".xml");
 
-          
+
           status = unzipfile->DecompressFile(namefile, unzippathfile, namefile.Get());
+
+          #ifdef LINUX
+          if(!status)
+            {
+              // The bundle's own directory is not writable (typical of a read-only install dir on native
+              // Linux: /usr/share, /opt, or simply a directory owned by another user; note WSL runs from
+              // /mnt/c/... where everything is always writable, which masks this). Extract to /tmp instead.
+              // unzippathfile is redirected too, so every LATER extraction from this same bundle (vector
+              // fonts, bitmaps, animation frames -- they all resolve their target directory through
+              // GetUnzipPathFile()) automatically follows to the writable location.
+              XPATH tmppath;
+
+              tmppath = __L("/tmp/");
+
+              status = unzipfile->DecompressFile(namefile, tmppath, namefile.Get());
+              if(status)
+                {
+                  unzippathfile = tmppath;
+                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[UI Load] bundle dir not writable; extracting [%s] to /tmp instead"), namefile.Get());
+                }
+            }
+          #endif
+
           if(status)
             {
               XPATH unzippathfile_tmp;
 
               unzippathfile_tmp  = unzippathfile;
               unzippathfile_tmp += namefile;
-           
-              status = LoadLayout(unzippathfile_tmp, screen, viewportindex);                
 
-              DeleteTemporalUnZipFile(unzippathfile_tmp);                          
+              status = LoadLayout(unzippathfile_tmp, screen, viewportindex);
+
+              DeleteTemporalUnZipFile(unzippathfile_tmp);
+            }
+           else
+            {
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[UI Load] ERROR: cannot extract [%s] from bundle [%s] (entry missing in zip, or target dir not writable)"), namefile.Get(), pathfile.Get());
             }
         }
-       else 
+       else
         {
-          CloseUnZipFile();        
-        }        
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[UI Load] ERROR: cannot open layout bundle [%s] (file missing? name case mismatch on a case-sensitive filesystem?)"), pathfile.Get());
+          CloseUnZipFile();
+        }
     }
 
   return status;

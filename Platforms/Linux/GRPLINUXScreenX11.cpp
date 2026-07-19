@@ -44,6 +44,7 @@
 
 #include "GRP2DCanvas.h"
 #include "GRPDesktopManager.h"
+#include "GRPViewPort.h"
 
 #include "MainProcLINUX.h"
 #include "APPFlowGraphics.h"
@@ -211,13 +212,42 @@ bool GRPLINUXSCREENX11::Create(bool show)
 bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
 {
   if(!display)
-    { 
+    {
       return false;
     }
 
-  if(!window)  
+  if(!window)
     {
       return false;
+    }
+
+  if(!IsRunningOnWSL())
+    {
+      // Keep the stored window position (GetPositionX()/GetPositionY()) in sync with the window's REAL
+      // position on the desktop. There is no ConfigureNotify handling on this backend, so without this the
+      // stored position is whatever the app requested at creation -- and a native WM (KWin's smart placement,
+      // for one) is free to put the window somewhere entirely different, or the user parks it elsewhere.
+      // GRPSCREEN::UpdateCFGChromesDrag() builds all its desktop-space cursor math on GetPositionX()/Y(), so a
+      // stale value teleported the window to the stale coordinates on the first caption click. Skipped on
+      // WSLg, whose compositor-side phantom frame offsets make the translated origin unreliable there (and
+      // whose windows never move anyway -- see the ancestor-walk workaround in Set_Position()).
+      Window  translatechild = None;
+      int     realx          = 0;
+      int     realy          = 0;
+
+      if(XTranslateCoordinates(display, window, root, 0, 0, &realx, &realy, &translatechild))
+        {
+          if((realx != GetPositionX()) || (realy != GetPositionY()))
+            {
+              SetPosition(realx, realy);
+            }
+        }
+
+      // NOTE: the stored SIZE (GetWidth()/GetHeight()) is deliberately NOT synced here: engine-wide, those
+      // members are the CONTENT (canvas design) size, constant for the life of the screen -- exactly how the
+      // Windows backend treats them (its raster blit and mouse mapping are built on that assumption). Code
+      // that needs the LIVE native client size queries GetClientSize() (virtual, overridden per platform)
+      // instead.
     }
 
   if(wmdeletewindow != None)
@@ -251,13 +281,99 @@ bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
     }
 
 
-  if(!canvas)  
+  if(!canvas)
     {
       return false;
     }
-  
+
+  // GEN's own resize grip for custom-chromes windows (no-op in every other mode). Runs BEFORE the
+  // snap-back below so that, within the same frame, a grip-driven resize is still subject to the
+  // very same viewport-max clamp as a WM-driven one.
+  UpdateCustomChromesResize();
+
+  // Reactive growth-cap snap-back: WM_NORMAL_HINTS' PMaxSize (see ApplyWMNormalHints()) is only a
+  // hint some window managers do not honour for interactive resize -- unlike Win32's
+  // WM_GETMINMAXINFO (which Windows itself enforces, synchronously, before the resize is ever
+  // applied), X11 gives clients no veto over a WM-driven interactive resize or a WM-driven
+  // maximize. This runs every frame, regardless of render path (GL or raster, hence placed before
+  // the GL early-return below) and regardless of chromes mode, and is the actual WM-independent
+  // guarantee that the window never PERSISTS beyond the viewport's max on either axis -- a brief
+  // one-frame overshoot during an active drag is possible on non-compliant WMs, but it is
+  // immediately snapped back, never left growing unbounded. Only fullscreen is excluded
+  // (unrelated sizing, must not be clamped by the viewport max).
+  if(!Styles_IsFullScreen())
+    {
+      // Lazy PMaxSize hint: ApplyWMNormalHints() is called from Create_Window() but the
+      // GRPVIEWPORT_ID_MAIN viewport may not be configured yet at that point, causing it to
+      // skip setting PMaxSize. Re-apply once from Update() the first time the viewport is
+      // available, so KWin's maximize request is capped proactively (before the snap-back
+      // even needs to trigger) on the very first frame after the viewport is set up.
+      if(!normalhintsapplied && GetViewport(GRPVIEWPORT_ID_MAIN))
+        {
+          ApplyWMNormalHints();
+          normalhintsapplied = true;
+        }
+
+      float maxw = 0.0f;
+      float maxh = 0.0f;
+
+      ResolveViewportMax(maxw, maxh);
+
+      if((maxw > 0.0f) || (maxh > 0.0f))
+        {
+          XWindowAttributes wattr;
+          if(XGetWindowAttributes(display, window, &wattr))
+            {
+              int cappedw = wattr.width;
+              int cappedh = wattr.height;
+
+              if((maxw > 0.0f) && (wattr.width  > (int)maxw)) cappedw = (int)maxw;
+              if((maxh > 0.0f) && (wattr.height > (int)maxh)) cappedh = (int)maxh;
+
+              if((cappedw != wattr.width) || (cappedh != wattr.height))
+                {
+                  // On EWMH-compliant WMs (KDE/KWin, GNOME/Mutter) a window in
+                  // _NET_WM_STATE_MAXIMIZED is geometry-managed by the WM: any XResizeWindow
+                  // from the client is intercepted (SubstructureRedirectMask on root) and
+                  // overridden to maintain the maximized geometry. We must first ask the WM to
+                  // leave the maximized state via a _NET_WM_STATE ClientMessage. Both this
+                  // message and the XResizeWindow below are sent to the X server on the same
+                  // connection, so they arrive in KWin's event queue in FIFO order -- KWin
+                  // processes the de-maximize first, then the ConfigureRequest from XResizeWindow
+                  // (which it now honours since the window is no longer maximized). On Weston/
+                  // WSLg, XResizeWindow always works even while maximized, so this message is a
+                  // no-op there. On WMs that ignore _NET_WM_STATE entirely, both are no-ops and
+                  // the next frame will re-detect and retry.
+                  Atom netstate = XInternAtom(display, "_NET_WM_STATE",              False);
+                  Atom maxhorz  = XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+                  Atom maxvert  = XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
+
+                  if(netstate != None && maxhorz != None && maxvert != None)
+                    {
+                      XEvent ev;
+                      memset(&ev, 0, sizeof(ev));
+                      ev.type                 = ClientMessage;
+                      ev.xclient.window       = window;
+                      ev.xclient.message_type = netstate;
+                      ev.xclient.format       = 32;
+                      ev.xclient.data.l[0]    = 0;            // _NET_WM_STATE_REMOVE
+                      ev.xclient.data.l[1]    = (long)maxhorz;
+                      ev.xclient.data.l[2]    = (long)maxvert;
+                      ev.xclient.data.l[3]    = 1;            // source: application (not pager)
+                      ev.xclient.data.l[4]    = 0;
+                      XSendEvent(display, root, False,
+                                 SubstructureRedirectMask | SubstructureNotifyMask, &ev);
+                    }
+
+                  XResizeWindow(display, window, cappedw, cappedh);
+                  XFlush(display);
+                }
+            }
+        }
+    }
+
   #ifdef GRP_OPENGL_ACTIVE
-  if(blitgles) 
+  if(blitgles)
     {
       return blitgles->Update(canvas);
     }
@@ -279,31 +395,67 @@ bool GRPLINUXSCREENX11::Update(GRP2DCANVAS* canvas)
           newh = wattr.height;
         }
 
-      XBYTE* srcbuffer  = (XBYTE*)canvas->Buffer_Get();
-      XBYTE* blitbuffer = srcbuffer;
-      bool   scaled     = false;
+      // No bitmap rescaling on X11: the canvas is always blitted 1:1, cropped to the smaller of
+      // the canvas' own (fixed design) size (width/height) and the window's current live size
+      // (neww/newh), on each axis independently, and anchored to the window's TOP-LEFT corner --
+      // growing the window reveals more of the existing background (background_pixel, set by
+      // Create_Window()'s XCreateWindow() call) instead of stretching the canvas to fill it. If
+      // the window's live size is below the GRPVIEWPORT_ID_MAIN viewport's declared minimum
+      // (either axis), the content is hidden entirely this frame (XPutImage is not called, so the
+      // window's own background shows through) instead of shrinking it to fit -- the X11 raster-
+      // path equivalent of GRPWINDOWSSCREEN::Update()'s IsAboveViewportMinimumSize() guard.
+      GRPVIEWPORT* mainviewport = GetViewport(GRPVIEWPORT_ID_MAIN);
 
-      if(srcbuffer && ((neww != (int)width) || (newh != (int)height)) && (neww > 0) && (newh > 0))
+      bool belowviewportminimum = mainviewport &&
+                                   ((mainviewport->GetMinWidth()  > 0.0f && neww < (int)mainviewport->GetMinWidth())  ||
+                                    (mainviewport->GetMinHeight() > 0.0f && newh < (int)mainviewport->GetMinHeight()));
+
+      XBYTE* srcbuffer = (XBYTE*)canvas->Buffer_Get();
+
+      if(!belowviewportminimum && srcbuffer && (neww > 0) && (newh > 0))
         {
-          XBYTE* scaledbuffer = ScaleBufferNearestLetterbox(srcbuffer, (int)width, (int)height, neww, newh);
-          if(scaledbuffer)
+          int bw = ((int)width  < neww) ? (int)width  : neww;
+          int bh = ((int)height < newh) ? (int)height : newh;
+
+          XBYTE* blitbuffer = srcbuffer;
+          bool   cropped    = false;
+          bool   canblit    = true;
+
+          if((bw != (int)width) || (bh != (int)height))
             {
-              blitbuffer = scaledbuffer;
-              scaled     = true;
+              // Window smaller than the canvas on at least one axis: crop to the top-left bw x bh
+              // region instead of blitting the whole (width x height) canvas.
+              XBYTE* croppedbuffer = (XBYTE*)malloc((size_t)bw * (size_t)bh * 4);
+              if(croppedbuffer)
+                {
+                  for(int y=0; y<bh; y++)
+                    {
+                      memcpy(croppedbuffer + (size_t)y * (size_t)bw    * 4,
+                             srcbuffer      + (size_t)y * (size_t)width * 4,
+                             (size_t)bw * 4);
+                    }
+
+                  blitbuffer = croppedbuffer;
+                  cropped    = true;
+                }
+               else
+                {
+                  canblit = false;
+                }
             }
+
+          if(canblit)
+            {
+              XImage* image = CreateXImageFromBuffer(display, DefaultScreen(display), blitbuffer, bw, bh);
+              if(image)
+                {
+                  XPutImage(display, window, gc, image, 0, 0, 0, 0, bw, bh);
+                  XDestroyImage(image);
+                }
+            }
+
+          if(cropped) free(blitbuffer);
         }
-
-      int blitw = scaled ? neww   : (int)width;
-      int blith = scaled ? newh   : (int)height;
-
-      XImage* image = CreateXImageFromBuffer(display, DefaultScreen(display), blitbuffer, blitw, blith);
-      if(image)
-        {
-          XPutImage(display, window, gc, image, 0, 0, 0, 0, blitw, blith);
-          XDestroyImage(image);
-        }
-
-      if(scaled) free(blitbuffer);
 
       XFreeGC(display, gc);
     }
@@ -376,6 +528,23 @@ bool GRPLINUXSCREENX11::Delete()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Resize(int width, int height)
 {
+  // Clamp to the GRPVIEWPORT_ID_MAIN viewport's max size here too (not just via
+  // ApplyWMNormalHints()/Update()'s reactive snap-back), so an API/script-driven Resize() call
+  // (e.g. Script_Lib_Window.cpp) requesting a size beyond the max settles at the cap immediately
+  // instead of visibly growing for one frame and then being snapped back by Update() -- mirrors
+  // Win32's WM_GETMINMAXINFO, which Windows sends (and enforces) for programmatic resizes too, not
+  // just interactive drag. Not applied while fullscreen (unrelated sizing).
+  if(!Styles_IsFullScreen())
+    {
+      float maxw = 0.0f;
+      float maxh = 0.0f;
+
+      ResolveViewportMax(maxw, maxh);
+
+      if((maxw > 0.0f) && (width  > (int)maxw)) width  = (int)maxw;
+      if((maxh > 0.0f) && (height > (int)maxh)) height = (int)maxh;
+    }
+
   XResizeWindow(display, window, width, height);
 
   return UpdateSize(width, height);
@@ -404,7 +573,20 @@ bool GRPLINUXSCREENX11::Set_Position(int x, int y)
 
   SetPosition(x, y);
 
- 
+  if(!IsRunningOnWSL())
+    {
+      // Native, ICCCM-compliant WM (KWin, Mutter, Xfwm...): a managed top-level window moves itself by issuing
+      // the request on ITS OWN window; the WM intercepts it (SubstructureRedirect on the frame) and repositions
+      // the whole frame accordingly. The ancestor-walk below (the WSLg workaround) must NOT run here: under a
+      // reparenting WM it climbs into the WM's OWN frame window, and XMoveWindow on a window that belongs to
+      // the window manager is ignored/reverted by KWin -- which is exactly why caption-dragging moved nothing
+      // on native KDE while working fine on WSLg.
+      XMoveWindow(display, window, x, y);
+      XFlush(display);
+
+      return true;
+    }
+
   Window towindow      = window;
   Window current       = window;
   int    totaloffsetx  = 0;
@@ -496,15 +678,50 @@ bool GRPLINUXSCREENX11::Set_Position(int x, int y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool GRPLINUXSCREENX11::GetClientSize(int& width, int& height)
+* @brief      Get client size: LIVE size of the native window (X11 override of the base's content-size
+*             fallback). Queried fresh from the server each call, so it tracks interactive resizes (the
+*             custom-chromes grip, a WM-driven resize, maximize...) with no dependence on any cached member.
+* @ingroup    PLATFORM_LINUX
+*
+* @param[out] width : live client area width.
+* @param[out] height : live client area height.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::GetClientSize(int& width, int& height)
+{
+  if(!display || !window)
+    {
+      return GRPSCREEN::GetClientSize(width, height);
+    }
+
+  XWindowAttributes wattr;
+
+  if(!XGetWindowAttributes(display, window, &wattr))
+    {
+      return GRPSCREEN::GetClientSize(width, height);
+    }
+
+  width  = wattr.width;
+  height = wattr.height;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool GRPLINUXSCREENX11::Show(bool active)
 * @brief      Show
 * @ingroup    PLATFORM_LINUX
-* 
+*
 * @param[in]  active : Active value.
-* 
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Show(bool active)
 {
@@ -607,6 +824,15 @@ bool GRPLINUXSCREENX11::Maximize(bool active)
 {
   if(!display) return false;
   if(!window)  return false;
+
+  // Already as big as the viewport cap allows: maximizing could not grow the window, and the WM (KWin,
+  // Mutter...) would still relocate it to the work area's top-left corner while keeping the capped size
+  // (PMaxSize). Per design the window must stay EXACTLY as it is (same size, same position), so this is a
+  // no-op. Same guard as GRPWINDOWSSCREEN::Maximize(), common rule in GRPSCREEN::IsClientSizeAtMaximum().
+  if(active && IsClientSizeAtMaximum())
+    {
+      return true;
+    }
 
   Atom wm_state      = XInternAtom(display, "_NET_WM_STATE"                 , False);
   Atom wm_state_maxh = XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_HORZ"  , False);
@@ -801,8 +1027,18 @@ void GRPLINUXSCREENX11::Chromes_ApplyStyle()
   GRPSCREENCFGCHROMES* cfgchromes = GetCFGChromes();
   if(!cfgchromes) return;
 
-  Atom wmhintsatom = XInternAtom(display, "_MOTIF_WM_HINTS", True);
-  if(wmhintsatom == None) return;
+  // only_if_exists = False: creates the atom if absent, exactly like the custom-chromes block in
+  // Create_Window(). With True, on sessions where no client has interned this atom yet (possible on
+  // KDE Plasma 6 / KWin 6 at early startup), the call returns None and the whole function exits
+  // silently -- no hints are set, KWin sees an undecorated window with no Motif hints and applies
+  // its FULL default chrome (all buttons: minimize, maximize, close). That is exactly why
+  // SetNativeMinimizeActive(false) / SetNativeMaximizeActive(false) had no visible effect.
+  Atom wmhintsatom = XInternAtom(display, "_MOTIF_WM_HINTS", False);
+  if(wmhintsatom == None)
+    {
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen X11] Error Atom _MOTIF_WM_HINTS (native chromes)"));
+      return;
+    }
 
   HITNS hints;
 
@@ -901,19 +1137,307 @@ void GRPLINUXSCREENX11::Chromes_ApplyPostCreate()
     }
 
   SetCanClose(cfgchromes->GetNativeCloseActive());
+
+  // ---- _NET_WM_WINDOW_TYPE (button suppression for KWin 6+) -----------------------------------------
+  // KWin 6 does NOT use _MOTIF_WM_HINTS.functions to control button VISIBILITY for NORMAL windows:
+  //   • It always considers NORMAL windows minimizable (isMinimizable() == true unconditionally),
+  //     so MWM_FUNC_MINIMIZE absent from functions has NO effect on the minimize button.
+  //   • It derives "can maximize?" from isResizable() (i.e. whether MWM_FUNC_RESIZE is present),
+  //     not from MWM_FUNC_MAXIMIZE -- confirmed by user testing: SetResizeActive(false) makes the
+  //     maximize button disappear; SetResizeActive(true) always shows it regardless of
+  //     SetNativeMaximizeActive(false).
+  //   • _NET_WM_ALLOWED_ACTIONS set by the client before mapping IS overwritten by KWin's own
+  //     updateAllowedActions() when the window is first managed, so that approach does not work.
+  //
+  // The only reliable EWMH mechanism to suppress both buttons across KWin 6 is _NET_WM_WINDOW_TYPE:
+  // when SetNativeMinimizeActive(false) && SetNativeMaximizeActive(false), declare the window as
+  // _NET_WM_WINDOW_TYPE_UTILITY ("floating tool window / palette"). KWin treats UTILITY windows as
+  // non-minimizable and non-maximizable, so no minimize/maximize buttons appear in the decoration.
+  // The window is still resizable (UTILITY windows have a resize border) and still has a close
+  // button. The Motif hints from Chromes_ApplyStyle() still carry the correct bits for other WMs
+  // that DO honour them (Openbox, XFWM, Metacity, etc.).
+  //
+  // When only ONE of the two buttons is suppressed (e.g. no-maximize but keep minimize), KWin 6
+  // has no per-button standard mechanism -- UTILITY hides both, NORMAL shows both (ignoring hints).
+  // Motif hints still handle those intermediate cases on WMs that respect them.
+  // ----------------------------------------------------------------------------------------------------
+  if(cfgchromes->GetNativeCaptionActive()   &&
+     !cfgchromes->GetNativeMinimizeActive() &&
+     !cfgchromes->GetNativeMaximizeActive())
+    {
+      Atom netwmwindowtype  = XInternAtom(display, "_NET_WM_WINDOW_TYPE",         False);
+      Atom netwmtypeutility = XInternAtom(display, "_NET_WM_WINDOW_TYPE_UTILITY", False);
+
+      if(netwmwindowtype != None && netwmtypeutility != None)
+        {
+          XChangeProperty(display, window, netwmwindowtype, XA_ATOM, 32, PropModeReplace,
+                          (unsigned char*)&netwmtypeutility, 1);
+        }
+    }
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool GRPLINUXSCREENX11::IsUsingCustomChromes()
+* @brief      Single source of truth for "is this screen using GEN's own custom-drawn chrome instead of
+*             native/WM decoration" -- see the header declaration for the full rationale. Selects the
+*             no-native-decoration-at-all path in Create_Window() (_MOTIF_WM_HINTS decorations = 0) and
+*             enables GEN's own resize grip (UpdateCustomChromesResize()) in its place.
+* @note       Does NOT gate the growth cap: ApplyWMNormalHints() and Update()'s reactive snap-back apply
+*             to custom-chromes windows exactly like to any other.
+* @note       INTERNAL
+* @ingroup    PLATFORM_LINUX
+*
+* @return     bool : true if custom (non-native) chromes are active for this screen.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::IsUsingCustomChromes()
+{
+  return (IsCFGChromesActive()                     &&
+          !GetCFGChromes()->GetUseNativeChromes()  &&
+          !Style_Is(GRPSCREENSTYLE_TRANSPARENT));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPLINUXSCREENX11::ResolveViewportMax(float& maxw, float& maxh)
+* @brief      Resolves the GRPVIEWPORT_ID_MAIN viewport's max size, shared by ApplyWMNormalHints() and
+*             Update()'s reactive snap-back. See the header declaration for the full fallback chain
+*             (explicit viewport max -> viewport's own declared size -> this screen's own GRPPROPERTIES max).
+* @note       INTERNAL
+* @ingroup    PLATFORM_LINUX
+*
+* @param[out] maxw : Resolved max width. Left UNTOUCHED if no viewport is configured yet.
+* @param[out] maxh : Resolved max height. Left UNTOUCHED if no viewport is configured yet.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXSCREENX11::ResolveViewportMax(float& maxw, float& maxh)
+{
+  GRPVIEWPORT* mainviewport = GetViewport(GRPVIEWPORT_ID_MAIN);
+  if(!mainviewport)
+    {
+      return; // no viewport configured yet: caller keeps whatever it had
+    }
+
+  maxw = mainviewport->GetMaxWidth();
+  maxh = mainviewport->GetMaxHeight();
+
+  // No EXPLICIT SetMaxSize() on this axis: fall back to the viewport's own declared size, so the
+  // window is capped even when the app never calls the new SetMaxSize() API.
+  if(maxw <= 0.0f) maxw = mainviewport->GetWidth();
+  if(maxh <= 0.0f) maxh = mainviewport->GetHeight();
+
+  // Final safety net: if one axis is still unresolved while the other DOES have a real value,
+  // never hand a literal 0 on just that one axis to a caller (some WMs could read a 0 max_width/
+  // max_height as "zero-size allowed" rather than "unconstrained") -- fall back to this screen's
+  // own GRPPROPERTIES max (set in the constructor to the X11 display's own resolution), so both
+  // axes always end up with a real, non-zero ceiling together.
+  if(maxw <= 0.0f) maxw = (float)GetMaxWidth();
+  if(maxh <= 0.0f) maxh = (float)GetMaxHeight();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPLINUXSCREENX11::ApplyWMNormalHints()
+* @brief      X11 equivalent of GRPWINDOWSSCREEN::ApplyResizeLimits's WM_GETMINMAXINFO handling: caps how
+*             big this window can become at the GRPVIEWPORT_ID_MAIN viewport's max size (width and height
+*             independently), via a PMaxSize XSizeHints property (XSetWMNormalHints). Compliant EWMH window
+*             managers honour WM_NORMAL_HINTS' PMaxSize both for interactive border-drag resize AND for
+*             _NET_WM_STATE_MAXIMIZED_HORZ/VERT maximize requests -- Maximize() below is deliberately left
+*             untouched, it already sends the correct EWMH ClientMessage; setting this hint is what makes
+*             that existing maximize request respect the viewport's max instead of filling the whole monitor.
+* @note       No minimum is enforced here (no PMinSize set): the window is left free to shrink as usual; see
+*             GRPLINUXBLITGLESX11::ComputePresentationScale (GL path) and Update() (raster path) for how the
+*             rendered content is hidden (not the window itself) below the viewport's minimum.
+* @note       Called from Create_Window() for EVERY non-fullscreen window, custom-chromes ones included: a
+*             size hint only tells the window manager which sizes are ALLOWED, it never asks it to DRAW
+*             anything, so it cannot bring back native decoration (only _MOTIF_WM_HINTS' decorations field
+*             does that -- see Create_Window()'s custom-chromes block). Fullscreen is the only exclusion
+*             (unrelated sizing, must not be clamped by the viewport max). Since a hint is only ever a
+*             REQUEST, Update()'s reactive snap-back is what actually GUARANTEES the cap; this just lets a
+*             cooperating WM get it right the first time, without the one-frame overshoot.
+* @note       INTERNAL
+* @ingroup    PLATFORM_LINUX
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXSCREENX11::ApplyWMNormalHints()
+{
+  if(!display || !window)
+    {
+      return;
+    }
+
+  float maxw = 0.0f;
+  float maxh = 0.0f;
+
+  ResolveViewportMax(maxw, maxh);
+
+  if(maxw <= 0.0f && maxh <= 0.0f)
+    {
+      return; // no viewport configured yet / viewport has no usable size at all yet
+    }
+
+  XSizeHints hints;
+
+  memset(&hints, 0, sizeof(hints));
+
+  hints.flags      = PMaxSize;
+  hints.max_width  = (int)maxw;
+  hints.max_height = (int)maxh;
+
+  XSetWMNormalHints(display, window, &hints);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPLINUXSCREENX11::UpdateCustomChromesResize()
+* @brief      GEN's own resize grip, for custom-chromes windows only: a band of
+*             GRPLINUXSCREENX11_CUSTOMRESIZE_BORDER pixels along the INSIDE of the window's right and bottom
+*             edges which, when dragged with the left mouse button, resizes the window in-process via
+*             XResizeWindow. This exists because a custom-chromes window is created with _MOTIF_WM_HINTS
+*             decorations = 0 -- completely undecorated, the only value that reliably suppresses the native
+*             titlebar across window managers (see Create_Window()) -- which necessarily also gives up the
+*             WM-drawn resize border. Exactly the approach a client-side-decorated GTK/Qt application takes.
+* @note       Right, bottom and bottom-right corner only, never left or top. Two reasons: the canvas is
+*             anchored to the window's TOP-LEFT corner and never rescaled (see
+*             GRPLINUXBLITGLESX11::ComputePresentationScale), so these are the edges whose movement actually
+*             changes what is visible; and keeping the top edge out of it means this can never fight
+*             GRPSCREEN::UpdateCFGChromesDrag()'s caption drag, which lives up there.
+* @note       A resize only ever STARTS on a fresh press that lands inside the band (a press that began
+*             anywhere else and merely moved over it does not count), and every subsequent frame recomputes
+*             the size from the size/pointer position captured at that moment -- never incrementally from the
+*             previous frame -- so a pointer that outruns the window, or leaves it entirely, cannot make the
+*             size drift. The result is clamped to the GRPVIEWPORT_ID_MAIN viewport's max exactly like every
+*             other resize path in this class, so the grip can never be used to exceed it.
+* @note       INTERNAL
+* @ingroup    PLATFORM_LINUX
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXSCREENX11::UpdateCustomChromesResize()
+{
+  if(!display || !window) return;
+
+  if(!IsUsingCustomChromes() || Styles_IsFullScreen() || !GetCFGChromes()->GetResizeActive())
+    {
+      customresizing          = false;
+      customresizeprevpressed = false;
+
+      return;
+    }
+
+  Window        rootreturn  = 0;
+  Window        childreturn = 0;
+  int           rootx       = 0;
+  int           rooty       = 0;
+  int           winx        = 0;
+  int           winy        = 0;
+  unsigned int  mask        = 0;
+
+  if(!XQueryPointer(display, window, &rootreturn, &childreturn, &rootx, &rooty, &winx, &winy, &mask))
+    {
+      customresizing          = false;
+      customresizeprevpressed = false;
+
+      return;
+    }
+
+  bool pressed = ((mask & Button1Mask) ? true : false);
+
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  // The caption drag owns the pointer while it is running: never try to resize at the same time.
+  if(cfgchromesdragging)
+    {
+      customresizing          = false;
+      customresizeprevpressed = pressed;
+
+      return;
+    }
+  #endif
+
+  if(!customresizing)
+    {
+      if(pressed && !customresizeprevpressed)
+        {
+          XWindowAttributes wattr;
+
+          if(XGetWindowAttributes(display, window, &wattr))
+            {
+              int edge = 0;
+
+              if((winx >= 0) && (winx <= wattr.width) && (winy >= 0) && (winy <= wattr.height))
+                {
+                  if(winx >= (wattr.width  - GRPLINUXSCREENX11_CUSTOMRESIZE_BORDER)) edge |= GRPLINUXSCREENX11_CUSTOMRESIZE_EDGE_RIGHT;
+                  if(winy >= (wattr.height - GRPLINUXSCREENX11_CUSTOMRESIZE_BORDER)) edge |= GRPLINUXSCREENX11_CUSTOMRESIZE_EDGE_BOTTOM;
+                }
+
+              if(edge)
+                {
+                  customresizing          = true;
+                  customresizeedge        = edge;
+                  customresizestartrootx  = rootx;
+                  customresizestartrooty  = rooty;
+                  customresizestartwidth  = wattr.width;
+                  customresizestartheight = wattr.height;
+                }
+            }
+        }
+    }
+   else
+    {
+      if(!pressed)
+        {
+          customresizing = false;
+        }
+       else
+        {
+          int neww = customresizestartwidth;
+          int newh = customresizestartheight;
+
+          if(customresizeedge & GRPLINUXSCREENX11_CUSTOMRESIZE_EDGE_RIGHT)  neww = customresizestartwidth  + (rootx - customresizestartrootx);
+          if(customresizeedge & GRPLINUXSCREENX11_CUSTOMRESIZE_EDGE_BOTTOM) newh = customresizestartheight + (rooty - customresizestartrooty);
+
+          float maxw = 0.0f;
+          float maxh = 0.0f;
+
+          ResolveViewportMax(maxw, maxh);
+
+          if((maxw > 0.0f) && (neww > (int)maxw)) neww = (int)maxw;
+          if((maxh > 0.0f) && (newh > (int)maxh)) newh = (int)maxh;
+
+          if(neww < GRPLINUXSCREENX11_CUSTOMRESIZE_MINSIZE) neww = GRPLINUXSCREENX11_CUSTOMRESIZE_MINSIZE;
+          if(newh < GRPLINUXSCREENX11_CUSTOMRESIZE_MINSIZE) newh = GRPLINUXSCREENX11_CUSTOMRESIZE_MINSIZE;
+
+          XWindowAttributes wattr;
+
+          if(XGetWindowAttributes(display, window, &wattr))
+            {
+              if((neww != wattr.width) || (newh != wattr.height))
+                {
+                  XResizeWindow(display, window, neww, newh);
+                  XFlush(display);
+                }
+            }
+        }
+    }
+
+  customresizeprevpressed = pressed;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool GRPLINUXSCREENX11::Create_Window(bool show)
 * @brief      Create window
 * @ingroup    PLATFORM_LINUX
-* 
+*
 * @param[in]  show : Show value.
-* 
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPLINUXSCREENX11::Create_Window(bool show)
 {
@@ -1086,10 +1610,10 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
       window = XCreateWindow(display, root, posx, posy, winw, winh, 0, vinfo.depth, InputOutput, vinfo.visual, CWColormap | CWBorderPixel | CWBackPixel, &attr);        
     }
  
-  if(!window) 
+  if(!window)
     {
       return false;
-    }      
+    }
 
   if(Style_Is(GRPSCREENSTYLE_TRANSPARENT))
     {
@@ -1137,9 +1661,19 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
   // the native window must show as little of its own decoration as possible -- no border/title/menu/min/max at
   // all; a resize grip is the only thing kept (and only if requested), the same way GRPWINDOWSSCREEN keeps
   // WS_THICKFRAME without WS_CAPTION for its own custom mode.
-  bool usecfgchromescustom = (IsCFGChromesActive()                       &&
-                               !GetCFGChromes()->GetUseNativeChromes()   &&
-                               !Style_Is(GRPSCREENSTYLE_TRANSPARENT));
+  bool usecfgchromescustom = IsUsingCustomChromes();
+
+  // Cap this window's growth (interactive resize and native Maximize) at the GRPVIEWPORT_ID_MAIN
+  // viewport's max size, before the window manager ever starts managing this window (i.e. before
+  // Chromes_ApplyStyle()/the custom-chromes hints block/Show() below), so the hint is already in
+  // place the first time it matters. Applies to custom chromes too: a size hint tells the WM what
+  // sizes are ALLOWED, it never asks it to DRAW anything, so it cannot bring back native
+  // decoration (the decorations field alone does that -- see the custom-chromes block below).
+  // Only fullscreen is excluded (unrelated sizing, must not be clamped by the viewport max).
+  if(!Styles_IsFullScreen())
+    {
+      ApplyWMNormalHints();
+    }
 
   if(usecfgchromesnative)
     {
@@ -1148,16 +1682,46 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
     }
    else if(usecfgchromescustom)
     {
-      Atom wmhintsatom = XInternAtom(display, "_MOTIF_WM_HINTS", True);
+      // only_if_exists = False ("create if absent so we can set it", exactly like the
+      // _COMPTON_SHADOW lookup above): with True, this whole block -- the ONLY thing suppressing
+      // the native titlebar in custom-chromes mode -- would be silently skipped on any session
+      // where no client had interned this atom yet, which is indistinguishable, from the outside,
+      // from the fix not working at all.
+      Atom wmhintsatom = XInternAtom(display, "_MOTIF_WM_HINTS", False);
 
-      if(wmhintsatom != None)
+      if(wmhintsatom == None)
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Screen X11] Error Atom _MOTIF_WM_HINTS (custom chromes)"));
+        }
+       else
         {
           HITNS hints;
 
           memset(&hints, 0, sizeof(hints));
 
-          hints.flags       = GRPLINUXSCREENX11_MWM_HINTS_DECORATIONS;
-          hints.decorations = GetCFGChromes()->GetResizeActive() ? GRPLINUXSCREENX11_MWM_DECOR_RESIZEH : 0;
+          // decorations MUST be exactly 0 here -- NOT "0 plus the resize handles". This is the whole
+          // reason the native titlebar used to appear stacked on top of GEN's custom-drawn caption:
+          // _MOTIF_WM_HINTS' decorations field is not a reliable "give me only these pieces" request
+          // across window managers. WSLg's compositor (and several others) implement it as a plain
+          // boolean -- decorations == 0 means "undecorated", ANY non-zero mask means "decorate this
+          // window", at which point they draw their OWN COMPLETE frame (border AND titlebar AND
+          // buttons), ignoring which individual bits were actually asked for. So the previous
+          // "MWM_DECOR_RESIZEH when GetResizeActive()" (a non-zero mask, and GetResizeActive()
+          // defaults to true -- see GRPSCREENCFGCHROMES::Clean() -- so this was the normal case, not
+          // an edge case) was read as "decorate me", producing exactly the doubled caption reported.
+          // Giving up MWM_DECOR_RESIZEH means giving up the WM-drawn resize border too: GEN draws
+          // and drives its own instead, see UpdateCustomChromesResize(). MWM_HINTS_FUNCTIONS is set
+          // alongside MWM_HINTS_DECORATIONS (with functions populated to match) the same way
+          // Chromes_ApplyStyle() does it -- functions describes what the WM should ALLOW, not what
+          // it should DRAW, so unlike decorations it can safely keep RESIZE.
+          hints.flags       = GRPLINUXSCREENX11_MWM_HINTS_DECORATIONS | GRPLINUXSCREENX11_MWM_HINTS_FUNCTIONS;
+          hints.decorations = 0;
+          hints.functions   = GRPLINUXSCREENX11_MWM_FUNC_MOVE;
+
+          if(GetCFGChromes()->GetResizeActive())
+            {
+              hints.functions |= GRPLINUXSCREENX11_MWM_FUNC_RESIZE;
+            }
 
           XChangeProperty(display, window, wmhintsatom, wmhintsatom, 32, PropModeReplace, (unsigned char*)&hints, 5);
         }
@@ -1725,6 +2289,16 @@ void GRPLINUXSCREENX11::Clean()
   wmdeletewindow = None;
 
   isdesktop      = false;
+
+  normalhintsapplied      = false;
+
+  customresizing          = false;
+  customresizeedge        = 0;
+  customresizeprevpressed = false;
+  customresizestartrootx  = 0;
+  customresizestartrooty  = 0;
+  customresizestartwidth  = 0;
+  customresizestartheight = 0;
 
   #ifdef GRP_OPENGL_ACTIVE
   blitgles  = NULL;

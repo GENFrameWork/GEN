@@ -48,6 +48,7 @@
 #include "UI_SkinCanvas.h"
 #include "INPManager.h"
 #include "XTimer.h"
+#include "XTrace.h"
 #endif
 
 
@@ -554,7 +555,81 @@ bool GRPSCREEN::Set_Position(int x, int y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool GRPSCREEN::GetClientSize(int& width, int& height)
+* @brief      Get client size: the LIVE size of the native window's client area, as opposed to
+*             GetWidth()/GetHeight() which are the fixed CONTENT (canvas design) size. Each platform overrides
+*             this with the real native query (GetClientRect on Windows, XGetWindowAttributes on X11); this
+*             base fallback simply reports the content size, which is also correct for platforms whose window
+*             can never be resized away from it.
+* @ingroup    GRAPHIC
+*
+* @param[out] width : live client area width.
+* @param[out] height : live client area height.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::GetClientSize(int& width, int& height)
+{
+  width  = (int)GetWidth();
+  height = (int)GetHeight();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPSCREEN::IsClientSizeAtMaximum()
+* @brief      Is client size at maximum: true when the native window's LIVE client area has already reached
+*             the effective growth cap on BOTH axes, i.e. maximizing it could not make it any bigger. The cap
+*             follows the exact same resolution rule every resize path in the engine uses (Windows'
+*             ApplyResizeLimits / X11's ResolveViewportMax): the GRPVIEWPORT_ID_MAIN viewport's explicit
+*             SetMaxSize() per axis, falling back to the viewport's own declared (design) size. With no
+*             viewport or no usable cap this returns false (an OS maximize could always grow the window).
+*             Used by the platform Maximize() overrides to turn a maximize request into a no-op -- keeping
+*             both the SIZE and the POSITION untouched -- when the window is already as big as it is allowed
+*             to get; without this, the OS would keep the capped size but still relocate the window to the
+*             work area's top-left corner.
+* @ingroup    GRAPHIC
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::IsClientSizeAtMaximum()
+{
+  GRPVIEWPORT* mainviewport = GetViewport(GRPVIEWPORT_ID_MAIN);
+  if(!mainviewport)
+    {
+      return false;
+    }
+
+  int maxw = (int)mainviewport->GetMaxWidth();
+  int maxh = (int)mainviewport->GetMaxHeight();
+
+  if(maxw <= 0) maxw = (int)mainviewport->GetWidth();
+  if(maxh <= 0) maxh = (int)mainviewport->GetHeight();
+
+  if((maxw <= 0) || (maxh <= 0))
+    {
+      return false;
+    }
+
+  int clientwidth  = 0;
+  int clientheight = 0;
+
+  if(!GetClientSize(clientwidth, clientheight))
+    {
+      return false;
+    }
+
+  return ((clientwidth >= maxw) && (clientheight >= maxh));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool GRPSCREEN::Resize(int width, int height)
 * @brief      Resize
 * @ingroup    GRAPHIC
@@ -847,8 +922,11 @@ bool GRPSCREEN::IsCFGChromesActive()
 
 #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
 
+// Forward declaration: defined later in this file, before UpdateCFGChromesAutoHide.
+static void GRPSCREEN_SetElementVisibleRecursive(UI_ELEMENT* element, bool visible);
+
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool GRPSCREEN::LoadCFGChromesLayout()
 * @brief      Load CFG chromes layout
 * @note       Resolves and loads the .xml (or .zip bundle) + layout named in GetCFGChromes(), and keeps a weak
@@ -889,12 +967,24 @@ bool GRPSCREEN::LoadCFGChromesLayout()
 
       pathfile = namelayoutfile->Get();
 
-      if(!GEN_USERINTERFACE.Load(pathfile, this, 0)) return false;
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Chromes] loading custom layout: file [%s] layout [%s]"), namelayoutfile->Get(), namelayout->Get());
+
+      if(!GEN_USERINTERFACE.Load(pathfile, this, 0))
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Chromes] ERROR: custom layout file [%s] could NOT be loaded -> NO custom chrome will be drawn (see [UI Load] trace above for the exact reason)"), namelayoutfile->Get());
+          return false;
+        }
 
       cfgchromeslayout = GEN_USERINTERFACE.Layouts_Get(namelayout->Get());
     }
 
-  if(!cfgchromeslayout) return false;
+  if(!cfgchromeslayout)
+    {
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Chromes] ERROR: layout named [%s] not found inside [%s] -> NO custom chrome will be drawn (check the <layout name=...> attribute in the XML)"), namelayout->Get(), namelayoutfile->Get());
+      return false;
+    }
+
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Chromes] custom layout [%s] loaded OK"), namelayout->Get());
 
   // The layout's own role="title" element (if any) keeps whatever static text it was authored with in the
   // .xml; once custom chromes are active, this screen's own title (GetTitle(), the same string a native
@@ -906,6 +996,24 @@ bool GRPSCREEN::LoadCFGChromesLayout()
     {
       ((UI_ELEMENT_TEXT*)titleelement)->GetText()->Set(GetTitle()->Get());
     }
+
+  // Sync the caption element's actual visibility to the initial desired state
+  // (cfgchromesautohidevisible == true from Clean()). Without this, an XML
+  // layout that authors the caption with visible="false" (common when auto-hide
+  // is the default behaviour) would start hidden and UpdateCFGChromesAutoHide()
+  // would never have a chance to show it on the GL/EGL path used by KDE native
+  // X11, where keyboard focus may not be granted immediately.
+  UI_ELEMENT* captionelement = cfgchromeslayout->Elements_Get(UI_ELEMENT_CHROMEROLE_CAPTION);
+  if(captionelement)
+    {
+      GRPSCREEN_SetElementVisibleRecursive(captionelement, cfgchromesautohidevisible);
+    }
+
+  // Reference width for UpdateCFGChromesButtonsPosition(): the window width the layout's element positions
+  // were just resolved against. The min/max/close buttons keep their authored distance to the RIGHT edge of
+  // this width; when the window is later resized narrower they are shifted left by exactly the difference.
+  cfgchromesbuttonsrefwidth = (int)GetWidth();
+  cfgchromesbuttonsshift    = 0;
 
   return true;
 }
@@ -1065,15 +1173,39 @@ static void GRPSCREEN_SetElementVisibleRecursive(UI_ELEMENT* element, bool visib
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void GRPSCREEN_ShiftElementXRecursive(UI_ELEMENT* element, double dx)
+* @brief      INTERNAL: shifts an element and every one of its compose (child) elements horizontally by dx.
+*             Child element positions are stored ABSOLUTE (the skin adds the father's position at layout time,
+*             see UI_SKINCANVAS::SetAroundFromSubElements()/CalculePosition()), so moving just the button's own
+*             element would leave its icon/graphic drawn at the old spot.
+* @ingroup    GRAPHIC
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void GRPSCREEN_ShiftElementXRecursive(UI_ELEMENT* element, double dx)
+{
+  if(!element) return;
+
+  element->SetXPosition(element->GetXPosition() + dx);
+
+  for(XDWORD c=0; c<element->GetComposeElements()->GetSize(); c++)
+    {
+      GRPSCREEN_ShiftElementXRecursive(element->GetComposeElements()->Get(c), dx);
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPSCREEN::UpdateCFGChromesAutoHide()
 * @brief      Update CFG chromes auto hide
 * @note       Hides the layout's role="caption" element (and everything inside it: icon, title, min/max/close)
 *             when the cursor has stayed steadily outside its own area for GetCFGChromes()->GetCustomAutoHide()
-*             milliseconds, and shows it again once the cursor has stayed steadily inside that same area for the
-*             same amount of time. The debounce timer resets every time the cursor moves in or out, so a quick
-*             pass through the caption's edge never triggers a transition by itself. A no-op when auto-hide is 0
-*             (disabled, the default): the caption is left exactly as it already is.
+*             milliseconds -- that parameter is the HIDE delay only. Showing is INSTANTANEOUS: the moment the
+*             cursor enters the caption area the bar is made visible again, with no debounce at all. The hide
+*             timer resets every time the cursor moves in or out, so a quick pass near the caption's edge never
+*             hides it by itself. When auto-hide is 0 (disabled, the default) the caption is simply always
+*             visible.
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the operation is successful; otherwise false.
@@ -1085,11 +1217,23 @@ bool GRPSCREEN::UpdateCFGChromesAutoHide()
   if(cfgchromes.GetUseNativeChromes()) return false;
   if(!cfgchromeslayout)                return false;
 
-  XDWORD timehidden = cfgchromes.GetCustomAutoHide();
-  if(!timehidden) return false;
-
   UI_ELEMENT* captionelement = cfgchromeslayout->Elements_Get(UI_ELEMENT_CHROMEROLE_CAPTION);
   if(!captionelement) return false;
+
+  XDWORD timehidden = cfgchromes.GetCustomAutoHide();
+  if(!timehidden)
+    {
+      // Auto-hide disabled: caption is always visible. LoadCFGChromesLayout()
+      // already forced it visible once; this guard keeps cfgchromesautohidevisible
+      // consistent so that if auto-hide is re-enabled at runtime the timer logic
+      // starts from a known-good state.
+      if(!cfgchromesautohidevisible)
+        {
+          cfgchromesautohidevisible = true;
+          GRPSCREEN_SetElementVisibleRecursive(captionelement, true);
+        }
+      return true;
+    }
 
   if(!cfgchromesautohidetimer)
     {
@@ -1110,9 +1254,20 @@ bool GRPSCREEN::UpdateCFGChromesAutoHide()
   bline.width  = captionelement->GetBoundaryLine()->width;
   bline.height = captionelement->GetBoundaryLine()->height;
 
-  // A cursor reading unavailable (e.g. the cursor is outside this window entirely) definitely counts as "not
-  // over the caption".
-  bool cursorover = cursoravailable && bline.IsWithin(uix, uiy);
+  // When cursor position is NOT available (cursor outside the window, or the
+  // input device hasn't been updated yet because the window doesn't have
+  // keyboard focus), preserve the current desired state rather than treating
+  // it as "cursor away from chrome". This prevents the caption being hidden
+  // on KDE native X11 simply because the WM hasn't granted focus yet.
+  bool cursorover;
+  if(cursoravailable)
+    {
+      cursorover = bline.IsWithin(uix, uiy);
+    }
+  else
+    {
+      cursorover = cfgchromesautohidedesired;
+    }
 
   if(cursorover != cfgchromesautohidedesired)
     {
@@ -1120,13 +1275,74 @@ bool GRPSCREEN::UpdateCFGChromesAutoHide()
       cfgchromesautohidetimer->Reset();
     }
 
-  if((cfgchromesautohidedesired != cfgchromesautohidevisible) &&
-     (cfgchromesautohidetimer->GetMeasureMilliSeconds() >= timehidden))
+  if(cfgchromesautohidedesired != cfgchromesautohidevisible)
     {
-      cfgchromesautohidevisible = cfgchromesautohidedesired;
+      // Asymmetric by design: SHOWING is instantaneous (the instant the cursor touches the caption area the
+      // bar pops in, no debounce), while HIDING only happens after the cursor has stayed steadily away from
+      // the caption for GetCustomAutoHide() milliseconds -- that parameter is a HIDE delay only.
+      if(cfgchromesautohidedesired || (cfgchromesautohidetimer->GetMeasureMilliSeconds() >= timehidden))
+        {
+          cfgchromesautohidevisible = cfgchromesautohidedesired;
 
-      GRPSCREEN_SetElementVisibleRecursive(captionelement, cfgchromesautohidevisible);
+          GRPSCREEN_SetElementVisibleRecursive(captionelement, cfgchromesautohidevisible);
+        }
     }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPSCREEN::UpdateCFGChromesButtonsPosition()
+* @brief      Update CFG chromes buttons position
+* @note       Keeps the chrome's minimize/maximize/close buttons visible when the window is resized narrower
+*             than the width their layout positions were authored for: all three are shifted LEFT together by
+*             exactly (reference width - current width) so they hug the window's live right edge. At or above
+*             the reference width they sit exactly where the layout put them (never pushed further right).
+*             Only the horizontal position is touched; only these three roles are moved (icon/title/caption
+*             stay put, per design). The shift is applied as a delta over the previously applied one, so
+*             positions never accumulate error and nothing at all is touched while the width is unchanged.
+* @ingroup    GRAPHIC
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::UpdateCFGChromesButtonsPosition()
+{
+  if(!IsCFGChromesActive())            return false;
+  if(cfgchromes.GetUseNativeChromes()) return false;
+  if(!cfgchromeslayout)                return false;
+  if(!cfgchromesbuttonsrefwidth)       return false;
+
+  // LIVE native client width (platform virtual) -- NOT GetWidth(), which is the fixed content size and would
+  // never change on a resize. This is what makes this same code work identically on Windows and Linux.
+  int clientwidth  = 0;
+  int clientheight = 0;
+
+  if(!GetClientSize(clientwidth, clientheight)) return false;
+
+  int shift = clientwidth - cfgchromesbuttonsrefwidth;
+  if(shift > 0) shift = 0;                                    // never right of the authored position
+
+  if(shift == cfgchromesbuttonsshift) return true;            // width unchanged since last applied: nothing to do
+
+  double dx = (double)(shift - cfgchromesbuttonsshift);
+
+  UI_ELEMENT_CHROMEROLE roles[3] = { UI_ELEMENT_CHROMEROLE_MINIMIZE,
+                                     UI_ELEMENT_CHROMEROLE_MAXIMIZE,
+                                     UI_ELEMENT_CHROMEROLE_CLOSE    };
+
+  for(int c=0; c<3; c++)
+    {
+      UI_ELEMENT* buttonelement = cfgchromeslayout->Elements_Get(roles[c]);
+      if(buttonelement)
+        {
+          GRPSCREEN_ShiftElementXRecursive(buttonelement, dx);
+        }
+    }
+
+  cfgchromesbuttonsshift = shift;
 
   return true;
 }
@@ -1293,6 +1509,7 @@ bool GRPSCREEN::UpdateViewports()
   #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
   UpdateCFGChromesDrag();
   UpdateCFGChromesAutoHide();
+  UpdateCFGChromesButtonsPosition();
   #endif
 
   for(XDWORD c=0; c<viewports.GetSize(); c++)
@@ -1515,6 +1732,9 @@ void GRPSCREEN::Clean()
   cfgchromesautohidevisible  = true;      // starts shown, matching a freshly loaded/unaffected layout
   cfgchromesautohidedesired  = true;
   cfgchromesautohidetimer    = NULL;      // created lazily, on first actual use (see UpdateCFGChromesAutoHide())
+
+  cfgchromesbuttonsrefwidth  = 0;         // captured by LoadCFGChromesLayout(); 0 = repositioning inactive
+  cfgchromesbuttonsshift     = 0;
   #endif
 }
 

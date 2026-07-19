@@ -157,6 +157,14 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
     bool                                   GetPointerPosition                (int& x, int& y);
     int                                    GetAndResetScrollDelta            ();
 
+    // LIVE compositor-driven window size (windowwidth/windowheight below), as opposed to
+    // GetWidth()/GetHeight() (inherited from GRPPROPERTIES), which after this port represents ONLY
+    // the canvas' fixed design size -- see the windowwidth/windowheight member comment for the full
+    // rationale. Needed by GRPLINUXBLITGLESWAYLAND (a different class) to size the wl_egl_window /
+    // report the EGL native surface size.
+    int                                    GetWindowWidth                    ();
+    int                                    GetWindowHeight                   ();
+
     #ifdef GRP_OPENGL_ACTIVE
     GRPLINUXBLITGLESWAYLAND*              GetBlitGLES                       ();
     #endif
@@ -207,6 +215,22 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
     bool                                  haskeyboardfocus;       // pushed by wl_keyboard::enter/leave (no XGetInputFocus equivalent)
     bool                                  haspointerfocus;        // pushed by wl_pointer::enter/leave
 
+    // LIVE compositor-driven window size, deliberately kept SEPARATE from the inherited
+    // GRPPROPERTIES::width/height (GetWidth()/GetHeight()/SetSize()), which represent ONLY the
+    // canvas' fixed design resolution (e.g. 1024x768), set once by the app and never touched again
+    // by window-resize code -- the same invariant GRPLINUXSCREENX11 already preserves (by never
+    // calling SetSize() from Resize()) and GRPWINDOWSSCREEN relies on. Prior to this port,
+    // Resize()/XDGToplevel_Configure() called SetSize() directly, conflating the two and breaking
+    // that invariant on Wayland only; SetSize() must never be called again from window-resize code
+    // on this class, only from the app's own canvas-size setup. Updated by Resize() (locally
+    // requested size) and XDGToplevel_Configure() (compositor-confirmed size), both clamped to the
+    // GRPVIEWPORT_ID_MAIN viewport's max via ClampToViewportMax(). Read by
+    // GRPLINUXBLITGLESWAYLAND::GetNativeWindow()/GetNativeWindowSize() (via GetWindowWidth()/
+    // GetWindowHeight() below) to size the wl_egl_window / report the EGL native surface size, and
+    // by this class's own Update() raster path as the "live size" to crop against.
+    int                                   windowwidth;
+    int                                   windowheight;
+
     int                                   pointerx;               // last known surface-local position, pushed by wl_pointer::motion
     int                                   pointery;
     int                                   scrolldelta;            // accumulated wl_pointer::axis (vertical) since the last GetAndResetScrollDelta()
@@ -239,6 +263,36 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
 
     bool                                  ConnectDisplay                    ();
     bool                                  BindGlobals                       ();
+
+    // Shared resolution logic for the GRPVIEWPORT_ID_MAIN viewport's max size, used by both
+    // ClampToViewportMax() and ApplyMaxSizeHint() below: an EXPLICIT GRPVIEWPORT::SetMaxSize() on
+    // an axis wins; otherwise that axis falls back to the viewport's own declared size
+    // (GetWidth()/GetHeight()), same fallback GRPLINUXSCREENX11::ApplyWMNormalHints() and
+    // GRPWINDOWSSCREEN::ApplyResizeLimits() use. maxw/maxh are left untouched (caller's
+    // responsibility to treat <=0 as "no cap on that axis") if no viewport is configured yet.
+    void                                  ResolveViewportMax                (float& maxw, float& maxh);
+
+    // In/out clamp of a requested (w,h) pair down to the GRPVIEWPORT_ID_MAIN viewport's resolved
+    // max, per axis independently (see ResolveViewportMax() above) -- the Wayland analogue of
+    // GRPWINDOWSSCREEN::ApplyResizeLimits() clamping ptMaxTrackSize, applied here in-process since
+    // xdg-shell gives clients no equivalent OS-level drag-limit hook for THIS (see
+    // ApplyMaxSizeHint() below for the proactive xdg_toplevel_set_max_size() request that covers
+    // that side). Leaves w/h untouched on an axis with no resolved max, or if no viewport is
+    // configured yet.
+    void                                  ClampToViewportMax                (int& w, int& h);
+
+    // Proactive Wayland analogue of GRPLINUXSCREENX11::ApplyWMNormalHints()/
+    // GRPWINDOWSSCREEN::ApplyResizeLimits(): resolves the GRPVIEWPORT_ID_MAIN viewport's max size
+    // (see ResolveViewportMax() above) and, if xdgtoplevel already exists, calls the standard
+    // xdg_toplevel_set_max_size() request so the compositor's own interactive resize grab AND its
+    // own maximize logic both respect it -- unlike X11's XSetWMNormalHints (a property the WM reads
+    // whenever it needs to), this is a real protocol request that must be reissued, so it is called
+    // both once from Create_Surface() and again on every XDGToplevel_Configure() (idempotent/cheap
+    // either way). Deliberately does NOT call xdg_toplevel_set_min_size() (no OS-enforced minimum,
+    // same policy as X11/Windows) -- see the Update() raster-path guard and
+    // GRPLINUXBLITGLESWAYLAND::ComputePresentationScale (GL path) for how content below the
+    // viewport's min is hidden instead.
+    void                                  ApplyMaxSizeHint                  ();
 
   public:
 

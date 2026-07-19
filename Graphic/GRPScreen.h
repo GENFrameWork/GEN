@@ -157,7 +157,10 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     virtual bool                          Delete                        ();
 
     virtual bool                          Get_Position                  (int &x, int &y);
-    virtual bool                          Set_Position                  (int x, int y);    
+    virtual bool                          Set_Position                  (int x, int y);
+
+    virtual bool                          GetClientSize                 (int& width, int& height);
+    bool                                  IsClientSizeAtMaximum         ();
 
     virtual bool                          Resize                        (int width, int height);
     
@@ -193,6 +196,7 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     UI_LAYOUT*                            GetCFGChromesLayout           ();
     bool                                  UpdateCFGChromesDrag          ();
     bool                                  UpdateCFGChromesAutoHide      ();
+    bool                                  UpdateCFGChromesButtonsPosition ();
     #endif
     
     bool                                  UpdateSize                    (int width, int height);
@@ -250,6 +254,9 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     bool                                  cfgchromesautohidevisible;      // current actual shown/hidden state
     bool                                  cfgchromesautohidedesired;      // last computed "cursor is over it" state
     XTIMER*                               cfgchromesautohidetimer;        // how long "desired" has stayed stable
+
+    int                                   cfgchromesbuttonsrefwidth;      // window width the chrome layout was positioned for (captured at load)
+    int                                   cfgchromesbuttonsshift;         // horizontal shift currently applied to min/max/close so they stay visible
     #endif
 
   private:

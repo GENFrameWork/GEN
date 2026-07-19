@@ -38,6 +38,7 @@
 #include "GRPLINUXBlitGLESWayland.h"
 
 #include "GRPLINUXScreenWayland.h"
+#include "GRPViewPort.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -108,9 +109,14 @@ EGLNativeDisplayType GRPLINUXBLITGLESWAYLAND::GetNativeDisplay()
 * @brief      Get native window. Wraps the screen's wl_surface in a struct wl_egl_window*
 *             (created once, lazily) -- EGL cannot take a raw wl_surface* directly the way it
 *             takes a raw X11 Window XID. Also keeps the wl_egl_window's internal size in sync
-*             with the current GEN screen size on every call: unlike an X11 Window (which IS
-*             already the right size the moment XResizeWindow() returns), a wl_egl_window has
-*             its own separately-tracked buffer size that only wl_egl_window_resize() updates.
+*             with the current LIVE compositor-driven window size on every call: unlike an X11
+*             Window (which IS already the right size the moment XResizeWindow() returns), a
+*             wl_egl_window has its own separately-tracked buffer size that only
+*             wl_egl_window_resize() updates. Uses GetWindowWidth()/GetWindowHeight() (the live
+*             window size, tracked separately from the canvas' fixed design size reported by
+*             GetWidth()/GetHeight() -- see GRPLINUXSCREENWAYLAND::windowwidth/windowheight),
+*             NOT GetWidth()/GetHeight(), since after that split GetWidth()/GetHeight() no longer
+*             reflect the live window size.
 * @ingroup    PLATFORM_LINUX
 *
 * @return     EGLNativeWindowType : Requested value.
@@ -124,8 +130,8 @@ EGLNativeWindowType GRPLINUXBLITGLESWAYLAND::GetNativeWindow()
   struct wl_surface* surface = ws->GetWLSurface();
   if(!surface) return (EGLNativeWindowType)0;
 
-  int width  = (int)ws->GetWidth();
-  int height = (int)ws->GetHeight();
+  int width  = ws->GetWindowWidth();
+  int height = ws->GetWindowHeight();
   if(width  <= 0) width  = GRPLINUXSCREENWAYLAND_DEFAULT_WIDTH;
   if(height <= 0) height = GRPLINUXSCREENWAYLAND_DEFAULT_HEIGHT;
 
@@ -145,9 +151,12 @@ EGLNativeWindowType GRPLINUXBLITGLESWAYLAND::GetNativeWindow()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool GRPLINUXBLITGLESWAYLAND::GetNativeWindowSize(int& width, int& height)
-* @brief      Report the CURRENT screen size, the same role GRPLINUXBLITGLESX11::GetNativeWindowSize()
-*             plays on X11 (there via XGetWindowAttributes()). Lets the base blitter detect a
-*             resize (compositor-driven here, via xdg_toplevel::configure -- see
+* @brief      Report the CURRENT live/compositor-driven window size, the same role
+*             GRPLINUXBLITGLESX11::GetNativeWindowSize() plays on X11 (there via
+*             XGetWindowAttributes()). Reads GetWindowWidth()/GetWindowHeight() -- NOT
+*             GetWidth()/GetHeight(), which after the live-size/canvas-design-size split report
+*             only the canvas' fixed design size -- so the base blitter can detect a resize
+*             (compositor-driven here, via xdg_toplevel::configure -- see
 *             GRPLINUXSCREENWAYLAND::XDGToplevel_Configure()) and recreate the EGL surface to
 *             match, the same way GRPANDROIDBLITGLES does for a rotation.
 * @ingroup    PLATFORM_LINUX
@@ -163,10 +172,104 @@ bool GRPLINUXBLITGLESWAYLAND::GetNativeWindowSize(int& width, int& height)
   GRPLINUXSCREENWAYLAND* ws = (GRPLINUXSCREENWAYLAND*)screen;
   if(!ws) return false;
 
-  width  = (int)ws->GetWidth();
-  height = (int)ws->GetHeight();
+  width  = ws->GetWindowWidth();
+  height = ws->GetWindowHeight();
 
   return (width > 0 && height > 0);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPLINUXBLITGLESWAYLAND::ComputePresentationScale(GLsizei surfacewidth, GLsizei surfaceheight, float& scalex, float& scaley, float& translatex, float& translatey, bool& visible)
+* @brief      Wayland presentation policy: NO bitmap rescaling. The canvas is drawn at its native pixel size
+*             (1 texel = 1 pixel) regardless of the drawable surface size, so growing the window shows more
+*             background around the (unscaled) canvas, and shrinking it crops the canvas -- it is never
+*             stretched. Width and height are resolved independently, matching the same independence at the
+*             window-resize level (see GRPLINUXSCREENWAYLAND::ApplyMaxSizeHint).
+* @note       Anchored to the window's TOP-LEFT corner, not centered: the canvas' own top-left corner always
+*             stays pinned to the window's top-left corner. Growing the window only reveals more background
+*             at the bottom/right; shrinking it only crops the canvas' bottom/right edges -- regardless of
+*             which edge or corner the user actually dragged to resize.
+*             The toplevel itself is already prevented from growing past the GRPVIEWPORT_ID_MAIN viewport's
+*             max size (ApplyMaxSizeHint calls xdg_toplevel_set_max_size(), a standard xdg-shell request
+*             honoured by the compositor both for interactive resize and for its own maximize logic), so the
+*             "beyond max" half of the requirement is enforced natively and needs no handling here. This
+*             method only needs to cover the "hide below min" half: whenever the surface (i.e. the window's
+*             live size) is smaller than that viewport's declared minimum, on either axis, the canvas is
+*             not drawn at all (the surface is left cleared/blank) instead of being shrunk to fit.
+*             surfacewidth/surfaceheight are passed in by the shared GRPBLITGLES::Update(), which obtains
+*             them from GetNativeWindowSize() above -- i.e. the LIVE window size, not the canvas design size.
+* @ingroup    PLATFORM_LINUX
+*
+* @param[in]  surfacewidth : Width, in pixels, of the drawable surface (matches the live window size).
+* @param[in]  surfaceheight : Height, in pixels, of the drawable surface.
+* @param[out] scalex : Resulting NDC X scale to apply to the fullscreen quad (native size, never a stretch).
+* @param[out] scaley : Resulting NDC Y scale to apply to the fullscreen quad (native size, never a stretch).
+* @param[out] translatex : Resulting NDC X shift so the LEFT edge of the quad stays pinned to the window's left edge.
+* @param[out] translatey : Resulting NDC Y shift so the TOP edge of the quad stays pinned to the window's top edge.
+* @param[out] visible : true if the canvas should be drawn at all; false to leave the surface cleared (blank).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPLINUXBLITGLESWAYLAND::ComputePresentationScale(GLsizei surfacewidth, GLsizei surfaceheight, float& scalex, float& scaley, float& translatex, float& translatey, bool& visible)
+{
+  scalex     = 1.0f;
+  scaley     = 1.0f;
+  translatex = 0.0f;
+  translatey = 0.0f;
+  visible    = true;
+
+  if(surfacewidth <= 0 || surfaceheight <= 0 || texw <= 0 || texh <= 0)
+    {
+      visible = false;
+      return;
+    }
+
+  // Native 1:1 mapping: the quad's NDC half-extent (1.0) must cover exactly texw/texh pixels out of
+  // a surfacewidth/surfaceheight-sized viewport. texw/texh are swapped for a 90/270 rotated
+  // presentation, same convention as the base (shared) letterbox implementation.
+  int effectivetexw = texw;
+  int effectivetexh = texh;
+
+  if(rotation == GRPSCREENROTATION_90_CLOCKWISE || rotation == GRPSCREENROTATION_90_ANTICLOCKWISE)
+    {
+      effectivetexw = texh;
+      effectivetexh = texw;
+    }
+
+  scalex = (float)effectivetexw / (float)surfacewidth;
+  scaley = (float)effectivetexh / (float)surfaceheight;
+
+  // Top-left anchor: in NDC, x=-1 is the window's LEFT edge and y=+1 is its TOP edge (canonical
+  // convention used throughout this pipeline -- see BuildQuad's UV mapping). After the scale above,
+  // the quad spans [-scalex,+scalex] x [-scaley,+scaley], CENTERED at the origin. Shifting it by
+  // (scalex-1, 1-scaley) moves its left edge to -1 and its top edge to +1 -- pinning that corner --
+  // while the OPPOSITE (bottom-right) edge/corner is the one that now grows or gets clipped away as
+  // the window is resized. This is a pure screen-space shift (see BuildModelMatrix), so it holds
+  // regardless of any rotation/flip also baked into the matrix.
+  translatex = scalex - 1.0f;
+  translatey = 1.0f  - scaley;
+
+  GRPLINUXSCREENWAYLAND* ws = (GRPLINUXSCREENWAYLAND*)screen;
+  if(!ws)
+    {
+      return;
+    }
+
+  GRPVIEWPORT* mainviewport = ws->GetViewport(GRPVIEWPORT_ID_MAIN);
+  if(!mainviewport)
+    {
+      return; // no viewport configured yet: no min/max restriction to apply
+    }
+
+  float minwidth  = mainviewport->GetMinWidth();
+  float minheight = mainviewport->GetMinHeight();
+
+  if((minwidth  > 0.0f && surfacewidth  < (GLsizei)minwidth) ||
+     (minheight > 0.0f && surfaceheight < (GLsizei)minheight))
+    {
+      visible = false;
+    }
 }
 
 

@@ -48,6 +48,7 @@
 #include "GRPXEvent.h"
 #include "GRP2DCanvas.h"
 #include "GRPBitmap.h"
+#include "GRPViewPort.h"
 
 
 #ifdef GRP_OPENGL_ACTIVE
@@ -202,20 +203,28 @@ bool GRPWINDOWSSCREEN::Update(GRP2DCANVAS* canvas)
       return false;
     }
 
-  if(!canvas) 
+  if(!canvas)
     {
       return false;
     }
 
-  
+  // No bitmap rescaling on Windows: the canvas is always blitted 1:1 (width/height below are the
+  // canvas' own size, not the window's). If the window's client area is currently smaller than the
+  // GRPVIEWPORT_ID_MAIN viewport's declared minimum size (either axis), the content is hidden
+  // (nothing is blitted, so the window's own background shows through) instead of shrinking it to fit.
+  if(!IsAboveViewportMinimumSize())
+    {
+      return true;
+    }
+
   SetDIBitsToDevice(hdc, 0, 0, width  ,
                                height ,
                                0,0,0  ,
                                height ,
                                canvas->Buffer_Get() ,
                                &hinfo ,
-                               DIB_RGB_COLORS);     
-  
+                               DIB_RGB_COLORS);
+
   return true;
 
   #else
@@ -403,7 +412,43 @@ bool GRPWINDOWSSCREEN::Set_Position(int x, int y)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool GRPWINDOWSSCREEN::GetClientSize(int& width, int& height)
+* @brief      Get client size: LIVE size of the native window's client area (Windows override of the base's
+*             content-size fallback). Queried fresh via GetClientRect each call, so it tracks interactive
+*             resizes with no dependence on the width/height members (which, engine-wide, hold the fixed
+*             CONTENT size -- see the SetDIBitsToDevice blit in Update()).
+* @ingroup    PLATFORM_WINDOWS
+*
+* @param[out] width : live client area width.
+* @param[out] height : live client area height.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPWINDOWSSCREEN::GetClientSize(int& width, int& height)
+{
+  if(!hwnd)
+    {
+      return GRPSCREEN::GetClientSize(width, height);
+    }
+
+  RECT rect;
+
+  if(!GetClientRect(hwnd, &rect))
+    {
+      return GRPSCREEN::GetClientSize(width, height);
+    }
+
+  width  = (int)(rect.right  - rect.left);
+  height = (int)(rect.bottom - rect.top);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool GRPWINDOWSSCREEN::Resize(int width, int height)
 * @brief      Resize
 * @ingroup    PLATFORM_WINDOWS
@@ -416,27 +461,218 @@ bool GRPWINDOWSSCREEN::Set_Position(int x, int y)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Resize(int width, int height)
 {
-  RECT    rect;
-  XDWORD  style;
+  DWORD style = (DWORD)GetWindowLong(hwnd, GWL_STYLE);
+  int   windowwidth  = 0;
+  int   windowheight = 0;
 
-  GetClientRect(hwnd, &rect);
+  // NOTE: uses ClientSizeToWindowSize(), NOT a plain AdjustWindowRect(), so a borderless-but-resizable
+  // window (WS_THICKFRAME without WS_CAPTION -- custom Chromes) ends up with a client area that is
+  // EXACTLY width x height, matching what BaseWndProc's WM_NCCALCSIZE override actually gives it,
+  // instead of being inflated by a non-client border that style never really has.
+  ClientSizeToWindowSize(width, height, style, windowwidth, windowheight);
 
-  rect.right  = rect.left + width;    //+ 16;
-  rect.bottom = rect.top  + height;   //+ 16;
-
-  style = GetWindowLong(hwnd, GWL_STYLE);
-
-  AdjustWindowRect(&rect,style,false);
-
-  SetWindowPos(hwnd,NULL, positionx, positiony, (rect.right-rect.left), (rect.bottom-rect.top) , SWP_NOMOVE | SWP_NOZORDER);
+  SetWindowPos(hwnd, NULL, positionx, positiony, windowwidth, windowheight, SWP_NOMOVE | SWP_NOZORDER);
 
   return UpdateSize(width, height);
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPWINDOWSSCREEN::ClientSizeToWindowSize(int clientwidth, int clientheight, DWORD style, int& windowwidth, int& windowheight)
+* @brief      Converts a desired CLIENT area size into the WINDOW (outer) size that must be passed to
+*             SetWindowPos/CreateWindowEx to obtain it, for the given window style.
+* @note       INTERNAL. This is NOT a plain AdjustWindowRect() call: BaseWndProc's WM_NCCALCSIZE handler
+*             forces the non-client area to ZERO (client area = the whole window) whenever the style is
+*             WS_THICKFRAME without WS_CAPTION (the borderless-but-resizable case used by this engine's
+*             custom/non-native Chromes with resize enabled -- see Chromes_ApplyStyle/Create_Window).
+*             AdjustWindowRect() knows nothing about that override: for that same style it still assumes
+*             the STANDARD (non-zero) sizing-frame border and pads the window accordingly, so blindly
+*             using it here would make the actual window (and hence the actual, unscaled-since-there-is-
+*             no-more-stretching client area) end up bigger than requested by that padding -- visible as a
+*             black band around the canvas. This mirrors the WM_NCCALCSIZE condition exactly, so the two
+*             stay in sync; any window/client size computation in this file must go through here (or
+*             through that same style check) instead of calling AdjustWindowRect() directly.
+* @ingroup    PLATFORM_WINDOWS
+*
+* @param[in]  clientwidth : Desired client area width.
+* @param[in]  clientheight : Desired client area height.
+* @param[in]  style : Window style (WS_*) the window has/will have.
+* @param[out] windowwidth : Resulting outer window width.
+* @param[out] windowheight : Resulting outer window height.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPWINDOWSSCREEN::ClientSizeToWindowSize(int clientwidth, int clientheight, DWORD style, int& windowwidth, int& windowheight)
+{
+  if((style & WS_THICKFRAME) && !(style & WS_CAPTION))
+    {
+      // Same condition as the WM_NCCALCSIZE override in BaseWndProc: no non-client area at all,
+      // so the window IS the client area.
+      windowwidth  = clientwidth;
+      windowheight = clientheight;
+
+      return;
+    }
+
+  RECT rect = { 0, 0, clientwidth, clientheight };
+
+  AdjustWindowRect(&rect, style, FALSE);
+
+  windowwidth  = rect.right  - rect.left;
+  windowheight = rect.bottom - rect.top;
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool GRPWINDOWSSCREEN::IsAboveViewportMinimumSize()
+* @brief      Checks the CURRENT native client area against the GRPVIEWPORT_ID_MAIN viewport's declared
+*             minimum size (width and height checked independently). Used to hide (rather than shrink) the
+*             rendered content when the window becomes smaller than that minimum.
+* @note       INTERNAL
+* @ingroup    PLATFORM_WINDOWS
+*
+* @return     bool : true if the client area is at or above the configured minimum (or no minimum / no
+*                    viewport is configured, i.e. unrestricted); false if it is below the minimum on
+*                    either axis.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPWINDOWSSCREEN::IsAboveViewportMinimumSize()
+{
+  if(!hwnd)
+    {
+      return true;
+    }
+
+  GRPVIEWPORT* mainviewport = GetViewport(GRPVIEWPORT_ID_MAIN);
+  if(!mainviewport)
+    {
+      return true; // no viewport configured yet: no restriction to apply
+    }
+
+  float minwidth  = mainviewport->GetMinWidth();
+  float minheight = mainviewport->GetMinHeight();
+
+  if(minwidth <= 0.0f && minheight <= 0.0f)
+    {
+      return true; // no minimum configured on either axis
+    }
+
+  RECT rect;
+  GetClientRect(hwnd, &rect);
+
+  int clientwidth  = rect.right  - rect.left;
+  int clientheight = rect.bottom - rect.top;
+
+  if(minwidth  > 0.0f && clientwidth  < (int)minwidth)  return false;
+  if(minheight > 0.0f && clientheight < (int)minheight) return false;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPWINDOWSSCREEN::ApplyResizeLimits(MINMAXINFO* minmaxinfo)
+* @brief      Handles WM_GETMINMAXINFO: caps how big this window can become at the GRPVIEWPORT_ID_MAIN
+*             viewport's max size (width and height independently), both while the user drags the
+*             native resize border (ptMaxTrackSize) and when it is maximized, either via the native Maximize
+*             button/double-click on the caption or programmatically through Maximize() /
+*             ShowWindow(SW_SHOWMAXIMIZED) (ptMaxSize / ptMaxPosition -- Windows consults the very same
+*             WM_GETMINMAXINFO message in that case, so no extra code is needed in Maximize() itself).
+*             If an axis has no EXPLICIT max configured via GRPVIEWPORT::SetMaxSize(), it defaults to the
+*             viewport's OWN declared size (GetWidth()/GetHeight() -- the design/content resolution, e.g.
+*             the 1024x768 an app sets via CreateViewport): growing past that shows no more real canvas
+*             content anyway (just background), so this is the sane default without requiring every app to
+*             call SetMaxSize() explicitly. Apps that DO want a different (larger or smaller) cap can still
+*             override it per axis via SetMaxSize().
+*             If the resulting max is bigger than the monitor the window is on, the monitor's own work
+*             area size is used instead (a window can never usefully be bigger than the screen it is on).
+*             No minimum is enforced here: the window is left free to shrink as usual; see
+*             IsAboveViewportMinimumSize() / GRPWINDOWSBLITGLES::ComputePresentationScale for how the
+*             rendered content is hidden (not the window itself) below the viewport's minimum.
+* @note       INTERNAL
+* @ingroup    PLATFORM_WINDOWS
+*
+* @param[in]  minmaxinfo : MINMAXINFO pointer received with WM_GETMINMAXINFO (lParam), to fill in.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPWINDOWSSCREEN::ApplyResizeLimits(MINMAXINFO* minmaxinfo)
+{
+  if(!minmaxinfo || !hwnd)
+    {
+      return;
+    }
+
+  GRPVIEWPORT* mainviewport = GetViewport(GRPVIEWPORT_ID_MAIN);
+  if(!mainviewport)
+    {
+      return; // no viewport configured yet: keep the OS defaults untouched
+    }
+
+  int maxviewportwidth  = (int)mainviewport->GetMaxWidth();
+  int maxviewportheight = (int)mainviewport->GetMaxHeight();
+
+  // No EXPLICIT SetMaxSize() on this axis: fall back to the viewport's own declared size, so the
+  // window is capped even when the app never calls the new SetMaxSize() API (see @brief above).
+  if(maxviewportwidth  <= 0) maxviewportwidth  = (int)mainviewport->GetWidth();
+  if(maxviewportheight <= 0) maxviewportheight = (int)mainviewport->GetHeight();
+
+  if(maxviewportwidth <= 0 && maxviewportheight <= 0)
+    {
+      return; // viewport has no usable size at all yet: keep the OS defaults untouched
+    }
+
+  // Monitor this window is (mostly) on, so multi-monitor Maximize lands on the right screen and we
+  // never ask for more than that monitor's real work area.
+  RECT        workarea = { 0, 0, 0, 0 };
+  HMONITOR    hmonitor  = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+  MONITORINFO monitorinfo;
+
+  memset(&monitorinfo, 0, sizeof(MONITORINFO));
+  monitorinfo.cbSize = sizeof(MONITORINFO);
+
+  if(hmonitor && GetMonitorInfo(hmonitor, &monitorinfo))
+    {
+      workarea = monitorinfo.rcWork;
+    }
+   else
+    {
+      SystemParametersInfo(SPI_GETWORKAREA, 0, &workarea, 0);
+    }
+
+  int monitorwidth  = workarea.right  - workarea.left;
+  int monitorheight = workarea.bottom - workarea.top;
+
+  // Per-axis target CLIENT size: the viewport max, but never larger than the monitor it is on.
+  int targetclientwidth  = (maxviewportwidth  > 0 && maxviewportwidth  < monitorwidth ) ? maxviewportwidth  : monitorwidth;
+  int targetclientheight = (maxviewportheight > 0 && maxviewportheight < monitorheight) ? maxviewportheight : monitorheight;
+
+  // Convert that CLIENT size into a WINDOW size (adds back the caption/borders for the current style,
+  // if it actually has any -- see ClientSizeToWindowSize()).
+  DWORD style = (DWORD)GetWindowLong(hwnd, GWL_STYLE);
+  int   targetwindowwidth  = 0;
+  int   targetwindowheight = 0;
+
+  ClientSizeToWindowSize(targetclientwidth, targetclientheight, style, targetwindowwidth, targetwindowheight);
+
+  // Drag limit (only meaningful with WS_THICKFRAME, harmless otherwise): never let the user drag the
+  // window past the viewport max, per axis.
+  if(maxviewportwidth  > 0) minmaxinfo->ptMaxTrackSize.x = targetwindowwidth;
+  if(maxviewportheight > 0) minmaxinfo->ptMaxTrackSize.y = targetwindowheight;
+
+  // Native Maximize (button / double-click caption / SW_SHOWMAXIMIZED): lands at the viewport max,
+  // clamped to the monitor, anchored at the monitor's work area origin (in virtual-screen coordinates,
+  // as required by WM_GETMINMAXINFO for correct multi-monitor behaviour).
+  minmaxinfo->ptMaxSize.x     = targetwindowwidth;
+  minmaxinfo->ptMaxSize.y     = targetwindowheight;
+  minmaxinfo->ptMaxPosition.x = workarea.left;
+  minmaxinfo->ptMaxPosition.y = workarea.top;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool GRPWINDOWSSCREEN::Show(bool active)
 * @brief      Show
 * @ingroup    PLATFORM_WINDOWS
@@ -578,7 +814,99 @@ bool GRPWINDOWSSCREEN::Maximize(bool active)
       return false;
     }
 
-  return ShowWindow(hwnd, active?SW_SHOWMAXIMIZED:SW_NORMAL)?true:false; 
+  if(!active)
+    {
+      return ShowWindow(hwnd, SW_NORMAL)?true:false;
+    }
+
+  // Already as big as the viewport cap allows: maximizing could not grow the window. Per design the window
+  // must stay EXACTLY as it is (same size, same position), so this is a no-op -- identical to the X11
+  // backend's behaviour under KWin.
+  if(IsClientSizeAtMaximum())
+    {
+      return true;
+    }
+
+  GRPVIEWPORT* mainviewport      = GetViewport(GRPVIEWPORT_ID_MAIN);
+  int          maxviewportwidth  = 0;
+  int          maxviewportheight = 0;
+
+  if(mainviewport)
+    {
+      maxviewportwidth  = (int)mainviewport->GetMaxWidth();
+      maxviewportheight = (int)mainviewport->GetMaxHeight();
+
+      // Same fallback chain as ApplyResizeLimits() / GRPSCREEN::IsClientSizeAtMaximum(): no explicit
+      // SetMaxSize() on an axis -> the viewport's own declared (design) size.
+      if(maxviewportwidth  <= 0) maxviewportwidth  = (int)mainviewport->GetWidth();
+      if(maxviewportheight <= 0) maxviewportheight = (int)mainviewport->GetHeight();
+    }
+
+  if((maxviewportwidth <= 0) || (maxviewportheight <= 0))
+    {
+      // No usable viewport cap configured: a true OS maximize is the only sensible meaning left.
+      return ShowWindow(hwnd, SW_SHOWMAXIMIZED)?true:false;
+    }
+
+  // With a viewport growth cap, NEVER go through SW_SHOWMAXIMIZED: a window in Windows' "maximized" state
+  // whose WM_GETMINMAXINFO-capped size is smaller than the work area is a degenerate state -- Windows
+  // relocates it to ptMaxPosition (the work area's top-left corner), the taskbar/DWM previews and the
+  // restore geometry misbehave around it, and a later restore can land the window partially off-screen.
+  // Instead the window is grown IN PLACE to the very same capped size every other resize path resolves
+  // (viewport cap, clamped to the monitor's work area), KEEPING its current position -- which is exactly
+  // what the X11 backend does under KWin (PMaxSize + snap-back, no WM 'maximized' state kept). The window
+  // stays a NORMAL window at its capped size, so there is no special state to restore from later.
+  RECT        workarea = { 0, 0, 0, 0 };
+  HMONITOR    hmonitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+  MONITORINFO monitorinfo;
+
+  memset(&monitorinfo, 0, sizeof(MONITORINFO));
+  monitorinfo.cbSize = sizeof(MONITORINFO);
+
+  if(hmonitor && GetMonitorInfo(hmonitor, &monitorinfo))
+    {
+      workarea = monitorinfo.rcWork;
+    }
+   else
+    {
+      SystemParametersInfo(SPI_GETWORKAREA, 0, &workarea, 0);
+    }
+
+  int monitorwidth  = workarea.right  - workarea.left;
+  int monitorheight = workarea.bottom - workarea.top;
+
+  int targetclientwidth  = (maxviewportwidth  < monitorwidth ) ? maxviewportwidth  : monitorwidth;
+  int targetclientheight = (maxviewportheight < monitorheight) ? maxviewportheight : monitorheight;
+
+  DWORD style              = (DWORD)GetWindowLong(hwnd, GWL_STYLE);
+  int   targetwindowwidth  = 0;
+  int   targetwindowheight = 0;
+
+  ClientSizeToWindowSize(targetclientwidth, targetclientheight, style, targetwindowwidth, targetwindowheight);
+
+  RECT windowrect;
+
+  if(!GetWindowRect(hwnd, &windowrect))
+    {
+      return false;
+    }
+
+  // Keep the current position; only nudge it back if the grown window would overflow the work area
+  // (so growing never leaves part of the window off-screen or under the taskbar).
+  int newx = windowrect.left;
+  int newy = windowrect.top;
+
+  if((newx + targetwindowwidth ) > workarea.right ) newx = workarea.right  - targetwindowwidth;
+  if((newy + targetwindowheight) > workarea.bottom) newy = workarea.bottom - targetwindowheight;
+  if(newx < workarea.left) newx = workarea.left;
+  if(newy < workarea.top)  newy = workarea.top;
+
+  if(!SetWindowPos(hwnd, NULL, newx, newy, targetwindowwidth, targetwindowheight, SWP_NOZORDER))
+    {
+      return false;
+    }
+
+  return true;
 }
 
 
@@ -1127,18 +1455,19 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
         }
 
       // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen Windows] Part 1 Ini: x=%04d, y=%04d (%04d,%04d)  Bitxpixel (%d)"), posx, posy, width, height, GetBitsperPixel());
-       
-      RECT rect;
 
-      GetClientRect(hwnd, &rect);
+      // NOTE: uses ClientSizeToWindowSize(), NOT a plain AdjustWindowRect(), so a borderless-but-resizable
+      // window (WS_THICKFRAME without WS_CAPTION -- custom Chromes) ends up with a client area that is
+      // EXACTLY winw x winh, matching what BaseWndProc's WM_NCCALCSIZE override actually gives it, instead
+      // of being inflated by a non-client border that style never really has (which, now that the canvas is
+      // no longer stretched to fill whatever size results, would otherwise show as a black band around it).
+      int windowwidth  = 0;
+      int windowheight = 0;
 
-      rect.right  = rect.left + winw;    //+ 16;
-      rect.bottom = rect.top  + winh;   //+ 16;
+      ClientSizeToWindowSize(winw, winh, (DWORD)GetWindowLong(hwnd, GWL_STYLE), windowwidth, windowheight);
 
-      AdjustWindowRect(&rect, GetWindowLong(hwnd, GWL_STYLE), false);
-    
-      SetWindowPos(hwnd, NULL, posx , posy, (rect.right-rect.left), (rect.bottom-rect.top) , SWP_NOMOVE | SWP_NOZORDER);
-      
+      SetWindowPos(hwnd, NULL, posx, posy, windowwidth, windowheight, SWP_NOMOVE | SWP_NOZORDER);
+
       POINT point = { 0, 0}; 
 
       ClientToScreen(hwnd, (LPPOINT)&point);  
@@ -1285,6 +1614,39 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
                                             if(onbottom)            return HTBOTTOM;
 
                                             return HTCLIENT;
+                                          }
+                                      }
+                                      break;
+
+      // No bitmap rescaling: caps how big this window can become (drag border + native Maximize) at
+      // the GRPVIEWPORT_ID_MAIN viewport's declared max size. See GRPWINDOWSSCREEN::ApplyResizeLimits.
+      // Screen not yet registered (e.g. this fires during the synchronous CreateWindowEx() call
+      // itself, before GRPWINDOWSSCREEN::Create() adds it to GetListScreens()) is a no-op, same as
+      // the existing WM_MOVE/WM_CLOSE/WM_DESTROY handling below.
+      case WM_GETMINMAXINFO         : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
+                                        if(screen)
+                                          {
+                                            screen->ApplyResizeLimits((MINMAXINFO*)lparam);
+                                            return 0;
+                                          }
+                                      }
+                                      break;
+
+      // While the user interactively drags the resize border, Windows runs its OWN modal message
+      // loop inside DispatchMessage() (see MAINPROCWINDOWS::MainLoop's PeekMessage/DispatchMessage
+      // pump), which blocks the app's normal per-frame Update/UpdateViewports call until the mouse
+      // button is released -- WM_SIZE is the only thing that still gets dispatched, repeatedly, as
+      // the border moves. Without re-presenting here, nothing paints the window for the whole drag,
+      // so its own background brush (BLACK_BRUSH, see wndclass.hbrBackground) shows through as a
+      // solid black window. Re-presenting the CURRENT screen canvas (the last frame the normal main
+      // loop rendered; no UI re-render happens here, only presentation) through the same
+      // UpdateViewports() the main loop already calls every frame keeps the window showing that
+      // frame -- cropped/anchored to each intermediate size exactly like any other resize -- instead
+      // of going black, for the whole duration of the drag.
+      case WM_SIZE                  : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
+                                        if(screen)
+                                          {
+                                            screen->UpdateViewports();
                                           }
                                       }
                                       break;

@@ -519,68 +519,110 @@ bool GRPBLITGLES::Update(GRP2DCANVAS* canvas)
         }
     }
 
-  // --- Letterbox/pillarbox: keep the canvas aspect ratio inside the surface --------------------
-  // The canvas (texture) is a fixed design size (e.g. 1024x768). The surface may have any aspect
-  // (e.g. 2712x1220). Scale the fullscreen quad down on one axis so the canvas keeps its aspect,
-  // centered, with black bars on the remaining space (glClear paints them). This matches the
-  // Windows/Linux look where the 1024x768 screen is shown 1:1 / scaled to the window.
-  lboxsx = 1.0f;
-  lboxsy = 1.0f;
-  if(vpw > 0 && vph > 0 && texw > 0 && texh > 0)
-    {
-      float surface_aspect = (float)vpw / (float)vph;
+  // --- Presentation scale: how the canvas texture maps onto the drawable surface ----------------
+  // Default (shared) policy is letterbox/pillarbox (see ComputePresentationScale below); platform
+  // specialisations may replace it (e.g. GRPWINDOWSBLITGLES presents the canvas at its native pixel
+  // size, with no rescaling, and can also report the canvas as not-visible -- see that override).
+  bool presentationvisible = true;
 
-      // The canvas is texw x texh, but at 90/270 degrees it is PRESENTED rotated, so its
-      // effective (on-screen) aspect ratio is the inverse (texh/texw). Account for that here,
-      // otherwise a rotated canvas would be letterboxed against the wrong axis and look squashed.
-      float canvas_aspect;
-      if(rotation == GRPSCREENROTATION_90_CLOCKWISE || rotation == GRPSCREENROTATION_90_ANTICLOCKWISE)
-        {
-          canvas_aspect = (float)texh / (float)texw;   // width/height swapped by the 90/270 rotation
-        }
-       else
-        {
-          canvas_aspect = (float)texw / (float)texh;   // 0 / 180 degrees: aspect unchanged
-        }
-
-      float ratio          = canvas_aspect / surface_aspect;
-      if(ratio >= 1.0f) 
-        { lboxsx = 1.0f;  
-          lboxsy = 1.0f / ratio; 
-        } // canvas wider  -> bars top/bottom
-      else              
-        { 
-          lboxsx = ratio; 
-          lboxsy = 1.0f;         
-        } // canvas taller -> bars left/right
-    }
+  ComputePresentationScale(vpw, vph, lboxsx, lboxsy, lboxtx, lboxty, presentationvisible);
 
   glViewport(0, 0, vpw, vph);
   glClear(GL_COLOR_BUFFER_BIT);
-  glUseProgram(program);
 
-  float mv[16];
-  BuildModelMatrix(mv);
-  glUniformMatrix4fv(u_modelview, 1, GL_FALSE, mv);
-  glUniform1i(u_tex, 0);
+  if(presentationvisible)
+    {
+      glUseProgram(program);
 
-  if(IsES3() && vao)
-    {
-      glBindVertexArray(vao);
-      glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-      glBindVertexArray(0);
-    }
-   else
-    {
-      glBindBuffer(GL_ARRAY_BUFFER, vbo);
-      glEnableVertexAttribArray((GLuint)a_pos);
-      glEnableVertexAttribArray((GLuint)a_uv);
-      glVertexAttribPointer((GLuint)a_pos, 2, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void*)0);
-      glVertexAttribPointer((GLuint)a_uv,  2, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void*)(sizeof(float)*2));
-      glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+      float mv[16];
+      BuildModelMatrix(mv);
+      glUniformMatrix4fv(u_modelview, 1, GL_FALSE, mv);
+      glUniform1i(u_tex, 0);
+
+      if(IsES3() && vao)
+        {
+          glBindVertexArray(vao);
+          glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+          glBindVertexArray(0);
+        }
+       else
+        {
+          glBindBuffer(GL_ARRAY_BUFFER, vbo);
+          glEnableVertexAttribArray((GLuint)a_pos);
+          glEnableVertexAttribArray((GLuint)a_uv);
+          glVertexAttribPointer((GLuint)a_pos, 2, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void*)0);
+          glVertexAttribPointer((GLuint)a_uv,  2, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void*)(sizeof(float)*2));
+          glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        }
     }
 
   return eglctx->SwapBuffers();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPBLITGLES::ComputePresentationScale(GLsizei surfacewidth, GLsizei surfaceheight, float& scalex, float& scaley, float& translatex, float& translatey, bool& visible)
+* @brief      Computes how the canvas texture maps onto the drawable surface (the fullscreen quad's NDC scale
+*             AND position), and whether it should be drawn at all.
+* @note       Default (shared) policy: letterbox/pillarbox, CENTERED. The canvas (texture) is a fixed design
+*             size (e.g. 1024x768). The surface may have any aspect (e.g. 2712x1220). Scale the fullscreen
+*             quad down on one axis so the canvas keeps its aspect, centered (translatex/translatey left at
+*             0), with black bars on the remaining space (glClear paints them). This matches the previous
+*             Windows/Linux look where the 1024x768 screen is shown 1:1 / scaled to the window -- i.e. this
+*             DOES rescale the presented bitmap as the surface is resized. Platform specialisations can
+*             override this method to implement a different presentation policy (scale AND/OR anchor)
+*             without touching the shared Update() flow above.
+* @ingroup    GRAPHIC
+*
+* @param[in]  surfacewidth : Width, in pixels, of the drawable surface (EGL surface / native window).
+* @param[in]  surfaceheight : Height, in pixels, of the drawable surface.
+* @param[out] scalex : Resulting NDC X scale to apply to the fullscreen quad.
+* @param[out] scaley : Resulting NDC Y scale to apply to the fullscreen quad.
+* @param[out] translatex : Resulting NDC X translation to apply to the fullscreen quad (0 = centered).
+* @param[out] translatey : Resulting NDC Y translation to apply to the fullscreen quad (0 = centered).
+* @param[out] visible : true if the canvas should be drawn at all; false to leave the surface cleared (blank).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPBLITGLES::ComputePresentationScale(GLsizei surfacewidth, GLsizei surfaceheight, float& scalex, float& scaley, float& translatex, float& translatey, bool& visible)
+{
+  scalex     = 1.0f;
+  scaley     = 1.0f;
+  translatex = 0.0f;
+  translatey = 0.0f;
+  visible    = true;
+
+  if(surfacewidth <= 0 || surfaceheight <= 0 || texw <= 0 || texh <= 0)
+    {
+      return;
+    }
+
+  float surface_aspect = (float)surfacewidth / (float)surfaceheight;
+
+  // The canvas is texw x texh, but at 90/270 degrees it is PRESENTED rotated, so its
+  // effective (on-screen) aspect ratio is the inverse (texh/texw). Account for that here,
+  // otherwise a rotated canvas would be letterboxed against the wrong axis and look squashed.
+  float canvas_aspect;
+  if(rotation == GRPSCREENROTATION_90_CLOCKWISE || rotation == GRPSCREENROTATION_90_ANTICLOCKWISE)
+    {
+      canvas_aspect = (float)texh / (float)texw;   // width/height swapped by the 90/270 rotation
+    }
+   else
+    {
+      canvas_aspect = (float)texw / (float)texh;   // 0 / 180 degrees: aspect unchanged
+    }
+
+  float ratio = canvas_aspect / surface_aspect;
+  if(ratio >= 1.0f)
+    {
+      scalex = 1.0f;
+      scaley = 1.0f / ratio;
+    } // canvas wider  -> bars top/bottom
+   else
+    {
+      scalex = ratio;
+      scaley = 1.0f;
+    } // canvas taller -> bars left/right
 }
 
 
@@ -1237,6 +1279,14 @@ void GRPBLITGLES::BuildModelMatrix(float* m)
   // by diag(lboxsx, lboxsy, 1, 1), i.e. scale matrix row 0 (X out) and row 1 (Y out).
   m[0] *= lboxsx;  m[4] *= lboxsx;  m[ 8] *= lboxsx;  m[12] *= lboxsx;
   m[1] *= lboxsy;  m[5] *= lboxsy;  m[ 9] *= lboxsy;  m[13] *= lboxsy;
+
+  // Screen-space anchor: shifts the already-scaled quad. 0,0 (default) leaves it centered, exactly
+  // as before. A platform presentation policy that anchors to a corner instead of centering (see
+  // GRPWINDOWSBLITGLES::ComputePresentationScale) sets lboxtx/lboxty accordingly; this is a pure
+  // post-scale/post-rotation additive shift in final NDC space, so it pins whichever screen corner
+  // it targets regardless of any rotation/flip baked into the matrix above.
+  m[12] += lboxtx;
+  m[13] += lboxty;
 }
 
 
@@ -1281,6 +1331,8 @@ void GRPBLITGLES::Clean()
   rotation    = GRPSCREENROTATION_NONE;
   lboxsx      = 1.0f;
   lboxsy      = 1.0f;
+  lboxtx      = 0.0f;
+  lboxty      = 0.0f;
 }
 
 

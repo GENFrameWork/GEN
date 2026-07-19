@@ -282,7 +282,106 @@ void GRPVIEWPORT::SetSize(float width, float height)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         float GRPVIEWPORT::GetMinWidth()
+* @brief      Get minimum width (0 = not set / no limit)
+* @ingroup    GRAPHIC
+*
+* @return     float : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+float GRPVIEWPORT::GetMinWidth()
+{
+  return minwidth;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         float GRPVIEWPORT::GetMinHeight()
+* @brief      Get minimum height (0 = not set / no limit)
+* @ingroup    GRAPHIC
+*
+* @return     float : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+float GRPVIEWPORT::GetMinHeight()
+{
+  return minheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPVIEWPORT::SetMinSize(float minwidth, float minheight)
+* @brief      Set minimum size. Below this size (either axis, independently) the native window
+*             hosting this viewport is expected to hide its rendered content instead of shrinking
+*             it to fit. Pass 0 to leave an axis unrestricted.
+* @ingroup    GRAPHIC
+*
+* @param[in]  minwidth : Minimum width value.
+* @param[in]  minheight : Minimum height value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPVIEWPORT::SetMinSize(float minwidth, float minheight)
+{
+  this->minwidth  = minwidth;
+  this->minheight = minheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         float GRPVIEWPORT::GetMaxWidth()
+* @brief      Get maximum width (0 = not set / no limit)
+* @ingroup    GRAPHIC
+*
+* @return     float : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+float GRPVIEWPORT::GetMaxWidth()
+{
+  return maxwidth;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         float GRPVIEWPORT::GetMaxHeight()
+* @brief      Get maximum height (0 = not set / no limit)
+* @ingroup    GRAPHIC
+*
+* @return     float : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+float GRPVIEWPORT::GetMaxHeight()
+{
+  return maxheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPVIEWPORT::SetMaxSize(float maxwidth, float maxheight)
+* @brief      Set maximum size. Beyond this size (either axis, independently) the native window
+*             hosting this viewport is expected to stop growing (native resize border and
+*             Maximize are both capped at it) instead of stretching its rendered content to fill
+*             a bigger window. Pass 0 to leave an axis unrestricted.
+* @ingroup    GRAPHIC
+*
+* @param[in]  maxwidth : Maximum width value.
+* @param[in]  maxheight : Maximum height value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPVIEWPORT::SetMaxSize(float maxwidth, float maxheight)
+{
+  this->maxwidth  = maxwidth;
+  this->maxheight = maxheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         float GRPVIEWPORT::GetCanvasPositionX()
 * @brief      Get canvas position x
 * @ingroup    GRAPHIC
@@ -399,6 +498,11 @@ void GRPVIEWPORT::Clean()
 
   width           = 0.0f;
   height          = 0.0f;
+
+  minwidth        = 0.0f;
+  minheight       = 0.0f;
+  maxwidth        = 0.0f;
+  maxheight       = 0.0f;
 
   canvas_x        = 0.0f;
   canvas_y        = 0.0f;

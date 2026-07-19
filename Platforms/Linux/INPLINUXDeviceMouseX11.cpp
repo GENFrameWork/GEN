@@ -136,11 +136,11 @@ bool INPLINUXDEVICEMOUSEX11::Update()
       return false;
     }
 
-  if(!grpscreenx11->HasFocus())   
-    {
-      return false;
-    }  
-  
+  // Cursor position is always polled via XQueryPointer even without keyboard
+  // focus so that the custom-chrome hit-test and auto-hide logic work on KDE
+  // native X11, where the WM may not grant keyboard focus to a borderless
+  // window until the user explicitly clicks it. XQueryPointer is a direct
+  // server round-trip that does not depend on any event-mask or focus state.
   Display*     display = grpscreenx11->GetDisplay();
   Window       root;
   Window       child;
@@ -159,10 +159,17 @@ bool INPLINUXDEVICEMOUSEX11::Update()
         {
           cursor->SetIsChanged(false);
 
-          if((cursor->GetX() != mousex) || (cursor->GetY() != mousey))
+          // The cursor stores Y INVERTED (bottom-up); compare in that same space. The previous code compared
+          // the stored (inverted) Y against the RAW (top-down) Y: two different coordinate spaces. That made
+          // the change-test lie in both directions -- and in the worst case (raw y mirroring the stored y
+          // around the window's vertical center, constantly crossed while dragging the window vertically
+          // under a quiet cursor) the Y update was skipped with the cursor genuinely moved, freezing all
+          // vertical caption-drag motion while horizontal kept working.
+          int invmousey = (grpscreenx11->GetHeight() - mousey);
+
+          if((cursor->GetX() != mousex) || (cursor->GetY() != invmousey))
             {
-              mousey = (grpscreenx11->GetHeight()-mousey);
-              cursor->Set(mousex,mousey);
+              cursor->Set(mousex, invmousey);
               cursor->SetIsChanged(true);
             }
         }
@@ -178,6 +185,13 @@ bool INPLINUXDEVICEMOUSEX11::Update()
       INPBUTTON* button = GetButton(INPBUTTON_ID_MOUSE_LEFT);
       if(button) cursor->AddPointToMotion(button->IsPressed());
     }
+
+  // Button events are processed regardless of keyboard focus: XCheckWindowEvent below only ever dequeues
+  // ButtonPress/ButtonRelease that landed on THIS window (the XGrabButton in SetScreen() is on this window,
+  // not on root), so there is no risk of reacting to clicks made elsewhere. Gating them on HasFocus() broke
+  // caption-dragging on native KDE: KWin does not always grant *keyboard* focus to a borderless
+  // (custom-chromes) window, so with the gate in place the very clicks meant to drag the window were the
+  // ones being thrown away. Keyboard input stays focus-gated in its own device (INPLINUXDEVICEKEYBOARDX11).
 
   //-------------------------------------------------------------
   // Read Buttons

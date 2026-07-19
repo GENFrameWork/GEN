@@ -629,6 +629,45 @@ bool XWINDOWSWINGET::Find(XCHAR* search, XSTRING& jsonresult)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XWINDOWSWINGET::Show(XCHAR* ID, XSTRING& jsonresult)
+* @brief      show (equivalente a `winget show <id>`)
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[in]  ID : Identifier to use.
+* @param[in]  jsonresult : Output jsonresult.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSWINGET::Show(XCHAR* ID, XSTRING& jsonresult)
+{
+  if(!ID)
+    {
+      return false;
+    }
+
+  XBUFFER  buffer_output;
+  XSTRING  cmdstr;
+  XSTRING  result;
+  bool     status = false;
+
+  cmdstr.Format(__L("Get-WinGetPackage -Id \"%s\" | Select-Object * | ConvertTo-Json -Depth 5"), ID);
+  status = Exec(cmdstr.Get(), buffer_output);
+  if(!status)
+    {
+      return false;
+    }
+
+  result.ConvertFromUTF8(buffer_output);
+
+  jsonresult = result;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool XWINDOWSWINGET::ApplicationOperation(XWINDOWSWINGET_APPLICATIONOPERATION appoper, XCHAR* ID, bool force)
 * @brief      application operation
 * @ingroup    PLATFORM_WINDOWS
@@ -656,7 +695,7 @@ bool XWINDOWSWINGET::ApplicationOperation(XWINDOWSWINGET_APPLICATIONOPERATION ap
       case XWINDOWSWINGET_APPLICATIONOPERATION_UNKNOWN        : return status;
       case XWINDOWSWINGET_APPLICATIONOPERATION_INSTALL        : cmdstr.Format(__L("Install-WinGetPackage"));    break;
       case XWINDOWSWINGET_APPLICATIONOPERATION_UPDATEVERSION  : cmdstr.Format(__L("Update-WinGetPackage"));     break;
-      case XWINDOWSWINGET_APPLICATIONOPERATION_UNINSTALL      : cmdstr.Format(__L("Uninstall-WinGetPackage"));  break;
+      case XWINDOWSWINGET_APPLICATIONOPERATION_UNINSTALL      : cmdstr.Format(__L("Uninstall-WinGetPackage"));  break;      
     }
 
   cmdstr.AddFormat(__L(" -Id \"%s\""), ID);
@@ -1113,6 +1152,8 @@ void XWINDOWSWINGET::Clean()
 {
 
 }
+
+
 
 
 
