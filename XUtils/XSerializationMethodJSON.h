@@ -88,8 +88,9 @@ class XSERIALIZATIONMETHODJSON : public XSERIALIZATIONMETHOD
 
     virtual bool                ExtractStruct                  (XCHAR* name = NULL);
     virtual bool                ExtractArray                   (XDWORD nelements, XCHAR* name = NULL);
+    virtual bool                ExtractArrayElement            (XDWORD index, XCHAR* name = NULL, bool open = true);
 
-    XFILEJSON*                  GetFileJSON                    (); 
+    XFILEJSON*                  GetFileJSON                    ();
     void                        SetFileJSON                    (XFILEJSON* bufferdata); 
 
     XFILEJSONOBJECT*            GetActualObject                ();
@@ -99,11 +100,18 @@ class XSERIALIZATIONMETHODJSON : public XSERIALIZATIONMETHOD
 
     bool                        CheckHandleActive              ();
 
-    void                        Clean                          ();   
+    XFILEJSONVALUE*             GetContainerValue              (XCHAR* name, XFILEJSONOBJECT* startobject);
 
-    XFILEJSON*                  fileJSON; 
+    void                        Clean                          ();
+
+    XFILEJSON*                  fileJSON;
     XVECTOR<XFILEJSONOBJECT*>   fathers;
     XFILEJSONOBJECT*            actualobject;
+
+    // Extraction context: independent from actualobject (which is set by CreateInstance for the Add path and
+    // becomes dangling when the JSON tree is rebuilt by ReadAndDecodeAllLines/DecodeAllLines).
+    XVECTOR<XFILEJSONOBJECT*>   extractfathers;
+    XFILEJSONOBJECT*            extractobject;
 };
 
 

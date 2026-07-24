@@ -35,6 +35,8 @@
 #include "XString.h"
 #include "XBuffer.h"
 #include "XConsole.h"
+#include "XSerializable.h"
+
 
 #include "GRPRect.h"
 
@@ -47,7 +49,8 @@
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-class XPROCESS
+
+class XPROCESS 
 {
   public:
                                     XPROCESS                          ();
@@ -70,25 +73,28 @@ class XPROCESS
     void                            SetWindowTitleHeight              (int windowtitleheight);    
     int                             GetWindowBorderWidth              (); 
     void                            SetWindowBorderWidth              (int windowborderwidth);
-    
+  
     bool                            CopyTo                            (XPROCESS& xprocess);    
     bool                            CopyFrom                          (XPROCESS& xprocess);    
 
-    bool                            Compare                           (XPROCESS& xprocess, bool onlyfixed = true);    
+    bool                            Compare                           (XPROCESS& xprocess, bool onlyfixed = true);  
+
     
   private:
 
     void                            Clean                             ();
 
     XDWORD                          ID;
+
     XVECTOR<XDWORD>                 processIDs;    
     XPATH                           path;  
     XSTRING                         name;  
+
     void*                           windowhandle;          
     XSTRING                         windowtitle; 
     GRPRECTINT                      windowrect; 
     int                             windowtitleheight;    
-    int                             windowborderwidth;    
+    int                             windowborderwidth;
 };
 
 

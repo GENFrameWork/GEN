@@ -110,9 +110,6 @@ class XWINDOWSWINGET
     bool                                        List                          (bool updateavaible, XSTRING& jsonresult);  
     bool                                        Find                          (XCHAR* search, XSTRING& jsonresult);
 
-    
-    bool                                        Show                          (XCHAR* ID, XSTRING& jsonresult);
-
     bool                                        ApplicationOperation          (XWINDOWSWINGET_APPLICATIONOPERATION appoper, XCHAR* ID, bool force = true);
            
   private:                                             

@@ -57,6 +57,52 @@
 
 
 
+/*---- INTERNAL FUNCTIONS --------------------------------------------------------------------------------------------*/
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         template<class T> static T XVARIANT_GetNumericValue(XVARIANT_TYPE type, const void* data)
+* @brief      Get the stored numeric value converted to T, taking into account the real stored type.
+*             (FIX: the old cast operators did a blind *(T*)data reinterpret, reading out of bounds when the
+*             stored type was smaller than T -> e.g. XQWORD extracted from a JSON number stored as int).
+* @ingroup    XUTILS
+*
+* @param[in]  type : Real type stored in the variant.
+* @param[in]  data : Pointer to the stored data.
+*
+* @return     T : Requested value (0 if data is NULL or the type is not numeric).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+template<class T>
+static T XVARIANT_GetNumericValue(XVARIANT_TYPE type, const void* data)
+{
+  if(!data)
+    {
+      return (T)0;
+    }
+
+  switch(type)
+    {
+      case XVARIANT_TYPE_BOOLEAN        : return (T)(*(bool*)data);
+      case XVARIANT_TYPE_SHORT          : return (T)(*(short*)data);
+      case XVARIANT_TYPE_WORD           : return (T)(*(XWORD*)data);
+      case XVARIANT_TYPE_INTEGER        : return (T)(*(int*)data);
+      case XVARIANT_TYPE_DWORD          : return (T)(*(XDWORD*)data);
+      case XVARIANT_TYPE_DOUBLEINTEGER  : return (T)(*(long long*)data);
+      case XVARIANT_TYPE_QWORD          : return (T)(*(XQWORD*)data);
+      case XVARIANT_TYPE_FLOAT          : return (T)(*(float*)data);
+      case XVARIANT_TYPE_DOUBLE         : return (T)(*(double*)data);
+      case XVARIANT_TYPE_CHAR           : return (T)(*(char*)data);
+      case XVARIANT_TYPE_XCHAR          : return (T)(*(XCHAR*)data);
+                              default   : break;
+    }
+
+  return (T)0;
+}
+
+
+
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
@@ -775,9 +821,9 @@ const XVARIANT& XVARIANT::operator = (const XVARIANT& value)
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator bool() const 
+XVARIANT::operator bool() const
 {
-  return *(bool*)data;
+  return XVARIANT_GetNumericValue<bool>(type, data);
 }
 
 
@@ -790,9 +836,9 @@ XVARIANT::operator bool() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator short() const 
-{  
-  return *(short*)data;
+XVARIANT::operator short() const
+{
+  return XVARIANT_GetNumericValue<short>(type, data);
 }
 
 
@@ -805,9 +851,9 @@ XVARIANT::operator short() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator XWORD() const 
+XVARIANT::operator XWORD() const
 {
-  return *(XWORD*)data;
+  return XVARIANT_GetNumericValue<XWORD>(type, data);
 }
 
 
@@ -820,9 +866,9 @@ XVARIANT::operator XWORD() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator int() const 
+XVARIANT::operator int() const
 {
-  return *(int*)data;
+  return XVARIANT_GetNumericValue<int>(type, data);
 }
 
 
@@ -835,9 +881,9 @@ XVARIANT::operator int() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator XDWORD() const 
+XVARIANT::operator XDWORD() const
 {
-  return *(XDWORD*)data;
+  return XVARIANT_GetNumericValue<XDWORD>(type, data);
 }
 
 
@@ -850,9 +896,9 @@ XVARIANT::operator XDWORD() const
 * @return     XVARIANT::operator long : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator long long() const 
+XVARIANT::operator long long() const
 {
-  return *(long long*)data;
+  return XVARIANT_GetNumericValue<long long>(type, data);
 }
 
 
@@ -865,9 +911,9 @@ XVARIANT::operator long long() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator XQWORD() const 
+XVARIANT::operator XQWORD() const
 {
-  return *(XQWORD*)data;
+  return XVARIANT_GetNumericValue<XQWORD>(type, data);
 }
 
 
@@ -880,9 +926,9 @@ XVARIANT::operator XQWORD() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator float() const 
+XVARIANT::operator float() const
 {
-  return *(float*)data;
+  return XVARIANT_GetNumericValue<float>(type, data);
 }
 
 
@@ -895,9 +941,9 @@ XVARIANT::operator float() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator double() const 
+XVARIANT::operator double() const
 {
-  return *(double*)data;
+  return XVARIANT_GetNumericValue<double>(type, data);
 }
 
 
@@ -910,9 +956,9 @@ XVARIANT::operator double() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator char() const 
+XVARIANT::operator char() const
 {
-  return *(char*)data;
+  return XVARIANT_GetNumericValue<char>(type, data);
 }
 
 
@@ -940,9 +986,9 @@ XVARIANT::operator char*() const
 * @return     XVARIANT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-XVARIANT::operator XCHAR() const 
+XVARIANT::operator XCHAR() const
 {
-  return *(XCHAR*)data;
+  return XVARIANT_GetNumericValue<XCHAR>(type, data);
 }
 
 

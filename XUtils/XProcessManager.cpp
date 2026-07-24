@@ -37,9 +37,10 @@
 
 #include "XProcessManager.h"
 
+#include "XFactory.h"
+#include "XTimer.h"
 #include "XConsole.h"
 #include "XTrace.h"
-
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -47,12 +48,9 @@
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 XPROCESSMANAGER* XPROCESSMANAGER::instance = NULL;
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -405,9 +403,11 @@ bool XPROCESS::Compare(XPROCESS& xprocess, bool onlyfixed)
 void XPROCESS::Clean()
 {
   ID                  = 0xFFFFFFFF;
+
   windowhandle        = NULL;
   windowtitleheight   = 0;    
   windowborderwidth   = 0;    
+
 }
 
 

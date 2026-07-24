@@ -509,7 +509,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(bool& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueBoolean();
@@ -539,7 +539,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(char& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = (char)jsonvalue->GetValueDWord();
@@ -569,7 +569,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(int& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueInteger();
@@ -599,7 +599,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(float& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueFloating();
@@ -629,7 +629,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(double& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueDoubleFloat();
@@ -659,7 +659,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(long& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueInteger();
@@ -689,7 +689,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(long long& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueDoubleInteger();
@@ -719,7 +719,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(XBYTE& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = (XBYTE)jsonvalue->GetValueDWord();
@@ -749,7 +749,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(XWORD& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueWord();
@@ -779,7 +779,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(XDWORD& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueDWord();
@@ -809,7 +809,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(XQWORD& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueQWord();
@@ -839,7 +839,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(XSTRING& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       var = jsonvalue->GetValueString();
@@ -869,7 +869,7 @@ bool XSERIALIZATIONMETHODJSON::Extract(XBUFFER& var, XCHAR* name)
       return false;
     }
 
-  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name);
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
       //var = jsonvalue->
@@ -939,7 +939,7 @@ bool XSERIALIZATIONMETHODJSON::ExtractStruct(XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::ExtractArray(XDWORD nelements, XCHAR* name)
 {
-  if(!CheckHandleActive()) 
+  if(!CheckHandleActive())
     {
       return false;
     }
@@ -949,7 +949,160 @@ bool XSERIALIZATIONMETHODJSON::ExtractArray(XDWORD nelements, XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool XSERIALIZATIONMETHODJSON::ExtractArrayElement(XDWORD index, XCHAR* name, bool open)
+* @brief      Positions the extraction context (actualobject) on the index-th object of the named array
+*             (open = true), or restores the previous context (open = false).
+*             (FIX: without this, every element of an array was deserialized searching from the JSON root,
+*             so all the entries of a XVECTOR ended up with the data of the first element).
+* @ingroup    XUTILS
+*
+* @param[in]  index : Index of the element inside the array.
+* @param[in]  name : Name of the array.
+* @param[in]  open : true to enter the element; false to leave it.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XSERIALIZATIONMETHODJSON::ExtractArrayElement(XDWORD index, XCHAR* name, bool open)
+{
+  if(!fileJSON)
+    {
+      return false;
+    }
+
+  if(open)
+    {
+      // NOTE: XFILEJSON::GetValue() never compares the name of OBJECT/ARRAY values (it only recurses into them),
+      // so arrays cannot be located with it: GetContainerValue() is used instead.
+      XFILEJSONVALUE* jsonvalue = GetContainerValue(name, extractobject);
+      if(!jsonvalue)
+        {
+          return false;
+        }
+
+      if(jsonvalue->GetType() != XFILEJSONVALUETYPE_ARRAY)
+        {
+          return false;
+        }
+
+      XFILEJSONARRAY* array = jsonvalue->GetValueArray();
+      if(!array || !array->GetValues())
+        {
+          return false;
+        }
+
+      XFILEJSONVALUE* elementvalue = (XFILEJSONVALUE*)array->GetValues()->Get(index);
+      if(!elementvalue)
+        {
+          return false;
+        }
+
+      if(elementvalue->GetType() != XFILEJSONVALUETYPE_OBJECT)
+        {
+          return false;
+        }
+
+      XFILEJSONOBJECT* elementobject = elementvalue->GetValueObject();
+      if(!elementobject)
+        {
+          return false;
+        }
+
+      extractfathers.Add(extractobject);
+      extractobject = elementobject;
+    }
+   else
+    {
+      if(!extractfathers.GetSize())
+        {
+          return false;
+        }
+
+      extractobject = extractfathers.GetLast();
+      extractfathers.DeleteLast();
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XFILEJSONVALUE* XSERIALIZATIONMETHODJSON::GetContainerValue(XCHAR* name, XFILEJSONOBJECT* startobject)
+* @brief      Search a container value (OBJECT or ARRAY) by name. XFILEJSON::GetValue() cannot be used for this
+*             because it never compares the name of container values, only the name of primitive values.
+*             Direct children are searched first; if not found, the search descends recursively.
+* @ingroup    XUTILS
+*
+* @param[in]  name : Name of the container to search.
+* @param[in]  startobject : Start object of the search (NULL = root of the JSON).
+*
+* @return     XFILEJSONVALUE* : Pointer to the requested value; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XFILEJSONVALUE* XSERIALIZATIONMETHODJSON::GetContainerValue(XCHAR* name, XFILEJSONOBJECT* startobject)
+{
+  if(!fileJSON)
+    {
+      return NULL;
+    }
+
+  XFILEJSONOBJECT* object = startobject?startobject:fileJSON->GetRoot();
+  if(!object)
+    {
+      return NULL;
+    }
+
+  if(!object->GetValues())
+    {
+      return NULL;
+    }
+
+  // First pass: direct children.
+  for(XDWORD c=0; c<object->GetValues()->GetSize(); c++)
+    {
+      XFILEJSONVALUE* value = (XFILEJSONVALUE*)object->GetValues()->Get(c);
+      if(value)
+        {
+          XFILEJSONVALUETYPE type = value->GetType();
+          if((type == XFILEJSONVALUETYPE_OBJECT) || (type == XFILEJSONVALUETYPE_ARRAY))
+            {
+              if(value->GetName())
+                {
+                  if(!value->GetName()->Compare(name))
+                    {
+                      return value;
+                    }
+                }
+            }
+        }
+    }
+
+  // Second pass: descend recursively.
+  for(XDWORD c=0; c<object->GetValues()->GetSize(); c++)
+    {
+      XFILEJSONVALUE* value = (XFILEJSONVALUE*)object->GetValues()->Get(c);
+      if(value)
+        {
+          XFILEJSONVALUETYPE type = value->GetType();
+          if((type == XFILEJSONVALUETYPE_OBJECT) || (type == XFILEJSONVALUETYPE_ARRAY))
+            {
+              XFILEJSONVALUE* found = GetContainerValue(name, (XFILEJSONOBJECT*)value->GetValuePointer());
+              if(found)
+                {
+                  return found;
+                }
+            }
+        }
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         XFILEJSON* XSERIALIZATIONMETHODJSON::GetFileJSON()
 * @brief      Get file JSON
 * @ingroup    XUTILS
@@ -1046,8 +1199,10 @@ void XSERIALIZATIONMETHODJSON::Clean()
   fileJSON      = NULL;
 
   fathers.DeleteAll();
+  extractfathers.DeleteAll();
 
   actualobject  = NULL;
+  extractobject = NULL;
 }
 
 

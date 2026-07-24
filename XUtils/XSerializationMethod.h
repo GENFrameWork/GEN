@@ -91,7 +91,8 @@ class XSERIALIZATIONMETHOD
 
     virtual bool                   ExtractStruct        (XCHAR* name = NULL);
     virtual bool                   ExtractArray         (XDWORD nelements, XCHAR* name = NULL);
-    
+    virtual bool                   ExtractArrayElement  (XDWORD index, XCHAR* name = NULL, bool open = true);
+
   private:
 
     void                           Clean                ();   

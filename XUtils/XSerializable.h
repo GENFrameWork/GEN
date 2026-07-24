@@ -160,13 +160,20 @@ class XSERIALIZABLE
                                          if(element)
                                            {
                                              element->SetSerializationMethod(serializationmethod);
-                                             element->Deserialize();               
-                                           }                                       
-                                       } 
 
-                                     return true;                           
-                                   }  
-                                   
+                                             // FIX: position the extraction context on the c-th element of the array,
+                                             // otherwise every element reads the data of the first entry of the JSON.
+                                             if(serializationmethod->ExtractArrayElement(c, name, true))
+                                               {
+                                                 element->Deserialize();
+                                                 serializationmethod->ExtractArrayElement(c, name, false);
+                                               }
+                                           }
+                                       }
+
+                                     return true;
+                                   }
+
     template<class T>
     bool                           XVectorClass_Add          (XVECTOR<T*>* var, XCHAR* name, XCHAR* nameclass)
                                    { 
@@ -206,12 +213,19 @@ class XSERIALIZABLE
                                          if(element)
                                            {
                                              element->SetSerializationMethod(serializationmethod);
-                                             Class_Extract<T>(element, nameclass);
-                                           }                                       
-                                       } 
 
-                                     return true;                           
-                                   }                             
+                                             // FIX: position the extraction context on the c-th element of the array,
+                                             // otherwise every element reads the data of the first entry of the JSON.
+                                             if(serializationmethod->ExtractArrayElement(c, name, true))
+                                               {
+                                                 Class_Extract<T>(element, nameclass);
+                                                 serializationmethod->ExtractArrayElement(c, name, false);
+                                               }
+                                           }
+                                       }
+
+                                     return true;
+                                   }
 
     XSERIALIZATIONMETHOD*          GetSerializationMethod     ();
     void                           SetSerializationMethod     (XSERIALIZATIONMETHOD* serializationmethod);

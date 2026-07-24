@@ -660,7 +660,28 @@ bool XSERIALIZATIONMETHOD::ExtractArray(XDWORD nelements, XCHAR* name)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool XSERIALIZATIONMETHOD::ExtractArrayElement(XDWORD index, XCHAR* name, bool open)
+* @brief      Positions the extraction context on the index-th element of the named array (open = true) or restores
+*             the previous context (open = false). Default implementation is a no-op that returns true, so
+*             sequential methods (binary) are not affected.
+* @ingroup    XUTILS
+*
+* @param[in]  index : Index of the element inside the array.
+* @param[in]  name : Name of the array.
+* @param[in]  open : true to enter the element; false to leave it.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XSERIALIZATIONMETHOD::ExtractArrayElement(XDWORD index, XCHAR* name, bool open)
+{
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void XSERIALIZATIONMETHOD::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
