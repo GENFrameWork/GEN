@@ -162,6 +162,36 @@ XSTRING* APPFLOWEXTENDED_INTERNETSTATUS::GetPublicIP()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XDWORD APPFLOWEXTENDED_INTERNETSTATUS::GetLatency()
+* @brief      Get latency
+* @ingroup    APPFLOW
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD APPFLOWEXTENDED_INTERNETSTATUS::GetLatency()
+{
+  return latency;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void APPFLOWEXTENDED_INTERNETSTATUS::SetLatency(XDWORD latency)
+* @brief      Set latency
+* @ingroup    APPFLOW
+* 
+* @param[in]  latency : Latency value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void APPFLOWEXTENDED_INTERNETSTATUS::SetLatency(XDWORD latency)
+{
+  this->latency = latency;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool APPFLOWEXTENDED_INTERNETSTATUS::Update()
 * @brief      Update
 * @ingroup    APPFLOW
@@ -187,6 +217,8 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Update()
     {
       publicIP = __L("");
     }
+
+  latency = internetservices->GetInternetLatency();
 
   return true;
 }
@@ -221,13 +253,20 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Show(XCONSOLE* console)
   string2.ConvertFromBoolean(haveinternetconnection, XSTRINGBOOLEANMODE_HUMAN);   
   APPFLOW_EXTENDED.GetConsole()->Show_Line(string, string2);
 
-  if(haveinternetconnection && !publicIP.IsEmpty())
+  if(haveinternetconnection)
     {
-      string  = __L("Public IP");
-      string2.Format(__L("[%s]"), publicIP.Get());
+      string  = __L("Latency");
+      string2.Format(__L("%d ms"), latency);
       APPFLOW_EXTENDED.GetConsole()->Show_Line(string, string2);
+  
+      if(!publicIP.IsEmpty())
+        {
+          string  = __L("Public IP");
+          string2.Format(__L("[%s]"), publicIP.Get());
+          APPFLOW_EXTENDED.GetConsole()->Show_Line(string, string2);
+        }
     }
- 
+
   return true;
 }
 
@@ -247,6 +286,7 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Serialize()
   
   Primitive_Add<bool>(haveinternetconnection  , __L("internetconnection"));
   Primitive_Add<XSTRING*>(&publicIP           , __L("publicIP")); 
+  Primitive_Add<int>(latency                  , __L("latencyms"));
 
   return true;
 }
@@ -267,6 +307,7 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Deserialize()
   
   Primitive_Extract<bool>(haveinternetconnection , __L("internetconnection"));
   Primitive_Extract<XSTRING>(publicIP            , __L("publicIP"));
+  Primitive_Extract<XDWORD>(latency              , __L("latencyms"));
  
   return true;
 }
@@ -289,6 +330,8 @@ void APPFLOWEXTENDED_INTERNETSTATUS::Clean()
 
   haveinternetconnection  = false;
   publicIP.Empty();    
+
+  latency                 = 0;
 }
 
 

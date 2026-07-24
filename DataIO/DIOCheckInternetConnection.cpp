@@ -174,6 +174,8 @@ bool DIOCHECKINTERNETCONNECTION::Check()
   static bool isinternetactiveold = false;
 
   isinternetactive = checkconnections->Connections_SomeIsConnected(); 
+
+  latency = checkconnections->Connections_GetLatency();
  
   if(isinternetactiveold != isinternetactive)
     {
@@ -319,6 +321,21 @@ bool DIOCHECKINTERNETCONNECTION::IsChangeConnectionStatus()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XDWORD DIOCHECKINTERNETCONNECTION::GetLatency()
+* @brief      Get latency
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Latency (in milliseconds) measured on the last Check(); 0 if there is no internet connection.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD DIOCHECKINTERNETCONNECTION::GetLatency()
+{
+  return latency;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void DIOCHECKINTERNETCONNECTION::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
@@ -336,6 +353,7 @@ void DIOCHECKINTERNETCONNECTION::Clean()
 
   ischangeconnectionstatus = false;
   xmutexconnectioncuts     = NULL;
+  latency                  = 0;
 }
 
 

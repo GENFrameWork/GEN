@@ -145,6 +145,36 @@ void APPFLOWINTERNETSERVICES_XEVENT::SetInternetConnextionCut(DIOCHECKTCPIPCONNE
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XDWORD APPFLOWINTERNETSERVICES_XEVENT::GetLatency()
+* @brief      Get latency
+* @ingroup    APPFLOW
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD APPFLOWINTERNETSERVICES_XEVENT::GetLatency()
+{
+  return latency;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void APPFLOWINTERNETSERVICES_XEVENT::SetLatency(XDWORD latency)
+* @brief      Set latency
+* @ingroup    APPFLOW
+* 
+* @param[in]  latency : Latency value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void APPFLOWINTERNETSERVICES_XEVENT::SetLatency(XDWORD latency)
+{
+  this->latency = latency;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool APPFLOWINTERNETSERVICES_XEVENT::IsChangePublicIP()
 * @brief      Is change public IP
 * @ingroup    APPFLOW
@@ -336,6 +366,8 @@ void APPFLOWINTERNETSERVICES_XEVENT::Clean()
 {
   internetconnexionstate  = APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE_NONE;
   internetconnectioncut   = NULL;
+
+  latency                 = 0;
 
   ischangepublicIP        = false;
   ischangelocalIP         = false;

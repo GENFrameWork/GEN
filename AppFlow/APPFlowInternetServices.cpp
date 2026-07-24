@@ -42,7 +42,6 @@
 #include "XSystem.h"
 #include "XTranslation.h"
 #include "XTranslation_GEN.h"
-#include "XTranslation.h"
 #include "XLanguage_ISO_639_3.h"
 
 #include "DIOFactory.h"
@@ -330,6 +329,23 @@ bool APPFLOWINTERNETSERVICES::Ini(APPFLOWCFG* cfg, XDWORD timeoutgetpublicip)
 bool APPFLOWINTERNETSERVICES::HaveInternetConnection()
 {
   return haveinternetconnection;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD APPFLOWINTERNETSERVICES::GetInternetLatency()
+* @brief      Get internet latency
+* @ingroup    APPFLOW
+* 
+* @return     XDWORD : Latency (in milliseconds) of the internet connection; 0 if there is no connection.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD APPFLOWINTERNETSERVICES::GetInternetLatency()
+{
+  if(!checkinternetconnection) return 0;
+
+  return checkinternetconnection->GetLatency();
 }
 
 
@@ -728,6 +744,8 @@ bool APPFLOWINTERNETSERVICES::CheckInternetStatus()
   PostEvent(&xevent);
  
   haveinternetconnection = checkinternetconnection->Check();
+
+  xevent.SetLatency(checkinternetconnection->GetLatency());
 
   if(checkinternetconnection->IsChangeConnectionStatus())
     {

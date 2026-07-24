@@ -168,6 +168,7 @@ class DIOCHECKTCPIPCONNECTIONS
     bool                                    Connections_WaitToAllChecked           (int timeout);
     bool                                    Connections_WaitToSomeIsChecked        (int timeout);
     bool                                    Connections_SomeIsConnected            ();
+    XDWORD                                  Connections_GetLatency                  ();
 
     bool                                    Connections_DeleteAll                  ();
 

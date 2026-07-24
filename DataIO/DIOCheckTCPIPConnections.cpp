@@ -1037,6 +1037,40 @@ bool DIOCHECKTCPIPCONNECTIONS::Connections_SomeIsConnected()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XDWORD DIOCHECKTCPIPCONNECTIONS::Connections_GetLatency()
+* @brief      Connections get latency
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Elapsed time (in milliseconds) of the last connection found connected; 0 if none is connected.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD DIOCHECKTCPIPCONNECTIONS::Connections_GetLatency()
+{
+  XDWORD latency = 0;
+
+  if(xmutexconnections) xmutexconnections->Lock();
+
+  for(XDWORD c=0; c<connections.GetSize(); c++)
+    {
+      DIOCHECKTCPIPCONNECTION* cc = connections.Get(c);
+      if(cc)
+        {
+          if(cc->IsConnected())
+            {
+              latency = cc->GetElapsedTime();
+              break;
+            }
+        }
+    }
+
+  if(xmutexconnections) xmutexconnections->UnLock();
+
+  return latency;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool DIOCHECKTCPIPCONNECTIONS::Connections_DeleteAll()
 * @brief      Connections GEN_DELETE all
 * @ingroup    DATAIO

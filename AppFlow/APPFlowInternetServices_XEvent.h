@@ -75,6 +75,9 @@ class APPFLOWINTERNETSERVICES_XEVENT : public XEVENT
     DIOCHECKTCPIPCONNECTION_CUT*                            GetInternetConnextionCut               ();
     void                                                    SetInternetConnextionCut               (DIOCHECKTCPIPCONNECTION_CUT* internetconnectioncut);
 
+    XDWORD                                                  GetLatency                             ();
+    void                                                    SetLatency                             (XDWORD latency);
+
     bool                                                    IsChangePublicIP                       ();     
     void                                                    SetIsChangePublicIP                    (bool ischangepublicIP);     
 
@@ -100,6 +103,8 @@ class APPFLOWINTERNETSERVICES_XEVENT : public XEVENT
 
     APPFLOWINTERNETSERVICES_CHECKINTERNETCONNEXION_STATE    internetconnexionstate;
     DIOCHECKTCPIPCONNECTION_CUT*                            internetconnectioncut;
+
+    XDWORD                                                  latency;
 
     bool                                                    ischangepublicIP;
     bool                                                    ischangelocalIP;

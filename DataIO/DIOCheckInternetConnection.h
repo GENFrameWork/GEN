@@ -69,6 +69,8 @@ class DIOCHECKINTERNETCONNECTION
 
     bool                                    IsChangeConnectionStatus               ();
 
+    XDWORD                                  GetLatency                             ();
+
   private:
 
     void                                    Clean                                 ();
@@ -78,6 +80,8 @@ class DIOCHECKINTERNETCONNECTION
     XDWORD                                  connectionID[DIOCHECKINTERNETCONNECTION_MAXCONNECTIONS];
 
     bool                                    ischangeconnectionstatus;
+
+    XDWORD                                  latency;
 
     XMUTEX*                                 xmutexconnectioncuts;
     XVECTOR<DIOCHECKTCPIPCONNECTION_CUT*>   connectioncuts;

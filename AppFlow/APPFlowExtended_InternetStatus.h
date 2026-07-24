@@ -59,6 +59,9 @@ class APPFLOWEXTENDED_INTERNETSTATUS : public DIOWEBSERVER_RESOLVEENDPOINT
 
     bool                                GetHaveInternetConnection                   ();
     XSTRING*                            GetPublicIP                                 ();    
+
+    XDWORD                              GetLatency                                   ();
+    void                                SetLatency                                   (XDWORD latency);
    
     bool                                Update                                      (); 
     bool                                Show                                        (XCONSOLE* console);
@@ -77,6 +80,8 @@ class APPFLOWEXTENDED_INTERNETSTATUS : public DIOWEBSERVER_RESOLVEENDPOINT
 
     bool                                haveinternetconnection;
     XSTRING                             publicIP;    
+
+    XDWORD                              latency;
 };
 
 
