@@ -72,7 +72,7 @@ class APPFLOWINTERNETSERVICES : public XOBSERVER, public XSUBJECT
 
     bool                            HaveInternetConnection          ();
 
-    XDWORD                          GetInternetLatency              ();
+    XDWORD                           GetInternetLatency               ();
 
     XSTRING*                        GetAutomaticLocalIP             ();
     XSTRING*                        GetAllLocalIP                   ();

@@ -258,15 +258,15 @@ bool APPFLOWEXTENDED_INTERNETSTATUS::Show(XCONSOLE* console)
       string  = __L("Latency");
       string2.Format(__L("%d ms"), latency);
       APPFLOW_EXTENDED.GetConsole()->Show_Line(string, string2);
-  
-      if(!publicIP.IsEmpty())
-        {
-          string  = __L("Public IP");
-          string2.Format(__L("[%s]"), publicIP.Get());
-          APPFLOW_EXTENDED.GetConsole()->Show_Line(string, string2);
-        }
     }
 
+  if(haveinternetconnection && !publicIP.IsEmpty())
+    {
+      string  = __L("Public IP");
+      string2.Format(__L("[%s]"), publicIP.Get());
+      APPFLOW_EXTENDED.GetConsole()->Show_Line(string, string2);
+    }
+ 
   return true;
 }
 

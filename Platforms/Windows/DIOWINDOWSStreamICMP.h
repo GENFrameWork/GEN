@@ -102,6 +102,8 @@ class DIOWINDOWSSTREAMICMP : public DIOSTREAMICMP , public XFSMACHINE
 
     XTHREADCOLLECTED*         threadconnection;
     SOCKET                    handle;    
+
+    bool                      hastimeperiodactive;
 };
 
 

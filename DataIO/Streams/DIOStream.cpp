@@ -248,7 +248,12 @@ bool DIOSTREAM::WaitToConnected(int timeout)
           break;
         }
 
-      Wait(DIOSTREAM_TIMEINWAITFUNCTIONS);
+      // Poll cadence is config-driven (defaults to DIOSTREAM_TIMEINWAITFUNCTIONS) so a
+      // specific stream (e.g. DIOPING, for accurate RTT) can request a tighter cadence
+      // via DIOSTREAMCONFIG::SetPollInterval() without affecting other DIOSTREAM users.
+      { DIOSTREAMCONFIG* _pollconfig = GetConfig();
+        Wait(_pollconfig ? _pollconfig->GetPollInterval() : DIOSTREAM_TIMEINWAITFUNCTIONS);
+      }
     }
 
   return status;
@@ -431,7 +436,12 @@ bool DIOSTREAM::WaitToFilledReadingBuffer(int filledto, int timeout)
             }
         }
 
-      Wait(DIOSTREAM_TIMEINWAITFUNCTIONS);
+      // Poll cadence is config-driven (defaults to DIOSTREAM_TIMEINWAITFUNCTIONS) so a
+      // specific stream (e.g. DIOPING, for accurate RTT) can request a tighter cadence
+      // via DIOSTREAMCONFIG::SetPollInterval() without affecting other DIOSTREAM users.
+      { DIOSTREAMCONFIG* _pollconfig = GetConfig();
+        Wait(_pollconfig ? _pollconfig->GetPollInterval() : DIOSTREAM_TIMEINWAITFUNCTIONS);
+      }
     }
 
   if(xmutextimerout) xmutextimerout->UnLock();
@@ -904,7 +914,12 @@ bool DIOSTREAM::WaitToFlushOutXBuffer(int timeout, bool mutexactive)
             }
         }
 
-      Wait(DIOSTREAM_TIMEINWAITFUNCTIONS);
+      // Poll cadence is config-driven (defaults to DIOSTREAM_TIMEINWAITFUNCTIONS) so a
+      // specific stream (e.g. DIOPING, for accurate RTT) can request a tighter cadence
+      // via DIOSTREAMCONFIG::SetPollInterval() without affecting other DIOSTREAM users.
+      { DIOSTREAMCONFIG* _pollconfig = GetConfig();
+        Wait(_pollconfig ? _pollconfig->GetPollInterval() : DIOSTREAM_TIMEINWAITFUNCTIONS);
+      }
     }
 
   if(xmutextimerout && mutexactive) 

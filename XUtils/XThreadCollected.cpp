@@ -415,7 +415,7 @@ XDWORD XTHREADCOLLECTED::GetWaitYield()
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTHREADCOLLECTED::SetWaitYield(XDWORD waityield)
 {
-  if(directxthread) return directxthread->SetWaitYield(priority);
+  if(directxthread) return directxthread->SetWaitYield(waityield);
   this->waityield = waityield;
 }
 

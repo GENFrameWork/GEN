@@ -105,6 +105,9 @@ class DIOSTREAMCONFIG : public XSUBJECT
     XDWORD                    GetThreadWaitYield              ();
     void                      SetThreadWaitYield              (XDWORD threadwaityield);
 
+    XDWORD                    GetPollInterval                 ();
+    void                      SetPollInterval                 (XDWORD pollinterval);
+
     
   protected:
 
@@ -115,6 +118,7 @@ class DIOSTREAMCONFIG : public XSUBJECT
     XDWORD                    sizebufferSO;
     XTHREADPRIORITY           threadpriority;
     XDWORD                    threadwaityield;
+    XDWORD                    pollinterval;
 
   private:
 

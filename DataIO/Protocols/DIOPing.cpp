@@ -500,6 +500,14 @@ bool DIOPING::Do(XDWORD nretries, XDWORD timebetweenchecks, bool exitfirstgoodre
   
   diostreamICMPconfig.SetMode(DIOSTREAMMODE_CLIENT);
 
+  // Request a fast, high-priority dedicated thread for this ICMP stream so the RTT
+  // measured here is not inflated by the generic XTHREAD/DIOSTREAM default polling
+  // cadence (10 ms). Scoped to DIOPING only: DIOSTREAMICMPCONFIG defaults (and every
+  // other DIOSTREAMICMP consumer that does not set these) keep today's behavior.
+  diostreamICMPconfig.SetThreadWaitYield(1);
+  diostreamICMPconfig.SetThreadPriority(XTHREADPRIORITY_HIGH);
+  diostreamICMPconfig.SetPollInterval(1);
+
   DIOSTREAMICMP* diostreamICMP  = (DIOSTREAMICMP*)GEN_DIOFACTORY.CreateStreamIO(&diostreamICMPconfig);
   if(!diostreamICMP) 
     {

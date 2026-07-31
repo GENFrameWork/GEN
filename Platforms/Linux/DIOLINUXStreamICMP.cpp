@@ -198,6 +198,9 @@ bool DIOLINUXSTREAMICMP::Open()
 
   ResetConnectionStatistics();
 
+  threadconnection->SetWaitYield(config->GetThreadWaitYield());
+  threadconnection->SetPriority(config->GetThreadPriority());
+
   return threadconnection->Ini();
 }
 

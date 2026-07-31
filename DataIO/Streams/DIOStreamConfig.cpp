@@ -36,6 +36,8 @@
 
 #include "DIOStreamConfig.h"
 
+#include "DIOStream.h"
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -278,6 +280,36 @@ void DIOSTREAMCONFIG::SetThreadWaitYield(XDWORD threadwaityield)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XDWORD DIOSTREAMCONFIG::GetPollInterval()
+* @brief      Get poll interval
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD DIOSTREAMCONFIG::GetPollInterval()
+{
+  return pollinterval;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMCONFIG::SetPollInterval(XDWORD pollinterval)
+* @brief      Set poll interval
+* @ingroup    DATAIO
+* 
+* @param[in]  pollinterval : Pollinterval value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMCONFIG::SetPollInterval(XDWORD pollinterval)
+{
+  this->pollinterval = pollinterval;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void DIOSTREAMCONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
@@ -293,6 +325,7 @@ void DIOSTREAMCONFIG::Clean()
   sizebufferSO            = 0;
   threadpriority          = XTHREADPRIORITY_NORMAL;
   threadwaityield         = XTHREAD_DEFAULTWAITYIELD;
+  pollinterval            = DIOSTREAM_TIMEINWAITFUNCTIONS;
 }
 
 

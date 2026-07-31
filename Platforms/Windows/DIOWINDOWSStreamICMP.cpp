@@ -46,6 +46,9 @@
 #include "DIOStream_XEvent.h"
 #include "DIOStreamICMPConfig.h"
 
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -169,6 +172,19 @@ bool DIOWINDOWSSTREAMICMP::Open()
 
   ResetConnectionStatistics();
 
+  threadconnection->SetWaitYield(config->GetThreadWaitYield());
+  threadconnection->SetPriority(config->GetThreadPriority());
+
+  // Windows Sleep() defaults to the system scheduler tick (~15.6 ms): a Sleep(1) can
+  // really sleep ~15 ms unless the process timer resolution is raised. Only requested
+  // when the caller (e.g. DIOPING, for accurate RTT) asked for a tight cadence via
+  // DIOSTREAMCONFIG::SetThreadWaitYield(); scoped to the lifetime of this stream, and
+  // restored in Close(). Other DIOSTREAMICMP consumers keep today's behavior.
+  if(config->GetThreadWaitYield() < DIOSTREAM_TIMEINWAITFUNCTIONS)
+    {
+      hastimeperiodactive = (timeBeginPeriod(1) == TIMERR_NOERROR);
+    }
+
   return threadconnection->Ini();
 }
 
@@ -211,6 +227,12 @@ bool DIOWINDOWSSTREAMICMP::Disconnect()
 bool DIOWINDOWSSTREAMICMP::Close()
 {
   if(!threadconnection) return false;
+
+  if(hastimeperiodactive)
+    {
+      timeEndPeriod(1);
+      hastimeperiodactive = false;
+    }
 
   threadconnection->End();
 
@@ -289,9 +311,11 @@ int DIOWINDOWSSTREAMICMP::IsReadyConnect(SOCKET socket)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWINDOWSSTREAMICMP::Clean()
 {
-  threadconnection  = NULL;
-  status            = DIOSTREAMSTATUS_DISCONNECTED;
-  handle            = INVALID_SOCKET;
+  threadconnection     = NULL;
+  status               = DIOSTREAMSTATUS_DISCONNECTED;
+  handle               = INVALID_SOCKET;
+
+  hastimeperiodactive  = false;
 }
 
 
