@@ -261,9 +261,17 @@ bool DIOWEBSERVER_HEADER::Create(XSTRING* resource, int version, int subversion,
 
   if(password)
     {
-      line += __L("Unauthorised");
+      XSTRING description;
+      XSTRING authenticateline;
+
+      GetDescriptionResult(DIOWEBHEADER_RESULT_UNAUTHORIZED, description);
+
+      line += description;
       AddLine(line);
-      AddLine(__L("WWW-Authenticate: Basic"));
+
+      // Without the realm the browsers do not show the login/password dialog.
+      authenticateline.Format(__L("%s: Basic realm=\"%s\", charset=\"UTF-8\""), DIOWEBHEADER_WWW_AUTHENTICATE, DIOWEBSERVER_AUTHENTICATION_DEFAULTREALM);
+      AddLine(authenticateline);
     }
    else
     {
@@ -1126,18 +1134,32 @@ bool DIOWEBSERVER_REQUEST::HaveLoginPassword()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_REQUEST::GetLoginPassword(XSTRING& login, XSTRING& password)
 {
+  login.Empty();
+  password.Empty();
+
   if(loginpassword.IsEmpty()) return false;
 
+  XSTRING base64;
+  XBUFFER decoded;
   XSTRING lp;
 
-  lp.ConvertToBase64(loginpassword);
-  //lp.ConvertFromBase64(loginpassword);
+  // The value of the header "Authorization: Basic xxxxxx" is the BASE64 of "login:password",
+  // so it has to be DECODED (before it was encoded, destroying the received value).
 
-  int index = lp.Find(__L(":"),true);
+  base64 = loginpassword;
+  base64.DeleteNoCharacters(__L(" \t\r\n"), 0, XSTRINGCONTEXT_ALLSTRING);
+
+  if(base64.IsEmpty())                        return false;
+  if(!base64.ConvertBase64ToBinary(decoded))  return false;
+  if(!decoded.GetSize())                      return false;
+
+  if(!lp.Set(decoded.Get(), decoded.GetSize())) return false;
+
+  int index = lp.Find(__L(":"), true);
   if(index ==  XSTRING_NOTFOUND) return false;
 
-  lp.Copy(0,index,login);
-  lp.Copy(index+1,password);
+  lp.Copy(0, index, login);
+  lp.Copy(index+1, password);
 
   return true;
 }
@@ -2931,6 +2953,74 @@ DIOWEBSERVER_AUTHENTICATION* DIOWEBSERVER::GetAuthentication(XSTRING& guest)
     }
 
   return authentication;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBSERVER::HaveAuthentications()
+* @brief      Have authentications configured
+* @ingroup    DATAIO
+* 
+* @return     bool : true if there is at least one authentication registered; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBSERVER::HaveAuthentications()
+{
+  return authentications.IsEmpty()?false:true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBSERVER::CheckAuthentication(XSTRING& guest, XSTRING& login, XSTRING& password)
+* @brief      Check the login/password received against the registered authentications.
+*             The guest (Host of the request) is used first, if it is not found the wildcard guest is used.
+*             An empty registered login means that any login is valid (only the password is checked).
+* @ingroup    DATAIO
+* 
+* @param[in]  guest : Guest (host) value.
+* @param[in]  login : Login value.
+* @param[in]  password : Password text.
+* 
+* @return     bool : true if the credentials are valid; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBSERVER::CheckAuthentication(XSTRING& guest, XSTRING& login, XSTRING& password)
+{
+  DIOWEBSERVER_AUTHENTICATION* authentication = GetAuthentication(guest);
+
+  if(!authentication)
+    {
+      // The Host header can come as "host:port", try only with the host part.
+      int index = guest.FindCharacter(__C(':'));
+      if(index != XSTRING_NOTFOUND)
+        {
+          XSTRING onlyguest;
+
+          guest.Copy(0, index, onlyguest);
+          authentication = GetAuthentication(onlyguest);
+        }
+    }
+
+  if(!authentication)
+    {
+      XSTRING allguests;
+
+      allguests = DIOWEBSERVER_AUTHENTICATION_ALLGUESTS;
+      authentication = GetAuthentication(allguests);
+    }
+
+  if(!authentication) return false;
+
+  if(!authentication->GetLogin()->IsEmpty())
+    {
+      if(authentication->GetLogin()->Compare(login, true)) return false;
+    }
+
+  if(authentication->GetPassword()->Compare(password, false)) return false;   // The password is case sensitive.
+
+  return true;
 }
 
 

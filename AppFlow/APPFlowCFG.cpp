@@ -230,6 +230,7 @@ bool APPFLOWCFG::DoVariableMapping()
   AddValue(XFILECFG_VALUETYPE_INT     , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PORT                                      , &webserver_port                                                     , __L("Port for the WEB server")                                            , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_INT     , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_TIMEOUTTOSERVERPAGE                       , &webserver_timeouttoserverpage                                      , __L("Timeout for the WEB server")                                         , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_BOOLEAN , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_AUTHENTICATEDACCESS                       , &webserver_isauthenticatedaccess                                    , __L("Authenticate access for the WEB server")                             , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+  AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_LOGIN                                     , &webserver_login                                                    , __L("Login (user) for the WEB server")                                    , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PASSWORD                                  , &webserver_password                                                 , __L("Password for the WEB server")                                        , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_RESOURCES                            , &webserver_path_resources                                           , __L("Path resources for the WEB server")                                  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PHP                                  , &webserver_path_PHP                                                 , __L("Path instalation PHP for the WEB server")                            , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
@@ -1618,6 +1619,21 @@ bool APPFLOWCFG::WebServer_IsAuthenticatedAccess()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XSTRING* APPFLOWCFG::WebServer_GetLogin()
+* @brief      Web server get login (user)
+* @ingroup    APPFLOW
+* 
+* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* APPFLOWCFG::WebServer_GetLogin()
+{
+  return &webserver_login;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSTRING* APPFLOWCFG::WebServer_GetPassword()
 * @brief      Web server get password
 * @ingroup    APPFLOW
@@ -1904,6 +1920,10 @@ void APPFLOWCFG::Clean()
   webserver_port                                    = 0;
   webserver_timeouttoserverpage                     = 0;
   webserver_isauthenticatedaccess                   = false;
+  webserver_login.Empty();
+  webserver_password.Empty();
+  webserver_path_resources.Empty();
+  webserver_path_PHP.Empty();
   #endif
 
   //-----------------------------------------------------------------------------------------------------

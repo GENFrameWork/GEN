@@ -118,6 +118,17 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
 
   if(!webserver)  return false;
 
+  //-------------------------------------------------------------------------------------------------------------------------------
+  // The configuration of the object was never transferred to the members nor to the DIOWEBSERVER, so the authenticated
+  // access of the .INI file was simply ignored.
+
+  this->isapirestonly         = isapirestonly;
+  this->isauthenticatedaccess = cfg->WebServer_IsAuthenticatedAccess();
+
+  if(!Ini_Authentication(cfg)) return false;
+
+  //-------------------------------------------------------------------------------------------------------------------------------
+
   /*
   if(chekuseragentid)
     {
@@ -139,6 +150,64 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
     }
 
   return Ini(cfg->WebServer_GetPort(), doinitialconnectitivitytest, cfg->WebServer_GetTimeoutToServerPage(), cfg->WebServer_GetLocalAddress());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool APPFLOWWEBSERVER::Ini_Authentication(APPFLOWCFG* cfg)
+* @brief      Transfer the authentication configuration (APPFLOWCFG) to the DIOWEBSERVER.
+* @ingroup    APPFLOW
+* 
+* @param[in]  cfg : Configuration object to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini_Authentication(APPFLOWCFG* cfg)
+{
+  if(!cfg)        return false;
+  if(!webserver)  return false;
+
+  webserver->DelAllAuthentication();
+
+  if(!cfg->WebServer_IsAuthenticatedAccess()) return true;
+
+  XSTRING* login    = cfg->WebServer_GetLogin();
+  XSTRING* password = cfg->WebServer_GetPassword();
+
+  if(!login)    return false;
+  if(!password) return false;
+
+  if(password->IsEmpty())
+    {
+      // Authenticated access is active but there is no password in the configuration:
+      // the authentication is resolved by events (DOAUTHENTICATE / CHECKAUTHENTICATE).
+      APPFLOW_LOG_ENTRY(XLOGLEVEL_WARNING, DIOWEBSERVER_LOGSECTIONID, false, __L("Authenticated access is active but there is no password in the configuration, it will be resolved by events."));
+
+      return true;
+    }
+
+  XSTRING guest;
+
+  // The wildcard guest is used to accept the credentials for any Host of the request.
+  guest = DIOWEBSERVER_AUTHENTICATION_ALLGUESTS;
+
+  if(!webserver->AddAuthentication(guest, (*login), (*password))) return false;
+
+  // If a local address is configured, the same credentials are also registered for that specific guest.
+  XSTRING* localaddress = cfg->WebServer_GetLocalAddress();
+  if(localaddress)
+    {
+      if(!localaddress->IsEmpty())
+        {
+          if(!webserver->AddAuthentication((*localaddress), (*login), (*password))) return false;
+        }
+    }
+
+  APPFLOW_LOG_ENTRY(XLOGLEVEL_INFO, DIOWEBSERVER_LOGSECTIONID, false, __L("Authenticated access configured for the web server (user [%s])."), login->IsEmpty()?__L("<any>"):login->Get());
+
+  return true;
 }
 
 
@@ -413,33 +482,40 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
 
   if(isauthenticatedaccess)
     {
-      if(!cfg->WebServer_GetPassword()->IsEmpty())
+      if(webserver->HaveAuthentications())
         {
-          if(!request->GetLoginPassword(page_login, page_password))
+          XSTRING login;
+          XSTRING password;
+
+          if(!request->GetLoginPassword(login, password))
             {
-              SendRequest(connection, DIOWEBHEADER_RESULT_UNAUTHORIZED, NULL, 5);
+              // There are no credentials in the request: ask for them (401 + WWW-Authenticate).
+              GenerateResponse_Unauthorized(connection);
 
               return true;
             }
            else
             {
-              bool ispasswordvalid;
+              bool  ispasswordvalid = webserver->CheckAuthentication((*request->GetGuest()), login, password);
 
-              ispasswordvalid = !page_password.Compare(cfg->WebServer_GetPassword()->Get(), true);
-              if(!ispasswordvalid)
-                {
-                  XSTRING leyend;
-
-                  leyend = __L("Invalid user or password!");
-                  GenerateResponse_Error(connection, DIOWEBHEADER_RESULT_NOTFOUND, leyend);
-                }  
+              page_login    = login;
+              page_password = password;
 
               XSTRING IPstring;
-              connection->GetDIOStream()->GetClientIP()->GetXString(IPstring);           
+              connection->GetDIOStream()->GetClientIP()->GetXString(IPstring);
 
-              APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("Request from [%s] to the web server password [%s]: %s"), IPstring.Get(), cfg->WebServer_GetPassword()->Get(), (ispasswordvalid)? __L("Ok."): __L("INVALID!") );
+              APPFLOW_LOG_ENTRY((ispasswordvalid?XLOGLEVEL_INFO:XLOGLEVEL_WARNING), DIOWEBSERVER_LOGSECTIONID, false, __L("Request from [%s] to the web server, authentication of the user [%s]: %s"), IPstring.Get(), login.Get(), (ispasswordvalid)? __L("Ok."): __L("INVALID!") );
 
-              if(!ispasswordvalid) return true;
+              if(!ispasswordvalid)
+                {
+                  page_login.Empty();
+                  page_password.Empty();
+
+                  // Answer again with 401 so the client can retry with valid credentials.
+                  GenerateResponse_Unauthorized(connection);
+
+                  return true;
+                }
             }
         }
        else
@@ -756,6 +832,32 @@ bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connectio
 bool APPFLOWWEBSERVER::GenerateResponse_Error(DIOWEBSERVER_CONNECTION* connection,  DIOWEBHEADER_RESULT result, XSTRING& leyend)
 {
   return GenerateResponse_Error(connection, result, leyend.Get());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool APPFLOWWEBSERVER::GenerateResponse_Unauthorized(DIOWEBSERVER_CONNECTION* connection)
+* @brief      Generate a 401 response including the header WWW-Authenticate, so the client asks for the credentials.
+* @ingroup    APPFLOW
+* 
+* @param[in]  connection : Connection pointer to use.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::GenerateResponse_Unauthorized(DIOWEBSERVER_CONNECTION* connection)
+{
+  DIOWEBSERVER_HEADER webserverheader;
+
+  if(!connection)                                return false;
+  if(!connection->GetDIOStream())                return false;
+  if(!connection->GetDIOStream()->IsConnected()) return false;
+  if(!connection->GetRequest())                  return false;
+
+  webserverheader.Create(connection->GetRequest()->GetResource(), 1, 1, DIOWEBHEADER_RESULT_UNAUTHORIZED, 0, NULL, false, true);
+
+  return webserverheader.Write(connection->GetDIOStream(), 5);
 }
 
 

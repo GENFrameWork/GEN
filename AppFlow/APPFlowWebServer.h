@@ -62,6 +62,7 @@ class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
     virtual                    ~APPFLOWWEBSERVER                  ();
 
     bool                        Ini                               (APPFLOWCFG* cfg, bool doinitialconnectitivitytest, bool isapirestonly, bool chekuseragentid);
+    bool                        Ini_Authentication                (APPFLOWCFG* cfg);
     bool                        Ini                               (XDWORD port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal);
 
     DIOWEBSERVER*               GetWebServer                      ();
@@ -79,6 +80,7 @@ class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
     bool                        GenerateMessagePage               (XSTRING& leyend, DIOWEBPAGEHTMLCREATOR& webHTMLpage);
     bool                        GenerateResponse_Error            (DIOWEBSERVER_CONNECTION* connection, DIOWEBHEADER_RESULT result, XCHAR* leyend);
     bool                        GenerateResponse_Error            (DIOWEBSERVER_CONNECTION* connection, DIOWEBHEADER_RESULT result, XSTRING& leyend);
+    bool                        GenerateResponse_Unauthorized     (DIOWEBSERVER_CONNECTION* connection);
 
     bool                        End                               ();
 

@@ -149,6 +149,7 @@
 #define APPFLOW_CFG_WEBSERVER_PORT                                                    __L("port")
 #define APPFLOW_CFG_WEBSERVER_TIMEOUTTOSERVERPAGE                                     __L("timeouttoserverpage")
 #define APPFLOW_CFG_WEBSERVER_AUTHENTICATEDACCESS                                     __L("isauthenticatedaccess")
+#define APPFLOW_CFG_WEBSERVER_LOGIN                                                   __L("login")
 #define APPFLOW_CFG_WEBSERVER_PASSWORD                                                __L("password")
 #define APPFLOW_CFG_WEBSERVER_PATH_RESOURCES                                          __L("path_resources")
 #define APPFLOW_CFG_WEBSERVER_PATH_PHP                                                __L("path_php")
@@ -343,6 +344,7 @@ class APPFLOWCFG
     int                  WebServer_GetPort                                        ();
     int                  WebServer_GetTimeoutToServerPage                         ();
     bool                 WebServer_IsAuthenticatedAccess                          ();
+    XSTRING*             WebServer_GetLogin                                       ();
     XSTRING*             WebServer_GetPassword                                    ();
     XPATH*               WebServer_PathResources                                  ();
     XPATH*               WebServer_PathPHP                                        ();
@@ -433,6 +435,7 @@ class APPFLOWCFG
     int                  webserver_port;
     int                  webserver_timeouttoserverpage;
     bool                 webserver_isauthenticatedaccess;
+    XSTRING              webserver_login;
     XSTRING              webserver_password;
     XPATH                webserver_path_resources;
     XPATH                webserver_path_PHP;

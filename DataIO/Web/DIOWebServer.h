@@ -110,6 +110,9 @@ enum DIOWEBSERVER_WEBSOCKET_OPCODE
 #define DIOWEBSERVER_LOGSECTIONID_VERBOSE         __L("WEB Server Verbose")
 
 
+#define DIOWEBSERVER_AUTHENTICATION_ALLGUESTS     __L("*")
+#define DIOWEBSERVER_AUTHENTICATION_DEFAULTREALM  __L("GEN Web Server")
+
 #define DIOWEBSERVER_DEFAULTPORT                  80
 #define DIOWEBSERVER_KEEPALIVE                    5     // Seconds
 #define DIOWEBSERVER_KEEPALIVE_MAXRESOURCES       100
@@ -408,6 +411,8 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
 
     bool                                        AddAuthentication                       (XSTRING& guest, XSTRING& login, XSTRING& password);
     DIOWEBSERVER_AUTHENTICATION*                GetAuthentication                       (XSTRING& guest);
+    bool                                        HaveAuthentications                     ();
+    bool                                        CheckAuthentication                     (XSTRING& guest, XSTRING& login, XSTRING& password);
     bool                                        DelAuthentication                       (XSTRING& guest);
     bool                                        DelAllAuthentication                    ();
 
