@@ -68,6 +68,13 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
 
     bool                                  GetClientSize                       (int& width, int& height);
 
+    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+    bool                                  GetCursorDesktopPosition            (int& x, int& y);
+
+    bool                                  BeginCFGChromesDrag                 ();
+    bool                                  EndCFGChromesDrag                   ();
+    #endif
+
     bool                                  Delete                              ();
 
     bool                                  Resize                              (int width, int height);

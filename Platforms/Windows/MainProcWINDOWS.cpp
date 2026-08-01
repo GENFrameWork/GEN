@@ -305,6 +305,17 @@ bool MAINPROCWINDOWS::Update()
       #ifdef INP_ACTIVE
       GEN_INPMANAGER.Update();
       #endif
+
+      #if defined(GRP_ACTIVE) && defined(GRP_SCREEN_CUSTOMCHROMES_ACTIVE)
+      // Custom-chrome caption drag, ticked HERE -- right after the input devices have been read -- and not
+      // only from GRPSCREEN::UpdateViewports(), which the application calls after its own DrawFrame(). That
+      // ordering meant the window was always placed where the cursor had been one full rendered frame
+      // earlier; at a few thousand pixels per second that is a visible gap, enough for the pointer to slide
+      // out of the caption (and, before the pointer capture was added, out of the window altogether). The
+      // call left in UpdateViewports() is kept for main loops that do not go through MAINPROC, and is a
+      // no-op here because the tick recomputes an absolute target instead of accumulating deltas.
+      GRPSCREEN::UpdateAllCFGChromesDrag();
+      #endif
     }
 
 

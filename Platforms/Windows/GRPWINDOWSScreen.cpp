@@ -385,30 +385,104 @@ bool GRPWINDOWSSCREEN::Get_Position(int& x, int& y)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPWINDOWSSCREEN::Set_Position(int x, int y)
 {
-  RECT    rect;
-  XDWORD  style;
-
-  GetClientRect(hwnd, &rect);
-
-  int width   = rect.right  - rect.left; 
-  int height  = rect.bottom - rect.top;  
-
-  rect.right  = x;  
-  rect.left   = x + width;
-
-  rect.top    = y;  
-  rect.bottom = y + height;
-
-  style = GetWindowLong(hwnd, GWL_STYLE);
-
   SetPosition(x, y);
 
-  AdjustWindowRect(&rect, style, false);
-
-  SetWindowPos(hwnd,NULL, positionx, positiony, (rect.right-rect.left), (rect.bottom-rect.top)  , SWP_NOSIZE | SWP_NOZORDER);
+  // NOTE: SWP_NOSIZE, so the size arguments are ignored by Windows -- they are passed as 0. What used to be
+  // here was a GetClientRect() + AdjustWindowRect() computation whose result went into those two ignored
+  // arguments and nowhere else (and which, incidentally, filled the RECT with left/right swapped:
+  // "rect.right = x; rect.left = x + width;"). Removing it changes no behaviour whatsoever and takes two
+  // pointless round trips per call out of the caption-drag path, which now runs on every input tick.
+  SetWindowPos(hwnd, NULL, positionx, positiony, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
   return true;
 }
+
+
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPWINDOWSSCREEN::GetCursorDesktopPosition(int& x, int& y)
+* @brief      Get cursor desktop position
+* @note       Plain GetCursorPos(): the pointer in DESKTOP coordinates, with no reference at all to this
+*             window's own position or size. GRPSCREEN::UpdateCFGChromesDrag() builds the drag delta on this
+*             (and only this) so that moving the window cannot feed back into the next reading, and so that
+*             the reading stays valid while the pointer is outside the window.
+*             NOTE: this is the very value INPWINDOWSDEVICEMOUSE::Update() already asks Windows for and then
+*             throws away after converting it to client-relative coordinates.
+* @ingroup    PLATFORM_WINDOWS
+*
+* @param[out] x : X coordinate, desktop space.
+* @param[out] y : Y coordinate, desktop space.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPWINDOWSSCREEN::GetCursorDesktopPosition(int& x, int& y)
+{
+  POINT point;
+
+  if(!GetCursorPos(&point))
+    {
+      return false;
+    }
+
+  x = (int)point.x;
+  y = (int)point.y;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPWINDOWSSCREEN::BeginCFGChromesDrag()
+* @brief      Begin CFG chromes drag
+* @note       Takes the mouse capture for the whole caption drag. Without it Windows stops routing the pointer
+*             to this window the moment it leaves the client area, which is exactly what used to leave the
+*             window stopped half way through a fast drag.
+* @ingroup    PLATFORM_WINDOWS
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPWINDOWSSCREEN::BeginCFGChromesDrag()
+{
+  if(!hwnd)
+    {
+      return false;
+    }
+
+  SetCapture(hwnd);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPWINDOWSSCREEN::EndCFGChromesDrag()
+* @brief      End CFG chromes drag
+* @note       Releases the capture taken by BeginCFGChromesDrag(). Only releases it if this window is the one
+*             actually holding it, so an unmatched call can never steal the capture from somebody else.
+* @ingroup    PLATFORM_WINDOWS
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPWINDOWSSCREEN::EndCFGChromesDrag()
+{
+  if(GetCapture() != (HWND)hwnd)
+    {
+      return false;
+    }
+
+  ReleaseCapture();
+
+  return true;
+}
+
+#endif
 
 
 /**-------------------------------------------------------------------------------------------------------------------

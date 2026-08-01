@@ -101,6 +101,16 @@ enum GRPSCREENROTATION
 
 #define GRPSCREENSTYLE_DEFAULT                        GRPSCREENSTYLE_TITLE
 
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+// Dead zone, in desktop pixels, the cursor must travel with the button held down on the caption before the
+// window actually starts moving. Keeps a plain click on the caption (or on a caption element that later grows
+// a behaviour of its own) from nudging the window by one or two pixels.
+#define GRPSCREEN_CFGCHROMES_DRAGDEADZONE             4
+
+// Define this to force the in-process drag even where GRPSCREEN::SystemMove() is available.
+// #define GRPSCREEN_CFGCHROMES_NOSYSTEMMOVE
+#endif
+
 
 
 
@@ -197,6 +207,46 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     bool                                  UpdateCFGChromesDrag          ();
     bool                                  UpdateCFGChromesAutoHide      ();
     bool                                  UpdateCFGChromesButtonsPosition ();
+
+    // Cursor position in DESKTOP (screen/root) coordinates, independent of this window's own position.
+    // UpdateCFGChromesDrag() needs this and ONLY this: expressing the drag delta in a reference frame the
+    // drag itself does not move removes the feedback loop that the previous client-relative math had (see
+    // the long note on UpdateCFGChromesDrag()). Platforms that cannot report it return false and the drag
+    // simply does not start, exactly as if there were no caption element -- no other behaviour changes.
+    virtual bool                          GetCursorDesktopPosition      (int& x, int& y);
+
+    // Window position the drag delta is added to, in the same space Set_Position() consumes. Default: the
+    // stored position, which is what the Windows backend keeps exact at all times (WM_MOVE updates it
+    // synchronously). Backends whose stored position can go stale override it -- see GRPLINUXSCREENX11, where
+    // it is only refreshed once per rendered frame and a window the user or the WM moved in between would
+    // otherwise anchor the drag to an old value and teleport the window on the first tick.
+    virtual bool                          GetCFGChromesDragAnchor       (int& x, int& y);
+
+    // Hands the whole interactive move over to the window manager / compositor, the way a native title bar
+    // does it. Tried FIRST when a caption drag starts: when it succeeds there is no in-process loop at all,
+    // so tracking is exactly 1:1 and snapping/tiling/multi-monitor come for free. Backends return false when
+    // the mechanism is not available and the in-process drag below takes over unchanged.
+    virtual bool                          SystemMove                    ();
+
+    // Pointer capture for the duration of a caption drag. Without it the pointer stops being reported to
+    // this window the moment it leaves the client area, which is what used to leave the window frozen
+    // mid-drag. Default implementation does nothing (and says so by returning false), so a platform that
+    // does not implement it behaves exactly as before.
+    virtual bool                          BeginCFGChromesDrag           ();
+    virtual bool                          EndCFGChromesDrag             ();
+
+    // True only while the user is actually dragging the window by its custom caption. Lets the platform
+    // input devices keep reporting the pointer during the drag (see INPWINDOWSDEVICEMOUSE::Update()).
+    bool                                  IsCFGChromesDragging          ();
+
+    // Runs the caption-drag tick on every live screen. Meant to be called by the platform main loop right
+    // after the input devices are updated (MAINPROCWINDOWS::Update(), MAINPROCLINUX::Update()), which is a
+    // whole rendered frame earlier than UpdateViewports() -- that one runs AFTER the application's own
+    // DrawFrame(), and that delay is what made the pointer visibly outrun the window. UpdateCFGChromesDrag()
+    // is idempotent (it recomputes an ABSOLUTE target from the current cursor position, it does not
+    // accumulate), so the call still left in UpdateViewports() for main loops that do not use MAINPROC
+    // remains harmless.
+    static bool                           UpdateAllCFGChromesDrag       ();
     #endif
     
     bool                                  UpdateSize                    (int width, int height);
@@ -245,11 +295,15 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
     #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
     UI_LAYOUT*                            cfgchromeslayout;              // weak reference (owned by UI_MANAGER)
 
-    bool                                  cfgchromesdragging;
-    int                                   cfgchromesdragstartcursorx;
+    bool                                  cfgchromesdragging;             // button went down on the caption and has not been released yet
+    bool                                  cfgchromesdragmoving;           // ...and it has already travelled past the dead zone, so the window is being moved
+    bool                                  cfgchromesdragbuttonwaspressed; // left button state on the previous tick, for our OWN press-edge detection
+    int                                   cfgchromesdragstartcursorx;     // DESKTOP coordinates of the cursor when the drag started
     int                                   cfgchromesdragstartcursory;
-    int                                   cfgchromesdragstartscreenx;
+    int                                   cfgchromesdragstartscreenx;     // window position when the drag started
     int                                   cfgchromesdragstartscreeny;
+    int                                   cfgchromesdraglastposx;         // last position actually requested through Set_Position() during this drag
+    int                                   cfgchromesdraglastposy;
 
     bool                                  cfgchromesautohidevisible;      // current actual shown/hidden state
     bool                                  cfgchromesautohidedesired;      // last computed "cursor is over it" state
@@ -265,12 +319,20 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 
     #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
     bool                                  GetCFGChromesCursorPosition   (int& uix, int& uiy);
+    bool                                  IsOverCFGChromesButton        (int uix, int uiy);
     #endif
      
     GRPDESKTOPMANAGER*                    desktopmanager;
     GRPSCREENTYPE_DESKTOP                 desktopscreenselected;
 
     static XMAP<void*, GRPSCREEN*>        listscreens;
+
+    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+    // Every live screen, platform independent. listscreens above is keyed by native handle and is only ever
+    // populated by the Windows backend (its window procedure looks screens up by HWND there), so it cannot be
+    // used to reach the X11 screens -- which is why UpdateAllCFGChromesDrag() found nothing to do on Linux.
+    static XVECTOR<GRPSCREEN*>            allscreens;
+    #endif
 };
 
 

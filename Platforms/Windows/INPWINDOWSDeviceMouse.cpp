@@ -123,7 +123,17 @@ bool INPWINDOWSDEVICEMOUSE::Update()
         {
           if(!grpscreen->Style_Is(GRPSCREENSTYLE_ONTOP))
             {
-              return false;
+              #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+              // While a custom-caption drag is in progress this device MUST keep running. Bailing out here
+              // freezes the whole device -- including the left button's state -- so the release that is
+              // supposed to end the drag would never be seen and the window would keep following the cursor
+              // after the user let go. The window is normally the foreground one during a drag anyway; this
+              // only covers the window that momentarily loses foreground while the pointer is captured.
+              if(!grpscreen->IsCFGChromesDragging())
+              #endif
+                {
+                  return false;
+                }
             }
         }
     }

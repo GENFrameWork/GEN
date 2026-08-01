@@ -57,9 +57,36 @@
 #include "GEN_Control.h"
 
 
+/*---- DEFINES -------------------------------------------------------------------------------------------------------*/
+
+
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+// Diagnostics for the custom-caption drag. Off by default: define GRPSCREEN_CHROMESDRAG_TRACE (or -D it on the
+// compiler command line) to get one line per drag start/stop and per rejected press, which is what tells apart
+// "the drag never started" from "the drag started but the platform did not move the window".
+// Low frequency (one line per click): always on when tracing is compiled in.
+#ifdef XTRACE_ACTIVE
+#define GRPSCREEN_CHROMESDRAGTRACE(...)       XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __VA_ARGS__)
+#else
+#define GRPSCREEN_CHROMESDRAGTRACE(...)
+#endif
+
+// One line per moved frame: opt in with -DGRPSCREEN_CHROMESDRAG_TRACE, it is very noisy.
+#if defined(GRPSCREEN_CHROMESDRAG_TRACE) && defined(XTRACE_ACTIVE)
+#define GRPSCREEN_CHROMESDRAGTRACEMOVE(...)   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __VA_ARGS__)
+#else
+#define GRPSCREEN_CHROMESDRAGTRACEMOVE(...)
+#endif
+#endif
+
+
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 XMAP<void*, GRPSCREEN*>  GRPSCREEN::listscreens;
+
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+XVECTOR<GRPSCREEN*>      GRPSCREEN::allscreens;
+#endif
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -101,6 +128,14 @@ GRPSCREEN::GRPSCREEN()
 * --------------------------------------------------------------------------------------------------------------------*/
 GRPSCREEN::~GRPSCREEN()
 {
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  // Also done in Delete(), but a backend whose Delete() bails out early (GRPLINUXSCREENX11::Delete() returns
+  // before reaching the base when its display/window are already gone) must not leave a dangling pointer in
+  // the registry UpdateAllCFGChromesDrag() walks. XVECTOR::Delete() on an element that is not there is a
+  // no-op.
+  allscreens.Delete(this);
+  #endif
+
   if(framerate)
     {
       GEN_DELETE framerate;
@@ -457,6 +492,13 @@ bool GRPSCREEN::Create(bool show)
 
   if(framerate) framerate->Reset();
 
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  if(allscreens.Find(this) == NOTFOUND)
+    {
+      allscreens.Add(this);
+    }
+  #endif
+
   return true;
 }
 
@@ -506,6 +548,10 @@ bool GRPSCREEN::UpdateTransparent(GRP2DCANVAS* canvas)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::Delete()
 {
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  allscreens.Delete(this);
+  #endif
+
   if(screencanvas)
     {
       GEN_DELETE screencanvas;
@@ -1038,13 +1084,33 @@ UI_LAYOUT* GRPSCREEN::GetCFGChromesLayout()
 * 
 * @fn         bool GRPSCREEN::UpdateCFGChromesDrag()
 * @brief      Update CFG chromes drag
-* @note       Reads GEN_INPMANAGER's mouse device directly (raw cursor position + raw button held state) -- not
-*             the UserInterface event pipeline, and not whatever input polling the running application does for
-*             its own purposes; those stay entirely separate. On the frame the button goes down, hit-tests the
-*             layout's role="caption" element (if any); while still held, moves this screen by exactly how much
-*             the mouse has moved in real desktop coordinates since the drag started (rebuilt every frame from
-*             the window's CURRENT position, so the window's own movement never feeds back into the next
-*             frame's delta). Releasing the button ends the drag.
+* @note       Reads GEN_INPMANAGER's mouse device directly (raw cursor position + raw button state) -- not the
+*             UserInterface event pipeline, and not whatever input polling the running application does for its
+*             own purposes; those stay entirely separate.
+*
+*             On the frame the button GOES DOWN (the PRESSED edge, not the held level) the layout's
+*             role="caption" element is hit-tested in client space, excluding the minimize/maximize/close
+*             elements that live inside it. From then on, and until the button is released, the window is moved
+*             by exactly the delta the cursor has travelled in DESKTOP (screen/root) coordinates since that
+*             moment:
+*
+*                 newpos = windowpos_at_drag_start + (cursor_desktop_now - cursor_desktop_at_drag_start)
+*
+*             The reference frame is the desktop, which the drag does not move. This is the whole point of the
+*             rewrite: the previous version reconstructed the desktop cursor position as
+*             "client_relative_cursor + GetPositionX()", which measured the input in the very frame of
+*             reference the algorithm was moving. Any delay between the two readings (one full render frame,
+*             since the drag tick runs after DrawFrame(); plus, on X11, the asynchronous round trip of
+*             XMoveWindow() through the window manager, which leaves GetPositionX() holding a REQUESTED
+*             position while the client-relative reading refers to the REAL one) turned straight into a
+*             position error: the window lagged behind the pointer and, on X11, could overshoot it.
+*
+*             It also no longer aborts when the cursor sits outside the client area. The platform pointer is
+*             captured for the duration of the drag (BeginCFGChromesDrag()), so it keeps being reported
+*             wherever it goes; and even if a platform cannot capture it, GetCursorDesktopPosition() is a
+*             desktop-wide reading that does not depend on the cursor being over this window. The old
+*             "skip this frame" guard could not recover on its own -- a frozen window can never catch up with
+*             a pointer that has already left it -- which is what left the window stopped mid-drag.
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the operation is successful; otherwise false.
@@ -1062,27 +1128,49 @@ bool GRPSCREEN::UpdateCFGChromesDrag()
   INPBUTTON* inpbutton = mousedevice->GetButton(INPBUTTON_ID_MOUSE_LEFT);
   if(!inpbutton) return false;
 
-  if(!inpbutton->IsPressed())
+  // Press EDGE detected here, from this class' own bookkeeping, instead of asking the button for
+  // INPBUTTON_STATE_PRESSED. The per-platform input devices age that state on their own schedule (the X11
+  // device, for one, promotes PRESSED to HOLD at the top of its next Update()), so how long the edge stays
+  // visible depends on where in the frame this tick happens to run -- and this tick now runs from two places.
+  // A level read plus one bool is not subject to any of that.
+  bool ispressed  = inpbutton->IsPressed();
+  bool waspressed = cfgchromesdragbuttonwaspressed;
+
+  cfgchromesdragbuttonwaspressed = ispressed;
+
+  if(!ispressed)
     {
-      cfgchromesdragging = false;
+      if(cfgchromesdragging)
+        {
+          EndCFGChromesDrag();
+
+          GRPSCREEN_CHROMESDRAGTRACE(__L("[Chromes drag] END: window (%d,%d)"), GetPositionX(), GetPositionY());
+        }
+
+      cfgchromesdragging   = false;
+      cfgchromesdragmoving = false;
+
       return true;
     }
 
-  int uix = 0;
-  int uiy = 0;
-
-  // GetCFGChromesCursorPosition() returns false whenever the cursor is currently outside this window's client
-  // bounds -- easy to hit for a frame or two during a fast drag, since the window is still catching up to the
-  // cursor. Treat it as "no new reading this frame" rather than a real coordinate: feeding a bogus one into the
-  // position math below was exactly what sent the window flying off when dragging quickly. Skipping it just
-  // holds the window in place for a frame; the very next valid reading picks the drag back up seamlessly.
-  if(!GetCFGChromesCursorPosition(uix, uiy)) return true;
+  int desktopcursorx = 0;
+  int desktopcursory = 0;
 
   if(!cfgchromesdragging)
     {
+      // A button that was ALREADY down on the previous tick never starts a drag: otherwise a press that began
+      // somewhere else, or one made while the window was not focused, would grab the window as soon as the
+      // pointer happened to travel over the caption.
+      if(waspressed) return false;
+
+      int uix = 0;
+      int uiy = 0;
+
+      if(!GetCFGChromesCursorPosition(uix, uiy))                  return false;
+
       UI_ELEMENT* captionelement = cfgchromeslayout->Elements_Get(UI_ELEMENT_CHROMEROLE_CAPTION);
-      if(!captionelement)                                                return false;
-      if(!captionelement->IsActive() || !captionelement->IsVisible())    return false;
+      if(!captionelement)                                         return false;
+      if(!captionelement->IsActive() || !captionelement->IsVisible()) return false;
 
       UI_BOUNDARYLINE bline;
 
@@ -1091,24 +1179,304 @@ bool GRPSCREEN::UpdateCFGChromesDrag()
       bline.width  = captionelement->GetBoundaryLine()->width;
       bline.height = captionelement->GetBoundaryLine()->height;
 
-      if(!bline.IsWithin(uix, uiy)) return false;
+      if(!bline.IsWithin(uix, uiy))                               return false;
+
+      // The minimize/maximize/close elements are laid out INSIDE the caption's own area (see any
+      // role="caption" layout: they are compose elements of it), so a press on any of them also passes the
+      // test above. They must not start a window move.
+      if(IsOverCFGChromesButton(uix, uiy))
+        {
+          GRPSCREEN_CHROMESDRAGTRACE(__L("[Chromes drag] press at UI (%d,%d) landed on a window button: no drag"), uix, uiy);
+          return false;
+        }
+
+      if(!GetCursorDesktopPosition(desktopcursorx, desktopcursory))
+        {
+          GRPSCREEN_CHROMESDRAGTRACE(__L("[Chromes drag] ERROR: GetCursorDesktopPosition() not available on this backend -> the caption drag CANNOT run"));
+          return false;
+        }
+
+      int anchorx = 0;
+      int anchory = 0;
+
+      if(!GetCFGChromesDragAnchor(anchorx, anchory))
+        {
+          anchorx = GetPositionX();
+          anchory = GetPositionY();
+        }
 
       cfgchromesdragging         = true;
-      cfgchromesdragstartscreenx = GetPositionX();
-      cfgchromesdragstartscreeny = GetPositionY();
-      cfgchromesdragstartcursorx = uix + cfgchromesdragstartscreenx;
-      cfgchromesdragstartcursory = uiy + cfgchromesdragstartscreeny;
+      cfgchromesdragmoving       = false;
+      cfgchromesdragstartscreenx = anchorx;
+      cfgchromesdragstartscreeny = anchory;
+      cfgchromesdragstartcursorx = desktopcursorx;
+      cfgchromesdragstartcursory = desktopcursory;
+      cfgchromesdraglastposx     = anchorx;
+      cfgchromesdraglastposy     = anchory;
+
+      #ifndef GRPSCREEN_CFGCHROMES_NOSYSTEMMOVE
+      // Preferred path: let the window manager run the move. Everything above still had to happen (the press
+      // must be identified as landing on the caption before anything is handed over), but from here on the
+      // in-process loop is not used at all -- SystemMove() only returns true when the platform really took
+      // over, so a false keeps the previous behaviour byte for byte.
+      if(SystemMove())
+        {
+          cfgchromesdragging   = false;
+          cfgchromesdragmoving = false;
+
+          GRPSCREEN_CHROMESDRAGTRACE(__L("[Chromes drag] START: handed over to the window manager (SystemMove)"));
+
+          return true;
+        }
+      #endif
+
+      BeginCFGChromesDrag();
+
+      GRPSCREEN_CHROMESDRAGTRACE(__L("[Chromes drag] START: in-process. window (%d,%d)  cursor desktop (%d,%d)  UI (%d,%d)"), anchorx, anchory, desktopcursorx, desktopcursory, uix, uiy);
 
       return true;
     }
 
-  int desktopcursorx = uix + GetPositionX();
-  int desktopcursory = uiy + GetPositionY();
+  // A failed reading here is a genuine platform failure, not "the cursor left the window": the position is
+  // read desktop-wide. Hold still for this tick; the next valid reading recomputes the ABSOLUTE target, so
+  // nothing is lost and nothing accumulates.
+  if(!GetCursorDesktopPosition(desktopcursorx, desktopcursory)) return true;
 
-  Set_Position(cfgchromesdragstartscreenx + (desktopcursorx - cfgchromesdragstartcursorx),
-               cfgchromesdragstartscreeny + (desktopcursory - cfgchromesdragstartcursory));
+  int deltax = desktopcursorx - cfgchromesdragstartcursorx;
+  int deltay = desktopcursory - cfgchromesdragstartcursory;
+
+  if(!cfgchromesdragmoving)
+    {
+      int absdeltax = (deltax < 0)?-deltax:deltax;
+      int absdeltay = (deltay < 0)?-deltay:deltay;
+
+      if((absdeltax < GRPSCREEN_CFGCHROMES_DRAGDEADZONE) && (absdeltay < GRPSCREEN_CFGCHROMES_DRAGDEADZONE))
+        {
+          return true;
+        }
+
+      cfgchromesdragmoving = true;
+    }
+
+  int newpositionx = cfgchromesdragstartscreenx + deltax;
+  int newpositiony = cfgchromesdragstartscreeny + deltay;
+
+  // Compared against what WE last asked for, never against GetPositionX()/Y(). Those track the window's real
+  // position, which lags the request (X11 moves are asynchronous and go through the window manager) and on
+  // the X11 backend is re-read from the server once per rendered frame -- comparing against it would skip
+  // moves that had not landed yet. Besides saving a system call, this is what makes it harmless for this tick
+  // to run more than once per main-loop iteration: the early one from UpdateAllCFGChromesDrag() plus the
+  // legacy one from UpdateViewports().
+  if((newpositionx == cfgchromesdraglastposx) && (newpositiony == cfgchromesdraglastposy))
+    {
+      return true;
+    }
+
+  cfgchromesdraglastposx = newpositionx;
+  cfgchromesdraglastposy = newpositiony;
+
+  bool moved = Set_Position(newpositionx, newpositiony);
+
+  (void)moved;   // only read by the trace below, which compiles away unless diagnostics are enabled
+
+  GRPSCREEN_CHROMESDRAGTRACEMOVE(__L("[Chromes drag] MOVE to (%d,%d)  delta (%d,%d)  Set_Position=%s  real (%d,%d)"), newpositionx, newpositiony, deltax, deltay, moved?__L("ok"):__L("FAILED"), GetPositionX(), GetPositionY());
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::IsCFGChromesDragging()
+* @brief      Is CFG chromes dragging: true while the user holds the button down on the custom caption.
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if a caption drag is currently in progress.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::IsCFGChromesDragging()
+{
+  return cfgchromesdragging;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::UpdateAllCFGChromesDrag()
+* @brief      Update all CFG chromes drag
+* @note       STATIC. Runs the caption-drag tick on every screen currently registered in GetListScreens().
+*             Called by the platform main loop immediately after the input devices are updated, so the window
+*             follows the pointer with the freshest reading available instead of one whole rendered frame
+*             later (UpdateViewports() runs after the application's DrawFrame()).
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::UpdateAllCFGChromesDrag()
+{
+  for(XDWORD c=0; c<allscreens.GetSize(); c++)
+    {
+      GRPSCREEN* screen = allscreens.Get(c);
+      if(screen)
+        {
+          screen->UpdateCFGChromesDrag();
+        }
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::IsOverCFGChromesButton(int uix, int uiy)
+* @brief      Is over CFG chromes button
+* @note       INTERNAL: true when the given UI-space point falls on the layout's role="minimize"/"maximize"/
+*             "close" element (or on any of its compose elements, e.g. the graphic of a multioption). Used to
+*             keep a press on a window button from also starting a caption drag.
+* @ingroup    GRAPHIC
+* 
+* @param[in]  uix : X coordinate, UI-space (top-down, client-relative).
+* @param[in]  uiy : Y coordinate, UI-space (top-down, client-relative).
+* 
+* @return     bool : true if the point is over one of the caption's window buttons.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::IsOverCFGChromesButton(int uix, int uiy)
+{
+  if(!cfgchromeslayout) return false;
+
+  UI_ELEMENT_CHROMEROLE roles[3] = { UI_ELEMENT_CHROMEROLE_MINIMIZE,
+                                     UI_ELEMENT_CHROMEROLE_MAXIMIZE,
+                                     UI_ELEMENT_CHROMEROLE_CLOSE    };
+
+  for(int c=0; c<3; c++)
+    {
+      UI_ELEMENT* element = cfgchromeslayout->Elements_Get(roles[c]);
+      if(!element)                              continue;
+      if(!element->IsActive())                  continue;
+      if(!element->IsVisible())                 continue;
+
+      UI_BOUNDARYLINE bline;
+
+      bline.x      = element->GetXPosition();
+      bline.y      = element->GetYPosition();
+      bline.width  = element->GetBoundaryLine()->width;
+      bline.height = element->GetBoundaryLine()->height;
+
+      // A degenerate boundary (a role wired to an element that never got a size) must not be able to veto
+      // the drag over an arbitrary area: ignore it and let the caption keep the press.
+      if((bline.width <= 0) || (bline.height <= 0)) continue;
+
+      if(bline.IsWithin(uix, uiy)) return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::GetCursorDesktopPosition(int& x, int& y)
+* @brief      Get cursor desktop position
+* @note       VIRTUAL. Base implementation: not available. Each platform screen that can report the pointer in
+*             desktop (screen/root) coordinates overrides this -- see GRPWINDOWSSCREEN (GetCursorPos) and
+*             GRPLINUXSCREENX11 (XQueryPointer against the root window). Where it is not available the custom
+*             caption drag simply never starts, which is the previous behaviour on those platforms anyway.
+* @ingroup    GRAPHIC
+* 
+* @param[out] x : X coordinate, desktop space.
+* @param[out] y : Y coordinate, desktop space.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::GetCursorDesktopPosition(int& x, int& y)
+{
+  x = 0;
+  y = 0;
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::SystemMove()
+* @brief      System move
+* @note       VIRTUAL. Base implementation: not available, so the in-process drag runs. Overridden where the
+*             platform offers a "the window manager moves the window from here" request -- X11's EWMH
+*             _NET_WM_MOVERESIZE for one. MUST return false, having done nothing, whenever the request could
+*             not actually be issued: the caller relies on that to fall back cleanly.
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the platform took over the move; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::SystemMove()
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::GetCFGChromesDragAnchor(int& x, int& y)
+* @brief      Get CFG chromes drag anchor
+* @note       VIRTUAL. Base implementation: not available, so UpdateCFGChromesDrag() falls back to the stored
+*             GetPositionX()/GetPositionY(). That is exactly right for the Windows backend, whose WM_MOVE
+*             handler keeps those members equal to the real position at all times. Backends where the stored
+*             position can lag reality override this with a live query.
+* @ingroup    GRAPHIC
+* 
+* @param[out] x : X coordinate, in the space Set_Position() consumes.
+* @param[out] y : Y coordinate, in the space Set_Position() consumes.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::GetCFGChromesDragAnchor(int& x, int& y)
+{
+  x = 0;
+  y = 0;
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::BeginCFGChromesDrag()
+* @brief      Begin CFG chromes drag
+* @note       VIRTUAL. Base implementation: nothing to do. Platforms override it to capture/grab the pointer so
+*             it keeps being reported to this window while the drag is in progress even if it travels outside
+*             the window's own area.
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::BeginCFGChromesDrag()
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool GRPSCREEN::EndCFGChromesDrag()
+* @brief      End CFG chromes drag
+* @note       VIRTUAL. Base implementation: nothing to do. Counterpart of BeginCFGChromesDrag(); releases the
+*             pointer capture/grab. MUST be safe to call when no capture was ever taken.
+* @ingroup    GRAPHIC
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPSCREEN::EndCFGChromesDrag()
+{
+  return false;
 }
 
 
@@ -1507,6 +1875,12 @@ bool GRPSCREEN::UpdateViewports()
     }
 
   #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  // NOTE: the drag tick also runs earlier in the frame, straight after the input devices are updated (see
+  // UpdateAllCFGChromesDrag(), called from MAINPROCWINDOWS::Update()/MAINPROCLINUX::Update()). That is the
+  // one that gives the window a fresh cursor reading instead of one a whole DrawFrame() old. This call is
+  // kept so that a main loop which does not go through MAINPROC still gets the drag; running twice costs
+  // nothing because the tick recomputes an absolute target and skips the platform call when it has not
+  // changed.
   UpdateCFGChromesDrag();
   UpdateCFGChromesAutoHide();
   UpdateCFGChromesButtonsPosition();
@@ -1723,7 +2097,11 @@ void GRPSCREEN::Clean()
   #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
   cfgchromeslayout        = NULL;
 
-  cfgchromesdragging         = false;
+  cfgchromesdragging             = false;
+  cfgchromesdragmoving           = false;
+  cfgchromesdragbuttonwaspressed = false;
+  cfgchromesdraglastposx         = 0;
+  cfgchromesdraglastposy         = 0;
   cfgchromesdragstartcursorx = 0;
   cfgchromesdragstartcursory = 0;
   cfgchromesdragstartscreenx = 0;

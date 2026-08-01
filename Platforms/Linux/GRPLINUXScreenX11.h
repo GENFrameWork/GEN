@@ -118,9 +118,20 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
 
     bool                                  Resize                            (int width, int height);
 
+    bool                                  Get_Position                      (int& x, int& y);
     bool                                  Set_Position                      (int x, int y);
 
     bool                                  GetClientSize                     (int& width, int& height);
+
+    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+    bool                                  GetCursorDesktopPosition          (int& x, int& y);
+    bool                                  GetCFGChromesDragAnchor           (int& x, int& y);
+
+    bool                                  SystemMove                        ();
+
+    bool                                  BeginCFGChromesDrag               ();
+    bool                                  EndCFGChromesDrag                 ();
+    #endif
 
     bool                                  Show                              (bool active);
     bool                                  ShowCursor                        (bool active);
@@ -188,6 +199,11 @@ class GRPLINUXSCREENX11 : public GRPSCREEN
     #endif
 
   private:
+
+    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+    bool                                  IsWMSupported                     (Atom atom);
+    #endif
+
 
     bool                                  Create_Window                     (bool show);
 

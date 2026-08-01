@@ -39,6 +39,10 @@
 
 #include "GRPLINUXScreenX11.h"
 
+
+#include <stdio.h>
+#include <string.h>
+
 #include "XTrace.h"
 #include "XBuffer.h"
 
@@ -54,8 +58,6 @@
 
 #ifdef GRP_OPENGL_ACTIVE
 #include "GRPLINUXBlitGLESX11.h"
-#include <stdio.h>
-#include <string.h>
 #endif
 
 
@@ -73,7 +75,6 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
-#ifdef GRP_OPENGL_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         static bool IsRunningOnWSL()
@@ -87,14 +88,17 @@ static bool IsRunningOnWSL()
 {
   FILE* f = fopen("/proc/version", "r");
   if(!f) return false;
+
   char buf[512];
   size_t n = fread(buf, 1, sizeof(buf)-1, f);
+
   fclose(f);
+
   buf[n] = '\0';
+
   return (strstr(buf, "microsoft") != NULL || strstr(buf, "Microsoft") != NULL || strstr(buf, "WSL") != NULL);
 }
 
-#endif
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -553,6 +557,56 @@ bool GRPLINUXSCREENX11::Resize(int width, int height)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool GRPLINUXSCREENX11::Get_Position(int& x, int& y)
+* @brief      Get position
+* @note       The window's REAL origin in root (desktop) coordinates, asked to the server. Base
+*             GRPSCREEN::Get_Position() is a stub returning false; this is the X11 override.
+*
+*             XTranslateCoordinates and not XGetWindowAttributes: under a reparenting window manager the
+*             attributes' x/y are relative to the WM's frame window, not to the root. This is the same call
+*             Update() already uses once per rendered frame to refresh the stored position -- exposed here so
+*             that code needing an up-to-the-moment position (the custom-caption drag takes its anchor from
+*             it) does not depend on how long ago that frame happened to run.
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[out] x : X coordinate, root/desktop space.
+* @param[out] y : Y coordinate, root/desktop space.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::Get_Position(int& x, int& y)
+{
+  if(!display || !window)
+    {
+      return false;
+    }
+
+  // On WSLg the translated origin is unreliable (compositor-side phantom frame offsets, the very reason
+  // Set_Position() needs its ancestor-walk workaround there), so keep using the stored value.
+  if(IsRunningOnWSL())
+    {
+      return false;
+    }
+
+  Window  translatechild = None;
+  int     realx          = 0;
+  int     realy          = 0;
+
+  if(!XTranslateCoordinates(display, window, root, 0, 0, &realx, &realy, &translatechild))
+    {
+      return false;
+    }
+
+  x = realx;
+  y = realy;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRPLINUXSCREENX11::Set_Position(int x, int y)
 * @brief      Set position
 * @note       Base GRPSCREEN::Set_Position() is a stub (returns false); this is the X11 override actually
@@ -710,6 +764,311 @@ bool GRPLINUXSCREENX11::GetClientSize(int& width, int& height)
 
   return true;
 }
+
+
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPLINUXSCREENX11::GetCursorDesktopPosition(int& x, int& y)
+* @brief      Get cursor desktop position
+* @note       XQueryPointer against the ROOT window: root_x/root_y is the pointer in desktop coordinates, with
+*             no reference at all to this window's own position. That matters twice over on X11:
+*
+*               - XMoveWindow() is asynchronous (a request the window manager honours whenever it gets to it,
+*                 and on a reparenting WM like KWin it travels through the frame window -- see Set_Position()).
+*                 GetPositionX() therefore holds a REQUESTED position that can be several milliseconds ahead of
+*                 the real one. The old drag math added that requested position to a client-relative pointer
+*                 reading taken against the REAL one, and the difference went straight into the movement: the
+*                 window could travel further than the mouse did.
+*               - The client-relative reading is only valid while the pointer is over the window; the root one
+*                 is always valid.
+*
+*             INPLINUXDEVICEMOUSEX11::Update() already asks the server for exactly these two values on every
+*             tick and discards them; this is the same round trip, kept here so GRPSCREEN does not have to
+*             reach into a platform input device.
+* @ingroup    PLATFORM_LINUX
+*
+* @param[out] x : X coordinate, desktop (root) space.
+* @param[out] y : Y coordinate, desktop (root) space.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::GetCursorDesktopPosition(int& x, int& y)
+{
+  if(!display)
+    {
+      return false;
+    }
+
+  Window        root      = 0;
+  Window        child     = 0;
+  int           rootx     = 0;
+  int           rooty     = 0;
+  int           winx      = 0;
+  int           winy      = 0;
+  unsigned int  mask      = 0;
+
+  if(!XQueryPointer(display, DefaultRootWindow(display), &root, &child, &rootx, &rooty, &winx, &winy, &mask))
+    {
+      // False means the pointer is on another screen of the same display; nothing usable this tick.
+      return false;
+    }
+
+  x = rootx;
+  y = rooty;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPLINUXSCREENX11::GetCFGChromesDragAnchor(int& x, int& y)
+* @brief      Get CFG chromes drag anchor
+* @note       The live position from Get_Position(). The stored GetPositionX()/GetPositionY() is only
+*             refreshed once per rendered frame (Update(), through the same XTranslateCoordinates call), so a
+*             window that the window manager or the user moved since then would anchor the drag to a position
+*             the window no longer has, and the very first tick would teleport it there. Returns false on
+*             WSLg -- where Get_Position() is not trustworthy -- and the caller then falls back to the stored
+*             value, which is what that backend has always used.
+* @ingroup    PLATFORM_LINUX
+*
+* @param[out] x : X coordinate, root/desktop space.
+* @param[out] y : Y coordinate, root/desktop space.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::GetCFGChromesDragAnchor(int& x, int& y)
+{
+  return Get_Position(x, y);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPLINUXSCREENX11::SystemMove()
+* @brief      System move
+* @note       EWMH _NET_WM_MOVERESIZE with _NET_WM_MOVERESIZE_MOVE: asks the window manager to run the
+*             interactive move itself, from the pointer's current position, exactly as if the user had grabbed
+*             a native title bar. Every compliant WM implements it (KWin, Mutter -- including the XWayland
+*             case -- Xfwm, Openbox), and it is what Chrome, Electron and Qt's startSystemMove() use for their
+*             own custom title bars.
+*
+*             This matters beyond smoothness: several window managers, Mutter in particular, are free to
+*             ignore or constrain a plain XMoveWindow() coming from the client (which is all
+*             GRPLINUXSCREENX11::Set_Position() can do), and then the in-process drag computes correct
+*             positions that the window simply never takes. _NET_WM_MOVERESIZE is the sanctioned request and
+*             is honoured.
+*
+*             Returns false -- having done nothing -- when the WM does not advertise the atom in
+*             _NET_SUPPORTED, so the in-process drag stays in charge on non-compliant setups.
+* @ingroup    PLATFORM_LINUX
+*
+* @return     bool : true if the window manager took over the move; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::SystemMove()
+{
+  if(!display || !window)
+    {
+      return false;
+    }
+
+  // WSLg: Set_Position()'s ancestor-walk workaround exists precisely because that compositor does not behave
+  // like a normal WM here. Do not add a second, differently-broken path on top of it.
+  if(IsRunningOnWSL())
+    {
+      return false;
+    }
+
+  Atom moveresizeatom = XInternAtom(display, "_NET_WM_MOVERESIZE", True);
+  if(moveresizeatom == None)
+    {
+      return false;
+    }
+
+  if(!IsWMSupported(moveresizeatom))
+    {
+      return false;
+    }
+
+  // The WM starts its move loop from where the pointer is NOW, so it needs the current root position.
+  Window        queryroot  = None;
+  Window        querychild = None;
+  int           rootx      = 0;
+  int           rooty      = 0;
+  int           winx       = 0;
+  int           winy       = 0;
+  unsigned int  mask       = 0;
+
+  if(!XQueryPointer(display, window, &queryroot, &querychild, &rootx, &rooty, &winx, &winy, &mask))
+    {
+      return false;
+    }
+
+  // The pointer must be released first: the WM cannot run its own grab while this client holds one, and the
+  // mouse device installs a passive XGrabButton on this window that the press has already activated.
+  XUngrabPointer(display, CurrentTime);
+  XFlush(display);
+
+  XEvent event;
+
+  memset(&event, 0, sizeof(event));
+
+  event.xclient.type         = ClientMessage;
+  event.xclient.window       = window;
+  event.xclient.message_type = moveresizeatom;
+  event.xclient.format       = 32;
+  event.xclient.data.l[0]    = rootx;
+  event.xclient.data.l[1]    = rooty;
+  event.xclient.data.l[2]    = 8;             // _NET_WM_MOVERESIZE_MOVE
+  event.xclient.data.l[3]    = Button1;
+  event.xclient.data.l[4]    = 1;             // source indication: normal application
+
+  if(!XSendEvent(display, root, False, SubstructureNotifyMask | SubstructureRedirectMask, &event))
+    {
+      return false;
+    }
+
+  XFlush(display);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPLINUXSCREENX11::IsWMSupported(Atom atom)
+* @brief      Is WM supported
+* @note       INTERNAL: true when the running window manager lists the given atom in the root window's
+*             _NET_SUPPORTED property, i.e. when it actually implements that part of EWMH.
+* @ingroup    PLATFORM_LINUX
+*
+* @param[in]  atom : the EWMH atom to look for.
+*
+* @return     bool : true if the window manager advertises support for it.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::IsWMSupported(Atom atom)
+{
+  if(!display || (atom == None))
+    {
+      return false;
+    }
+
+  Atom supportedatom = XInternAtom(display, "_NET_SUPPORTED", True);
+  if(supportedatom == None)
+    {
+      return false;
+    }
+
+  Atom            actualtype   = None;
+  int             actualformat = 0;
+  unsigned long   nitems       = 0;
+  unsigned long   bytesafter   = 0;
+  unsigned char*  prop         = NULL;
+  bool            found        = false;
+
+  if(XGetWindowProperty(display, root, supportedatom, 0, 1024, False, XA_ATOM,
+                        &actualtype, &actualformat, &nitems, &bytesafter, &prop) != Success)
+    {
+      return false;
+    }
+
+  if(prop)
+    {
+      if((actualtype == XA_ATOM) && (actualformat == 32))
+        {
+          Atom* atoms = (Atom*)prop;
+
+          for(unsigned long c=0; c<nitems; c++)
+            {
+              if(atoms[c] == atom)
+                {
+                  found = true;
+                  break;
+                }
+            }
+        }
+
+      XFree(prop);
+    }
+
+  return found;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPLINUXSCREENX11::BeginCFGChromesDrag()
+* @brief      Begin CFG chromes drag
+* @note       Grabs the pointer for the whole caption drag so motion and, above all, the ButtonRelease that
+*             ends it keep being delivered to this window even while the pointer is outside it. Without the
+*             grab a fast drag that let the pointer slip off the window left it stopped, unable to catch up.
+*             GrabModeAsync on both pointer and keyboard: the grab must never freeze event processing.
+* @ingroup    PLATFORM_LINUX
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::BeginCFGChromesDrag()
+{
+  if(!display || !window)
+    {
+      return false;
+    }
+
+  // owner_events = False, deliberately: it is what INPLINUXDEVICEMOUSEX11::SetScreen()'s passive XGrabButton
+  // on this same window already uses, and the window itself only ever selects KeyPress/KeyRelease through
+  // XSelectInput -- so button events do NOT reach us "normally", they reach us because a grab reports them
+  // with respect to the grab window. Passing True here would leave that routing depending on a selection the
+  // window does not have. With False every ButtonPress/ButtonRelease/MotionNotify is reported against this
+  // window with this mask, which is exactly what INPLINUXDEVICEMOUSEX11::Update()'s XCheckWindowEvent() looks
+  // for -- including, crucially, the release that ends the drag when the pointer is outside the window.
+  if(XGrabPointer(display, window, False,
+                  ButtonPressMask | ButtonReleaseMask | PointerMotionMask,
+                  GrabModeAsync, GrabModeAsync, None, None, CurrentTime) != GrabSuccess)
+    {
+      // Somebody else owns the pointer (a WM menu, another grab...). NOT fatal, and the caller ignores this
+      // result on purpose: the drag still tracks correctly through the root-relative reading in
+      // GetCursorDesktopPosition(), it just is not exclusive.
+      return false;
+    }
+
+  XFlush(display);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPLINUXSCREENX11::EndCFGChromesDrag()
+* @brief      End CFG chromes drag
+* @note       Counterpart of BeginCFGChromesDrag(). XUngrabPointer on a connection that holds no grab is a
+*             no-op for the server, so this is safe to call unmatched.
+* @ingroup    PLATFORM_LINUX
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPLINUXSCREENX11::EndCFGChromesDrag()
+{
+  if(!display)
+    {
+      return false;
+    }
+
+  XUngrabPointer(display, CurrentTime);
+  XFlush(display);
+
+  return true;
+}
+
+#endif
 
 
 /**-------------------------------------------------------------------------------------------------------------------
