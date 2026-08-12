@@ -71,7 +71,8 @@
 * @brief      Constructor of class
 * @ingroup    APPFLOW
 * 
-* @param[in]  DIOWEBSERVER_RESOLVEENDPOINT : DIOWEBSERVER RESOLVEENDPOINT pointer to use.
+* 
+* @param[in]  cfg : Application flow configuration.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 APPFLOWEXTENDED_APPLICATIONSTATUS::APPFLOWEXTENDED_APPLICATIONSTATUS(APPFLOWCFG* cfg) : DIOWEBSERVER_RESOLVEENDPOINT()

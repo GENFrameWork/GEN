@@ -57,11 +57,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_STRING::SCRIPT_LIB_STRING() : SCRIPT_LIB(SCRIPT_LIB_NAME_STRING)
+* @fn         SCRIPT_LIB_STRING::SCRIPT_LIB_STRING()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_STRING : SCRIPT LIB NAME STRING value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_STRING::SCRIPT_LIB_STRING() : SCRIPT_LIB(SCRIPT_LIB_NAME_STRING)

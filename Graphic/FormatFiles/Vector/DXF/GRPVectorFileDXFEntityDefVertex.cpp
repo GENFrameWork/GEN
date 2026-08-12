@@ -104,7 +104,6 @@ GRPVECTORFILEDXFENTITYDEFVERTEX::~GRPVECTORFILEDXFENTITYDEFVERTEX()
 * 
 * @param[in]  vertex : Vertex pointer to use.
 * 
-* @return     void GRPVECTORFILEDXFENTITYDEFVERTEX:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFVERTEX::operator =  (GRPVECTORFILEDXFENTITYDEFVERTEX* vertex)
@@ -121,7 +120,6 @@ void GRPVECTORFILEDXFENTITYDEFVERTEX::operator =  (GRPVECTORFILEDXFENTITYDEFVERT
 * 
 * @param[in]  vertex : Vertex value.
 * 
-* @return     void GRPVECTORFILEDXFENTITYDEFVERTEX:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFVERTEX::operator =  (GRPVECTORFILEDXFENTITYDEFVERTEX vertex)

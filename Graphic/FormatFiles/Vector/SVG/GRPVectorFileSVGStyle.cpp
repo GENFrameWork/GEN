@@ -94,7 +94,7 @@ GRPVECTORFILESVGSTYLE::~GRPVECTORFILESVGSTYLE()
 * @ingroup    GRAPHIC
 * 
 * @param[in]  element : xml element
-* @param[in]  stylesheet : document-wide CSS class rules collected from every <style> element (NULL = ignore class="")
+* @param[in]  stylesheet : document-wide CSS class rules collected from every &lt;style&gt; element (NULL = ignore class="")
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 
@@ -280,7 +280,7 @@ GRP2DCOLOR_RGBA8& GRPVECTORFILESVGSTYLE::GetStrokeColor()   { return strokecolor
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGSTYLE::IsFillPaintServer()
-* @brief      Is fill paint server : the fill is a url(#id) reference (gradient / pattern)
+* @brief      Is fill paint server : the fill is a url(\#id) reference (gradient / pattern)
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the condition is met; otherwise false.
@@ -304,7 +304,7 @@ XSTRING* GRPVECTORFILESVGSTYLE::GetFillPaintID()            { return &fillpainti
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGSTYLE::IsStrokePaintServer()
-* @brief      Is stroke paint server : the stroke is a url(#id) reference
+* @brief      Is stroke paint server : the stroke is a url(\#id) reference
 * @ingroup    GRAPHIC
 * 
 * @return     bool : true if the condition is met; otherwise false.
@@ -328,7 +328,7 @@ XSTRING* GRPVECTORFILESVGSTYLE::GetStrokePaintID()          { return &strokepain
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void GRPVECTORFILESVGSTYLE::ExtractPaintServerID(XSTRING& value, XSTRING& id)
-* @brief      Extract paint server id : parse the id from a "url(#id)" / "url(id)" value
+* @brief      Extract paint server id : parse the id from a "url(\#id)" / "url(id)" value
 * @note       INTERNAL
 * @ingroup    GRAPHIC
 * 
@@ -566,7 +566,7 @@ bool GRPVECTORFILESVGSTYLE::ParseStyleAttribute(XSTRING& style)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGSTYLE::ParseColor(XSTRING& value, GRP2DCOLOR_RGBA8& color, bool& isnone)
-* @brief      Parse color : #rgb, #rrggbb, rgb(r,g,b), none, basic named colors
+* @brief      Parse color : \#rgb, \#rrggbb, rgb(r,g,b), none, basic named colors
 * @note       INTERNAL
 * @ingroup    GRAPHIC
 * 

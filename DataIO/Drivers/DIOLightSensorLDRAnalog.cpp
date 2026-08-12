@@ -66,7 +66,8 @@
 * 
 * @param[in]  diogpio : Diogpio pointer to use.
 * @param[in]  pindata : Pindata value.
-* @param[in]  DIODEVICE : DIODEVICE value.
+* 
+* @param[in]  activatecache : Activate cache flag.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLIGHTSENSORLDRANALOG::DIOLIGHTSENSORLDRANALOG( DIOGPIO* diogpio, int pindata, bool activatecache) : DIODEVICE()

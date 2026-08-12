@@ -59,11 +59,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_CFG::SCRIPT_LIB_CFG() : SCRIPT_LIB(SCRIPT_LIB_NAME_CFG)
+* @fn         SCRIPT_LIB_CFG::SCRIPT_LIB_CFG()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_CFG : SCRIPT LIB NAME configuration value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_CFG::SCRIPT_LIB_CFG() : SCRIPT_LIB(SCRIPT_LIB_NAME_CFG)

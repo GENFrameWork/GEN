@@ -99,7 +99,6 @@ DIOWEBPAGEHTMLCREATOR::~DIOWEBPAGEHTMLCREATOR()
 * 
 * @param[in]  htlmpage : Htlmpage value.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (const char* htlmpage)
@@ -116,7 +115,6 @@ void DIOWEBPAGEHTMLCREATOR::operator = (const char* htlmpage)
 * 
 * @param[in]  htlmpage : Htlmpage value.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (const XCHAR* htlmpage)
@@ -133,7 +131,6 @@ void DIOWEBPAGEHTMLCREATOR::operator = (const XCHAR* htlmpage)
 * 
 * @param[in]  htlmpage : Htlmpage value.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (DIOWEBPAGEHTMLCREATOR& htlmpage)
@@ -150,7 +147,6 @@ void DIOWEBPAGEHTMLCREATOR::operator = (DIOWEBPAGEHTMLCREATOR& htlmpage)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (XSTRING& string)
@@ -167,7 +163,6 @@ void DIOWEBPAGEHTMLCREATOR::operator = (XSTRING& string)
 * 
 * @param[in]  htlmpage : Htlmpage pointer to use.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator = (XWORD* htlmpage)
@@ -184,7 +179,6 @@ void DIOWEBPAGEHTMLCREATOR::operator = (XWORD* htlmpage)
 * 
 * @param[in]  htlmpage : Htlmpage value.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (const char* htlmpage)
@@ -201,7 +195,6 @@ void DIOWEBPAGEHTMLCREATOR::operator += (const char* htlmpage)
 * 
 * @param[in]  htlmpage : Htlmpage value.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (const XCHAR* htlmpage)
@@ -218,7 +211,6 @@ void DIOWEBPAGEHTMLCREATOR::operator += (const XCHAR* htlmpage)
 * 
 * @param[in]  htlmpage : Htlmpage value.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (XPATH& htlmpage)
@@ -235,7 +227,6 @@ void DIOWEBPAGEHTMLCREATOR::operator += (XPATH& htlmpage)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (XSTRING& string)
@@ -252,7 +243,6 @@ void DIOWEBPAGEHTMLCREATOR::operator += (XSTRING& string)
 * 
 * @param[in]  htlmpage : Htlmpage value.
 * 
-* @return     void DIOWEBPAGEHTMLCREATOR:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBPAGEHTMLCREATOR::operator += (XCHAR htlmpage)

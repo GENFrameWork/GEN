@@ -84,11 +84,10 @@ APPFLOWGRAPHICS*   SCRIPT_LIB_WINDOW::appgraphics = NULL;
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_WINDOW::SCRIPT_LIB_WINDOW() : SCRIPT_LIB(SCRIPT_LIB_NAME_WINDOW)
+* @fn         SCRIPT_LIB_WINDOW::SCRIPT_LIB_WINDOW()
 * @brief      Constructor
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_WINDOW : SCRIPT LIB NAME WINDOW value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_WINDOW::SCRIPT_LIB_WINDOW() : SCRIPT_LIB(SCRIPT_LIB_NAME_WINDOW)

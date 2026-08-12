@@ -69,7 +69,6 @@ jmethodID ANDROIDJNI::FindClassMethod;
 * @brief      oid JavaEnvDestructor
 * @ingroup    PLATFORM_ANDROID
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void JavaEnvDestructor(void*)

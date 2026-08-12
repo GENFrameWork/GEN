@@ -60,7 +60,8 @@
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  XFILECONTAINER : XFILECONTAINER pointer to use.
+* 
+* @param[in]  hash : Hash implementation to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEHASH::XFILEHASH(HASH* hash): XFILECONTAINER()

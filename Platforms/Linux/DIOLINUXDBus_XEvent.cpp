@@ -63,7 +63,8 @@
 * @ingroup    PLATFORM_LINUX
 * 
 * @param[in]  subject : Subject pointer to use.
-* @param[in]  XEVENT_TYPE_LINUX_DBUS : XEVENT TYPE LINUX DBUS value.
+* 
+* @param[in]  type : Event type.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXDBUS_XEVENT::DIOLINUXDBUS_XEVENT(XSUBJECT* subject, XDWORD type) : XEVENT(subject, type, XEVENT_TYPE_LINUX_DBUS)

@@ -60,11 +60,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_TIMER::SCRIPT_LIB_TIMER() : SCRIPT_LIB(SCRIPT_LIB_NAME_TIMER)
+* @fn         SCRIPT_LIB_TIMER::SCRIPT_LIB_TIMER()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_TIMER : SCRIPT LIB NAME TIMER value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_TIMER::SCRIPT_LIB_TIMER() : SCRIPT_LIB(SCRIPT_LIB_NAME_TIMER)

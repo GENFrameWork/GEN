@@ -60,11 +60,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_DIR::SCRIPT_LIB_DIR() : SCRIPT_LIB(SCRIPT_LIB_NAME_DIR)
+* @fn         SCRIPT_LIB_DIR::SCRIPT_LIB_DIR()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_DIR : SCRIPT LIB NAME DIR value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_DIR::SCRIPT_LIB_DIR() : SCRIPT_LIB(SCRIPT_LIB_NAME_DIR)

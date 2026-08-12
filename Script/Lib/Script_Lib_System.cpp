@@ -64,11 +64,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_SYSTEM::SCRIPT_LIB_SYSTEM() : SCRIPT_LIB(SCRIPT_LIB_SYSTEM_NAME)
+* @fn         SCRIPT_LIB_SYSTEM::SCRIPT_LIB_SYSTEM()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_SYSTEM_NAME : SCRIPT LIB SYSTEM NAME value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_SYSTEM::SCRIPT_LIB_SYSTEM() : SCRIPT_LIB(SCRIPT_LIB_SYSTEM_NAME)

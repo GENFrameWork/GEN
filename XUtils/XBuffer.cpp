@@ -2508,7 +2508,6 @@ int XBUFFER::Find(XSTRING& string, bool normalize, int startindex)
 * 
 * @param[in]  xbuffer : Buffer to use.
 * 
-* @return     void XBUFFER:: : Requested buffer.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFER::operator = (const XBUFFER& xbuffer)

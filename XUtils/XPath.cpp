@@ -202,7 +202,6 @@ XPATH::~XPATH()
 * 
 * @param[in]  path : Path to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (const char* path)
@@ -219,7 +218,6 @@ void XPATH::operator = (const char* path)
 * 
 * @param[in]  path : Path to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (const XCHAR* path)
@@ -236,7 +234,6 @@ void XPATH::operator = (const XCHAR* path)
 * 
 * @param[in]  path : Path to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (XPATH& path)
@@ -253,7 +250,6 @@ void XPATH::operator = (XPATH& path)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (XSTRING& string)
@@ -270,7 +266,6 @@ void XPATH::operator = (XSTRING& string)
 * 
 * @param[in]  path : Path to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator = (XWORD* path)
@@ -287,7 +282,6 @@ void XPATH::operator = (XWORD* path)
 * 
 * @param[in]  path : Path to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (const char* path)
@@ -304,7 +298,6 @@ void XPATH::operator += (const char* path)
 * 
 * @param[in]  path : Path to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (const XCHAR* path)
@@ -321,7 +314,6 @@ void XPATH::operator += (const XCHAR* path)
 * 
 * @param[in]  path : Path to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (XPATH& path)
@@ -338,7 +330,6 @@ void XPATH::operator += (XPATH& path)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (XSTRING& string)
@@ -355,7 +346,6 @@ void XPATH::operator += (XSTRING& string)
 * 
 * @param[in]  path : Path to use.
 * 
-* @return     void XPATH:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XPATH::operator += (XCHAR path)

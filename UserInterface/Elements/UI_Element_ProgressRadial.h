@@ -58,7 +58,7 @@
 *   - value arc gradient START color   : GetColor()            (XML attribute "color")
 *   - value arc gradient END   color   : GetLineColor()        (XML attribute "linecolor")
 *       When the line color alpha is 0 (unset), the value arc is stroked flat with GetColor().
-*   - centered caption (e.g. "37%")    : the composed UI_ELEMENT_TEXT (Get_UIText(), set from a child <text>)
+*   - centered caption (e.g. "37%")    : the composed UI_ELEMENT_TEXT (Get_UIText(), set from a child &lt;text&gt;)
 *
 * GEOMETRY:
 *   The progress ring occupies its boundary box. The ring is centered in that box; its radius is derived from the

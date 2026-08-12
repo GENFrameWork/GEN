@@ -89,10 +89,10 @@ GRPVECTORFILESVGCSSSTYLESHEET::~GRPVECTORFILESVGCSSSTYLESHEET()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGCSSSTYLESHEET::ParseDocument(XFILEXMLELEMENT* root)
-* @brief      Parse document : find every <style> element anywhere in the document and parse its CSS text
+* @brief      Parse document : find every &lt;style&gt; element anywhere in the document and parse its CSS text
 * @ingroup    GRAPHIC
 * 
-* @param[in]  root : root xml element (normally the <svg> element)
+* @param[in]  root : root xml element (normally the &lt;svg&gt; element)
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 
@@ -190,7 +190,7 @@ bool GRPVECTORFILESVGCSSSTYLESHEET::Add(XCHAR* classname, XCHAR* declarations)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGCSSSTYLESHEET::CollectStyleElements(XFILEXMLELEMENT* element)
-* @brief      Collect style elements : recursively find every <style> element and parse it
+* @brief      Collect style elements : recursively find every &lt;style&gt; element and parse it
 * @note       INTERNAL
 * @ingroup    GRAPHIC
 * 
@@ -241,7 +241,7 @@ bool GRPVECTORFILESVGCSSSTYLESHEET::CollectStyleElements(XFILEXMLELEMENT* elemen
 *             exports actually use.
 * @ingroup    GRAPHIC
 * 
-* @param[in]  text : raw <style> element text content
+* @param[in]  text : raw &lt;style&gt; element text content
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 

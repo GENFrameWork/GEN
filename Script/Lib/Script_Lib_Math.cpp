@@ -61,11 +61,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_MATH::SCRIPT_LIB_MATH() : SCRIPT_LIB(SCRIPT_LIB_MATH_NAME)
+* @fn         SCRIPT_LIB_MATH::SCRIPT_LIB_MATH()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_MATH_NAME : SCRIPT LIB MATH NAME value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_MATH::SCRIPT_LIB_MATH() : SCRIPT_LIB(SCRIPT_LIB_MATH_NAME)

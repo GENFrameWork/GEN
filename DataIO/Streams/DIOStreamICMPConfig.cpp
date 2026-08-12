@@ -139,7 +139,6 @@ XSTRING* DIOSTREAMICMPCONFIG::GetResolvedRemoteURL()
 * @note       INTERNAL
 * @ingroup    DATAIO
 * 
-* @return     void DIOSTREAMICMPCONFIG :: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMICMPCONFIG ::Clean()

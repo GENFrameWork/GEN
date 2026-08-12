@@ -54,11 +54,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XBER_XEVENT::XBER_XEVENT() : XEVENT(NULL, 0, 0)
+* @fn         XBER_XEVENT::XBER_XEVENT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  NULL : NULL value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XBER_XEVENT::XBER_XEVENT() : XEVENT(NULL, 0, 0)

@@ -374,7 +374,8 @@ void DIOGEOLOCATIONIP_RESULT::Clean()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  DIOSCRAPERWEB : DIOSCRAPERWEB pointer to use.
+* 
+* @param[in]  webclient : Web client (optional).
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSCRAPERWEBGEOLOCATIONIP::DIOSCRAPERWEBGEOLOCATIONIP(DIOWEBCLIENT* webclient): DIOSCRAPERWEB()

@@ -61,11 +61,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_LOG::SCRIPT_LIB_LOG() : SCRIPT_LIB(SCRIPT_LIB_NAME_LOG)
+* @fn         SCRIPT_LIB_LOG::SCRIPT_LIB_LOG()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_LOG : SCRIPT LIB NAME LOG value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_LOG::SCRIPT_LIB_LOG() : SCRIPT_LIB(SCRIPT_LIB_NAME_LOG)

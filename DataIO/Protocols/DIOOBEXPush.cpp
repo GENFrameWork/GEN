@@ -325,7 +325,8 @@ void DIOOBEXPUSHFILE::Clean()
 * @ingroup    DATAIO
 * 
 * @param[in]  diostream : Diostream pointer to use.
-* @param[in]  XFSMACHINE : XFSMACHINE value.
+* 
+* @param[in]  inlittleendian : Little-endian mode flag.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOOBEXPUSH::DIOOBEXPUSH(DIOSTREAM* diostream, bool inlittleendian) : XFSMACHINE(0)

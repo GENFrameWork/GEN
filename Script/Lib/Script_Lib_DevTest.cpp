@@ -56,11 +56,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_DEVTEST::SCRIPT_LIB_DEVTEST() : SCRIPT_LIB(SCRIPT_LIB_NAME_DEVTEST)
+* @fn         SCRIPT_LIB_DEVTEST::SCRIPT_LIB_DEVTEST()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_DEVTEST : SCRIPT LIB NAME DEVTEST value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_DEVTEST::SCRIPT_LIB_DEVTEST() : SCRIPT_LIB(SCRIPT_LIB_NAME_DEVTEST)

@@ -3,7 +3,7 @@
 * @file       GRPVectorFileSVGObjText.h
 * 
 * @class      GRPVECTORFILESVGOBJTEXT
-* @brief      Graphic Vector File SVG Object Text class (<text> / <tspan>)
+* @brief      Graphic Vector File SVG Object Text class
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.

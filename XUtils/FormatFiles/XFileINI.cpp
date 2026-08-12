@@ -698,7 +698,6 @@ XFILEINI::XFILEINI(): XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  XFILETXT : XFILETXT value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINI::XFILEINI(XPATH& xpath): XFILETXT()
@@ -715,7 +714,6 @@ XFILEINI::XFILEINI(XPATH& xpath): XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  XFILETXT : XFILETXT pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEINI::XFILEINI(XFILE* file): XFILETXT()

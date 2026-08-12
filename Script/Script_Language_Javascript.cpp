@@ -482,17 +482,6 @@ void SCRIPT_LNG_JAVASCRIPT::Clean()
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         #if !defined(COMPILER_CLANG_CL) && !defined(COMPILER_CLANG) && !defined(COMPILER_GCC) double __builtin_inf(void)
-* @brief      builtin inf
-* @ingroup    SCRIPT
-* 
-* @param[in]  void : Void value.
-* 
-* @return     #if ! : Requested value.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 #if !defined(COMPILER_CLANG_CL) && !defined(COMPILER_CLANG) && !defined(COMPILER_GCC)
 /**-------------------------------------------------------------------------------------------------------------------
 * 

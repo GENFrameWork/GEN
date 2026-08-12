@@ -314,7 +314,6 @@ bool XFSTRING::Fast_Empty()
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator =  (const char* string)
@@ -331,7 +330,6 @@ void XFSTRING::operator =  (const char* string)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator =  (const XCHAR* string)
@@ -348,7 +346,6 @@ void XFSTRING::operator =  (const XCHAR* string)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator =  (const XSTRING& string)
@@ -365,7 +362,6 @@ void XFSTRING::operator =  (const XSTRING& string)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator =  (XWORD* string)
@@ -382,7 +378,6 @@ void XFSTRING::operator =  (XWORD* string)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator =  (XBUFFER& string)
@@ -399,7 +394,6 @@ void XFSTRING::operator =  (XBUFFER& string)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator += (const char* string)
@@ -416,7 +410,6 @@ void XFSTRING::operator += (const char* string)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator += (const XCHAR* string)
@@ -433,7 +426,6 @@ void XFSTRING::operator += (const XCHAR* string)
 * 
 * @param[in]  string : String to use.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator += (XSTRING& string)
@@ -450,7 +442,6 @@ void XFSTRING::operator += (XSTRING& string)
 * 
 * @param[in]  character : Character value.
 * 
-* @return     void XFSTRING:: : Requested string.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XFSTRING::operator += (XCHAR character)

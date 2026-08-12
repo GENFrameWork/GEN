@@ -69,7 +69,8 @@
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  DIOSTREAMUDP : DIOSTREAMUDP pointer to use.
+* 
+* @param[in]  config : Stream UDP configuration.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMUDPACKNOWLEDGE::DIOSTREAMUDPACKNOWLEDGE(DIOSTREAMUDPCONFIG* config) : DIOSTREAMUDP()

@@ -162,7 +162,7 @@ bool GRP2DVECTORFILESVGRENDERAGG::Render(GRPVECTORFILESVG* svg, GRP2DCANVAS* can
 * 
 * @fn         bool GRP2DVECTORFILESVGRENDERAGG::CalculateViewBoxTransform(GRPVECTORFILESVG* svg, double targetx, double targety, double targetwidth, double targetheight, GRPVECTORFILESVGTRANSFORM& transform)
 * @brief      Calculate view box transform : map the SVG viewBox into the target rectangle (uniform scale, centered)
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  svg : loaded SVG file
@@ -214,7 +214,7 @@ bool GRP2DVECTORFILESVGRENDERAGG::CalculateViewBoxTransform(GRPVECTORFILESVG* sv
 * 
 * @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& parenttransform, GRPVECTORFILESVGSTYLE& parentstyle, GRP2DCANVAS* canvas)
 * @brief      Render node : accumulate transform / style and render this node (recursing into containers)
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  obj : object node
@@ -282,13 +282,15 @@ bool GRP2DVECTORFILESVGRENDERAGG::RenderNode(GRPVECTORFILESVGOBJ* obj, GRPVECTOR
 /**-------------------------------------------------------------------------------------------------------------------
 * @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderNodeContent(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& nodetransform, GRPVECTORFILESVGSTYLE& nodestyle, GRP2DCANVAS* canvas)
 * @brief      Render node content : dispatch a node (use / text / container / shape) with its resolved transform + style
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * @param[in]  obj : node
 * @param[in]  nodetransform : accumulated transform
 * @param[in]  nodestyle : effective style
 * @param[in]  canvas : target canvas
+* 
 * @return     bool : true if handled.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILESVGRENDERAGG::RenderNodeContent(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& nodetransform, GRPVECTORFILESVGSTYLE& nodestyle, GRP2DCANVAS* canvas)
 {
@@ -341,10 +343,20 @@ bool GRP2DVECTORFILESVGRENDERAGG::RenderNodeContent(GRPVECTORFILESVGOBJ* obj, GR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool GRP2DVECTORFILESVGRENDERAGG::ComputeClipDeviceBox(GRPVECTORFILESVGOBJ* clipobj, GRPVECTORFILESVGTRANSFORM& transform, double& x1, double& y1, double& x2, double& y2)
 * @brief      Compute clip device box : device space bounding box of the union of the clipPath shapes (rectangular approximation)
-* @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
+* @param[in]  clipobj : 
+* @param[in]  transform : 
+* @param[in]  x1 : 
+* @param[in]  y1 : 
+* @param[in]  x2 : 
+* @param[in]  y2 : 
+* 
+* @return     bool : true if is succesful. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRP2DVECTORFILESVGRENDERAGG::ComputeClipDeviceBox(GRPVECTORFILESVGOBJ* clipobj, GRPVECTORFILESVGTRANSFORM& transform, double& x1, double& y1, double& x2, double& y2)
 {
@@ -366,10 +378,20 @@ bool GRP2DVECTORFILESVGRENDERAGG::ComputeClipDeviceBox(GRPVECTORFILESVGOBJ* clip
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void GRP2DVECTORFILESVGRENDERAGG::AccumulateClipShape(GRPVECTORFILESVGOBJ* shape, GRPVECTORFILESVGTRANSFORM& transform, int depth, bool& found, double& x1, double& y1, double& x2, double& y2)
 * @brief      Accumulate clip shape : add one clip shape (resolving <use>) device bounding box into the running union
-* @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
+* @param[in]  shape : 
+* @param[in]  transform : 
+* @param[in]  depth : 
+* @param[in]  found : 
+* @param[in]  x1 : 
+* @param[in]  y1 : 
+* @param[in]  x2 : 
+* @param[in]  y2 : 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILESVGRENDERAGG::AccumulateClipShape(GRPVECTORFILESVGOBJ* shape, GRPVECTORFILESVGTRANSFORM& transform, int depth, bool& found, double& x1, double& y1, double& x2, double& y2)
 {
@@ -445,7 +467,7 @@ void GRP2DVECTORFILESVGRENDERAGG::AccumulateClipShape(GRPVECTORFILESVGOBJ* shape
 * 
 * @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderShape(GRPVECTORFILESVGOBJ* obj, GRPVECTORFILESVGTRANSFORM& transform, GRPVECTORFILESVGSTYLE& style, GRP2DCANVAS* canvas)
 * @brief      Render shape : build the geometry, transform it and paint fill and/or stroke
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  obj : shape node
@@ -572,7 +594,7 @@ bool GRP2DVECTORFILESVGRENDERAGG::RenderText(GRPVECTORFILESVGOBJ* obj, GRPVECTOR
 * 
 * @fn         double GRP2DVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGSTYLE& style, double sizeuser, double penx, double peny, GRPVECTORFILESVGTEXTANCHOR anchor, GRPVECTORFILESVGTRANSFORM& transform, double scale, GRP2DCANVAS* canvas)
 * @brief      Draw text run : draw one text run at the (user space) pen and return the advanced pen x (user space)
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  text : run text
@@ -625,7 +647,7 @@ double GRP2DVECTORFILESVGRENDERAGG::DrawTextRun(XSTRING* text, GRPVECTORFILESVGS
 * 
 * @fn         void GRP2DVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx, double& miny, double& width, double& height)
 * @brief      Compute path bbox : axis aligned bounding box of the path (approximated using endpoints + control points)
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  path : path (user space)
@@ -683,7 +705,7 @@ void GRP2DVECTORFILESVGRENDERAGG::ComputePathBBox(GRP2DPATH& path, double& minx,
 * 
 * @fn         bool GRP2DVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING* paintid, double globalalpha, bool isstroke, double linewidth, bool evenodd, GRPVECTORFILESVGTRANSFORM& transform, double bbx, double bby, double bbw, double bbh, GRP2DCANVAS* canvas)
 * @brief      Render gradient : resolve the paint server gradient and fill (or stroke) the path with it
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  devicepath : path already transformed to device space
@@ -810,13 +832,15 @@ bool GRP2DVECTORFILESVGRENDERAGG::RenderGradient(GRP2DPATH& devicepath, XSTRING*
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void GRP2DVECTORFILESVGRENDERAGG::TransformPath(GRP2DPATH& path, GRPVECTORFILESVGTRANSFORM& transform)
 * @brief      Transform path : apply the transform to every point of the path
-* @note       INTERNAL
 * @ingroup    GRAPHIC
+* 
 * @param[in]  path : path to transform (in place)
 * @param[in]  transform : transform to apply
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRP2DVECTORFILESVGRENDERAGG::TransformPath(GRP2DPATH& path, GRPVECTORFILESVGTRANSFORM& transform)
 {
@@ -844,7 +868,7 @@ void GRP2DVECTORFILESVGRENDERAGG::TransformPath(GRP2DPATH& path, GRPVECTORFILESV
 * 
 * @fn         double GRP2DVECTORFILESVGRENDERAGG::GetScaleFactor(GRPVECTORFILESVGTRANSFORM& transform)
 * @brief      Get scale factor : uniform scale approximation from the transform (used to scale the stroke width)
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  transform : transform
@@ -868,7 +892,7 @@ double GRP2DVECTORFILESVGRENDERAGG::GetScaleFactor(GRPVECTORFILESVGTRANSFORM& tr
 * 
 * @fn         void GRP2DVECTORFILESVGRENDERAGG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
-* @note       INTERNAL
+* @note       INTERNAL.
 * @ingroup    GRAPHIC
 * 
 * --------------------------------------------------------------------------------------------------------------------*/

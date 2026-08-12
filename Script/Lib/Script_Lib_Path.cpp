@@ -57,11 +57,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_PATH::SCRIPT_LIB_PATH() : SCRIPT_LIB(SCRIPT_LIB_NAME_PATH)
+* @fn         SCRIPT_LIB_PATH::SCRIPT_LIB_PATH()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_PATH : SCRIPT LIB NAME PATH value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_PATH::SCRIPT_LIB_PATH() : SCRIPT_LIB(SCRIPT_LIB_NAME_PATH)

@@ -3,7 +3,7 @@
 * @file       GRPVectorFileSVGObjGradient.cpp
 * 
 * @class      GRPVECTORFILESVGOBJGRADIENT
-* @brief      Graphic Vector File SVG Object Gradient class (<linearGradient> / <radialGradient> paint server)
+* @brief      Graphic Vector File SVG Object Gradient class (&lt;linearGradient&gt; / &lt;radialGradient&gt; paint server)
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -88,7 +88,7 @@ GRPVECTORFILESVGOBJGRADIENT::~GRPVECTORFILESVGOBJGRADIENT()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGOBJGRADIENT::ApplyData(XFILEXMLELEMENT* element)
-* @brief      Apply data : read the common attributes plus the gradient definition and its <stop> children
+* @brief      Apply data : read the common attributes plus the gradient definition and its &lt;stop&gt; children
 * @ingroup    GRAPHIC
 * 
 * @param[in]  element : xml element
@@ -156,7 +156,7 @@ bool GRPVECTORFILESVGOBJGRADIENT::ApplyData(XFILEXMLELEMENT* element)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGOBJGRADIENT::ParseStops(XFILEXMLELEMENT* element)
-* @brief      Parse stops : read the <stop> children (offset, stop-color, stop-opacity)
+* @brief      Parse stops : read the &lt;stop&gt; children (offset, stop-color, stop-opacity)
 * @note       INTERNAL
 * @ingroup    GRAPHIC
 * 
@@ -255,7 +255,7 @@ double GRPVECTORFILESVGOBJGRADIENT::ParseCoordinate(XCHAR* value, double default
 * @note       INTERNAL
 * @ingroup    GRAPHIC
 * 
-* @param[in]  element : <stop> element
+* @param[in]  element : &lt;stop&gt; element
 * @param[in]  name : property name
 * @param[in]  outvalue : property value
 * 

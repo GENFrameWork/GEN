@@ -876,7 +876,6 @@ void Signal_Ini(void)
 * 
 * @param[in]  sign : Sign value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void Signal_Handler(int sign)
@@ -1193,7 +1192,6 @@ static inline bool Signal_ResolveFunctionName(void* addr, XSTRING& namefunc)
 * @param[in]  out : Output out.
 * @param[in]  max_frames : Max frames value.
 * 
-* @return     static inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static inline void Signal_PrintfStackTrace(FILE *out, unsigned int max_frames)

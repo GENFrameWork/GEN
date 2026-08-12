@@ -67,7 +67,8 @@
 * @ingroup    DATAIO
 * 
 * @param[in]  width : Width value.
-* @param[in]  DIODEVICEI2C : DIODEVICEI2 C value.
+* 
+* @param[in]  height : Display height in pixels.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOI2COLEDDISPLAYSSD1306::DIOI2COLEDDISPLAYSSD1306( XDWORD width, XDWORD height): DIODEVICEI2C()

@@ -67,7 +67,8 @@
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
-* @param[in]  DIODEVICESPI : DIODEVICESPI value.
+* 
+* @param[in]  type : PCF8833 display type.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSPILCDDISPLAYPCF8833::DIOSPILCDDISPLAYPCF8833(DIOSPILCDDISPLAYPCF8833_TYPE type) : DIODEVICESPI()

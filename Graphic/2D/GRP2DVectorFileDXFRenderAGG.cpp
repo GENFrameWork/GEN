@@ -1291,7 +1291,6 @@ static bool MTextIsToggle(XCHAR d)
 * @param[in]  raw : assembled MTEXT string (codes 3* + 1)
 * @param[in]  lines : decoded lines (one XSTRING per line)
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void MTextDecode(XCHAR* raw, XVECTOR<XSTRING*>& lines)

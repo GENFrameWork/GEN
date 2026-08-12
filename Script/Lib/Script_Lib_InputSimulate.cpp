@@ -65,11 +65,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_INPUTSIMULATE::SCRIPT_LIB_INPUTSIMULATE() : SCRIPT_LIB(SCRIPT_LIB_NAME_INPUTSIMULATE )
+* @fn         SCRIPT_LIB_INPUTSIMULATE::SCRIPT_LIB_INPUTSIMULATE()
 * @brief      Constructor
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_INPUTSIMULATE : SCRIPT LIB NAME INPUTSIMULATE value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_INPUTSIMULATE::SCRIPT_LIB_INPUTSIMULATE() : SCRIPT_LIB(SCRIPT_LIB_NAME_INPUTSIMULATE )

@@ -58,7 +58,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         METHODDEF(void) GRPBITMAPFILEJPG_ErrorExit(j_common_ptr info)
+* @fn         void GRPBITMAPFILEJPG_ErrorExit(j_common_ptr info)
 * @brief      Handle JPEG error exit
 * @ingroup    GRAPHIC
 * 

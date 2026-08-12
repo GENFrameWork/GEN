@@ -4,7 +4,7 @@
 * 
 * @class      MALLOCSTATS
 * @brief      MALLOCSTATS
-* @ingroup    PLATFORM_MICROCONTROLLERS
+* @ingroup    PLATFORM_STM32
 * 
 * @copyright  EndoraSoft. All rights reserved.
 * 

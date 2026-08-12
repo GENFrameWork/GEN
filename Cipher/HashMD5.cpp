@@ -511,7 +511,6 @@ inline XDWORD HASHMD5::RotateLeft(XDWORD x, int n)
 * @param[in]  s : S value.
 * @param[in]  ac : Ac value.
 * 
-* @return     inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline void HASHMD5::FF(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWORD s, XDWORD ac)
@@ -534,7 +533,6 @@ inline void HASHMD5::FF(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWOR
 * @param[in]  s : S value.
 * @param[in]  ac : Ac value.
 * 
-* @return     inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline void HASHMD5::GG(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWORD s, XDWORD ac)
@@ -557,7 +555,6 @@ inline void HASHMD5::GG(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWOR
 * @param[in]  s : S value.
 * @param[in]  ac : Ac value.
 * 
-* @return     inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline void HASHMD5::HH(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWORD s, XDWORD ac)
@@ -580,7 +577,6 @@ inline void HASHMD5::HH(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWOR
 * @param[in]  s : S value.
 * @param[in]  ac : Ac value.
 * 
-* @return     inline void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 inline void HASHMD5::II(XDWORD& a, XDWORD b, XDWORD c, XDWORD d, XDWORD x, XDWORD s, XDWORD ac)

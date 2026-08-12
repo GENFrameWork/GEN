@@ -62,11 +62,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_TRACE::SCRIPT_LIB_TRACE() : SCRIPT_LIB(SCRIPT_LIB_NAME_TRACE)
+* @fn         SCRIPT_LIB_TRACE::SCRIPT_LIB_TRACE()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_TRACE : SCRIPT LIB NAME TRACE value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_TRACE::SCRIPT_LIB_TRACE() : SCRIPT_LIB(SCRIPT_LIB_NAME_TRACE)

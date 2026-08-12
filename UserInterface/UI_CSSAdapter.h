@@ -2,7 +2,7 @@
 *
 * @file       UI_CSSAdapter.h
 *
-* @class      UI_CSSADAPTER (free helpers)
+* @class      UI_CSSADAPTER
 * @brief      User Interface : top-left / CSS box-model boundary.
 * @ingroup    USERINTERFACE
 * 

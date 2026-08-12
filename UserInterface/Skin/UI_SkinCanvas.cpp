@@ -114,7 +114,6 @@
 * @param[in]  spandeg : signed span in degrees.
 * @param[in]  firstpoint : true on the first append (emits a MoveTo); set to false afterwards.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressRadial_AppendArc(GRP2DPATH& path, double cx, double cy, double r, double startdeg, double spandeg, bool& firstpoint)
@@ -160,7 +159,6 @@ static void UI_SkinCanvas_ProgressRadial_AppendArc(GRP2DPATH& path, double cx, d
 * @param[in]  d : D value.
 * @param[in]  formradius : Formradius value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void DrawScrollPill(GRP2DCANVAS* canvas, double a, double b, double c, double d, double formradius)
@@ -193,7 +191,6 @@ static void DrawScrollPill(GRP2DCANVAS* canvas, double a, double b, double c, do
 * @param[in]  y2 : Y2 value.
 * @param[in]  radius : Radius value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius)
@@ -253,7 +250,6 @@ static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, d
 * @param[in]  maxy : Maxy value.
 * @param[in]  r : R value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, double miny, double maxx, double maxy, double r)
@@ -306,7 +302,6 @@ static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, doub
 * @param[in]  gx2 : Gx2 value.
 * @param[in]  gy2 : Gy2 value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressBar_DrawGradientRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius,
@@ -665,8 +660,7 @@ void UI_SKINCANVAS_REBUILDAREAS::Clean()
 * @ingroup    USERINTERFACE
 * 
 * @param[in]  screen : Screen object to use.
-* @param[in]  UI_SKIN : UI SKIN value.
-* @param[in]  screen : Screen object to use.
+* @param[in]  viewportindex : Viewport index (default 0).
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_SKINCANVAS::UI_SKINCANVAS(GRPSCREEN* screen,  int viewportindex) : UI_SKIN(),  UI_SKINCANVAS_REBUILDAREAS(screen)
@@ -1995,7 +1989,6 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bo
 * @param[in]  tx : Tx value.
 * @param[in]  ty : Ty value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2017,7 +2010,6 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bo
 * @param[in]  tx : Tx value.
 * @param[in]  ty : Ty value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressImage_Layout(int allocation, double imgw, double imgh, double textw, double texth, double gap,
@@ -3628,7 +3620,6 @@ bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRP2DCANVAS* canvas
 * @param[in]  miny : Miny value.
 * @param[in]  maxy : Maxy value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
@@ -4166,7 +4157,6 @@ double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRP2
 * @param[in]  aheadleft : Aheadleft value.
 * @param[in]  aheadright : Aheadright value.
 * 
-* @return     static void : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 // Inline-image obstacle resolver for the text box. Active images are rectangles the running text must flow around.

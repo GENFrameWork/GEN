@@ -68,7 +68,8 @@
 * @ingroup    DATAIO
 * 
 * @param[in]  config : Configuration object to use.
-* @param[in]  DIOSTREAM : DIOSTREAM pointer to use.
+* 
+* @param[in]  cipher : Cipher to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMCIPHER::DIOSTREAMCIPHER(DIOSTREAMCONFIG* config, CIPHER* cipher): DIOSTREAM()

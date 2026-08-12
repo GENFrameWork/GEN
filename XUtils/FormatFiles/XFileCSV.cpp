@@ -321,7 +321,6 @@ XFILECSV::XFILECSV(): XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  XFILETXT : XFILETXT value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV::XFILECSV(XPATH& xpath) : XFILETXT()
@@ -338,7 +337,6 @@ XFILECSV::XFILECSV(XPATH& xpath) : XFILETXT()
 * @brief      Constructor of class
 * @ingroup    XUTILS
 * 
-* @param[in]  XFILETXT : XFILETXT pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILECSV::XFILECSV(XFILE* file) : XFILETXT()

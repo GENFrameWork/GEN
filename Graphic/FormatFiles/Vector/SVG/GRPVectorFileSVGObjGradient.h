@@ -3,7 +3,7 @@
 * @file       GRPVectorFileSVGObjGradient.h
 * 
 * @class      GRPVECTORFILESVGOBJGRADIENT
-* @brief      Graphic Vector File SVG Object Gradient class (<linearGradient> / <radialGradient> paint server)
+* @brief      Graphic Vector File SVG Object Gradient class
 * @ingroup    GRAPHIC
 * 
 * @copyright  EndoraSoft. All rights reserved.

@@ -56,7 +56,7 @@ class GRPBITMAP;
 *
 * XML:
 *   imageempty="<file>"  imagefull="<file>"  level="0..100"  direction="horizontal|vertical"  alpha="0..100"
-*   optional child <text> => centered caption (Get_UIText()).
+*   optional child &lt;text&gt; => centered caption (Get_UIText()).
 */
 class UI_ELEMENT_PROGRESS_IMAGE : public UI_ELEMENT_OPTION
 {

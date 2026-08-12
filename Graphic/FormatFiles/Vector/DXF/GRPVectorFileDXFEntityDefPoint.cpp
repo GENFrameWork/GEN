@@ -125,7 +125,6 @@ GRPVECTORFILEDXFENTITYDEFPOINT::~GRPVECTORFILEDXFENTITYDEFPOINT()
 * 
 * @param[in]  point : Point pointer to use.
 * 
-* @return     void GRPVECTORFILEDXFENTITYDEFPOINT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFPOINT::operator =  (GRPVECTORFILEDXFENTITYDEFPOINT* point)
@@ -142,7 +141,6 @@ void GRPVECTORFILEDXFENTITYDEFPOINT::operator =  (GRPVECTORFILEDXFENTITYDEFPOINT
 * 
 * @param[in]  point : Point value.
 * 
-* @return     void GRPVECTORFILEDXFENTITYDEFPOINT:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPVECTORFILEDXFENTITYDEFPOINT::operator =  (GRPVECTORFILEDXFENTITYDEFPOINT point)

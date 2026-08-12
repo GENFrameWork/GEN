@@ -64,11 +64,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_PROCESS::SCRIPT_LIB_PROCESS() : SCRIPT_LIB(SCRIPT_LIB_NAME_PROCESS)
+* @fn         SCRIPT_LIB_PROCESS::SCRIPT_LIB_PROCESS()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_PROCESS : SCRIPT LIB NAME PROCESS value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_PROCESS::SCRIPT_LIB_PROCESS() : SCRIPT_LIB(SCRIPT_LIB_NAME_PROCESS)

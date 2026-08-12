@@ -62,11 +62,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_CONSOLE::SCRIPT_LIB_CONSOLE() : SCRIPT_LIB(SCRIPT_LIB_NAME_CONSOLE)
+* @fn         SCRIPT_LIB_CONSOLE::SCRIPT_LIB_CONSOLE()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_CONSOLE : SCRIPT LIB NAME CONSOLE value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_CONSOLE::SCRIPT_LIB_CONSOLE() : SCRIPT_LIB(SCRIPT_LIB_NAME_CONSOLE)

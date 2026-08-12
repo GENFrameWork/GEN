@@ -928,7 +928,6 @@ bool XWINDOWSSERVICEBASE::SetFailureActions(XCHAR* servicename, LPSERVICE_FAILUR
 * @param[in]  argc : Argc value.
 * @param[in]  argv : Argv pointer to use.
 * 
-* @return     void WINAPI : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void WINAPI XWINDOWSSERVICEBASE::ServiceMain(DWORD argc, LPWSTR* argv)
@@ -957,7 +956,6 @@ void WINAPI XWINDOWSSERVICEBASE::ServiceMain(DWORD argc, LPWSTR* argv)
 * @param[in]  eventdata : Eventdata value.
 * @param[in]  context : Context object to use.
 * 
-* @return     void WINAPI : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void WINAPI XWINDOWSSERVICEBASE::ServiceCtrlHandler(DWORD control, DWORD eventtype, LPVOID eventdata, LPVOID context)

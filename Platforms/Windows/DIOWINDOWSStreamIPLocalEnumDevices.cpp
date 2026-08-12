@@ -88,11 +88,11 @@ DIOWINDOWSSTREAMIPLOCALENUMDEVICES::~DIOWINDOWSSTREAMIPLOCALENUMDEVICES()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #ifdef BUILDER bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
+* @fn         ifdef BUILDER bool DIOWINDOWSSTREAMIPLOCALENUMDEVICES::Search()
 * @brief      Search
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @return     #ifdef BUILDER bool : Requested value.
+* @return     \#ifdef BUILDER bool : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #ifdef BUILDER

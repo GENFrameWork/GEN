@@ -338,7 +338,6 @@ XQWORD XTRACE_TARGET::GetNETHandle()
 * 
 * @param[in]  NEThandle : GEN_NEW Net Handle of target
 * 
-* @return     void XTRACE_TARGET:: : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XTRACE_TARGET:: SetNETHandle(XQWORD NEThandle)
@@ -1865,7 +1864,7 @@ XDWORD XTRACE::GetTraceFromXBuffer(XBUFFER& xbufferpacket, XDWORD& publicIP, XDW
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #ifdef DIO_ACTIVE XDWORD XTRACE::GetTraceFromDIOStream(DIOSTREAM* DIOstream, XDWORD& publicIP, XDWORD& localIP, XBYTE& level, XDWORD& sequence, XDATETIME* xtime, XBUFFER& data)
+* @fn         ifdef DIO_ACTIVE XDWORD XTRACE::GetTraceFromDIOStream(DIOSTREAM* DIOstream, XDWORD& publicIP, XDWORD& localIP, XBYTE& level, XDWORD& sequence, XDATETIME* xtime, XBUFFER& data)
 * @brief      Get trace from DIO stream
 * @ingroup    XUTILS
 * 
@@ -1877,7 +1876,7 @@ XDWORD XTRACE::GetTraceFromXBuffer(XBUFFER& xbufferpacket, XDWORD& publicIP, XDW
 * @param[in]  xtime : Xtime pointer to use.
 * @param[in]  data : Data buffer to use.
 * 
-* @return     #ifdef DIO_ACTIVE XDWORD : Requested value.
+* @return     \#ifdef DIO_ACTIVE XDWORD : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #ifdef DIO_ACTIVE

@@ -70,7 +70,8 @@
 * @ingroup    DATAIO
 * 
 * @param[in]  pindata : Pindata value.
-* @param[in]  DIODEVICE : DIODEVICE value.
+* 
+* @param[in]  activatecache : Activate cache flag.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOTEMHUMSENSORAM2301::DIOTEMHUMSENSORAM2301(int pindata, bool activatecache) : DIODEVICE()

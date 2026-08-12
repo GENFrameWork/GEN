@@ -60,11 +60,10 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         SCRIPT_LIB_RAND::SCRIPT_LIB_RAND() : SCRIPT_LIB(SCRIPT_LIB_NAME_RANDOM)
+* @fn         SCRIPT_LIB_RAND::SCRIPT_LIB_RAND()
 * @brief      Constructor of class
 * @ingroup    SCRIPT
 * 
-* @param[in]  SCRIPT_LIB_NAME_RANDOM : SCRIPT LIB NAME RANDOM value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_RAND::SCRIPT_LIB_RAND() : SCRIPT_LIB(SCRIPT_LIB_NAME_RANDOM)

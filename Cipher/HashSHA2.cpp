@@ -73,14 +73,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #define UNPACK32(x, str)
+* @fn         define UNPACK32(x, str)
 * @brief      UNPACK32
 * @ingroup    CIPHER
 * 
 * @param[in]  x : X coordinate.
 * @param[in]  str : String to use.
 * 
-* @return     #define : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #define UNPACK32(x, str)    {                                             \
@@ -92,14 +91,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #define PACK32(str, x)
+* @fn         define PACK32(str, x)
 * @brief      PACK32
 * @ingroup    CIPHER
 * 
 * @param[in]  str : String to use.
 * @param[in]  x : X coordinate.
 * 
-* @return     #define : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #define PACK32(str, x)      {                                             \
@@ -111,14 +109,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #define UNPACK64(x, str)
+* @fn         define UNPACK64(x, str)
 * @brief      UNPACK64
 * @ingroup    CIPHER
 * 
 * @param[in]  x : X coordinate.
 * @param[in]  str : String to use.
 * 
-* @return     #define : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #define UNPACK64(x, str)    {                                             \
@@ -134,14 +131,13 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #define PACK64(str, x)
+* @fn         define PACK64(str, x)
 * @brief      PACK64
 * @ingroup    CIPHER
 * 
 * @param[in]  str : String to use.
 * @param[in]  x : X coordinate.
 * 
-* @return     #define : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #define PACK64(str, x)      {                                             \
@@ -157,13 +153,12 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #define SHA256_SCR(i)
+* @fn         define SHA256_SCR(i)
 * @brief      SHA256 SCR
 * @ingroup    CIPHER
 * 
 * @param[in]  i : I value.
 * 
-* @return     #define : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 /* Macros used for loops unrolling */
@@ -175,13 +170,12 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #define SHA512_SCR(i)
+* @fn         define SHA512_SCR(i)
 * @brief      SHA512 SCR
 * @ingroup    CIPHER
 * 
 * @param[in]  i : I value.
 * 
-* @return     #define : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #define SHA512_SCR(i)       {                                             \
@@ -191,7 +185,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #define SHA256_EXP(a, b, c, d, e, f, g, h, j)
+* @fn         define SHA256_EXP(a, b, c, d, e, f, g, h, j)
 * @brief      SHA256 EXP
 * @ingroup    CIPHER
 * 
@@ -205,7 +199,6 @@
 * @param[in]  h : H value.
 * @param[in]  j : J value.
 * 
-* @return     #define : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #define SHA256_EXP(a, b, c, d, e, f, g, h, j) {                                                           \
@@ -218,7 +211,7 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         #define SHA512_EXP(a, b, c, d, e, f, g ,h, j)
+* @fn         define SHA512_EXP(a, b, c, d, e, f, g ,h, j)
 * @brief      SHA512 EXP
 * @ingroup    CIPHER
 * 
@@ -232,7 +225,6 @@
 * @param[in]  h : H value.
 * @param[in]  j : J value.
 * 
-* @return     #define : Requested value.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 #define SHA512_EXP(a, b, c, d, e, f, g ,h, j) {                                                           \
@@ -334,7 +326,8 @@ XDWORD HASHSHA2::Sha256_k[64] =   { 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5db
 * @brief      Constructor of class
 * @ingroup    CIPHER
 * 
-* @param[in]  HASH : HASH value.
+* 
+* @param[in]  type : SHA-2 hash type.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 HASHSHA2::HASHSHA2(HASHSHA2TYPE type) : HASH()

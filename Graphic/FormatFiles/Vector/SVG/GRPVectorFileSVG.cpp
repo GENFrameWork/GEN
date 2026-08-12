@@ -97,7 +97,7 @@ GRPVECTORFILESVG::~GRPVECTORFILESVG()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         GRPVECTORFILERESULT GRPVECTORFILESVG::DetectType()
-* @brief      Detect type : check the extension (.svg) and that the file is a text file with a <svg> root tag
+* @brief      Detect type : check the extension (.svg) and that the file is a text file with a &lt;svg&gt; root tag
 * @ingroup    GRAPHIC
 * 
 * @return     GRPVECTORFILERESULT : Requested value.
@@ -177,7 +177,7 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::DetectType()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         GRPVECTORFILERESULT GRPVECTORFILESVG::Load()
-* @brief      Load : parse the XML, read the <svg> config and build the SVG object tree
+* @brief      Load : parse the XML, read the &lt;svg&gt; config and build the SVG object tree
 * @ingroup    GRAPHIC
 * 
 * @return     GRPVECTORFILERESULT : Requested value.
@@ -266,7 +266,7 @@ GRPVECTORFILERESULT GRPVECTORFILESVG::Load(XSTRING& content)
 * @brief      Build the SVG object tree from an already decoded XML file (shared by the disk and the in memory loads)
 * @ingroup    GRAPHIC
 * 
-* @param[in]  file : decoded XML file (root must be the <svg> element)
+* @param[in]  file : decoded XML file (root must be the &lt;svg&gt; element)
 * 
 * @return     GRPVECTORFILERESULT : Requested value.
 * 
@@ -321,7 +321,7 @@ GRPVECTORFILECONFIG* GRPVECTORFILESVG::GetConfig()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::GetRoot()
-* @brief      Get root : the root SVG object (the <svg> node)
+* @brief      Get root : the root SVG object (the &lt;svg&gt; node)
 * @ingroup    GRAPHIC
 * 
 * @return     GRPVECTORFILESVGOBJ* : Pointer to the requested object; NULL if it is not available.
@@ -336,7 +336,7 @@ GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::GetRoot()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         GRPVECTORFILESVGOBJ* GRPVECTORFILESVG::FindObjByID(XCHAR* id)
-* @brief      Find obj by id : search the object tree (including the <defs> content) for a node with the given id
+* @brief      Find obj by id : search the object tree (including the &lt;defs&gt; content) for a node with the given id
 * @ingroup    GRAPHIC
 * 
 * @param[in]  id : id to find (without the leading '#')

@@ -87,7 +87,7 @@ GRPVECTORFILESVGCONFIG::~GRPVECTORFILESVGCONFIG()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGCONFIG::ApplyData(XFILEXMLELEMENT* elementsvg)
-* @brief      Apply data : read the root <svg> attributes (width, height, viewBox, preserveAspectRatio)
+* @brief      Apply data : read the root &lt;svg&gt; attributes (width, height, viewBox, preserveAspectRatio)
 * @ingroup    GRAPHIC
 * 
 * @param[in]  elementsvg : root svg element

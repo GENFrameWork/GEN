@@ -86,8 +86,8 @@ XFILEXDB::XFILEXDB(HASH* hash) : XFILEHASH(hash)
 * @ingroup    XUTILS
 * 
 * @param[in]  hash : Hash pointer to use.
-* @param[in]  hash : Hash value.
-* 
+* @param[in]  xpath : Path to the XDB file.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXDB::XFILEXDB(HASH* hash, XPATH& xpath)
   : XFILEHASH(hash)
