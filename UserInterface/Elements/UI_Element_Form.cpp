@@ -114,16 +114,48 @@ UI_BOUNDARYLINE* UI_ELEMENT_FORM::GetVisibleRect()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool UI_ELEMENT_FORM::GetLegacyFillWarningEmitted()
+* @brief      Latched by Draw_Form the first time it uses the legacy "color" property as fill, so the migration
+*             warning is emitted once per instance rather than every frame.
+* @ingroup    USERINTERFACE
+*
+* @return     bool : true iff the warning was already emitted for this Form.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT_FORM::GetLegacyFillWarningEmitted()
+{
+  return legacy_fill_warning_emitted;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT_FORM::SetLegacyFillWarningEmitted(bool value)
+* @brief      Set the legacy-fill warning latch.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  value : Value to store.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_FORM::SetLegacyFillWarningEmitted(bool value)
+{
+  legacy_fill_warning_emitted = value;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void UI_ELEMENT_FORM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_FORM::Clean()
 {
-  roundvisiblerect = 0;    
+  roundvisiblerect            = 0;
+  legacy_fill_warning_emitted = false;
 }
 
 

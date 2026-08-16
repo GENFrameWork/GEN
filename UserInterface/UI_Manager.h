@@ -69,6 +69,7 @@ class UI_ELEMENT_TEXT;
 class UI_ELEMENT_FORM;
 class UI_VIRTUALKEYBOARD;
 class UI_STYLE;
+class UI_STYLESHEET;
 
 
 class UI_MANAGER : public XOBSERVER, public XSUBJECT
@@ -153,9 +154,15 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            SubscribeInputEvents                      (bool active);    
     bool                            SubscribeOutputEvents                     (bool active, XOBSERVER* observer, XSUBJECT* subject); 
 
-    bool                            CreaterVirtualKeyboard                    (UI_LAYOUT* layout, GRPSCREEN* screen);    
-    bool                            DeleteVirtualKeyboard                     (); 
-    
+    bool                            CreaterVirtualKeyboard                    (UI_LAYOUT* layout, GRPSCREEN* screen);
+    bool                            DeleteVirtualKeyboard                     ();
+
+    // --- CSS stylesheet attached to the currently loaded layout bundle. -------------------------------------------
+    // Loaded from an optional <stylesheet>file.css</stylesheet> node under the XML root at CreateLayouts() time;
+    // owned by the manager (deleted when a new layout is loaded, or in the destructor). NULL means "no stylesheet
+    // active" - layouts then behave exactly as before this feature was introduced.
+    UI_STYLESHEET*                  GetStyleSheet                             ();
+
   private:                                 
                                     UI_MANAGER                                ();
                                     UI_MANAGER                                (UI_MANAGER const&);        // Don't implement
@@ -195,7 +202,8 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     UI_ELEMENT*                     GetLayoutElement_ProgressImage            (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
 
     UI_ELEMENT*                     CreatePartialLayout                       (XFILEXMLELEMENT* nodeelement, UI_LAYOUT* layout, UI_ELEMENT* father);
-    bool                            CreateLayouts                             (XFILEXML& xml, GRPSCREEN* screen, int viewportindex = 0);
+    void                            PrepareElementStyleState                  (UI_ELEMENT* element);
+    bool                            CreateLayouts                             (XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* screen, int viewportindex = 0);
     
     GRPBITMAP*                      LoadBackgroundBitmap                      (XSTRING& namefilebitmap, GRPPROPERTYMODE mode, GRP2DCANVAS* referencecanvas = NULL, double width = 0.0, double height = 0.0);
     GRPBITMAP*                      LoadBackgroundVectorFileToBitmap          (XSTRING& namefilevector, GRP2DCANVAS* referencecanvas, double width, double height);
@@ -243,8 +251,10 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     int                             last_yposition;
 
     UI_ELEMENT*                     preselect_element;
-    
-    UI_VIRTUALKEYBOARD*             virtualkeyboard;     
+
+    UI_VIRTUALKEYBOARD*             virtualkeyboard;
+
+    UI_STYLESHEET*                  stylesheet;                                // owned; NULL when no .css is active
 };
 
 

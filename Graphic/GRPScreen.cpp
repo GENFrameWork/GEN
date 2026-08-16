@@ -1055,11 +1055,27 @@ bool GRPSCREEN::LoadCFGChromesLayout()
       GRPSCREEN_SetElementVisibleRecursive(captionelement, cfgchromesautohidevisible);
     }
 
-  // Reference width for UpdateCFGChromesButtonsPosition(): the window width the layout's element positions
-  // were just resolved against. The min/max/close buttons keep their authored distance to the RIGHT edge of
-  // this width; when the window is later resized narrower they are shifted left by exactly the difference.
+  // Reference width for UpdateCFGChromesButtonsPosition(): the width the layout's element positions were just
+  // resolved against. The min/max/close buttons keep their authored distance to the RIGHT edge of this width;
+  // when the window is later resized narrower they are shifted left by exactly the difference.
+  //
+  // That reference is the CAPTION's own resolved width, not GetWidth(): a chrome layout no longer has to
+  // hardcode a width at all (UI_SKINCANVAS::CalculateBoundaryLine_Form resolves a role="caption" form with no
+  // authored width to the full canvas width), and the caption is by definition the box the buttons were
+  // aligned inside. The two coincide in the ordinary one-viewport case; reading the caption keeps them
+  // consistent when they do not -- and when a layout DOES author an explicit width, that authored value is
+  // what the buttons were positioned against, so it is the right reference too. GetWidth() stays as the
+  // fallback for a layout with no caption element.
   cfgchromesbuttonsrefwidth = (int)GetWidth();
-  cfgchromesbuttonsshift    = 0;
+
+  if(captionelement && (captionelement->GetBoundaryLine()->width > 0.0))
+    {
+      cfgchromesbuttonsrefwidth = (int)captionelement->GetBoundaryLine()->width;
+    }
+
+  cfgchromesbuttonsshift = 0;
+
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Chromes] caption width resolved to [%d] (buttons reference width)"), cfgchromesbuttonsrefwidth);
 
   return true;
 }
@@ -1689,6 +1705,14 @@ bool GRPSCREEN::UpdateCFGChromesButtonsPosition()
   int clientheight = 0;
 
   if(!GetClientSize(clientwidth, clientheight)) return false;
+
+  // Ignore a client size the window manager cannot have meant. During the first frames the native window may
+  // still be unmapped / mid-creation and report a degenerate size (0 on X11 while the WM has not configured
+  // the frame yet, or a stale default on Windows between CreateWindow and the first WM_SIZE). Acting on it
+  // would yank all three buttons far to the left for a frame or two and then snap them back -- and because
+  // the canvas is only repainted through rebuild areas, the pixels they left behind at the old position are
+  // not erased, so those frames smear the top of the window. Waiting one frame for a real size costs nothing.
+  if(clientwidth <= 0) return false;
 
   int shift = clientwidth - cfgchromesbuttonsrefwidth;
   if(shift > 0) shift = 0;                                    // never right of the authored position

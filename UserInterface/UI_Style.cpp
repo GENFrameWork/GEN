@@ -37,6 +37,9 @@
 
 #include "XFileXML.h"
 
+#include "UI_Element.h"
+#include "UI_StyleSheet.h"
+
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
@@ -245,6 +248,55 @@ bool UI_STYLE::FillFromXMLElement(XFILEXMLELEMENT* node)
     }
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_STYLE::FillFromCSSDeclarations(UI_STYLESHEET* sheet, UI_ELEMENT* element)
+* @brief      CSS front-end. Layers all matching stylesheet rules on top of the current bag using the element's
+*             identity (type / id / class list). Existing keys are overwritten by matches (CSS-wins semantics).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  sheet : Parsed stylesheet; NULL is a valid no-op.
+* @param[in]  element : Element whose identity drives selector matching; NULL is a no-op.
+*
+* @return     bool : true if at least one rule matched; false otherwise.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_STYLE::FillFromCSSDeclarations(UI_STYLESHEET* sheet, UI_ELEMENT* element)
+{
+  if(!sheet)    return false;
+  if(!element)  return false;
+
+  XSTRING* type_string = element->GetTypeString();
+  XSTRING* name        = element->GetName();
+
+  XSTRING            emptystr;
+  XVECTOR<XSTRING*>  emptyclasses;
+
+  XSTRING&           elem_type    = type_string ? *type_string  : emptystr;
+  XSTRING&           elem_id      = name        ? *name         : emptystr;
+  XVECTOR<XSTRING*>& elem_classes = element->GetClassNames() ? *element->GetClassNames() : emptyclasses;
+
+  // Active pseudo-classes: derived from the element's current live state (ispreselect/isselected/isactive).
+  // At load time all state flags default to false / active-true, so the pseudo set is effectively empty and
+  // this call reproduces the stateless cascade of step 2. When the element later transitions state, the same
+  // helper is invoked again to layer state-specific rules on top.
+  XVECTOR<XSTRING*> activepseudos;
+  element->GetActivePseudos(activepseudos);
+
+  bool ok = sheet->Resolve(elem_type, elem_id, elem_classes, activepseudos, *this);
+
+  // Owned strings produced by GetActivePseudos().
+  for(XDWORD c=0; c<activepseudos.GetSize(); c++)
+    {
+      XSTRING* p = activepseudos.Get(c);
+      if(p) GEN_DELETE p;
+    }
+  activepseudos.DeleteAll();
+
+  return ok;
 }
 
 

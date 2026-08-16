@@ -341,10 +341,16 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                     }
 
                                                                                   buffer = GEN_NEW XBYTE[buffersize];
-                                                                                  if(!buffer) 
+                                                                                  if(!buffer)
                                                                                     {
                                                                                       return false;
                                                                                     }
+
+                                                                                  // See GRP2DCANVAS::Buffer_Create(): a canvas must start from a known, fully transparent surface. Only the
+                                                                                  // regions a layout actually covers are ever painted, so leaving the allocation uninitialized shows raw heap
+                                                                                  // memory as garbage -- most visibly under the semi-transparent caption of a custom window chrome, and it is
+                                                                                  // then captured as the saved background of that element's rebuild area and restored on every repaint.
+                                                                                  memset(buffer, 0, buffersize);
 
                                                                                   rbuffer.attach(buffer, width , height, (IsBufferInverse()?1:-1)*((int)width * GetBytesperPixel()));
 

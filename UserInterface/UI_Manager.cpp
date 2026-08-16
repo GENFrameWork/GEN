@@ -65,6 +65,8 @@
 
 #include "UI_XEvent.h"
 #include "UI_Style.h"
+#include "UI_StyleSheet.h"
+#include "UI_CSSParser.h"
 #include "UI_Color.h"
 #include "UI_Colors.h"
 #include "UI_Text.h"
@@ -308,8 +310,8 @@ bool UI_MANAGER::LoadLayout(XPATH& pathfile, GRPSCREEN* screen, int viewportinde
   bool     status = false;  
 
   if(xml.Open(pathfile, true))
-    {      
-      CreateLayouts(xml, screen, viewportindex);
+    {
+      CreateLayouts(xml, pathfile, screen, viewportindex);
 
       xml.Close();
 
@@ -2812,7 +2814,13 @@ UI_MANAGER::~UI_MANAGER()
       xmutex_UIevent = NULL;
     }
 
-  Clean();                            
+  if(stylesheet)
+    {
+      GEN_DELETE stylesheet;
+      stylesheet = NULL;
+    }
+
+  Clean();
 }
 
 
@@ -3023,6 +3031,24 @@ bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout,
   UI_STYLE style;
   style.FillFromXMLElement(node);
 
+  // Set the element's identity BEFORE the CSS cascade runs, so #id and .class selectors can match. The XML
+  // attributes we just harvested carry the authoritative identity; CSS may still overwrite visual keys later,
+  // but never the identity itself.
+  XSTRING xml_name;   style.Get(__L("name"),  xml_name);
+  XSTRING xml_class;  style.Get(__L("class"), xml_class);
+
+  if(element)
+    {
+      if(!xml_name.IsEmpty())  element->GetName()->Set(xml_name);
+      element->SetClassNames(xml_class);         // empty string clears the list; retro-compat safe
+    }
+
+  // Layer stylesheet declarations on top (CSS-wins semantics). No stylesheet loaded -> no-op.
+  if(stylesheet && element)
+    {
+      style.FillFromCSSDeclarations(stylesheet, element);
+    }
+
   XSTRING fathertagname;
   if(node && node->GetFather()) fathertagname = node->GetFather()->GetName();
 
@@ -3135,13 +3161,49 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
                 else if(!rolestr.Compare(__L("close")    , true))  element->SetChromeRole(UI_ELEMENT_CHROMEROLE_CLOSE);
     }
 
+  // Step 6: track authored-vs-default for "color" and "bckgrdcolor", and honour the CSS-natural aliases and
+  // the "inherit" value on color.
+  //
+  //   "color"            : if the string is exactly "inherit" (case-insensitive), walk up the parent chain and
+  //                        copy the first ancestor's color that itself was authored; otherwise parse the string
+  //                        into element->color. Either way, mark color_set = true on success.
+  //   "bckgrdcolor" or   : first-hit lookup order accepts the CSS-natural "background-color" as an alias, so
+  //   "background-color"   authors can write either. Any authored value marks background_color_set = true.
   XSTRING color;
   style.Get(__L("color"), color);
-  if(!color.IsEmpty()) element->GetColor()->SetFromString(color);
+  if(!color.IsEmpty())
+    {
+      if(!color.Compare(__L("inherit"), true))
+        {
+          UI_ELEMENT* ancestor = element->GetFather();
+          while(ancestor)
+            {
+              if(ancestor->IsColorSet())
+                {
+                  ancestor->GetColor()->CopyTo(element->GetColor());
+                  element->SetColorSet(true);
+                  break;
+                }
+              ancestor = ancestor->GetFather();
+            }
+        }
+       else
+        {
+          element->GetColor()->SetFromString(color);
+          element->SetColorSet(true);
+        }
+    }
 
   XSTRING bckgrdcolor;
-  style.Get(__L("bckgrdcolor"), bckgrdcolor);
-  if(!bckgrdcolor.IsEmpty()) element->GetBackgroundColor()->SetFromString(bckgrdcolor);
+  if(!style.Get(__L("bckgrdcolor"), bckgrdcolor) || bckgrdcolor.IsEmpty())
+    {
+      style.Get(__L("background-color"), bckgrdcolor);
+    }
+  if(!bckgrdcolor.IsEmpty())
+    {
+      element->GetBackgroundColor()->SetFromString(bckgrdcolor);
+      element->SetBackgroundColorSet(true);
+    }
 
   XSTRING visible;
   if(style.Get(__L("visible"), visible))
@@ -3180,6 +3242,235 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
       element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT  , (double)margin[1]);
       element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP     , (double)margin[2]);
       element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN   , (double)margin[3]);
+    }
+
+  // --- Step 4: box-model additions --------------------------------------------------------------------------------
+  // Padding shorthand accepts 1..4 numbers separated by comma or whitespace, using CSS ordering:
+  //     1 value:  all four sides
+  //     2 values: TOP-BOTTOM, LEFT-RIGHT
+  //     3 values: TOP, LEFT-RIGHT, BOTTOM
+  //     4 values: TOP, RIGHT, BOTTOM, LEFT
+  // Longhand keys ("padding-left" / "-right" / "-top" / "-bottom") override the shorthand and are applied last.
+  XSTRING paddingstr;
+  if(style.Get(__L("padding"), paddingstr))
+    {
+      double vals[4] = { 0.0, 0.0, 0.0, 0.0 };
+      int    n       = 0;
+
+      // Split on any run of comma / whitespace.
+      XDWORD   len  = paddingstr.GetSize();
+      XDWORD   p    = 0;
+      while(p < len && n < 4)
+        {
+          while(p < len)
+            {
+              XCHAR ch = paddingstr[(int)p];
+              if(ch != __C(' ') && ch != __C('\t') && ch != __C(',')) break;
+              p++;
+            }
+          if(p >= len) break;
+
+          XDWORD start = p;
+          while(p < len)
+            {
+              XCHAR ch = paddingstr[(int)p];
+              if(ch == __C(' ') || ch == __C('\t') || ch == __C(',')) break;
+              p++;
+            }
+
+          XSTRING tok;
+          paddingstr.Copy((int)start, (int)p, tok);
+          vals[n++] = tok.ConvertToDouble();
+        }
+
+      double p_top = 0.0, p_right = 0.0, p_bottom = 0.0, p_left = 0.0;
+
+      switch(n)
+        {
+          case 1  : p_top = p_right = p_bottom = p_left = vals[0]; break;
+          case 2  : p_top = p_bottom = vals[0]; p_left = p_right = vals[1]; break;
+          case 3  : p_top = vals[0]; p_left = p_right = vals[1]; p_bottom = vals[2]; break;
+          default : p_top = vals[0]; p_right = vals[1]; p_bottom = vals[2]; p_left = vals[3]; break;
+        }
+
+      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT , p_left);
+      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, p_right);
+      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_UP   , p_top);
+      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN , p_bottom);
+    }
+
+  double pv;
+  if(style.Get(__L("padding-left")  , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT , pv);
+  if(style.Get(__L("padding-right") , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, pv);
+  if(style.Get(__L("padding-top")   , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_UP   , pv);
+  if(style.Get(__L("padding-bottom"), pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN , pv);
+
+  // border-width in pixels. 0 = "no stroke at all" (honoured explicitly); a missing key leaves the element's
+  // -1 default so the skin keeps drawing its historical 1-px border for containers.
+  double bw;
+  if(style.Get(__L("border-width"), bw)) element->SetBorderWidth(bw);
+
+  // Step 5: border-color at base level. Consumers (Draw_Form et al.) prefer this when set, otherwise fall back
+  // to the per-type "linecolor" so pre-step-5 layouts render unchanged.
+  XSTRING bcstr;
+  if(style.Get(__L("border-color"), bcstr) && !bcstr.IsEmpty()) element->SetBorderColorFromString(bcstr);
+
+  // Step 5: border-radius shorthand + per-corner longhands.
+  // Shorthand accepts 1..4 numbers (comma or whitespace separated), CSS ordering: TL, TR, BR, BL.
+  //     1 value:  all four corners
+  //     2 values: TL-BR, TR-BL (diagonals)
+  //     3 values: TL, TR-BL, BR
+  //     4 values: TL, TR, BR, BL
+  XSTRING brstr;
+  if(style.Get(__L("border-radius"), brstr))
+    {
+      double vals[4] = { 0.0, 0.0, 0.0, 0.0 };
+      int    n       = 0;
+
+      XDWORD  len = brstr.GetSize();
+      XDWORD  p   = 0;
+      while(p < len && n < 4)
+        {
+          while(p < len)
+            {
+              XCHAR ch = brstr[(int)p];
+              if(ch != __C(' ') && ch != __C('\t') && ch != __C(',')) break;
+              p++;
+            }
+          if(p >= len) break;
+
+          XDWORD start = p;
+          while(p < len)
+            {
+              XCHAR ch = brstr[(int)p];
+              if(ch == __C(' ') || ch == __C('\t') || ch == __C(',')) break;
+              p++;
+            }
+
+          XSTRING tok;
+          brstr.Copy((int)start, (int)p, tok);
+          vals[n++] = tok.ConvertToDouble();
+        }
+
+      double r_tl = 0.0, r_tr = 0.0, r_br = 0.0, r_bl = 0.0;
+
+      switch(n)
+        {
+          case 1  : r_tl = r_tr = r_br = r_bl = vals[0];                             break;
+          case 2  : r_tl = r_br = vals[0]; r_tr = r_bl = vals[1];                    break;
+          case 3  : r_tl = vals[0]; r_tr = r_bl = vals[1]; r_br = vals[2];           break;
+          default : r_tl = vals[0]; r_tr = vals[1]; r_br = vals[2]; r_bl = vals[3];  break;
+        }
+
+      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TL, r_tl);
+      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TR, r_tr);
+      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BR, r_br);
+      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BL, r_bl);
+    }
+
+  double rv;
+  if(style.Get(__L("border-top-left-radius")     , rv)) element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TL, rv);
+  if(style.Get(__L("border-top-right-radius")    , rv)) element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TR, rv);
+  if(style.Get(__L("border-bottom-right-radius") , rv)) element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BR, rv);
+  if(style.Get(__L("border-bottom-left-radius")  , rv)) element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BL, rv);
+
+  // Step 7: box-shadow. Accepted grammar (CSS subset):
+  //     box-shadow: <offset-x> <offset-y> <color>
+  //     box-shadow: <offset-x> <offset-y> <blur> <color>
+  //   No spread, no inset, no multi-shadow list. Blur is parsed and stored but currently ignored by the
+  //   renderer (hard-shadow only in this rebanada); a follow-up will add stack-blur.
+  //   The tokenizer splits on whitespace; the last non-numeric token is the colour string. GEN colours never
+  //   contain spaces (either a name, "#RRGGBBAA", or a "R,G,B[,A]" tuple without spaces) so this is unambiguous.
+  XSTRING boxshadow;
+  if(style.Get(__L("box-shadow"), boxshadow) && !boxshadow.IsEmpty())
+    {
+      XVECTOR<XSTRING*> tokens;
+      XDWORD  bs_len = boxshadow.GetSize();
+      XDWORD  bs_p   = 0;
+
+      while(bs_p < bs_len)
+        {
+          while(bs_p < bs_len)
+            {
+              XCHAR ch = boxshadow[(int)bs_p];
+              if(ch != __C(' ') && ch != __C('\t')) break;
+              bs_p++;
+            }
+          if(bs_p >= bs_len) break;
+
+          XDWORD start = bs_p;
+          while(bs_p < bs_len)
+            {
+              XCHAR ch = boxshadow[(int)bs_p];
+              if(ch == __C(' ') || ch == __C('\t')) break;
+              bs_p++;
+            }
+
+          XSTRING* tok = GEN_NEW XSTRING();
+          if(tok)
+            {
+              boxshadow.Copy((int)start, (int)bs_p, *tok);
+              tokens.Add(tok);
+            }
+        }
+
+      // Classify: leading numeric tokens are (offset-x, offset-y, blur); the first non-numeric one starts the
+      // colour. A token is numeric when its first character is digit, '.', '-' or '+'.
+      double  sh_x     = 0.0;
+      double  sh_y     = 0.0;
+      double  sh_blur  = 0.0;
+      XSTRING sh_color;
+      int     nnum     = 0;
+
+      for(XDWORD c=0; c<tokens.GetSize(); c++)
+        {
+          XSTRING* tok = tokens.Get(c);
+          if(!tok || tok->IsEmpty()) continue;
+
+          // A token is a numeric offset / blur when it starts with a digit-like character AND contains no
+          // comma. GEN colours never have interior spaces but the R,G,B[,A] tuple form embeds commas, so
+          // "0,0,0,120" starts with '0' but must be treated as a colour, not as a blur value. Hex ("#RRGGBB")
+          // and named colours ("red", "yellow") never start with a numeric character and are already handled
+          // by the first-character check.
+          XCHAR first          = (*tok)[0];
+          bool  starts_numeric = (first == __C('-')) || (first == __C('+')) || (first == __C('.')) ||
+                                 (first >= __C('0') && first <= __C('9'));
+          bool  has_comma      = tok->FindCharacter(__C(',')) >= 0;
+          bool  isnum          = starts_numeric && !has_comma;
+
+          if(isnum && nnum < 3)
+            {
+              double v = tok->ConvertToDouble();
+              if     (nnum == 0) sh_x    = v;
+              else if(nnum == 1) sh_y    = v;
+              else               sh_blur = v;
+              nnum++;
+            }
+           else
+            {
+              // Everything from here on is the colour (single token in practice; if the author put spaces
+              // inside a hypothetical multi-token color, we accept only the first token to stay simple).
+              sh_color = *tok;
+              break;
+            }
+        }
+
+      // Only latch the shadow when we got at least the two mandatory offsets and a colour.
+      if(nnum >= 2 && !sh_color.IsEmpty())
+        {
+          element->SetShadowOffsetX(sh_x);
+          element->SetShadowOffsetY(sh_y);
+          element->SetShadowBlur(sh_blur);
+          element->GetShadowColor()->SetFromString(sh_color);
+          element->SetBoxShadowSet(true);
+        }
+
+      for(XDWORD c=0; c<tokens.GetSize(); c++)
+        {
+          XSTRING* tok = tokens.Get(c);
+          if(tok) GEN_DELETE tok;
+        }
+      tokens.DeleteAll();
     }
 
   return true;
@@ -4726,7 +5017,7 @@ UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAY
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportindex)
+* @fn         bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* screen, int viewportindex)
 * @brief      Create layouts
 * @ingroup    USERINTERFACE
 * 
@@ -4737,29 +5028,81 @@ UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAY
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportindex)
-{ 
-  if(!xml.ReadAndDecodeAllLines()) 
+bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* screen, int viewportindex)
+{
+  if(!xml.ReadAndDecodeAllLines())
     {
       return false;
     }
 
-  XFILEXMLELEMENT*  root          = xml.GetRoot();  
-  XSTRING           nametypeskin;  
-  UI_SKIN_DRAWMODE  drawmode      = UI_SKIN_DRAWMODE_UNKNOWN;  
+  XFILEXMLELEMENT*  root          = xml.GetRoot();
+  XSTRING           nametypeskin;
+  UI_SKIN_DRAWMODE  drawmode      = UI_SKIN_DRAWMODE_UNKNOWN;
   XSTRING           raster_fontname;
-  XSTRING           vector_fontname; 
-  XSTRING           background_color[2]; 
-  XSTRING           background_namefile[2]; 
-  XSTRING           background_seamlesspattern[2]; 
-  XSTRING           background_patternwidth[2]; 
-  XSTRING           background_patternheight[2]; 
-  
-  if(!root) 
+  XSTRING           vector_fontname;
+  XSTRING           background_color[2];
+  XSTRING           background_namefile[2];
+  XSTRING           background_seamlesspattern[2];
+  XSTRING           background_patternwidth[2];
+  XSTRING           background_patternheight[2];
+
+  if(!root)
     {
       return false;
     }
-    
+
+  // --- Optional <stylesheet>file.css</stylesheet> declaration ---------------------------------------------------
+  // Discover a single (first-hit) stylesheet node under the XML root, resolve its filename against the XML's own
+  // directory and parse it into a fresh UI_STYLESHEET. On any I/O or parse issue we log and continue: an absent
+  // or malformed stylesheet must never abort layout construction (retro-compat with layouts that carry none).
+  if(stylesheet)
+    {
+      GEN_DELETE stylesheet;
+      stylesheet = NULL;
+    }
+
+  for(int c=0; c<root->GetNElements(); c++)
+    {
+      XFILEXMLELEMENT* nodess = root->GetElement(c);
+      if(nodess && !nodess->GetName().Compare(__L("stylesheet"), true))
+        {
+          XSTRING cssname = nodess->GetValue();
+          cssname.DeleteNoCharacters(__L(" \t\r\n"));
+
+          if(!cssname.IsEmpty())
+            {
+              XPATH   csspath;
+              XSTRING drive;
+              XPATH   dir;
+
+              xmlpathfile.GetDrive(drive);
+              xmlpathfile.GetPath (dir);
+
+              csspath  = drive;
+              csspath += dir;
+              csspath += cssname;
+
+              UI_STYLESHEET* sheet = GEN_NEW UI_STYLESHEET();
+              if(sheet)
+                {
+                  UI_CSSPARSER parser;
+                  if(parser.ParseFile(csspath, *sheet) && sheet->Rules_Count() > 0)
+                    {
+                      stylesheet = sheet;
+                      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[UI Load] stylesheet [%s] loaded (%d rules)"), csspath.Get(), sheet->Rules_Count());
+                    }
+                   else
+                    {
+                      GEN_DELETE sheet;
+                      XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[UI Load] stylesheet [%s] not applied (missing or empty)"), csspath.Get());
+                    }
+                }
+            }
+
+          break;   // first-hit wins; ignore any additional <stylesheet> nodes at the root
+        }
+    }
+
   for(int c=0; c<root->GetNElements(); c++)
     {
       XFILEXMLELEMENT* nodeskin = root->GetElement(c);
@@ -5017,9 +5360,18 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, GRPSCREEN* screen, int viewportind
                           if(nodeelement)
                             {
                               UI_ELEMENT* element = CreatePartialLayout(nodeelement, layout, NULL);
-                              if(element) layout->Elements_Add(element);                                                                                                                              
-                            }                              
-                        } 
+                              if(element)
+                                {
+                                  layout->Elements_Add(element);
+
+                                  // Post-load hook for step 3 (state-based CSS): snapshot the load-time visual
+                                  // baseline of every element in the freshly-built subtree and mark those that
+                                  // are targeted by pseudo-carrying rules so their state setters know they must
+                                  // trigger a re-resolve. Cheap walk, runs once per layout.
+                                  PrepareElementStyleState(element);
+                                }
+                            }
+                        }
                     }  
                 }
             }                  
@@ -6079,15 +6431,76 @@ void UI_MANAGER::HandleEvent(XEVENT* xevent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         UI_STYLESHEET* UI_MANAGER::GetStyleSheet()
+* @brief      Currently active CSS stylesheet, or NULL when none was declared in the layout XML.
+* @ingroup    USERINTERFACE
+*
+* @return     UI_STYLESHEET* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_STYLESHEET* UI_MANAGER::GetStyleSheet()
+{
+  return stylesheet;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::PrepareElementStyleState(UI_ELEMENT* element)
+* @brief      Walk a freshly-built subtree, snapshot every element's visual baseline and mark those the active
+*             stylesheet can restyle via pseudo-class rules. Called once per top-level element right after
+*             CreatePartialLayout returns.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Root of the subtree.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::PrepareElementStyleState(UI_ELEMENT* element)
+{
+  if(!element) return;
+
+  element->SnapshotStyleVisual();
+
+  if(stylesheet)
+    {
+      XSTRING*           type_string = element->GetTypeString();
+      XSTRING*           name        = element->GetName();
+      XSTRING            emptystr;
+      XVECTOR<XSTRING*>  emptyclasses;
+
+      XSTRING&           elem_type    = type_string ? *type_string  : emptystr;
+      XSTRING&           elem_id      = name        ? *name         : emptystr;
+      XVECTOR<XSTRING*>& elem_classes = element->GetClassNames() ? *element->GetClassNames() : emptyclasses;
+
+      if(stylesheet->HasPseudoRulesFor(elem_type, elem_id, elem_classes))
+        {
+          element->SetStyleHasStateRules(true);
+        }
+    }
+
+  XVECTOR<UI_ELEMENT*>* children = element->GetComposeElements();
+  if(children)
+    {
+      for(XDWORD c=0; c<children->GetSize(); c++)
+        {
+          PrepareElementStyleState(children->Get(c));
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void UI_MANAGER::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    USERINTERFACE
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_MANAGER::Clean()
-{  
+{
   iszippedfile        = false;
   unzipfile           = NULL;  
   
@@ -6104,6 +6517,8 @@ void UI_MANAGER::Clean()
   preselect_element   = NULL;
 
   virtualkeyboard     = NULL;
+
+  stylesheet          = NULL;
 }
 
 

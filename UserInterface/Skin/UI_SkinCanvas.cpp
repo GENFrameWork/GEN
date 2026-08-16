@@ -41,10 +41,12 @@
 #include "XSleep.h"
 
 #include "GRP2DCanvas.h"
+#include "GRP2DColor.h"
 #include "GRPViewPort.h"
 #include "GRPScreen.h"
 #include "GRPBitmap.h"
 #include "GRPBitmapFile.h"
+#include "GRPFactory.h"
 
 #include "UI_Animation.h"
 #include "UI_Element.h"
@@ -284,7 +286,402 @@ static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, doub
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         static void UI_SkinCanvas_AppendRoundRectPathPerCorner(GRP2DPATH& path, double minx, double miny, double maxx, double maxy, double rTL, double rTR, double rBR, double rBL)
+* @brief      Build a rounded-rectangle outline with a possibly-different radius per corner. Corners with radius
+*             <= 0 are drawn square. Each non-zero radius is clamped to half the shorter side of the rect so
+*             two adjacent large radii never overlap into an invalid shape. Uses only MoveTo/LineTo, matching the
+*             stroke-friendly polyline convention of UI_SkinCanvas_AppendRoundRectPath so both fill and stroke
+*             paint through the same AGG code path.
+* @note       INTERNAL / FILE LOCAL. Inputs are already normalized (minx <= maxx, miny <= maxy).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  path : Path to append into.
+* @param[in]  minx : Left edge.
+* @param[in]  miny : Top edge.
+* @param[in]  maxx : Right edge.
+* @param[in]  maxy : Bottom edge.
+* @param[in]  rTL : Top-left corner radius.
+* @param[in]  rTR : Top-right corner radius.
+* @param[in]  rBR : Bottom-right corner radius.
+* @param[in]  rBL : Bottom-left corner radius.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void UI_SkinCanvas_AppendRoundRectPathPerCorner(GRP2DPATH& path, double minx, double miny, double maxx, double maxy,
+                                                       double rTL, double rTR, double rBR, double rBL)
+{
+  double w    = maxx - minx;
+  double h    = maxy - miny;
+  double half = ((w < h) ? w : h) / 2.0;
+
+  // Clamp each corner independently to keep the outline valid on narrow rectangles.
+  if(rTL < 0.0) rTL = 0.0;   if(rTL > half) rTL = half;
+  if(rTR < 0.0) rTR = 0.0;   if(rTR > half) rTR = half;
+  if(rBR < 0.0) rBR = 0.0;   if(rBR > half) rBR = half;
+  if(rBL < 0.0) rBL = 0.0;   if(rBL > half) rBL = half;
+
+  // If nothing is rounded at all, emit the plain rectangle (matches the shortcut in AppendRoundRectPath).
+  if(rTL <= 0.0 && rTR <= 0.0 && rBR <= 0.0 && rBL <= 0.0)
+    {
+      path.MoveTo(minx, miny);  path.LineTo(maxx, miny);  path.LineTo(maxx, maxy);  path.LineTo(minx, maxy);  path.Close();
+      return;
+    }
+
+  const int STEPS = 6;
+  bool      first = true;
+
+  // Traversal order (clockwise, starting at the top edge between the two top corners):
+  //   TL corner arc -> top edge -> TR arc -> right edge -> BR arc -> bottom edge -> BL arc -> left edge -> Close.
+  double cx[4] = { minx + rTL, maxx - rTR, maxx - rBR, minx + rBL };                  // corner centers: TL, TR, BR, BL
+  double cy[4] = { miny + rTL, miny + rTR, maxy - rBR, maxy - rBL };
+  double r [4] = { rTL,        rTR,        rBR,        rBL        };
+  double a0[4] = { 180.0,      270.0,        0.0,       90.0      };                  // start angle of each quarter arc
+
+  for(int c = 0; c < 4; c++)
+    {
+      if(r[c] <= 0.0)
+        {
+          // Square corner: emit the sharp corner vertex itself.
+          double vx = (c == 0) ? minx : (c == 1) ? maxx : (c == 2) ? maxx : minx;
+          double vy = (c == 0) ? miny : (c == 1) ? miny : (c == 2) ? maxy : maxy;
+          if(first) { path.MoveTo(vx, vy); first = false; }
+          else        path.LineTo(vx, vy);
+          continue;
+        }
+
+      for(int s = 0; s <= STEPS; s++)
+        {
+          double ang = (a0[c] + (90.0 * (double)s / (double)STEPS)) * (PI / 180.0);
+          double px  = cx[c] + (r[c] * cos(ang));
+          double py  = cy[c] + (r[c] * sin(ang));
+
+          if(first) { path.MoveTo(px, py); first = false; }
+          else        path.LineTo(px, py);
+        }
+    }
+
+  path.Close();
+}
+
+
+// Padding, in pixels, added around a shadow silhouette so the blur fade has room to reach zero before the
+// off-screen bitmap ends. SINGLE SOURCE OF TRUTH: both the renderer (UI_SkinCanvas_DrawSoftShadow, which sizes
+// and positions the bitmap) and the invalidation logic (UI_SKINCANVAS::PreDrawFunction, which expands the
+// element's rebuild-area) must agree on this number. If they drift apart, the outer ring of the blurred shadow
+// falls outside the saved/restored background rectangle and leaves ghost pixels that accumulate -- getting
+// progressively darker -- on every repaint.
+#define UI_SKINCANVAS_SHADOW_BLURPADDING(blur)      ((blur) * 2)
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void UI_SkinCanvas_BoxBlur32(XBYTE* pixels, int width, int height, int radius)
+* @brief      In-place 3-pass box blur over a 32-bit RGBA/BGRA pixel buffer.
+* @note       INTERNAL / FILE LOCAL. Applied 3 times, a box blur converges to a Gaussian (central limit theorem):
+*             visually indistinguishable from agg::stack_blur_rgba32 for the small radii (2-16 px) used by drop
+*             shadows on UI cards. Channels are blurred independently so byte order (RGBA vs BGRA) is irrelevant:
+*             each byte ends up in the same slot it started. Boundary handling clamps to the closest in-bounds
+*             pixel, which prevents dark fringes when the buffer padding is smaller than the blur radius.
+*             Complexity: O(passes * width * height) irrespective of radius, thanks to the sliding-window sum.
+* @ingroup    USERINTERFACE
+*
+* @param[in,out] pixels : Buffer to blur in place (width * height * 4 bytes, row-major).
+* @param[in]     width : Buffer width in pixels.
+* @param[in]     height : Buffer height in pixels.
+* @param[in]     radius : Blur radius in pixels; <=0 is a no-op.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void UI_SkinCanvas_BoxBlur32(XBYTE* pixels, int width, int height, int radius)
+{
+  if(!pixels)                     return;
+  if(radius <= 0)                 return;
+  if(width <= 0 || height <= 0)   return;
+
+  const int PASSES     = 3;
+  int       rowbytes   = width * 4;
+  int       npixels    = width * height;
+  int       windowsize = (radius * 2) + 1;
+
+  XBYTE* tmp = GEN_NEW XBYTE[npixels * 4];
+  if(!tmp) return;
+
+  for(int p = 0; p < PASSES; p++)
+    {
+      // Horizontal pass: pixels -> tmp
+      for(int y = 0; y < height; y++)
+        {
+          XBYTE* rowin  = pixels + (y * rowbytes);
+          XBYTE* rowout = tmp    + (y * rowbytes);
+
+          int sums[4] = { 0, 0, 0, 0 };
+
+          for(int i = -radius; i <= radius; i++)
+            {
+              int xi = (i < 0) ? 0 : ((i >= width) ? (width - 1) : i);
+              int b  = xi * 4;
+              sums[0] += rowin[b + 0];
+              sums[1] += rowin[b + 1];
+              sums[2] += rowin[b + 2];
+              sums[3] += rowin[b + 3];
+            }
+
+          for(int x = 0; x < width; x++)
+            {
+              int bo = x * 4;
+              rowout[bo + 0] = (XBYTE)(sums[0] / windowsize);
+              rowout[bo + 1] = (XBYTE)(sums[1] / windowsize);
+              rowout[bo + 2] = (XBYTE)(sums[2] / windowsize);
+              rowout[bo + 3] = (XBYTE)(sums[3] / windowsize);
+
+              int rm  = x - radius;
+              int add = x + radius + 1;
+              int rc  = (rm  < 0) ? 0 : ((rm  >= width) ? (width - 1) : rm );
+              int ac  = (add < 0) ? 0 : ((add >= width) ? (width - 1) : add);
+
+              int brm = rc * 4;
+              int bad = ac * 4;
+              sums[0] += rowin[bad + 0] - rowin[brm + 0];
+              sums[1] += rowin[bad + 1] - rowin[brm + 1];
+              sums[2] += rowin[bad + 2] - rowin[brm + 2];
+              sums[3] += rowin[bad + 3] - rowin[brm + 3];
+            }
+        }
+
+      // Vertical pass: tmp -> pixels
+      for(int x = 0; x < width; x++)
+        {
+          int sums[4] = { 0, 0, 0, 0 };
+
+          for(int i = -radius; i <= radius; i++)
+            {
+              int yi = (i < 0) ? 0 : ((i >= height) ? (height - 1) : i);
+              int b  = ((yi * width) + x) * 4;
+              sums[0] += tmp[b + 0];
+              sums[1] += tmp[b + 1];
+              sums[2] += tmp[b + 2];
+              sums[3] += tmp[b + 3];
+            }
+
+          for(int y = 0; y < height; y++)
+            {
+              int bo = ((y * width) + x) * 4;
+              pixels[bo + 0] = (XBYTE)(sums[0] / windowsize);
+              pixels[bo + 1] = (XBYTE)(sums[1] / windowsize);
+              pixels[bo + 2] = (XBYTE)(sums[2] / windowsize);
+              pixels[bo + 3] = (XBYTE)(sums[3] / windowsize);
+
+              int rm  = y - radius;
+              int add = y + radius + 1;
+              int rc  = (rm  < 0) ? 0 : ((rm  >= height) ? (height - 1) : rm );
+              int ac  = (add < 0) ? 0 : ((add >= height) ? (height - 1) : add);
+
+              int brm = ((rc * width) + x) * 4;
+              int bad = ((ac * width) + x) * 4;
+              sums[0] += tmp[bad + 0] - tmp[brm + 0];
+              sums[1] += tmp[bad + 1] - tmp[brm + 1];
+              sums[2] += tmp[bad + 2] - tmp[brm + 2];
+              sums[3] += tmp[bad + 3] - tmp[brm + 3];
+            }
+        }
+    }
+
+  GEN_DELETE_ARRAY tmp;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool UI_SkinCanvas_RoundedRectInside(int px, int py, int w, int h, double rTL, double rTR, double rBR, double rBL)
+* @brief      Point-in-rounded-rect test for the four per-corner radius variant.
+* @note       INTERNAL / FILE LOCAL. Rectangle spans [0, w) x [0, h). Corners with radius 0 draw square.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  px : Pixel X (relative to rectangle top-left).
+* @param[in]  py : Pixel Y (relative to rectangle top-left).
+* @param[in]  w : Rectangle width.
+* @param[in]  h : Rectangle height.
+* @param[in]  rTL : Top-left radius.
+* @param[in]  rTR : Top-right radius.
+* @param[in]  rBR : Bottom-right radius.
+* @param[in]  rBL : Bottom-left radius.
+*
+* @return     bool : true iff the pixel is inside the shape.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool UI_SkinCanvas_RoundedRectInside(int px, int py, int w, int h, double rTL, double rTR, double rBR, double rBL)
+{
+  if(px < 0 || px >= w || py < 0 || py >= h) return false;
+
+  // Which corner region does (px, py) fall into? A pixel not inside any corner square is always inside the shape.
+  bool in_TL = (px <  (int)rTL) && (py <  (int)rTL);
+  bool in_TR = (px >= (w - (int)rTR)) && (py <  (int)rTR);
+  bool in_BR = (px >= (w - (int)rBR)) && (py >= (h - (int)rBR));
+  bool in_BL = (px <  (int)rBL) && (py >= (h - (int)rBL));
+
+  if(!in_TL && !in_TR && !in_BR && !in_BL) return true;
+
+  double cx = 0.0, cy = 0.0, r = 0.0;
+
+  if     (in_TL) { cx = rTL;      cy = rTL;      r = rTL; }
+  else if(in_TR) { cx = w - rTR;  cy = rTR;      r = rTR; }
+  else if(in_BR) { cx = w - rBR;  cy = h - rBR;  r = rBR; }
+  else           { cx = rBL;      cy = h - rBL;  r = rBL; }
+
+  if(r <= 0.0) return true;    // corner declared square: inside
+
+  double dx = ((double)px + 0.5) - cx;
+  double dy = ((double)py + 0.5) - cy;
+
+  return (dx * dx + dy * dy) <= (r * r);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, double miny, double maxx, double maxy, double rTL, double rTR, double rBR, double rBL, UI_COLOR* shadow_color, int blur_radius)
+* @brief      Draw a soft-edged rounded-rect drop shadow. Rasterises the silhouette into an off-screen RGBA
+*             bitmap padded to hold the blur fade, runs UI_SkinCanvas_BoxBlur32 on it, then composites via
+*             the canvas's PutBitmapAlpha. Falls back cleanly on unsupported canvas modes (returns false so
+*             the caller can draw a hard shadow instead).
+* @note       INTERNAL / FILE LOCAL.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  canvas : Target canvas.
+* @param[in]  minx : Shadow rect left edge (screen coords).
+* @param[in]  miny : Shadow rect top edge.
+* @param[in]  maxx : Shadow rect right edge.
+* @param[in]  maxy : Shadow rect bottom edge.
+* @param[in]  rTL : Top-left corner radius.
+* @param[in]  rTR : Top-right corner radius.
+* @param[in]  rBR : Bottom-right corner radius.
+* @param[in]  rBL : Bottom-left corner radius.
+* @param[in]  shadow_color : Shadow tint (RGB used everywhere; A used inside the silhouette).
+* @param[in]  blur_radius : Blur radius in pixels; must be > 0.
+*
+* @return     bool : true on success; false when the canvas mode is not 32-bit RGBA/BGRA (caller draws hard).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, double miny, double maxx, double maxy,
+                                          double rTL, double rTR, double rBR, double rBL,
+                                          UI_COLOR* shadow_color, int blur_radius)
+{
+  if(!canvas || !shadow_color || blur_radius <= 0) return false;
+
+  int shape_w = (int)(maxx - minx);
+  int shape_h = (int)(maxy - miny);
+  if(shape_w <= 0 || shape_h <= 0) return false;
+
+  // Pad the bitmap on each side so the fade at the shape's border has room to fully dissipate before the
+  // buffer ends. Padding tighter than the blur radius would leave a visible hard cut. The very same formula
+  // drives the rebuild-area expansion in PreDrawFunction -- keep them in sync via the shared macro.
+  int pad  = UI_SKINCANVAS_SHADOW_BLURPADDING(blur_radius);
+  int bw   = shape_w + (2 * pad);
+  int bh   = shape_h + (2 * pad);
+
+  // Always create the off-screen bitmap in RGBA_8888. This decouples the shadow pipeline from the canvas
+  // native pixel format: our per-pixel writes below use fixed R=0/G=1/B=2/A=3 offsets, and the composite
+  // step at the end goes through canvas->PutBlendPixel with a GRP2DCOLOR_RGBA8 -- the canvas layer handles
+  // whatever mode conversion is needed to write into 24-bit RGB, 16-bit RGB565 or another 32-bit backend.
+  GRPBITMAP* bitmap = GRPFACTORY::GetInstance().CreateBitmap(bw, bh, GRPPROPERTYMODE_32_RGBA_8888);
+  if(!bitmap)         return false;
+  if(!bitmap->IsValid())
+    {
+      GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
+      return false;
+    }
+
+  XBYTE* buf = bitmap->GetBuffer();
+  if(!buf)
+    {
+      GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
+      return false;
+    }
+
+  // Fixed RGBA_8888 layout: R, G, B, A per pixel.
+  const int r_off = 0;
+  const int g_off = 1;
+  const int b_off = 2;
+  const int a_off = 3;
+
+  XBYTE sr = (XBYTE)shadow_color->GetRed();
+  XBYTE sg = (XBYTE)shadow_color->GetGreen();
+  XBYTE sb = (XBYTE)shadow_color->GetBlue();
+  XBYTE sa = (XBYTE)shadow_color->GetAlpha();
+
+  // First pass: fill every pixel with the shadow RGB but alpha 0 (transparent shadow colour). This way the
+  // subsequent blur averages RGB against itself (no drift) and only alpha fades from full-shadow to 0 at the
+  // silhouette boundary -- the standard trick for correct soft-shadow colour at the edges.
+  for(int y = 0; y < bh; y++)
+    {
+      XBYTE* row = buf + (y * bw * 4);
+      for(int x = 0; x < bw; x++)
+        {
+          int off = x * 4;
+          row[off + r_off] = sr;
+          row[off + g_off] = sg;
+          row[off + b_off] = sb;
+          row[off + a_off] = 0;
+        }
+    }
+
+  // Second pass: set alpha to sa inside the rounded rectangle silhouette (positioned at (pad, pad) relative
+  // to the bitmap origin). Everything outside stays transparent.
+  for(int y = 0; y < shape_h; y++)
+    {
+      XBYTE* row = buf + ((y + pad) * bw * 4);
+      for(int x = 0; x < shape_w; x++)
+        {
+          if(UI_SkinCanvas_RoundedRectInside(x, y, shape_w, shape_h, rTL, rTR, rBR, rBL))
+            {
+              row[((x + pad) * 4) + a_off] = sa;
+            }
+        }
+    }
+
+  UI_SkinCanvas_BoxBlur32(buf, bw, bh, blur_radius);
+
+  // One-shot self-check: the first time a soft shadow renders anywhere in the process, log the parameters
+  // so the console confirms the soft path was reached and shows the effective bitmap / blur / colour. Any
+  // subsequent invocation is silent so the log stays clean.
+  static bool once = true;
+  if(once)
+    {
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[UI Draw] soft shadow: bitmap=%dx%d blur=%d shadow_alpha=%d"),
+                        bw, bh, blur_radius, (int)shadow_color->GetAlpha());
+      once = false;
+    }
+
+  // Composite the blurred bitmap onto the canvas. We deliberately do NOT use canvas->PutBitmapAlpha because
+  // that helper passes the source pixel's alpha as agg's cover_type, which then multiplies the source alpha
+  // AGAIN internally -- effectively squaring the alpha and crushing every semi-transparent edge to zero.
+  // The blurred soft edges of a shadow are almost entirely in that low-alpha range, so PutBitmapAlpha would
+  // reduce the shadow to only its most opaque central band, producing the same hard-edged silhouette we are
+  // trying to escape. Instead we iterate and call PutBlendPixel with cover=255 (full coverage), so the
+  // compositing weight is exactly the pixel's own alpha and the soft gradient survives intact.
+  double dest_x = minx - (double)pad;
+  double dest_y = miny - (double)pad;
+
+  for(int y = 0; y < bh; y++)
+    {
+      XBYTE* row = buf + (y * bw * 4);
+      for(int x = 0; x < bw; x++)
+        {
+          int off = x * 4;
+          XBYTE a = row[off + a_off];
+          if(a == 0) continue;
+
+          GRP2DCOLOR_RGBA8 c(row[off + r_off], row[off + g_off], row[off + b_off], a);
+          canvas->PutBlendPixel(dest_x + (double)x, dest_y + (double)y, &c, 255.0);
+        }
+    }
+
+  GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         static void UI_SkinCanvas_ProgressBar_DrawGradientRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius, GRP2DGRADIENTSTOP* stops, double gx1, double gy1, double gx2, double gy2)
 * @brief      Fills a (optionally rounded) rect with a linear gradient along (gx1,gy1)->(gx2,gy2).
 * @note       INTERNAL / FILE LOCAL. Used only when gradientcolor is set; the solid DrawRect path is left untouched.
@@ -1045,18 +1442,56 @@ bool UI_SKINCANVAS::CalculePosition(UI_ELEMENT* element, double fatherwidth, dou
         }
     } 
 
-  x_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT);  
+  x_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT);
   x_position -= element->GetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT);
 
   if(element->GetFather())
     {
-      y_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_UP);          
-      y_position -= element->GetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN);      
+      y_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_UP);
+      y_position -= element->GetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN);
     }
    else
     {
-      y_position -= element->GetMargin(UI_ELEMENT_TYPE_ALIGN_UP);          
-      y_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN);      
+      y_position -= element->GetMargin(UI_ELEMENT_TYPE_ALIGN_UP);
+      y_position += element->GetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN);
+    }
+
+  // --- Step 4: father padding delta -----------------------------------------------------------------------------
+  // Apply the father's padding as a delta on top of the alignment already resolved above. The delta depends on
+  // WHICH alignment / numeric mode the child uses, because padding shifts the reference edge differently for
+  // each case (LEFT-aligned or numeric-x shifts right by pad_L; RIGHT-aligned shifts left by pad_R; CENTER by
+  // half the padding differential). Zero padding leaves this a full no-op, preserving the pre-step-4 geometry
+  // of every layout that does not set the property.
+  if(element->GetFather())
+    {
+      UI_ELEMENT* father = element->GetFather();
+
+      double pad_L = father->GetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT);
+      double pad_R = father->GetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT);
+      double pad_T = father->GetPadding(UI_ELEMENT_TYPE_ALIGN_UP);
+      double pad_B = father->GetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN);
+
+      if(pad_L != 0.0 || pad_R != 0.0 || pad_T != 0.0 || pad_B != 0.0)
+        {
+          switch((int)element->GetBoundaryLine()->x)
+            {
+              case UI_ELEMENT_TYPE_ALIGN_LEFT   : x_position += pad_L;                                     break;
+              case UI_ELEMENT_TYPE_ALIGN_RIGHT  : x_position -= pad_R;                                     break;
+              case UI_ELEMENT_TYPE_ALIGN_CENTER : x_position += (int)round((pad_L - pad_R) / 2.0);         break;
+                                        default : x_position += pad_L;                                     break;
+            }
+
+          // Y is bottom-anchored in GEN's internal storage: increasing y moves DOWN on screen. Padding shifts
+          // the interior origin the same way it does in CSS, but the sign flips for numeric / DOWN cases
+          // because they measure "distance from the bottom edge".
+          switch((int)element->GetBoundaryLine()->y)
+            {
+              case UI_ELEMENT_TYPE_ALIGN_UP     : y_position += pad_T;                                     break;
+              case UI_ELEMENT_TYPE_ALIGN_DOWN   : y_position -= pad_B;                                     break;
+              case UI_ELEMENT_TYPE_ALIGN_CENTER : y_position += (int)round((pad_T - pad_B) / 2.0);         break;
+                                        default : y_position -= pad_B;                                     break;
+            }
+        }
     }
 
   element->SetXPosition(x_position);
@@ -1654,28 +2089,64 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Form(UI_ELEMENT* element, bool adjusts
 
   double fatherwidth  = 0.0f;
   double fatherheight = 0.0f;
-  
+
   GetFatherSize(element, fatherwidth, fatherheight);
+
+  // --- Custom window chrome: the caption bar spans the whole window, always ---------------------------------------
+  //
+  // A form carrying role="caption" is the background bar of a GEN custom window chrome (see GRPSCREEN's
+  // CFG Chromes). Its width is not a design decision of the layout: it IS the width of the window the chrome
+  // is applied to. Resolving it here -- instead of making every chrome .xml hardcode a number -- is what lets
+  // the very same chrome bundle be reused by applications of different sizes.
+  //
+  // Without this, a caption authored with no "width" attribute falls into the generic AUTO/0 case below, which
+  // shrink-wraps the form around its own children. The bar then collapses to roughly the width of the title
+  // text, and every child positioned with xpos="right" (minimize / maximize / close) resolves against that
+  // collapsed width and lands on top of the icon -- the "only the caption icon shows" symptom.
+  //
+  // The value used is the FULL canvas width, not GetFatherSize()'s canvas width - 1: that -1 is the generic
+  // "maximum valid coordinate" convention for width="max", and one pixel of bare canvas at the right end of
+  // the caption bar is visible. A caption nested inside another element (unusual, but legal) simply takes its
+  // father's width. An explicitly authored numeric width still wins: it is not touched here.
+  if(element->GetChromeRole() == UI_ELEMENT_CHROMEROLE_CAPTION)
+    {
+      switch((int)element->GetBoundaryLine()->width)
+        {
+          case UI_ELEMENT_TYPE_ALIGN_AUTO :
+          case UI_ELEMENT_TYPE_ALIGN_MAX  :
+          case                          0 : { double captionwidth = fatherwidth;
+
+                                              if(!element->GetFather())
+                                                {
+                                                  GRP2DCANVAS* canvas = GetCanvas();
+                                                  if(canvas) captionwidth = (double)canvas->GetWidth();
+                                                }
+
+                                              element->GetBoundaryLine()->width = captionwidth;
+                                            }
+                                            break;
+        }
+    }
 
   switch((int)element->GetBoundaryLine()->width)
     {
-      case UI_ELEMENT_TYPE_ALIGN_AUTO	  :		 		
-      case                           0  : { double maximgwidth = 0.0f; 
+      case UI_ELEMENT_TYPE_ALIGN_AUTO	  :
+      case                           0  : { double maximgwidth = 0.0f;
 
                                             for(XDWORD c=0; c<element_form->GetComposeElements()->GetSize(); c++)
                                               {
                                                UI_ELEMENT* subelement = (UI_ELEMENT*)element->GetComposeElements()->Get(c);
-                                               if(subelement) maximgwidth = __MAX((GetPositionWithoutDefine(subelement->GetBoundaryLine()->x) + subelement->GetBoundaryLine()->width), maximgwidth);                                                    
+                                               if(subelement) maximgwidth = __MAX((GetPositionWithoutDefine(subelement->GetBoundaryLine()->x) + subelement->GetBoundaryLine()->width), maximgwidth);
                                               }
 
                                             element->GetBoundaryLine()->width = maximgwidth;
                                           }
                                           break;
 
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = fatherwidth;                                          
-                                          break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = fatherwidth;
+                                          break;
     }
-   
+
   switch((int)element->GetBoundaryLine()->height)
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO	  :		 		
@@ -2848,36 +3319,168 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
   
   PreDrawFunction(element, canvas, clip_rect, x_position, y_position);
 
-  if(element->MustReDraw()) 
+  if(element->MustReDraw())
     {
-      GRP2DCOLOR_RGBA8  color(element_form->GetColor()->GetRed(),
-                              element_form->GetColor()->GetGreen(),
-                              element_form->GetColor()->GetBlue(),
-                              element_form->GetColor()->GetAlpha());
+      // Element geometry (screen coords, y-down). Shared by the shadow layer (step 7) and the fill+stroke
+      // layer (steps 4-5-6) below.
+      double  vr_minx = element_form->GetVisibleRect()->x;
+      double  vr_miny = element_form->GetVisibleRect()->GetTop();
+      double  vr_maxx = element_form->GetVisibleRect()->x + element_form->GetVisibleRect()->width;
+      double  vr_maxy = element_form->GetVisibleRect()->y;
 
-      GRP2DCOLOR_RGBA8  linecolor(element_form->GetLineColor()->GetRed(),
-                                  element_form->GetLineColor()->GetGreen(),
-                                  element_form->GetLineColor()->GetBlue(),
-                                  element_form->GetLineColor()->GetAlpha());
+      // Step 7-8: box-shadow. Drawn BEFORE the fill so the form paints on top of it. When blur > 0 the skin
+      // rasterises the silhouette into an off-screen RGBA bitmap, applies a 3-pass box blur (Gaussian
+      // approximation, visually equivalent to agg::stack_blur_rgba32 for typical UI radii) and composites
+      // via PutBitmapAlpha. Falls back to the hard-edged variant when the canvas mode is not 32-bit
+      // RGBA/BGRA, when blur is 0, or when the off-screen allocation fails. The rebuild-area was already
+      // expanded in PreDrawFunction to include the blurred footprint so save/restore is safe.
+      if(element_form->IsBoxShadowSet())
+        {
+          double sh_x    = element_form->GetShadowOffsetX();
+          double sh_y    = element_form->GetShadowOffsetY();
+          double sh_blur = element_form->GetShadowBlur();
 
-      
+          double sh_minx = vr_minx + sh_x;
+          double sh_miny = vr_miny + sh_y;
+          double sh_maxx = vr_maxx + sh_x;
+          double sh_maxy = vr_maxy + sh_y;
+
+          // Resolve corner radii once: per-corner if any is authored, else uniform roundrect on all four.
+          double rTL, rTR, rBR, rBL;
+          if(element_form->HasAnyPerCornerRadius())
+            {
+              rTL = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_TL);
+              rTR = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_TR);
+              rBR = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BR);
+              rBL = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BL);
+            }
+           else
+            {
+              double r = (double)element_form->GetRoundRect();
+              rTL = rTR = rBR = rBL = r;
+            }
+
+          bool soft_ok = false;
+          if(sh_blur > 0.0)
+            {
+              soft_ok = UI_SkinCanvas_DrawSoftShadow(canvas, sh_minx, sh_miny, sh_maxx, sh_maxy,
+                                                    rTL, rTR, rBR, rBL,
+                                                    element_form->GetShadowColor(), (int)sh_blur);
+            }
+
+          if(!soft_ok)
+            {
+              // Hard shadow fallback (no blur, or canvas mode not 32-bit).
+              GRP2DCOLOR_RGBA8  shadow_col(element_form->GetShadowColor()->GetRed(),
+                                           element_form->GetShadowColor()->GetGreen(),
+                                           element_form->GetShadowColor()->GetBlue(),
+                                           element_form->GetShadowColor()->GetAlpha());
+
+              GRP2DCOLOR_RGBA8  shadow_line_none(0, 0, 0, 0);
+
+              canvas->SetFillColor(&shadow_col);
+              canvas->SetLineColor(&shadow_line_none);
+              canvas->SetLineWidth(1.0f);
+
+              if(element_form->HasAnyPerCornerRadius())
+                {
+                  GRP2DPATH shpath;
+                  UI_SkinCanvas_AppendRoundRectPathPerCorner(shpath, sh_minx, sh_miny, sh_maxx, sh_maxy, rTL, rTR, rBR, rBL);
+                  canvas->Path(shpath, true);
+                }
+               else if(element_form->GetRoundRect())
+                {
+                  canvas->RoundRect(sh_minx, sh_maxy, sh_maxx, sh_miny, element_form->GetRoundRect(), true);
+                }
+               else
+                {
+                  canvas->Rectangle(sh_minx, sh_maxy, sh_maxx, sh_miny, true);
+                }
+            }
+        }
+
+      // Step 6: CSS-natural fill. Prefer background_color when authored (via "bckgrdcolor" or the CSS-standard
+      // alias "background-color"); fall back to the historical "color" property for retro-compat with layouts
+      // that predate this unification. A one-time XTRACE warning per fallback element helps authors migrate.
+      UI_COLOR* fillsrc = element_form->IsBackgroundColorSet() ? element_form->GetBackgroundColor()
+                                                               : element_form->GetColor();
+
+      if(!element_form->IsBackgroundColorSet() && !element_form->GetLegacyFillWarningEmitted())
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[UI Draw] Form [%s]: fill via legacy \"color\" property; migrate to \"bckgrdcolor\" (or CSS \"background-color\") for CSS-natural semantics"),
+                            element_form->GetName() ? element_form->GetName()->Get() : __L("(unnamed)"));
+          element_form->SetLegacyFillWarningEmitted(true);
+        }
+
+      GRP2DCOLOR_RGBA8  color(fillsrc->GetRed(),
+                              fillsrc->GetGreen(),
+                              fillsrc->GetBlue(),
+                              fillsrc->GetAlpha());
+
+      // Step 5: prefer base-level border-color if authored, otherwise fall back to the historical per-type
+      // linecolor member so pre-step-5 layouts render unchanged.
+      UI_COLOR* bcsrc = element_form->IsBorderColorSet() ? element_form->GetBorderColor()
+                                                         : element_form->GetLineColor();
+
+      GRP2DCOLOR_RGBA8  linecolor(bcsrc->GetRed(),
+                                  bcsrc->GetGreen(),
+                                  bcsrc->GetBlue(),
+                                  bcsrc->GetAlpha());
+
       canvas->SetLineColor(&linecolor);
       canvas->SetFillColor(&color);
 
-      canvas->SetLineWidth(1.0f);
+      // Step 4: honour element-configured border-width. -1 = default (historical 1.0f for containers), 0 = no
+      // stroke drawn at all (fill-only), >0 = author-specified thickness. AGG's RoundRect / Rectangle draw a
+      // stroke along with the fill even when linewidth is 0, so the "no stroke" case is handled by pushing a
+      // fully transparent line color instead of relying on width 0.
+      double bw = element_form->GetBorderWidth();
 
-      if(element_form->GetRoundRect())
-        {          
-          canvas->RoundRect(element_form->GetVisibleRect()->x, 
+      if(bw == 0.0)
+        {
+          GRP2DCOLOR_RGBA8  linecolor_none(0, 0, 0, 0);
+          canvas->SetLineColor(&linecolor_none);
+          canvas->SetLineWidth(1.0f);
+        }
+       else
+        {
+          canvas->SetLineWidth((bw < 0.0) ? 1.0f : bw);
+        }
+
+      // Step 5: per-corner radius. When any corner carries an authored radius, build a custom path and draw
+      // via canvas->Path so each corner arcs with its own radius. Otherwise keep the classic single-radius
+      // canvas->RoundRect call, which is the fastest path and unchanged from step 4.
+      //
+      // NOTE: canvas->Path fills OR strokes depending on the boolean argument (this is the same convention
+      // used by the ProgressBar gradient-fill path at line 405 of this file). RoundRect, in contrast, does
+      // both in a single call. To match RoundRect's behaviour we issue two Path calls, and honour the same
+      // "border-width == 0 -> suppress stroke by pushing a transparent line colour" contract established
+      // above for the RoundRect branch.
+      if(element_form->HasAnyPerCornerRadius())
+        {
+          double rTL = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_TL);
+          double rTR = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_TR);
+          double rBR = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BR);
+          double rBL = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BL);
+
+          GRP2DPATH path;
+          UI_SkinCanvas_AppendRoundRectPathPerCorner(path, vr_minx, vr_miny, vr_maxx, vr_maxy, rTL, rTR, rBR, rBL);
+
+          canvas->Path(path, true);       // fill
+          canvas->Path(path, false);      // stroke (transparent line colour when border-width == 0)
+        }
+       else if(element_form->GetRoundRect())
+        {
+          canvas->RoundRect(element_form->GetVisibleRect()->x,
                             element_form->GetVisibleRect()->y,
-                            element_form->GetVisibleRect()->x + element_form->GetVisibleRect()->width, 
+                            element_form->GetVisibleRect()->x + element_form->GetVisibleRect()->width,
                             element_form->GetVisibleRect()->GetTop(), element_form->GetRoundRect(), true);
         }
        else
-        {        
+        {
           canvas->Rectangle(element_form->GetVisibleRect()->x,
                             element_form->GetVisibleRect()->y,
-                            element_form->GetVisibleRect()->x + element_form->GetVisibleRect()->width, 
+                            element_form->GetVisibleRect()->x + element_form->GetVisibleRect()->width,
                             element_form->GetVisibleRect()->GetTop(),  true);
         }
     }
@@ -3754,10 +4357,39 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XR
                                                     area_left, area_right, area_top, area_bottom);
         }
 
-      CreateRebuildArea(area_left - edge, 
-                        area_top  - edge, 
-                        (area_right  - area_left) + (edge * 2),
-                        (area_bottom - area_top ) + (edge * 2), element);                    
+      // Step 7: expand the rebuild-area to include the box-shadow footprint, so save/restore cycles at
+      // repaint time do not leave ghost pixels where the shadow was drawn OUTSIDE the element's own rect.
+      // Positive offset extends the corresponding far side; negative extends the near side. Blur, when
+      // rendered in a follow-up rebanada, will add further symmetric expansion on all sides -- we already
+      // account for it below so the rebuild-area is right on the day blur ships.
+      double  shadow_L = 0.0, shadow_R = 0.0, shadow_T = 0.0, shadow_B = 0.0;
+      if(element->IsBoxShadowSet())
+        {
+          double sx = element->GetShadowOffsetX();
+          double sy = element->GetShadowOffsetY();
+          double sb = element->GetShadowBlur();
+
+          if(sx >= 0.0) shadow_R = sx; else shadow_L = -sx;
+          if(sy >= 0.0) shadow_B = sy; else shadow_T = -sy;
+
+          if(sb > 0.0)
+            {
+              // Must match the off-screen bitmap padding used by UI_SkinCanvas_DrawSoftShadow exactly: the
+              // blurred bitmap is composited from (shape - pad) to (shape + pad), so an expansion of only
+              // `blur` would leave the outer ring of the fade outside the rebuild-area. Those pixels would
+              // never be restored, so each repaint would blend a new shadow on top of the previous one and
+              // the halo would darken frame after frame.
+              double pad = (double)UI_SKINCANVAS_SHADOW_BLURPADDING(sb);
+
+              shadow_L += pad; shadow_R += pad;
+              shadow_T += pad; shadow_B += pad;
+            }
+        }
+
+      CreateRebuildArea(area_left - edge - shadow_L,
+                        area_top  - edge - shadow_T,
+                        (area_right  - area_left) + (edge * 2) + shadow_L + shadow_R,
+                        (area_bottom - area_top ) + (edge * 2) + shadow_T + shadow_B, element);
     }
 
   UI_PROPERTY_SCROLLEABLE* scrolleable = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(element);

@@ -361,6 +361,19 @@ bool GRP2DCANVAS::Buffer_Create()
 {
   buffersize = (width * height * GetBytesperPixel());
   buffer     = GEN_NEW XBYTE[buffersize];
+  if(!buffer)
+    {
+      return false;
+    }
+
+  // A freshly allocated buffer holds whatever the heap left in it. Nothing in the engine guarantees that
+  // every single pixel is written before the first Update(): repainting is driven by rebuild areas, so any
+  // region that no layout actually covers keeps showing the raw memory as garbage. The strip a custom
+  // window chrome paints over with a semi-transparent caption is exactly such a region, which is why the
+  // garbage used to be visible along the top of the window on the first frames. It is worse than a cosmetic
+  // one-off: the FIRST rebuild area created over an uncovered region captures that garbage as its saved
+  // "background" and restores it on every later repaint. Start from a known, fully transparent surface.
+  Buffer_SetToZero();
 
   return true;
 }

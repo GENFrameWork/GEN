@@ -1194,6 +1194,50 @@ bool XFILEXML::EncodeAllLines(bool istabulatedline)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool XFILEXML_IsCommentOpen(XSTRING& string)
+* @brief      True when the accumulated text is exactly the comment opening delimiter.
+* @note       INTERNAL / FILE LOCAL
+* @ingroup    XUTILS
+*
+* @param[in]  string : Text accumulated so far by DecodeAllLines().
+*
+* @return     bool : true if the buffer is the four characters that open a comment.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool XFILEXML_IsCommentOpen(XSTRING& string)
+{
+  if(string.GetSize() != 4) return false;
+
+  return (!string.Compare(__L("<!--"))) ? true : false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool XFILEXML_IsCommentClose(XSTRING& string)
+* @brief      True when the accumulated text already ends with the comment closing delimiter.
+* @note       INTERNAL / FILE LOCAL
+* @ingroup    XUTILS
+*
+* @param[in]  string : Text accumulated so far by DecodeAllLines().
+*
+* @return     bool : true if the buffer ends with the three characters that close a comment.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool XFILEXML_IsCommentClose(XSTRING& string)
+{
+  XDWORD size = string.GetSize();
+
+  if(size < 7) return false;                                            // "<!---->" is the shortest legal comment
+
+  return ((string[(int)size-3] == __C('-')) &&
+          (string[(int)size-2] == __C('-')) &&
+          (string[(int)size-1] == __C('>'))) ? true : false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XFILEXML::DecodeAllLines()
 * @brief      Decode all lines
@@ -1210,6 +1254,7 @@ bool XFILEXML::DecodeAllLines()
   XSTRING*  stringml;
   bool      quote      =  false;
   bool      cdata      =  false;
+  bool      comment    =  false;
   int       c          =  0;
 
   string.Empty();
@@ -1222,6 +1267,29 @@ bool XFILEXML::DecodeAllLines()
         {
           XCHAR letter[2] = { 0, 0 };
           letter[0] = (*stringml)[d];
+
+          // ----------------------------------------------------------------------------------------------------
+          // Inside a comment nothing is markup until the closing "-->": a quote must not flip the quote state and
+          // '<' / '>' must not open or close an element. Comments therefore span as many lines as needed and may
+          // legally contain angle brackets, which is what documenting markup inside a layout file requires.
+          //
+          // Without this branch the tokenizer flushes on the first '>' it meets inside the comment and, worse, a
+          // '<' in the comment text starts a brand new element that is never closed, so every element that
+          // follows is silently re-parented under that phantom tag and the document is effectively lost.
+          // ----------------------------------------------------------------------------------------------------
+          if(comment)
+            {
+              string += letter;
+
+              if(XFILEXML_IsCommentClose(string))
+                {
+                  DecodeLine(string,true);                              // typed as COMMENT by DecodeLine()
+                  string.Empty();
+                  comment = false;
+                }
+
+              continue;
+            }
 
           if((*stringml)[d]==__C('\"')) quote=!quote;
 
@@ -1253,6 +1321,10 @@ bool XFILEXML::DecodeAllLines()
                 }
                else string += letter;
             }
+
+          // A comment opens only outside CDATA. Checked after the append so the four delimiter characters are
+          // already in the buffer; "<!DOCTYPE" and "<![CDATA[" differ by their third character and are unaffected.
+          if((!cdata) && XFILEXML_IsCommentOpen(string)) comment = true;
         }
 
       c++;

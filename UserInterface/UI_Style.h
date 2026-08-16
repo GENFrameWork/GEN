@@ -41,6 +41,8 @@
 
 
 class XFILEXMLELEMENT;
+class UI_ELEMENT;
+class UI_STYLESHEET;
 
 
 class UI_STYLEPROPERTY
@@ -93,7 +95,12 @@ class UI_STYLE
 
     // --- Front-ends (each one fills the same neutral bag) ---------------------------------------------------------
     bool                            FillFromXMLElement          (XFILEXMLELEMENT* node);    // current XML format
-    // bool                         FillFromCSSDeclarations     (...);                      // future HTML/CSS front-end
+
+    // CSS front-end. Applies every matching rule from `sheet` to this bag using the element's identity
+    // (type_string / name / class list). Existing keys are overwritten by matches (CSS-wins semantics), so
+    // the caller pre-fills from XML first and then calls this to layer the stylesheet on top. Returns true
+    // if at least one rule matched. Passing a NULL sheet is a valid no-op that returns false.
+    bool                            FillFromCSSDeclarations     (UI_STYLESHEET* sheet, UI_ELEMENT* element);
 
   private:
 
