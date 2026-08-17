@@ -318,7 +318,52 @@ bool GRPBLITGLES::Create(GRPSCREEN* screen)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool GRPBLITGLES::PresentBlankFrame()
+* @brief      Clears the surface to the configured clear colour (see Create()'s glClearColor -- opaque black
+*             unless usealpha) and presents it, WITHOUT drawing the canvas texture/quad.
+* @note       Create() sets up the EGL surface and the GL clear colour but never itself clears or swaps: the
+*             surface's initial content is therefore whatever the driver happens to leave in a freshly
+*             allocated buffer -- undefined, and on several drivers visibly so (a scatter of stray coloured
+*             pixels, not a clean colour). Nothing is wrong with that BY ITSELF, since the normal Update(canvas)
+*             path always clears before it draws -- except the platform Create_Window() that owns this blitter
+*             maps the native window to the desktop BEFORE this object exists at all, and the very first
+*             Update(canvas) call only happens once the application's main loop reaches its first draw tick.
+*             Everything the OS/compositor paints in that gap -- which can span several frames-worth of wall
+*             clock time -- shows this undefined content, which is exactly the stray-pixel "garbage strip" a
+*             custom window chrome's caption (the one thing drawn at the very top, right where a resize/DPI
+*             related discrepancy would be most visible) makes so obvious.
+*             Calling this once, right after Create() succeeds and BEFORE the platform code that owns this
+*             blitter makes the window visible, guarantees the surface holds a clean, known colour for every
+*             frame the OS could possibly display before GEN's own first real Update(canvas). Called twice by
+*             the caller (once per back buffer of the common double-buffered case) so neither buffer of the
+*             swap chain is left holding undefined content.
+* @ingroup    GRAPHIC
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPBLITGLES::PresentBlankFrame()
+{
+  if(!eglctx) return false;
+
+  if(!eglctx->MakeCurrent()) return false;
+
+  int vpw = (screen && (screen->GetWidth()  > 0)) ? (int)screen->GetWidth()  : texw;
+  int vph = (screen && (screen->GetHeight() > 0)) ? (int)screen->GetHeight() : texh;
+
+  if(vpw <= 0) vpw = 1;
+  if(vph <= 0) vph = 1;
+
+  glViewport(0, 0, vpw, vph);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  return eglctx->SwapBuffers();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool GRPBLITGLES::Resize(int width, int height)
 * @brief      resize
 * @ingroup    GRAPHIC

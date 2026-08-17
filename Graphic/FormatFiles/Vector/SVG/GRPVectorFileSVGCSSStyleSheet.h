@@ -59,7 +59,7 @@ class GRPVECTORFILESVGCSSSTYLESHEET
     bool                            Add                                (XCHAR* classname, XCHAR* declarations);
 
     bool                            CollectStyleElements               (XFILEXMLELEMENT* element);       // recursive
-    bool                            ParseStyleSheetText                (XSTRING& text);                  // ".fil0{fill:white} .fil1{fill:black;fill-rule:nonzero}"
+    bool                            ParseStyleSheetText                (XSTRING& text);                  // ".fil0{fill:white} .fil1{fill:black;fill-rule:nonzero} * {fill:#RRGGBB}"
 
     void                            Clean                              ();
 

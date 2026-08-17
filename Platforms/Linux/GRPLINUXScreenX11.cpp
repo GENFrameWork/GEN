@@ -2229,25 +2229,42 @@ bool GRPLINUXSCREENX11::Create_Window(bool show)
       XSetWMProtocols(display, window, &wmdeletewindow, 1);
     }
 
-  XMapWindow(display , window);
-  XMoveWindow(display, window, posx, posy);    
+  // NOTE: XMapWindow()/XMoveWindow() used to happen HERE, before blitgles even existed -- see the
+  // GRP_OPENGL_ACTIVE block below, right before the final "return true;", for why they were moved past it.
 
   #ifdef GRP_OPENGL_ACTIVE
- 
+
   if(blitgles && !blitgles->Create(this))
     {
       XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] BlitGLES create failed; falling back to X11 software path"));
       GEN_DELETE blitgles;
       blitgles = NULL;
     }
-    
+
   if(blitgles)
     {
       blitgles->SetFlipY(true);
       XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen X11] BlitGLES SetFlipY(true) — correcting Mesa EGL-to-X11 vertical flip"));
+
+      // The EGL surface Create() just built has never been cleared or presented -- its initial content is
+      // whatever the driver leaves in a freshly allocated buffer, which is undefined and on several drivers
+      // visibly so (stray coloured pixels, not a clean colour). XMapWindow() below is what first makes this
+      // window visible on the desktop; clearing and presenting a blank frame BEFORE that call, rather than
+      // after, means the X server/compositor never has a chance to grab that undefined content -- twice, so
+      // neither buffer of the common double-buffered swap chain is left holding it.
+      blitgles->PresentBlankFrame();
+      blitgles->PresentBlankFrame();
     }
-    
+
   #endif
+
+  // Moved past blitgles setup above (see the NOTE further up): on a GRP_OPENGL_ACTIVE build the window
+  // must not become visible on the desktop until the EGL surface behind it has at least one clean,
+  // known-colour frame presented (see PresentBlankFrame() just above) -- otherwise whatever the X
+  // server/compositor paints before GEN's own first real Update(canvas) call shows the surface's undefined
+  // initial content instead.
+  XMapWindow(display , window);
+  XMoveWindow(display, window, posx, posy);
 
   return true;
 }

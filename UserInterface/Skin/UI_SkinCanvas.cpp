@@ -48,6 +48,16 @@
 #include "GRPBitmapFile.h"
 #include "GRPFactory.h"
 
+// Needed only by UI_SkinCanvas_DrawSoftShadow's agg::stack_blur_rgba32 call further down: this file otherwise
+// stays behind the GRP2DCANVAS/GRPBITMAP abstraction and never touches AGG types directly. agg_rendering_buffer.h
+// and agg_pixfmt_rgba.h are already pulled in transitively (GRPBitmap.h, GRP2DCanvasAGG.h) on every platform
+// that ships the AGG canvas backend; agg_blur.h is the one header this file is the first to require, so if a
+// given platform's vendored AGG drop is a trimmed subset without it, this is the file that will fail to build --
+// add agg_blur.h to that platform's AGG sources (it is dependency-free beyond agg_array.h) to fix it.
+#include "agg_rendering_buffer.h"
+#include "agg_pixfmt_rgba.h"
+#include "agg_blur.h"
+
 #include "UI_Animation.h"
 #include "UI_Element.h"
 #include "UI_Property_Scrolleable.h"
@@ -370,123 +380,12 @@ static void UI_SkinCanvas_AppendRoundRectPathPerCorner(GRP2DPATH& path, double m
 // element's rebuild-area) must agree on this number. If they drift apart, the outer ring of the blurred shadow
 // falls outside the saved/restored background rectangle and leaves ghost pixels that accumulate -- getting
 // progressively darker -- on every repaint.
+// Still valid with agg::stack_blur_rgba32 (see UI_SkinCanvas_DrawSoftShadow): its single-pass triangular kernel
+// has non-zero support out to exactly the blur radius on each side, i.e. NARROWER than the old hand-rolled
+// 3-pass box blur this padding was originally sized for (whose support reached roughly 3x the radius). 2x
+// stays comfortably generous for the new algorithm -- no need to shrink it, and shrinking would risk exactly
+// the ghost-pixel bug described above for no benefit.
 #define UI_SKINCANVAS_SHADOW_BLURPADDING(blur)      ((blur) * 2)
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         static void UI_SkinCanvas_BoxBlur32(XBYTE* pixels, int width, int height, int radius)
-* @brief      In-place 3-pass box blur over a 32-bit RGBA/BGRA pixel buffer.
-* @note       INTERNAL / FILE LOCAL. Applied 3 times, a box blur converges to a Gaussian (central limit theorem):
-*             visually indistinguishable from agg::stack_blur_rgba32 for the small radii (2-16 px) used by drop
-*             shadows on UI cards. Channels are blurred independently so byte order (RGBA vs BGRA) is irrelevant:
-*             each byte ends up in the same slot it started. Boundary handling clamps to the closest in-bounds
-*             pixel, which prevents dark fringes when the buffer padding is smaller than the blur radius.
-*             Complexity: O(passes * width * height) irrespective of radius, thanks to the sliding-window sum.
-* @ingroup    USERINTERFACE
-*
-* @param[in,out] pixels : Buffer to blur in place (width * height * 4 bytes, row-major).
-* @param[in]     width : Buffer width in pixels.
-* @param[in]     height : Buffer height in pixels.
-* @param[in]     radius : Blur radius in pixels; <=0 is a no-op.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-static void UI_SkinCanvas_BoxBlur32(XBYTE* pixels, int width, int height, int radius)
-{
-  if(!pixels)                     return;
-  if(radius <= 0)                 return;
-  if(width <= 0 || height <= 0)   return;
-
-  const int PASSES     = 3;
-  int       rowbytes   = width * 4;
-  int       npixels    = width * height;
-  int       windowsize = (radius * 2) + 1;
-
-  XBYTE* tmp = GEN_NEW XBYTE[npixels * 4];
-  if(!tmp) return;
-
-  for(int p = 0; p < PASSES; p++)
-    {
-      // Horizontal pass: pixels -> tmp
-      for(int y = 0; y < height; y++)
-        {
-          XBYTE* rowin  = pixels + (y * rowbytes);
-          XBYTE* rowout = tmp    + (y * rowbytes);
-
-          int sums[4] = { 0, 0, 0, 0 };
-
-          for(int i = -radius; i <= radius; i++)
-            {
-              int xi = (i < 0) ? 0 : ((i >= width) ? (width - 1) : i);
-              int b  = xi * 4;
-              sums[0] += rowin[b + 0];
-              sums[1] += rowin[b + 1];
-              sums[2] += rowin[b + 2];
-              sums[3] += rowin[b + 3];
-            }
-
-          for(int x = 0; x < width; x++)
-            {
-              int bo = x * 4;
-              rowout[bo + 0] = (XBYTE)(sums[0] / windowsize);
-              rowout[bo + 1] = (XBYTE)(sums[1] / windowsize);
-              rowout[bo + 2] = (XBYTE)(sums[2] / windowsize);
-              rowout[bo + 3] = (XBYTE)(sums[3] / windowsize);
-
-              int rm  = x - radius;
-              int add = x + radius + 1;
-              int rc  = (rm  < 0) ? 0 : ((rm  >= width) ? (width - 1) : rm );
-              int ac  = (add < 0) ? 0 : ((add >= width) ? (width - 1) : add);
-
-              int brm = rc * 4;
-              int bad = ac * 4;
-              sums[0] += rowin[bad + 0] - rowin[brm + 0];
-              sums[1] += rowin[bad + 1] - rowin[brm + 1];
-              sums[2] += rowin[bad + 2] - rowin[brm + 2];
-              sums[3] += rowin[bad + 3] - rowin[brm + 3];
-            }
-        }
-
-      // Vertical pass: tmp -> pixels
-      for(int x = 0; x < width; x++)
-        {
-          int sums[4] = { 0, 0, 0, 0 };
-
-          for(int i = -radius; i <= radius; i++)
-            {
-              int yi = (i < 0) ? 0 : ((i >= height) ? (height - 1) : i);
-              int b  = ((yi * width) + x) * 4;
-              sums[0] += tmp[b + 0];
-              sums[1] += tmp[b + 1];
-              sums[2] += tmp[b + 2];
-              sums[3] += tmp[b + 3];
-            }
-
-          for(int y = 0; y < height; y++)
-            {
-              int bo = ((y * width) + x) * 4;
-              pixels[bo + 0] = (XBYTE)(sums[0] / windowsize);
-              pixels[bo + 1] = (XBYTE)(sums[1] / windowsize);
-              pixels[bo + 2] = (XBYTE)(sums[2] / windowsize);
-              pixels[bo + 3] = (XBYTE)(sums[3] / windowsize);
-
-              int rm  = y - radius;
-              int add = y + radius + 1;
-              int rc  = (rm  < 0) ? 0 : ((rm  >= height) ? (height - 1) : rm );
-              int ac  = (add < 0) ? 0 : ((add >= height) ? (height - 1) : add);
-
-              int brm = ((rc * width) + x) * 4;
-              int bad = ((ac * width) + x) * 4;
-              sums[0] += tmp[bad + 0] - tmp[brm + 0];
-              sums[1] += tmp[bad + 1] - tmp[brm + 1];
-              sums[2] += tmp[bad + 2] - tmp[brm + 2];
-              sums[3] += tmp[bad + 3] - tmp[brm + 3];
-            }
-        }
-    }
-
-  GEN_DELETE_ARRAY tmp;
-}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -540,7 +439,7 @@ static bool UI_SkinCanvas_RoundedRectInside(int px, int py, int w, int h, double
 *
 * @fn         static void UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, double miny, double maxx, double maxy, double rTL, double rTR, double rBR, double rBL, UI_COLOR* shadow_color, int blur_radius)
 * @brief      Draw a soft-edged rounded-rect drop shadow. Rasterises the silhouette into an off-screen RGBA
-*             bitmap padded to hold the blur fade, runs UI_SkinCanvas_BoxBlur32 on it, then composites via
+*             bitmap padded to hold the blur fade, runs agg::stack_blur_rgba32 on it, then composites via
 *             the canvas's PutBitmapAlpha. Falls back cleanly on unsupported canvas modes (returns false so
 *             the caller can draw a hard shadow instead).
 * @note       INTERNAL / FILE LOCAL.
@@ -638,7 +537,21 @@ static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, doubl
         }
     }
 
-  UI_SkinCanvas_BoxBlur32(buf, bw, bh, blur_radius);
+  // Literal AGG stack blur (agg_blur.h), applied in place on the same off-screen RGBA_8888 buffer built above.
+  // agg::stack_blur_rgba32 is templated on an "Img" concept (width()/height()/stride()/pix_ptr()/order_type),
+  // not on a raw agg::rendering_buffer -- agg::pixfmt_rgba32 (order_rgba: R=0,G=1,B=2,A=3, agg_pixfmt_rgba.h)
+  // is exactly that wrapper, and its byte order matches r_off/g_off/b_off/a_off above pixel for pixel, so no
+  // channel shuffling is needed. rx/ry both use blur_radius: a single isotropic blur, same as the box-blur
+  // version this replaces. See the NOTE on UI_SKINCANVAS_SHADOW_BLURPADDING for why the existing 2x padding
+  // is still (more than) enough for this algorithm's narrower kernel support.
+  {
+    agg::rendering_buffer rbuf;
+    rbuf.attach(buf, (unsigned)bw, (unsigned)bh, bw * 4);
+
+    agg::pixfmt_rgba32 pixf(rbuf);
+
+    agg::stack_blur_rgba32(pixf, (unsigned)blur_radius, (unsigned)blur_radius);
+  }
 
   // One-shot self-check: the first time a soft shadow renders anywhere in the process, log the parameters
   // so the console confirms the soft path was reached and shows the effective bitmap / blur / colour. Any
@@ -677,6 +590,111 @@ static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, doubl
 
   GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void UI_SkinCanvas_DrawElementBoxShadow(GRP2DCANVAS* canvas, UI_ELEMENT* element, double x_position, double y_position)
+* @brief      Draws an element's box-shadow layer, generic across widget types.
+* @note       INTERNAL / FILE LOCAL. Same box-shadow behaviour Draw_Form has had since steps 7-8 (soft shadow via
+*             UI_SkinCanvas_DrawSoftShadow/agg::stack_blur_rgba32 when blur > 0, hard-edged silhouette otherwise),
+*             but written against base UI_ELEMENT accessors only (IsBoxShadowSet/GetShadowOffsetX/GetShadowOffsetY/
+*             GetShadowBlur/GetShadowColor/HasAnyPerCornerRadius/GetEffectiveBorderRadius/GetRoundRect are all
+*             declared on UI_ELEMENT itself, not UI_ELEMENT_FORM) so any Draw_X can call it. Draw_Form's own inline
+*             copy of this logic is deliberately left untouched rather than rewired to call this helper: it anchors
+*             the shadow on GetVisibleRect(), a UI_ELEMENT_FORM-specific rect (a distinct stored member, not simply
+*             recomputed from the base boundary line) that this function cannot reproduce without risking a behaviour
+*             change on the one widget that already shipped and was verified. This helper instead anchors the shadow
+*             on (x_position, y_position) plus element->GetBoundaryLine()->width/height -- the exact same geometry
+*             UI_SKINCANVAS::PreDrawFunction already uses to expand the rebuild-area for a shadow on ANY element type
+*             (see its own "Step 7" block), and the same (x_position, y_position) the calling Draw_X already uses to
+*             place its own content -- so the shadow, the widget's own drawing, and the invalidation rectangle all
+*             agree on where the element is, for every type this is wired into.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  canvas : Target canvas.
+* @param[in]  element : Element whose box-shadow (if any) should be drawn. A no-op if IsBoxShadowSet() is false.
+* @param[in]  x_position : Element's resolved left edge (screen coords), as already computed by PreDrawFunction.
+* @param[in]  y_position : Element's resolved bottom edge (screen coords), as already computed by PreDrawFunction.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void UI_SkinCanvas_DrawElementBoxShadow(GRP2DCANVAS* canvas, UI_ELEMENT* element, double x_position, double y_position)
+{
+  if(!canvas)                        return;
+  if(!element)                       return;
+  if(!element->IsBoxShadowSet())     return;
+
+  double width  = element->GetBoundaryLine()->width;
+  double height = element->GetBoundaryLine()->height;
+
+  double minx = UI_BOUNDARYLINE_EdgeLeft  (x_position, width);
+  double maxx = UI_BOUNDARYLINE_EdgeRight (x_position, width);
+  double miny = UI_BOUNDARYLINE_EdgeTop   (y_position, height);
+  double maxy = UI_BOUNDARYLINE_EdgeBottom(y_position, height);
+
+  double sh_x    = element->GetShadowOffsetX();
+  double sh_y    = element->GetShadowOffsetY();
+  double sh_blur = element->GetShadowBlur();
+
+  double sh_minx = minx + sh_x;
+  double sh_miny = miny + sh_y;
+  double sh_maxx = maxx + sh_x;
+  double sh_maxy = maxy + sh_y;
+
+  // Resolve corner radii once: per-corner if any is authored, else uniform roundrect on all four -- identical
+  // precedence to Draw_Form's own copy of this logic.
+  double rTL, rTR, rBR, rBL;
+  if(element->HasAnyPerCornerRadius())
+    {
+      rTL = element->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_TL);
+      rTR = element->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_TR);
+      rBR = element->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BR);
+      rBL = element->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BL);
+    }
+   else
+    {
+      double r = (double)element->GetRoundRect();
+      rTL = rTR = rBR = rBL = r;
+    }
+
+  bool soft_ok = false;
+  if(sh_blur > 0.0)
+    {
+      soft_ok = UI_SkinCanvas_DrawSoftShadow(canvas, sh_minx, sh_miny, sh_maxx, sh_maxy,
+                                            rTL, rTR, rBR, rBL,
+                                            element->GetShadowColor(), (int)sh_blur);
+    }
+
+  if(!soft_ok)
+    {
+      // Hard shadow fallback (no blur, or canvas mode not 32-bit) -- same construction as Draw_Form's.
+      GRP2DCOLOR_RGBA8  shadow_col(element->GetShadowColor()->GetRed(),
+                                   element->GetShadowColor()->GetGreen(),
+                                   element->GetShadowColor()->GetBlue(),
+                                   element->GetShadowColor()->GetAlpha());
+
+      GRP2DCOLOR_RGBA8  shadow_line_none(0, 0, 0, 0);
+
+      canvas->SetFillColor(&shadow_col);
+      canvas->SetLineColor(&shadow_line_none);
+      canvas->SetLineWidth(1.0f);
+
+      if(element->HasAnyPerCornerRadius())
+        {
+          GRP2DPATH shpath;
+          UI_SkinCanvas_AppendRoundRectPathPerCorner(shpath, sh_minx, sh_miny, sh_maxx, sh_maxy, rTL, rTR, rBR, rBL);
+          canvas->Path(shpath, true);
+        }
+       else if(element->GetRoundRect())
+        {
+          canvas->RoundRect(sh_minx, sh_maxy, sh_maxx, sh_miny, element->GetRoundRect(), true);
+        }
+       else
+        {
+          canvas->Rectangle(sh_minx, sh_maxy, sh_maxx, sh_miny, true);
+        }
+    }
 }
 
 
@@ -821,19 +839,19 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
                   if(element->MustReDraw() || (!element->IsVisible())) 
                     { 
                       if(element->GetZLevel() == level)
-                        {       
+                        {
                           // XTRACE_PRINTCOLOR(XTRACE_COLOR_PURPLE, __L("Del area level [%d] [%s] "), element->GetZLevel(), element->GetName()->Get());
-                          GRPBITMAP* bitmap = area->GetBitmap();              
+                          GRPBITMAP* bitmap = area->GetBitmap();
                           if(bitmap) PutBitmapNoAlpha(area->GetXPos(), area->GetYPos(), bitmap);
 
-                          areas.Delete(area);                
-                          GEN_DELETE area;  
-                        }              
+                          areas.Delete(area);
+                          GEN_DELETE area;
+                        }
                     }
                 }
-            }           
+            }
         }
-    }  
+    }
 
   return true;
 }
@@ -1204,17 +1222,52 @@ bool UI_SKINCANVAS::LoadFonts()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         static double UI_SKINCANVAS_ResolveMaxSize(UI_ELEMENT* element, double fathersize)
+* @brief      INTERNAL: corrects the one-pixel-short father size GetFatherSize() reports for a ROOT (fatherless)
+*             element, but ONLY at the point a width="max" / height="max" resolution consumes it -- never for
+*             GetFatherSize()'s other consumer, CalculePosition()'s xpos="right"/"center" and
+*             ypos="up"/"down"/"center" resolution, which is left untouched on purpose.
+* @note       GetFatherSize() reports "canvas size - 1" as a root element's father size, a "last valid pixel
+*             index" convention (the same one SetClipBox(0,0,width-1,height-1) uses for the canvas' own clip
+*             box). That is a defensible convention for a COORDINATE, but every CalculateBoundaryLine_X()
+*             function also feeds the very same number into a "max" SIZE resolution, where it means something
+*             different: "fill the father edge-to-edge". A root form with width="max" on a 1440 px canvas was
+*             resolving to 1439 -- one column short of the window's own right edge -- while the exact same
+*             form with an explicit width="1440" filled it completely. That mismatch is what left a sliver of
+*             unpainted canvas behind a custom window chrome's caption bar when its width was left to default.
+*             This helper closes that ONE pixel gap exactly where it is created (the "max" case), and only for
+*             root elements (a child's father size never carries GetFatherSize()'s -1: it comes straight from
+*             the father's own already-resolved UI_BOUNDARYLINE). Every other consumer of GetFatherSize()'s
+*             output -- most notably CalculePosition(), called right after with the SAME fatherwidth/fatherheight
+*             local variables this function does not touch -- keeps its pre-existing arithmetic byte for byte,
+*             so no existing layout's positioning shifts because of this fix.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : the element being resolved (only element->GetFather() is inspected).
+* @param[in]  fathersize : the father width or height as returned by GetFatherSize().
+*
+* @return     double : fathersize unchanged for a child element; fathersize + 1 for a root element.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static double UI_SKINCANVAS_ResolveMaxSize(UI_ELEMENT* element, double fathersize)
+{
+  return element->GetFather() ? fathersize : (fathersize + 1.0);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_SKINCANVAS::GetFatherSize(UI_ELEMENT* element, double& width, double& height)
 * @brief      Get father size
 * @ingroup    USERINTERFACE
-* 
+*
 * @param[in]  element : Element to process.
 * @param[in]  width : Width value.
 * @param[in]  height : Height value.
-* 
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::GetFatherSize(UI_ELEMENT* element, double& width, double& height)
 {
@@ -1625,14 +1678,14 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Text(UI_ELEMENT* element, bool adjusts
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO	 :		 		
       case                           0 : element->GetBoundaryLine()->width  = (double)canvas->VectorFont_GetWidth(string_max.Get());    break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX   : element->GetBoundaryLine()->width = fatherwidth;                                               break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX   : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                               break;	    
     }
    
   switch((int)element->GetBoundaryLine()->height)
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO	 :		 		
       case                           0 : element->GetBoundaryLine()->height  = (double)canvas->VectorFont_GetHeight(string_max.Get());  break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX   : element->GetBoundaryLine()->height  = fatherheight;                                            break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX   : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                            break;	    
     }
 
   return CalculePosition(element, fatherwidth, fatherheight, adjustsizemargin);
@@ -1709,14 +1762,14 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Image(UI_ELEMENT* element, bool adjust
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO   :		 		
       case                            0 : element->GetBoundaryLine()->width  = (double)element_image->GetImage()->GetWidth();       break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = fatherwidth;                                          break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                          break;	    
     }
    
   switch((int)element->GetBoundaryLine()->height)
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO	  :		 		
       case                            0 : element->GetBoundaryLine()->height  = (double)element_image->GetImage()->GetHeight();     break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = fatherheight;                                       break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                       break;	    
     }
 
   return CalculePosition(element, fatherwidth, fatherheight, adjustsizemargin);
@@ -1760,7 +1813,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Animation(UI_ELEMENT* element, bool ad
                                             }
                                             break;
 
-      case UI_ELEMENT_TYPE_ALIGN_MAX      : element->GetBoundaryLine()->width = fatherwidth;                                          
+      case UI_ELEMENT_TYPE_ALIGN_MAX      : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                          
                                             break;	    
     }
    
@@ -1779,7 +1832,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Animation(UI_ELEMENT* element, bool ad
                                             }
                                             break;
 
-      case UI_ELEMENT_TYPE_ALIGN_MAX      : element->GetBoundaryLine()->height  = fatherheight;                                       
+      case UI_ELEMENT_TYPE_ALIGN_MAX      : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                       
                                             break;	    
     }
 
@@ -1849,7 +1902,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Option(UI_ELEMENT* element, bool adjus
                                               }
                                               break;
 
-          case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = fatherwidth;                                          
+          case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                          
                                               break;	    
         }
 
@@ -1873,7 +1926,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Option(UI_ELEMENT* element, bool adjus
                                               }
                                               break;
 
-          case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = fatherheight;                                       
+          case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                       
                                               break;	    
         }
     }
@@ -1946,7 +1999,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_MultiOption(UI_ELEMENT* element, bool 
                                           }
                                           break;
 
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = fatherwidth;                                          
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                          
                                           break;	    
     }
    
@@ -1965,7 +2018,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_MultiOption(UI_ELEMENT* element, bool 
                                           }
                                           break;
 
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = fatherheight;                                       
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                       
                                           break;	    
     }
 
@@ -2056,14 +2109,14 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_EditText(UI_ELEMENT* element, bool adj
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO :		 		
       case                          0 : element->GetBoundaryLine()->width  = (double)canvas->VectorFont_GetWidth(string_max.Get());     break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX  : element->GetBoundaryLine()->width = fatherwidth;                                                break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX  : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                                break;	    
     }
    
   switch((int)element->GetBoundaryLine()->height)
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO :		 		
       case                          0 : element->GetBoundaryLine()->height  = (double)canvas->VectorFont_GetHeight(string_max.Get());   break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX  : element->GetBoundaryLine()->height  = fatherheight;                                             break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX  : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                             break;	    
     }
 
   return CalculePosition(element, fatherwidth, fatherheight, adjustsizemargin);
@@ -2143,7 +2196,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Form(UI_ELEMENT* element, bool adjusts
                                           }
                                           break;
 
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = fatherwidth;
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);
                                           break;
     }
 
@@ -2162,7 +2215,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_Form(UI_ELEMENT* element, bool adjusts
                                           }
                                           break;
 
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = fatherheight;                                       
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                       
                                           break;	    
     }
 
@@ -2237,14 +2290,14 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ListBox(UI_ELEMENT* element, bool adju
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO :		 		
       case                          0 : element->GetBoundaryLine()->width  = (double)canvas->VectorFont_GetWidth(string_max.Get());     break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX  : element->GetBoundaryLine()->width = fatherwidth;                                                break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX  : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                                break;	    
     }
    
   switch((int)element->GetBoundaryLine()->height)
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO	:		 		
       case                          0 : element->GetBoundaryLine()->height  = (double)canvas->VectorFont_GetHeight(string_max.Get());   break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX  : element->GetBoundaryLine()->height  = fatherheight;                                             break;	    
+      case UI_ELEMENT_TYPE_ALIGN_MAX  : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                             break;	    
     }
 
   return CalculePosition(element, fatherwidth, fatherheight, adjustsizemargin);
@@ -2305,7 +2358,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool 
                                               }
                                               break;
 
-          case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = fatherwidth;                                          
+          case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                          
                                               break;	    
         }
 
@@ -2331,7 +2384,7 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool 
                                               }
                                               break;
 
-          case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = fatherheight;                                       
+          case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height  = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                       
                                               break;	    
         }
     }
@@ -2422,14 +2475,14 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bo
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO   :
       case                           0  : element->GetBoundaryLine()->width  = (element->GetBoundaryLine()->height > 0) ? element->GetBoundaryLine()->height : fatherwidth;    break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width  = fatherwidth;                                                                                    break;
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width  = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);                                                                                    break;
     }
 
   switch((int)element->GetBoundaryLine()->height)
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO   :
       case                           0  : element->GetBoundaryLine()->height = (element->GetBoundaryLine()->width > 0) ? element->GetBoundaryLine()->width : fatherheight;     break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height = fatherheight;                                                                                   break;
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight);                                                                                   break;
     }
 
   CalculePosition(element_progress, fatherwidth, fatherheight, adjustsizemargin);
@@ -2576,14 +2629,14 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressImage(UI_ELEMENT* element, boo
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO   :
       case                           0  : element->GetBoundaryLine()->width  = bw;           break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width  = fatherwidth;  break;
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->width  = UI_SKINCANVAS_ResolveMaxSize(element, fatherwidth);  break;
     }
 
   switch((int)element->GetBoundaryLine()->height)
     {
       case UI_ELEMENT_TYPE_ALIGN_AUTO   :
       case                           0  : element->GetBoundaryLine()->height = bh;           break;
-      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height = fatherheight; break;
+      case UI_ELEMENT_TYPE_ALIGN_MAX    : element->GetBoundaryLine()->height = UI_SKINCANVAS_ResolveMaxSize(element, fatherheight); break;
     }
 
   CalculePosition(element_progressimage, fatherwidth, fatherheight, adjustsizemargin);
@@ -2816,10 +2869,15 @@ bool UI_SKINCANVAS::Draw_Image(UI_ELEMENT* element)
 
   PreDrawFunction(element, canvas, clip_rect, x_position, y_position);
 
-  if(element->MustReDraw()) 
+  if(element->MustReDraw())
     {
-      canvas->PutBitmapAlpha(x_position , 
-                             y_position - element_image->GetImage()->GetHeight(), 
+      // Box-shadow (see UI_SkinCanvas_DrawElementBoxShadow): drawn before the bitmap, same "shadow first, own
+      // content on top" ordering Draw_Form uses. A no-op when the element does not declare box-shadow, so this
+      // is zero behaviour change for every existing image layout.
+      UI_SkinCanvas_DrawElementBoxShadow(canvas, element, x_position, y_position);
+
+      canvas->PutBitmapAlpha(x_position ,
+                             y_position - element_image->GetImage()->GetHeight(),
                              element_image->GetImage(), element_image->GetAlpha());
     }
 
@@ -3638,6 +3696,63 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
               if(element_progressbar->GetDirection() == UI_ELEMENT_TYPE_DIRECTION_VERTICAL)
                    roundradius = element_progressrect->GetBoundaryLine()->width  / 2.0;
               else roundradius = element_progressrect->GetBoundaryLine()->height / 2.0;
+            }
+
+          // Box-shadow, read from the PROGRESSBAR element (element/element_progressbar) but drawn behind the
+          // TRACK rect (element_progressrect) -- that sub-element is what UI_SkinCanvas_ProgressBar_DrawRect
+          // below actually paints, so the shadow has to match its rect and its radius (including the roundcap
+          // override just above) to line up. This is deliberately NOT a call to the generic
+          // UI_SkinCanvas_DrawElementBoxShadow helper: that helper anchors on the ELEMENT's own boundary and
+          // supports per-corner radii, neither of which is what gets drawn here -- the visible track is a
+          // different rect (a sub-element) with a single uniform radius (roundradius above), never per-corner.
+          // Reuses UI_SkinCanvas_ProgressBar_DrawRect itself for the hard-shadow (no blur) fallback so the
+          // shadow's capsule-clamping (short bars where the frame is narrower than 2*radius) is pixel-identical
+          // to the track's own, instead of a second hand-written copy of that edge case.
+          if(element->IsBoxShadowSet())
+            {
+              double sh_x    = element->GetShadowOffsetX();
+              double sh_y    = element->GetShadowOffsetY();
+              double sh_blur = element->GetShadowBlur();
+
+              double rect_minx = element_progressrect->GetXPosition();
+              double rect_maxx = element_progressrect->GetXPosition() + element_progressrect->GetBoundaryLine()->width;
+              double rect_miny = element_progressrect->GetTopY();
+              double rect_maxy = element_progressrect->GetYPosition();
+
+              double sh_minx = rect_minx + sh_x;
+              double sh_miny = rect_miny + sh_y;
+              double sh_maxx = rect_maxx + sh_x;
+              double sh_maxy = rect_maxy + sh_y;
+
+              bool soft_ok = false;
+              if(sh_blur > 0.0)
+                {
+                  soft_ok = UI_SkinCanvas_DrawSoftShadow(canvas, sh_minx, sh_miny, sh_maxx, sh_maxy,
+                                                        roundradius, roundradius, roundradius, roundradius,
+                                                        element->GetShadowColor(), (int)sh_blur);
+                }
+
+              if(!soft_ok)
+                {
+                  GRP2DCOLOR_RGBA8  shadow_col(element->GetShadowColor()->GetRed(),
+                                               element->GetShadowColor()->GetGreen(),
+                                               element->GetShadowColor()->GetBlue(),
+                                               element->GetShadowColor()->GetAlpha());
+                  GRP2DCOLOR_RGBA8  shadow_line_none(0, 0, 0, 0);
+
+                  canvas->SetFillColor(&shadow_col);
+                  canvas->SetLineColor(&shadow_line_none);
+                  canvas->SetLineWidth(1.0f);
+
+                  UI_SkinCanvas_ProgressBar_DrawRect(canvas, sh_minx, sh_maxy, sh_maxx, sh_miny, roundradius);
+                }
+
+              // Restore the track's own colours/width: both branches above may have changed canvas state
+              // (the hard-shadow fallback always does; the soft path never touches it, but restoring
+              // unconditionally is one cheap, always-correct line instead of two conditional ones).
+              canvas->SetLineColor(&linecolor);
+              canvas->SetFillColor(&bkgcolor);
+              canvas->SetLineWidth(1.0);
             }
 
           UI_SkinCanvas_ProgressBar_DrawRect(canvas,

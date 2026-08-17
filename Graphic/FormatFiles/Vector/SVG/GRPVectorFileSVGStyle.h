@@ -79,6 +79,7 @@ class GRPVECTORFILESVGSTYLE
     double                          GetStrokeOpacity           ();
 
     GRP2DPATHFILLRULE               GetFillRule                ();
+    bool                            IsFillRuleSpecified        ();
 
     static bool                     ParseColor                 (XSTRING& value, GRP2DCOLOR_RGBA8& color, bool& isnone);
     static int                      HexValue                   (XCHAR character);
@@ -112,6 +113,7 @@ class GRPVECTORFILESVGSTYLE
     double                          strokeopacity;
 
     GRP2DPATHFILLRULE               fillrule;
+    bool                            fillrulespecified;
 };
 
 

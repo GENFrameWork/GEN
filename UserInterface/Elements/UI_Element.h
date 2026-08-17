@@ -256,12 +256,25 @@ class UI_ELEMENT : public XSUBJECT
 		double																GetEffectiveBorderRadius    (UI_ELEMENT_BORDER_CORNER corner);
 		bool																	HasAnyPerCornerRadius       ();
 
-		// --- Box-shadow (step 7) ---------------------------------------------------------------------------------------
-		// CSS-like drop shadow drawn behind the element (before its fill and stroke) at (offset_x, offset_y),
-		// tinted with shadow_color. Blur is accepted from the parser but not rendered yet: this rebanada ships
-		// hard shadow only, and stack-blur rendering is deferred to a follow-up step so this one stays small.
+		// --- Box-shadow (steps 7-10) -----------------------------------------------------------------------------------
+		// CSS-like drop shadow drawn behind the element (before its own content) at (offset_x, offset_y), tinted
+		// with shadow_color. When blur > 0, the skin rasterises the silhouette into an off-screen RGBA buffer and
+		// runs AGG's own agg::stack_blur_rgba32 (agg_blur.h) on it before compositing; blur == 0 (or a non-32-bit
+		// canvas, or a failed off-screen allocation) falls back to the hard-edged silhouette. These properties
+		// live on the base UI_ELEMENT precisely so any widget type can use them, but as of step 10 only three
+		// Draw_X functions in UI_SkinCanvas.cpp actually paint the shadow layer: Draw_Form (its own inline copy,
+		// anchored on UI_ELEMENT_FORM::GetVisibleRect()), Draw_Image (via the generic, type-agnostic
+		// UI_SkinCanvas_DrawElementBoxShadow helper, anchored on the base GetBoundaryLine()), and Draw_ProgressBar
+		// (its own inline copy, read from the PROGRESSBAR element but anchored/radius-matched on the actual visible
+		// track sub-element, element->GetProgressRect() -- deliberately not the generic helper, since that rect and
+		// its roundcap-aware radius are not what UI_SkinCanvas_DrawElementBoxShadow assumes). Draw_Animation gets it
+		// transitively (it delegates its own drawing to a child Draw_Image call). Every other Draw_X still silently
+		// ignores a box-shadow set on it -- setting box_shadow_set on those types stores the value (CSS parsing is
+		// unaffected) but nothing renders yet. See UI_SkinCanvas_DrawElementBoxShadow's own comment for why wiring
+		// in more types is a per-type job, not a blind loop over every Draw_X.
 		// The skin expands the element's rebuild-area to include the shadow footprint (see PreDrawFunction),
-		// so save/restore cycles at repaint time do not leave ghost pixels outside the element rect.
+		// so save/restore cycles at repaint time do not leave ghost pixels outside the element rect -- this part
+		// already works for every element type regardless of whether its Draw_X paints the shadow yet.
 		bool																	IsBoxShadowSet              ();
 		void																	SetBoxShadowSet             (bool value);
 		double																GetShadowOffsetX            ();
@@ -333,7 +346,7 @@ class UI_ELEMENT : public XSUBJECT
 		bool																	box_shadow_set;
 		double																shadow_offset_x;
 		double																shadow_offset_y;
-		double																shadow_blur;                               // parsed and stored; ignored by render for now
+		double																shadow_blur;                               // parsed and stored; rendered via agg::stack_blur_rgba32 when > 0 (see Draw_Form)
 		UI_COLOR															shadow_color;
 
 		double																x_position;

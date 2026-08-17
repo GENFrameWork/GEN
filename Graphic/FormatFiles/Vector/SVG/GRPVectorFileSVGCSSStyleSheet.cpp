@@ -234,11 +234,15 @@ bool GRPVECTORFILESVGCSSSTYLESHEET::CollectStyleElements(XFILEXMLELEMENT* elemen
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGCSSSTYLESHEET::ParseStyleSheetText(XSTRING& text)
-* @brief      Parse style sheet text : minimal CSS subset, only flat class selectors are recognized
+* @brief      Parse style sheet text : minimal CSS subset, only flat class selectors plus the bare universal
+*             selector are recognized
 * @note       INTERNAL: ".fil0{fill:white} .fil1,.fil2{fill:black;fill-rule:nonzero}" -> "fil0"->"fill:white" ,
-*             "fil1"->"fill:black;fill-rule:nonzero" , "fil2"->"fill:black;fill-rule:nonzero". Any selector that
-*             does not start with '.' (tag, id, '*', @media...) is ignored; only what CorelDRAW/Illustrator/Figma
-*             exports actually use.
+*             "fil1"->"fill:black;fill-rule:nonzero" , "fil2"->"fill:black;fill-rule:nonzero". "* {fill:#8B949E}"
+*             -> reserved key "*" -> "fill:#8B949E" (see GRPVECTORFILESVGSTYLE::ApplyData for how/when that
+*             reserved key is applied -- always lowest priority, exactly like the real universal selector). Any
+*             OTHER selector that does not start with '.' and is not exactly '*' (tag, id, @media...) is still
+*             ignored; those two are what CorelDRAW/Illustrator/Figma exports and this codebase's own icon
+*             generators actually use.
 * @ingroup    GRAPHIC
 * 
 * @param[in]  text : raw &lt;style&gt; element text content
@@ -291,6 +295,19 @@ bool GRPVECTORFILESVGCSSSTYLESHEET::ParseStyleSheetText(XSTRING& text)
                         {
                           classname.DeleteCharacters(0, 1);                        // strip the leading '.'
                           if(!classname.IsEmpty()) Add(classname.Get(), declarations.Get());
+                        }
+                       else if((classname.GetSize() == 1) && (classname[0] == __C('*')))
+                        {
+                          // Universal selector ("* {fill:#RRGGBB}"): some icon generators emit this instead of
+                          // CorelDRAW's per-part ".fil0{...}" convention when they are flattening a whole icon
+                          // to a single colour. Stored under the reserved key "*" (Get() does a plain string
+                          // compare, so this reserved key can never collide with a real class name -- ".":
+                          // stripped above -- would have to produce an actual empty or single-'*' class name for
+                          // that to happen, and neither is a legal CSS class name any generator would emit).
+                          // GRPVECTORFILESVGSTYLE::ApplyData applies it FIRST, before presentation attributes,
+                          // class rules or inline style -- exactly the lowest-specificity position the universal
+                          // selector has in a real CSS cascade, so anything more specific still overrides it.
+                          Add(__L("*"), declarations.Get());
                         }
                     }
                 }

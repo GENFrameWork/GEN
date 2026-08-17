@@ -80,6 +80,7 @@ class GRPBLITGLES
     bool                                  Create                            (GRPSCREEN* screen);
     bool                                  Resize                            (int width, int height);
     bool                                  Update                            (GRP2DCANVAS* canvas);
+    bool                                  PresentBlankFrame                 ();
     bool                                  SwapBuffers                       ();
     bool                                  Destroy                           ();
 

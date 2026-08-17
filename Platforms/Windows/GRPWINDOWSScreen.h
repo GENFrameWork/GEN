@@ -121,6 +121,11 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
     bool                                  IsAboveViewportMinimumSize          ();
     void                                  ClientSizeToWindowSize              (int clientwidth, int clientheight, DWORD style, int& windowwidth, int& windowheight);
 
+    // Clears DWMWA_CLOAK (see the NOTE in Create_Window()) the first time it is called after a real frame
+    // has been presented. A no-op once windowcloaked is already false, so it is safe/cheap to call from
+    // Update(GRP2DCANVAS*) every single frame.
+    void                                  Uncloak                             ();
+
     static  LRESULT CALLBACK              BaseWndProc                         (HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
     void                                  Clean                               ();
@@ -132,6 +137,14 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
     HINSTANCE                             hinstance;
     HWND                                  hwnd;
     HDC                                   hdc;
+
+    // true from the moment Create_Window() cloaks a freshly created Custom-Chromes window (DWMWA_CLOAK)
+    // until Uncloak() (called from Update(GRP2DCANVAS*), on the first real frame presented) clears it
+    // again. See the NOTE beside the DwmSetWindowAttribute() call in Create_Window() for why only that
+    // window style needs this, and the NOTE in Show() for why uncloaking was moved out of it. Also
+    // checked by BaseWndProc's WM_SIZE handler (see its NOTE) so a spurious, startup-time WM_SIZE
+    // cannot call Update(GRP2DCANVAS*)/Uncloak() early through that unrelated resize-drag path.
+    bool                                   windowcloaked;
 
     DEVMODE                               devmode;
 

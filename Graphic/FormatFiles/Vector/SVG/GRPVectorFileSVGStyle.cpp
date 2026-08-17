@@ -89,19 +89,32 @@ GRPVECTORFILESVGSTYLE::~GRPVECTORFILESVGSTYLE()
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element, GRPVECTORFILESVGCSSSTYLESHEET* stylesheet)
-* @brief      Apply data : read presentation attributes, then the class="" CSS rules, then the inline style
-*             attribute (each step overrides the previous one, same cascade order browsers use)
+* @brief      Apply data : the document-wide universal ("*") rule if any, then presentation attributes, then the
+*             class="" CSS rules, then the inline style attribute (each step overrides the previous one, same
+*             cascade order browsers use -- the universal selector goes first because it has the LOWEST
+*             specificity of any selector, real CSS included, so anything more specific below simply overwrites it)
 * @ingroup    GRAPHIC
-* 
+*
 * @param[in]  element : xml element
-* @param[in]  stylesheet : document-wide CSS class rules collected from every &lt;style&gt; element (NULL = ignore class="")
-* 
+* @param[in]  stylesheet : document-wide CSS class + universal-selector rules collected from every &lt;style&gt;
+*                          element (NULL = ignore class="" and the universal rule both)
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPVECTORFILESVGSTYLE::ApplyData(XFILEXMLELEMENT* element, GRPVECTORFILESVGCSSSTYLESHEET* stylesheet)
 {
   if(!element) return false;
+
+  // Document-wide universal selector ("* {fill:#RRGGBB}" in a <style> block -- see the NOTE in
+  // GRPVECTORFILESVGCSSSTYLESHEET::ParseStyleSheetText). Applied first and unconditionally: every element in the
+  // document goes through this same ApplyData, so this is exactly equivalent to a real "*" CSS rule matching
+  // every element, at its correct (lowest) specificity -- every step below can still override it per element.
+  if(stylesheet)
+    {
+      XSTRING* universal = stylesheet->Get(__L("*"));
+      if(universal) ParseStyleAttribute(*universal);
+    }
 
   static XCHAR* presentationattrs[] = { __L("fill")          ,
                                         __L("stroke")        ,
@@ -199,9 +212,21 @@ void GRPVECTORFILESVGSTYLE::InheritFrom(GRPVECTORFILESVGSTYLE& parent)
       strokewidth          = parent.GetStrokeWidth();
     }
 
-  // opacity is not inherited in SVG, but fill-opacity / stroke-opacity / fill-rule are.
+  // opacity is not inherited in SVG, but fill-opacity / stroke-opacity are.
   fillopacity   = parent.GetFillOpacity()   * fillopacity;
   strokeopacity = parent.GetStrokeOpacity() * strokeopacity;
+
+  // fill-rule is inherited the same way fill/stroke are (not multiplied like the opacities above): if this node
+  // never specified its own fill-rule (neither as a presentation attribute, nor via class="", nor inline style),
+  // take the parent's effective (possibly itself inherited) value instead of silently staying at the
+  // GRP2DPATHFILLRULE_NONZERO default set by Clean(). This is what lets a "fill-rule:evenodd" declared once on the
+  // <svg> root's own style="" (the common CorelDRAW/Illustrator export pattern) reach every descendant <path>,
+  // including ones several levels down (e.g. root -> <g> -> <path>), instead of only affecting the root itself.
+  if(!fillrulespecified)
+    {
+      fillrulespecified = parent.IsFillRuleSpecified();
+      fillrule          = parent.GetFillRule();
+    }
 }
 
 
@@ -426,6 +451,20 @@ GRP2DPATHFILLRULE GRPVECTORFILESVGSTYLE::GetFillRule()      { return fillrule; }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool GRPVECTORFILESVGSTYLE::IsFillRuleSpecified()
+* @brief      Is fill rule specified : true if THIS node declared its own fill-rule (attribute, class="", or inline
+*             style); false if the current value is either the NONZERO default or an inherited one -- used by
+*             InheritFrom() to decide whether a parent's fill-rule should keep propagating further down the tree.
+* @ingroup    GRAPHIC
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool GRPVECTORFILESVGSTYLE::IsFillRuleSpecified()            { return fillrulespecified; }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool GRPVECTORFILESVGSTYLE::ApplyProperty(XSTRING& name, XSTRING& value)
 * @brief      Apply property : set a single style property by name
@@ -510,6 +549,8 @@ bool GRPVECTORFILESVGSTYLE::ApplyProperty(XSTRING& name, XSTRING& value)
     {
       if(!propvalue.Compare(__L("evenodd"), true))  fillrule = GRP2DPATHFILLRULE_EVENODD;
        else                                         fillrule = GRP2DPATHFILLRULE_NONZERO;
+
+      fillrulespecified = true;
     }
    else
     {
@@ -748,6 +789,7 @@ void GRPVECTORFILESVGSTYLE::Clean()
   strokeopacity        = 1.0;
 
   fillrule             = GRP2DPATHFILLRULE_NONZERO;
+  fillrulespecified    = false;
 }
 
 

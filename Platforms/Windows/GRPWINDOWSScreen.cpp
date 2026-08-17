@@ -55,6 +55,17 @@
 #include "GRPWINDOWSBlitGLES.h"
 #endif
 
+// Used only to cloak/uncloak Custom-Chromes windows during creation (see the DWMWA_CLOAK NOTE in
+// Create_Window() and in Show()). dwmapi.dll ships with Windows Vista and later, which this engine
+// already requires for its GLES3/EGL rendering path (see GRPBlitGLES.h), so this adds no new minimum
+// OS requirement. #pragma comment links dwmapi.lib automatically, so no project file changes are needed.
+#include <dwmapi.h>
+#pragma comment(lib, "dwmapi.lib")
+
+#ifndef DWMWA_CLOAK
+#define DWMWA_CLOAK 13   // Not declared by older Windows SDKs; value is stable ABI (Windows 8+).
+#endif
+
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
@@ -198,7 +209,7 @@ bool GRPWINDOWSSCREEN::Update(GRP2DCANVAS* canvas)
 {
   #ifndef GRP_OPENGL_ACTIVE
 
-  if(!hdc)    
+  if(!hdc)
     {
       return false;
     }
@@ -225,13 +236,20 @@ bool GRPWINDOWSSCREEN::Update(GRP2DCANVAS* canvas)
                                &hinfo ,
                                DIB_RGB_COLORS);
 
+  Uncloak();
+
   return true;
 
   #else
 
   if(!canvas)   return false;
   if(!blitgles) return false;
-  return blitgles->Update(canvas);
+
+  bool status = blitgles->Update(canvas);
+
+  if(status) Uncloak();
+
+  return status;
 
   #endif
 }
@@ -760,6 +778,17 @@ bool GRPWINDOWSSCREEN::Show(bool active)
 {
   if(!hwnd) return false;
 
+  // NOTE: does NOT touch DWMWA_CLOAK (see the NOTE in Create_Window() where it is set, and in
+  // Update(GRP2DCANVAS*) where it is finally cleared). Uncloaking here, on the WS_VISIBLE/ShowWindow
+  // transition, was the first version of this fix and it was NOT enough: this call happens right after
+  // Create_Window() presents its first blank frame, but BEFORE the rest of Ini_Graphics()'s synchronous
+  // work (dashboard XML/CSS parsing, ~30 SVG icon decodes) -- which can easily take another second --
+  // has run. For that whole stretch the window sat mapped, uncloaked and idle with NOTHING pumping its
+  // message queue (the main loop has not started yet), which is long enough for Windows/DWM to treat it
+  // as unresponsive and paint it from a stale/ghosted surface instead of GEN's own last presented frame
+  // -- indistinguishable, visually, from the undefined-content garbage the earlier fixes targeted, but
+  // caused by a completely different mechanism. See Update(GRP2DCANVAS*) for where uncloaking actually
+  // happens now.
   ::ShowWindow(hwnd, (active?SW_SHOW:SW_HIDE));
 
   isshow  = active;
@@ -767,6 +796,31 @@ bool GRPWINDOWSSCREEN::Show(bool active)
   return true;
 }
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void GRPWINDOWSSCREEN::Uncloak()
+* @brief      Uncloak
+* @note       Clears DWMWA_CLOAK (see the NOTE in Create_Window()) the first time it runs after Create_Window()
+*             cloaked a Custom-Chromes window. Called from Update(GRP2DCANVAS*) right after a real frame has
+*             actually been presented -- by construction that only happens once the main loop is ticking (it is
+*             what calls Update() every frame), so the message queue is being pumped regularly again and the
+*             window is no longer at risk of being treated as unresponsive. A no-op on every call after the
+*             first (windowcloaked already false), and for any window that was never cloaked in the first place
+*             (native Chromes, no Chromes, fullscreen, GRPSCREENSTYLE_TRANSPARENT).
+* @ingroup    PLATFORM_WINDOWS
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void GRPWINDOWSSCREEN::Uncloak()
+{
+  if(!windowcloaked) return;
+  if(!hwnd)          return;
+
+  BOOL cloak = FALSE;
+
+  DwmSetWindowAttribute(hwnd, DWMWA_CLOAK, &cloak, sizeof(cloak));
+  windowcloaked = false;
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1518,9 +1572,37 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
                             hinstance         ,
                             (void*)this);
 
-      if(!hwnd) 
+      if(!hwnd)
         {
           return false;
+        }
+
+      // NOTE (garbage/desktop content flashing at the top of Custom-Chromes windows on startup): a
+      // usecfgchromescustom window has NO native non-client area at all -- its entire rectangle, row 0
+      // included, is client area owned by GEN's own canvas (see usecfgchromescustom above). From this
+      // CreateWindowEx() until the app's main loop is actually ticking (pumping messages AND presenting a
+      // real frame every iteration -- see Uncloak(), called from Update(GRP2DCANVAS*)), the window already
+      // exists and CAN legally be composited/repainted by the desktop (DWM) at any point, including while
+      // GEN itself is busy with synchronous startup work (parsing the dashboard's XML/CSS, decoding SVG
+      // icons...) and not pumping its own message queue. On affected driver/DWM combinations, whatever DWM
+      // paints during that gap is not simply blank/black: either the compositor's own surface memory
+      // (which, having just been used to composite the real desktop, can look like actual desktop/taskbar
+      // content), or -- for a window Windows has started treating as unresponsive because its message
+      // queue has gone unpumped for a while -- a stale/ghosted repaint that is visually indistinguishable
+      // from that same garbage. DWMWA_CLOAK removes the window from composition entirely (it exists, but
+      // the desktop never draws it) until Uncloak() clears it, which by construction only happens once the
+      // main loop -- and with it, regular message pumping -- has actually started. A usecfgchromesnative
+      // window never needs any of this: its top rows are native non-client area, painted synchronously by
+      // Windows itself independently of whether the app's own message loop is keeping up, so there is no
+      // gap for DWM to fill with anything else.
+      if(usecfgchromescustom)
+        {
+          BOOL cloak = TRUE;
+
+          if(SUCCEEDED(DwmSetWindowAttribute(hwnd, DWMWA_CLOAK, &cloak, sizeof(cloak))))
+            {
+              windowcloaked = true;
+            }
         }
 
       if(usecfgchromesnative)
@@ -1564,16 +1646,8 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
 
   // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Screen Windows] Part 2 Ini: x=%04d, y=%04d (%04d,%04d)  Bitxpixel (%d)"), posx, posy, width, height, GetBitsperPixel());
 
-  if(show)
-    {
-      if(!Show(show)) return false;
-    }
-
-  if(!SetFocus(hwnd))
-    {
-      return false;
-    } 
-    
+  // NOTE: Show(show)/SetFocus(hwnd) used to happen HERE, before hdc/blitgles even existed -- see the
+  // GRP_OPENGL_ACTIVE block below, right before the final "return true;", for why they were moved past it.
 
   hdc = GetDC(hwnd);
   if(!hdc)
@@ -1613,9 +1687,34 @@ bool GRPWINDOWSSCREEN::Create_Window(bool show)
               blitgles = NULL;
               return false;
             }
+
+          // The EGL surface Create() just built has never been cleared or presented -- its initial content
+          // is whatever the driver leaves in a freshly allocated buffer, which is undefined and on several
+          // drivers visibly so (stray coloured pixels, not a clean colour). Show(show) below is what first
+          // makes this window visible to the desktop; clearing and presenting a blank frame BEFORE that
+          // call, rather than after, means the compositor never has a chance to grab that undefined content
+          // -- twice, so neither buffer of the common double-buffered swap chain is left holding it.
+          blitgles->PresentBlankFrame();
+          blitgles->PresentBlankFrame();
         }
     }
   #endif
+
+  // Moved past hdc/blitgles setup above (see the NOTE further up): on a GRP_OPENGL_ACTIVE build the
+  // window must not become visible to the desktop until the EGL surface behind it has at least one
+  // clean, known-colour frame presented (see PresentBlankFrame() just above) -- otherwise whatever the
+  // OS paints before GEN's own first real Update(canvas) call shows the surface's undefined initial
+  // content instead. GetDC()/SetFocus() do not require the window to already be visible, so moving them
+  // alongside Show() here changes nothing about their own behaviour.
+  if(show)
+    {
+      if(!Show(show)) return false;
+    }
+
+  if(!SetFocus(hwnd))
+    {
+      return false;
+    }
 
   return true;
 }
@@ -1717,8 +1816,27 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
       // UpdateViewports() the main loop already calls every frame keeps the window showing that
       // frame -- cropped/anchored to each intermediate size exactly like any other resize -- instead
       // of going black, for the whole duration of the drag.
+      //
+      // NOTE (Custom Chromes startup garbage): WM_SIZE is sent SYNCHRONOUSLY by Windows itself --
+      // not queued through the app's own message pump -- as a direct side effect of CreateWindowEx,
+      // ShowWindow, SetWindowPos, DPI changes, etc. That means it can and does fire during the still-
+      // ongoing startup sequence (Ini_Graphics()/dashboard load in APPFLOWGRAPHICS::CreateMainScreenProcess,
+      // well before MAINPROCWINDOWS::MainLoop ever starts pumping real frames), at a point where this
+      // screen is already registered (see GRPWINDOWSSCREEN::Create()) but screencanvas may not yet hold
+      // one single fully drawn frame. Calling UpdateViewports()->Update(screencanvas) at that moment
+      // used to call Uncloak() (see Create_Window()/Show()/Update(GRP2DCANVAS*)) on whatever partial/stale
+      // content happened to be in screencanvas right then -- lifting DWMWA_CLOAK, and hence exposing the
+      // window to DWM composition, well before the real first frame was ready. Because WHETHER and WHEN
+      // such a WM_SIZE fires during that startup window is entirely up to Windows/DPI/monitor timing (not
+      // the app), this made the resulting garbage intermittent from run to run even with Custom Chromes
+      // always active -- and it never affected native chromes because windowcloaked is never set true
+      // there (see Create_Window()), so this same call was always a harmless no-op for that style. Skipping
+      // the call entirely while still cloaked is safe: a cloaked window is not composed/visible at all, so
+      // there is nothing on screen for this resize-drag repaint to usefully update yet; the ONLY call that
+      // is allowed to clear the cloak remains the real Update(GRP2DCANVAS*) driven by the main loop's own
+      // per-frame DrawFrame()/UpdateViewports() cycle, once startup has actually produced a real frame.
       case WM_SIZE                  : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
-                                        if(screen)
+                                        if(screen && !screen->windowcloaked)
                                           {
                                             screen->UpdateViewports();
                                           }
@@ -1830,6 +1948,7 @@ void GRPWINDOWSSCREEN::Clean()
   hinstance       = NULL;
   hwnd            = NULL;
   hdc             = NULL;
+  windowcloaked   = false;
 
   #ifdef GRP_OPENGL_ACTIVE
   blitgles        = NULL;
