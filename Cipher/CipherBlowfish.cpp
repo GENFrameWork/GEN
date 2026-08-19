@@ -441,6 +441,9 @@ bool CIPHERBLOWFISH::Cipher(XBYTE* input,XDWORD size)
       case CIPHERCHAININGMODE_CTR     : status = BlowfishCipher_CTR(&ctx, result->GetSize(), &offset, nonce_counter, stream_block, inputpadding.Get(),  result->Get());
                                         break;
 
+      case CIPHERCHAININGMODE_GCM     :                                             // Not applicable to this cipher
+      case CIPHERCHAININGMODE_POLY1305: status = false;
+                                        break;
     }
 
   return status;
@@ -499,6 +502,10 @@ bool CIPHERBLOWFISH::Uncipher(XBYTE* input,XDWORD size)
                                         break;
 
       case CIPHERCHAININGMODE_CTR     : status = BlowfishCipher_CTR(&ctx, size, &offset, nonce_counter, stream_block, input,  result->Get());
+                                        break;
+
+      case CIPHERCHAININGMODE_GCM     :                                             // Not applicable to this cipher
+      case CIPHERCHAININGMODE_POLY1305: status = false;
                                         break;
 
     }

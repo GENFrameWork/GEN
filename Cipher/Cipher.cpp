@@ -429,7 +429,139 @@ bool CIPHER::Uncipher(XBUFFER& input)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool CIPHER::IsAEAD()
+* @brief      Is this cipher an AEAD (Authenticated Encryption with Associated Data) one
+* @note       VIRTUAL. Ciphers that authenticate as well as encrypt, such as AES-GCM, override this.
+* @ingroup    CIPHER
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHER::IsAEAD()
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD CIPHER::GetAEADNonceSize()
+* @brief      Get the size, in bytes, of the nonce expected by the AEAD operations
+* @note       VIRTUAL
+* @ingroup    CIPHER
+*
+* @return     XDWORD : Requested value. Zero if this cipher is not an AEAD one.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD CIPHER::GetAEADNonceSize()
+{
+  return 0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD CIPHER::GetAEADTagSize()
+* @brief      Get the size, in bytes, of the authentication tag produced by the AEAD operations
+* @note       VIRTUAL
+* @ingroup    CIPHER
+*
+* @return     XDWORD : Requested value. Zero if this cipher is not an AEAD one.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD CIPHER::GetAEADTagSize()
+{
+  return 0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHER::CipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+* @brief      Cipher with authentication: the ciphertext is left in the result buffer and the tag in tag
+* @note       VIRTUAL. The base implementation always fails, because a generic cipher is not an AEAD one.
+* @ingroup    CIPHER
+*
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  nonce : Nonce, unique for every operation with the same key.
+* @param[in]  additionaldata : Data authenticated but not ciphered. It may be empty.
+* @param[out] tag : Buffer that receives the authentication tag.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHER::CipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHER::CipherAEAD(XBUFFER& input, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+* @brief      Cipher with authentication
+* @ingroup    CIPHER
+*
+* @param[in]  input : Input buffer to use.
+* @param[in]  nonce : Nonce, unique for every operation with the same key.
+* @param[in]  additionaldata : Data authenticated but not ciphered. It may be empty.
+* @param[out] tag : Buffer that receives the authentication tag.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHER::CipherAEAD(XBUFFER& input, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+{
+  return CipherAEAD(input.Get(), input.GetSize(), nonce, additionaldata, tag);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHER::UncipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+* @brief      Uncipher and verify the authentication tag: the plain text is left in the result buffer
+* @note       VIRTUAL. The base implementation always fails, because a generic cipher is not an AEAD one.
+* @ingroup    CIPHER
+*
+* @param[in]  input : Input pointer to use.
+* @param[in]  size : Size value.
+* @param[in]  nonce : Nonce used by the cipher operation.
+* @param[in]  additionaldata : Data authenticated but not ciphered. It may be empty.
+* @param[in]  tag : Authentication tag to verify.
+*
+* @return     bool : true if the operation is successful and the tag is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHER::UncipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHER::UncipherAEAD(XBUFFER& input, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+* @brief      Uncipher and verify the authentication tag
+* @ingroup    CIPHER
+*
+* @param[in]  input : Input buffer to use.
+* @param[in]  nonce : Nonce used by the cipher operation.
+* @param[in]  additionaldata : Data authenticated but not ciphered. It may be empty.
+* @param[in]  tag : Authentication tag to verify.
+*
+* @return     bool : true if the operation is successful and the tag is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHER::UncipherAEAD(XBUFFER& input, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+{
+  return UncipherAEAD(input.Get(), input.GetSize(), nonce, additionaldata, tag);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         XBYTE* CIPHER::GetResult(int& resultsize)
 * @brief      Get result
 * @ingroup    CIPHER

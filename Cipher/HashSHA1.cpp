@@ -103,6 +103,8 @@ bool HASHSHA1::Do(XBYTE* input, XQWORD size)
 {
   XDWORD msgdigest[5] = { 0, 0, 0, 0, 0 };
 
+  Reset();
+
   result->Delete();
 
   Input(input, size);

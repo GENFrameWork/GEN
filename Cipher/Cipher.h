@@ -66,6 +66,8 @@ enum CIPHERCHAININGMODE
   CIPHERCHAININGMODE_CBC            ,
   CIPHERCHAININGMODE_CFB            ,
   CIPHERCHAININGMODE_CTR            ,
+  CIPHERCHAININGMODE_GCM            ,
+  CIPHERCHAININGMODE_POLY1305       ,
 };
 
 
@@ -102,6 +104,16 @@ class CIPHER
 
     virtual bool          Uncipher                  (XBYTE* input,XDWORD size);
     bool                  Uncipher                  (XBUFFER& input);
+
+    virtual bool          IsAEAD                    ();
+    virtual XDWORD        GetAEADNonceSize          ();
+    virtual XDWORD        GetAEADTagSize            ();
+
+    virtual bool          CipherAEAD                (XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag);
+    bool                  CipherAEAD                (XBUFFER& input, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag);
+
+    virtual bool          UncipherAEAD              (XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag);
+    bool                  UncipherAEAD              (XBUFFER& input, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag);
 
     virtual XBYTE*        GetResult                 (int& resultsize);
     XBUFFER*              GetResult                 ();
