@@ -232,7 +232,7 @@ bool DIODNSPROTOCOL_MITM_SERVER::Update()
       nameURLstr.Set((char*)nameURL);
       question    = (DIODNSPROTOCOL_QUESTION*)receivedbuffer[0].Get() + sizeof(DIODNSPROTOCOL_HEADER) + nameURLstr.GetSize() + 1;
   
-      GEN_DELETE nameURL;
+      GEN_DELETE_ARRAY nameURL;
       nameURL = NULL;
 
       DIODNSPROTOCOL_MITM_SERVER_XEVENT xevent(this, DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS);
@@ -340,7 +340,10 @@ bool DIODNSPROTOCOL_MITM_SERVER::Update()
      
       nameURL     =  DIODNSPROTOCOLCLIENT::GetBufferName(reader, receivedbuffer[0].Get(), &stop);
       nameURLstr.Set((char*)nameURL);
-      
+
+      GEN_DELETE_ARRAY nameURL;
+      nameURL = NULL;
+       
       DIODNSPROTOCOL_MITM_SERVER_XEVENT xevent(this, DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS);
       xevent.GetAskedURL()->Set(nameURLstr);
       xevent.GetAskedBuffer()->CopyFrom(receivedbuffer[0]);
@@ -714,7 +717,6 @@ void DIODNSPROTOCOL_MITM_SERVER::Clean()
 
   diostreamudp    = NULL;
 }
-
 
 
 

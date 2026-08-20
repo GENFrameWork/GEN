@@ -287,6 +287,10 @@ bool DIODNSPROTOCOLCLIENT::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int queryty
                           int    type;
                           int    stop   = 0;
 
+                          result->name      = NULL;
+                          result->resource  = NULL;
+                          result->rdata     = NULL;
+
                           result->name  = GetBufferName(reader, answerbuffer.Get(), &stop);
                           reader += stop;
 
@@ -313,7 +317,18 @@ bool DIODNSPROTOCOLCLIENT::ResolveURL(XCHAR* URL, DIOIP& IPresolved, int queryty
                               status = ResolveURL((XCHAR*)URLmore.Get(), IPresolved, querytype, timeout);
                             }
 
-                          free(result->name);
+                          if(result->name)
+                            {
+                              GEN_DELETE_ARRAY result->name;
+                              result->name = NULL;
+                            }
+
+                          if(result->rdata)
+                            {
+                              GEN_DELETE_ARRAY result->rdata;
+                              result->rdata = NULL;
+                            }
+
                           GEN_DELETE result;
 
                           if(status) break;                                               
@@ -518,7 +533,8 @@ XBYTE* DIODNSPROTOCOLCLIENT::GetBufferName(XBYTE* reader, XBYTE* buffer, int* co
   int     j;
 
   *count = 1;
-  name = (XBYTE*)malloc(_MAXSTR);
+  name = GEN_NEW XBYTE[_MAXSTR];
+  if(!name) return NULL;
 
   name[0] = '\0';
 
@@ -585,6 +601,5 @@ void DIODNSPROTOCOLCLIENT::Clean()
 
   serverport      = 0;
 }
-
 
 

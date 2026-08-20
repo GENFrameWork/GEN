@@ -553,13 +553,45 @@ class DIOSTREAMTLS : public T
     bool                                    Transport_Write                         (XBUFFER& output)
                                             {
                                               XBUFFER* transportoutput;
+                                              XTIMER*  xtimer;
+                                              bool     status = true;
 
                                               if(output.IsEmpty()) return true;
 
                                               transportoutput = T::GetOutXBuffer();
                                               if(!transportoutput || !transportoutput->Add(output)) return false;
 
-                                              return T::WaitToFlushOutXBuffer(timeout, false);
+                                              xtimer = GEN_XFACTORY.CreateTimer();
+                                              if(!xtimer) return false;
+
+                                              xtimer->Reset();
+
+                                              while(!T::IsFlushOutXBuffer())
+                                                {
+                                                  if(T::GetStatus() == DIOSTREAMSTATUS_DISCONNECTED)
+                                                    {
+                                                      T::ResetOutXBuffer();
+                                                      status = false;
+                                                      break;
+                                                    }
+
+                                                  if(timeout != XTIMER_INFINITE)
+                                                    {
+                                                      if(xtimer->GetMeasureSeconds() >= (XDWORD)timeout)
+                                                        {
+                                                          T::ResetOutXBuffer();
+                                                          status = false;
+                                                          break;
+                                                        }
+                                                    }
+
+                                                  DIOSTREAMCONFIG* streamconfig = T::GetConfig();
+                                                  T::Wait(streamconfig?streamconfig->GetPollInterval():DIOSTREAM_TIMEINWAITFUNCTIONS);
+                                                }
+
+                                              GEN_XFACTORY.DeleteTimer(xtimer);
+
+                                              return status;
                                             }
 
 
