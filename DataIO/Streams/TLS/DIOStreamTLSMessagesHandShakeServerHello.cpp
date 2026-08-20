@@ -48,6 +48,14 @@
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 
+static XBYTE DIOSTREAMTLS_MSG_HELLORETRYREQUEST_RANDOM[DIOSTREAMTLS_MSG_HELLORETRYREQUEST_RANDOM_SIZE] =
+{
+  0xCF, 0x21, 0xAD, 0x74, 0xE5, 0x9A, 0x61, 0x11,
+  0xBE, 0x1D, 0x8C, 0x02, 0x1E, 0x65, 0xB8, 0x91,
+  0xC2, 0xA2, 0x11, 0x16, 0x7A, 0xBB, 0x8C, 0x5E,
+  0x07, 0x9E, 0x09, 0xE2, 0xC8, 0xA8, 0x33, 0x9C
+};
+
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
@@ -219,6 +227,39 @@ XVECTOR<XWORD>* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCipherSuites()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XWORD DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCipherSuite()
+* @brief      Get the cipher suite selected by the server
+* @ingroup    DATAIO
+*
+* @return     XWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCipherSuite()
+{
+  return ciphersuites.IsEmpty()?0:ciphersuites.Get(0);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetCipherSuite(XWORD ciphersuite)
+* @brief      Set the cipher suite selected by the server
+* @ingroup    DATAIO
+*
+* @param[in]  ciphersuite : Cipher suite value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetCipherSuite(XWORD ciphersuite)
+{
+  ciphersuites.DeleteAll();
+  ciphersuites.Add(ciphersuite);
+
+  ciphersuites_length = sizeof(XWORD);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XBYTE DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetCompressionLength()
 * @brief      get compression length
@@ -336,23 +377,47 @@ XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Ex
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_Add(DIOSTREAMTLS_MSG_EXTENSION* extension)
 {
+  XDWORD extensionslength = 0;
+
   if(!extension)
     {
       return false;
     }
 
-  extensions.Add(extension);
-
-  Extensions_SetLenght(0);
-
   for(XDWORD c=0; c<extensions.GetSize(); c++)
     {
-      DIOSTREAMTLS_MSG_EXTENSION* extension = extensions.Get(c);
-      if(extension)
+      DIOSTREAMTLS_MSG_EXTENSION* currentextension = extensions.Get(c);
+      if(currentextension && (currentextension->GetType() == extension->GetType()))
         {
-          Extensions_SetLenght(Extensions_GetLenght() + extension->GetLengthBuffer());          
+          return false;
+        }
+
+      if(currentextension)
+        {
+          XDWORD extensionlength = currentextension->GetLengthBuffer();
+          if(!extensionlength || ((extensionslength + extensionlength) > 0xFFFF))
+            {
+              return false;
+            }
+
+          extensionslength += extensionlength;
         }
     }
+
+  XDWORD extensionlength = extension->GetLengthBuffer();
+  if(!extensionlength || ((extensionslength + extensionlength) > 0xFFFF))
+    {
+      return false;
+    }
+
+  extensionslength += extensionlength;
+
+  if(!extensions.Add(extension))
+    {
+      return false;
+    }
+
+  Extensions_SetLenght((XWORD)extensionslength);
 
   return true;
 }
@@ -397,38 +462,39 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Extensions_DeleteAll()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
-  buffer.Add(legacy_version);  
-
-  buffer.Add((XBYTE*)random, DIOSTREAMTLS_MSG_RANDOM_SIZE);  
-
-  buffer.Add(sessionID_length);  
-  if(sessionID_length)
+  if((sessionID_length > DIOSTREAMTLS_MSG_SESSIONID_SIZE) || (ciphersuites.GetSize() != 1))
     {
-      buffer.Add((XBYTE*)sessionID, sessionID_length);  
+      return false;
     }
 
-  buffer.Add(ciphersuites_length);  
-
-  for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
-    {
-      XWORD ciphersuite = ciphersuites.Get(c);
-
-      buffer.Add(ciphersuite);
-    }
-
-  buffer.Add(compress_length);  
-  buffer.Add(compress_method);  
-
-  buffer.Add(extensions_lenght);
+  XBUFFER extensionbuffer;
 
   for(XDWORD c=0; c<extensions.GetSize(); c++)
     {
       DIOSTREAMTLS_MSG_EXTENSION* extension = extensions.Get(c);
-      if(extension)
+      if(!extension || !extension->SetToBuffer(extensionbuffer, showdebug))
         {
-          extension->SetToBuffer(buffer, showdebug);  
+          return false;
         }
     }
+
+  if(extensionbuffer.GetSize() > 0xFFFF)
+    {
+      return false;
+    }
+
+  ciphersuites_length = sizeof(XWORD);
+  compress_length      = 1;
+  extensions_lenght    = (XWORD)extensionbuffer.GetSize();
+
+  if(!buffer.Add(legacy_version))                                      return false;
+  if(!buffer.Add((XBYTE*)random, DIOSTREAMTLS_MSG_RANDOM_SIZE))         return false;
+  if(!buffer.Add(sessionID_length))                                    return false;
+  if(sessionID_length && !buffer.Add((XBYTE*)sessionID, sessionID_length)) return false;
+  if(!buffer.Add(ciphersuites.Get(0)))                                 return false;
+  if(!buffer.Add(compress_method))                                     return false;
+  if(!buffer.Add(extensions_lenght))                                   return false;
+  if(extensions_lenght && !buffer.Add(extensionbuffer))                return false;
 
   return true;
 }
@@ -448,7 +514,93 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::SetToBuffer(XBUFFER& buffer, bool s
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
-  return true;
+  XBUFFER workbuffer;
+  XDWORD  sizeconsumed = buffer.GetSize();
+
+  workbuffer.Add(buffer);
+
+  if(workbuffer.GetSize() < (sizeof(XWORD) + DIOSTREAMTLS_MSG_RANDOM_SIZE + sizeof(XBYTE) + sizeof(XWORD) + sizeof(XBYTE)))
+    {
+      return false;
+    }
+
+  Extensions_DeleteAll();
+  ciphersuites.DeleteAll();
+
+  if(!workbuffer.Extract(legacy_version)) return false;
+
+  if(workbuffer.Extract(random, 0, DIOSTREAMTLS_MSG_RANDOM_SIZE) != DIOSTREAMTLS_MSG_RANDOM_SIZE)
+    {
+      return false;
+    }
+
+  if(!workbuffer.Extract(sessionID_length)) return false;
+  if((sessionID_length > DIOSTREAMTLS_MSG_SESSIONID_SIZE) || (workbuffer.GetSize() < sessionID_length)) return false;
+
+  memset(sessionID, 0, DIOSTREAMTLS_MSG_SESSIONID_SIZE);
+
+  if(sessionID_length && (workbuffer.Extract(sessionID, 0, sessionID_length) != sessionID_length))
+    {
+      return false;
+    }
+
+  XWORD ciphersuite = 0;
+
+  if(!workbuffer.Extract(ciphersuite) || !ciphersuites.Add(ciphersuite)) return false;
+
+  ciphersuites_length = sizeof(XWORD);
+  compress_length      = 1;
+
+  if(!workbuffer.Extract(compress_method)) return false;
+
+  if(workbuffer.IsEmpty())
+    {
+      extensions_lenght = 0;
+      return (buffer.Extract(NULL, 0, sizeconsumed) == sizeconsumed);
+    }
+
+  if(!workbuffer.Extract(extensions_lenght)) return false;
+  if(workbuffer.GetSize() != extensions_lenght) return false;
+
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT context = IsHelloRetryRequest()?DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_HELLORETRYREQUEST:
+                                                                    DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_SERVERHELLO;
+
+  while(!workbuffer.IsEmpty())
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = NULL;
+
+      if(!DIOSTREAMTLS_MSG_EXTENSION_Extract(workbuffer, context, extension))
+        {
+          Extensions_DeleteAll();
+          return false;
+        }
+
+      if(!Extensions_Add(extension))
+        {
+          GEN_DELETE extension;
+          Extensions_DeleteAll();
+          return false;
+        }
+    }
+
+  Extensions_SetLenght(extensions_lenght);
+
+  return (buffer.Extract(NULL, 0, sizeconsumed) == sizeconsumed);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::IsHelloRetryRequest()
+* @brief      Check whether the random field identifies a HelloRetryRequest
+* @ingroup    DATAIO
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::IsHelloRetryRequest()
+{
+  return !memcmp(random, DIOSTREAMTLS_MSG_HELLORETRYREQUEST_RANDOM, DIOSTREAMTLS_MSG_HELLORETRYREQUEST_RANDOM_SIZE);
 }
 
 
@@ -476,9 +628,5 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO::Clean()
 
   extensions_lenght     = 0;
 }
-
-
-
-
 
 

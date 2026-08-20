@@ -36,7 +36,9 @@
 
 #include "XWINDOWSRand.h"
 
-#include <time.h>
+#include <windows.h>
+#include <bcrypt.h>
+#include <string.h>
 
 
 
@@ -80,4 +82,54 @@ XWINDOWSRAND::~XWINDOWSRAND()
 
 }
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSRAND::Ini()
+* @brief      Initialize the object
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSRAND::Ini()
+{
+  XBYTE data = 0;
+
+  return Generate(&data, sizeof(data));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XWINDOWSRAND::Generate(XBYTE* buffer, XDWORD size)
+* @brief      Generate random bytes
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[out] buffer : Buffer where the random bytes are stored.
+* @param[in]  size : Size of the buffer in bytes.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSRAND::Generate(XBYTE* buffer, XDWORD size)
+{
+  if(!size)
+    {
+      return true;
+    }
+
+  if(!buffer)
+    {
+      return false;
+    }
+
+  if(BCryptGenRandom(NULL, (PUCHAR)buffer, (ULONG)size, BCRYPT_USE_SYSTEM_PREFERRED_RNG) != 0)
+    {
+      memset(buffer, 0, size);
+      return false;
+    }
+
+  return true;
+}
 

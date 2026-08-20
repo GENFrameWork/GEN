@@ -32,6 +32,8 @@
 
 #include <stdlib.h>
 
+#include "XBase.h"
+
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 #define GETRANDOM(min,max)  ((rand()%(int)(((max)+1)-(min)))+(min))
@@ -57,6 +59,7 @@ class XRAND
     virtual int           MaxElements         (int max);
     virtual int           Max                 (int max);
     virtual int           Between             (int min, int max);
+    virtual bool          Generate            (XBYTE* buffer, XDWORD size);
 
     float                 Between             (float  min,  float max);
     bool                  Percent             (int percent);
@@ -72,9 +75,6 @@ class XRAND
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-
 
 
 

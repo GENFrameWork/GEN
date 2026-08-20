@@ -89,6 +89,7 @@ CIPHERTRUSTEDROOTCERTIFICATESX509::CIPHERTRUSTEDROOTCERTIFICATESX509()
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERTRUSTEDROOTCERTIFICATESX509::~CIPHERTRUSTEDROOTCERTIFICATESX509()
 {
+  Certificates_DeleteAll();
   DeleteAllLines();
 
   Clean();
@@ -115,6 +116,8 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::ReadFromFile(XPATH* pathnamefile)
     {
       return false;
     }
+
+  Certificates_DeleteAll();
     
   xfiletxt = GEN_NEW XFILETXT();
   if(!xfiletxt) 
@@ -274,6 +277,115 @@ bool CIPHERTRUSTEDROOTCERTIFICATESX509::DeleteAllLines()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool CIPHERTRUSTEDROOTCERTIFICATESX509::Certificates_Decode()
+* @brief      Decode every PEM certificate into an owned DER buffer
+* @ingroup    CIPHER
+* 
+* @return     bool : true if at least one complete certificate is decoded; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERTRUSTEDROOTCERTIFICATESX509::Certificates_Decode()
+{
+  XSTRING certificatebase64;
+  bool    iscertificate = false;
+
+  Certificates_DeleteAll();
+
+  for(XDWORD c=0; c<lines.GetSize(); c++)
+    {
+      XSTRING* line = lines.Get(c);
+      if(!line) continue;
+
+      if(line->Find(__L("-----BEGIN CERTIFICATE-----"), true) != XSTRING_NOTFOUND)
+        {
+          if(iscertificate)
+            {
+              Certificates_DeleteAll();
+              return false;
+            }
+
+          certificatebase64.Empty();
+          iscertificate = true;
+          continue;
+        }
+
+      if(line->Find(__L("-----END CERTIFICATE-----"), true) != XSTRING_NOTFOUND)
+        {
+          XBUFFER* certificate;
+
+          if(!iscertificate || certificatebase64.IsEmpty())
+            {
+              Certificates_DeleteAll();
+              return false;
+            }
+
+          certificate = GEN_NEW XBUFFER();
+          if(!certificate)
+            {
+              Certificates_DeleteAll();
+              return false;
+            }
+
+          if(!certificate->ConvertFromBase64(certificatebase64) || certificate->IsEmpty() || !certificates.Add(certificate))
+            {
+              GEN_DELETE certificate;
+              Certificates_DeleteAll();
+              return false;
+            }
+
+          certificatebase64.Empty();
+          iscertificate = false;
+          continue;
+        }
+
+      if(iscertificate && !line->IsEmpty()) certificatebase64.Add(line->Get());
+    }
+
+  if(iscertificate || certificates.IsEmpty())
+    {
+      Certificates_DeleteAll();
+      return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XVECTOR<XBUFFER*>* CIPHERTRUSTEDROOTCERTIFICATESX509::Certificates_GetAll()
+* @brief      Get every decoded DER trust anchor
+* @ingroup    CIPHER
+* 
+* @return     XVECTOR<XBUFFER*>* : Pointer to the owned certificate list.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XBUFFER*>* CIPHERTRUSTEDROOTCERTIFICATESX509::Certificates_GetAll()
+{
+  return &certificates;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERTRUSTEDROOTCERTIFICATESX509::Certificates_DeleteAll()
+* @brief      Delete every decoded DER trust anchor
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERTRUSTEDROOTCERTIFICATESX509::Certificates_DeleteAll()
+{
+  certificates.DeleteContents();
+  certificates.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void CIPHERTRUSTEDROOTCERTIFICATESX509::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
@@ -284,9 +396,6 @@ void CIPHERTRUSTEDROOTCERTIFICATESX509::Clean()
 {
 
 }
-
-
-
 
 
 

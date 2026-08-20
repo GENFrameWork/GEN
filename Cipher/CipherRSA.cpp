@@ -493,6 +493,60 @@ bool CIPHERRSA::Sign(XBUFFER& input, CIPHERKEYTYPE keytouse, HASH* hash, CIPHERR
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERRSA::Verify(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version, XDWORD saltsize)
+* @brief      Verify an RSA signature
+* @ingroup    CIPHER
+*
+* @param[in]  input : Signed data.
+* @param[in]  size : Signed data size.
+* @param[in]  signature : RSA signature.
+* @param[in]  hash : Hash algorithm used by the signature.
+* @param[in]  pkcs1version : PKCS#1 signature encoding.
+* @param[in]  saltsize : Exact PSS salt size. Zero selects the hash size.
+*
+* @return     bool : true if the signature is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERRSA::Verify(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version, XDWORD saltsize)
+{
+  if(!input || !size || !hash || signature.IsEmpty())
+    {
+      return false;
+    }
+
+  switch(pkcs1version)
+    {
+      case CIPHERRSAPKCS1VERSIONV15 : return Verify_PKCS1_V15(input, size, signature, hash);
+      case CIPHERRSAPKCS1VERSIONV21 : return Verify_PKCS1_V21(input, size, signature, hash, saltsize);
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERRSA::Verify(XBUFFER& input, XBUFFER& signature, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version, XDWORD saltsize)
+* @brief      Verify an RSA signature
+* @ingroup    CIPHER
+*
+* @param[in]  input : Signed data.
+* @param[in]  signature : RSA signature.
+* @param[in]  hash : Hash algorithm used by the signature.
+* @param[in]  pkcs1version : PKCS#1 signature encoding.
+* @param[in]  saltsize : Exact PSS salt size. Zero selects the hash size.
+*
+* @return     bool : true if the signature is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERRSA::Verify(XBUFFER& input, XBUFFER& signature, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version, XDWORD saltsize)
+{
+  return Verify(input.Get(), input.GetSize(), signature, hash, pkcs1version, saltsize);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         CIPHERRSA* CIPHERRSA::GetInstance()
 * @brief      Get instance
@@ -859,6 +913,323 @@ bool CIPHERRSA::Uncipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERRSA::Verify_PKCS1_V15(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash)
+* @brief      Verify an EMSA-PKCS1-v1_5 signature
+* @ingroup    CIPHER
+*
+* @param[in]  input : Signed data.
+* @param[in]  size : Signed data size.
+* @param[in]  signature : RSA signature.
+* @param[in]  hash : Hash algorithm used by the signature.
+*
+* @return     bool : true if the signature is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERRSA::Verify_PKCS1_V15(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash)
+{
+  XBYTE     digestinfoSHA224[] = { 0x30, 0x2D, 0x30, 0x0D, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01,
+                                   0x65, 0x03, 0x04, 0x02, 0x04, 0x05, 0x00, 0x04, 0x1C };
+  XBYTE     digestinfoSHA256[] = { 0x30, 0x31, 0x30, 0x0D, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01,
+                                   0x65, 0x03, 0x04, 0x02, 0x01, 0x05, 0x00, 0x04, 0x20 };
+  XBYTE     digestinfoSHA384[] = { 0x30, 0x41, 0x30, 0x0D, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01,
+                                   0x65, 0x03, 0x04, 0x02, 0x02, 0x05, 0x00, 0x04, 0x30 };
+  XBYTE     digestinfoSHA512[] = { 0x30, 0x51, 0x30, 0x0D, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01,
+                                   0x65, 0x03, 0x04, 0x02, 0x03, 0x05, 0x00, 0x04, 0x40 };
+  XBYTE*    digestinfoheader   = NULL;
+  XDWORD    digestinfoheadersize = 0;
+  XBUFFER   decoded;
+  XBUFFER   digestinfo;
+  XBUFFER   expected;
+  int       keysize;
+  int       paddingsize;
+
+  if(!input || !size || !hash)
+    {
+      return false;
+    }
+
+  keysize = GetKeySizeInBytes(CIPHERKEYTYPE_RSA_PUBLIC);
+  if(!keysize || (signature.GetSize() != (XDWORD)keysize))
+    {
+      return false;
+    }
+
+  switch(hash->GetType())
+    {
+      case HASHTYPE_SHA224 : digestinfoheader     = digestinfoSHA224;
+                             digestinfoheadersize = sizeof(digestinfoSHA224);
+                             break;
+
+      case HASHTYPE_SHA256 : digestinfoheader     = digestinfoSHA256;
+                             digestinfoheadersize = sizeof(digestinfoSHA256);
+                             break;
+
+      case HASHTYPE_SHA384 : digestinfoheader     = digestinfoSHA384;
+                             digestinfoheadersize = sizeof(digestinfoSHA384);
+                             break;
+
+      case HASHTYPE_SHA512 : digestinfoheader     = digestinfoSHA512;
+                             digestinfoheadersize = sizeof(digestinfoSHA512);
+                             break;
+
+                  default : return false;
+    }
+
+  if(!hash->ResetResult() || !hash->Do(input, size))
+    {
+      return false;
+    }
+
+  if(!digestinfo.Add(digestinfoheader, digestinfoheadersize) ||
+     !digestinfo.Add((*hash->GetResult())))
+    {
+      return false;
+    }
+
+  paddingsize = keysize - (int)digestinfo.GetSize() - 3;
+  if(paddingsize < 8)
+    {
+      return false;
+    }
+
+  if(!expected.Add((XBYTE)0x00) || !expected.Add((XBYTE)0x01))
+    {
+      return false;
+    }
+
+  for(int c=0; c<paddingsize; c++)
+    {
+      if(!expected.Add((XBYTE)0xFF))
+        {
+          return false;
+        }
+    }
+
+  if(!expected.Add((XBYTE)0x00) || !expected.Add(digestinfo))
+    {
+      return false;
+    }
+
+  if(!DoRSAPublicOperation(signature, decoded) || (decoded.GetSize() != expected.GetSize()))
+    {
+      return false;
+    }
+
+  return CompareConstantTime(decoded, expected);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERRSA::Verify_PKCS1_V21(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash, XDWORD saltsize)
+* @brief      Verify an EMSA-PSS signature
+* @ingroup    CIPHER
+*
+* @param[in]  input : Signed data.
+* @param[in]  size : Signed data size.
+* @param[in]  signature : RSA signature.
+* @param[in]  hash : Hash algorithm used by the signature.
+* @param[in]  saltsize : Exact salt size. Zero selects the hash size.
+*
+* @return     bool : true if the signature is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERRSA::Verify_PKCS1_V21(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash, XDWORD saltsize)
+{
+  XBUFFER decoded;
+  XBUFFER encodedmessage;
+  XBUFFER maskedDB;
+  XBUFFER DBmask;
+  XBUFFER DB;
+  XBUFFER messagehash;
+  XBUFFER M;
+  XBUFFER H2;
+  XDWORD  hashsize;
+  XDWORD  modulusbits;
+  XDWORD  encodedbits;
+  XDWORD  encodedsize;
+  XDWORD  datablocksize;
+  XDWORD  unusedbits;
+  XDWORD  saltindex;
+  int     keysize;
+
+  if(!input || !size || !hash)
+    {
+      return false;
+    }
+
+  keysize = GetKeySizeInBytes(CIPHERKEYTYPE_RSA_PUBLIC);
+  hashsize = (XDWORD)hash->GetDefaultSize();
+
+  if(!keysize || !hashsize || (signature.GetSize() != (XDWORD)keysize))
+    {
+      return false;
+    }
+
+  if(!saltsize)
+    {
+      saltsize = hashsize;
+    }
+
+  modulusbits = context.N.GetMSB();
+  if(modulusbits < 2)
+    {
+      return false;
+    }
+
+  encodedbits = modulusbits - 1;
+  encodedsize = (encodedbits + 7) / 8;
+
+  if((encodedsize < (hashsize + saltsize + 2)) || (encodedsize > (XDWORD)keysize))
+    {
+      return false;
+    }
+
+  if(!DoRSAPublicOperation(signature, decoded) || (decoded.GetSize() != (XDWORD)keysize))
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<(decoded.GetSize() - encodedsize); c++)
+    {
+      if(decoded.GetByte(c))
+        {
+          return false;
+        }
+    }
+
+  if(!encodedmessage.Add(&decoded.Get()[decoded.GetSize() - encodedsize], encodedsize) ||
+     (encodedmessage.GetByte(encodedsize - 1) != 0xBC))
+    {
+      return false;
+    }
+
+  datablocksize = encodedsize - hashsize - 1;
+  unusedbits    = (8 * encodedsize) - encodedbits;
+
+  if(unusedbits && (encodedmessage.GetByte(0) & (XBYTE)(0xFF << (8 - unusedbits))))
+    {
+      return false;
+    }
+
+  if(!maskedDB.Add(encodedmessage.Get(), datablocksize))
+    {
+      return false;
+    }
+
+  XBUFFER H;
+  if(!H.Add(&encodedmessage.Get()[datablocksize], hashsize) ||
+     !MaskGenerationFunction1(H, datablocksize, hash, DBmask))
+    {
+      return false;
+    }
+
+  if(!DB.Resize(datablocksize))
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<datablocksize; c++)
+    {
+      DB.Set((XBYTE)(maskedDB.GetByte(c) ^ DBmask.GetByte(c)), c);
+    }
+
+  if(unusedbits)
+    {
+      DB.Set((XBYTE)(DB.GetByte(0) & (0xFF >> unusedbits)), 0);
+    }
+
+  saltindex = datablocksize - saltsize;
+  if(!saltindex || (DB.GetByte(saltindex - 1) != 0x01))
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<(saltindex - 1); c++)
+    {
+      if(DB.GetByte(c))
+        {
+          return false;
+        }
+    }
+
+  if(!hash->ResetResult() || !hash->Do(input, size) || !messagehash.Add((*hash->GetResult())))
+    {
+      return false;
+    }
+
+  for(int c=0; c<8; c++)
+    {
+      if(!M.Add((XBYTE)0x00))
+        {
+          return false;
+        }
+    }
+
+  if(!M.Add(messagehash) || !M.Add(&DB.Get()[saltindex], saltsize) ||
+     !hash->ResetResult() || !hash->Do(M) || !H2.Add((*hash->GetResult())) || (H2.GetSize() != H.GetSize()))
+    {
+      return false;
+    }
+
+  return CompareConstantTime(H, H2);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERRSA::MaskGenerationFunction1(XBUFFER& seed, XDWORD size, HASH* hash, XBUFFER& mask)
+* @brief      Generate an MGF1 mask as specified by PKCS#1
+* @ingroup    CIPHER
+*
+* @param[in]  seed : MGF1 seed.
+* @param[in]  size : Requested mask size.
+* @param[in]  hash : Hash used by MGF1.
+* @param[out] mask : Generated mask.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERRSA::MaskGenerationFunction1(XBUFFER& seed, XDWORD size, HASH* hash, XBUFFER& mask)
+{
+  XBUFFER data;
+  XDWORD  counter = 0;
+
+  if(seed.IsEmpty() || !size || !hash || !hash->GetDefaultSize())
+    {
+      return false;
+    }
+
+  mask.Delete();
+
+  while(mask.GetSize() < size)
+    {
+      data.Delete();
+
+      if(!data.Add(seed) ||
+         !data.Add((XBYTE)((counter >> 24) & 0xFF)) ||
+         !data.Add((XBYTE)((counter >> 16) & 0xFF)) ||
+         !data.Add((XBYTE)((counter >>  8) & 0xFF)) ||
+         !data.Add((XBYTE)( counter        & 0xFF)) ||
+         !hash->ResetResult() || !hash->Do(data) || !mask.Add((*hash->GetResult())))
+        {
+          return false;
+        }
+
+      counter++;
+    }
+
+  if(mask.GetSize() > size)
+    {
+      mask.Resize(size);
+    }
+
+  return (mask.GetSize() == size);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool CIPHERRSA::DoRSAPublicOperation(XBUFFER& input, XBUFFER& output)
 * @brief      Do RSA public operation
@@ -1046,7 +1417,7 @@ int CIPHERRSA::GetKeySizeInBytes(CIPHERKEYTYPE keytouse)
 {
   int keysize = 0;
 
-  CIPHERKEY* key =  GetKey(CIPHERKEYTYPE_RSA_PRIVATE);
+  CIPHERKEY* key = GetKey(keytouse);
   if(!key) return 0;
 
   keysize = key->GetSizeInBytes();
@@ -1099,8 +1470,3 @@ void CIPHERRSA::Clean()
 {
   xrand = NULL;
 }
-
-
-
-
-

@@ -404,33 +404,33 @@ void CIPHERECDSAX25519::fproduct(XQWORDSIG* output, const XQWORDSIG* in2, const 
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSAX25519::freduce_degree(XQWORDSIG* output) 
 {
-  // Each of these shifts and adds ends up multiplying the value by 19.
-  output[8] += output[18] << 4;
-  output[8] += output[18] << 1;
+  // Each of these multiplications and adds ends up multiplying the value by 19.
+  output[8] += output[18] * 16;
+  output[8] += output[18] * 2;
   output[8] += output[18];
-  output[7] += output[17] << 4;
-  output[7] += output[17] << 1;
+  output[7] += output[17] * 16;
+  output[7] += output[17] * 2;
   output[7] += output[17];
-  output[6] += output[16] << 4;
-  output[6] += output[16] << 1;
+  output[6] += output[16] * 16;
+  output[6] += output[16] * 2;
   output[6] += output[16];
-  output[5] += output[15] << 4;
-  output[5] += output[15] << 1;
+  output[5] += output[15] * 16;
+  output[5] += output[15] * 2;
   output[5] += output[15];
-  output[4] += output[14] << 4;
-  output[4] += output[14] << 1;
+  output[4] += output[14] * 16;
+  output[4] += output[14] * 2;
   output[4] += output[14];
-  output[3] += output[13] << 4;
-  output[3] += output[13] << 1;
+  output[3] += output[13] * 16;
+  output[3] += output[13] * 2;
   output[3] += output[13];
-  output[2] += output[12] << 4;
-  output[2] += output[12] << 1;
+  output[2] += output[12] * 16;
+  output[2] += output[12] * 2;
   output[2] += output[12];
-  output[1] += output[11] << 4;
-  output[1] += output[11] << 1;
+  output[1] += output[11] * 16;
+  output[1] += output[11] * 2;
   output[1] += output[11];
-  output[0] += output[10] << 4;
-  output[0] += output[10] << 1;
+  output[0] += output[10] * 16;
+  output[0] += output[10] * 2;
   output[0] += output[10];
 }
 
@@ -515,17 +515,17 @@ void CIPHERECDSAX25519::freduce_coefficients(XQWORDSIG* output)
     {
       XQWORDSIG over = div_by_2_26(output[i]);
 
-      output[i] -= over << 26;
+      output[i] -= over * 67108864;
       output[i+1] += over;
 
       over = div_by_2_25(output[i+1]);
-      output[i+1] -= over << 25;
+      output[i+1] -= over * 33554432;
       output[i+2] += over;
     }
 
   // Now |output[10]| < 2 ^ 38 and all other coefficients are reduced. 
-  output[0] += output[10] << 4;
-  output[0] += output[10] << 1;
+  output[0] += output[10] * 16;
+  output[0] += output[10] * 2;
   output[0] += output[10];
 
   output[10] = 0;
@@ -533,7 +533,7 @@ void CIPHERECDSAX25519::freduce_coefficients(XQWORDSIG* output)
   // Now output[1..9] are reduced, and |output[0]| < 2^26 + 19 * 2^38  So |over| will be no more than 77825  
   {
     XQWORDSIG over = div_by_2_26(output[0]);
-    output[0] -= over << 26;
+    output[0] -= over * 67108864;
     output[1] += over;
   }
 
@@ -541,7 +541,7 @@ void CIPHERECDSAX25519::freduce_coefficients(XQWORDSIG* output)
   {
     // output[1] fits in 32 bits, so we can use div_s32_by_2_25 here. 
     XDWORDSIG over32 = div_s32_by_2_25((XDWORDSIG)output[1]);
-    output[1] -= over32 << 25;
+    output[1] -= over32 * 33554432;
     output[2] += over32;
   }
 
@@ -1096,6 +1096,5 @@ void CIPHERECDSAX25519::Clean()
 {
   CleanAllKeys();
 }
-
 
 

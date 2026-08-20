@@ -338,23 +338,47 @@ XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Ex
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_Add(DIOSTREAMTLS_MSG_EXTENSION* extension)
 {
+  XDWORD extensionslength = 0;
+
   if(!extension)
     {
       return false;
     }
 
-  extensions.Add(extension);
-
-  Extensions_SetLenght(0);
-
   for(XDWORD c=0; c<extensions.GetSize(); c++)
     {
-      DIOSTREAMTLS_MSG_EXTENSION* extension = extensions.Get(c);
-      if(extension)
+      DIOSTREAMTLS_MSG_EXTENSION* currentextension = extensions.Get(c);
+      if(currentextension && (currentextension->GetType() == extension->GetType()))
         {
-          Extensions_SetLenght(Extensions_GetLenght() + extension->GetLengthBuffer());          
+          return false;
+        }
+
+      if(currentextension)
+        {
+          XDWORD extensionlength = currentextension->GetLengthBuffer();
+          if(!extensionlength || ((extensionslength + extensionlength) > 0xFFFF))
+            {
+              return false;
+            }
+
+          extensionslength += extensionlength;
         }
     }
+
+  XDWORD extensionlength = extension->GetLengthBuffer();
+  if(!extensionlength || ((extensionslength + extensionlength) > 0xFFFF))
+    {
+      return false;
+    }
+
+  extensionslength += extensionlength;
+
+  if(!extensions.Add(extension))
+    {
+      return false;
+    }
+
+  Extensions_SetLenght((XWORD)extensionslength);
 
   return true;
 }
@@ -399,90 +423,54 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Extensions_DeleteAll()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
-  int index = 0;
- 
-  buffer.Add(clientversion);  
-  
-  buffer.Add((XBYTE*)random, DIOSTREAMTLS_MSG_RANDOM_SIZE);  
-
-  buffer.Add(sessionID_length);  
-  if(sessionID_length)
+  if(sessionID_length > DIOSTREAMTLS_MSG_SESSIONID_SIZE)
     {
-      buffer.Add((XBYTE*)sessionID, sessionID_length);  
-    }  
+      return false;
+    }
 
-  buffer.Add(ciphersuites_length);  
-  for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
+  if(ciphersuites.IsEmpty() || (ciphersuites.GetSize() > (0xFFFF / sizeof(XWORD))))
     {
-      XWORD ciphersuite = ciphersuites.Get(c);
+      return false;
+    }
 
-      buffer.Add(ciphersuite);
-    }  
-
-  buffer.Add(compress_length);  
-  buffer.Add(compress_method);  
-
-  buffer.Add(extensions_lenght);
+  XBUFFER extensionbuffer;
 
   for(XDWORD c=0; c<extensions.GetSize(); c++)
     {
       DIOSTREAMTLS_MSG_EXTENSION* extension = extensions.Get(c);
-      if(extension)
+      if(!extension || !extension->SetToBuffer(extensionbuffer, showdebug))
         {
-          extension->SetToBuffer(buffer, showdebug);  
+          return false;
         }
     }
 
-  if(showdebug)
+  if(extensionbuffer.GetSize() > 0xFFFF)
     {
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Header Message"));
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], 5);
-      index += 5;
+      return false;
+    }
 
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Header"));
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], 4);
-      index += 4;
-      
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Version"));
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], 2);
-      index += 2;
+  ciphersuites_length = (XWORD)(ciphersuites.GetSize() * sizeof(XWORD));
+  compress_length      = 1;
+  extensions_lenght    = (XWORD)extensionbuffer.GetSize();
 
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Random"));
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], DIOSTREAMTLS_MSG_RANDOM_SIZE);
-      index +=  DIOSTREAMTLS_MSG_RANDOM_SIZE;
-   
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Session"));
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], 1);
-      index += 1;
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], buffer.Get()[index-1]);
-      index += buffer.Get()[index-1];
-  
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Cipher Suites"));
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], 2); 
-      index += 2;
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], ciphersuites_length);
-      index += ciphersuites_length;
+  if(!buffer.Add(clientversion))                                      return false;
+  if(!buffer.Add((XBYTE*)random, DIOSTREAMTLS_MSG_RANDOM_SIZE))        return false;
+  if(!buffer.Add(sessionID_length))                                   return false;
+  if(sessionID_length && !buffer.Add((XBYTE*)sessionID, sessionID_length)) return false;
+  if(!buffer.Add(ciphersuites_length))                                return false;
 
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Compresion"));
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], 2); 
-      index += 2;
-
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Extensions"));
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Size"));
-      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], 2); 
-      index += 2;
-
-      for(XDWORD c=0; c<extensions.GetSize(); c++)
+  for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
+    {
+      if(!buffer.Add(ciphersuites.Get(c)))
         {
-          DIOSTREAMTLS_MSG_EXTENSION* extension = extensions.Get(c);
-          if(extension)
-            {
-              XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Extension: [%d]"), c+1);
-              XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, &buffer.Get()[index], extension->GetLength() + 4 ); 
-              index +=  extension->GetLength() + 4;
-            }
+          return false;
         }
     }
+
+  if(!buffer.Add(compress_length))                                    return false;
+  if(!buffer.Add(compress_method))                                    return false;
+  if(!buffer.Add(extensions_lenght))                                  return false;
+  if(extensions_lenght && !buffer.Add(extensionbuffer))               return false;
 
   return true;
 }
@@ -502,7 +490,84 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::SetToBuffer(XBUFFER& buffer, bool s
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
-  return true;
+  XBUFFER workbuffer;
+  XDWORD  sizeconsumed = buffer.GetSize();
+
+  workbuffer.Add(buffer);
+
+  if(workbuffer.GetSize() < (sizeof(XWORD) + DIOSTREAMTLS_MSG_RANDOM_SIZE + sizeof(XBYTE)))
+    {
+      return false;
+    }
+
+  Extensions_DeleteAll();
+  ciphersuites.DeleteAll();
+
+  if(!workbuffer.Extract(clientversion)) return false;
+
+  if(workbuffer.Extract(random, 0, DIOSTREAMTLS_MSG_RANDOM_SIZE) != DIOSTREAMTLS_MSG_RANDOM_SIZE)
+    {
+      return false;
+    }
+
+  if(!workbuffer.Extract(sessionID_length)) return false;
+  if((sessionID_length > DIOSTREAMTLS_MSG_SESSIONID_SIZE) || (workbuffer.GetSize() < sessionID_length)) return false;
+
+  memset(sessionID, 0, DIOSTREAMTLS_MSG_SESSIONID_SIZE);
+
+  if(sessionID_length && (workbuffer.Extract(sessionID, 0, sessionID_length) != sessionID_length))
+    {
+      return false;
+    }
+
+  if(!workbuffer.Extract(ciphersuites_length)) return false;
+  if(!ciphersuites_length || (ciphersuites_length % sizeof(XWORD)) || (workbuffer.GetSize() < ciphersuites_length)) return false;
+
+  for(XDWORD c=0; c<(ciphersuites_length / sizeof(XWORD)); c++)
+    {
+      XWORD ciphersuite = 0;
+
+      if(!workbuffer.Extract(ciphersuite) || !ciphersuites.Add(ciphersuite))
+        {
+          ciphersuites.DeleteAll();
+          return false;
+        }
+    }
+
+  if(!workbuffer.Extract(compress_length)) return false;
+  if((compress_length != 1) || (workbuffer.GetSize() < compress_length)) return false;
+  if(!workbuffer.Extract(compress_method)) return false;
+
+  if(workbuffer.IsEmpty())
+    {
+      extensions_lenght = 0;
+      return (buffer.Extract(NULL, 0, sizeconsumed) == sizeconsumed);
+    }
+
+  if(!workbuffer.Extract(extensions_lenght)) return false;
+  if(workbuffer.GetSize() != extensions_lenght) return false;
+
+  while(!workbuffer.IsEmpty())
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = NULL;
+
+      if(!DIOSTREAMTLS_MSG_EXTENSION_Extract(workbuffer, DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_CLIENTHELLO, extension))
+        {
+          Extensions_DeleteAll();
+          return false;
+        }
+
+      if(!Extensions_Add(extension))
+        {
+          GEN_DELETE extension;
+          Extensions_DeleteAll();
+          return false;
+        }
+    }
+
+  Extensions_SetLenght(extensions_lenght);
+
+  return (buffer.Extract(NULL, 0, sizeconsumed) == sizeconsumed);
 }
 
 
@@ -530,9 +595,6 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO::Clean()
 
   extensions_lenght     = 0;
 }
-
-
-
 
 
 

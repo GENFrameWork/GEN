@@ -673,6 +673,68 @@ bool CIPHER::SetKey(int index, CIPHERKEY* key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHER::CompareConstantTime(XBYTE* data1, XBYTE* data2, XDWORD size)
+* @brief      Compare two blocks in a time that does not depend on where they start to differ
+* @note       STATIC. Authentication tags, MACs and verify data must never be compared with memcmp: the duration of
+*             an ordinary comparison tells an attacker how much of a forged value was already right.
+* @ingroup    CIPHER
+*
+* @param[in]  data1 : First block.
+* @param[in]  data2 : Second block.
+* @param[in]  size : Size of both blocks, in bytes.
+*
+* @return     bool : true if both blocks are equal; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHER::CompareConstantTime(XBYTE* data1, XBYTE* data2, XDWORD size)
+{
+  XBYTE difference = 0;
+
+  if(!data1 || !data2)
+    {
+      return false;
+    }
+
+  if(!size)
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<size; c++)
+    {
+      difference |= (XBYTE)(data1[c] ^ data2[c]);
+    }
+
+  return (difference == 0)?true:false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHER::CompareConstantTime(XBUFFER& data1, XBUFFER& data2)
+* @brief      Compare two buffers in a time that does not depend on where they start to differ
+* @note       STATIC. Buffers of a different size are told apart at once, because their size is not a secret.
+* @ingroup    CIPHER
+*
+* @param[in]  data1 : First buffer.
+* @param[in]  data2 : Second buffer.
+*
+* @return     bool : true if both buffers are equal; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHER::CompareConstantTime(XBUFFER& data1, XBUFFER& data2)
+{
+  if(data1.GetSize() != data2.GetSize())
+    {
+      return false;
+    }
+
+  return CompareConstantTime(data1.Get(), data2.Get(), data1.GetSize());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void CIPHER::Clean()
 * @brief      Clean the attributes of the class: Default initialize

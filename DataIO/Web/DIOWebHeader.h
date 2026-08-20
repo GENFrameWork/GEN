@@ -103,6 +103,7 @@ enum DIOWEBHEADER_METHOD
 
 
 #define DIOWEBHEADER_CONTENT_LENGTH                       __L("Content-Length")
+#define DIOWEBHEADER_TRANSFER_ENCODING                    __L("Transfer-Encoding")
 #define DIOWEBHEADER_ETAG                                 __L("ETag")
 #define DIOWEBHEADER_WWW_AUTHENTICATE                     __L("WWW-Authenticate")
 
@@ -153,8 +154,6 @@ class DIOWEBHEADER
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 

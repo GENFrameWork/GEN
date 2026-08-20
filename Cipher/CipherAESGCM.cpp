@@ -771,38 +771,6 @@ bool CIPHERAESGCM::GCM_Do(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& ad
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool CIPHERAESGCM::CompareConstantTime(XBYTE* data1, XBYTE* data2, XDWORD size)
-* @brief      Compare two blocks in a time that does not depend on where they start to differ
-* @note       INTERNAL. A normal comparison would leak, through its duration, how much of a forged tag was right.
-* @ingroup    CIPHER
-*
-* @param[in]  data1 : First block.
-* @param[in]  data2 : Second block.
-* @param[in]  size : Size of both blocks, in bytes.
-*
-* @return     bool : true if both blocks are equal; otherwise false.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERAESGCM::CompareConstantTime(XBYTE* data1, XBYTE* data2, XDWORD size)
-{
-  XBYTE difference = 0;
-
-  if(!data1 || !data2)
-    {
-      return false;
-    }
-
-  for(XDWORD c=0; c<size; c++)
-    {
-      difference |= (XBYTE)(data1[c] ^ data2[c]);
-    }
-
-  return (difference == 0)?true:false;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
 * @fn         void CIPHERAESGCM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL

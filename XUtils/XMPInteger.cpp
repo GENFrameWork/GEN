@@ -368,12 +368,16 @@ void XMPINTEGER::Swap(XMPINTEGER* xmpinteger)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XMPINTEGER::LeftSet(int z)
 {
+  XLIMB value;
+
   if(!Grow(1)) return false;
 
   memset(GetLimbs(), 0, (GetNLimbs() * XMPINTEGER_CHARSINLIMB));
 
-  limbs[0] = (XLIMB)(( z < 0 ) ?-z : z);
-  sign     = (( z < 0 ) ? -1 : 1);
+  value = ( z < 0 ) ? (XLIMB)(-(z + 1)) + 1 : (XLIMB)z;
+
+  limbs[0] = value;
+  sign     = ( z < 0 ) ? -1 : 1;
 
   return true;
 }
@@ -841,17 +845,11 @@ int XMPINTEGER::CompareSignedValues(XMPINTEGER& xmpinteger)
 * --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::CompareSignedValues(int integer)
 {
- XMPINTEGER xmpinteger;
- XLIMB*     pointer = GEN_NEW XLIMB();
+  XMPINTEGER xmpinteger;
 
- (*pointer)  = ( integer < 0 ) ? -integer : integer;
+  if(!xmpinteger.LeftSet(integer)) return 0;
 
- xmpinteger.SetSign((integer < 0 ) ? -1 : 1);
-
- xmpinteger.SetNLimbs(1);
- xmpinteger.SetLimbs(pointer);
-
- return CompareSignedValues(xmpinteger);
+  return CompareSignedValues(xmpinteger);
 }
 
 
@@ -1060,13 +1058,8 @@ bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteg
 bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger, int integer)
 {
   XMPINTEGER _xmpinteger2;
-  XLIMB*      pointer = GEN_NEW XLIMB();
 
-  (*pointer) = ( integer < 0 ) ? -integer : integer;
-
-  _xmpinteger2.SetSign(( integer < 0 ) ? -1 : 1);
-  _xmpinteger2.SetNLimbs(1);
-  _xmpinteger2.SetLimbs(pointer);
+  if(!_xmpinteger2.LeftSet(integer)) return false;
 
   return AdditionSigned(xmpinteger, &_xmpinteger2);
 }
@@ -1087,13 +1080,8 @@ bool XMPINTEGER::AdditionSigned(XMPINTEGER* xmpinteger, int integer)
 bool XMPINTEGER::SubtractionSigned(XMPINTEGER* xmpinteger, int integer)
 {
   XMPINTEGER  _xmpinteger2;
-  XLIMB*      pointer = GEN_NEW XLIMB();
 
- (*pointer) = (integer < 0 ) ? -integer : integer;
-
-  _xmpinteger2.SetSign(( integer < 0 ) ? -1 : 1);
-  _xmpinteger2.SetNLimbs(1);
-  _xmpinteger2.SetLimbs(pointer);
+  if(!_xmpinteger2.LeftSet(integer)) return false;
 
   return(SubtractionSigned(xmpinteger, &_xmpinteger2));
 }
@@ -1176,12 +1164,11 @@ bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2
 bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, int integer)
 {
   XMPINTEGER _xmpinteger;
-  XLIMB*      pointer = GEN_NEW XLIMB();
+
+  if(!_xmpinteger.Grow(1)) return false;
 
   _xmpinteger.SetSign(1);
-  _xmpinteger.SetNLimbs(1);
-  _xmpinteger.SetLimbs(pointer);
-  (*pointer) = integer;
+  _xmpinteger.GetLimbs()[0] = (XLIMB)integer;
 
   return Multiplication(xmpinteger, &_xmpinteger);
 }
@@ -1369,12 +1356,8 @@ bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPI
 bool XMPINTEGER::Division(XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, int integerb)
 {
   XMPINTEGER _B;
-  XLIMB*      pointer = GEN_NEW XLIMB();
 
-  (*pointer) = ( integerb < 0 ) ? -integerb : integerb;
-  _B.SetSign(( integerb < 0 ) ? -1 : 1);
-  _B.SetNLimbs(1);
-  _B.SetLimbs(pointer);
+  if(!_B.LeftSet(integerb)) return false;
 
   return Division( xmpintegerQ, xmpintegerR, xmpintegerA, &_B );
 }
@@ -1559,14 +1542,9 @@ void XMPINTEGER::MontgomeryMultiplication(XMPINTEGER* A, XMPINTEGER* B, XMPINTEG
 * --------------------------------------------------------------------------------------------------------------------*/
 void XMPINTEGER::MontgomeryReduction(XMPINTEGER* A, XMPINTEGER* N, XLIMB mm, XMPINTEGER* T)
 {
-  XLIMB*     z = GEN_NEW XLIMB();
   XMPINTEGER U;
 
-  (*z) = 1;
-
-  U.SetNLimbs(1);
-  U.SetSign(1);
-  U.SetLimbs(z);
+  if(!U.LeftSet(1)) return;
 
   MontgomeryMultiplication( A, &U, N, mm, T );
 }
@@ -1608,7 +1586,10 @@ bool XMPINTEGER::SlidingWindowExponentiation(XMPINTEGER* A, XMPINTEGER* E, XMPIN
   T.Ini();
   Apos.Ini();
 
-  memset((XBYTE*)W, 0, sizeof(W));
+  for(i=0; i<(2 << XMPINTEGER_WINDOWSIZE); i++)
+    {
+      W[i].SetSign(0);
+    }
 
   i = E->GetMSB();
 
@@ -2681,6 +2662,3 @@ void XMPINTEGER::Clean()
   nlimbs  = 0;
   limbs   = NULL;
 }
-
-
-

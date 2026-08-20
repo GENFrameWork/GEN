@@ -36,6 +36,8 @@
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOStreamConfigString.h"
 
+#include "DIOStreamTLSMessages.h"
+
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
@@ -46,25 +48,55 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
+class CIPHERKEY;
+
+
 class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
 {
   public:
-                            DIOSTREAMTLSCONFIG       ();
-    virtual                ~DIOSTREAMTLSCONFIG       ();
+                            DIOSTREAMTLSCONFIG                ();
+    virtual                ~DIOSTREAMTLSCONFIG                ();
+
+    XWORD                   GetCipherSuite                    ();
+    void                    SetCipherSuite                    (XWORD ciphersuite);
+
+    XSTRING*                GetServerName                     ();
+
+    XVECTOR<XBUFFER*>*      GetTrustedRoots                   ();
+    bool                    TrustedRoot_Add                   (XBUFFER& root);
+    bool                    TrustedRoots_AddDefaults          ();
+    bool                    TrustedRoots_Delete               ();
+
+    XVECTOR<XBUFFER*>*      GetLocalCertificateChain          ();
+    bool                    LocalCertificate_Add              (XBUFFER& certificate);
+    bool                    LocalCertificates_Delete          ();
+
+    CIPHERKEY*              GetLocalPrivateKey                ();
+    bool                    SetLocalPrivateKey                (CIPHERKEY* privatekey);
+
+    bool                    HasLocalCredentials               ();
+    bool                    LocalCredentials_Delete           ();
+
+    bool                    IsAllowUnauthenticatedServer      ();
+    void                    SetAllowUnauthenticatedServer     (bool allowunauthenticatedserver);
     
   protected:
     
   private:
 
-    void                    Clean                    ();
+    void                    Clean                             ();
+
+    XWORD                   ciphersuite;
+    XSTRING                 servername;
+    XVECTOR<XBUFFER*>       trustedroots;
+    XVECTOR<XBUFFER*>       localcertificatechain;
+    CIPHERKEY*              localprivatekey;
+    bool                    allowunauthenticatedserver;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-
 
 

@@ -45,6 +45,8 @@
 
 #define DIOSTREAMTLS_MSG_RANDOM_SIZE                                          32
 #define DIOSTREAMTLS_MSG_SESSIONID_SIZE                                       32
+#define DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE                                 4
+#define DIOSTREAMTLS_MSG_MAXLENGTH24                                          0x00FFFFFF
 
 #define DIOSTREAMTLS_MSG_CIPHER_DES_CBC3_SHA                                  0x000A    // SSLv3   
 #define DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_CBC_SHA                      0x002F    // SSLv3   
@@ -135,6 +137,9 @@ enum DIOSTREAMTLS_CONTENTTYPE_HANDSHAKE
   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_HELLO_REQUEST                        =      0  , 
   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO                         =      1  , 
   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO                         =      2  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET                   =      4  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_END_OF_EARLY_DATA                    =      5  ,
+  DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_ENCRYPTED_EXTENSIONS                 =      8  ,
   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE                          =     11  , 
   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_KEY_EXCHANGE                  =     12  ,
   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_REQUEST                  =     13  , 
@@ -145,6 +150,43 @@ enum DIOSTREAMTLS_CONTENTTYPE_HANDSHAKE
   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE                           =     24  ,
   DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH                         =    254  ,      
  };
+
+
+enum DIOSTREAMTLS_ALERT_LEVEL
+{
+  DIOSTREAMTLS_ALERT_LEVEL_WARNING                                            =      1  ,
+  DIOSTREAMTLS_ALERT_LEVEL_FATAL                                              =      2  ,
+};
+
+
+enum DIOSTREAMTLS_ALERT_DESCRIPTION
+{
+  DIOSTREAMTLS_ALERT_DESCRIPTION_CLOSE_NOTIFY                                =      0  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE                           =     10  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_RECORD_MAC                               =     20  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_RECORD_OVERFLOW                              =     22  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE                            =     40  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE                              =     42  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_UNSUPPORTED_CERTIFICATE                      =     43  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_REVOKED                          =     44  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_EXPIRED                          =     45  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_UNKNOWN                          =     46  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER                            =     47  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_UNKNOWN_CA                                   =     48  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_ACCESS_DENIED                                =     49  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR                                 =     50  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_DECRYPT_ERROR                                =     51  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION                             =     70  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY                        =     71  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR                               =     80  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_MISSING_EXTENSION                            =    109  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_UNSUPPORTED_EXTENSION                        =    110  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_UNRECOGNIZED_NAME                            =    112  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE              =    113  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_UNKNOWN_PSK_IDENTITY                         =    115  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_REQUIRED                         =    116  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_NO_APPLICATION_PROTOCOL                      =    120  ,
+};
 
 
 enum DIOSTREAMTLS_ALPN_TYPE
@@ -179,6 +221,96 @@ class DIOSTREAMTLS_MSG_INTERFACE
 };
 
 
+#define DIOSTREAMTLS_MSG_RECORDHEADER_SIZE                                    5
+
+
+class DIOSTREAMTLS_MSG_RECORDHEADER : public DIOSTREAMTLS_MSG_INTERFACE
+{
+  public:
+                                            DIOSTREAMTLS_MSG_RECORDHEADER                     ();
+    virtual                                ~DIOSTREAMTLS_MSG_RECORDHEADER                     ();
+
+    DIOSTREAMTLS_CONTENTTYPE                GetContenType                                     ();
+    void                                    SetContenType                                     (DIOSTREAMTLS_CONTENTTYPE contenttype);
+
+    XWORD                                   GetProtocolVersion                                ();
+    void                                    SetProtocolVersion                                (XWORD protocolversion);
+
+    XWORD                                   GetLength                                         ();
+    void                                    SetLength                                         (XWORD length);
+
+    bool                                    SetToBuffer                                       (XBUFFER& buffer, bool showdebug);
+    bool                                    GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+    bool                                    Peek                                              (XBUFFER& buffer);
+
+  private:
+
+    void                                    Clean                                             ();
+
+    DIOSTREAMTLS_CONTENTTYPE                contenttype;
+    XWORD                                   protocolversion;
+    XWORD                                   length;
+};
+
+
+class DIOSTREAMTLS_MSG_HANDSHAKE : public DIOSTREAMTLS_MSG_INTERFACE
+{
+  public:
+                                            DIOSTREAMTLS_MSG_HANDSHAKE                      ();
+    virtual                                ~DIOSTREAMTLS_MSG_HANDSHAKE                      ();
+
+    XBYTE                                   GetMsgType                                      ();
+    void                                    SetMsgType                                      (XBYTE msgtype);
+
+    XDWORD                                  GetLength                                       ();
+    void                                    SetLength                                       (XDWORD length);
+
+    XBUFFER*                                GetBody                                         ();
+
+    bool                                    SetToBuffer                                     (XBUFFER& buffer, bool showdebug);
+    bool                                    GetFromBuffer                                   (XBUFFER& buffer, bool showdebug);
+
+    static bool                             Message_Extract                                 (XBUFFER& input, XBUFFER& message);
+
+  private:
+
+    void                                    Clean                                           ();
+
+    XBYTE                                   msgtype;
+    XDWORD                                  length;
+    XBUFFER                                 body;
+};
+
+
+class DIOSTREAMTLS_MSG_ALERT : public DIOSTREAMTLS_MSG_INTERFACE
+{
+  public:
+                                            DIOSTREAMTLS_MSG_ALERT                          ();
+    virtual                                ~DIOSTREAMTLS_MSG_ALERT                          ();
+
+    DIOSTREAMTLS_ALERT_LEVEL                GetLevel                                        ();
+    void                                    SetLevel                                        (DIOSTREAMTLS_ALERT_LEVEL level);
+
+    DIOSTREAMTLS_ALERT_DESCRIPTION          GetDescription                                  ();
+    void                                    SetDescription                                  (DIOSTREAMTLS_ALERT_DESCRIPTION description);
+
+    bool                                    SetToBuffer                                     (XBUFFER& buffer, bool showdebug);
+    bool                                    GetFromBuffer                                   (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                    Clean                                           ();
+
+    XBYTE                                   level;
+    XBYTE                                   description;
+};
+
+
+bool                                        DIOSTREAMTLS_MSG_AddLength24                    (XBUFFER& buffer, XDWORD length);
+bool                                        DIOSTREAMTLS_MSG_ExtractLength24                (XBUFFER& buffer, XDWORD& length);
+
+
 template<typename T>
 class DIOSTREAMTLS_MSG_RECORD : public DIOSTREAMTLS_MSG_INTERFACE
 {
@@ -195,46 +327,55 @@ class DIOSTREAMTLS_MSG_RECORD : public DIOSTREAMTLS_MSG_INTERFACE
                                             }
 
 
+    DIOSTREAMTLS_MSG_RECORDHEADER*          GetHeader                                         ()
+                                            {
+                                              return &header;
+                                            }
+
+
     DIOSTREAMTLS_CONTENTTYPE                GetContenType                                     ()
                                             {
-                                              return contenttype;
-                                            }    
+                                              return header.GetContenType();
+                                            }
 
 
     void                                    SetContenType                                     (DIOSTREAMTLS_CONTENTTYPE contenttype)
                                             {
-                                              this->contenttype = contenttype;
-                                            }    
-    
+                                              header.SetContenType(contenttype);
+                                            }
+
 
     XWORD                                   GetProtocolVersion                                ()
                                             {
-                                              return protocolversion;
+                                              return header.GetProtocolVersion();
                                             }
 
 
     void                                    SetProtocolVersion                                (XWORD protocolversion)
                                             {
-                                              this->protocolversion = protocolversion;
+                                              header.SetProtocolVersion(protocolversion);
                                             }
 
-   
+
     XWORD                                   GetLength                                         ()
                                             {
-                                              return length;    
-                                            } 
-    
+                                              return header.GetLength();
+                                            }
+
 
     void                                    SetLength                                         (XWORD length)
                                             {
-                                              this->length = length;    
-                                            } 
+                                              header.SetLength(length);
+                                            }
 
     void                                    CalculateLength                                   ()
-                                            {      
-                                              GetFragment()->SetLength(GetFragment()->GetBody()->GetLengthBuffer());     
-                                   
-                                              SetLength(GetFragment()->GetLengthBuffer());                                              
+                                            {
+                                              XBUFFER fragmentbuffer;
+
+                                              if(fragment.SetToBuffer(fragmentbuffer, false))
+                                                {
+                                                  SetLength((XWORD)fragmentbuffer.GetSize());
+                                                }
                                             } 
 
 
@@ -245,37 +386,86 @@ class DIOSTREAMTLS_MSG_RECORD : public DIOSTREAMTLS_MSG_INTERFACE
  
 
     bool                                    SetToBuffer                                       (XBUFFER& buffer, bool showdebug)
-                                            {  
+                                            {
+                                              XBUFFER fragmentbuffer;
+
+                                              if(!fragment.SetToBuffer(fragmentbuffer, showdebug))
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(fragmentbuffer.GetSize() > 0xFFFF)
+                                                {
+                                                  return false;
+                                                }
+
+                                              header.SetLength((XWORD)fragmentbuffer.GetSize());
+
                                               buffer.Delete();
 
-                                              buffer.Add((XBYTE)contenttype);
-                                              buffer.Add(protocolversion);
-                                              buffer.Add(length);
+                                              if(!header.SetToBuffer(buffer, showdebug))
+                                                {
+                                                  return false;
+                                                }
 
-                                              fragment.SetToBuffer(buffer, showdebug);
-                                                
-                                              return true;
+                                              return buffer.Add(fragmentbuffer);
                                             }
 
 
     bool                                    GetFromBuffer                                     (XBUFFER& buffer, bool showdebug)
                                             {
-                                              return true;
+                                              XBUFFER                       workbuffer;
+                                              XBUFFER                       fragmentbuffer;
+                                              DIOSTREAMTLS_MSG_RECORDHEADER newheader;
+                                              XDWORD                        sizeconsumed = 0;
+
+                                              workbuffer.Add(buffer);
+
+                                              if(!newheader.GetFromBuffer(workbuffer, showdebug))
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(workbuffer.GetSize() < newheader.GetLength())
+                                                {
+                                                  return false;
+                                                }
+
+                                              fragmentbuffer.Resize(newheader.GetLength());
+
+                                              if(newheader.GetLength())
+                                                {
+                                                  if(workbuffer.Extract(fragmentbuffer.Get(), 0, newheader.GetLength()) != newheader.GetLength())
+                                                    {
+                                                      return false;
+                                                    }
+                                                }
+
+                                              if(!fragment.GetFromBuffer(fragmentbuffer, showdebug))
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(!fragmentbuffer.IsEmpty())
+                                                {
+                                                  return false;
+                                                }
+
+                                              header       = newheader;
+                                              sizeconsumed = DIOSTREAMTLS_MSG_RECORDHEADER_SIZE + newheader.GetLength();
+
+                                              return (buffer.Extract(NULL, 0, sizeconsumed) == sizeconsumed);
                                             }
 
   private:
 
     void                                    Clean                                             ()
                                             {
-                                              contenttype       = (DIOSTREAMTLS_CONTENTTYPE)0;        
-                                              protocolversion   = 0;   
-                                              length            = 0;  
+
                                             }
-   
-    DIOSTREAMTLS_CONTENTTYPE                contenttype;        
-    XWORD                                   protocolversion;   
-    XWORD                                   length;  
-    T                                       fragment;           
+
+    DIOSTREAMTLS_MSG_RECORDHEADER           header;
+    T                                       fragment;
 };
 
 
@@ -307,13 +497,13 @@ class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
                                             }
 
 
-    XWORD                                   GetLength                                         ()
+    XDWORD                                  GetLength                                         ()
                                             {
                                               return length;    
                                             } 
     
 
-    void                                    SetLength                                         (XWORD length)
+    void                                    SetLength                                         (XDWORD length)
                                             {
                                               this->length = length;    
                                             } 
@@ -326,21 +516,89 @@ class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
 
     bool                                    SetToBuffer                                       (XBUFFER& buffer, bool showdebug)
                                             {
-                                              buffer.Add((XBYTE)msgtype);  
+                                              XBUFFER bodybuffer;
 
-                                              XDWORD _length = length;
-                                              SWAPDWORD(_length);  
-                                              buffer.Add((XBYTE*)(&_length)+1, 3);  
+                                              if(!body.SetToBuffer(bodybuffer, showdebug))
+                                                {
+                                                  return false;
+                                                }
 
-                                              body.SetToBuffer(buffer,  showdebug);
+                                              if(bodybuffer.GetSize() > DIOSTREAMTLS_MSG_MAXLENGTH24)
+                                                {
+                                                  return false;
+                                                }
 
-                                              return true;
+                                              length = bodybuffer.GetSize();
+
+                                              if(!buffer.Add((XBYTE)msgtype))
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(!DIOSTREAMTLS_MSG_AddLength24(buffer, length))
+                                                {
+                                                  return false;
+                                                }
+
+                                              return buffer.Add(bodybuffer);
                                             }
 
 
     bool                                    GetFromBuffer                                     (XBUFFER& buffer, bool showdebug)
                                             {
-                                              return true;
+                                              XBUFFER workbuffer;
+                                              XBUFFER bodybuffer;
+                                              XBYTE   newmsgtype = 0;
+                                              XDWORD  newlength  = 0;
+                                              XDWORD  sizeconsumed;
+
+                                              workbuffer.Add(buffer);
+
+                                              if(workbuffer.GetSize() < DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE)
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(!workbuffer.Extract(newmsgtype))
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(!DIOSTREAMTLS_MSG_ExtractLength24(workbuffer, newlength))
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(workbuffer.GetSize() < newlength)
+                                                {
+                                                  return false;
+                                                }
+
+                                              bodybuffer.Resize(newlength);
+
+                                              if(newlength)
+                                                {
+                                                  if(workbuffer.Extract(bodybuffer.Get(), 0, newlength) != newlength)
+                                                    {
+                                                      return false;
+                                                    }
+                                                }
+
+                                              if(!body.GetFromBuffer(bodybuffer, showdebug))
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(!bodybuffer.IsEmpty())
+                                                {
+                                                  return false;
+                                                }
+
+                                              msgtype     = newmsgtype;
+                                              length      = newlength;
+                                              sizeconsumed = DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE + newlength;
+
+                                              return (buffer.Extract(NULL, 0, sizeconsumed) == sizeconsumed);
                                             }
  
   private:
@@ -361,8 +619,5 @@ class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-
 
 

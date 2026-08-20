@@ -119,6 +119,9 @@ class CIPHERRSA : public CIPHER
     bool                            Sign                              (XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version = CIPHERRSAPKCS1VERSIONV15);
     bool                            Sign                              (XBUFFER& input, CIPHERKEYTYPE keytouse, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version = CIPHERRSAPKCS1VERSIONV15);
 
+    bool                            Verify                            (XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version = CIPHERRSAPKCS1VERSIONV15, XDWORD saltsize = 0);
+    bool                            Verify                            (XBUFFER& input, XBUFFER& signature, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version = CIPHERRSAPKCS1VERSIONV15, XDWORD saltsize = 0);
+
 
     static CIPHERRSA*               GetInstance                       ();
     XRAND*                          GetXRand                          ();
@@ -132,6 +135,10 @@ class CIPHERRSA : public CIPHER
 
     bool                            Cipher_PKCS1_V15                  (XBYTE* buffer, XDWORD size, XBUFFER& output, CIPHERKEYTYPE keytypetouse, CIPHERRSAPKCS1VERSION pkcs1version,  XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom);
     bool                            Uncipher_PKCS1_V15                (XBYTE* buffer, XDWORD size, XBUFFER& output, CIPHERKEYTYPE keytypetouse, CIPHERRSAPKCS1VERSION pkcs1version,  XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom);
+
+    bool                            Verify_PKCS1_V15                  (XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash);
+    bool                            Verify_PKCS1_V21                  (XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash, XDWORD saltsize);
+    bool                            MaskGenerationFunction1          (XBUFFER& seed, XDWORD size, HASH* hash, XBUFFER& mask);
 
     bool                            DoRSAPublicOperation              (XBUFFER& input, XBUFFER& output);
     bool                            DoRSAPrivateOperation             (XBUFFER& input, XBUFFER& output, XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom);
@@ -155,7 +162,6 @@ class CIPHERRSA : public CIPHER
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

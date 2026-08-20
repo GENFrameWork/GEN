@@ -36,9 +36,15 @@
 
 #include "CipherCertificateX509.h"
 
+#include <string.h>
+
 #include "XFactory.h"
 #include "XDateTime.h"
 #include "XTrace.h"
+
+#include "CipherKeyPublicRSA.h"
+#include "CipherRSA.h"
+#include "HashSHA2.h"
 
 
 
@@ -50,6 +56,578 @@
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+
+
+class CIPHERCERTIFICATEX509_DERITEM
+{
+  public:
+
+    XBYTE         tag;
+    const XBYTE*  data;
+    XDWORD        size;
+    const XBYTE*  encoded;
+    XDWORD        encodedsize;
+};
+
+
+class CIPHERCERTIFICATEX509_DERREADER
+{
+  public:
+
+                    CIPHERCERTIFICATEX509_DERREADER   (const XBYTE* data, XDWORD size)
+                    {
+                      this->data = data;
+                      this->size = size;
+                      position   = 0;
+                    }
+
+    bool            Read                              (CIPHERCERTIFICATEX509_DERITEM& item)
+                    {
+                      XDWORD length;
+                      XDWORD headersize;
+
+                      if(!data || (position >= size))
+                        {
+                          return false;
+                        }
+
+                      item.encoded = &data[position];
+                      item.tag     = data[position++];
+
+                      if((item.tag & 0x1F) == 0x1F)
+                        {
+                          return false;
+                        }
+
+                      if(position >= size)
+                        {
+                          return false;
+                        }
+
+                      length = data[position++];
+                      if(length & 0x80)
+                        {
+                          XDWORD sizesize = length & 0x7F;
+
+                          if(!sizesize || (sizesize > 4) || ((position + sizesize) > size) || !data[position])
+                            {
+                              return false;
+                            }
+
+                          length = 0;
+                          for(XDWORD c=0; c<sizesize; c++)
+                            {
+                              length = (length << 8) | data[position++];
+                            }
+
+                          if(length < 128)
+                            {
+                              return false;
+                            }
+                        }
+
+                      if(length > (size - position))
+                        {
+                          return false;
+                        }
+
+                      headersize       = (XDWORD)(&data[position] - item.encoded);
+                      item.data         = &data[position];
+                      item.size         = length;
+                      item.encodedsize  = headersize + length;
+                      position         += length;
+
+                      return true;
+                    }
+
+    bool            IsEnd                             ()
+                    {
+                      return (position == size);
+                    }
+
+  private:
+
+    const XBYTE*    data;
+    XDWORD          size;
+    XDWORD          position;
+};
+
+
+static bool CIPHERCERTIFICATEX509_DER_OIDCompare(CIPHERCERTIFICATEX509_DERITEM& item, const XBYTE* OID, XDWORD OIDsize)
+{
+  if((item.tag != 0x06) || !OID || (item.size != OIDsize))
+    {
+      return false;
+    }
+
+  return !memcmp(item.data, OID, OIDsize);
+}
+
+
+static bool CIPHERCERTIFICATEX509_DER_OIDToString(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& OID)
+{
+  XQWORD value;
+  XQWORD second;
+  XDWORD index;
+  XDWORD first;
+
+  if((item.tag != 0x06) || !item.size)
+    {
+      return false;
+    }
+
+  value = 0;
+  index = 0;
+
+  if(item.data[index] == 0x80)
+    {
+      return false;
+    }
+
+  do
+    {
+      if((value >> 57) || (index >= item.size))
+        {
+          return false;
+        }
+
+      value = (value << 7) | (item.data[index] & 0x7F);
+    }
+  while(item.data[index++] & 0x80);
+
+  if(value < 40)
+    {
+      first  = 0;
+      second = value;
+    }
+  else if(value < 80)
+    {
+      first  = 1;
+      second = value - 40;
+    }
+   else
+    {
+      first  = 2;
+      second = value - 80;
+    }
+
+  OID.Format(__L("%d.%llu"), first, second);
+
+  while(index < item.size)
+    {
+      value = 0;
+
+      if(item.data[index] == 0x80)
+        {
+          return false;
+        }
+
+      do
+        {
+          if((value >> 57) || (index >= item.size))
+            {
+              return false;
+            }
+
+          value = (value << 7) | (item.data[index] & 0x7F);
+        }
+      while(item.data[index++] & 0x80);
+
+      OID.AddFormat(__L(".%llu"), value);
+    }
+
+  return true;
+}
+
+
+static bool CIPHERCERTIFICATEX509_DER_Algorithm(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& OID)
+{
+  CIPHERCERTIFICATEX509_DERREADER reader(item.data, item.size);
+  CIPHERCERTIFICATEX509_DERITEM   OIDitem;
+  CIPHERCERTIFICATEX509_DERITEM   parameters;
+
+  if((item.tag != 0x30) || !reader.Read(OIDitem) || !CIPHERCERTIFICATEX509_DER_OIDToString(OIDitem, OID))
+    {
+      return false;
+    }
+
+  if(!reader.IsEnd())
+    {
+      if(!reader.Read(parameters) || !reader.IsEnd() || (parameters.tag != 0x05) || parameters.size)
+        {
+          return false;
+        }
+    }
+
+  return true;
+}
+
+
+static bool CIPHERCERTIFICATEX509_DER_String(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& string)
+{
+  string.Empty();
+
+  switch(item.tag)
+    {
+      case 0x0C : return string.ConvertFromUTF8((XBYTE*)item.data, item.size);
+
+      case 0x12 :
+      case 0x13 :
+      case 0x14 :
+      case 0x16 :
+      case 0x1A : for(XDWORD c=0; c<item.size; c++)
+                    {
+                      if(item.data[c] & 0x80)
+                        {
+                          return false;
+                        }
+
+                      string.Add((XCHAR)item.data[c]);
+                    }
+                  return true;
+
+      case 0x1E : if(item.size & 1)
+                    {
+                      return false;
+                    }
+
+                  for(XDWORD c=0; c<item.size; c+=2)
+                    {
+                      string.Add((XCHAR)(((XWORD)item.data[c] << 8) | item.data[c+1]));
+                    }
+                  return true;
+    }
+
+  return false;
+}
+
+
+static bool CIPHERCERTIFICATEX509_DER_Name(CIPHERCERTIFICATEX509_DERITEM& item, CIPHERCERTIFICATEX509_ID* ID)
+{
+  static const XBYTE OIDcountry[]          = { 0x55, 0x04, 0x06 };
+  static const XBYTE OIDorganization[]     = { 0x55, 0x04, 0x0A };
+  static const XBYTE OIDorganizationunit[] = { 0x55, 0x04, 0x0B };
+  static const XBYTE OIDcommonname[]       = { 0x55, 0x04, 0x03 };
+
+  CIPHERCERTIFICATEX509_DERREADER reader(item.data, item.size);
+  CIPHERCERTIFICATEX509_DERITEM   set;
+
+  if((item.tag != 0x30) || !ID)
+    {
+      return false;
+    }
+
+  while(!reader.IsEnd())
+    {
+      CIPHERCERTIFICATEX509_DERREADER setreader(NULL, 0);
+      CIPHERCERTIFICATEX509_DERITEM   attribute;
+
+      if(!reader.Read(set) || (set.tag != 0x31))
+        {
+          return false;
+        }
+
+      setreader = CIPHERCERTIFICATEX509_DERREADER(set.data, set.size);
+
+      while(!setreader.IsEnd())
+        {
+          CIPHERCERTIFICATEX509_DERREADER attributereader(NULL, 0);
+          CIPHERCERTIFICATEX509_DERITEM   OID;
+          CIPHERCERTIFICATEX509_DERITEM   value;
+          XSTRING                        string;
+          XSTRING*                       target = NULL;
+
+          if(!setreader.Read(attribute) || (attribute.tag != 0x30))
+            {
+              return false;
+            }
+
+          attributereader = CIPHERCERTIFICATEX509_DERREADER(attribute.data, attribute.size);
+
+          if(!attributereader.Read(OID) || !attributereader.Read(value) || !attributereader.IsEnd())
+            {
+              return false;
+            }
+
+          if(CIPHERCERTIFICATEX509_DER_OIDCompare(OID, OIDcountry, sizeof(OIDcountry)))
+            {
+              target = ID->GetCountryName();
+            }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(OID, OIDorganization, sizeof(OIDorganization)))
+            {
+              target = ID->GetOrganizationName();
+            }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(OID, OIDorganizationunit, sizeof(OIDorganizationunit)))
+            {
+              target = ID->GetOrganizationalUnitName();
+            }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(OID, OIDcommonname, sizeof(OIDcommonname)))
+            {
+              target = ID->GetCommonName();
+            }
+
+          if(target)
+            {
+              if(!CIPHERCERTIFICATEX509_DER_String(value, string) || !target->Set(string))
+                {
+                  return false;
+                }
+            }
+        }
+    }
+
+  return true;
+}
+
+
+static bool CIPHERCERTIFICATEX509_DER_Time(CIPHERCERTIFICATEX509_DERITEM& item, XDATETIME& datetime)
+{
+  int     year;
+  int     index;
+  XDWORD  timesize;
+
+  if((item.tag != 0x17) && (item.tag != 0x18))
+    {
+      return false;
+    }
+
+  timesize = (item.tag == 0x17)?13:15;
+  if((item.size != timesize) || (item.data[item.size-1] != 'Z'))
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<(item.size-1); c++)
+    {
+      if((item.data[c] < '0') || (item.data[c] > '9'))
+        {
+          return false;
+        }
+    }
+
+  if(item.tag == 0x17)
+    {
+      year  = ((item.data[0] - '0') * 10) + (item.data[1] - '0');
+      year += (year >= 50)?1900:2000;
+      index = 2;
+    }
+   else
+    {
+      year  = ((item.data[0] - '0') * 1000) + ((item.data[1] - '0') * 100);
+      year += ((item.data[2] - '0') * 10) + (item.data[3] - '0');
+      index = 4;
+    }
+
+  datetime.SetYear(year);
+  datetime.SetMonth  (((item.data[index]    - '0') * 10) + (item.data[index+1]  - '0'));
+  datetime.SetDay    (((item.data[index+2]  - '0') * 10) + (item.data[index+3]  - '0'));
+  datetime.SetHours  (((item.data[index+4]  - '0') * 10) + (item.data[index+5]  - '0'));
+  datetime.SetMinutes(((item.data[index+6]  - '0') * 10) + (item.data[index+7]  - '0'));
+  datetime.SetSeconds(((item.data[index+8]  - '0') * 10) + (item.data[index+9]  - '0'));
+  datetime.SetMilliSeconds(0);
+  datetime.SetIsLocal(false);
+
+  return datetime.IsValidDate();
+}
+
+
+static int CIPHERCERTIFICATEX509_HexValue(XCHAR character)
+{
+  if((character >= __C('0')) && (character <= __C('9'))) return character - __C('0');
+  if((character >= __C('a')) && (character <= __C('f'))) return character - __C('a') + 10;
+  if((character >= __C('A')) && (character <= __C('F'))) return character - __C('A') + 10;
+
+  return -1;
+}
+
+
+static bool CIPHERCERTIFICATEX509_IPAddress(XCHAR* address, XBUFFER& binary)
+{
+  XSTRING string;
+  XDWORD  size;
+
+  if(!address)
+    {
+      return false;
+    }
+
+  string = address;
+  size   = string.GetSize();
+
+  if(string.FindCharacter(__C(':')) < 0)
+    {
+      XDWORD value = 0;
+      XDWORD count = 0;
+      XDWORD digits = 0;
+
+      for(XDWORD c=0; c<=size; c++)
+        {
+          XCHAR character = (c<size)?string[c]:__C('.');
+
+          if((character >= __C('0')) && (character <= __C('9')))
+            {
+              value = (value * 10) + character - __C('0');
+              digits++;
+
+              if((digits > 3) || (value > 255))
+                {
+                  return false;
+                }
+            }
+          else if(character == __C('.'))
+            {
+              if(!digits || (count >= 4))
+                {
+                  return false;
+                }
+
+              binary.Add((XBYTE)value);
+              count++;
+              value  = 0;
+              digits = 0;
+            }
+          else
+            {
+              return false;
+            }
+        }
+
+      return (count == 4);
+    }
+
+  XWORD groups[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+  int   ngroups   = 0;
+  int   compressed = -1;
+  XDWORD position = 0;
+
+  if((size >= 2) && (string[0] == __C(':')) && (string[1] == __C(':')))
+    {
+      compressed = 0;
+      position   = 2;
+    }
+
+  while(position < size)
+    {
+      XDWORD value  = 0;
+      int    digits = 0;
+
+      if(ngroups >= 8)
+        {
+          return false;
+        }
+
+      while((position < size) && (string[position] != __C(':')))
+        {
+          int hexadecimal = CIPHERCERTIFICATEX509_HexValue(string[position]);
+          if((hexadecimal < 0) || (digits >= 4))
+            {
+              return false;
+            }
+
+          value = (value << 4) | hexadecimal;
+          digits++;
+          position++;
+        }
+
+      if(!digits)
+        {
+          return false;
+        }
+
+      groups[ngroups++] = (XWORD)value;
+
+      if(position < size)
+        {
+          if((position + 1 < size) && (string[position+1] == __C(':')))
+            {
+              if(compressed >= 0)
+                {
+                  return false;
+                }
+
+              compressed = ngroups;
+              position  += 2;
+            }
+           else
+            {
+              position++;
+            }
+        }
+    }
+
+  if(compressed >= 0)
+    {
+      int missing = 8 - ngroups;
+      if(missing < 1)
+        {
+          return false;
+        }
+
+      for(int c=ngroups-1; c>=compressed; c--)
+        {
+          groups[c+missing] = groups[c];
+        }
+
+      for(int c=0; c<missing; c++)
+        {
+          groups[compressed+c] = 0;
+        }
+
+      ngroups = 8;
+    }
+
+  if(ngroups != 8)
+    {
+      return false;
+    }
+
+  for(int c=0; c<8; c++)
+    {
+      binary.Add((XBYTE)(groups[c] >> 8));
+      binary.Add((XBYTE)(groups[c] & 0xFF));
+    }
+
+  return true;
+}
+
+
+static bool CIPHERCERTIFICATEX509_DNSName(XSTRING& pattern, XCHAR* servername)
+{
+  XSTRING hostname;
+  int     dot;
+
+  if(!servername || pattern.IsEmpty())
+    {
+      return false;
+    }
+
+  hostname = servername;
+
+  if(hostname.Character_GetLast() == __C('.')) hostname.DeleteLastCharacter();
+  if(pattern.Character_GetLast()  == __C('.')) pattern.DeleteLastCharacter();
+
+  if(!pattern.Compare(hostname, true))
+    {
+      return true;
+    }
+
+  if((pattern.GetSize() < 3) || (pattern[0] != __C('*')) || (pattern[1] != __C('.')) ||
+     (pattern.FindCharacter(__C('*'), 1) >= 0))
+    {
+      return false;
+    }
+
+  dot = hostname.FindCharacter(__C('.'));
+  if(dot <= 0)
+    {
+      return false;
+    }
+
+  XSTRING hostnamesuffix(&hostname.Get()[dot]);
+  XSTRING patternsuffix(&pattern.Get()[1]);
+
+  return !hostnamesuffix.Compare(patternsuffix, true);
+}
 
 
 
@@ -410,6 +988,12 @@ CIPHERCERTIFICATEX509::~CIPHERCERTIFICATEX509()
       GEN_DELETE hash;
     }
 
+  subjectalternativenamesDNS.DeleteContents();
+  subjectalternativenamesDNS.DeleteAll();
+
+  subjectalternativenamesIP.DeleteContents();
+  subjectalternativenamesIP.DeleteAll();
+
   Clean();
 }
 
@@ -616,33 +1200,44 @@ CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetIssuerID()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::IsValidDates()
 {
-  XDATETIME*  xdatetime_notbefore = GetDateNotBefore();
-  XDATETIME*  xdatetime_notafter  = GetDateNotAfter();
-
-  if(!xdatetime_notbefore || !xdatetime_notafter)
+  XDATETIME* xdatetime = GEN_XFACTORY.CreateDateTime();
+  if(!xdatetime)
     {
       return false;
-    }    
-
-  XQWORD seconds_notbefore = xdatetime_notbefore->GetSeconsFromDate();
-  XQWORD seconds_notafter  = xdatetime_notafter->GetSeconsFromDate();
-  XQWORD seconds_actual    = 0;
-
-  XDATETIME* xdatetime = GEN_XFACTORY.CreateDateTime();
-  if(xdatetime)
-    {
-      xdatetime->Read();
-      seconds_actual = xdatetime->GetSeconsFromDate();   
-
-      GEN_XFACTORY.DeleteDateTime(xdatetime);
     }
 
-  if((seconds_actual > seconds_notbefore) && (seconds_actual < seconds_notafter))
+  xdatetime->Read(false);
+  bool status = IsValidDates(xdatetime);
+
+  GEN_XFACTORY.DeleteDateTime(xdatetime);
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::IsValidDates(XDATETIME* datetime)
+* @brief      Check certificate validity at a supplied UTC time
+* @ingroup    CIPHER
+*
+* @param[in]  datetime : Validation time.
+*
+* @return     bool : true if notBefore <= datetime <= notAfter; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsValidDates(XDATETIME* datetime)
+{
+  if(!datetime || !datetime->IsValidDate() || !datenotbefore.IsValidDate() || !datenotafter.IsValidDate())
     {
-      return true;
+      return false;
     }
 
-  return false;
+  XQWORD secondsactual    = datetime->GetSeconsFromDate();
+  XQWORD secondsnotbefore = datenotbefore.GetSeconsFromDate();
+  XQWORD secondsnotafter  = datenotafter.GetSeconsFromDate();
+
+  return ((secondsactual >= secondsnotbefore) && (secondsactual <= secondsnotafter));
 }
 
 
@@ -901,16 +1496,830 @@ XBUFFER* CIPHERCERTIFICATEX509::GetHashData()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
+* @brief      Decode a bounded DER X.509 certificate
+* @ingroup    CIPHER
+*
+* @param[in]  certificate : Complete DER certificate.
+*
+* @return     bool : true if the certificate is structurally valid and its public key is supported; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
+{
+  static const XBYTE OIDbasicconstraints[] = { 0x55, 0x1D, 0x13 };
+  static const XBYTE OIDkeyusage[]         = { 0x55, 0x1D, 0x0F };
+  static const XBYTE OIDextendedkeyusage[] = { 0x55, 0x1D, 0x25 };
+  static const XBYTE OIDsubjectaltname[]   = { 0x55, 0x1D, 0x11 };
+  static const XBYTE OIDserverauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x01 };
+
+  CIPHERCERTIFICATEX509_DERREADER certificatereader(certificate.Get(), certificate.GetSize());
+  CIPHERCERTIFICATEX509_DERITEM   certificatesequence;
+  CIPHERCERTIFICATEX509_DERITEM   TBS;
+  CIPHERCERTIFICATEX509_DERITEM   outeralgorithm;
+  CIPHERCERTIFICATEX509_DERITEM   signatureitem;
+  XSTRING                          outeralgorithmOID;
+  XSTRING                          inneralgorithmOID;
+
+  if(certificate.IsEmpty() || !certificatedata.IsEmpty() ||
+     !certificatereader.Read(certificatesequence) || !certificatereader.IsEnd() ||
+     (certificatesequence.tag != 0x30))
+    {
+      return false;
+    }
+
+  CIPHERCERTIFICATEX509_DERREADER sequence(certificatesequence.data, certificatesequence.size);
+
+  if(!sequence.Read(TBS) || (TBS.tag != 0x30) ||
+     !sequence.Read(outeralgorithm) || !sequence.Read(signatureitem) || !sequence.IsEnd() ||
+     !CIPHERCERTIFICATEX509_DER_Algorithm(outeralgorithm, outeralgorithmOID) ||
+     (signatureitem.tag != 0x03) || (signatureitem.size < 2) || signatureitem.data[0])
+    {
+      return false;
+    }
+
+  if(!SetAlgorithmType(outeralgorithmOID.Get()))
+    {
+      return false;
+    }
+
+  CIPHERCERTIFICATEX509_DERREADER tbsreader(TBS.data, TBS.size);
+  CIPHERCERTIFICATEX509_DERITEM   item;
+
+  if(!tbsreader.Read(item))
+    {
+      return false;
+    }
+
+  if(item.tag == 0xA0)
+    {
+      CIPHERCERTIFICATEX509_DERREADER versionreader(item.data, item.size);
+      CIPHERCERTIFICATEX509_DERITEM   versionitem;
+
+      if(!versionreader.Read(versionitem) || !versionreader.IsEnd() ||
+         (versionitem.tag != 0x02) || (versionitem.size != 1) || (versionitem.data[0] > 2))
+        {
+          return false;
+        }
+
+      XWORD versionvalue = 0;
+      for(XDWORD c=0; c<versionitem.size; c++)
+        {
+          versionvalue = (XWORD)((versionvalue << 8) | versionitem.data[c]);
+        }
+
+      version = versionvalue + 1;
+
+      if(!tbsreader.Read(item))
+        {
+          return false;
+        }
+    }
+   else
+    {
+      version = 1;
+    }
+
+  if((item.tag != 0x02) || !item.size || (item.data[0] & 0x80) ||
+     ((item.size > 1) && !item.data[0] && !(item.data[1] & 0x80)) ||
+     !serial.Add((XBYTE*)item.data, item.size))
+    {
+      return false;
+    }
+
+  if(!tbsreader.Read(item) || !CIPHERCERTIFICATEX509_DER_Algorithm(item, inneralgorithmOID) ||
+     inneralgorithmOID.Compare(outeralgorithmOID))
+    {
+      return false;
+    }
+
+  if(!tbsreader.Read(item) || (item.tag != 0x30) ||
+     !issuerdata.Add((XBYTE*)item.encoded, item.encodedsize) ||
+     !CIPHERCERTIFICATEX509_DER_Name(item, &issuerID))
+    {
+      return false;
+    }
+
+  if(!tbsreader.Read(item) || (item.tag != 0x30))
+    {
+      return false;
+    }
+
+  CIPHERCERTIFICATEX509_DERREADER validityreader(item.data, item.size);
+  CIPHERCERTIFICATEX509_DERITEM   notbefore;
+  CIPHERCERTIFICATEX509_DERITEM   notafter;
+
+  if(!validityreader.Read(notbefore) || !validityreader.Read(notafter) || !validityreader.IsEnd() ||
+     !CIPHERCERTIFICATEX509_DER_Time(notbefore, datenotbefore) ||
+     !CIPHERCERTIFICATEX509_DER_Time(notafter, datenotafter) ||
+     (datenotbefore.GetSeconsFromDate() > datenotafter.GetSeconsFromDate()))
+    {
+      return false;
+    }
+
+  if(!tbsreader.Read(item) || (item.tag != 0x30) ||
+     !subjectdata.Add((XBYTE*)item.encoded, item.encodedsize) ||
+     !CIPHERCERTIFICATEX509_DER_Name(item, &subjectID))
+    {
+      return false;
+    }
+
+  if(!tbsreader.Read(item) || (item.tag != 0x30))
+    {
+      return false;
+    }
+
+  CIPHERCERTIFICATEX509_DERREADER publickeyinforeader(item.data, item.size);
+  CIPHERCERTIFICATEX509_DERITEM   publickeyalgorithm;
+  CIPHERCERTIFICATEX509_DERITEM   publickeybits;
+  XSTRING                          publickeyalgorithmOID;
+
+  if(!publickeyinforeader.Read(publickeyalgorithm) || !publickeyinforeader.Read(publickeybits) ||
+     !publickeyinforeader.IsEnd() ||
+     !CIPHERCERTIFICATEX509_DER_Algorithm(publickeyalgorithm, publickeyalgorithmOID) ||
+     publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.1")) ||
+     (publickeybits.tag != 0x03) || (publickeybits.size < 2) || publickeybits.data[0])
+    {
+      return false;
+    }
+
+  CIPHERCERTIFICATEX509_DERREADER publickeyreader(&publickeybits.data[1], publickeybits.size - 1);
+  CIPHERCERTIFICATEX509_DERITEM   publickeysequence;
+
+  if(!publickeyreader.Read(publickeysequence) || !publickeyreader.IsEnd() || (publickeysequence.tag != 0x30))
+    {
+      return false;
+    }
+
+  CIPHERCERTIFICATEX509_DERREADER RSAreader(publickeysequence.data, publickeysequence.size);
+  CIPHERCERTIFICATEX509_DERITEM   modulusitem;
+  CIPHERCERTIFICATEX509_DERITEM   exponentitem;
+
+  if(!RSAreader.Read(modulusitem) || !RSAreader.Read(exponentitem) || !RSAreader.IsEnd() ||
+     (modulusitem.tag != 0x02) || !modulusitem.size || (modulusitem.data[0] & 0x80) ||
+     ((modulusitem.size > 1) && !modulusitem.data[0] && !(modulusitem.data[1] & 0x80)) ||
+     (exponentitem.tag != 0x02) || !exponentitem.size || (exponentitem.data[0] & 0x80) ||
+     ((exponentitem.size > 1) && !exponentitem.data[0] && !(exponentitem.data[1] & 0x80)))
+    {
+      return false;
+    }
+
+  XBUFFER modulusbuffer;
+  XBUFFER exponentbuffer;
+  XMPINTEGER modulus;
+  XMPINTEGER exponent;
+
+  if(!modulusbuffer.Add((XBYTE*)modulusitem.data, modulusitem.size) ||
+     !exponentbuffer.Add((XBYTE*)exponentitem.data, exponentitem.size) ||
+     !modulus.SetFromXBuffer(modulusbuffer) || !exponent.SetFromXBuffer(exponentbuffer))
+    {
+      return false;
+    }
+
+  CIPHERKEYPUBLICRSA* RSApublickey = GEN_NEW CIPHERKEYPUBLICRSA();
+  if(!RSApublickey)
+    {
+      return false;
+    }
+
+  if(!RSApublickey->Set(modulus, exponent) || !RSApublickey->Check() || !SetPublicCipherKey(RSApublickey))
+    {
+      GEN_DELETE RSApublickey;
+      return false;
+    }
+
+  publiccipherkeyvalid = true;
+  publiccipherkeyID    = publickeyalgorithmOID;
+
+  bool hasextensionsblock = false;
+
+  while(!tbsreader.IsEnd())
+    {
+      if(!tbsreader.Read(item))
+        {
+          return false;
+        }
+
+      if((item.tag == 0x81) || (item.tag == 0x82))
+        {
+          if(version < 2)
+            {
+              return false;
+            }
+
+          continue;
+        }
+
+      if((item.tag != 0xA3) || (version != 3) || hasextensionsblock)
+        {
+          return false;
+        }
+
+      hasextensionsblock = true;
+
+      CIPHERCERTIFICATEX509_DERREADER explicitreader(item.data, item.size);
+      CIPHERCERTIFICATEX509_DERITEM   extensionssequence;
+
+      if(!explicitreader.Read(extensionssequence) || !explicitreader.IsEnd() || (extensionssequence.tag != 0x30))
+        {
+          return false;
+        }
+
+      CIPHERCERTIFICATEX509_DERREADER extensionsreader(extensionssequence.data, extensionssequence.size);
+
+      while(!extensionsreader.IsEnd())
+        {
+          CIPHERCERTIFICATEX509_DERITEM extensionsequence;
+          CIPHERCERTIFICATEX509_DERITEM extensionOID;
+          CIPHERCERTIFICATEX509_DERITEM extensionvalue;
+          CIPHERCERTIFICATEX509_DERITEM criticalitem;
+          bool                          critical = false;
+
+          if(!extensionsreader.Read(extensionsequence) || (extensionsequence.tag != 0x30))
+            {
+              return false;
+            }
+
+          CIPHERCERTIFICATEX509_DERREADER extensionreader(extensionsequence.data, extensionsequence.size);
+          if(!extensionreader.Read(extensionOID) || !extensionreader.Read(extensionvalue))
+            {
+              return false;
+            }
+
+          if(extensionvalue.tag == 0x01)
+            {
+              criticalitem = extensionvalue;
+              if((criticalitem.size != 1) ||
+                 ((criticalitem.data[0] != 0x00) && (criticalitem.data[0] != 0xFF)) ||
+                 !extensionreader.Read(extensionvalue))
+                {
+                  return false;
+                }
+
+              critical = criticalitem.data[0]?true:false;
+            }
+
+          if(!extensionreader.IsEnd() || (extensionvalue.tag != 0x04))
+            {
+              return false;
+            }
+
+          if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDbasicconstraints, sizeof(OIDbasicconstraints)))
+            {
+              CIPHERCERTIFICATEX509_DERREADER constraintsouter(extensionvalue.data, extensionvalue.size);
+              CIPHERCERTIFICATEX509_DERITEM   constraintssequence;
+
+              if(hasbasicconstraints || !constraintsouter.Read(constraintssequence) || !constraintsouter.IsEnd() ||
+                 (constraintssequence.tag != 0x30))
+                {
+                  return false;
+                }
+
+              hasbasicconstraints = true;
+
+              CIPHERCERTIFICATEX509_DERREADER constraintsreader(constraintssequence.data, constraintssequence.size);
+              if(!constraintsreader.IsEnd())
+                {
+                  CIPHERCERTIFICATEX509_DERITEM constraint;
+                  if(!constraintsreader.Read(constraint))
+                    {
+                      return false;
+                    }
+
+                  if(constraint.tag == 0x01)
+                    {
+                      if((constraint.size != 1) ||
+                         ((constraint.data[0] != 0x00) && (constraint.data[0] != 0xFF)))
+                        {
+                          return false;
+                        }
+
+                      iscertificateauthority = constraint.data[0]?true:false;
+
+                      if(!constraintsreader.IsEnd() && !constraintsreader.Read(constraint))
+                        {
+                          return false;
+                        }
+                    }
+
+                  if(constraint.tag == 0x02)
+                    {
+                      if(!constraint.size || (constraint.size > 4) || (constraint.data[0] & 0x80))
+                        {
+                          return false;
+                        }
+
+                      basicconstraintspathlength = 0;
+                      for(XDWORD c=0; c<constraint.size; c++)
+                        {
+                          basicconstraintspathlength = (basicconstraintspathlength << 8) | constraint.data[c];
+                        }
+                    }
+                   else if(constraint.tag != 0x01)
+                    {
+                      return false;
+                    }
+
+                  if(!constraintsreader.IsEnd())
+                    {
+                      return false;
+                    }
+                }
+
+              if((basicconstraintspathlength >= 0) && !iscertificateauthority)
+                {
+                  return false;
+                }
+
+              publiccipherkeybasicconstraints = iscertificateauthority;
+            }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDkeyusage, sizeof(OIDkeyusage)))
+            {
+              CIPHERCERTIFICATEX509_DERREADER keyusagereader(extensionvalue.data, extensionvalue.size);
+              CIPHERCERTIFICATEX509_DERITEM   keyusage;
+
+              if(haskeyusage || !keyusagereader.Read(keyusage) || !keyusagereader.IsEnd() ||
+                 (keyusage.tag != 0x03) || (keyusage.size < 2) || (keyusage.data[0] > 7))
+                {
+                  return false;
+                }
+
+              if(keyusage.data[0] &&
+                 (keyusage.data[keyusage.size-1] & (XBYTE)((1 << keyusage.data[0]) - 1)))
+                {
+                  return false;
+                }
+
+              haskeyusage             = true;
+              keyusagedigitalsignature = (keyusage.data[1] & 0x80)?true:false;
+              keyusagecertificatesign  = (keyusage.data[1] & 0x04)?true:false;
+              publiccipherkeyusaged    = keyusagedigitalsignature;
+            }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDextendedkeyusage, sizeof(OIDextendedkeyusage)))
+            {
+              CIPHERCERTIFICATEX509_DERREADER extendedouter(extensionvalue.data, extensionvalue.size);
+              CIPHERCERTIFICATEX509_DERITEM   extendedsequence;
+
+              if(hasextendedkeyusage || !extendedouter.Read(extendedsequence) || !extendedouter.IsEnd() ||
+                 (extendedsequence.tag != 0x30))
+                {
+                  return false;
+                }
+
+              hasextendedkeyusage = true;
+              CIPHERCERTIFICATEX509_DERREADER extendedreader(extendedsequence.data, extendedsequence.size);
+
+              while(!extendedreader.IsEnd())
+                {
+                  CIPHERCERTIFICATEX509_DERITEM extendedOID;
+                  if(!extendedreader.Read(extendedOID) || (extendedOID.tag != 0x06))
+                    {
+                      return false;
+                    }
+
+                  if(CIPHERCERTIFICATEX509_DER_OIDCompare(extendedOID, OIDserverauth, sizeof(OIDserverauth)))
+                    {
+                      extendedkeyusageserverauthentication = true;
+                    }
+                }
+            }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDsubjectaltname, sizeof(OIDsubjectaltname)))
+            {
+              CIPHERCERTIFICATEX509_DERREADER namesouter(extensionvalue.data, extensionvalue.size);
+              CIPHERCERTIFICATEX509_DERITEM   namessequence;
+
+              if(hassubjectalternativename || !namesouter.Read(namessequence) || !namesouter.IsEnd() ||
+                 (namessequence.tag != 0x30))
+                {
+                  return false;
+                }
+
+              hassubjectalternativename = true;
+              CIPHERCERTIFICATEX509_DERREADER namesreader(namessequence.data, namessequence.size);
+
+              while(!namesreader.IsEnd())
+                {
+                  CIPHERCERTIFICATEX509_DERITEM name;
+                  if(!namesreader.Read(name))
+                    {
+                      return false;
+                    }
+
+                  if(name.tag == 0x82)
+                    {
+                      XSTRING* DNSname = GEN_NEW XSTRING();
+                      if(!DNSname)
+                        {
+                          return false;
+                        }
+
+                      for(XDWORD c=0; c<name.size; c++)
+                        {
+                          if((name.data[c] & 0x80) || !name.data[c])
+                            {
+                              GEN_DELETE DNSname;
+                              return false;
+                            }
+
+                          DNSname->Add((XCHAR)name.data[c]);
+                        }
+
+                      if(DNSname->IsEmpty() || !subjectalternativenamesDNS.Add(DNSname))
+                        {
+                          GEN_DELETE DNSname;
+                          return false;
+                        }
+                    }
+                  else if(name.tag == 0x87)
+                    {
+                      if((name.size != 4) && (name.size != 16))
+                        {
+                          return false;
+                        }
+
+                      XBUFFER* IPname = GEN_NEW XBUFFER();
+                      if(!IPname || !IPname->Add((XBYTE*)name.data, name.size) ||
+                         !subjectalternativenamesIP.Add(IPname))
+                        {
+                          if(IPname) GEN_DELETE IPname;
+                          return false;
+                        }
+                    }
+                }
+            }
+          else if(critical)
+            {
+              hasunknowncriticalextension = true;
+            }
+        }
+    }
+
+  if(!certificatedata.Add(certificate) ||
+     !tbsdata.Add((XBYTE*)TBS.encoded, TBS.encodedsize) ||
+     !signature.Add((XBYTE*)&signatureitem.data[1], signatureitem.size - 1))
+    {
+      return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetCertificateData()
+* @brief      Get the complete DER certificate
+* @ingroup    CIPHER
+*
+* @return     XBUFFER* : Certificate buffer.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* CIPHERCERTIFICATEX509::GetCertificateData()
+{
+  return &certificatedata;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetTBSData()
+* @brief      Get the exact DER TBSCertificate signed by the issuer
+* @ingroup    CIPHER
+*
+* @return     XBUFFER* : TBSCertificate buffer.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* CIPHERCERTIFICATEX509::GetTBSData()
+{
+  return &tbsdata;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetSignature()
+* @brief      Get the certificate signature
+* @ingroup    CIPHER
+*
+* @return     XBUFFER* : Signature buffer.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* CIPHERCERTIFICATEX509::GetSignature()
+{
+  return &signature;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetIssuerData()
+* @brief      Get the exact DER issuer name
+* @ingroup    CIPHER
+*
+* @return     XBUFFER* : Issuer name buffer.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* CIPHERCERTIFICATEX509::GetIssuerData()
+{
+  return &issuerdata;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetSubjectData()
+* @brief      Get the exact DER subject name
+* @ingroup    CIPHER
+*
+* @return     XBUFFER* : Subject name buffer.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* CIPHERCERTIFICATEX509::GetSubjectData()
+{
+  return &subjectdata;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::HasBasicConstraints()
+* @brief      Check whether BasicConstraints is present
+* @ingroup    CIPHER
+*
+* @return     bool : true if the extension is present; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::HasBasicConstraints()
+{
+  return hasbasicconstraints;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::IsCertificateAuthority()
+* @brief      Check whether BasicConstraints authorizes certificate signing
+* @ingroup    CIPHER
+*
+* @return     bool : true if the certificate is a CA; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsCertificateAuthority()
+{
+  return hasbasicconstraints && iscertificateauthority;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int CIPHERCERTIFICATEX509::GetBasicConstraintsPathLength()
+* @brief      Get the BasicConstraints path length
+* @ingroup    CIPHER
+*
+* @return     int : Maximum subordinate CA count, or -1 if it is not limited.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int CIPHERCERTIFICATEX509::GetBasicConstraintsPathLength()
+{
+  return basicconstraintspathlength;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::HasKeyUsage()
+* @brief      Check whether KeyUsage is present
+* @ingroup    CIPHER
+*
+* @return     bool : true if the extension is present; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::HasKeyUsage()
+{
+  return haskeyusage;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::IsKeyUsageDigitalSignature()
+* @brief      Check the digitalSignature KeyUsage bit
+* @ingroup    CIPHER
+*
+* @return     bool : true if digital signatures are authorized; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsKeyUsageDigitalSignature()
+{
+  return keyusagedigitalsignature;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::IsKeyUsageCertificateSign()
+* @brief      Check the keyCertSign KeyUsage bit
+* @ingroup    CIPHER
+*
+* @return     bool : true if certificate signing is authorized; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsKeyUsageCertificateSign()
+{
+  return keyusagecertificatesign;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::HasExtendedKeyUsage()
+* @brief      Check whether ExtendedKeyUsage is present
+* @ingroup    CIPHER
+*
+* @return     bool : true if the extension is present; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::HasExtendedKeyUsage()
+{
+  return hasextendedkeyusage;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageServerAuthentication()
+* @brief      Check the id-kp-serverAuth ExtendedKeyUsage
+* @ingroup    CIPHER
+*
+* @return     bool : true if TLS server authentication is authorized; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageServerAuthentication()
+{
+  return extendedkeyusageserverauthentication;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::HasUnknownCriticalExtension()
+* @brief      Check whether an unsupported critical extension was found
+* @ingroup    CIPHER
+*
+* @return     bool : true if validation must reject the certificate; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::HasUnknownCriticalExtension()
+{
+  return hasunknowncriticalextension;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XSTRING*>* CIPHERCERTIFICATEX509::GetSubjectAlternativeNamesDNS()
+* @brief      Get decoded dNSName subject alternative names
+* @ingroup    CIPHER
+*
+* @return     XVECTOR<XSTRING*>* : DNS name list.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XSTRING*>* CIPHERCERTIFICATEX509::GetSubjectAlternativeNamesDNS()
+{
+  return &subjectalternativenamesDNS;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XBUFFER*>* CIPHERCERTIFICATEX509::GetSubjectAlternativeNamesIP()
+* @brief      Get decoded iPAddress subject alternative names
+* @ingroup    CIPHER
+*
+* @return     XVECTOR<XBUFFER*>* : Binary IP address list.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XBUFFER*>* CIPHERCERTIFICATEX509::GetSubjectAlternativeNamesIP()
+{
+  return &subjectalternativenamesIP;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::IsServerNameValid(XCHAR* servername)
+* @brief      Match a TLS server name against subjectAltName or the legacy commonName fallback
+* @ingroup    CIPHER
+*
+* @param[in]  servername : Expected DNS name or IP address.
+*
+* @return     bool : true if the identity matches; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsServerNameValid(XCHAR* servername)
+{
+  XBUFFER binaryIP;
+
+  if(!servername || !servername[0])
+    {
+      return false;
+    }
+
+  if(CIPHERCERTIFICATEX509_IPAddress(servername, binaryIP))
+    {
+      for(XDWORD c=0; c<subjectalternativenamesIP.GetSize(); c++)
+        {
+          XBUFFER* alternative = subjectalternativenamesIP.Get(c);
+          if(alternative && alternative->Compare(binaryIP))
+            {
+              return true;
+            }
+        }
+
+      return false;
+    }
+
+  for(XDWORD c=0; c<subjectalternativenamesDNS.GetSize(); c++)
+    {
+      XSTRING* alternative = subjectalternativenamesDNS.Get(c);
+      if(alternative)
+        {
+          XSTRING pattern((*alternative));
+          if(CIPHERCERTIFICATEX509_DNSName(pattern, servername))
+            {
+              return true;
+            }
+        }
+    }
+
+  if(hassubjectalternativename)
+    {
+      return false;
+    }
+
+  XSTRING commonname((*subjectID.GetCommonName()));
+  return CIPHERCERTIFICATEX509_DNSName(commonname, servername);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
+* @brief      Verify the X.509 signature with the issuer RSA public key
+* @ingroup    CIPHER
+*
+* @param[in]  issuerpublickey : Issuer public key.
+*
+* @return     bool : true if the signature is valid and its algorithm is accepted; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
+{
+  if(!issuerpublickey || (issuerpublickey->GetType() != CIPHERKEYTYPE_RSA_PUBLIC) ||
+     tbsdata.IsEmpty() || signature.IsEmpty())
+    {
+      return false;
+    }
+
+  CIPHERRSA RSA;
+  if(!RSA.SetKey(issuerpublickey, true))
+    {
+      return false;
+    }
+
+  switch(algorithmtype)
+    {
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_256);
+                                                                            return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
+                                                                          }
+
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_384);
+                                                                            return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
+                                                                          }
+
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_512);
+                                                                            return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
+                                                                          }
+
+                                                                    default : break;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool CIPHERCERTIFICATEX509::ConvertDateTime(XCHAR* datestr, XDATETIME* datetime)
 * @brief      Convert date time
 * @ingroup    CIPHER
-* 
+*
 * @param[in]  datestr : Datestr pointer to use.
 * @param[in]  datetime : Datetime pointer to use.
-* 
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::ConvertDateTime(XCHAR* datestr, XDATETIME* datetime)
 {
@@ -1109,8 +2518,17 @@ void CIPHERCERTIFICATEX509::Clean()
   publiccipherkey                 = NULL; 
 
   hash                            = NULL;
+
+  hasbasicconstraints             = false;
+  iscertificateauthority          = false;
+  basicconstraintspathlength      = -1;
+
+  haskeyusage                     = false;
+  keyusagedigitalsignature        = false;
+  keyusagecertificatesign         = false;
+
+  hasextendedkeyusage                   = false;
+  extendedkeyusageserverauthentication  = false;
+  hasunknowncriticalextension           = false;
+  hassubjectalternativename              = false;
 }
-
-
-
-

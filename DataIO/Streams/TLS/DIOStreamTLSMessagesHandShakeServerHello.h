@@ -38,6 +38,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
+#define DIOSTREAMTLS_MSG_HELLORETRYREQUEST_RANDOM_SIZE                       32
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -61,6 +62,8 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO : public DIOSTREAMTLS_MSG_INTERFACE
     XWORD                                   GetCiphersuitesLength                             ();
     void                                    SetCiphersuitesLength                             (XWORD ciphersuites_length);
     XVECTOR<XWORD>*                         GetCipherSuites                                   ();
+    XWORD                                   GetCipherSuite                                    ();
+    void                                    SetCipherSuite                                    (XWORD ciphersuite);
 
     XBYTE                                   GetCompressionLength                              ();
     void                                    SetCompressionLength                              (XBYTE compress_length);
@@ -76,6 +79,8 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO : public DIOSTREAMTLS_MSG_INTERFACE
                                                 
     bool                                    SetToBuffer                                       (XBUFFER& buffer, bool showdebug);    
     bool                                    GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+    bool                                    IsHelloRetryRequest                               ();
                                             
   private:
 
@@ -102,7 +107,6 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO : public DIOSTREAMTLS_MSG_INTERFACE
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

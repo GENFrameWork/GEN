@@ -119,6 +119,9 @@ class CIPHER
     XBUFFER*              GetResult                 ();
     bool                  GetResultString           (XSTRING& stringhex);
 
+    static bool           CompareConstantTime       (XBYTE* data1, XBYTE* data2, XDWORD size);
+    static bool           CompareConstantTime       (XBUFFER& data1, XBUFFER& data2);
+
   protected:
 
     CIPHERTYPE            type;

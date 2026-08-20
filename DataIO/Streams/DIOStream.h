@@ -104,7 +104,7 @@ class DIOSTREAM : public XSUBJECT
     virtual XDWORD              Read                            (XBYTE* buffer, XDWORD size);
     virtual XDWORD              Write                           (XBYTE* buffer, XDWORD size);
 
-    XDWORD                      Read                            (XBUFFER& xbuffer);
+    virtual XDWORD              Read                            (XBUFFER& xbuffer);
     XDWORD                      Write                           (XBUFFER& xbuffer);
 
     virtual bool                WaitToFilledReadingBuffer       (int filledto = DIOSTREAM_SOMETHINGTOREAD, int timeout = XTIMER_INFINITE);
@@ -130,7 +130,7 @@ class DIOSTREAM : public XSUBJECT
     DIOSTREAMTYPE               GetType                         ();
     void                        SetType                         (DIOSTREAMTYPE type);
 
-    XBUFFER*                    GetInXBuffer                    ();
+    virtual XBUFFER*            GetInXBuffer                    ();
     XBUFFER*                    GetOutXBuffer                   ();
 
     bool                        ResetXBuffers                   ();
@@ -191,7 +191,6 @@ class DIOSTREAM : public XSUBJECT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

@@ -34,6 +34,7 @@
 #include "XBuffer.h"
 #include "XDateTime.h"
 #include "XMPInteger.h"
+#include "XVector.h"
 
 #include "CipherKey.h"
 #include "Hash.h"
@@ -121,6 +122,7 @@ class CIPHERCERTIFICATEX509
     CIPHERCERTIFICATEX509_ID*               GetIssuerID                             ();  
 
     bool                                    IsValidDates                            ();
+    bool                                    IsValidDates                            (XDATETIME* datetime);
     XDATETIME*                              GetDateNotBefore                        ();
     XDATETIME*                              GetDateNotAfter                         ();
 
@@ -146,6 +148,32 @@ class CIPHERCERTIFICATEX509
     HASH*                                   GetHash                                 ();  
     void                                    SetHash                                 (HASH* hash);
     XBUFFER*                                GetHashData                             ();
+
+    bool                                    Decode                                  (XBUFFER& certificate);
+
+    XBUFFER*                                GetCertificateData                      ();
+    XBUFFER*                                GetTBSData                              ();
+    XBUFFER*                                GetSignature                            ();
+    XBUFFER*                                GetIssuerData                           ();
+    XBUFFER*                                GetSubjectData                          ();
+
+    bool                                    HasBasicConstraints                     ();
+    bool                                    IsCertificateAuthority                  ();
+    int                                     GetBasicConstraintsPathLength           ();
+
+    bool                                    HasKeyUsage                             ();
+    bool                                    IsKeyUsageDigitalSignature              ();
+    bool                                    IsKeyUsageCertificateSign               ();
+
+    bool                                    HasExtendedKeyUsage                     ();
+    bool                                    IsExtendedKeyUsageServerAuthentication  ();
+    bool                                    HasUnknownCriticalExtension             ();
+
+    XVECTOR<XSTRING*>*                      GetSubjectAlternativeNamesDNS           ();
+    XVECTOR<XBUFFER*>*                      GetSubjectAlternativeNamesIP            ();
+
+    bool                                    IsServerNameValid                       (XCHAR* servername);
+    bool                                    VerifySignature                         (CIPHERKEY* issuerpublickey);
 
     bool                                    ConvertDateTime                         (XCHAR* datestr, XDATETIME* datetime);
 
@@ -176,14 +204,34 @@ class CIPHERCERTIFICATEX509
 
     HASH*                                   hash;
     XBUFFER                                 hashdata;
+
+    XBUFFER                                 certificatedata;
+    XBUFFER                                 tbsdata;
+    XBUFFER                                 signature;
+    XBUFFER                                 issuerdata;
+    XBUFFER                                 subjectdata;
+
+    bool                                    hasbasicconstraints;
+    bool                                    iscertificateauthority;
+    int                                     basicconstraintspathlength;
+
+    bool                                    haskeyusage;
+    bool                                    keyusagedigitalsignature;
+    bool                                    keyusagecertificatesign;
+
+    bool                                    hasextendedkeyusage;
+    bool                                    extendedkeyusageserverauthentication;
+    bool                                    hasunknowncriticalextension;
+    bool                                    hassubjectalternativename;
+
+    XVECTOR<XSTRING*>                       subjectalternativenamesDNS;
+    XVECTOR<XBUFFER*>                       subjectalternativenamesIP;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 

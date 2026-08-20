@@ -31,6 +31,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "XVector.h"
+#include "XBuffer.h"
 #include "XPath.h"
 
 
@@ -55,16 +56,20 @@ class CIPHERTRUSTEDROOTCERTIFICATESX509
     XVECTOR<XSTRING*>*    GetLines                          ();
     bool                  DeleteAllLines                    ();
 
+    bool                  Certificates_Decode              ();
+    XVECTOR<XBUFFER*>*    Certificates_GetAll              ();
+    bool                  Certificates_DeleteAll           ();
+
   private:
   
     void                  Clean                             ();
     XVECTOR<XSTRING*>     lines;
+    XVECTOR<XBUFFER*>     certificates;
 };
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

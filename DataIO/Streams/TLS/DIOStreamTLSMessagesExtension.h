@@ -43,10 +43,23 @@
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMS	  0x000d // 1.2+
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_ALPN	                0x0010 // 1.2+  Protocol app
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_EMS                   0x0017 // 1.2	  Extended Mster Secret 
- #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SESSIONTICKET	        0x0023 // 1.2	  Ticket
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SESSIONTICKET	        0x0023 // 1.2	  Ticket
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDVERSIONS	    0x002b // 1.3	  TLS Versions
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PSKKEYEXCHANGEMODES	  0x002d // 1.3	  Mode PSK
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE	            0x0033 // 1.3	  Public Key                                                                    
+
+
+enum DIOSTREAMTLS_MSG_EXTENSION_CONTEXT
+{
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_UNKNOWN                    = 0 ,
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_CLIENTHELLO                    ,
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_SERVERHELLO                    ,
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_HELLORETRYREQUEST              ,
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_ENCRYPTEDEXTENSIONS             ,
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_CERTIFICATEREQUEST              ,
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_CERTIFICATEENTRY                ,
+  DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_NEWSESSIONTICKET                ,
+};
 
 
 
@@ -92,12 +105,12 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                             Clean();
                                                           }
 
-    XBYTE                                                 List_GetLength                                    () 
+    S                                                     List_GetLength                                    () 
                                                           {
                                                             return list_length;
                                                           }
                                                          
-    void                                                  List_SetLength                                    (XBYTE list_length)
+    void                                                  List_SetLength                                    (S list_length)
                                                           {
                                                             this->list_length = list_length;
                                                           }
@@ -109,9 +122,19 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                        
     bool                                                  List_Add                                          (T element)
                                                           {
-                                                            list.Add(element);
+                                                            XDWORD size = (list.GetSize() + 1) * sizeof(T);
 
-                                                            List_SetLength(list.GetSize() * sizeof(T));  
+                                                            if(((XDWORD)(S)size != size) || (size > (0xFFFF - sizeof(S))))
+                                                              {
+                                                                return false;
+                                                              }
+
+                                                            if(!list.Add(element))
+                                                              {
+                                                                return false;
+                                                              }
+
+                                                            List_SetLength((S)(list.GetSize() * sizeof(T)));
 
                                                             SetLength(List_GetLength() + sizeof(S));  
 
@@ -121,7 +144,8 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
     bool                                                  List_DeleteAll                                    ()
                                                           {
                                                             list.DeleteAll();
-  
+
+                                                            List_SetLength(0);
                                                             SetLength(0);
 
                                                             return true;
@@ -134,15 +158,17 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                                 return false;
                                                               }
 
-                                                            extension->SetType(GetType());  
-                                                            extension->SetLength(GetLength());
+                                                            extension->List_DeleteAll();
 
-                                                            extension->List_SetLength(List_GetLength());
+                                                            extension->SetType(GetType());  
 
                                                             for(XDWORD c=0; c<list.GetSize(); c++)
                                                               {
                                                                 T element = list.Get(c);      
-                                                                extension->List_Get()->Add(element);      
+                                                                if(!extension->List_Add(element))
+                                                                  {
+                                                                    return false;
+                                                                  }
                                                               }
 
                                                             return true;
@@ -155,15 +181,17 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                                 return false;
                                                               }
 
+                                                            List_DeleteAll();
+
                                                             SetType(extension->GetType());  
-                                                            SetLength(extension->GetLength());
 
-                                                            List_SetLength(extension->List_GetLength());
-
-                                                            for(XDWORD c=0; c<list.GetSize(); c++)
+                                                            for(XDWORD c=0; c<extension->List_Get()->GetSize(); c++)
                                                               {
                                                                 T element = extension->List_Get()->Get(c);      
-                                                                List_Get()->Add(element);      
+                                                                if(!List_Add(element))
+                                                                  {
+                                                                    return false;
+                                                                  }
                                                               }
 
                                                             return true;
@@ -171,14 +199,33 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
                                                                                                                 
     bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug)
                                                           {
-                                                            DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug);
+                                                            XDWORD size = list.GetSize() * sizeof(T);
 
-                                                            buffer.Add((S)list_length);
+                                                            if(((XDWORD)(S)size != size) || (size > (0xFFFF - sizeof(S))))
+                                                              {
+                                                                return false;
+                                                              }
+
+                                                            List_SetLength((S)size);
+                                                            SetLength((XWORD)(sizeof(S) + List_GetLength()));
+
+                                                            if(!DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug))
+                                                              {
+                                                                return false;
+                                                              }
+
+                                                            if(!buffer.Add((S)list_length))
+                                                              {
+                                                                return false;
+                                                              }
 
                                                             for(XDWORD c=0; c<list.GetSize(); c++)
                                                               {
                                                                 T element = List_Get()->Get(c);      
-                                                                buffer.Add(element);
+                                                                if(!buffer.Add(element))
+                                                                  {
+                                                                    return false;
+                                                                  }
                                                               }
 
                                                             return true;
@@ -186,32 +233,59 @@ class DIOSTREAMTLS_MSG_EXTENSION_LIST : public DIOSTREAMTLS_MSG_EXTENSION
 
     bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug)
                                                           {
-                                                            DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug);
+                                                            if(!DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug))
+                                                              {
+                                                                return false;
+                                                              }
 
-                                                            buffer.Extract((S&)list_length);
+                                                            if((GetLength() < sizeof(S)) || (buffer.GetSize() != GetLength()))
+                                                              {
+                                                                return false;
+                                                              }
+
+                                                            if(!buffer.Extract(list_length))
+                                                              {
+                                                                return false;
+                                                              }
+
+                                                            if((List_GetLength() != buffer.GetSize()) || (List_GetLength() % sizeof(T)))
+                                                              {
+                                                                return false;
+                                                              }
+
+                                                            List_Get()->DeleteAll();
 
                                                             XDWORD nsize = List_GetLength() / sizeof(T);
 
                                                             for(XDWORD c=0; c<nsize; c++)
                                                               {
-                                                                T element = List_Get()->Get(c);      
+                                                                T element = 0;
 
-                                                                buffer.Extract(element);
+                                                                if(!buffer.Extract(element))
+                                                                  {
+                                                                    List_Get()->DeleteAll();
+                                                                    return false;
+                                                                  }
 
-                                                                List_Get()->Add(element);      
+                                                                if(!List_Get()->Add(element))
+                                                                  {
+                                                                    List_Get()->DeleteAll();
+                                                                    return false;
+                                                                  }
                                                               }
 
-                                                            return true;
+                                                            return buffer.IsEmpty();
                                                           }                                                        
                                                
   private:
 
     void                                                  Clean                                             ()
                                                           {
+                                                            list.DeleteAll();
                                                             list_length = 0;
                                                           }
-                                                          
-    T                                                     list_length;
+                                                           
+    S                                                     list_length;
     XVECTOR<T>                                            list;
 };   
 
@@ -283,7 +357,7 @@ class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS : public DIOSTREAMTLS_MSG_EXTEN
 };
 
 
-class DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD, XWORD>
+class DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XBYTE, XBYTE>
 {
   public:
                                                           DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS         ();
@@ -356,6 +430,26 @@ class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS : public DIOSTREAMTLS_MSG_EXT
 };
 
 
+class DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER : public DIOSTREAMTLS_MSG_EXTENSION
+{
+  public:
+                                                          DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER ();
+    virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER ();
+
+    XWORD                                                 GetVersion                                        ();
+    void                                                  SetVersion                                        (XWORD version);
+
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                                  Clean                                             ();
+
+    XWORD                                                 version;
+};
+
+
 class DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XBYTE, XBYTE>
 {
   public:
@@ -425,11 +519,69 @@ class DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE : public DIOSTREAMTLS_MSG_EXTENSION
 };
 
 
+class DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_SERVER : public DIOSTREAMTLS_MSG_EXTENSION
+{
+  public:
+                                                          DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_SERVER        ();
+    virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_SERVER        ();
+
+    DIOSTREAMTLS_MSG_EXTENSION_KEY*                       GetKey                                            ();
+
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                                  Clean                                             ();
+
+    DIOSTREAMTLS_MSG_EXTENSION_KEY                        key;
+};
+
+
+class DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST : public DIOSTREAMTLS_MSG_EXTENSION
+{
+  public:
+                                                          DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST ();
+    virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST ();
+
+    XWORD                                                 GetSelectedGroup                                  ();
+    void                                                  SetSelectedGroup                                  (XWORD selectedgroup);
+
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                                  Clean                                             ();
+
+    XWORD                                                 selectedgroup;
+};
+
+
+class DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN : public DIOSTREAMTLS_MSG_EXTENSION
+{
+  public:
+                                                          DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN                ();
+    virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN                ();
+
+    XBUFFER*                                              GetData                                           ();
+
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                                  Clean                                             ();
+
+    XBUFFER                                               data;
+};
+
+
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 
 
-
-
+DIOSTREAMTLS_MSG_EXTENSION*                              DIOSTREAMTLS_MSG_EXTENSION_Create                 (XWORD type, DIOSTREAMTLS_MSG_EXTENSION_CONTEXT context);
+bool                                                     DIOSTREAMTLS_MSG_EXTENSION_Extract                (XBUFFER& buffer, DIOSTREAMTLS_MSG_EXTENSION_CONTEXT context, DIOSTREAMTLS_MSG_EXTENSION*& extension);
 

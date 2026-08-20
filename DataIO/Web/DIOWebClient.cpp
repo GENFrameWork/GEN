@@ -37,6 +37,7 @@
 #include "DIOWebClient.h"
 
 #include "XFactory.h"
+#include "XSleep.h"
 #include "XTimer.h"
 #include "XPath.h"
 #include "XFile.h"
@@ -48,6 +49,11 @@
 #include "DIOURL.h"
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOStreamTCPIP.h"
+
+#ifdef DIO_STREAMTLS_ACTIVE
+#include "DIOStreamTLSConfig.h"
+#endif
+
 #include "DIOWebClient_XEvent.h"
 
 
@@ -205,28 +211,178 @@ XQWORD DIOWEBCLIENT_HEADER::GetContentLength()
 {
   XQWORD contentlength = 0;
 
+  GetContentLength(contentlength);
+
+  return contentlength;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT_HEADER::HasContentLength()
+* @brief      Check whether a Content-Length response field is present
+* @ingroup    DATAIO
+* 
+* @return     bool : true when the field is present; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT_HEADER::HasContentLength()
+{
   for(XDWORD c=0; c<lines.GetSize(); c++)
     {
       XSTRING* line = lines.Get(c);
       if(line)
         {
-          if(line->Find(DIOWEBHEADER_CONTENT_LENGTH, true) != XSTRING_NOTFOUND)
+          int index = line->Find(__L(":"), true);
+          if(index != XSTRING_NOTFOUND)
             {
-              XSTRING sizestr;
+              XSTRING field;
 
-              int index = line->Find(__L(":"), true);
-              if(index != XSTRING_NOTFOUND)  line->Copy(index+1, sizestr);
-
-              sizestr.DeleteCharacter(__C(' '));
-
-              contentlength = sizestr.ConvertToQWord();
-
-              if(contentlength !=-1) break;
+              line->Copy(0, index, field);
+              if(!field.Compare(DIOWEBHEADER_CONTENT_LENGTH, true)) return true;
             }
         }
     }
 
-  return contentlength;
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT_HEADER::GetContentLength(XQWORD& contentlength)
+* @brief      Get and validate the Content-Length response field
+* @ingroup    DATAIO
+* 
+* @param[out] contentlength : Parsed content length.
+* 
+* @return     bool : true when a valid Content-Length field is present; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT_HEADER::GetContentLength(XQWORD& contentlength)
+{
+  bool found = false;
+
+  contentlength = 0;
+
+  for(XDWORD c=0; c<lines.GetSize(); c++)
+    {
+      XSTRING* line = lines.Get(c);
+      if(line)
+        {
+          int index = line->Find(__L(":"), true);
+          if(index != XSTRING_NOTFOUND)
+            {
+              XSTRING field;
+
+              line->Copy(0, index, field);
+              if(field.Compare(DIOWEBHEADER_CONTENT_LENGTH, true)) continue;
+
+              XDWORD  position = index + 1;
+              XQWORD  value    = 0;
+              bool    hasdigit = false;
+
+              while(position < line->GetSize())
+                {
+                  XCHAR character = line->Get()[position];
+
+                  if((character != __C(' ')) && (character != __C('\t'))) break;
+
+                  position++;
+                }
+
+              while(position < line->GetSize())
+                {
+                  XCHAR character = line->Get()[position];
+
+                  if((character < __C('0')) || (character > __C('9'))) break;
+
+                  XQWORD digit   = character - __C('0');
+                  XQWORD maximum = (XQWORD)-1;
+
+                  if(value > ((maximum - digit) / 10)) return false;
+
+                  value     = (value * 10) + digit;
+                  hasdigit  = true;
+                  position++;
+                }
+
+              if(!hasdigit) return false;
+
+              while(position < line->GetSize())
+                {
+                  XCHAR character = line->Get()[position];
+
+                  if((character != __C(' ')) && (character != __C('\t'))) return false;
+
+                  position++;
+                }
+
+              if(found && (contentlength != value)) return false;
+
+              contentlength = value;
+              found         = true;
+            }
+        }
+    }
+
+  return found;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT_HEADER::GetTransferEncoding(XSTRING& transferencoding)
+* @brief      Get the combined Transfer-Encoding response field
+* @ingroup    DATAIO
+* 
+* @param[out] transferencoding : Transfer coding list.
+* 
+* @return     bool : true when the field is present; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT_HEADER::GetTransferEncoding(XSTRING& transferencoding)
+{
+  bool found = false;
+
+  transferencoding.Empty();
+
+  for(XDWORD c=0; c<lines.GetSize(); c++)
+    {
+      XSTRING* line = lines.Get(c);
+      if(line)
+        {
+          int index = line->Find(__L(":"), true);
+          if(index != XSTRING_NOTFOUND)
+            {
+              XSTRING field;
+              XSTRING value;
+
+              line->Copy(0, index, field);
+              if(field.Compare(DIOWEBHEADER_TRANSFER_ENCODING, true)) continue;
+
+              line->Copy(index+1, value);
+
+              while(value.GetSize() && ((value.Get()[0] == __C(' ')) || (value.Get()[0] == __C('\t'))))
+                {
+                  value.DeleteCharacters(0, 1);
+                }
+
+              while(value.GetSize() && ((value.Get()[value.GetSize()-1] == __C(' ')) ||
+                                        (value.Get()[value.GetSize()-1] == __C('\t'))))
+                {
+                  value.DeleteCharacters(value.GetSize()-1, 1);
+                }
+
+              if(found) transferencoding += __L(",");
+
+              transferencoding += value;
+              found              = true;
+            }
+        }
+    }
+
+  return found;
 }
 
 
@@ -327,14 +483,28 @@ DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
   RegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_OPENWEB);
   RegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_WRITEHEADER);
   RegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_SENDPOSTDATA);
+  RegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
   RegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_READHEADER);
   RegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_READBODYBLOCK);
   RegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_CLOSEWEB);
 
   timerout=GEN_XFACTORY.CreateTimer();
   
+  #ifdef DIO_STREAMTLS_ACTIVE
+
+  diostreamcfg = GEN_NEW DIOSTREAMTLSCONFIG();
+
+  #else
+
   diostreamcfg = GEN_NEW DIOSTREAMTCPIPCONFIG();
-  if(diostreamcfg) diostream = (DIOSTREAMTCPIP*)GEN_DIOFACTORY.CreateStreamIO(diostreamcfg);
+
+  #endif
+
+  if(diostreamcfg)
+    {
+      diostreamcfg->SetIsTLS(false);
+      Stream_Create(false);
+    }
 }
 
 
@@ -351,6 +521,7 @@ DIOWEBCLIENT::~DIOWEBCLIENT()
   DeRegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_OPENWEB);
   DeRegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_WRITEHEADER);
   DeRegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_SENDPOSTDATA);
+  DeRegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
   DeRegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_READHEADER);
   DeRegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_READBODYBLOCK);
   DeRegisterEvent(DIOWEBCLIENT_XEVENT_TYPE_CLOSEWEB);
@@ -403,7 +574,8 @@ int DIOWEBCLIENT::Get_Port()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::Set_Port(int port)
 {
-  this->port = port;
+  this->port       = port;
+  isportconfigured = true;
 }
 
 
@@ -524,6 +696,29 @@ XSTRING*  DIOWEBCLIENT::GetPassword()
 DIOSTREAMTCPIPCONFIG* DIOWEBCLIENT::GetStreamCFG()
 {
   return diostreamcfg;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLSCONFIG* DIOWEBCLIENT::GetStreamTLSCFG()
+* @brief      Get TLS stream CFG
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTLSCONFIG* : Pointer to the TLS configuration; NULL if TLS is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLSCONFIG* DIOWEBCLIENT::GetStreamTLSCFG()
+{
+  #ifdef DIO_STREAMTLS_ACTIVE
+
+  return (DIOSTREAMTLSCONFIG*)diostreamcfg;
+
+  #else
+
+  return NULL;
+
+  #endif
 }
 
 
@@ -919,6 +1114,410 @@ bool DIOWEBCLIENT::Post(XCHAR* url, XPATH& pathfile, XBUFFER* postdata, XCHAR* a
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool DIOWEBCLIENT::Header_Read(int timeout)
+* @brief      Read the final HTTP response header
+* @ingroup    DATAIO
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if a final response header was read; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::Header_Read(int timeout)
+{
+  for(int c=0; c<8; c++)
+    {
+      if(!header.Read(diostream, timeout)) return false;
+
+      int result = header.GetResultServer();
+      if(!result) return false;
+
+      if((result < 100) || (result >= 200)) return true;
+      if(result == DIOWEBHEADER_RESULT_SWITCHINGPROTOCOLS) return false;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT::BodyBlock_Write(XBYTE* data, XDWORD size, bool istobuffer, void* to, XQWORD& totalsizeread, XQWORD contentlength, XTIMER* timerdownload, DIOWEBCLIENT_XEVENT& xevent)
+* @brief      Write one decoded HTTP body block
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Body data.
+* @param[in]  size : Body data size.
+* @param[in]  istobuffer : true to write to an XBUFFER; false to write to an XFILE.
+* @param[in]  to : Destination object.
+* @param[in,out] totalsizeread : Total decoded body size.
+* @param[in]  contentlength : Expected content length, or zero when it is not known.
+* @param[in]  timerdownload : Download timer.
+* @param[in]  xevent : Web client event.
+* 
+* @return     bool : true if the block was written; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::BodyBlock_Write(XBYTE* data, XDWORD size, bool istobuffer, void* to, XQWORD& totalsizeread, XQWORD contentlength, XTIMER* timerdownload, DIOWEBCLIENT_XEVENT& xevent)
+{
+  if(!data || !size || !to || !timerdownload) return false;
+
+  XQWORD maximum = (XQWORD)-1;
+  if(totalsizeread > (maximum - size)) return false;
+
+  bool status;
+
+  if(istobuffer)
+    {
+      status = ((XBUFFER*)to)->Add(data, size);
+    }
+   else
+    {
+      status = ((XFILE*)to)->Write(data, size);
+    }
+
+  if(!status) return false;
+
+  totalsizeread += size;
+
+  xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_READBODYBLOCK);
+  xevent.SetDownloadSize(totalsizeread);
+  xevent.SetContentLenght(contentlength);
+
+  if(contentlength) xevent.SetOperationPercent((float)((totalsizeread * 100.0f) / contentlength));
+
+  if(timerdownload->GetMeasureSeconds()) xevent.SetMBPSSpeed((XDWORD)(((totalsizeread * 8) / timerdownload->GetMeasureSeconds()) / 1000));
+
+  PostEvent(&xevent);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBCLIENT_CHUNKEDRESULT DIOWEBCLIENT::ChunkSize_Get(XBUFFER& input, XQWORD& chunksize)
+* @brief      Extract and validate one HTTP chunk-size line
+* @ingroup    DATAIO
+* 
+* @param[in,out] input : Pending transfer-coded bytes.
+* @param[out] chunksize : Parsed chunk size.
+* 
+* @return     DIOWEBCLIENT_CHUNKEDRESULT : Complete, incomplete or error.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOWEBCLIENT_CHUNKEDRESULT DIOWEBCLIENT::ChunkSize_Get(XBUFFER& input, XQWORD& chunksize)
+{
+  int lineend = XBUFFER_INVALIDPOSITION;
+
+  chunksize = 0;
+
+  for(XDWORD c=0; (c+1)<input.GetSize(); c++)
+    {
+      if((input.GetByte(c) == 0x0D) && (input.GetByte(c+1) == 0x0A))
+        {
+          lineend = c;
+          break;
+        }
+    }
+
+  if(lineend == XBUFFER_INVALIDPOSITION)
+    {
+      if(input.GetSize() > DIOWEBHEADER_MAXLINE) return DIOWEBCLIENT_CHUNKEDRESULT_ERROR;
+
+      return DIOWEBCLIENT_CHUNKEDRESULT_INCOMPLETE;
+    }
+
+  bool   hasdigit    = false;
+  bool   afterdigits = false;
+  XQWORD maximum     = (XQWORD)-1;
+
+  for(int c=0; c<lineend; c++)
+    {
+      XBYTE character = input.GetByte(c);
+
+      if(character == __C(';')) break;
+
+      if((character == __C(' ')) || (character == __C('\t')))
+        {
+          if(hasdigit) afterdigits = true;
+          continue;
+        }
+
+      if(afterdigits) return DIOWEBCLIENT_CHUNKEDRESULT_ERROR;
+
+      XBYTE digit;
+
+      if((character >= __C('0')) && (character <= __C('9'))) digit = character - __C('0');
+       else if((character >= __C('a')) && (character <= __C('f'))) digit = character - __C('a') + 10;
+       else if((character >= __C('A')) && (character <= __C('F'))) digit = character - __C('A') + 10;
+       else return DIOWEBCLIENT_CHUNKEDRESULT_ERROR;
+
+      if(chunksize > ((maximum - digit) >> 4)) return DIOWEBCLIENT_CHUNKEDRESULT_ERROR;
+
+      chunksize = (chunksize << 4) + digit;
+      hasdigit  = true;
+    }
+
+  if(!hasdigit) return DIOWEBCLIENT_CHUNKEDRESULT_ERROR;
+
+  input.Extract(NULL, 0, lineend+2);
+
+  return DIOWEBCLIENT_CHUNKEDRESULT_COMPLETE;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT::Body_Read(DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD contentlength, int timeout, bool istobuffer, void* to, DIOWEBCLIENT_XEVENT& xevent)
+* @brief      Read one framed HTTP response body
+* @ingroup    DATAIO
+* 
+* @param[in]  bodymode : Response body framing mode.
+* @param[in]  isTLS : true when the transport is TLS.
+* @param[in]  contentlength : Expected body size for Content-Length framing.
+* @param[in]  timeout : Timeout value.
+* @param[in]  istobuffer : true to write to an XBUFFER; false to write to an XFILE.
+* @param[in]  to : Destination object.
+* @param[in]  xevent : Web client event.
+* 
+* @return     bool : true if the complete body was read; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::Body_Read(DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD contentlength, int timeout, bool istobuffer, void* to, DIOWEBCLIENT_XEVENT& xevent)
+{
+  if(!to || !maxsizebuffer || (bodymode == DIOWEBCLIENT_BODYMODE_UNKNOWN)) return false;
+
+  if(istobuffer) ((XBUFFER*)to)->Delete();
+
+  if(bodymode == DIOWEBCLIENT_BODYMODE_NONE) return true;
+
+  XTIMER* timerdownload = GEN_XFACTORY.CreateTimer();
+  if(!timerdownload) return false;
+
+  XBYTE* buffer = GEN_NEW XBYTE[maxsizebuffer];
+  if(!buffer)
+    {
+      GEN_XFACTORY.DeleteTimer(timerdownload);
+      return false;
+    }
+
+  XBUFFER                   chunkinput;
+  DIOWEBCLIENT_CHUNKEDSTATE chunkstate       = DIOWEBCLIENT_CHUNKEDSTATE_SIZE;
+  XQWORD                    chunkremaining   = 0;
+  XQWORD                    contentremaining = contentlength;
+  XQWORD                    totalsizeread    = 0;
+  bool                      completed        = false;
+  bool                      status           = true;
+
+  if((bodymode == DIOWEBCLIENT_BODYMODE_CONTENTLENGTH) && !contentremaining) completed = true;
+
+  timerout->Reset();
+
+  while(status && !completed)
+    {
+      XDWORD sizetoread = maxsizebuffer;
+
+      if((bodymode == DIOWEBCLIENT_BODYMODE_CONTENTLENGTH) && (contentremaining < sizetoread))
+        {
+          sizetoread = (XDWORD)contentremaining;
+        }
+
+      if(!sizetoread)
+        {
+          completed = true;
+          break;
+        }
+
+      memset(buffer, 0, sizetoread);
+
+      XDWORD sizeread = diostream->Read(buffer, sizetoread);
+      if(sizeread)
+        {
+          timerout->Reset();
+
+          switch(bodymode)
+            {
+              case DIOWEBCLIENT_BODYMODE_CONTENTLENGTH     : if(!BodyBlock_Write(buffer, sizeread, istobuffer, to, totalsizeread, contentlength, timerdownload, xevent))
+                                                               {
+                                                                 status = false;
+                                                                 break;
+                                                               }
+
+                                                             if(sizeread > contentremaining)
+                                                               {
+                                                                 status = false;
+                                                                 break;
+                                                               }
+
+                                                             contentremaining -= sizeread;
+                                                             if(!contentremaining) completed = true;
+                                                             break;
+
+              case DIOWEBCLIENT_BODYMODE_CHUNKED          : if(!chunkinput.Add(buffer, sizeread))
+                                                               {
+                                                                 status = false;
+                                                                 break;
+                                                               }
+
+                                                             while(status && !completed)
+                                                               {
+                                                                 XDWORD                    inputsizebefore      = chunkinput.GetSize();
+                                                                 XQWORD                    chunkremainingbefore = chunkremaining;
+                                                                 DIOWEBCLIENT_CHUNKEDSTATE chunkstatebefore     = chunkstate;
+
+                                                                 switch(chunkstate)
+                                                                   {
+                                                                     case DIOWEBCLIENT_CHUNKEDSTATE_SIZE     : { DIOWEBCLIENT_CHUNKEDRESULT result = ChunkSize_Get(chunkinput, chunkremaining);
+
+                                                                                                                   if(result == DIOWEBCLIENT_CHUNKEDRESULT_ERROR)
+                                                                                                                     {
+                                                                                                                       status = false;
+                                                                                                                       break;
+                                                                                                                     }
+
+                                                                                                                   if(result == DIOWEBCLIENT_CHUNKEDRESULT_INCOMPLETE) break;
+
+                                                                                                                   chunkstate = chunkremaining?DIOWEBCLIENT_CHUNKEDSTATE_DATA:DIOWEBCLIENT_CHUNKEDSTATE_TRAILERS;
+                                                                                                                 }
+                                                                                                                 break;
+
+                                                                     case DIOWEBCLIENT_CHUNKEDSTATE_DATA     : { if(chunkinput.IsEmpty()) break;
+
+                                                                                                                   XDWORD blocksize = chunkinput.GetSize();
+                                                                                                                   if(chunkremaining < blocksize) blocksize = (XDWORD)chunkremaining;
+
+                                                                                                                   if(!BodyBlock_Write(chunkinput.Get(), blocksize, istobuffer, to, totalsizeread, 0, timerdownload, xevent))
+                                                                                                                     {
+                                                                                                                       status = false;
+                                                                                                                       break;
+                                                                                                                     }
+
+                                                                                                                   chunkinput.Extract(NULL, 0, blocksize);
+                                                                                                                   chunkremaining -= blocksize;
+
+                                                                                                                   if(!chunkremaining) chunkstate = DIOWEBCLIENT_CHUNKEDSTATE_DATAEND;
+                                                                                                                 }
+                                                                                                                 break;
+
+                                                                     case DIOWEBCLIENT_CHUNKEDSTATE_DATAEND  : if(chunkinput.GetSize() < 2) break;
+
+                                                                                                                 if((chunkinput.GetByte(0) != 0x0D) || (chunkinput.GetByte(1) != 0x0A))
+                                                                                                                   {
+                                                                                                                     status = false;
+                                                                                                                     break;
+                                                                                                                   }
+
+                                                                                                                 chunkinput.Extract(NULL, 0, 2);
+                                                                                                                 chunkstate = DIOWEBCLIENT_CHUNKEDSTATE_SIZE;
+                                                                                                                 break;
+
+                                                                     case DIOWEBCLIENT_CHUNKEDSTATE_TRAILERS : { int lineend = XBUFFER_INVALIDPOSITION;
+
+                                                                                                                   for(XDWORD c=0; (c+1)<chunkinput.GetSize(); c++)
+                                                                                                                     {
+                                                                                                                       if((chunkinput.GetByte(c) == 0x0D) && (chunkinput.GetByte(c+1) == 0x0A))
+                                                                                                                         {
+                                                                                                                           lineend = c;
+                                                                                                                           break;
+                                                                                                                         }
+                                                                                                                     }
+
+                                                                                                                   if(lineend == XBUFFER_INVALIDPOSITION)
+                                                                                                                     {
+                                                                                                                       if(chunkinput.GetSize() > DIOWEBHEADER_MAXLINE) status = false;
+                                                                                                                       break;
+                                                                                                                     }
+
+                                                                                                                   if(!lineend)
+                                                                                                                     {
+                                                                                                                       chunkinput.Extract(NULL, 0, 2);
+
+                                                                                                                       if(!chunkinput.IsEmpty())
+                                                                                                                         {
+                                                                                                                           status = false;
+                                                                                                                           break;
+                                                                                                                         }
+
+                                                                                                                       chunkstate = DIOWEBCLIENT_CHUNKEDSTATE_END;
+                                                                                                                       completed  = true;
+                                                                                                                       break;
+                                                                                                                     }
+
+                                                                                                                   bool hasseparator = false;
+
+                                                                                                                   for(int c=1; c<lineend; c++)
+                                                                                                                     {
+                                                                                                                       if(chunkinput.GetByte(c) == __C(':'))
+                                                                                                                         {
+                                                                                                                           hasseparator = true;
+                                                                                                                           break;
+                                                                                                                         }
+                                                                                                                     }
+
+                                                                                                                   if(!hasseparator)
+                                                                                                                     {
+                                                                                                                       status = false;
+                                                                                                                       break;
+                                                                                                                     }
+
+                                                                                                                   chunkinput.Extract(NULL, 0, lineend+2);
+                                                                                                                 }
+                                                                                                                 break;
+
+                                                                     case DIOWEBCLIENT_CHUNKEDSTATE_END      : completed = true;
+                                                                                                                 break;
+                                                                   }
+
+                                                                 if(!status || completed) break;
+
+                                                                 if((chunkinput.GetSize() == inputsizebefore) &&
+                                                                    (chunkremaining == chunkremainingbefore) &&
+                                                                    (chunkstate == chunkstatebefore)) break;
+
+                                                                 if((chunkstate == DIOWEBCLIENT_CHUNKEDSTATE_SIZE) && chunkinput.IsEmpty()) break;
+                                                                 if((chunkstate == DIOWEBCLIENT_CHUNKEDSTATE_DATA) && chunkinput.IsEmpty()) break;
+                                                                 if((chunkstate == DIOWEBCLIENT_CHUNKEDSTATE_DATAEND) && (chunkinput.GetSize() < 2)) break;
+                                                                 if((chunkstate == DIOWEBCLIENT_CHUNKEDSTATE_TRAILERS) && (chunkinput.GetSize() < 2)) break;
+                                                               }
+                                                             break;
+
+              case DIOWEBCLIENT_BODYMODE_CONNECTIONCLOSE : if(!BodyBlock_Write(buffer, sizeread, istobuffer, to, totalsizeread, 0, timerdownload, xevent)) status = false;
+                                                             break;
+
+                                                  default : status = false;
+                                                             break;
+            }
+        }
+       else
+        {
+          if(timeout && (timerout->GetMeasureSeconds() > (XDWORD)timeout))
+            {
+              status = false;
+              break;
+            }
+
+          if(diostream->GetStatus() != DIOSTREAMSTATUS_CONNECTED)
+            {
+              if((bodymode == DIOWEBCLIENT_BODYMODE_CONNECTIONCLOSE) && !isTLS) completed = true;
+               else status = false;
+
+              break;
+            }
+
+          GEN_XSLEEP.MilliSeconds(1);
+        }
+    }
+
+  GEN_DELETE_ARRAY buffer;
+  GEN_XFACTORY.DeleteTimer(timerdownload);
+
+  return status && completed;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to)
 * @brief      Make operation
 * @ingroup    DATAIO
@@ -938,10 +1537,15 @@ bool DIOWEBCLIENT::Post(XCHAR* url, XPATH& pathfile, XBUFFER* postdata, XCHAR* a
 bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to)
 {
   if(!diostreamcfg)     return false;
-  if(!diostream)        return false;
   if(!timerout)         return false;
+  if(!to)               return false;
 
-  bool status = true;
+  if(istobuffer) ((XBUFFER*)to)->Delete();
+
+  bool  status          = true;
+  bool  isTLS           = IsSecureURL(url);
+  int   defaultport     = isTLS?DIOWEBCLIENT_DEFAULTSECUREPORT:DIOWEBCLIENT_DEFAULTPORT;
+  int   operationport;
 
   if(!url.HaveHTTPID()) url.AddHTTPID();
 
@@ -953,10 +1557,14 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   xevent.GetURL()->Set(url.Get());
   xevent.SetMethod(method);
 
-  diostreamcfg->SetFromString(url.Get());
+  diostreamcfg->SetRemotePort(0);
+  if(!diostreamcfg->SetFromString(url.Get())) return false;
 
   url  = diostreamcfg->GetRemoteURL()->Get();
-  if(diostreamcfg->GetRemotePort()) port = diostreamcfg->GetRemotePort();
+  if(diostreamcfg->GetRemotePort()) operationport = diostreamcfg->GetRemotePort();
+                              else operationport = isportconfigured?port:defaultport;
+
+  if(!isportconfigured) port = operationport;
 
   url.GetHTTPServer(server, login, password);
   url.GetHTTPResource(resource);
@@ -972,13 +1580,29 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   if(proxyurl.IsEmpty())
     {
       diostreamcfg->GetRemoteURL()->Set(server.Get());
-      diostreamcfg->SetRemotePort(port);
+      diostreamcfg->SetRemotePort(operationport);
     }
    else
     {
+      if(isTLS) return false;
+
       diostreamcfg->GetRemoteURL()->Set(proxyurl.Get());
       diostreamcfg->SetRemotePort(proxyport);
     }
+
+  #ifdef DIO_STREAMTLS_ACTIVE
+
+  if(isTLS)
+    {
+      DIOSTREAMTLSCONFIG* tlsconfig = GetStreamTLSCFG();
+
+      if(!tlsconfig) return false;
+      tlsconfig->GetServerName()->Set(server.Get());
+    }
+
+  #endif
+
+  if(!Stream_Create(isTLS)) return false;
 
   //--- Connection WEB server -------------------
 
@@ -1018,16 +1642,16 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     }
 
 
-  sendheader.AddFormat(__L("%s %s HTTP/1.0\r\n"), methodstring.Get(), resource.Get());
+  sendheader.AddFormat(__L("%s %s HTTP/1.1\r\n"), methodstring.Get(), resource.Get());
 
   sendheader += __L("Host: ");
   sendheader += server.Get();
 
-  if(port!=DIOWEBCLIENT_DEFAULTPORT)
+  if(operationport!=defaultport)
     {
       XSTRING stringport;
 
-      stringport.ConvertFromInt(port);
+      stringport.ConvertFromInt(operationport);
 
       sendheader += __L(":");
       sendheader += stringport.Get();
@@ -1090,7 +1714,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   //--- Read Header ----------------------------
 
-  if(!header.Read(diostream, timeout))
+  if(!Header_Read(timeout))
     {
       diostream->Close();
       return false;
@@ -1238,7 +1862,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       //--- Read Header ----------------------------
 
-      if(!header.Read(diostream, timeout))
+      if(!Header_Read(timeout))
         {
           diostream->Close();
           return false;
@@ -1258,10 +1882,69 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
         }
     }
 
-  XQWORD   contentlength;
-  XSTRING  etag;
+  XQWORD                    contentlength        = 0;
+  XSTRING                   transferencoding;
+  XSTRING                   etag;
+  DIOWEBCLIENT_BODYMODE     bodymode             = DIOWEBCLIENT_BODYMODE_UNKNOWN;
+  int                       resultserver         = header.GetResultServer();
+  bool                      hascontentlength     = header.HasContentLength();
+  bool                      validcontentlength   = header.GetContentLength(contentlength);
+  bool                      hastransferencoding  = header.GetTransferEncoding(transferencoding);
+  bool                      hasnobody            = ((method == DIOWEBHEADER_METHOD_HEAD) ||
+                                                    ((resultserver >= 100) && (resultserver < 200)) ||
+                                                    (resultserver == DIOWEBHEADER_RESULT_NOCONTENT) ||
+                                                    (resultserver == DIOWEBHEADER_RESULT_RESETCONTENT) ||
+                                                    (resultserver == DIOWEBHEADER_RESULT_NOTMODIFIED));
 
-  contentlength = header.GetContentLength();
+  if(hasnobody)
+    {
+      bodymode     = DIOWEBCLIENT_BODYMODE_NONE;
+      contentlength = 0;
+    }
+   else if(hastransferencoding)
+    {
+      transferencoding.DeleteCharacter(__C(' '));
+      transferencoding.DeleteCharacter(__C('\t'));
+
+      if(hascontentlength || transferencoding.Compare(__L("chunked"), true))
+        {
+          xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
+          PostEvent(&xevent);
+
+          diostream->Close();
+          return false;
+        }
+
+      bodymode      = DIOWEBCLIENT_BODYMODE_CHUNKED;
+      contentlength = 0;
+    }
+   else if(hascontentlength)
+    {
+      if(!validcontentlength)
+        {
+          xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
+          PostEvent(&xevent);
+
+          diostream->Close();
+          return false;
+        }
+
+      bodymode = DIOWEBCLIENT_BODYMODE_CONTENTLENGTH;
+    }
+   else
+    {
+      bodymode = DIOWEBCLIENT_BODYMODE_CONNECTIONCLOSE;
+
+      if(isTLS)
+        {
+          xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
+          PostEvent(&xevent);
+
+          diostream->Close();
+          return false;
+        }
+    }
+
   header.GetETag(etag);
 
   xevent.SetContentLenght(contentlength);
@@ -1273,85 +1956,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   //--- Read Content ---------------------------
 
-  XBUFFER* _tobuffer     = NULL;
-  XFILE*   _tofile       = NULL;
- 
-  XTIMER* timerdownload=GEN_XFACTORY.CreateTimer();
-  if(!timerdownload)
-    {     
-      diostream->Close();
-      return false;
-    }
-       
-  if(istobuffer)
-    {
-      _tobuffer = (XBUFFER*)to;
-      if(_tobuffer) _tobuffer->Delete();
-    }
-   else
-    {
-      _tofile = (XFILE*)to;
-    }
-
-  XBYTE* buffer = GEN_NEW XBYTE[maxsizebuffer];
-  if(buffer)
-    {
-      XQWORD  totalsizeread = 0;
-      int     br;
-
-      timerout->Reset();
-
-      do{ memset(buffer, 0, maxsizebuffer);
-
-          br = diostream->Read(buffer, maxsizebuffer);
-          if(br)
-            {
-              timerout->Reset();
-
-              if(istobuffer)
-                {
-                  if(_tobuffer) _tobuffer->Add(buffer, br);
-                }
-               else
-                {
-                  if(_tofile) _tofile->Write(buffer, br);
-                }
-
-              totalsizeread += br;
-
-              xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_READBODYBLOCK);
-              xevent.SetDownloadSize(totalsizeread);
-              xevent.SetContentLenght((XQWORD)contentlength);
-
-              if(contentlength) xevent.SetOperationPercent((float)((totalsizeread * 100.0f) / contentlength));
-
-              if(timerdownload->GetMeasureSeconds()) xevent.SetMBPSSpeed((XDWORD)(((totalsizeread * 8) / timerdownload->GetMeasureSeconds()) / 1000));
-
-              PostEvent(&xevent);
-            }
-           else
-            {
-              if(timerout->GetMeasureSeconds()>(XDWORD)timeout)
-                {
-                  if(!totalsizeread) status = false;
-                  break;
-                }
-
-              if(diostream->GetStatus() != DIOSTREAMSTATUS_CONNECTED)
-                {
-                  if(!diostream->GetInXBuffer()->GetSize())
-                    {
-                      break;
-                    }
-                }
-            }
-
-        } while(1);
-
-      GEN_DELETE_ARRAY buffer;
-    }
-
-  GEN_XFACTORY.DeleteTimer(timerdownload);
+  status = Body_Read(bodymode, isTLS, contentlength, timeout, istobuffer, to, xevent);
 
   //--- Close ----------------------------------
 
@@ -1361,6 +1966,80 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   PostEvent(&xevent);
 
   return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT::Stream_Create(bool isTLS)
+* @brief      Create the transport required by the URL scheme
+* @ingroup    DATAIO
+* 
+* @param[in]  isTLS : true to create a TLS transport; false to create a TCP/IP transport.
+* 
+* @return     bool : true if the required transport is available; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::Stream_Create(bool isTLS)
+{
+  if(!diostreamcfg) return false;
+
+  #ifndef DIO_STREAMTLS_ACTIVE
+
+  if(isTLS) return false;
+
+  #endif
+
+  if(diostream && (isstreamTLS != isTLS))
+    {
+      diostream->Close();
+      GEN_DIOFACTORY.DeleteStreamIO(diostream);
+      diostream = NULL;
+    }
+
+  diostreamcfg->SetIsTLS(isTLS);
+
+  #ifdef DIO_STREAMTLS_ACTIVE
+
+  if(isTLS)
+    {
+      DIOSTREAMTLSCONFIG* tlsconfig = GetStreamTLSCFG();
+
+      if(!tlsconfig) return false;
+      if(tlsconfig->GetTrustedRoots()->IsEmpty())
+        {
+          if(!tlsconfig->TrustedRoots_AddDefaults()) return false;
+        }
+    }
+
+  #endif
+
+  if(!diostream)
+    {
+      diostream = (DIOSTREAMTCPIP*)GEN_DIOFACTORY.CreateStreamIO(diostreamcfg);
+      if(!diostream) return false;
+    }
+
+  isstreamTLS = isTLS;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT::IsSecureURL(DIOURL& url)
+* @brief      Check whether the URL selects HTTPS
+* @ingroup    DATAIO
+* 
+* @param[in]  url : URL to check.
+* 
+* @return     bool : true if the URL starts with the HTTPS identifier; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::IsSecureURL(DIOURL& url)
+{
+  return (url.Find(DIOURL_WEBURLID_SECURE, true) == 0)?true:false;
 }
 
 
@@ -1436,13 +2115,10 @@ void DIOWEBCLIENT::Clean()
   proxyport               = 0;
 
   port                    = DIOWEBCLIENT_DEFAULTPORT;
+  isportconfigured        = false;
+  isstreamTLS             = false;
 
   authenticationmethod    = DIOWEBCLIENT_AUTHENTICATION_METHOD_UNKNOWN;
 
   dostophttperror         = true;
 }
-
-
-
-
-

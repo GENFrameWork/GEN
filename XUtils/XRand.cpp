@@ -194,6 +194,39 @@ bool XRAND::Ini()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XRAND::Generate(XBYTE* buffer, XDWORD size)
+* @brief      Generate random bytes
+* @ingroup    XUTILS
+* 
+* @param[out] buffer : Buffer where the random bytes are stored.
+* @param[in]  size : Size of the buffer in bytes.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XRAND::Generate(XBYTE* buffer, XDWORD size)
+{
+  if(!size)
+    {
+      return true;
+    }
+
+  if(!buffer)
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<size; c++)
+    {
+      buffer[c] = (XBYTE)GETRANDOM(0, 255);
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int XRAND::MaxElements(int max)
 * @brief      Max elements
 * @ingroup    XUTILS
@@ -205,7 +238,12 @@ bool XRAND::Ini()
 * --------------------------------------------------------------------------------------------------------------------*/
 int XRAND::MaxElements(int max)
 {
-  return GETRANDOM(0, max-1);;
+  if(max <= 0)
+    {
+      return 0;
+    }
+
+  return Between(0, max-1);
 }
 
 
@@ -222,7 +260,12 @@ int XRAND::MaxElements(int max)
 * --------------------------------------------------------------------------------------------------------------------*/
 int XRAND::Max(int max)
 {
-  return GETRANDOM(0, max);
+  if(max <= 0)
+    {
+      return 0;
+    }
+
+  return Between(0, max);
 }
 
 
@@ -240,7 +283,26 @@ int XRAND::Max(int max)
 * --------------------------------------------------------------------------------------------------------------------*/
 int XRAND::Between(int min, int max)
 {
-  return GETRANDOM(min, max);
+  if(min >= max)
+    {
+      return min;
+    }
+
+  XQWORD range  = (XQWORD)((XQWORDSIG)max - (XQWORDSIG)min) + 1;
+  XQWORD total  = ((XQWORD)0xFFFFFFFF) + 1;
+  XQWORD limit  = total - (total % range);
+  XDWORD value  = 0;
+
+  do
+    {
+      if(!Generate((XBYTE*)&value, sizeof(value)))
+        {
+          return min;
+        }
+    }
+  while((XQWORD)value >= limit);
+
+  return (int)((XQWORDSIG)min + (XQWORDSIG)((XQWORD)value % range));
 }
 
 
@@ -258,8 +320,22 @@ int XRAND::Between(int min, int max)
 * --------------------------------------------------------------------------------------------------------------------*/
 float XRAND::Between(float min, float max)
 {
-  int   randomvalue = rand();
-  float delta       = ((float)randomvalue)/(float)RAND_MAX;
+  if(min >= max)
+    {
+      return min;
+    }
+
+  XDWORD value = 0;
+
+  if(!Generate((XBYTE*)&value, sizeof(value)))
+    {
+      return min;
+    }
+
+  value >>= 8;
+
+  float delta = ((float)value) / 16777215.0f;
+
   return ((max-min)*delta)+min;
 }
 
@@ -277,6 +353,9 @@ float XRAND::Between(float min, float max)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XRAND::Percent(int percent)
 {
+  if(percent <= 0)   return false;
+  if(percent >= 100) return true;
+
   int random = Between(1,100);
   if(random <= percent) return true;
 
@@ -296,6 +375,3 @@ void XRAND::Clean()
 {
 
 }
-
-
-

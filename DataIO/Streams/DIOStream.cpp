@@ -490,20 +490,24 @@ bool DIOSTREAM::ReadStr(char* str)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAM::ReadStr(XSTRING& string)
 {
+  XBUFFER* readbuffer;
   bool foundreturn = false;
   int  stringsize  = 0;
 
-  inbuffer->SetBlocked(true);
+  readbuffer = GetInXBuffer();
+  if(!readbuffer) return false;
 
-  for(int c=0;c<(int)inbuffer->GetSize();c++)
+  readbuffer->SetBlocked(true);
+
+  for(int c=0;c<(int)readbuffer->GetSize();c++)
     {
-      if((inbuffer->GetByte(c) =='\n') || (inbuffer->GetByte(c) == '\r'))
+      if((readbuffer->GetByte(c) =='\n') || (readbuffer->GetByte(c) == '\r'))
         {
           stringsize++;
 
-          if(c+1<(int)inbuffer->GetSize())
+          if(c+1<(int)readbuffer->GetSize())
             {
-              if((inbuffer->GetByte(c+1) == '\n') || (inbuffer->GetByte(c+1) =='\r')) stringsize++;
+              if((readbuffer->GetByte(c+1) == '\n') || (readbuffer->GetByte(c+1) =='\r')) stringsize++;
             }
 
           foundreturn = true;
@@ -513,7 +517,7 @@ bool DIOSTREAM::ReadStr(XSTRING& string)
         } else stringsize++;
     }
 
-  inbuffer->SetBlocked(false);
+  readbuffer->SetBlocked(false);
 
   if(!foundreturn) return false;
 
@@ -1170,6 +1174,5 @@ void DIOSTREAM::Clean()
   nbytesread          = 0;
   nbyteswrite         = 0;
 }
-
 
 

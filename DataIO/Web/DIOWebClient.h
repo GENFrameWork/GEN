@@ -45,6 +45,7 @@
 #define DIOWEBCLIENT_TIMEOUT            8
 #define DIOWEBCLIENT_MAXSIZEBUFFER      (64*1024)
 #define DIOWEBCLIENT_DEFAULTPORT        80
+#define DIOWEBCLIENT_DEFAULTSECUREPORT  443
 
 #define DIOWEBCLIENT_DEFAULTUSERAGENT   __L("User-Agent: Mozilla 5.0\r\n")
 
@@ -53,6 +54,34 @@ enum DIOWEBCLIENT_AUTHENTICATION_METHOD
   DIOWEBCLIENT_AUTHENTICATION_METHOD_UNKNOWN               = 0 ,
   DIOWEBCLIENT_AUTHENTICATION_METHOD_BASIC                     ,
   DIOWEBCLIENT_AUTHENTICATION_METHOD_DIGEST                    ,      
+};
+
+
+enum DIOWEBCLIENT_BODYMODE
+{
+  DIOWEBCLIENT_BODYMODE_UNKNOWN                     = 0 ,
+  DIOWEBCLIENT_BODYMODE_NONE                            ,
+  DIOWEBCLIENT_BODYMODE_CONTENTLENGTH                   ,
+  DIOWEBCLIENT_BODYMODE_CHUNKED                         ,
+  DIOWEBCLIENT_BODYMODE_CONNECTIONCLOSE                 ,
+};
+
+
+enum DIOWEBCLIENT_CHUNKEDSTATE
+{
+  DIOWEBCLIENT_CHUNKEDSTATE_SIZE                     = 0 ,
+  DIOWEBCLIENT_CHUNKEDSTATE_DATA                         ,
+  DIOWEBCLIENT_CHUNKEDSTATE_DATAEND                      ,
+  DIOWEBCLIENT_CHUNKEDSTATE_TRAILERS                     ,
+  DIOWEBCLIENT_CHUNKEDSTATE_END                          ,
+};
+
+
+enum DIOWEBCLIENT_CHUNKEDRESULT
+{
+  DIOWEBCLIENT_CHUNKEDRESULT_ERROR                   = -1 ,
+  DIOWEBCLIENT_CHUNKEDRESULT_INCOMPLETE               = 0 ,
+  DIOWEBCLIENT_CHUNKEDRESULT_COMPLETE                     ,
 };
 
 
@@ -65,6 +94,8 @@ class XTIMER;
 class XFILE;
 class DIOSTREAMTCPIPCONFIG;
 class DIOSTREAMTCPIP;
+class DIOSTREAMTLSCONFIG;
+class DIOWEBCLIENT_XEVENT;
 
 
 class DIOWEBCLIENT_HEADER : public DIOWEBHEADER
@@ -80,6 +111,9 @@ class DIOWEBCLIENT_HEADER : public DIOWEBHEADER
     int                                       GetResultServer                   ();
 
     XQWORD                                    GetContentLength                  ();
+    bool                                      HasContentLength                  ();
+    bool                                      GetContentLength                  (XQWORD& contentlength);
+    bool                                      GetTransferEncoding              (XSTRING& transferencoding);
     bool                                      GetETag                           (XSTRING& etag);
     bool                                      GetWWWAuthenticate                (XSTRING& authenticate);
 
@@ -112,6 +146,7 @@ class DIOWEBCLIENT : public XSUBJECT
     XSTRING*                                  GetPassword                       ();
 
     DIOSTREAMTCPIPCONFIG*                     GetStreamCFG                      ();
+    DIOSTREAMTLSCONFIG*                       GetStreamTLSCFG                   ();
 
     DIOWEBCLIENT_HEADER*                      GetHeader                         ();
     
@@ -136,6 +171,12 @@ class DIOWEBCLIENT : public XSUBJECT
   private:
 
     bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to);
+    bool                                      Header_Read                       (int timeout);
+    bool                                      Body_Read                         (DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD contentlength, int timeout, bool istobuffer, void* to, DIOWEBCLIENT_XEVENT& xevent);
+    bool                                      BodyBlock_Write                   (XBYTE* data, XDWORD size, bool istobuffer, void* to, XQWORD& totalsizeread, XQWORD contentlength, XTIMER* timerdownload, DIOWEBCLIENT_XEVENT& xevent);
+    DIOWEBCLIENT_CHUNKEDRESULT                ChunkSize_Get                     (XBUFFER& input, XQWORD& chunksize);
+    bool                                      Stream_Create                     (bool isTLS);
+    bool                                      IsSecureURL                       (DIOURL& url);
 
     bool                                      GetSubStringWWWWAuthenticate      (XSTRING& www_authenticate, XCHAR* field, XSTRING& value, bool betweenquotation = true);
 
@@ -149,6 +190,8 @@ class DIOWEBCLIENT : public XSUBJECT
     DIOSTREAMTCPIP*                           diostream;
 
     int                                       port;
+    bool                                      isportconfigured;
+    bool                                      isstreamTLS;
 
     DIOURL                                    proxyurl;
     int                                       proxyport;
@@ -166,8 +209,5 @@ class DIOWEBCLIENT : public XSUBJECT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-
 
 

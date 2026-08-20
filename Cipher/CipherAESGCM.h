@@ -83,8 +83,6 @@ class CIPHERAESGCM : public CIPHERAES
 
     bool                  GCM_Do                  (XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag, bool iscipher);
 
-    static bool           CompareConstantTime     (XBYTE* data1, XBYTE* data2, XDWORD size);
-
     void                  Clean                   ();
 
     CIPHERAES_CONTEXT     ctx;                                                  // AES key schedule, cipher direction

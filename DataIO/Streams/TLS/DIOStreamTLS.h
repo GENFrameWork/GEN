@@ -1,29 +1,29 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       DIOStreamTLS.h
-* 
+*
 * @class      DIOSTREAMTLS
 * @brief      Data Input/Output Stream TLS (Transport Layer Security) class
 * @ingroup    DATAIO
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 
 #pragma once
@@ -32,177 +32,320 @@
 
 #include "XBase.h"
 #include "XFactory.h"
-#include "XRand.h"
-#include "XFSMachine.h"
 #include "XBuffer.h"
+#include "XTimer.h"
 #include "XTrace.h"
 
-#include "DIOFactory.h"
-#include "DIOIP.h"
-#include "DIOStreamConfig.h"
 #include "DIOStream.h"
-#include "DIOStreamTLSMessages.h"
-#include "DIOStreamTLSMessagesExtension.h"
+#include "DIOStreamTLSConfig.h"
+#include "DIOStreamTLSSession.h"
+#include "DIOStreamTLSHandshakeClient.h"
 #include "DIOStreamTLSMessagesHandShakeClientHello.h"
 #include "DIOStreamTLSMessagesHandShakeServerHello.h"
-
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
-enum DIOSTREAMTLSXFSMEVENTS
-{
-  DIOSTREAMTLS_XFSMEVENT_NONE              = 0 ,
-  DIOSTREAMTLS_XFSMEVENT_OPEN                  ,
-  DIOSTREAMTLS_XFSMEVENT_HANDSHAKE             ,
-  DIOSTREAMTLS_XFSMEVENT_CONNECTED             ,
-  DIOSTREAMTLS_XFSMEVENT_DISCONNECTED          ,
-  DIOSTREAMTLS_XFSMEVENT_CLOSE                 ,
-
-  DIOSTREAMTLS_LASTEVENT
-};
-
-
-enum DIOSTREAMTLSXFSMSTATES
-{
-  DIOSTREAMTLS_XFSMSTATE_NONE              = 0 ,
-  DIOSTREAMTLS_XFSMSTATE_OPEN                  ,
-  DIOSTREAMTLS_XFSMSTATE_HANDSHAKE             ,
-  DIOSTREAMTLS_XFSMSTATE_CONNECTED             ,
-  DIOSTREAMTLS_XFSMSTATE_DISCONNECTED          ,
-  DIOSTREAMTLS_XFSMSTATE_CLOSE                 ,
-
-  DIOSTREAMTLS_LASTSTATE
-};
-
-
 #define DIOSTREAMTLS_TIMEOUT                3      // in seconds
+
+
+enum DIOSTREAMTLS_ERROR
+{
+  DIOSTREAMTLS_ERROR_NONE              = 0 ,
+  DIOSTREAMTLS_ERROR_CONFIGURATION         ,
+  DIOSTREAMTLS_ERROR_TRANSPORT             ,
+  DIOSTREAMTLS_ERROR_HANDSHAKE             ,
+  DIOSTREAMTLS_ERROR_RECORD                ,
+  DIOSTREAMTLS_ERROR_TRUNCATED             ,
+};
+
 
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-
-/*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-class DIOSTREAMTLSCONFIG;
-
 template<typename T>
-class DIOSTREAMTLS :  public T
+class DIOSTREAMTLS : public T
 {
   public:
-                                            DIOSTREAMTLS                            () 
+                                            DIOSTREAMTLS                            ()
                                             {
-                                              Clean();    
-                                              
-                                              timeout = DIOSTREAMTLS_TIMEOUT;  
+                                              Clean();
 
-                                              fsmachine = GEN_NEW XFSMACHINE(0);  
+                                              timeout = DIOSTREAMTLS_TIMEOUT;
+                                            }
 
-                                              IniFSMachine();                                               
-                                            } 
-                                       
 
     virtual                                ~DIOSTREAMTLS                            ()
-                                            {          
-                                              if(fsmachine)
-                                                {
-                                                  GEN_DELETE fsmachine;
-                                                  fsmachine = NULL;  
-                                                }
-                                   
+                                            {
+                                              handshakeclient.End();
+                                              session.End();
+
                                               Clean();
                                             }
 
 
     bool                                    Open                                    ()
-                                            {                                              
-                                              bool status = T::Open();
-                                              if(!status) 
+                                            {
+                                              DIOSTREAMTLSCONFIG* config;
+                                              XCHAR*                servername;
+
+                                              if(!isclosed)
                                                 {
+                                                  if(!Close()) return false;
+                                                }
+
+                                              tlserror  = DIOSTREAMTLS_ERROR_NONE;
+                                              isclosing = false;
+
+                                              config = dynamic_cast<DIOSTREAMTLSCONFIG*>(T::GetConfig());
+                                              if(!config || config->IsServer())
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
                                                   return false;
                                                 }
 
-                                              if(T::GetConfig()->IsServer())
+                                              servername = config->GetServerName()->GetSize()?config->GetServerName()->Get():config->GetRemoteURL()->Get();
+                                              if(!servername || !servername[0])
                                                 {
-
-
-
+                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  return false;
                                                 }
-                                               else
-                                                {   
-                                                  status = T::WaitToConnected(timeout);
-                                                  if(status) 
-                                                    {                                                     
-                                                      thread = CREATEXTHREAD(XTHREADGROUPID_DIOSTREAMTLS, __L("DIOSTREAMTLS::Open"), ThreadRunFunction, (void*)this);
-                                                      if(!thread) 
-                                                        {
-                                                          return false;    
-                                                        }
 
-                                                      if(thread->Ini())
-                                                        {
-                                                          fsmachine->SetEvent(DIOSTREAMTLS_XFSMEVENT_OPEN);
-                                                        }
+                                              handshakeclient.End();
+                                              session.End();
+
+                                              if(!session.Ini(config->GetCipherSuite(), DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
+                                                 !handshakeclient.Ini(&session, config->IsAllowUnauthenticatedServer()))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  return false;
+                                                }
+
+                                              if(!config->IsAllowUnauthenticatedServer() &&
+                                                 !handshakeclient.Authentication_Set(servername, config->GetTrustedRoots()))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  return false;
+                                                }
+
+                                              if(!T::Open())
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  return false;
+                                                }
+
+                                              isclosed = false;
+
+                                              if(!T::WaitToConnected(timeout))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  Close_OnError();
+                                                  return false;
+                                                }
+
+                                              T::SetStatus(DIOSTREAMSTATUS_GETTINGCONNECTION);
+
+                                              if(!Handshake_Client(servername))
+                                                {
+                                                  if(tlserror == DIOSTREAMTLS_ERROR_NONE) tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+
+                                                  if(session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) != DIOSTREAMTLSSESSION_EPOCH_CLEAR)
+                                                    {
+                                                      Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE);
                                                     }
+
+                                                  Close_OnError();
+                                                  return false;
                                                 }
-                                             
-                                              return status;
+
+                                              T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
+
+                                              return true;
                                             }
-    
+
 
     XDWORD                                  Read                                    (XBYTE* buffer, XDWORD size)
                                             {
-                                              bool status = T::WaitToFilledReadingBuffer(size, timeout);
-                                              if(!status)    
+                                              if(!buffer || !size) return 0;
+
+                                              XDWORD sizeread = session.ApplicationData_Read(buffer, size);
+                                              if(!sizeread)
                                                 {
-                                                  return 0;    
+                                                  if(!ApplicationInput_Process()) return 0;
+
+                                                  sizeread = session.ApplicationData_Read(buffer, size);
                                                 }
 
-                                              return T::Read(buffer, size);
+                                              if(sizeread)
+                                                {
+                                                  T::AddNBytesRead(sizeread);
+                                                  if(this->xtimernotactivity) this->xtimernotactivity->Reset();
+                                                }
+
+                                              return sizeread;
+                                            }
+
+
+    XDWORD                                  Read                                    (XBUFFER& buffer)
+                                            {
+                                              if(!buffer.GetSize()) return 0;
+
+                                              if(session.GetApplicationInput()->IsEmpty())
+                                                {
+                                                  if(!ApplicationInput_Process() || session.GetApplicationInput()->IsEmpty()) return 0;
+                                                }
+
+                                              XDWORD sizeread = Read(buffer.Get(), buffer.GetSize());
+                                              if(sizeread)
+                                                {
+                                                  if(sizeread != buffer.GetSize()) buffer.Resize(sizeread);
+                                                }
+                                               else
+                                                {
+                                                  buffer.Delete();
+                                                }
+
+                                              return buffer.GetSize();
                                             }
 
 
     XDWORD                                  Write                                   (XBYTE* buffer, XDWORD size)
                                             {
-                                              if(!size)
+                                              XBUFFER records;
+
+                                              if(!buffer || !size || isclosing || isclosed ||
+                                                 (T::GetStatus() != DIOSTREAMSTATUS_CONNECTED) ||
+                                                 !handshakeclient.IsHandshakeCompleted())
                                                 {
-                                                  return 0;    
+                                                  return 0;
                                                 }
 
-                                              XDWORD _size = T::Write(buffer, size);
-                                              if(!_size)
+                                              if(!session.ApplicationData_Protect(buffer, size, records) ||
+                                                 !Transport_Write(records))
                                                 {
-                                                  return 0;    
+                                                  tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  return 0;
                                                 }
-                                              
-                                              bool status = T::WaitToFlushOutXBuffer(timeout, false);  
-                                              
-                                              return status?size:0;
+
+                                              T::AddNBytesWrite(size);
+                                              if(this->xtimernotactivity) this->xtimernotactivity->Reset();
+
+                                              return size;
+                                            }
+
+
+    bool                                    WaitToFilledReadingBuffer               (int filledto = DIOSTREAM_SOMETHINGTOREAD, int timeout = XTIMER_INFINITE)
+                                            {
+                                              XTIMER* xtimer;
+                                              bool    status = false;
+
+                                              xtimer = GEN_XFACTORY.CreateTimer();
+                                              if(!xtimer) return false;
+
+                                              xtimer->Reset();
+
+                                              while(true)
+                                                {
+                                                  XDWORD size = session.GetApplicationInput()->GetSize();
+
+                                                  if(((filledto == DIOSTREAM_SOMETHINGTOREAD) && size) ||
+                                                     ((filledto != DIOSTREAM_SOMETHINGTOREAD) && ((int)size >= filledto)))
+                                                    {
+                                                      status = true;
+                                                      break;
+                                                    }
+
+                                                  if(!ApplicationInput_Process()) break;
+
+                                                  size = session.GetApplicationInput()->GetSize();
+
+                                                  if(((filledto == DIOSTREAM_SOMETHINGTOREAD) && size) ||
+                                                     ((filledto != DIOSTREAM_SOMETHINGTOREAD) && ((int)size >= filledto)))
+                                                    {
+                                                      status = true;
+                                                      break;
+                                                    }
+
+                                                  if(session.IsCloseNotifyReceived() || session.IsError() ||
+                                                     (T::GetStatus() == DIOSTREAMSTATUS_DISCONNECTED))
+                                                    {
+                                                      break;
+                                                    }
+
+                                                  if((timeout != XTIMER_INFINITE) && (xtimer->GetMeasureSeconds() >= (XDWORD)timeout)) break;
+
+                                                  DIOSTREAMCONFIG* streamconfig = T::GetConfig();
+                                                  T::Wait(streamconfig?streamconfig->GetPollInterval():DIOSTREAM_TIMEINWAITFUNCTIONS);
+                                                }
+
+                                              GEN_XFACTORY.DeleteTimer(xtimer);
+
+                                              return status;
+                                            }
+
+
+    XBUFFER*                                GetInXBuffer                            ()
+                                            {
+                                              ApplicationInput_Process();
+
+                                              return session.GetApplicationInput();
                                             }
 
 
     bool                                    Disconnect                              ()
-                                            {                                              
-                                              return T::Disconnect();
+                                            {
+                                              if(isclosed) return true;
+
+                                              bool status = true;
+
+                                              if(!isclosing && handshakeclient.IsHandshakeCompleted() &&
+                                                 (T::GetStatus() != DIOSTREAMSTATUS_DISCONNECTED))
+                                                {
+                                                  status = CloseNotify_Send();
+                                                }
+
+                                              isclosing = true;
+
+                                              if(T::GetStatus() != DIOSTREAMSTATUS_DISCONNECTED)
+                                                {
+                                                  status = T::Disconnect() && status;
+                                                }
+
+                                              T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
+
+                                              return status;
                                             }
 
 
     bool                                    Close                                   ()
-                                            {                                              
-                                              DELETEXTHREAD(XTHREADGROUPID_DIOSTREAMTLS, thread); 
-                                              thread = NULL;
+                                            {
+                                              if(isclosed) return true;
 
-                                              return T::Close();
-                                            } 
+                                              bool status = true;
 
-    DIOSTREAMSTATUS                         GetStatus                               ()
-                                            {                                              
-                                              return T::GetStatus();
+                                              if(!isclosing && handshakeclient.IsHandshakeCompleted() &&
+                                                 (T::GetStatus() != DIOSTREAMSTATUS_DISCONNECTED))
+                                                {
+                                                  status = CloseNotify_Send();
+                                                }
+
+                                              isclosing = true;
+
+                                              status = T::Close() && status;
+
+                                              handshakeclient.End();
+                                              session.End();
+
+                                              T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
+
+                                              isclosed  = true;
+                                              isclosing = false;
+
+                                              return status;
                                             }
 
 
@@ -217,472 +360,164 @@ class DIOSTREAMTLS :  public T
                                               this->timeout = timeout;
                                             }
 
+
+    DIOSTREAMTLS_ERROR                      GetLastTLSError                         ()
+                                            {
+                                              return tlserror;
+                                            }
+
+
+    DIOSTREAMTLSSESSION*                    GetTLSSession                           ()
+                                            {
+                                              return &session;
+                                            }
+
+
+    DIOSTREAMTLSHANDSHAKECLIENT*            GetTLSHandshakeClient                   ()
+                                            {
+                                              return &handshakeclient;
+                                            }
+
   private:
 
-     bool                                   HandShake_Client_ClientHello                      ()
+    bool                                    Handshake_Client                        (XCHAR* servername)
                                             {
-                                              DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>  clienthello_msg;
-                                              bool                                                                                        status = false;
+                                              XBUFFER clienthello;
+                                              XBUFFER records;
+                                              XTIMER* xtimer;
+                                              bool    serverhelloprocessed = false;
+                                              bool    status               = false;
 
-                                              status = HandShake_Client_Encode_ClientHello(clienthello_msg);
-                                              if(status)
+                                              if(!handshakeclient.ClientHello_Create(servername, clienthello, records) ||
+                                                 !Transport_Write(records))
                                                 {
-                                                  XBUFFER writebuffer;    
-                                                  XDWORD  writesize;  
+                                                  return false;
+                                                }
 
-                                                  clienthello_msg.SetToBuffer(writebuffer, true);
-  
-                                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DIO Stream TLS] ClientHello:"));
-                                                  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, writebuffer);
-          
-                                                  writesize = Write(writebuffer.Get(), writebuffer.GetSize());      
-                                                  if(writesize == writebuffer.GetSize())     
+                                              xtimer = GEN_XFACTORY.CreateTimer();
+                                              if(!xtimer) return false;
+
+                                              xtimer->Reset();
+
+                                              while(xtimer->GetMeasureSeconds() < (XDWORD)timeout)
+                                                {
+                                                  XBUFFER input;
+
+                                                  if(!Transport_Read(input))
                                                     {
-                                                      DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>>  serverhello_msg;
-                                                      XBUFFER                                                                                     readbuffer; 
-                                                      XBYTE                                                                                       typemsg       = 0;
-                                                      XWORD                                                                                       legacyversion = 0;
-                                                      XWORD                                                                                       sizemsg       = 0;
+                                                      if(T::GetStatus() == DIOSTREAMSTATUS_DISCONNECTED) break;
 
-                                                      status = Received_Message(readbuffer, typemsg, legacyversion, sizemsg);                                                              
-                                                      if(status)
-                                                        {    
-                                                          if(typemsg != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE)
-                                                            {
-                                                              status = false;          
-                                                            }
-                                                           else
-                                                            { 
-                                                              status = HandShake_Client_Decode_ServerHello(readbuffer, serverhello_msg);      
-                                                              if(status)
-                                                                {
-                                                                  
-
-                                                                }                                                         
-                                                            }
-                                                        }
+                                                      DIOSTREAMCONFIG* streamconfig = T::GetConfig();
+                                                      T::Wait(streamconfig?streamconfig->GetPollInterval():DIOSTREAM_TIMEINWAITFUNCTIONS);
+                                                      continue;
                                                     }
-                                                }
 
-                                              return status;    
-                                            }
+                                                  if(!handshakeclient.RecordInput_Add(input)) break;
 
-    bool                                    HandShake_Client_Encode_ClientHello     (DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>>& message)
-                                            {
-                                              DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO>*  fragment  = NULL;
-                                              DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO*                             body      = NULL;
-                                              XBUFFER                                                             writebuffer;
-  
-                                              fragment  = message.GetFragment();
-                                              body      = message.GetFragment()->GetBody();
+                                                  if(!serverhelloprocessed &&
+                                                     !ServerHello_Process(serverhelloprocessed)) break;
 
-                                              if(!fragment || !body)
-                                                {
-                                                  return false;
-                                                }
+                                                  if(serverhelloprocessed && !handshakeclient.Process()) break;
 
-                                              // -----------------------------------------------------------------------------------
-
-                                              message.SetContenType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE);
-                                              message.SetProtocolVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
-
-                                              fragment->SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO);
-
-                                              fragment->GetBody()->SetClientVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
-
-                                              // -----------------------------------------------------------------------------------
-
-                                              if(!GenerateRandom(random))
-                                                {
-                                                  return false;
-                                                }
-
-                                              memcpy(body->GetRandom(), random, DIOSTREAMTLS_MSG_RANDOM_SIZE);  
-
-                                              // -----------------------------------------------------------------------------------
-  
-                                              GenerateSessionID(sessionID, DIOSTREAMTLS_MSG_SESSIONID_SIZE);
-                                              memcpy(body->GetSessionID(), sessionID, DIOSTREAMTLS_MSG_SESSIONID_SIZE);
-                                              body->SetSessionIDLength(DIOSTREAMTLS_MSG_SESSIONID_SIZE);
-                                              // body->SetSessionIDLength(0);
-
-                                              // -----------------------------------------------------------------------------------
-
-                                              body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256 /*DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_GCM_SHA256*/);
-                                              body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384 /*DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_256_CBC_SHA256*/);
-                                              body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 /*DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_CBC_SHA*/);
-                                              body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
-                                              body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
-                                            
-                                              body->SetCiphersuitesLength((XWORD)body->GetCipherSuites()->GetSize() * sizeof(XWORD));
-
-                                              body->SetCompressionLength(0x01);
-                                              body->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
-
-                                              // -----------------------------------------------------------------------------------
-
-                                              DIOSTREAMTLS_MSG_EXTENSION_SNI* extension_SNI = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SNI();
-                                              if(extension_SNI)
-                                                {
-                                                  DIOSTREAMTLS_MSG_EXTENSION_SNI_SERVERNAME extension_SNI_servername;
-      
-                                                  extension_SNI_servername.Name_SetType(0); 
-                                                  extension_SNI_servername.Name_GetHost()->Set(__L("www.google.es")); 
-                                                  extension_SNI_servername.Name_SetLength(extension_SNI_servername.Name_GetHost()->GetSize());
-
-                                                  extension_SNI->List_Add(&extension_SNI_servername);           
-                                                }
-
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION*)extension_SNI); 
-
-                                              // ---------------------------------------
-
-                                              DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS* extension_supportedgroups = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS();
-                                              if(extension_supportedgroups)
-                                                { 
-                                                  extension_supportedgroups->List_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
-                                                  extension_supportedgroups->List_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
-                                                  extension_supportedgroups->List_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
-                                                }
-  
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS*)extension_supportedgroups); 
-
-                                              // ---------------------------------------
-
-                                              DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS* extension_ECpointformats = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS();
-                                              if(extension_ECpointformats)
-                                                { 
-                                                  extension_ECpointformats->List_Add(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
-                                                }
-  
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION_ECPOINTFORMATS*)extension_ECpointformats); 
-
-                                              // ---------------------------------------
-
-                                              DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* extension_signaturealgorithms = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS();
-                                              if(extension_signaturealgorithms)
-                                                {  
-                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
-                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384);
-                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512);
-                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
-                                                  extension_signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
-                                                
-                                                }
-  
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS*)extension_signaturealgorithms); 
-
-                                              // ---------------------------------------
-
-                                              DIOSTREAMTLS_MSG_EXTENSION_ALPN* extension_ALPN = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_ALPN();
-                                              if(extension_ALPN)
-                                                { 
-                                                  extension_ALPN->List_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_2);
-                                                  extension_ALPN->List_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1);     
-                                                }
- 
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION*)extension_ALPN); 
-
-                                              // ---------------------------------------
-
-                                              DIOSTREAMTLS_MSG_EXTENSION_EMS* extension_EMS = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_EMS();
-                                              if(extension_EMS)
-                                                {
-
-                                                }
- 
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION*)extension_EMS); 
-
-                                              // ---------------------------------------
-
-                                              DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS* extension_supportedversions = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS();
-                                              if(extension_supportedversions)
-                                                { 
-                                                  extension_supportedversions->List_Add(DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
-                                                  extension_supportedversions->List_Add(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);     
-                                                } 
-  
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS*)extension_supportedversions); 
-
-                                              // -----------------------------------------------------------------------------------
-  
-                                              DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES* extension_PSKkeyexchangemodes = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES();
-                                              if(extension_PSKkeyexchangemodes)
-                                                { 
-                                                  extension_PSKkeyexchangemodes->List_Add(DIOSTREAMTLS_MSG_PSKKEYEXCHANGEMODE_PSK);
-                                                  extension_PSKkeyexchangemodes->List_Add(DIOSTREAMTLS_MSG_PSKKEYEXCHANGEMODE_PSK_DHE);
-                                                }
-  
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES*)extension_PSKkeyexchangemodes); 
-
-                                              // -----------------------------------------------------------------------------------
-  
-                                              DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* extension_keyshare = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE();
-                                              if(extension_keyshare)
-                                                { 
-                                                  DIOSTREAMTLS_MSG_EXTENSION_KEY key;
-                                                  XBYTE                          datakey[32];
-
-                                                  GenerateRandom(datakey);
-
-                                                  key.SetKeyType(DIOSTREAMTLS_MSG_CURVEID_X25519);
-                                                  key.SetLengthKeyData(sizeof(datakey));
-                                                  key.GetKeyData()->Add(datakey, sizeof(datakey));
-
-                                                  extension_keyshare->List_Add(&key);
-                                                }
-  
-                                              body->Extensions_Add((DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)extension_keyshare); 
-
-                                              message.CalculateLength();                                        
-                                              
-                                              return true;                                         
-                                            }
-
-    bool                                    HandShake_Client_Decode_ServerHello   (XBUFFER& readbuffer, DIOSTREAMTLS_MSG_RECORD<DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO>>& message)
-                                            {                                                                                           
-                                              XBYTE typemsg;
-                                              XWORD legacyversion;
-                                              XWORD sizemsg;  
-                                              bool  status =  false;
-                                                      
-                                              readbuffer.Get(typemsg);  
-                                              readbuffer.Get(legacyversion);  
-                                              readbuffer.Get(sizemsg); 
-
-                                              if(typemsg != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE)
-                                                {
-                                                  return false;          
-                                                }
-
-                                              if(!sizemsg)
-                                                {
-                                                  return false;          
-                                                }  
-                                                      
-
- 
-                                              status = true;
-      
-                                              return status;
-                                            }
-
-    bool                                    Received_Message                        (XBUFFER& readbuffer, XBYTE& typemsg, XWORD& legacyversion, XWORD& sizemsg)
-                                            {
-                                              XBUFFER message;
-                                              XDWORD  sizeread;
-                                              bool    status =  false;
-
-                                              readbuffer.Resize(5);                                     
-                                              sizeread = Read(readbuffer.Get(), readbuffer.GetSize()); 
-                                              if(sizeread == readbuffer.GetSize())
-                                                { 
-                                                  readbuffer.Get(typemsg);  
-                                                  readbuffer.Get(legacyversion);  
-                                                  readbuffer.Get(sizemsg);                                                    
-
-                                                  message.Resize(sizemsg);  
-
-                                                  sizeread = Read(message.Get(), message.GetSize()); 
-                                                  if(sizeread == message.GetSize())
-                                                    { 
-                                                      readbuffer.Add(message);                                                                                                  
-                                                      status = true;   
-                                                    }                                                    
-                                                } 
-
-                                              if(!status)                         
-                                                {
-                                                  readbuffer.Empty();
-                                                }
-
-                                              return status;
-                                            }
-
-    
-    bool                                    GenerateRandom                          (XBYTE* random)
-                                            {
-                                              if(!random)
-                                                {
-                                                  return false;
-                                                }
-
-                                              memset(random, 0, DIOSTREAMTLS_MSG_RANDOM_SIZE);
-
-                                              XDATETIME*  timestamp = GEN_XFACTORY.CreateDateTime();  
-                                              bool        status    = false;
-
-                                              if(!timestamp)
-                                                {
-                                                  return false;
-                                                }
-
-                                              if(timestamp->Read())
-                                                {
-                                                  XDWORD timerstampdata = (XDWORD)timestamp->GetEPOCHFormat();
-
-                                                  memcpy(random, &timerstampdata, sizeof(timerstampdata));
-
-                                                  XRAND* xrand = GEN_XFACTORY.CreateRand();
-                                                  if(xrand)
+                                                  if(handshakeclient.IsServerFinishedVerified())
                                                     {
-                                                      xrand->Ini();      
+                                                      XBUFFER clientfinished;
+                                                      XBUFFER clientfinishedrecords;
 
-                                                      for(XDWORD c=sizeof(timerstampdata); c<DIOSTREAMTLS_MSG_RANDOM_SIZE; c++)
+                                                      if(handshakeclient.ClientFinished_Create(clientfinished, clientfinishedrecords) &&
+                                                         Transport_Write(clientfinishedrecords))
                                                         {
-                                                          random[c] = xrand->Max(255);
+                                                          status = true;
                                                         }
 
-                                                      status = true;  
+                                                      break;
                                                     }
+                                                }
 
-                                                  GEN_XFACTORY.DeleteRand(xrand);
-                                               }
-
-                                              GEN_XFACTORY.DeleteDateTime(timestamp);
+                                              GEN_XFACTORY.DeleteTimer(xtimer);
 
                                               return status;
                                             }
 
 
-    bool                                    GenerateSessionID                       (XBYTE* sessionID, XBYTE sessionIDlength)
+    bool                                    ServerHello_Process                     (bool& serverhelloprocessed)
                                             {
-                                              if(!sessionID)
+                                              while(!serverhelloprocessed)
                                                 {
-                                                  return false;
-                                                }
+                                                  DIOSTREAMTLS_CONTENTTYPE   contenttype = (DIOSTREAMTLS_CONTENTTYPE)0;
+                                                  DIOSTREAMTLSSESSION_RESULT result;
+                                                  XBUFFER                    plain;
 
-                                              memset(sessionID, 0, sessionIDlength);
+                                                  result = session.Record_Extract(contenttype, plain);
 
-                                              XDATETIME*  timestamp = GEN_XFACTORY.CreateDateTime();  
-                                              bool        status    = false;
+                                                  if(result == DIOSTREAMTLSSESSION_RESULT_INCOMPLETE) return true;
+                                                  if(result == DIOSTREAMTLSSESSION_RESULT_ERROR)      return false;
 
-                                              if(!timestamp)
-                                                {
-                                                  return false;
-                                                }
-
-                                              if(timestamp->Read())
-                                                {
-                                                  XDWORD timerstampdata = (XDWORD)timestamp->GetEPOCHFormat();
-
-                                                  memcpy(sessionID, &timerstampdata, sizeof(timerstampdata));
-
-                                                  XRAND* xrand = GEN_XFACTORY.CreateRand();
-                                                  if(xrand)
+                                                  if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC)
                                                     {
-                                                      xrand->Ini();      
-
-                                                      for(XDWORD c=sizeof(timerstampdata); c<sessionIDlength; c++)
-                                                        {
-                                                          sessionID[c] = xrand->Max(255);
-                                                        }
-
-                                                      status = true;  
+                                                      if((plain.GetSize() != 1) || (plain.GetByte(0) != 1)) return false;
+                                                      continue;
                                                     }
 
-                                                  GEN_XFACTORY.DeleteRand(xrand);
-                                               }
+                                                  if(contenttype != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE ||
+                                                     !session.HandshakeInput_Add(plain))
+                                                    {
+                                                      return false;
+                                                    }
 
-                                              GEN_XFACTORY.DeleteDateTime(timestamp);
+                                                  XBUFFER serverhello;
+                                                  result = session.Handshake_Extract(serverhello);
 
-                                              return status;
-                                            }
-    
+                                                  if(result == DIOSTREAMTLSSESSION_RESULT_INCOMPLETE) continue;
+                                                  if(result == DIOSTREAMTLSSESSION_RESULT_ERROR)      return false;
 
-    bool                                    IniFSMachine                            ()                                                                                         
-                                            {
-                                              if(!fsmachine)
-                                                {
-                                                  return false;              
+                                                  if(!handshakeclient.ServerHello_Process(serverhello)) return false;
+                                                  if(!session.GetHandshakeInput()->IsEmpty())            return false;
+
+                                                  serverhelloprocessed = true;
                                                 }
 
-                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_NONE            ,
-                                                                      DIOSTREAMTLS_XFSMEVENT_OPEN            ,  DIOSTREAMTLS_XFSMSTATE_OPEN         ,
-                                                                      DIOSTREAMTLS_XFSMEVENT_CLOSE           ,  DIOSTREAMTLS_XFSMSTATE_CLOSE        ,
-                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
-
-
-                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_OPEN            ,
-                                                                      DIOSTREAMTLS_XFSMEVENT_HANDSHAKE       ,  DIOSTREAMTLS_XFSMSTATE_HANDSHAKE    ,
-                                                                      DIOSTREAMTLS_XFSMEVENT_CLOSE           ,  DIOSTREAMTLS_XFSMSTATE_CLOSE        ,
-                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
-
-
-                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_HANDSHAKE       ,
-                                                                      DIOSTREAMTLS_XFSMEVENT_CONNECTED       ,  DIOSTREAMTLS_XFSMSTATE_CONNECTED    ,
-                                                                      DIOSTREAMTLS_XFSMEVENT_DISCONNECTED    ,  DIOSTREAMTLS_XFSMSTATE_DISCONNECTED ,                                                                      
-                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
-
-
-                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_CONNECTED       ,                                                                      
-                                                                      DIOSTREAMTLS_XFSMEVENT_DISCONNECTED    ,  DIOSTREAMTLS_XFSMSTATE_DISCONNECTED ,                                                                      
-                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
-
-
-                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_DISCONNECTED    ,                                                                                                                                    
-                                                                      DIOSTREAMTLS_XFSMEVENT_CLOSE           ,  DIOSTREAMTLS_XFSMSTATE_CLOSE        ,
-                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
-
-
-                                              if(!fsmachine->AddState(DIOSTREAMTLS_XFSMSTATE_CLOSE           ,
-                                                                      DIOSTREAMTLS_XFSMEVENT_NONE            ,  DIOSTREAMTLS_XFSMSTATE_NONE         ,                                                                   
-                                                                      XFSMACHINESTATE_EVENTDEFEND)) return false;
-
-                                              return true;  
+                                              return true;
                                             }
 
 
-    bool                                    Update                                  ()
+    bool                                    ApplicationInput_Process                ()
                                             {
-                                              if(!fsmachine)
+                                              XBUFFER input;
+
+                                              if(!session.IsIni()) return false;
+                                              if(session.IsTransportClosedWithoutNotify()) return false;
+
+                                              if(Transport_Read(input) && !session.RecordInput_Add(input))
                                                 {
-                                                  return false;              
+                                                  tlserror = DIOSTREAMTLS_ERROR_RECORD;
+                                                  return false;
                                                 }
 
-                                              if(fsmachine->GetEvent() == DIOSTREAMTLS_XFSMEVENT_NONE) // Not GEN_NEW event
-                                                {
-                                                  switch(fsmachine->GetCurrentState())
-                                                    {
-                                                      case DIOSTREAMTLS_XFSMSTATE_NONE                :  break;
-                                                      case DIOSTREAMTLS_XFSMSTATE_OPEN                :  break;
-                                                      case DIOSTREAMTLS_XFSMSTATE_HANDSHAKE           :  break;
-                                                      case DIOSTREAMTLS_XFSMSTATE_CONNECTED           :  break;
-                                                      case DIOSTREAMTLS_XFSMSTATE_DISCONNECTED        :  break;
+                                              DIOSTREAMTLSSESSION_RESULT result = session.ApplicationData_Process();
 
-                                                      case DIOSTREAMTLS_XFSMSTATE_CLOSE               :  fsmachine->SetEvent(DIOSTREAMTLS_XFSMEVENT_NONE);
-                                                                                                         break;                                                       
-                                                    }
+                                              if(result == DIOSTREAMTLSSESSION_RESULT_ERROR)
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_RECORD;
+                                                  Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+                                                  T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
+                                                  return false;
                                                 }
-                                               else //  New event
-                                                {
-                                                  if(fsmachine->GetEvent() < DIOSTREAMTLS_LASTEVENT)
-                                                    {
-                                                      fsmachine->CheckTransition();
 
-                                                      switch(fsmachine->GetCurrentState())
+                                              if(session.IsCloseNotifyReceived())
+                                                {
+                                                  if(!session.IsCloseNotifySent()) CloseNotify_Send();
+
+                                                  T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
+                                                }
+                                               else
+                                                {
+                                                  if(!isclosed && (T::GetStatus() == DIOSTREAMSTATUS_DISCONNECTED))
+                                                    {
+                                                      if(!session.TransportClosed())
                                                         {
-                                                          case DIOSTREAMTLS_XFSMSTATE_NONE            : break;
-
-                                                          case DIOSTREAMTLS_XFSMSTATE_OPEN            : fsmachine->SetEvent(DIOSTREAMTLS_XFSMEVENT_HANDSHAKE);
-                                                                                                        break;
-                                                           
-                                                          case DIOSTREAMTLS_XFSMSTATE_HANDSHAKE       : if(HandShake_Client_ClientHello())
-                                                                                                          {
-                                                                                                            fsmachine->SetEvent(DIOSTREAMTLS_XFSMEVENT_CONNECTED);
-                                                                                                          }
-                                                                                                         else
-                                                                                                          {
-                                                                                                            fsmachine->SetEvent(DIOSTREAMTLS_XFSMEVENT_DISCONNECTED);
-                                                                                                          }  
-                                                                                                        break;
-                                                               
-                                                          case DIOSTREAMTLS_XFSMSTATE_CONNECTED       : break;
-                                                          
-                                                          case DIOSTREAMTLS_XFSMSTATE_DISCONNECTED    : fsmachine->SetEvent(DIOSTREAMTLS_XFSMEVENT_CLOSE);
-                                                                                                        break;
-                                                           
-                                                          case DIOSTREAMTLS_XFSMSTATE_CLOSE           : break;
+                                                          tlserror = DIOSTREAMTLS_ERROR_TRUNCATED;
+                                                          return !session.GetApplicationInput()->IsEmpty();
                                                         }
                                                     }
                                                 }
@@ -691,37 +526,96 @@ class DIOSTREAMTLS :  public T
                                             }
 
 
-    static void                             ThreadRunFunction                       (void* param)
+    bool                                    Transport_Read                          (XBUFFER& input)
                                             {
-                                              DIOSTREAMTLS* diostreamTLS = (DIOSTREAMTLS*)param;
-                                              if(!diostreamTLS) 
+                                              XBUFFER* transportinput = T::GetInXBuffer();
+                                              XDWORD   size;
+
+                                              input.Delete();
+
+                                              if(!transportinput) return false;
+
+                                              size = transportinput->GetSize();
+                                              if(!size) return false;
+
+                                              if(!input.Resize(size)) return false;
+
+                                              if(transportinput->Extract(input.Get(), 0, size) != size)
                                                 {
-                                                  return;
+                                                  input.Delete();
+                                                  return false;
                                                 }
 
-                                              diostreamTLS->Update();
+                                              return true;
+                                            }
+
+
+    bool                                    Transport_Write                         (XBUFFER& output)
+                                            {
+                                              XBUFFER* transportoutput;
+
+                                              if(output.IsEmpty()) return true;
+
+                                              transportoutput = T::GetOutXBuffer();
+                                              if(!transportoutput || !transportoutput->Add(output)) return false;
+
+                                              return T::WaitToFlushOutXBuffer(timeout, false);
+                                            }
+
+
+    bool                                    Alert_Send                              (DIOSTREAMTLS_ALERT_LEVEL level, DIOSTREAMTLS_ALERT_DESCRIPTION description)
+                                            {
+                                              XBUFFER records;
+
+                                              if(!session.Alert_Create(level, description, records)) return false;
+
+                                              return Transport_Write(records);
+                                            }
+
+
+    bool                                    CloseNotify_Send                        ()
+                                            {
+                                              XBUFFER records;
+
+                                              if(!session.CloseNotify_Create(records)) return false;
+                                              if(records.IsEmpty())                  return true;
+
+                                              return Transport_Write(records);
+                                            }
+
+
+    void                                    Close_OnError                           ()
+                                            {
+                                              isclosing = true;
+
+                                              T::Close();
+                                              T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
+
+                                              isclosed  = true;
+                                              isclosing = false;
                                             }
 
 
     void                                    Clean                                   ()
                                             {
                                               timeout     = 0;
-
-                                              fsmachine   = NULL;
-                                              thread      = NULL;
+                                              tlserror    = DIOSTREAMTLS_ERROR_NONE;
+                                              isclosed    = true;
+                                              isclosing   = false;
                                             }
 
 
     int                                     timeout;
-  
-    XFSMACHINE*                             fsmachine;        
-    XTHREADCOLLECTED*                       thread;
+    DIOSTREAMTLS_ERROR                      tlserror;
+    bool                                    isclosed;
+    bool                                    isclosing;
 
-    XBYTE                                   random[DIOSTREAMTLS_MSG_RANDOM_SIZE];
-    XBYTE                                   sessionID[DIOSTREAMTLS_MSG_SESSIONID_SIZE];
+    DIOSTREAMTLSSESSION                     session;
+    DIOSTREAMTLSHANDSHAKECLIENT             handshakeclient;
 };
 
 
 
 
+/*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 

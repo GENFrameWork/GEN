@@ -46,15 +46,16 @@
 class XLINUXRAND : public XRAND
 {
   public:
-                  XLINUXRAND        ();
-    virtual      ~XLINUXRAND        ();
+                          XLINUXRAND          ();
+    virtual              ~XLINUXRAND          ();
+
+    virtual bool          Ini                 ();
+    virtual bool          Generate            (XBYTE* buffer, XDWORD size);
 };
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 

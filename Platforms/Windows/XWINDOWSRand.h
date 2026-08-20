@@ -47,16 +47,17 @@
 class XWINDOWSRAND : public XRAND
 {
   public:
-                   XWINDOWSRAND     ();
-    virtual       ~XWINDOWSRAND     ();
+                          XWINDOWSRAND        ();
+    virtual              ~XWINDOWSRAND        ();
+
+    virtual bool          Ini                 ();
+    virtual bool          Generate            (XBYTE* buffer, XDWORD size);
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 
