@@ -48,7 +48,8 @@
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_COOKIE                 0x002c // 1.3   HelloRetryRequest cookie
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PSKKEYEXCHANGEMODES	  0x002d // 1.3	  Mode PSK
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMSCERT 0x0032 // 1.2+  X.509 certificate signatures
-#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE	            0x0033 // 1.3	  Public Key                                                                    
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE	            0x0033 // 1.3	  Public Key
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY         0x0029 // 1.3	  Session resumption (PSK); parsed/replayed only, not offered by this client
 
 
 enum DIOSTREAMTLS_MSG_EXTENSION_CONTEXT
@@ -569,6 +570,94 @@ class DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST : public DIOSTREAMTL
     void                                                  Clean                                             ();
 
     XWORD                                                 selectedgroup;
+};
+
+
+class DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY
+{
+  public:
+                                                          DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY            ();
+    virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY            ();
+
+    XWORD                                                 GetLengthIdentity                                 ();
+    void                                                  SetLengthIdentity                                 (XWORD lengthidentity);
+
+    XBUFFER*                                              GetIdentity                                       ();
+
+    XDWORD                                                GetObfuscatedTicketAge                            ();
+    void                                                  SetObfuscatedTicketAge                            (XDWORD obfuscatedticketage);
+
+    bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity);
+    bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity);
+
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                                  Clean                                             ();
+
+    XWORD                                                 lengthidentity;
+    XBUFFER                                               identity;
+    XDWORD                                                obfuscatedticketage;
+};
+
+
+// ClientHello shape (RFC 8446 4.2.11): a list of PskIdentity entries plus a list of PskBinderEntry entries, each
+// its own independently length-prefixed vector. The server only ever sends the single-value form below.
+class DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY : public DIOSTREAMTLS_MSG_EXTENSION
+{
+  public:
+                                                          DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY           ();
+    virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY           ();
+
+    XWORD                                                 Identities_GetLength                              ();
+    void                                                  Identities_SetLength                              (XWORD identities_length);
+    XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY*>*     Identities_GetAll                                 ();
+    bool                                                  Identities_Add                                    (DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity);
+    bool                                                  Identities_DeleteAll                              ();
+
+    XWORD                                                 Binders_GetLength                                 ();
+    void                                                  Binders_SetLength                                 (XWORD binders_length);
+    XVECTOR<XBUFFER*>*                                    Binders_GetAll                                    ();
+    bool                                                  Binders_Add                                       (XBUFFER* binder);
+    bool                                                  Binders_DeleteAll                                 ();
+
+    bool                                                  CopyTo                                            (DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY* extension);
+    bool                                                  CopyFrom                                          (DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY* extension);
+
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                                  Clean                                             ();
+
+    XWORD                                                 identities_length;
+    XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY*>      identities;
+
+    XWORD                                                 binders_length;
+    XVECTOR<XBUFFER*>                                     binders;
+};
+
+
+class DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER : public DIOSTREAMTLS_MSG_EXTENSION
+{
+  public:
+                                                          DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER    ();
+    virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER    ();
+
+    XWORD                                                 GetSelectedIdentity                               ();
+    void                                                  SetSelectedIdentity                               (XWORD selectedidentity);
+
+    bool                                                  SetToBuffer                                       (XBUFFER& buffer, bool showdebug);
+    bool                                                  GetFromBuffer                                     (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                                  Clean                                             ();
+
+    XWORD                                                 selectedidentity;
 };
 
 

@@ -54,6 +54,10 @@
 #include "DIOStreamTLSConfig.h"
 #endif
 
+#ifdef COMPRESS_ACTIVE
+#include "CompressManager.h"
+#endif
+
 #include "DIOWebClient_XEvent.h"
 
 
@@ -387,7 +391,35 @@ bool DIOWEBCLIENT_HEADER::GetTransferEncoding(XSTRING& transferencoding)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool DIOWEBCLIENT_HEADER::GetContentEncoding(XSTRING& contentencoding)
+* @brief      Get the Content-Encoding response field (e.g. "gzip", "deflate")
+* @ingroup    DATAIO
+*
+* @param[out] contentencoding : Content coding value.
+*
+* @return     bool : true if the field is present and not empty; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT_HEADER::GetContentEncoding(XSTRING& contentencoding)
+{
+  contentencoding.Empty();
+
+  XCHAR* string = GetFieldValue(DIOWEBHEADER_CONTENT_ENCODING);
+
+  while(string && ((*string == __C(' ')) || (*string == __C('\t'))))
+    {
+      string++;
+    }
+
+  if(string)  contentencoding = string;
+
+  return contentencoding.GetSize()?true:false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOWEBCLIENT_HEADER::GetETag(XSTRING& etag)
 * @brief      Get E tag
 * @ingroup    DATAIO
@@ -444,6 +476,34 @@ bool DIOWEBCLIENT_HEADER::GetWWWAuthenticate(XSTRING& authenticate)
   if(string)  authenticate = string;
 
   return authenticate.GetSize()?true:false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOWEBCLIENT_HEADER::GetLocation(XSTRING& location)
+* @brief      Get the Location response field (redirection target)
+* @ingroup    DATAIO
+*
+* @param[out] location : Location value.
+*
+* @return     bool : true if the field is present and not empty; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT_HEADER::GetLocation(XSTRING& location)
+{
+  location.Empty();
+
+  XCHAR* string = GetFieldValue(DIOWEBHEADER_LOCATION);
+
+  while(string && ((*string == __C(' ')) || (*string == __C('\t'))))
+    {
+      string++;
+    }
+
+  if(string)  location = string;
+
+  return location.GetSize()?true:false;
 }
 
 
@@ -505,6 +565,10 @@ DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
       diostreamcfg->SetIsTLS(false);
       Stream_Create(false);
     }
+
+  #ifdef COMPRESS_ACTIVE
+  compressmanager = GEN_NEW COMPRESSMANAGER();
+  #endif
 }
 
 
@@ -543,6 +607,14 @@ DIOWEBCLIENT::~DIOWEBCLIENT()
       GEN_XFACTORY.DeleteTimer(timerout);
       timerout = NULL;
     }
+
+  #ifdef COMPRESS_ACTIVE
+  if(compressmanager)
+    {
+      GEN_DELETE compressmanager;
+      compressmanager = NULL;
+    }
+  #endif
 
   Clean();
 }
@@ -764,6 +836,66 @@ bool DIOWEBCLIENT::IsActiveDoStopHTTPError()
 void DIOWEBCLIENT::DoStopHTTPError(bool activate)
 {
   dostophttperror = activate;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOWEBCLIENT::IsActiveContentEncoding()
+* @brief      Is Content-Encoding support active
+* @ingroup    DATAIO
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::IsActiveContentEncoding()
+{
+  return contentencodingactive;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOWEBCLIENT::ContentEncoding_Activate(bool activate)
+* @brief      Activate or deactivate Content-Encoding support (request Accept-Encoding, decompress the response)
+* @ingroup    DATAIO
+*
+* @param[in]  activate : Activate value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWEBCLIENT::ContentEncoding_Activate(bool activate)
+{
+  contentencodingactive = activate;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOWEBCLIENT::IsActiveCompressRequestBody()
+* @brief      Is outgoing request body compression active
+* @ingroup    DATAIO
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::IsActiveCompressRequestBody()
+{
+  return compressrequestbody;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOWEBCLIENT::CompressRequestBody_Activate(bool activate)
+* @brief      Activate or deactivate gzip-compressing an outgoing Put()/Post() body
+* @ingroup    DATAIO
+*
+* @param[in]  activate : Activate value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWEBCLIENT::CompressRequestBody_Activate(bool activate)
+{
+  compressrequestbody = activate;
 }
 
 
@@ -1517,6 +1649,116 @@ bool DIOWEBCLIENT::Body_Read(DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOWEBCLIENT::Body_Decompress(bool istobuffer, void* to)
+* @brief      Transparently decompress a response body already written to "to" when the server sent a
+*             Content-Encoding (gzip/deflate) this client understands
+* @ingroup    DATAIO
+*
+* @param[in]  istobuffer : true when the body was written to an XBUFFER; false when it was written to an XFILE.
+* @param[in]  to : Destination that received the raw (still encoded) body; replaced in place with the decoded body.
+*
+* @return     bool : true when there was nothing to decompress, or decompression succeeded; false when the
+*                    response declared an encoding this client understands but decompressing it failed (a
+*                    truncated or corrupt body): "to" is left untouched in that case.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::Body_Decompress(bool istobuffer, void* to)
+{
+  #ifdef COMPRESS_ACTIVE
+
+  if(!contentencodingactive || !to) return true;
+
+  XSTRING contentencoding;
+  if(!header.GetContentEncoding(contentencoding)) return true;
+
+  COMPRESSBASE_TYPE type;
+
+  if(!contentencoding.Compare(__L("gzip"), true) || !contentencoding.Compare(__L("x-gzip"), true))
+    {
+      type = COMPRESSBASE_TYPE_GZ;
+    }
+   else if(!contentencoding.Compare(__L("deflate"), true))
+    {
+      type = COMPRESSBASE_TYPE_DEFLATE;
+    }
+   else
+    {
+      return true;                                                             // "identity", "br", ... : not ours
+    }
+
+  if(istobuffer && !((XBUFFER*)to)->GetSize()) return true;                    // nothing to decompress
+  if(!istobuffer && !((XFILE*)to)->GetSize())  return true;
+
+  COMPRESSBASE* compressor = compressmanager?compressmanager->Create(type):NULL;
+
+  if(!compressor) return true;
+
+  if(compressor->GetType() != type)
+    {
+      // The requested compressor module (COMPRESS_GZ_ACTIVE / COMPRESS_DEFLATE_ACTIVE) is not compiled into
+      // this build: COMPRESSMANAGER::Create() silently fell back to a plain COMPRESSBASE. Leave the body as-is
+      // (still encoded) rather than pretend to have decompressed it.
+      GEN_DELETE compressor;
+      return true;
+    }
+
+  bool status;
+
+  if(istobuffer)
+    {
+      XBUFFER* buffer = (XBUFFER*)to;
+      XBUFFER  decompressed;
+
+      status = compressor->Decompress(buffer->Get(), buffer->GetSize(), &decompressed);
+
+      if(status)
+        {
+          buffer->Delete();
+          status = decompressed.IsEmpty() || buffer->Add(decompressed.Get(), decompressed.GetSize());
+        }
+    }
+   else
+    {
+      XFILE* file = (XFILE*)to;
+
+      // The whole (still compressed) file is re-read into memory to decompress it, so this path is bounded to
+      // whatever fits in an XDWORD-sized XBUFFER; a compressed download at or beyond that size is left encoded
+      // on disk rather than risk a truncated read.
+      XQWORD filesize = file->GetSize();
+
+      if(filesize > (XQWORD)(XDWORD)-1)
+        {
+          GEN_DELETE compressor;
+          return true;
+        }
+
+      XBUFFER raw;
+      XBUFFER decompressed;
+
+      status = raw.Resize((XDWORD)filesize) && file->SetPosition(0) && file->Read(raw.Get(), (XDWORD)filesize) &&
+               compressor->Decompress(raw.Get(), raw.GetSize(), &decompressed);
+
+      if(status)
+        {
+          status = file->SetPosition(0) && file->SetSize(0) &&
+                   (decompressed.IsEmpty() || file->Write(decompressed.Get(), decompressed.GetSize()));
+        }
+    }
+
+  GEN_DELETE compressor;
+
+  return status;
+
+  #else
+
+  return true;
+
+  #endif
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to)
 * @brief      Make operation
@@ -1534,7 +1776,7 @@ bool DIOWEBCLIENT::Body_Read(DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD 
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to)
+bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount)
 {
   if(!diostreamcfg)     return false;
   if(!timerout)         return false;
@@ -1662,17 +1904,36 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   if(addhead) sendheader += addhead;
 
+  #ifdef COMPRESS_ACTIVE
+
+  if(contentencodingactive)
+    {
+      bool hasacceptencoding = false;
+
+      if(addhead)
+        {
+          XSTRING addheadstring;
+
+          addheadstring = addhead;
+          hasacceptencoding = (addheadstring.Find(DIOWEBHEADER_ACCEPT_ENCODING, true) != XSTRING_NOTFOUND);
+        }
+
+      if(!hasacceptencoding) sendheader += __L("Accept-Encoding: gzip, deflate\r\n");
+    }
+
+  #endif
+
 
   switch(authenticationmethod)
     {
       case DIOWEBCLIENT_AUTHENTICATION_METHOD_UNKNOWN : if(password.IsEmpty()) break;
                                                         authenticationmethod = DIOWEBCLIENT_AUTHENTICATION_METHOD_BASIC;
-      
+
       case DIOWEBCLIENT_AUTHENTICATION_METHOD_BASIC   : { XSTRING loginpassword;
                                                           XSTRING loginpasswordbase64;
 
                                                           loginpassword.Format(__L("%s:%s"), login.Get(), password.Get());
-                                                          loginpassword.ConvertToBase64(loginpasswordbase64);   
+                                                          loginpassword.ConvertToBase64(loginpasswordbase64);
 
                                                           sendheader += __L("Authorization: Basic ");
                                                           sendheader += loginpasswordbase64;
@@ -1682,14 +1943,43 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       case DIOWEBCLIENT_AUTHENTICATION_METHOD_DIGEST  : break;
     }
-  
 
-  if(postdata)
+
+  // effectivepostdata is postdata itself unless CompressRequestBody_Activate(true) is set and gzip-compressing
+  // it actually succeeds, in which case it points at compressedpostdata and a matching Content-Encoding is sent.
+  // It is what actually goes out on the wire below (and again on the digest-auth retry further down), so the
+  // Content-Length advertised here always matches the bytes written.
+  XBUFFER  compressedpostdata;
+  XBUFFER* effectivepostdata = postdata;
+
+  #ifdef COMPRESS_ACTIVE
+
+  if(compressrequestbody && postdata && !postdata->IsEmpty())
+    {
+      COMPRESSBASE* compressor = compressmanager?compressmanager->Create(COMPRESSBASE_TYPE_GZ):NULL;
+
+      if(compressor)
+        {
+          if((compressor->GetType() == COMPRESSBASE_TYPE_GZ) &&
+             compressor->Compress(postdata->Get(), postdata->GetSize(), &compressedpostdata))
+            {
+              effectivepostdata = &compressedpostdata;
+            }
+
+          GEN_DELETE compressor;
+        }
+    }
+
+  #endif
+
+  if(effectivepostdata)
     {
       XSTRING stringlenght;
-      stringlenght.Format(__L("%s: %d\r\n"), DIOWEBHEADER_CONTENT_LENGTH, postdata->GetSize());
+      stringlenght.Format(__L("%s: %d\r\n"), DIOWEBHEADER_CONTENT_LENGTH, effectivepostdata->GetSize());
 
       sendheader += stringlenght;
+
+      if(effectivepostdata == &compressedpostdata) sendheader += __L("Content-Encoding: gzip\r\n");
     }
 
   sendheader += __L("Connection: close\r\n");
@@ -1704,9 +1994,9 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   //--- Send Post data -------------------------
 
-  if(postdata)
+  if(effectivepostdata)
     {
-      diostream->Write(postdata->Get(), postdata->GetSize());
+      diostream->Write(effectivepostdata->Get(), effectivepostdata->GetSize());
 
       xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_SENDPOSTDATA);
       PostEvent(&xevent);
@@ -1726,8 +2016,49 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   if(header.GetResultServer() == 301)
     {
+      // Only GET/HEAD are auto-followed: a 301 must preserve the method per RFC 7231, and blindly
+      // replaying a POST/PUT body against a redirected URL risks an unintended duplicate side effect.
+      // The redirect chain is bounded, and a missing/empty Location simply falls through unchanged
+      // to the existing behaviour below (the 301 response is then read/returned as-is).
+      XSTRING location;
 
-    
+      if(((method == DIOWEBHEADER_METHOD_GET) || (method == DIOWEBHEADER_METHOD_HEAD)) &&
+         (redirectcount < DIOWEBCLIENT_MAXREDIRECTS) && header.GetLocation(location))
+        {
+          DIOURL redirecturl;
+
+          if(location.Find(__L("://"), true) != XSTRING_NOTFOUND)
+            {
+              redirecturl = location.Get();                                   // Absolute Location: use it as-is
+            }
+           else
+            {
+              XSTRING scheme;
+
+              scheme = isTLS?__L("https://"):__L("http://");
+
+              redirecturl  = scheme;
+              redirecturl += server;
+
+              if(operationport != defaultport)
+                {
+                  XSTRING stringport;
+
+                  stringport.ConvertFromInt(operationport);
+
+                  redirecturl += __L(":");
+                  redirecturl += stringport;
+                }
+
+              if(!location.IsEmpty() && (location.Get()[0] != __C('/'))) redirecturl += __L("/");
+
+              redirecturl += location;
+            }
+
+          diostream->Close();
+
+          return MakeOperation(method, redirecturl, postdata, addhead, timeout, localIP, istobuffer, to, redirectcount+1);
+        }
     }
 
   if((header.GetResultServer() == 401) && (authenticationmethod == DIOWEBCLIENT_AUTHENTICATION_METHOD_DIGEST))
@@ -1852,9 +2183,9 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       //--- Send Post data -------------------------
 
-      if(postdata)
+      if(effectivepostdata)
         {
-          diostream->Write(postdata->Get(), postdata->GetSize());
+          diostream->Write(effectivepostdata->Get(), effectivepostdata->GetSize());
 
           xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_SENDPOSTDATA);
           PostEvent(&xevent);
@@ -1959,6 +2290,8 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   //--- Read Content ---------------------------
 
   status = Body_Read(bodymode, isTLS, contentlength, timeout, istobuffer, to, xevent);
+
+  if(status) status = Body_Decompress(istobuffer, to);
 
   //--- Close ----------------------------------
 
@@ -2123,4 +2456,9 @@ void DIOWEBCLIENT::Clean()
   authenticationmethod    = DIOWEBCLIENT_AUTHENTICATION_METHOD_UNKNOWN;
 
   dostophttperror         = true;
+
+  contentencodingactive   = true;
+  compressrequestbody     = false;
+
+  compressmanager         = NULL;
 }

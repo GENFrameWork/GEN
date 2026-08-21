@@ -64,8 +64,11 @@ class COMPRESS_GZ : public COMPRESSBASE
 
     void                    Clean                 ();
 
-    int                     ZCompress             (XBYTE* target,XDWORD* targetsize,XBYTE* source,XDWORD sourcesize);
-    int                     ZDecompress           (XBYTE* target,XDWORD* targetsize,XBYTE* source,XDWORD sourcesize);
+    // Both stream chunk-sized output into target via XBUFFER::Add() until Z_STREAM_END, instead of requiring
+    // the caller to pre-size the destination to the exact (de)compressed length: the compressed/decompressed
+    // size of arbitrary data (e.g. a gzip-encoded HTTP response body) is not known ahead of time.
+    int                     ZCompress             (XBUFFER* target,XBYTE* source,XDWORD sourcesize);
+    int                     ZDecompress           (XBUFFER* target,XBYTE* source,XDWORD sourcesize);
 
 };
 

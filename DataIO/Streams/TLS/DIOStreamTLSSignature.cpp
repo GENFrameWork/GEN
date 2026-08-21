@@ -77,6 +77,12 @@ bool DIOSTREAMTLSSIGNATURE::IsSupported(XWORD signaturescheme, CIPHERKEY* key)
   if((key->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) &&
      (signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256)) return true;
 
+  if((key->GetType() == CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC) &&
+     (signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384)) return true;
+
+  if((key->GetType() == CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC) &&
+     (signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512)) return true;
+
   if(key->GetType() != CIPHERKEYTYPE_RSA_PUBLIC) return false;
 
   switch(signaturescheme)
@@ -111,8 +117,24 @@ bool DIOSTREAMTLSSIGNATURE::Verify(XWORD signaturescheme, CIPHERKEY* key, XBUFFE
 
   if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256)
     {
-      CIPHERECDSA ECDSA;
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP256R1);
       HASHSHA2    hash(HASHSHA2TYPE_256);
+
+      return ECDSA.SetKey(key, true) && ECDSA.Verify(content, signature, &hash);
+    }
+
+  if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384)
+    {
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP384R1);
+      HASHSHA2    hash(HASHSHA2TYPE_384);
+
+      return ECDSA.SetKey(key, true) && ECDSA.Verify(content, signature, &hash);
+    }
+
+  if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512)
+    {
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP521R1);
+      HASHSHA2    hash(HASHSHA2TYPE_512);
 
       return ECDSA.SetKey(key, true) && ECDSA.Verify(content, signature, &hash);
     }

@@ -40,6 +40,19 @@
 
 #define CIPHERECDSA_P256_PUBLICKEY_SIZE       65
 #define CIPHERECDSA_P256_COORDINATE_SIZE      32
+#define CIPHERECDSA_P256_CURVEBITS            256
+
+#define CIPHERECDSA_P384_PUBLICKEY_SIZE       97
+#define CIPHERECDSA_P384_COORDINATE_SIZE      48
+#define CIPHERECDSA_P384_CURVEBITS            384
+
+#define CIPHERECDSA_P521_PUBLICKEY_SIZE       133
+#define CIPHERECDSA_P521_COORDINATE_SIZE      66
+#define CIPHERECDSA_P521_CURVEBITS            521
+
+// Largest coordinate size across the curves above (P-521): the size used for fixed-length stack buffers
+// that are then only filled/read up to the coordinatesize of the curve actually in use.
+#define CIPHERECDSA_MAXCOORDINATE_SIZE        CIPHERECDSA_P521_COORDINATE_SIZE
 
 
 
@@ -53,7 +66,7 @@ class CIPHERECDSA : public CIPHER
 {
   public:
 
-                                    CIPHERECDSA                       ();
+                                    CIPHERECDSA                       (CIPHERTYPE curvetype = CIPHERTYPE_ECDSA_SECP256R1);
     virtual                        ~CIPHERECDSA                       ();
 
     bool                            SetKey                            (CIPHERKEY* key, bool integritycheck = false);
@@ -82,6 +95,11 @@ class CIPHERECDSA : public CIPHER
     XMPINTEGER                      publickeyX;
     XMPINTEGER                      publickeyY;
     bool                            havepublickey;
+
+    // Per-curve sizing, set by Parameters_Set() from the CIPHERTYPE (P-256/P-384/P-521) given to the constructor.
+    XDWORD                          coordinatesize;
+    XDWORD                          publickeysize;
+    XDWORD                          curvebits;
 };
 
 

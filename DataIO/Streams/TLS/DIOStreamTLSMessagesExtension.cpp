@@ -2587,6 +2587,912 @@ void DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST::Clean()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::~DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::~DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::GetLengthIdentity()
+* @brief      Get the identity opaque length
+* @ingroup    DATAIO
+*
+* @return     XWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::GetLengthIdentity()
+{
+  return lengthidentity;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::SetLengthIdentity(XWORD lengthidentity)
+* @brief      Set the identity opaque length
+* @ingroup    DATAIO
+*
+* @param[in]  lengthidentity : Lengthidentity value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::SetLengthIdentity(XWORD lengthidentity)
+{
+  this->lengthidentity = lengthidentity;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::GetIdentity()
+* @brief      Get the identity opaque
+* @ingroup    DATAIO
+*
+* @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::GetIdentity()
+{
+  return &identity;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::GetObfuscatedTicketAge()
+* @brief      Get the obfuscated ticket age
+* @ingroup    DATAIO
+*
+* @return     XDWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::GetObfuscatedTicketAge()
+{
+  return obfuscatedticketage;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::SetObfuscatedTicketAge(XDWORD obfuscatedticketage)
+* @brief      Set the obfuscated ticket age
+* @ingroup    DATAIO
+*
+* @param[in]  obfuscatedticketage : Obfuscatedticketage value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::SetObfuscatedTicketAge(XDWORD obfuscatedticketage)
+{
+  this->obfuscatedticketage = obfuscatedticketage;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity)
+* @brief      copy to
+* @ingroup    DATAIO
+*
+* @param[in]  identity : Identity pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity)
+{
+  if(!identity)
+    {
+      return false;
+    }
+
+  identity->SetLengthIdentity(lengthidentity);
+  identity->GetIdentity()->Empty();
+  identity->GetIdentity()->Add(this->identity);
+  identity->SetObfuscatedTicketAge(obfuscatedticketage);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity)
+* @brief      copy from
+* @ingroup    DATAIO
+*
+* @param[in]  identity : Identity pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity)
+{
+  if(!identity)
+    {
+      return false;
+    }
+
+  SetLengthIdentity(identity->GetLengthIdentity());
+  this->identity.Empty();
+  this->identity.Add((*identity->GetIdentity()));
+  SetObfuscatedTicketAge(identity->GetObfuscatedTicketAge());
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::SetToBuffer(XBUFFER& buffer, bool showdebug)
+* @brief      Set to buffer
+* @ingroup    DATAIO
+*
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::SetToBuffer(XBUFFER& buffer, bool showdebug)
+{
+  if(identity.IsEmpty() || (identity.GetSize() > 0xFFFF))
+    {
+      return false;
+    }
+
+  lengthidentity = (XWORD)identity.GetSize();
+
+  if(!buffer.Add(lengthidentity))       return false;
+  if(!buffer.Add(identity))             return false;
+  if(!buffer.Add(obfuscatedticketage))  return false;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::GetFromBuffer(XBUFFER& buffer, bool showdebug)
+* @brief      Get from buffer
+* @ingroup    DATAIO
+*
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::GetFromBuffer(XBUFFER& buffer, bool showdebug)
+{
+  if(buffer.GetSize() < (sizeof(XWORD) + sizeof(XDWORD)))
+    {
+      return false;
+    }
+
+  if(!buffer.Extract(lengthidentity)) return false;
+
+  if(!lengthidentity || (buffer.GetSize() < ((XDWORD)lengthidentity + sizeof(XDWORD))))
+    {
+      return false;
+    }
+
+  identity.Delete();
+  identity.Resize(lengthidentity);
+
+  if(buffer.Extract(identity.Get(), 0, lengthidentity) != lengthidentity)
+    {
+      identity.Delete();
+      return false;
+    }
+
+  return buffer.Extract(obfuscatedticketage);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY::Clean()
+{
+  lengthidentity      = 0;
+  obfuscatedticketage = 0;
+
+  identity.Delete();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY()
+{
+  Clean();
+
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::~DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::~DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY()
+{
+  Identities_DeleteAll();
+  Binders_DeleteAll();
+
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_GetLength()
+* @brief      identities  get length
+* @ingroup    DATAIO
+*
+* @return     XWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_GetLength()
+{
+  return identities_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_SetLength(XWORD identities_length)
+* @brief      identities  set length
+* @ingroup    DATAIO
+*
+* @param[in]  identities_length : Identities length value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_SetLength(XWORD identities_length)
+{
+  this->identities_length = identities_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY*>* DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_GetAll()
+* @brief      identities  get all
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY*>* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY*>* DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_GetAll()
+{
+  return &identities;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_Add(DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity)
+* @brief      identities  add
+* @ingroup    DATAIO
+*
+* @param[in]  identity : Identity pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_Add(DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity)
+{
+  if(!identity || identity->GetIdentity()->IsEmpty() || (identity->GetIdentity()->GetSize() > 0xFFFF))
+    {
+      return false;
+    }
+
+  XDWORD entrysize = sizeof(XWORD) + identity->GetIdentity()->GetSize() + sizeof(XDWORD);
+
+  if(((XDWORD)Identities_GetLength() + entrysize) > 0xFFFF)
+    {
+      return false;
+    }
+
+  DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* _identity = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY();
+  if(!_identity)
+    {
+      return false;
+    }
+
+  if(!_identity->CopyFrom(identity))
+    {
+      GEN_DELETE _identity;
+      return false;
+    }
+
+  if(!identities.Add(_identity))
+    {
+      GEN_DELETE _identity;
+      return false;
+    }
+
+  Identities_SetLength((XWORD)(Identities_GetLength() + entrysize));
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_DeleteAll()
+* @brief      identities  GEN_DELETE all
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Identities_DeleteAll()
+{
+  identities.DeleteContents();
+  identities.DeleteAll();
+
+  Identities_SetLength(0);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_GetLength()
+* @brief      binders  get length
+* @ingroup    DATAIO
+*
+* @return     XWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_GetLength()
+{
+  return binders_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_SetLength(XWORD binders_length)
+* @brief      binders  set length
+* @ingroup    DATAIO
+*
+* @param[in]  binders_length : Binders length value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_SetLength(XWORD binders_length)
+{
+  this->binders_length = binders_length;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XBUFFER*>* DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_GetAll()
+* @brief      binders  get all
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<XBUFFER*>* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XBUFFER*>* DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_GetAll()
+{
+  return &binders;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_Add(XBUFFER* binder)
+* @brief      binders  add
+* @ingroup    DATAIO
+*
+* @param[in]  binder : Binder pointer to use. A PskBinderEntry, 32..255 opaque bytes (RFC 8446 4.2.11).
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_Add(XBUFFER* binder)
+{
+  if(!binder || (binder->GetSize() < 32) || (binder->GetSize() > 255))
+    {
+      return false;
+    }
+
+  XDWORD entrysize = sizeof(XBYTE) + binder->GetSize();
+
+  if(((XDWORD)Binders_GetLength() + entrysize) > 0xFFFF)
+    {
+      return false;
+    }
+
+  XBUFFER* _binder = GEN_NEW XBUFFER();
+  if(!_binder)
+    {
+      return false;
+    }
+
+  _binder->Add((*binder));
+
+  if(!binders.Add(_binder))
+    {
+      GEN_DELETE _binder;
+      return false;
+    }
+
+  Binders_SetLength((XWORD)(Binders_GetLength() + entrysize));
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_DeleteAll()
+* @brief      binders  GEN_DELETE all
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Binders_DeleteAll()
+{
+  binders.DeleteContents();
+  binders.DeleteAll();
+
+  Binders_SetLength(0);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY* extension)
+* @brief      copy to
+* @ingroup    DATAIO
+*
+* @param[in]  extension : Extension pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::CopyTo(DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  extension->SetType(GetType());
+  extension->SetLength(GetLength());
+
+  extension->Identities_DeleteAll();
+  extension->Binders_DeleteAll();
+
+  for(XDWORD c=0; c<identities.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity = identities.Get(c);
+      if(identity)
+        {
+          extension->Identities_Add(identity);
+        }
+    }
+
+  for(XDWORD c=0; c<binders.GetSize(); c++)
+    {
+      XBUFFER* binder = binders.Get(c);
+      if(binder)
+        {
+          extension->Binders_Add(binder);
+        }
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY* extension)
+* @brief      copy from
+* @ingroup    DATAIO
+*
+* @param[in]  extension : Extension pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::CopyFrom(DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY* extension)
+{
+  if(!extension)
+    {
+      return false;
+    }
+
+  return extension->CopyTo(this);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::SetToBuffer(XBUFFER& buffer, bool showdebug)
+* @brief      Set to buffer
+* @ingroup    DATAIO
+*
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::SetToBuffer(XBUFFER& buffer, bool showdebug)
+{
+  XBUFFER identitiesbuffer;
+  XBUFFER bindersbuffer;
+
+  if(identities.IsEmpty() || binders.IsEmpty())
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<identities.GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity = identities.Get(c);
+      if(!identity || !identity->SetToBuffer(identitiesbuffer, showdebug))
+        {
+          return false;
+        }
+    }
+
+  for(XDWORD c=0; c<binders.GetSize(); c++)
+    {
+      XBUFFER* binder = binders.Get(c);
+      if(!binder || (binder->GetSize() < 32) || (binder->GetSize() > 255))
+        {
+          return false;
+        }
+
+      if(!bindersbuffer.Add((XBYTE)binder->GetSize()) || !bindersbuffer.Add((*binder)))
+        {
+          return false;
+        }
+    }
+
+  if(identitiesbuffer.IsEmpty() || (identitiesbuffer.GetSize() > 0xFFFF) ||
+     bindersbuffer.IsEmpty()    || (bindersbuffer.GetSize()    > 0xFFFF))
+    {
+      return false;
+    }
+
+  Identities_SetLength((XWORD)identitiesbuffer.GetSize());
+  Binders_SetLength((XWORD)bindersbuffer.GetSize());
+
+  XDWORD totalsize = sizeof(XWORD) + identitiesbuffer.GetSize() + sizeof(XWORD) + bindersbuffer.GetSize();
+
+  if(totalsize > 0xFFFF)
+    {
+      return false;
+    }
+
+  SetLength((XWORD)totalsize);
+
+  if(!DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug)) return false;
+
+  if(!buffer.Add((XWORD)Identities_GetLength())) return false;
+  if(!buffer.Add(identitiesbuffer))               return false;
+  if(!buffer.Add((XWORD)Binders_GetLength()))     return false;
+
+  return buffer.Add(bindersbuffer);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::GetFromBuffer(XBUFFER& buffer, bool showdebug)
+* @brief      Get from buffer
+* @ingroup    DATAIO
+*
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::GetFromBuffer(XBUFFER& buffer, bool showdebug)
+{
+  if(!DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug))
+    {
+      return false;
+    }
+
+  if((GetLength() < (sizeof(XWORD) + sizeof(XWORD))) || (buffer.GetSize() != GetLength()))
+    {
+      return false;
+    }
+
+  Identities_DeleteAll();
+  Binders_DeleteAll();
+
+  if(!buffer.Extract(identities_length) || !identities_length || (buffer.GetSize() < identities_length))
+    {
+      return false;
+    }
+
+  XBUFFER identitiesbuffer;
+  identitiesbuffer.Resize(identities_length);
+
+  if(buffer.Extract(identitiesbuffer.Get(), 0, identities_length) != identities_length)
+    {
+      return false;
+    }
+
+  while(!identitiesbuffer.IsEmpty())
+    {
+      if(identitiesbuffer.GetSize() < sizeof(XWORD))
+        {
+          Identities_DeleteAll();
+          return false;
+        }
+
+      XWORD entrylength = (XWORD)((identitiesbuffer.GetByte(0) << 8) | identitiesbuffer.GetByte(1));
+      XDWORD entrysize  = sizeof(XWORD) + entrylength + sizeof(XDWORD);
+
+      if(!entrylength || (identitiesbuffer.GetSize() < entrysize))
+        {
+          Identities_DeleteAll();
+          return false;
+        }
+
+      XBUFFER entrybuffer;
+      entrybuffer.Resize(entrysize);
+
+      if(identitiesbuffer.Extract(entrybuffer.Get(), 0, entrysize) != entrysize)
+        {
+          Identities_DeleteAll();
+          return false;
+        }
+
+      DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY identity;
+
+      if(!identity.GetFromBuffer(entrybuffer, showdebug) || !entrybuffer.IsEmpty() || !Identities_Add(&identity))
+        {
+          Identities_DeleteAll();
+          return false;
+        }
+    }
+
+  if(identities.IsEmpty() || (buffer.GetSize() < sizeof(XWORD)))
+    {
+      Identities_DeleteAll();
+      return false;
+    }
+
+  if(!buffer.Extract(binders_length) || !binders_length || (buffer.GetSize() != binders_length))
+    {
+      Identities_DeleteAll();
+      return false;
+    }
+
+  while(!buffer.IsEmpty())
+    {
+      if(buffer.GetSize() < sizeof(XBYTE))
+        {
+          Identities_DeleteAll();
+          Binders_DeleteAll();
+          return false;
+        }
+
+      XBYTE binderlength = buffer.GetByte(0);
+
+      if((binderlength < 32) || (buffer.GetSize() < ((XDWORD)sizeof(XBYTE) + binderlength)))
+        {
+          Identities_DeleteAll();
+          Binders_DeleteAll();
+          return false;
+        }
+
+      XBYTE dummy;
+
+      if(!buffer.Extract(dummy))
+        {
+          Identities_DeleteAll();
+          Binders_DeleteAll();
+          return false;
+        }
+
+      XBUFFER binder;
+      binder.Resize(binderlength);
+
+      if(buffer.Extract(binder.Get(), 0, binderlength) != binderlength)
+        {
+          Identities_DeleteAll();
+          Binders_DeleteAll();
+          return false;
+        }
+
+      if(!Binders_Add(&binder))
+        {
+          Identities_DeleteAll();
+          Binders_DeleteAll();
+          return false;
+        }
+    }
+
+  return !identities.IsEmpty() && !binders.IsEmpty();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY::Clean()
+{
+  identities_length = 0;
+  binders_length    = 0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER()
+{
+  Clean();
+
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::~DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::~DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XWORD DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::GetSelectedIdentity()
+* @brief      Get the selected identity index
+* @ingroup    DATAIO
+*
+* @return     XWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::GetSelectedIdentity()
+{
+  return selectedidentity;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::SetSelectedIdentity(XWORD selectedidentity)
+* @brief      Set the selected identity index
+* @ingroup    DATAIO
+*
+* @param[in]  selectedidentity : Selectedidentity value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::SetSelectedIdentity(XWORD selectedidentity)
+{
+  this->selectedidentity = selectedidentity;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::SetToBuffer(XBUFFER& buffer, bool showdebug)
+* @brief      Set to buffer
+* @ingroup    DATAIO
+*
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::SetToBuffer(XBUFFER& buffer, bool showdebug)
+{
+  SetLength(sizeof(XWORD));
+
+  if(!DIOSTREAMTLS_MSG_EXTENSION::SetToBuffer(buffer, showdebug)) return false;
+
+  return buffer.Add(selectedidentity);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::GetFromBuffer(XBUFFER& buffer, bool showdebug)
+* @brief      Get from buffer
+* @ingroup    DATAIO
+*
+* @param[in]  buffer : Buffer to use.
+* @param[in]  showdebug : Showdebug value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::GetFromBuffer(XBUFFER& buffer, bool showdebug)
+{
+  if(!DIOSTREAMTLS_MSG_EXTENSION::GetFromBuffer(buffer, showdebug)) return false;
+  if((GetLength() != sizeof(XWORD)) || (buffer.GetSize() != sizeof(XWORD))) return false;
+  if(!buffer.Extract(selectedidentity)) return false;
+
+  return buffer.IsEmpty();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER::Clean()
+{
+  selectedidentity = 0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN::DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN()
 * @brief      Constructor of class
 * @ingroup    DATAIO
@@ -2780,6 +3686,19 @@ DIOSTREAMTLS_MSG_EXTENSION* DIOSTREAMTLS_MSG_EXTENSION_Create(XWORD type, DIOSTR
                                                                                                                                break;
 
                                                                                                                         default : break;
+                                                                    }
+                                                                  break;
+
+      case DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY          : if(context == DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_CLIENTHELLO)
+                                                                    {
+                                                                      extension = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY();
+                                                                    }
+                                                                   else
+                                                                    {
+                                                                      if(context == DIOSTREAMTLS_MSG_EXTENSION_CONTEXT_SERVERHELLO)
+                                                                        {
+                                                                          extension = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER();
+                                                                        }
                                                                     }
                                                                   break;
 

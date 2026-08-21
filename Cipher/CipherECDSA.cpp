@@ -245,11 +245,11 @@ static bool CIPHERECDSA_PointAddAffine(CIPHERECDSA_POINT& point, XMPINTEGER& aff
 
 
 static bool CIPHERECDSA_PointMultiply(CIPHERECDSA_POINT& point, XMPINTEGER& scalar, XMPINTEGER& affineX,
-                                      XMPINTEGER& affineY, XMPINTEGER& prime)
+                                      XMPINTEGER& affineY, XMPINTEGER& prime, XDWORD curvebits)
 {
   point.isinfinity = true;
 
-  for(int bit=255; bit>=0; bit--)
+  for(int bit=(int)curvebits-1; bit>=0; bit--)
     {
       if(!CIPHERECDSA_PointDouble(point, prime)) return false;
 
@@ -336,7 +336,7 @@ static bool CIPHERECDSA_DERLength(XBYTE* data, XDWORD size, XDWORD& index, XDWOR
 
 
 static bool CIPHERECDSA_DERInteger(XBYTE* data, XDWORD size, XDWORD& index, XMPINTEGER& integer,
-                                   XMPINTEGER& order)
+                                   XMPINTEGER& order, XDWORD maxsize)
 {
   XDWORD length;
   XDWORD offset;
@@ -356,7 +356,7 @@ static bool CIPHERECDSA_DERInteger(XBYTE* data, XDWORD size, XDWORD& index, XMPI
       length--;
     }
 
-  if(!length || (length > CIPHERECDSA_P256_COORDINATE_SIZE) ||
+  if(!length || (length > maxsize) ||
      !integer.ImportFromBinary(&data[offset], length) ||
      (integer.CompareSignedValues(0) <= 0) || (integer.CompareSignedValues(order) >= 0))
     {
@@ -369,22 +369,60 @@ static bool CIPHERECDSA_DERInteger(XBYTE* data, XDWORD size, XDWORD& index, XMPI
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* Curve-selection helpers: map the CIPHERTYPE the constructor was given to the matching public-key type
+* (CIPHERKEYECDSA::GetType()) and the required TLS hash algorithm (RFC 8446 4.2.3 curve/hash pairing), so the
+* rest of the class never has to special-case a curve outside of Parameters_Set().
+* --------------------------------------------------------------------------------------------------------------------*/
+static CIPHERKEYTYPE CIPHERECDSA_ExpectedKeyType(CIPHERTYPE curvetype)
+{
+  switch(curvetype)
+    {
+      case CIPHERTYPE_ECDSA_SECP256R1 : return CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC;
+      case CIPHERTYPE_ECDSA_SECP384R1 : return CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC;
+      case CIPHERTYPE_ECDSA_SECP521R1 : return CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC;
+                                default : break;
+    }
+
+  return CIPHERKEYTYPE_UNKNOWN;
+}
+
+
+static HASHTYPE CIPHERECDSA_RequiredHashType(CIPHERTYPE curvetype)
+{
+  switch(curvetype)
+    {
+      case CIPHERTYPE_ECDSA_SECP256R1 : return HASHTYPE_SHA256;
+      case CIPHERTYPE_ECDSA_SECP384R1 : return HASHTYPE_SHA384;
+      case CIPHERTYPE_ECDSA_SECP521R1 : return HASHTYPE_SHA512;
+                                default : break;
+    }
+
+  return HASHTYPE_NONE;
+}
+
+
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         CIPHERECDSA::CIPHERECDSA() : CIPHER()
+* @fn         CIPHERECDSA::CIPHERECDSA(CIPHERTYPE curvetype) : CIPHER()
 * @brief      Constructor of class
 * @ingroup    CIPHER
 *
+* @param[in]  curvetype : Curve to use (CIPHERTYPE_ECDSA_SECP256R1, _SECP384R1 or _SECP521R1). Defaults to P-256
+*                         for source compatibility with existing default-constructed callers. Any other value
+*                         leaves the cipher unusable: Parameters_Set() (called from SetKey()/KeyPair_Create()/
+*                         SharedSecret_Create()/PublicKey_Check()) fails closed instead of guessing a curve.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-CIPHERECDSA::CIPHERECDSA() : CIPHER()
+CIPHERECDSA::CIPHERECDSA(CIPHERTYPE curvetype) : CIPHER()
 {
   Clean();
 
-  type = CIPHERTYPE_ECDSA_SECP256R1;
+  type = curvetype;
 }
 
 
@@ -405,7 +443,7 @@ CIPHERECDSA::~CIPHERECDSA()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERECDSA::SetKey(CIPHERKEY* key, bool integritycheck)
-* @brief      Set and validate an uncompressed ECDSA P-256 public key
+* @brief      Set and validate an uncompressed ECDSA public key for the curve given to the constructor
 * @ingroup    CIPHER
 *
 * @param[in]  key : Public key to use.
@@ -421,15 +459,14 @@ bool CIPHERECDSA::SetKey(CIPHERKEY* key, bool integritycheck)
 
   havepublickey = false;
 
-  if(!key || (key->GetType() != CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) || !Parameters_Set()) return false;
+  if(!key || (key->GetType() != CIPHERECDSA_ExpectedKeyType(GetType())) || !Parameters_Set()) return false;
 
   ECDSAkey = (CIPHERKEYECDSA*)key;
   keydata  = ECDSAkey->Get();
 
-  if(!keydata || (keydata->GetSize() != CIPHERECDSA_P256_PUBLICKEY_SIZE) || (keydata->GetByte(0) != 0x04) ||
-     !publickeyX.ImportFromBinary(&keydata->Get()[1], CIPHERECDSA_P256_COORDINATE_SIZE) ||
-     !publickeyY.ImportFromBinary(&keydata->Get()[1 + CIPHERECDSA_P256_COORDINATE_SIZE],
-                                  CIPHERECDSA_P256_COORDINATE_SIZE))
+  if(!keydata || (keydata->GetSize() != publickeysize) || (keydata->GetByte(0) != 0x04) ||
+     !publickeyX.ImportFromBinary(&keydata->Get()[1], coordinatesize) ||
+     !publickeyY.ImportFromBinary(&keydata->Get()[1 + coordinatesize], coordinatesize))
     {
       return false;
     }
@@ -449,13 +486,14 @@ bool CIPHERECDSA::SetKey(CIPHERKEY* key, bool integritycheck)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERECDSA::Verify(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash)
-* @brief      Verify an ECDSA P-256 signature encoded as a DER ECDSA-Sig-Value
+* @brief      Verify an ECDSA signature encoded as a DER ECDSA-Sig-Value, for the curve given to the constructor
 * @ingroup    CIPHER
 *
 * @param[in]  input : Signed data.
 * @param[in]  size : Signed data size.
 * @param[in]  signature : DER signature value.
-* @param[in]  hash : Hash algorithm used by the signature.
+* @param[in]  hash : Hash algorithm used by the signature; must match the curve's RFC 8446 4.2.3 pairing
+*                    (SHA-256 for P-256, SHA-384 for P-384, SHA-512 for P-521).
 *
 * @return     bool : true if the signature is valid; otherwise false.
 *
@@ -476,9 +514,9 @@ bool CIPHERECDSA::Verify(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* ha
   CIPHERECDSA_POINT point;
 
   if(!havepublickey || !input || !size || signature.IsEmpty() || !hash ||
-     (hash->GetType() != HASHTYPE_SHA256) || !Signature_Decode(signature, R, S) ||
+     (hash->GetType() != CIPHERECDSA_RequiredHashType(GetType())) || !Signature_Decode(signature, R, S) ||
      !hash->ResetResult() || !hash->Do(input, size) || !hash->GetResult() ||
-     (hash->GetResult()->GetSize() != CIPHERECDSA_P256_COORDINATE_SIZE) ||
+     !hash->GetResult()->GetSize() || (hash->GetResult()->GetSize() > coordinatesize) ||
      !digest.ImportFromBinary(hash->GetResult()->Get(), hash->GetResult()->GetSize()) ||
      !inverseS.ModularInverse(&S, &order) ||
      !multiplication.Multiplication(&digest, &inverseS) || !U1.Module(&U1, &multiplication, &order) ||
@@ -487,7 +525,7 @@ bool CIPHERECDSA::Verify(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* ha
       return false;
     }
 
-  for(int bit=255; bit>=0; bit--)
+  for(int bit=(int)curvebits-1; bit>=0; bit--)
     {
       if(!CIPHERECDSA_PointDouble(point, prime)) return false;
 
@@ -530,11 +568,11 @@ bool CIPHERECDSA::Verify(XBUFFER& input, XBUFFER& signature, HASH* hash)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERECDSA::KeyPair_Create(XBUFFER& privatekey, XBUFFER& publickey)
-* @brief      Create an ephemeral ECDHE key pair for the NIST P-256 group
+* @brief      Create an ephemeral ECDHE key pair for the curve given to the constructor
 * @ingroup    CIPHER
 *
-* @param[out] privatekey : Private scalar encoded in 32 bytes.
-* @param[out] publickey : Uncompressed public point encoded in 65 bytes.
+* @param[out] privatekey : Private scalar encoded in coordinatesize bytes.
+* @param[out] publickey : Uncompressed public point encoded in publickeysize bytes.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -542,12 +580,12 @@ bool CIPHERECDSA::Verify(XBUFFER& input, XBUFFER& signature, HASH* hash)
 bool CIPHERECDSA::KeyPair_Create(XBUFFER& privatekey, XBUFFER& publickey)
 {
   XRAND*           xrand;
-  XBYTE            scalarbuffer[CIPHERECDSA_P256_COORDINATE_SIZE];
+  XBYTE            scalarbuffer[CIPHERECDSA_MAXCOORDINATE_SIZE];
   XMPINTEGER       scalar;
   CIPHERECDSA_POINT point;
   XMPINTEGER       affineX;
   XMPINTEGER       affineY;
-  XBYTE            coordinate[CIPHERECDSA_P256_COORDINATE_SIZE];
+  XBYTE            coordinate[CIPHERECDSA_MAXCOORDINATE_SIZE];
   bool             status = false;
 
   if((&privatekey == &publickey) || !Parameters_Set()) return false;
@@ -562,10 +600,19 @@ bool CIPHERECDSA::KeyPair_Create(XBUFFER& privatekey, XBUFFER& publickey)
 
   if(xrand->Ini())
     {
+      // coordinatesize is a byte count, but curvebits is not always an exact multiple of 8 (P-521: 66 bytes =
+      // 528 bits for a 521-bit curve). Left over top bits must be masked off before the rejection-sampling
+      // check below, or a byte-aligned random draw for P-521 almost never lands under the (521-bit) order and
+      // every one of the 128 attempts can plausibly be rejected.
+      XBYTE topbytemask = (XBYTE)(0xFF >> (((XDWORD)coordinatesize * 8) - curvebits));
+
       for(int attempt=0; attempt<128; attempt++)
         {
-          if(!xrand->Generate(scalarbuffer, sizeof(scalarbuffer))) break;
-          if(!scalar.ImportFromBinary(scalarbuffer, sizeof(scalarbuffer))) break;
+          if(!xrand->Generate(scalarbuffer, coordinatesize)) break;
+
+          scalarbuffer[0] &= topbytemask;
+
+          if(!scalar.ImportFromBinary(scalarbuffer, coordinatesize)) break;
 
           if((scalar.CompareSignedValues(0) > 0) && (scalar.CompareSignedValues(order) < 0))
             {
@@ -579,14 +626,14 @@ bool CIPHERECDSA::KeyPair_Create(XBUFFER& privatekey, XBUFFER& publickey)
 
   if(status)
     {
-      status = CIPHERECDSA_PointMultiply(point, scalar, generatorX, generatorY, prime) &&
+      status = CIPHERECDSA_PointMultiply(point, scalar, generatorX, generatorY, prime, curvebits) &&
                CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) &&
-               privatekey.Add(scalarbuffer, sizeof(scalarbuffer)) &&
+               privatekey.Add(scalarbuffer, coordinatesize) &&
                publickey.Add((XBYTE)0x04) &&
-               affineX.ExportToBinary(coordinate, sizeof(coordinate)) &&
-               publickey.Add(coordinate, sizeof(coordinate)) &&
-               affineY.ExportToBinary(coordinate, sizeof(coordinate)) &&
-               publickey.Add(coordinate, sizeof(coordinate));
+               affineX.ExportToBinary(coordinate, coordinatesize) &&
+               publickey.Add(coordinate, coordinatesize) &&
+               affineY.ExportToBinary(coordinate, coordinatesize) &&
+               publickey.Add(coordinate, coordinatesize);
     }
 
   memset(scalarbuffer, 0, sizeof(scalarbuffer));
@@ -606,12 +653,13 @@ bool CIPHERECDSA::KeyPair_Create(XBUFFER& privatekey, XBUFFER& publickey)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERECDSA::SharedSecret_Create(XBUFFER& privatekey, XBUFFER& publickey, XBUFFER& sharedsecret)
-* @brief      Calculate the ECDHE P-256 shared secret from a private scalar and a validated peer point
+* @brief      Calculate the ECDHE shared secret from a private scalar and a validated peer point, for the curve
+*             given to the constructor
 * @ingroup    CIPHER
 *
-* @param[in]  privatekey : Private scalar encoded in 32 bytes.
-* @param[in]  publickey : Peer uncompressed public point encoded in 65 bytes.
-* @param[out] sharedsecret : X coordinate of the shared point encoded in 32 bytes.
+* @param[in]  privatekey : Private scalar encoded in coordinatesize bytes.
+* @param[in]  publickey : Peer uncompressed public point encoded in publickeysize bytes.
+* @param[out] sharedsecret : X coordinate of the shared point encoded in coordinatesize bytes.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -624,29 +672,28 @@ bool CIPHERECDSA::SharedSecret_Create(XBUFFER& privatekey, XBUFFER& publickey, X
   CIPHERECDSA_POINT point;
   XMPINTEGER       affineX;
   XMPINTEGER       affineY;
-  XBYTE            secret[CIPHERECDSA_P256_COORDINATE_SIZE];
+  XBYTE            secret[CIPHERECDSA_MAXCOORDINATE_SIZE];
   bool             status;
 
   sharedsecret.Delete();
   memset(secret, 0, sizeof(secret));
 
   if((&privatekey == &sharedsecret) || (&publickey == &sharedsecret) ||
-     !Parameters_Set() || (privatekey.GetSize() != CIPHERECDSA_P256_COORDINATE_SIZE) ||
-     (publickey.GetSize() != CIPHERECDSA_P256_PUBLICKEY_SIZE) || (publickey.GetByte(0) != 0x04) ||
+     !Parameters_Set() || (privatekey.GetSize() != coordinatesize) ||
+     (publickey.GetSize() != publickeysize) || (publickey.GetByte(0) != 0x04) ||
      !scalar.ImportFromBinary(privatekey.Get(), privatekey.GetSize()) ||
      (scalar.CompareSignedValues(0) <= 0) || (scalar.CompareSignedValues(order) >= 0) ||
-     !peerX.ImportFromBinary(&publickey.Get()[1], CIPHERECDSA_P256_COORDINATE_SIZE) ||
-     !peerY.ImportFromBinary(&publickey.Get()[1 + CIPHERECDSA_P256_COORDINATE_SIZE],
-                             CIPHERECDSA_P256_COORDINATE_SIZE) ||
+     !peerX.ImportFromBinary(&publickey.Get()[1], coordinatesize) ||
+     !peerY.ImportFromBinary(&publickey.Get()[1 + coordinatesize], coordinatesize) ||
      !CIPHERECDSA_PointCheck(peerX, peerY, prime, coefficientA, coefficientB))
     {
       return false;
     }
 
-  status = CIPHERECDSA_PointMultiply(point, scalar, peerX, peerY, prime) &&
+  status = CIPHERECDSA_PointMultiply(point, scalar, peerX, peerY, prime, curvebits) &&
            CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) &&
-           affineX.ExportToBinary(secret, sizeof(secret)) &&
-           sharedsecret.Add(secret, sizeof(secret));
+           affineX.ExportToBinary(secret, coordinatesize) &&
+           sharedsecret.Add(secret, coordinatesize);
 
   memset(secret, 0, sizeof(secret));
 
@@ -659,10 +706,10 @@ bool CIPHERECDSA::SharedSecret_Create(XBUFFER& privatekey, XBUFFER& publickey, X
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERECDSA::PublicKey_Check(XBUFFER& publickey)
-* @brief      Validate an uncompressed NIST P-256 public point
+* @brief      Validate an uncompressed public point on the curve given to the constructor
 * @ingroup    CIPHER
 *
-* @param[in]  publickey : Uncompressed point encoded in 65 bytes.
+* @param[in]  publickey : Uncompressed point encoded in publickeysize bytes.
 *
 * @return     bool : true if the point is valid; otherwise false.
 *
@@ -672,11 +719,10 @@ bool CIPHERECDSA::PublicKey_Check(XBUFFER& publickey)
   XMPINTEGER X;
   XMPINTEGER Y;
 
-  if(!Parameters_Set() || (publickey.GetSize() != CIPHERECDSA_P256_PUBLICKEY_SIZE) ||
+  if(!Parameters_Set() || (publickey.GetSize() != publickeysize) ||
      (publickey.GetByte(0) != 0x04) ||
-     !X.ImportFromBinary(&publickey.Get()[1], CIPHERECDSA_P256_COORDINATE_SIZE) ||
-     !Y.ImportFromBinary(&publickey.Get()[1 + CIPHERECDSA_P256_COORDINATE_SIZE],
-                         CIPHERECDSA_P256_COORDINATE_SIZE))
+     !X.ImportFromBinary(&publickey.Get()[1], coordinatesize) ||
+     !Y.ImportFromBinary(&publickey.Get()[1 + coordinatesize], coordinatesize))
     {
       return false;
     }
@@ -688,21 +734,65 @@ bool CIPHERECDSA::PublicKey_Check(XBUFFER& publickey)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERECDSA::Parameters_Set()
-* @brief      Set the NIST P-256 domain parameters
+* @brief      Set the NIST domain parameters for the curve given to the constructor
 * @note       INTERNAL
 * @ingroup    CIPHER
 *
-* @return     bool : true if the parameters are available; otherwise false.
+* @return     bool : true if the parameters are available; otherwise false (curve not one of the three supported).
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERECDSA::Parameters_Set()
 {
-  return prime.SetFromString(16, __L("FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF")) &&
-         coefficientA.SetFromString(16, __L("FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC")) &&
-         coefficientB.SetFromString(16, __L("5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B")) &&
-         generatorX.SetFromString(16, __L("6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296")) &&
-         generatorY.SetFromString(16, __L("4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5")) &&
-         order.SetFromString(16, __L("FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551"));
+  switch(GetType())
+    {
+      case CIPHERTYPE_ECDSA_SECP256R1 :
+
+        coordinatesize = CIPHERECDSA_P256_COORDINATE_SIZE;
+        publickeysize  = CIPHERECDSA_P256_PUBLICKEY_SIZE;
+        curvebits      = CIPHERECDSA_P256_CURVEBITS;
+
+        return prime.SetFromString(16, __L("FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF")) &&
+               coefficientA.SetFromString(16, __L("FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC")) &&
+               coefficientB.SetFromString(16, __L("5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B")) &&
+               generatorX.SetFromString(16, __L("6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296")) &&
+               generatorY.SetFromString(16, __L("4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5")) &&
+               order.SetFromString(16, __L("FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551"));
+
+      // NIST P-384 (secp384r1). Parameters per FIPS 186-4 / SEC 2, cross-checked against
+      // `openssl ecparam -name secp384r1 -param_enc explicit -text`.
+      case CIPHERTYPE_ECDSA_SECP384R1 :
+
+        coordinatesize = CIPHERECDSA_P384_COORDINATE_SIZE;
+        publickeysize  = CIPHERECDSA_P384_PUBLICKEY_SIZE;
+        curvebits      = CIPHERECDSA_P384_CURVEBITS;
+
+        return prime.SetFromString(16, __L("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFF")) &&
+               coefficientA.SetFromString(16, __L("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFC")) &&
+               coefficientB.SetFromString(16, __L("B3312FA7E23EE7E4988E056BE3F82D19181D9C6EFE8141120314088F5013875AC656398D8A2ED19D2A85C8EDD3EC2AEF")) &&
+               generatorX.SetFromString(16, __L("AA87CA22BE8B05378EB1C71EF320AD746E1D3B628BA79B9859F741E082542A385502F25DBF55296C3A545E3872760AB7")) &&
+               generatorY.SetFromString(16, __L("3617DE4A96262C6F5D9E98BF9292DC29F8F41DBD289A147CE9DA3113B5F0B8C00A60B1CE1D7E819D7A431D7C90EA0E5F")) &&
+               order.SetFromString(16, __L("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC7634D81F4372DDF581A0DB248B0A77AECEC196ACCC52973"));
+
+      // NIST P-521 (secp521r1). Parameters per FIPS 186-4 / SEC 2, cross-checked against
+      // `openssl ecparam -name secp521r1 -param_enc explicit -text`. The 521-bit field is encoded in 66 bytes,
+      // with the top byte only carrying bit 0 (0x01) of the value.
+      case CIPHERTYPE_ECDSA_SECP521R1 :
+
+        coordinatesize = CIPHERECDSA_P521_COORDINATE_SIZE;
+        publickeysize  = CIPHERECDSA_P521_PUBLICKEY_SIZE;
+        curvebits      = CIPHERECDSA_P521_CURVEBITS;
+
+        return prime.SetFromString(16, __L("01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) &&
+               coefficientA.SetFromString(16, __L("01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC")) &&
+               coefficientB.SetFromString(16, __L("0051953EB9618E1C9A1F929A21A0B68540EEA2DA725B99B315F3B8B489918EF109E156193951EC7E937B1652C0BD3BB1BF073573DF883D2C34F1EF451FD46B503F00")) &&
+               generatorX.SetFromString(16, __L("00C6858E06B70404E9CD9E3ECB662395B4429C648139053FB521F828AF606B4D3DBAA14B5E77EFE75928FE1DC127A2FFA8DE3348B3C1856A429BF97E7E31C2E5BD66")) &&
+               generatorY.SetFromString(16, __L("011839296A789A3BC0045C8A5FB42C7D1BD998F54449579B446817AFBD17273E662C97EE72995EF42640C550B9013FAD0761353C7086A272C24088BE94769FD16650")) &&
+               order.SetFromString(16, __L("01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA51868783BF2F966B7FCC0148F709A5D03BB5C9B8899C47AEBB6FB71E91386409"));
+
+                                default : break;
+    }
+
+  return false;
 }
 
 
@@ -745,8 +835,8 @@ bool CIPHERECDSA::Signature_Decode(XBUFFER& signature, XMPINTEGER& R, XMPINTEGER
 
   if(!data || !size || (data[index++] != 0x30) ||
      !CIPHERECDSA_DERLength(data, size, index, sequencelength) || (sequencelength != (size - index)) ||
-     !CIPHERECDSA_DERInteger(data, size, index, R, order) ||
-     !CIPHERECDSA_DERInteger(data, size, index, S, order))
+     !CIPHERECDSA_DERInteger(data, size, index, R, order, coordinatesize) ||
+     !CIPHERECDSA_DERInteger(data, size, index, S, order, coordinatesize))
     {
       return false;
     }
@@ -765,7 +855,10 @@ bool CIPHERECDSA::Signature_Decode(XBUFFER& signature, XMPINTEGER& R, XMPINTEGER
 * --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERECDSA::Clean()
 {
-  havepublickey = false;
+  havepublickey  = false;
+  coordinatesize = 0;
+  publickeysize  = 0;
+  curvebits      = 0;
 }
 
 

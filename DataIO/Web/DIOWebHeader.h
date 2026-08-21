@@ -104,8 +104,11 @@ enum DIOWEBHEADER_METHOD
 
 #define DIOWEBHEADER_CONTENT_LENGTH                       __L("Content-Length")
 #define DIOWEBHEADER_TRANSFER_ENCODING                    __L("Transfer-Encoding")
+#define DIOWEBHEADER_CONTENT_ENCODING                     __L("Content-Encoding")
+#define DIOWEBHEADER_ACCEPT_ENCODING                      __L("Accept-Encoding")
 #define DIOWEBHEADER_ETAG                                 __L("ETag")
 #define DIOWEBHEADER_WWW_AUTHENTICATE                     __L("WWW-Authenticate")
+#define DIOWEBHEADER_LOCATION                             __L("Location")
 
 #define DIOWEBHEADER_MAXLINE                              1024
 

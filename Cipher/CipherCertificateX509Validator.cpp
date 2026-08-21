@@ -107,6 +107,13 @@ bool CIPHERCERTIFICATEX509VALIDATOR::Validate(XVECTOR<XBUFFER*>* certificatechai
       return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDPARAMETER);
     }
 
+  // Reject an oversized certificate_list before decoding a single certificate: a malicious server could otherwise
+  // force unbounded CPU/memory work with a chain that was always going to be rejected as too long.
+  if(certificatechain->GetSize() > CIPHERCERTIFICATEX509VALIDATOR_MAXCHAINSIZE)
+    {
+      return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_PATHLENGTH);
+    }
+
   for(XDWORD c=0; c<certificatechain->GetSize(); c++)
     {
       XBUFFER* certificateDER = certificatechain->Get(c);
@@ -382,7 +389,9 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSignatureAlgorithmSupported(CIPHERCERTIFI
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION : return true;
-      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256         : return true;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256         :
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384         :
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512         : return true;
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS               : return (certificate->GetRSASSAPSSHashType() !=
                                                                                   CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN);
                                                                     default : break;

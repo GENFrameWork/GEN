@@ -59,7 +59,7 @@
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLSSESSION::DIOSTREAMTLSSESSION()
+DIOSTREAMTLSSESSION::DIOSTREAMTLSSESSION() : keyexchangep256(CIPHERTYPE_ECDSA_SECP256R1)
 {
   Clean();
 }

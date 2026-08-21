@@ -39,6 +39,11 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
+#define CIPHERCERTIFICATEX509VALIDATOR_MAXCHAINSIZE           10                // Hard cap on the certificate_list size, to bound
+                                                                                 // decoding work before any check has run (RFC 8446
+                                                                                 // does not limit it; a real chain rarely exceeds 4-5).
+
+
 enum CIPHERCERTIFICATEX509VALIDATOR_ERROR
 {
   CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE                         = 0 ,

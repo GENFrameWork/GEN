@@ -48,6 +48,9 @@
 #ifdef COMPRESS_GZ_ACTIVE
 #include "CompressGZ.h"
 #endif
+#ifdef COMPRESS_DEFLATE_ACTIVE
+#include "CompressDeflate.h"
+#endif
 
 
 
@@ -127,7 +130,12 @@ COMPRESSBASE* COMPRESSMANAGER::Create(COMPRESSBASE_TYPE type)
       #endif
 
       #ifdef COMPRESS_GZ_ACTIVE
-      case COMPRESSBASE_TYPE_GZ       : compress = GEN_NEW COMPRESS_GZ();         
+      case COMPRESSBASE_TYPE_GZ       : compress = GEN_NEW COMPRESS_GZ();
+                                        break;
+      #endif
+
+      #ifdef COMPRESS_DEFLATE_ACTIVE
+      case COMPRESSBASE_TYPE_DEFLATE  : compress = GEN_NEW COMPRESS_DEFLATE();
                                         break;
       #endif
                             default   : compress = GEN_NEW COMPRESSBASE();        break;

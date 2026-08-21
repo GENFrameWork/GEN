@@ -972,11 +972,11 @@ int CIPHERCERTIFICATEX509_ID::Compare(CIPHERCERTIFICATEX509_ID& certificateID, b
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509_ID::CopyTo(CIPHERCERTIFICATEX509_ID* certificateID)
 {
-  if(certificateID)
+  if(!certificateID)
     {
       return false;
     }
-  
+
   if(!certificateID->GetCountryName()->Set(GetCountryName()->Get()))
     {
       return false;
@@ -1036,11 +1036,11 @@ bool CIPHERCERTIFICATEX509_ID::CopyTo(CIPHERCERTIFICATEX509_ID& certificateID)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509_ID::CopyFrom(CIPHERCERTIFICATEX509_ID* certificateID)
 {
-  if(certificateID)
+  if(!certificateID)
     {
       return false;
     }
-  
+
   if(!GetCountryName()->Set(certificateID->GetCountryName()->Get()))
     {
       return false;
@@ -1916,13 +1916,44 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
     }
    else if(!publickeyalgorithmOID.Compare(__L("1.2.840.10045.2.1"), false))
     {
-      XSTRING publickeycurveOID;
+      // id-ecPublicKey: the actual curve comes from the ASN.1 parameters (a namedCurve OID). Only the three
+      // NIST curves CIPHERECDSA can verify are accepted here; any other named curve is rejected up front
+      // instead of being stored as a public key nothing can ever validate.
+      XSTRING       publickeycurveOID;
+      CIPHERTYPE    curvetype;
+      CIPHERKEYTYPE curvekeytype;
+      XDWORD        curvepublickeysize;
 
       if((publickeyalgorithmparameters.tag != 0x06) ||
-         !CIPHERCERTIFICATEX509_DER_OIDToString(publickeyalgorithmparameters, publickeycurveOID) ||
-         publickeycurveOID.Compare(__L("1.2.840.10045.3.1.7"), false) ||
-         (publickeybits.size != (CIPHERECDSA_P256_PUBLICKEY_SIZE + 1)) ||
-         (publickeybits.data[1] != 0x04))
+         !CIPHERCERTIFICATEX509_DER_OIDToString(publickeyalgorithmparameters, publickeycurveOID))
+        {
+          return false;
+        }
+
+      if(!publickeycurveOID.Compare(__L("1.2.840.10045.3.1.7"), false))            // secp256r1 / prime256v1
+        {
+          curvetype          = CIPHERTYPE_ECDSA_SECP256R1;
+          curvekeytype       = CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC;
+          curvepublickeysize = CIPHERECDSA_P256_PUBLICKEY_SIZE;
+        }
+       else if(!publickeycurveOID.Compare(__L("1.3.132.0.34"), false))             // secp384r1
+        {
+          curvetype          = CIPHERTYPE_ECDSA_SECP384R1;
+          curvekeytype       = CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC;
+          curvepublickeysize = CIPHERECDSA_P384_PUBLICKEY_SIZE;
+        }
+       else if(!publickeycurveOID.Compare(__L("1.3.132.0.35"), false))             // secp521r1
+        {
+          curvetype          = CIPHERTYPE_ECDSA_SECP521R1;
+          curvekeytype       = CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC;
+          curvepublickeysize = CIPHERECDSA_P521_PUBLICKEY_SIZE;
+        }
+       else
+        {
+          return false;
+        }
+
+      if((publickeybits.size != (curvepublickeysize + 1)) || (publickeybits.data[1] != 0x04))
         {
           return false;
         }
@@ -1933,10 +1964,10 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
           return false;
         }
 
-      ECDSApublickey->SetType(CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC);
+      ECDSApublickey->SetType(curvekeytype);
 
-      CIPHERECDSA ECDSA;
-      if(!ECDSApublickey->Set((XBYTE*)&publickeybits.data[1], CIPHERECDSA_P256_PUBLICKEY_SIZE) ||
+      CIPHERECDSA ECDSA(curvetype);
+      if(!ECDSApublickey->Set((XBYTE*)&publickeybits.data[1], curvepublickeysize) ||
          !ECDSA.SetKey(ECDSApublickey, true) || !SetPublicCipherKey(ECDSApublickey))
         {
           GEN_DELETE ECDSApublickey;
@@ -2590,8 +2621,26 @@ bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
   if((issuerpublickey->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) &&
      (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256))
     {
-      CIPHERECDSA ECDSA;
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP256R1);
       HASHSHA2    hash(HASHSHA2TYPE_256);
+
+      return ECDSA.SetKey(issuerpublickey, true) && ECDSA.Verify(tbsdata, signature, &hash);
+    }
+
+  if((issuerpublickey->GetType() == CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC) &&
+     (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384))
+    {
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP384R1);
+      HASHSHA2    hash(HASHSHA2TYPE_384);
+
+      return ECDSA.SetKey(issuerpublickey, true) && ECDSA.Verify(tbsdata, signature, &hash);
+    }
+
+  if((issuerpublickey->GetType() == CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC) &&
+     (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512))
+    {
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP521R1);
+      HASHSHA2    hash(HASHSHA2TYPE_512);
 
       return ECDSA.SetKey(issuerpublickey, true) && ECDSA.Verify(tbsdata, signature, &hash);
     }

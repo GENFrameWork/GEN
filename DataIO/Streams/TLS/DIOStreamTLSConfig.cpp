@@ -332,6 +332,8 @@ bool DIOSTREAMTLSCONFIG::CertificateSignatureScheme_Add(XWORD signaturescheme)
   switch(signaturescheme)
     {
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 :
@@ -492,11 +494,11 @@ bool DIOSTREAMTLSCONFIG::TrustedRoot_Add(XBUFFER& root)
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSTREAMTLSCONFIG::TrustedRoots_AddDefaults()
-* @brief      Add the supported RSA trust anchors from the embedded GEN CA bundle
+* @brief      Add the supported RSA/ECDSA-P256 trust anchors from the embedded GEN CA bundle
 * @ingroup    DATAIO
-* 
+*
 * @return     bool : true if at least one trust anchor is added; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::TrustedRoots_AddDefaults()
 {
@@ -513,8 +515,14 @@ bool DIOSTREAMTLSCONFIG::TrustedRoots_AddDefaults()
         {
           CIPHERCERTIFICATEX509 root;
 
-          if(root.Decode((*rootDER)) && root.IsCertificateAuthority() &&
-             root.GetPublicCipherKey() && (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_RSA_PUBLIC))
+          // Only load a root as a trust anchor when its key type is one CIPHERCERTIFICATEX509VALIDATOR can actually
+          // verify a chain signature against (see VerifySignature()): RSA of any size, or ECDSA on P-256/P-384/P-521.
+          // Silently admitting a root whose signature can never be checked would be worse than excluding it.
+          if(root.Decode((*rootDER)) && root.IsCertificateAuthority() && root.GetPublicCipherKey() &&
+             ((root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_RSA_PUBLIC) ||
+              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) ||
+              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC) ||
+              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC)))
             {
               if(!TrustedRoot_Add((*rootDER)))
                 {
@@ -760,6 +768,9 @@ void DIOSTREAMTLSCONFIG::Clean()
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512);
 
   ApplicationProtocols_Delete();
 
