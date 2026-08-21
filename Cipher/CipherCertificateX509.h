@@ -66,6 +66,15 @@ enum CIPHERCERTIFICATEX509_ALGORITHM_TYPE
 };
 
 
+enum CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE
+{
+  CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN       = 0 ,
+  CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256            ,
+  CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384            ,
+  CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512            ,
+};
+
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -118,6 +127,8 @@ class CIPHERCERTIFICATEX509
     CIPHERCERTIFICATEX509_ALGORITHM_TYPE    GetAlgorithmType                        ();
     bool                                    SetAlgorithmType                        (XCHAR* OID);
     XSTRING*                                GetAlgorithmTypeStr                     ();
+    CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE GetRSASSAPSSHashType                 ();
+    XDWORD                                  GetRSASSAPSSSaltSize                    ();
 
     CIPHERCERTIFICATEX509_ID*               GetIssuerID                             ();  
 
@@ -188,6 +199,8 @@ class CIPHERCERTIFICATEX509
 
     CIPHERCERTIFICATEX509_ALGORITHM_TYPE    algorithmtype;
     XSTRING                                 algorithmtypestr;
+    CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE RSASSAPSShashtype;
+    XDWORD                                  RSASSAPSSsaltsize;
 
     CIPHERCERTIFICATEX509_ID                issuerID;
     
@@ -232,7 +245,6 @@ class CIPHERCERTIFICATEX509
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

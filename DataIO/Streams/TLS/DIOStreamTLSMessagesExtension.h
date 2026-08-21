@@ -45,7 +45,9 @@
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_EMS                   0x0017 // 1.2	  Extended Mster Secret 
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SESSIONTICKET	        0x0023 // 1.2	  Ticket
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDVERSIONS	    0x002b // 1.3	  TLS Versions
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_COOKIE                 0x002c // 1.3   HelloRetryRequest cookie
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PSKKEYEXCHANGEMODES	  0x002d // 1.3	  Mode PSK
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMSCERT 0x0032 // 1.2+  X.509 certificate signatures
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE	            0x0033 // 1.3	  Public Key                                                                    
 
 
@@ -375,6 +377,15 @@ class DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS : public DIOSTREAMTLS_MSG_E
 };
 
 
+class DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT : public DIOSTREAMTLS_MSG_EXTENSION_LIST<XWORD, XWORD>
+{
+  public:
+                                                          DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT();
+    virtual                                              ~DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT();
+
+};
+
+
 class DIOSTREAMTLS_MSG_EXTENSION_ALPN : public DIOSTREAMTLS_MSG_EXTENSION
 {
   public:
@@ -385,6 +396,9 @@ class DIOSTREAMTLS_MSG_EXTENSION_ALPN : public DIOSTREAMTLS_MSG_EXTENSION
     void                                                  List_SetLength                                    (XWORD list_length);
 
     XBUFFER*                                              List_GetBuffer                                    (); 
+    XDWORD                                                List_GetNProtocols                                ();
+    bool                                                  List_Get                                          (XDWORD index, DIOSTREAMTLS_ALPN_TYPE& alpn_type);
+    bool                                                  List_Is                                           (DIOSTREAMTLS_ALPN_TYPE alpn_type);
     bool                                                  List_Add                                          (DIOSTREAMTLS_ALPN_TYPE alpn_type);
     bool                                                  List_DeleteAll                                    ();
 
@@ -584,4 +598,3 @@ class DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN : public DIOSTREAMTLS_MSG_EXTENSION
 
 DIOSTREAMTLS_MSG_EXTENSION*                              DIOSTREAMTLS_MSG_EXTENSION_Create                 (XWORD type, DIOSTREAMTLS_MSG_EXTENSION_CONTEXT context);
 bool                                                     DIOSTREAMTLS_MSG_EXTENSION_Extract                (XBUFFER& buffer, DIOSTREAMTLS_MSG_EXTENSION_CONTEXT context, DIOSTREAMTLS_MSG_EXTENSION*& extension);
-

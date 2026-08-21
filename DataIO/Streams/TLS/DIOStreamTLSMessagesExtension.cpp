@@ -36,6 +36,8 @@
 
 #include "DIOStreamTLSMessagesExtension.h"
 
+#include <string.h>
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -936,6 +938,36 @@ DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS::~DIOSTREAMTLS_MSG_EXTENSION_SIGN
 
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT::DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT::DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT()
+{
+  SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMSCERT);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT::~DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT::~DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT()
+{
+
+}
+
+
+
+
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -1014,6 +1046,120 @@ XBUFFER* DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetBuffer()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetNProtocols()
+* @brief      Get the number of encoded ALPN protocol names
+* @ingroup    DATAIO
+*
+* @return     XDWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_GetNProtocols()
+{
+  XDWORD index = 0;
+  XDWORD count = 0;
+
+  while(index < list_buffer.GetSize())
+    {
+      XBYTE protocolsize = list_buffer.GetByte(index);
+
+      if(!protocolsize || ((index + sizeof(XBYTE) + protocolsize) > list_buffer.GetSize())) return 0;
+
+      index += sizeof(XBYTE) + protocolsize;
+      count++;
+    }
+
+  return count;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, DIOSTREAMTLS_ALPN_TYPE& alpn_type)
+* @brief      Get one supported ALPN protocol name
+* @ingroup    DATAIO
+*
+* @param[in]  index : Protocol index.
+* @param[out] alpn_type : Decoded application protocol value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, DIOSTREAMTLS_ALPN_TYPE& alpn_type)
+{
+  static XBYTE HTTP11[] = { 0x68, 0x74, 0x74, 0x70, 0x2F, 0x31, 0x2E, 0x31 };
+  static XBYTE HTTP2[]  = { 0x68, 0x32 };
+  static XBYTE HTTP3[]  = { 0x68, 0x33 };
+
+  XDWORD position = 0;
+  XDWORD count    = 0;
+
+  alpn_type = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+
+  while(position < list_buffer.GetSize())
+    {
+      XBYTE protocolsize = list_buffer.GetByte(position);
+
+      if(!protocolsize || ((position + sizeof(XBYTE) + protocolsize) > list_buffer.GetSize())) return false;
+
+      if(count == index)
+        {
+          XBYTE* protocol = &list_buffer.Get()[position + sizeof(XBYTE)];
+
+          if((protocolsize == sizeof(HTTP11)) && !memcmp(protocol, HTTP11, sizeof(HTTP11)))
+            {
+              alpn_type = DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1;
+              return true;
+            }
+
+          if((protocolsize == sizeof(HTTP2)) && !memcmp(protocol, HTTP2, sizeof(HTTP2)))
+            {
+              alpn_type = DIOSTREAMTLS_ALPN_TYPE_HTTP_2;
+              return true;
+            }
+
+          if((protocolsize == sizeof(HTTP3)) && !memcmp(protocol, HTTP3, sizeof(HTTP3)))
+            {
+              alpn_type = DIOSTREAMTLS_ALPN_TYPE_HTTP_3;
+              return true;
+            }
+
+          return false;
+        }
+
+      position += sizeof(XBYTE) + protocolsize;
+      count++;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Is(DIOSTREAMTLS_ALPN_TYPE alpn_type)
+* @brief      Check whether an ALPN protocol name is present
+* @ingroup    DATAIO
+*
+* @param[in]  alpn_type : Application protocol value.
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Is(DIOSTREAMTLS_ALPN_TYPE alpn_type)
+{
+  for(XDWORD c=0; c<List_GetNProtocols(); c++)
+    {
+      DIOSTREAMTLS_ALPN_TYPE protocol;
+
+      if(List_Get(c, protocol) && (protocol == alpn_type)) return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
 * @brief      list  add
@@ -1029,10 +1175,11 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
   XBYTE* data = NULL;
   XDWORD size = 0;
 
+  if(List_Is(alpn_type)) return false;
+
   switch(alpn_type)
     {  
-      case DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1 : 
-                             default       :  { static XBYTE value[] = { 0x08, 0x68, 0x74, 0x74, 0x70, 0x2F, 0x31, 0x2E, 0x31 };
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1 :  { static XBYTE value[] = { 0x08, 0x68, 0x74, 0x74, 0x70, 0x2F, 0x31, 0x2E, 0x31 };
                                                 data = value;
                                                 size = sizeof(value);
                                               }
@@ -1048,7 +1195,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
                                                 data = value;
                                                 size = sizeof(value);
                                               }
-                                              break;      
+                                              break;
+
+                                     default : return false;
     }
 
   if(!data || !size || ((list_buffer.GetSize() + size) > (0xFFFF - sizeof(XWORD))))
@@ -2589,6 +2738,9 @@ DIOSTREAMTLS_MSG_EXTENSION* DIOSTREAMTLS_MSG_EXTENSION_Create(XWORD type, DIOSTR
 
       case DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMS   : extension = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS();
                                                                   break;
+
+      case DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMSCERT : extension = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT();
+                                                                    break;
 
       case DIOSTREAMTLS_MSG_EXTENSION_TYPE_ALPN                  : extension = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_ALPN();
                                                                   break;

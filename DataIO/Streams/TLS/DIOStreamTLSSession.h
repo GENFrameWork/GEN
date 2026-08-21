@@ -32,6 +32,7 @@
 
 #include "XBuffer.h"
 
+#include "CipherECDSA.h"
 #include "CipherECDSAX25519.h"
 
 #include "DIOStreamTLSKeySchedule.h"
@@ -40,6 +41,11 @@
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
+
+
+#define DIOSTREAMTLSSESSION_MAXHANDSHAKESIZE                    DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE
+#define DIOSTREAMTLSSESSION_MAXRECORDINPUTSIZE                  (4*1024*1024)
+#define DIOSTREAMTLSSESSION_MAXKEYUPDATES                       1024
 
 
 enum DIOSTREAMTLSSESSION_RESULT
@@ -79,6 +85,10 @@ class DIOSTREAMTLSSESSION
     DIOSTREAMTLSKEYSCHEDULE*                GetKeySchedule                                   ();
     DIOSTREAMTLSRECORD*                     GetRecord                                         ();
     CIPHERECDSAX25519*                      GetKeyExchange                                    ();
+    bool                                    KeyExchange_Generate                              (XWORD group, XBUFFER& publickey);
+    bool                                    KeyExchange_SharedSecret                          (XWORD group, XBUFFER& publickey, XBUFFER& sharedsecret);
+    void                                    KeyExchange_Delete                                ();
+    bool                                    CipherSuite_Select                                (XWORD ciphersuite);
 
     XBUFFER*                                GetRecordInput                                    ();
     bool                                    RecordInput_Add                                  (XBYTE* data, XDWORD size);
@@ -103,6 +113,8 @@ class DIOSTREAMTLSSESSION
     bool                                    ApplicationData_Protect                          (XBUFFER& data, XBUFFER& records);
     XDWORD                                  ApplicationData_Read                             (XBYTE* data, XDWORD size);
     DIOSTREAMTLSSESSION_RESULT              ApplicationData_Process                          ();
+    bool                                    KeyUpdate_Create                                 (bool requestpeer, XBUFFER& records);
+    bool                                    PostHandshakeOutput_Extract                       (XBUFFER& records);
 
     bool                                    Alert_Create                                     (DIOSTREAMTLS_ALERT_LEVEL level, DIOSTREAMTLS_ALERT_DESCRIPTION description, XBUFFER& records);
     bool                                    CloseNotify_Create                               (XBUFFER& records);
@@ -118,6 +130,7 @@ class DIOSTREAMTLSSESSION
 
   private:
 
+    bool                                    KeyUpdate_Process                                (DIOSTREAMTLS_MSG_HANDSHAKE& handshake);
     void                                    Clean                                            ();
 
     DIOSTREAMTLSKEYSCHEDULE_ROLE            role;
@@ -129,11 +142,17 @@ class DIOSTREAMTLSSESSION
     DIOSTREAMTLSKEYSCHEDULE                 keyschedule;
     DIOSTREAMTLSRECORD                      record;
     CIPHERECDSAX25519                       keyexchange;
+    CIPHERECDSA                             keyexchangep256;
+    XBUFFER                                 keyexchangep256private;
+    XBUFFER                                 keyexchangep256public;
 
     XBUFFER                                 recordinput;
     XBUFFER                                 handshakeinput;
     XBUFFER                                 transcript;
     XBUFFER                                 applicationinput;
+    XBUFFER                                 posthandshakeoutput;
+
+    XDWORD                                  keyupdates[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
 
     bool                                    closenotifysent;
     bool                                    closenotifyreceived;
@@ -147,7 +166,4 @@ class DIOSTREAMTLSSESSION
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-
 

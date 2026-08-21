@@ -131,16 +131,18 @@ void DIOSTREAMTLSSESSION::End()
 {
   record.End();
   keyschedule.End();
-  keyexchange.CleanAllKeys();
+  KeyExchange_Delete();
 
   recordinput.Delete();
   handshakeinput.Delete();
   transcript.Delete();
   applicationinput.Delete();
+  posthandshakeoutput.Delete();
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {
-      epoch[c] = DIOSTREAMTLSSESSION_EPOCH_CLEAR;
+      epoch[c]      = DIOSTREAMTLSSESSION_EPOCH_CLEAR;
+      keyupdates[c] = 0;
     }
 
   applicationsecretscalculated = false;
@@ -253,6 +255,158 @@ CIPHERECDSAX25519* DIOSTREAMTLSSESSION::GetKeyExchange()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLSSESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey)
+* @brief      Generate a fresh ephemeral key pair for a supported TLS group
+* @ingroup    DATAIO
+*
+* @param[in]  group : TLS supported group value.
+* @param[out] publickey : Encoded public key share.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey)
+{
+  publickey.Delete();
+
+  if(!isini) return false;
+
+  switch(group)
+    {
+      case DIOSTREAMTLS_MSG_CURVEID_X25519    : keyexchange.CleanAllKeys();
+
+                                                if(!keyexchange.GenerateRandomPrivateKey() ||
+                                                   !keyexchange.CreatePublicKey() ||
+                                                   !publickey.Add(keyexchange.GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC),
+                                                                  CIPHERECDSAX25519_MAXKEY))
+                                                  {
+                                                    keyexchange.CleanAllKeys();
+                                                    return false;
+                                                  }
+                                                break;
+
+      case DIOSTREAMTLS_MSG_CURVEID_SECP256R1 : keyexchangep256private.FillBuffer(0);
+                                                keyexchangep256private.Delete();
+                                                keyexchangep256public.Delete();
+
+                                                if(!keyexchangep256.KeyPair_Create(keyexchangep256private,
+                                                                                  keyexchangep256public) ||
+                                                   !publickey.Add(keyexchangep256public))
+                                                  {
+                                                    keyexchangep256private.FillBuffer(0);
+                                                    keyexchangep256private.Delete();
+                                                    keyexchangep256public.Delete();
+                                                    return false;
+                                                  }
+                                                break;
+
+                                      default : return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publickey, XBUFFER& sharedsecret)
+* @brief      Calculate the shared secret for a supported TLS group
+* @ingroup    DATAIO
+*
+* @param[in]  group : Negotiated TLS supported group value.
+* @param[in]  publickey : Encoded public key share of the remote end.
+* @param[out] sharedsecret : Calculated shared secret.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publickey, XBUFFER& sharedsecret)
+{
+  sharedsecret.Delete();
+
+  if(!isini) return false;
+
+  switch(group)
+    {
+      case DIOSTREAMTLS_MSG_CURVEID_X25519    : if((publickey.GetSize() != CIPHERECDSAX25519_MAXKEY) ||
+                                                   !keyexchange.GetKey(CIPHERECDSAX25519_TYPEKEY_PRIVATE) ||
+                                                   !keyexchange.CreateSharedKey(publickey.Get()) ||
+                                                   !sharedsecret.Add(keyexchange.GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED),
+                                                                     CIPHERECDSAX25519_MAXKEY))
+                                                  {
+                                                    return false;
+                                                  }
+                                                break;
+
+      case DIOSTREAMTLS_MSG_CURVEID_SECP256R1 : if(keyexchangep256private.IsEmpty() ||
+                                                   !keyexchangep256.SharedSecret_Create(keyexchangep256private,
+                                                                                       publickey, sharedsecret))
+                                                  {
+                                                    return false;
+                                                  }
+                                                break;
+
+                                      default : return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLSSESSION::KeyExchange_Delete()
+* @brief      Erase all ephemeral key exchange material
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLSSESSION::KeyExchange_Delete()
+{
+  keyexchange.CleanAllKeys();
+
+  keyexchangep256private.FillBuffer(0);
+  keyexchangep256private.Delete();
+  keyexchangep256public.Delete();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSESSION::CipherSuite_Select(XWORD ciphersuite)
+* @brief      Select an offered cipher suite before the handshake keys are derived
+* @ingroup    DATAIO
+*
+* @param[in]  ciphersuite : Cipher suite selected by the remote end.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSESSION::CipherSuite_Select(XWORD ciphersuite)
+{
+  if(!isini ||
+     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  != DIOSTREAMTLSSESSION_EPOCH_CLEAR) ||
+     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLSSESSION_EPOCH_CLEAR))
+    {
+      return false;
+    }
+
+  if(keyschedule.GetCipherSuite() == ciphersuite) return true;
+
+  record.End();
+
+  if(!keyschedule.Ini(ciphersuite, role) || !record.Ini(&keyschedule))
+    {
+      keyschedule.End();
+      isini = false;
+      return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         XBUFFER* DIOSTREAMTLSSESSION::GetRecordInput()
 * @brief      Get the transport record accumulator
 * @ingroup    DATAIO
@@ -280,7 +434,9 @@ XBUFFER* DIOSTREAMTLSSESSION::GetRecordInput()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSSESSION::RecordInput_Add(XBYTE* data, XDWORD size)
 {
-  if(!isini || (!data && size))
+  if(!isini || (!data && size) ||
+     (size > DIOSTREAMTLSSESSION_MAXRECORDINPUTSIZE) ||
+     (recordinput.GetSize() > (DIOSTREAMTLSSESSION_MAXRECORDINPUTSIZE - size)))
     {
       return false;
     }
@@ -388,7 +544,9 @@ XBUFFER* DIOSTREAMTLSSESSION::GetHandshakeInput()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSSESSION::HandshakeInput_Add(XBYTE* data, XDWORD size)
 {
-  if(!isini || (!data && size))
+  if(!isini || (!data && size) ||
+     (size > DIOSTREAMTLSSESSION_MAXHANDSHAKESIZE) ||
+     (handshakeinput.GetSize() > (DIOSTREAMTLSSESSION_MAXHANDSHAKESIZE - size)))
     {
       return false;
     }
@@ -447,6 +605,11 @@ DIOSTREAMTLSSESSION_RESULT DIOSTREAMTLSSESSION::Handshake_Extract(XBUFFER& messa
 
   XDWORD length        = ((XDWORD)data[1] << 16) | ((XDWORD)data[2] << 8) | (XDWORD)data[3];
   XDWORD messagelength = DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE + length;
+
+  if(messagelength > DIOSTREAMTLSSESSION_MAXHANDSHAKESIZE)
+    {
+      return DIOSTREAMTLSSESSION_RESULT_ERROR;
+    }
 
   if(handshakeinput.GetSize() < messagelength)
     {
@@ -728,7 +891,7 @@ XDWORD DIOSTREAMTLSSESSION::ApplicationData_Read(XBYTE* data, XDWORD size)
 *
 * @fn         DIOSTREAMTLSSESSION_RESULT DIOSTREAMTLSSESSION::ApplicationData_Process()
 * @brief      Process all complete records received after the handshake
-* @note       NewSessionTicket is consumed. KeyUpdate and every other unsupported post-handshake message are rejected.
+* @note       NewSessionTicket is consumed, KeyUpdate is processed and other post-handshake messages are rejected.
 * @ingroup    DATAIO
 *
 * @return     DIOSTREAMTLSSESSION_RESULT : Complete, incomplete or error.
@@ -797,11 +960,31 @@ DIOSTREAMTLSSESSION_RESULT DIOSTREAMTLSSESSION::ApplicationData_Process()
                                                                           }
 
                                                                         workbuffer.Add(message);
-                                                                        if(!handshake.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
-                                                                           (handshake.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET))
+                                                                        if(!handshake.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty())
                                                                           {
                                                                             iserror = true;
                                                                             return DIOSTREAMTLSSESSION_RESULT_ERROR;
+                                                                          }
+
+                                                                        switch(handshake.GetMsgType())
+                                                                          {
+                                                                            case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET : break;
+
+                                                                            case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE         : if(!KeyUpdate_Process(handshake))
+                                                                                                                                              {
+                                                                                                                                                iserror = true;
+                                                                                                                                                return DIOSTREAMTLSSESSION_RESULT_ERROR;
+                                                                                                                                              }
+
+                                                                                                                                            if(!handshakeinput.IsEmpty())
+                                                                                                                                              {
+                                                                                                                                                iserror = true;
+                                                                                                                                                return DIOSTREAMTLSSESSION_RESULT_ERROR;
+                                                                                                                                              }
+                                                                                                                                            break;
+
+                                                                                                                                  default : iserror = true;
+                                                                                                                                            return DIOSTREAMTLSSESSION_RESULT_ERROR;
                                                                           }
                                                                       }
                                                                   }
@@ -836,17 +1019,129 @@ DIOSTREAMTLSSESSION_RESULT DIOSTREAMTLSSESSION::ApplicationData_Process()
                                                                   }
                                                                   break;
 
-          case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC  : if((plain.GetSize() != 1) || (plain.GetByte(0) != 1))
-                                                                    {
-                                                                      iserror = true;
-                                                                      return DIOSTREAMTLSSESSION_RESULT_ERROR;
-                                                                    }
-                                                                  break;
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC  : iserror = true;
+                                                                  return DIOSTREAMTLSSESSION_RESULT_ERROR;
 
                                                         default : iserror = true;
                                                                   return DIOSTREAMTLSSESSION_RESULT_ERROR;
         }
     }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSESSION::KeyUpdate_Create(bool requestpeer, XBUFFER& records)
+* @brief      Create a protected TLS 1.3 KeyUpdate and advance the local application traffic keys
+* @ingroup    DATAIO
+*
+* @param[in]  requestpeer : Request the remote end to update its sending keys too.
+* @param[out] records : Protected KeyUpdate records.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSESSION::KeyUpdate_Create(bool requestpeer, XBUFFER& records)
+{
+  DIOSTREAMTLS_MSG_HANDSHAKE keyupdate;
+  XBUFFER                    message;
+
+  records.Delete();
+
+  if(!isini || iserror || closenotifysent || closenotifyreceived ||
+     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] != DIOSTREAMTLSSESSION_EPOCH_APPLICATION) ||
+     (keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] >= DIOSTREAMTLSSESSION_MAXKEYUPDATES))
+    {
+      return false;
+    }
+
+  keyupdate.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE);
+
+  if(!keyupdate.GetBody()->Add((XBYTE)(requestpeer?1:0)) ||
+     !keyupdate.SetToBuffer(message, false) ||
+     !record.Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, message, records) ||
+     !keyschedule.UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) ||
+     !record.SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL))
+    {
+      iserror = true;
+      records.Delete();
+      return false;
+    }
+
+  keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]++;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSESSION::PostHandshakeOutput_Extract(XBUFFER& records)
+* @brief      Extract protected records generated while processing post-handshake messages
+* @ingroup    DATAIO
+*
+* @param[out] records : Pending records.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSESSION::PostHandshakeOutput_Extract(XBUFFER& records)
+{
+  records.Delete();
+
+  if(!isini) return false;
+  if(posthandshakeoutput.IsEmpty()) return true;
+
+  if(!records.Add(posthandshakeoutput)) return false;
+
+  posthandshakeoutput.Delete();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSESSION::KeyUpdate_Process(DIOSTREAMTLS_MSG_HANDSHAKE& handshake)
+* @brief      Validate a remote KeyUpdate, advance the reading keys and prepare an optional response
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  handshake : Decoded KeyUpdate message.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSESSION::KeyUpdate_Process(DIOSTREAMTLS_MSG_HANDSHAKE& handshake)
+{
+  XBYTE requestupdate;
+
+  if((handshake.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE) ||
+     (handshake.GetBody()->GetSize() != 1) ||
+     (keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] >= DIOSTREAMTLSSESSION_MAXKEYUPDATES))
+    {
+      return false;
+    }
+
+  requestupdate = handshake.GetBody()->GetByte(0);
+  if(requestupdate > 1) return false;
+
+  if(!keyschedule.UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) ||
+     !record.SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE))
+    {
+      return false;
+    }
+
+  keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]++;
+
+  if(requestupdate)
+    {
+      XBUFFER records;
+
+      if(!KeyUpdate_Create(false, records) || !posthandshakeoutput.Add(records)) return false;
+    }
+
+  return true;
 }
 
 
@@ -1048,6 +1343,9 @@ void DIOSTREAMTLSSESSION::Clean()
   handshakeinput.Delete();
   transcript.Delete();
   applicationinput.Delete();
+  posthandshakeoutput.Delete();
+
+  KeyExchange_Delete();
 
   closenotifysent               = false;
   closenotifyreceived           = false;
@@ -1055,4 +1353,9 @@ void DIOSTREAMTLSSESSION::Clean()
   transportclosedwithoutnotify = false;
   receivedalertlevel            = (DIOSTREAMTLS_ALERT_LEVEL)0;
   receivedalertdescription      = (DIOSTREAMTLS_ALERT_DESCRIPTION)0;
+
+  for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
+    {
+      keyupdates[c] = 0;
+    }
 }

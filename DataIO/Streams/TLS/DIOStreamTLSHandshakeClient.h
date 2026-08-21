@@ -68,6 +68,9 @@ enum DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
+class DIOSTREAMTLSCONFIG;
+
+
 class DIOSTREAMTLSHANDSHAKECLIENT
 {
   public:
@@ -85,6 +88,10 @@ class DIOSTREAMTLSHANDSHAKECLIENT
     bool                                    IsUnauthenticatedServerAllowed                   ();
     bool                                    IsServerAuthenticated                            ();
 
+    bool                                    Capabilities_Set                                 (DIOSTREAMTLSCONFIG* config);
+    bool                                    IsApplicationProtocolNegotiated                  ();
+    DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
+
     bool                                    Authentication_Set                               (XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
     DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR GetAuthenticationError                   ();
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    GetCertificateValidationError                    ();
@@ -94,6 +101,7 @@ class DIOSTREAMTLSHANDSHAKECLIENT
 
     bool                                    ClientHello_Create                               (XCHAR* servername, XBUFFER& clienthello, XBUFFER& records);
     bool                                    Start                                            (XBUFFER& clienthello);
+    bool                                    HelloRetryRequest_Process                         (XBUFFER& helloretryrequest, XBUFFER& clienthello, XBUFFER& records);
     bool                                    ServerHello_Process                              (XBUFFER& serverhello);
     bool                                    ServerHello_Process                              (XBUFFER& serverhello, XBUFFER& sharedsecret);
     bool                                    ClientFinished_Create                            (XBUFFER& clientfinished, XBUFFER& records);
@@ -113,6 +121,11 @@ class DIOSTREAMTLSHANDSHAKECLIENT
 
     bool                                    SetError                                         ();
     bool                                    SetAuthenticationError                           (DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR error);
+    bool                                    CipherSuite_IsOffered                            (XWORD ciphersuite);
+    bool                                    SupportedGroup_IsOffered                         (XWORD supportedgroup);
+    bool                                    KeyShare_IsOffered                               (XWORD supportedgroup);
+    bool                                    SignatureScheme_IsOffered                        (XWORD signaturescheme);
+    bool                                    ApplicationProtocol_IsOffered                    (DIOSTREAMTLS_ALPN_TYPE applicationprotocol);
     void                                    Clean                                            ();
 
     DIOSTREAMTLSSESSION*                    session;
@@ -135,6 +148,25 @@ class DIOSTREAMTLSHANDSHAKECLIENT
 
     XBUFFER                                 legacysessionid;
 
+    XVECTOR<XWORD>                          ciphersuites;
+    XVECTOR<XWORD>                          supportedgroups;
+    XVECTOR<XWORD>                          signatureschemes;
+    XVECTOR<XWORD>                          certificatesignatureschemes;
+    XVECTOR<DIOSTREAMTLS_ALPN_TYPE>          applicationprotocols;
+
+    XVECTOR<XWORD>                          offeredciphersuites;
+    XVECTOR<XWORD>                          offeredsupportedgroups;
+    XVECTOR<XWORD>                          offeredkeysharegroups;
+    XVECTOR<XWORD>                          offeredsignatureschemes;
+    XVECTOR<DIOSTREAMTLS_ALPN_TYPE>          offeredapplicationprotocols;
+
+    bool                                    applicationprotocolnegotiated;
+    DIOSTREAMTLS_ALPN_TYPE                  applicationprotocol;
+
+    XBUFFER                                 firstclienthello;
+    XWORD                                   currentkeysharegroup;
+    bool                                    helloretryrequestprocessed;
+
     DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE* servercertificate;
     DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* servercertificateverify;
 };
@@ -143,6 +175,3 @@ class DIOSTREAMTLSHANDSHAKECLIENT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-

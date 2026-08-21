@@ -102,7 +102,9 @@ DIOSTREAMTLSCONFIG::~DIOSTREAMTLSCONFIG()
 * --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLSCONFIG::GetCipherSuite()
 {
-  return ciphersuite;
+  if(ciphersuites.IsEmpty()) return 0;
+
+  return ciphersuites.Get(0);
 }
 
 
@@ -117,7 +119,313 @@ XWORD DIOSTREAMTLSCONFIG::GetCipherSuite()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::SetCipherSuite(XWORD ciphersuite)
 {
-  this->ciphersuite = ciphersuite;
+  ciphersuites.DeleteAll();
+  ciphersuites.Add(ciphersuite);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCipherSuites()
+* @brief      Get the ordered TLS 1.3 cipher suite capabilities
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<XWORD>* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCipherSuites()
+{
+  return &ciphersuites;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::CipherSuite_Add(XWORD ciphersuite)
+* @brief      Add a supported TLS 1.3 cipher suite capability
+* @ingroup    DATAIO
+*
+* @param[in]  ciphersuite : Cipher suite value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::CipherSuite_Add(XWORD ciphersuite)
+{
+  if((ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256) &&
+     (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384)) return false;
+
+  for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
+    {
+      if(ciphersuites.Get(c) == ciphersuite) return false;
+    }
+
+  return ciphersuites.Add(ciphersuite);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::CipherSuites_Delete()
+* @brief      Delete all TLS 1.3 cipher suite capabilities
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::CipherSuites_Delete()
+{
+  ciphersuites.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
+* @brief      Get the ordered key exchange group capabilities
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<XWORD>* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
+{
+  return &supportedgroups;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
+* @brief      Add a supported key exchange group capability
+* @ingroup    DATAIO
+*
+* @param[in]  supportedgroup : Supported group value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
+{
+  if((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1)) return false;
+
+  for(XDWORD c=0; c<supportedgroups.GetSize(); c++)
+    {
+      if(supportedgroups.Get(c) == supportedgroup) return false;
+    }
+
+  return supportedgroups.Add(supportedgroup);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::SupportedGroups_Delete()
+* @brief      Delete all key exchange group capabilities
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::SupportedGroups_Delete()
+{
+  supportedgroups.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSignatureSchemes()
+* @brief      Get the ordered TLS CertificateVerify signature capabilities
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<XWORD>* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSignatureSchemes()
+{
+  return &signatureschemes;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::SignatureScheme_Add(XWORD signaturescheme)
+* @brief      Add a supported TLS CertificateVerify signature capability
+* @ingroup    DATAIO
+*
+* @param[in]  signaturescheme : Signature scheme value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::SignatureScheme_Add(XWORD signaturescheme)
+{
+  switch(signaturescheme)
+    {
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 : break;
+                                                        default : return false;
+    }
+
+  for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
+    {
+      if(signatureschemes.Get(c) == signaturescheme) return false;
+    }
+
+  return signatureschemes.Add(signaturescheme);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::SignatureSchemes_Delete()
+* @brief      Delete all TLS CertificateVerify signature capabilities
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::SignatureSchemes_Delete()
+{
+  signatureschemes.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCertificateSignatureSchemes()
+* @brief      Get the ordered X.509 certificate signature capabilities
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<XWORD>* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCertificateSignatureSchemes()
+{
+  return &certificatesignatureschemes;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::CertificateSignatureScheme_Add(XWORD signaturescheme)
+* @brief      Add a supported X.509 certificate signature capability
+* @ingroup    DATAIO
+*
+* @param[in]  signaturescheme : Signature scheme value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::CertificateSignatureScheme_Add(XWORD signaturescheme)
+{
+  switch(signaturescheme)
+    {
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256     :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384     :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512     : break;
+                                                        default : return false;
+    }
+
+  for(XDWORD c=0; c<certificatesignatureschemes.GetSize(); c++)
+    {
+      if(certificatesignatureschemes.Get(c) == signaturescheme) return false;
+    }
+
+  return certificatesignatureschemes.Add(signaturescheme);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::CertificateSignatureSchemes_Delete()
+* @brief      Delete all X.509 certificate signature capabilities
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::CertificateSignatureSchemes_Delete()
+{
+  certificatesignatureschemes.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<DIOSTREAMTLS_ALPN_TYPE>* DIOSTREAMTLSCONFIG::GetApplicationProtocols()
+* @brief      Get the ordered ALPN application protocol capabilities
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<DIOSTREAMTLS_ALPN_TYPE>* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<DIOSTREAMTLS_ALPN_TYPE>* DIOSTREAMTLSCONFIG::GetApplicationProtocols()
+{
+  return &applicationprotocols;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
+* @brief      Add an ALPN application protocol capability
+* @ingroup    DATAIO
+*
+* @param[in]  applicationprotocol : Application protocol value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
+{
+  switch(applicationprotocol)
+    {
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1 :
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_2   :
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_3   : break;
+                                      default : return false;
+    }
+
+  for(XDWORD c=0; c<applicationprotocols.GetSize(); c++)
+    {
+      if(applicationprotocols.Get(c) == applicationprotocol) return false;
+    }
+
+  return applicationprotocols.Add(applicationprotocol);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::ApplicationProtocols_Delete()
+* @brief      Delete all ALPN application protocol capabilities
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::ApplicationProtocols_Delete()
+{
+  applicationprotocols.DeleteAll();
+
+  return true;
 }
 
 
@@ -432,7 +740,29 @@ void DIOSTREAMTLSCONFIG::SetAllowUnauthenticatedServer(bool allowunauthenticated
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::Clean()
 {
-  ciphersuite                 = DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256;
+  CipherSuites_Delete();
+  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
+
+  SupportedGroups_Delete();
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+
+  SignatureSchemes_Delete();
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
+
+  CertificateSignatureSchemes_Delete();
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512);
+
+  ApplicationProtocols_Delete();
+
   servername.Empty();
   TrustedRoots_Delete();
   LocalCredentials_Delete();

@@ -35,6 +35,8 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "DIOStreamTLSHandshakeClient.h"
+#include "DIOStreamTLSConfig.h"
+#include "DIOStreamTLSSignature.h"
 #include "DIOStreamTLSMessagesHandShakeClientHello.h"
 #include "DIOStreamTLSMessagesHandShakeServerHello.h"
 
@@ -45,8 +47,6 @@
 #include "XString.h"
 
 #include "CipherCertificateX509.h"
-#include "CipherRSA.h"
-#include "HashSHA2.h"
 
 
 
@@ -119,6 +119,15 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Ini(DIOSTREAMTLSSESSION* session, bool allowun
   state                            = DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE;
   isini                            = true;
 
+  ciphersuites.Add(session->GetKeySchedule()->GetCipherSuite());
+  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
+  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+  signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
+  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384);
+  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512);
+
   return true;
 }
 
@@ -146,6 +155,20 @@ void DIOSTREAMTLSHANDSHAKECLIENT::End()
 
   legacysessionid.Delete();
 
+  ciphersuites.DeleteAll();
+  supportedgroups.DeleteAll();
+  signatureschemes.DeleteAll();
+  certificatesignatureschemes.DeleteAll();
+  applicationprotocols.DeleteAll();
+
+  offeredciphersuites.DeleteAll();
+  offeredsupportedgroups.DeleteAll();
+  offeredkeysharegroups.DeleteAll();
+  offeredsignatureschemes.DeleteAll();
+  offeredapplicationprotocols.DeleteAll();
+
+  firstclienthello.Delete();
+
   trustedroots.DeleteContents();
   trustedroots.DeleteAll();
   certificatevalidator.End();
@@ -161,6 +184,10 @@ void DIOSTREAMTLSHANDSHAKECLIENT::End()
   authenticationerror         = DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
   certificatevalidationerror  = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
   hasvalidationdatetime       = false;
+  applicationprotocolnegotiated = false;
+  applicationprotocol           = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+  currentkeysharegroup          = 0;
+  helloretryrequestprocessed    = false;
 }
 
 
@@ -267,6 +294,128 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::IsUnauthenticatedServerAllowed()
 bool DIOSTREAMTLSHANDSHAKECLIENT::IsServerAuthenticated()
 {
   return serverauthenticated;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
+* @brief      Copy the ordered TLS client capabilities from a stream configuration
+* @ingroup    DATAIO
+*
+* @param[in]  config : TLS stream configuration.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSHANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
+{
+  if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE) || !config ||
+     !config->GetCipherSuites() || config->GetCipherSuites()->IsEmpty() ||
+     !config->GetSupportedGroups() || config->GetSupportedGroups()->IsEmpty() ||
+     !config->GetSignatureSchemes() || config->GetSignatureSchemes()->IsEmpty() ||
+     !config->GetCertificateSignatureSchemes() || config->GetCertificateSignatureSchemes()->IsEmpty())
+    {
+      return false;
+    }
+
+  ciphersuites.DeleteAll();
+  supportedgroups.DeleteAll();
+  signatureschemes.DeleteAll();
+  certificatesignatureschemes.DeleteAll();
+  applicationprotocols.DeleteAll();
+
+  for(XDWORD c=0; c<config->GetCipherSuites()->GetSize(); c++)
+    {
+      XWORD ciphersuite = config->GetCipherSuites()->Get(c);
+
+      if((ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256) &&
+         (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384)) return false;
+      if(!ciphersuites.Add(ciphersuite)) return false;
+    }
+
+  for(XDWORD c=0; c<config->GetSupportedGroups()->GetSize(); c++)
+    {
+      XWORD supportedgroup = config->GetSupportedGroups()->Get(c);
+
+      if(((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1)) || !supportedgroups.Add(supportedgroup)) return false;
+    }
+
+  for(XDWORD c=0; c<config->GetSignatureSchemes()->GetSize(); c++)
+    {
+      XWORD signaturescheme = config->GetSignatureSchemes()->Get(c);
+
+      if((signaturescheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256) &&
+         (signaturescheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) &&
+         (signaturescheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384) &&
+         (signaturescheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512)) return false;
+      if(!signatureschemes.Add(signaturescheme)) return false;
+    }
+
+  for(XDWORD c=0; c<config->GetCertificateSignatureSchemes()->GetSize(); c++)
+    {
+      XWORD signaturescheme = config->GetCertificateSignatureSchemes()->Get(c);
+
+      switch(signaturescheme)
+        {
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256     :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384     :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512     : break;
+                                                            default : return false;
+        }
+
+      if(!certificatesignatureschemes.Add(signaturescheme)) return false;
+    }
+
+  if(config->GetApplicationProtocols())
+    {
+      for(XDWORD c=0; c<config->GetApplicationProtocols()->GetSize(); c++)
+        {
+          DIOSTREAMTLS_ALPN_TYPE applicationprotocol = config->GetApplicationProtocols()->Get(c);
+
+          if((applicationprotocol != DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1) &&
+             (applicationprotocol != DIOSTREAMTLS_ALPN_TYPE_HTTP_2)   &&
+             (applicationprotocol != DIOSTREAMTLS_ALPN_TYPE_HTTP_3)) return false;
+          if(!applicationprotocols.Add(applicationprotocol)) return false;
+        }
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::IsApplicationProtocolNegotiated()
+* @brief      Check whether the server selected an ALPN application protocol
+* @ingroup    DATAIO
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSHANDSHAKECLIENT::IsApplicationProtocolNegotiated()
+{
+  return applicationprotocolnegotiated;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLSHANDSHAKECLIENT::GetApplicationProtocol()
+* @brief      Get the ALPN application protocol selected by the server
+* @ingroup    DATAIO
+*
+* @return     DIOSTREAMTLS_ALPN_TYPE : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLSHANDSHAKECLIENT::GetApplicationProtocol()
+{
+  return applicationprotocol;
 }
 
 
@@ -399,7 +548,7 @@ DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* DIOSTREAMTLSHANDSHAKECLIENT::GetSe
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER& clienthello, XBUFFER& records)
-* @brief      Create and register a TLS 1.3 ClientHello with a fresh X25519 key share
+* @brief      Create and register a TLS 1.3 ClientHello with a fresh key share
 * @ingroup    DATAIO
 *
 * @param[in]  servername : Optional server name for the SNI extension.
@@ -413,10 +562,11 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO> message;
   DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO*                           body;
-  CIPHERECDSAX25519*                                                keyexchange;
   XRAND*                                                            xrand;
   XBYTE                                                             random[DIOSTREAMTLS_MSG_RANDOM_SIZE];
   XBYTE                                                             sessionid[DIOSTREAMTLS_MSG_SESSIONID_SIZE];
+  XWORD                                                             keysharegroup;
+  XBUFFER                                                           keysharepublic;
   bool                                                              status;
 
   if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE) ||
@@ -452,15 +602,12 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
       return SetError();
     }
 
-  keyexchange = session->GetKeyExchange();
-  if(!keyexchange)
-    {
-      return SetError();
-    }
+  if(supportedgroups.IsEmpty()) return SetError();
 
-  keyexchange->CleanAllKeys();
+  keysharegroup = supportedgroups.Get(0);
+  session->KeyExchange_Delete();
 
-  if(!keyexchange->GenerateRandomPrivateKey() || !keyexchange->CreatePublicKey())
+  if(!session->KeyExchange_Generate(keysharegroup, keysharepublic))
     {
       return SetError();
     }
@@ -478,9 +625,9 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
   body->SetSessionIDLength(sizeof(sessionid));
   memcpy(body->GetSessionID(), sessionid, sizeof(sessionid));
 
-  if(!body->GetCipherSuites()->Add(session->GetKeySchedule()->GetCipherSuite()))
+  for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
     {
-      return SetError();
+      if(!body->GetCipherSuites()->Add(ciphersuites.Get(c))) return SetError();
     }
 
   body->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
@@ -514,8 +661,16 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
       return SetError();
     }
 
-  if(!supportedgroups->List_Add(DIOSTREAMTLS_MSG_CURVEID_X25519) ||
-     !body->Extensions_Add(supportedgroups))
+  for(XDWORD c=0; c<this->supportedgroups.GetSize(); c++)
+    {
+      if(!supportedgroups->List_Add(this->supportedgroups.Get(c)))
+        {
+          GEN_DELETE supportedgroups;
+          return SetError();
+        }
+    }
+
+  if(!body->Extensions_Add(supportedgroups))
     {
       GEN_DELETE supportedgroups;
       return SetError();
@@ -529,13 +684,41 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
       return SetError();
     }
 
-  if(!signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) ||
-     !signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256)    ||
-     !signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384)    ||
-     !signaturealgorithms->List_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512)    ||
-     !body->Extensions_Add(signaturealgorithms))
+  for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
+    {
+      if(!signaturealgorithms->List_Add(signatureschemes.Get(c)))
+        {
+          GEN_DELETE signaturealgorithms;
+          return SetError();
+        }
+    }
+
+  if(!body->Extensions_Add(signaturealgorithms))
     {
       GEN_DELETE signaturealgorithms;
+      return SetError();
+    }
+
+  DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT* certificatesignaturealgorithms;
+
+  certificatesignaturealgorithms = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT();
+  if(!certificatesignaturealgorithms)
+    {
+      return SetError();
+    }
+
+  for(XDWORD c=0; c<certificatesignatureschemes.GetSize(); c++)
+    {
+      if(!certificatesignaturealgorithms->List_Add(certificatesignatureschemes.Get(c)))
+        {
+          GEN_DELETE certificatesignaturealgorithms;
+          return SetError();
+        }
+    }
+
+  if(!body->Extensions_Add(certificatesignaturealgorithms))
+    {
+      GEN_DELETE certificatesignaturealgorithms;
       return SetError();
     }
 
@@ -554,6 +737,32 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
       return SetError();
     }
 
+  if(!applicationprotocols.IsEmpty())
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_ALPN* ALPN;
+
+      ALPN = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_ALPN();
+      if(!ALPN)
+        {
+          return SetError();
+        }
+
+      for(XDWORD c=0; c<applicationprotocols.GetSize(); c++)
+        {
+          if(!ALPN->List_Add(applicationprotocols.Get(c)))
+            {
+              GEN_DELETE ALPN;
+              return SetError();
+            }
+        }
+
+      if(!body->Extensions_Add(ALPN))
+        {
+          GEN_DELETE ALPN;
+          return SetError();
+        }
+    }
+
   DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* keyshare;
   DIOSTREAMTLS_MSG_EXTENSION_KEY       key;
 
@@ -563,9 +772,9 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
       return SetError();
     }
 
-  key.SetKeyType(DIOSTREAMTLS_MSG_CURVEID_X25519);
+  key.SetKeyType(keysharegroup);
 
-  if(!key.GetKeyData()->Add(keyexchange->GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC), CIPHERECDSAX25519_MAXKEY) ||
+  if(!key.GetKeyData()->Add(keysharepublic) ||
      !keyshare->List_Add(&key) || !body->Extensions_Add(keyshare))
     {
       GEN_DELETE keyshare;
@@ -601,6 +810,8 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO> message;
   XBUFFER                                                          workbuffer;
   bool                                                             ciphersuitefound = false;
+  bool                                                             supportedgroupsfound = false;
+  bool                                                             keysharefound = false;
 
   if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE) ||
      !session->GetTranscript()->IsEmpty())
@@ -618,14 +829,84 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
 
   for(XDWORD c=0; c<message.GetBody()->GetCipherSuites()->GetSize(); c++)
     {
-      if(message.GetBody()->GetCipherSuites()->Get(c) == session->GetKeySchedule()->GetCipherSuite())
+      XWORD ciphersuite = message.GetBody()->GetCipherSuites()->Get(c);
+
+      if(!offeredciphersuites.Add(ciphersuite)) return SetError();
+
+      if(ciphersuite == session->GetKeySchedule()->GetCipherSuite())
         {
           ciphersuitefound = true;
-          break;
         }
     }
 
-  if(!ciphersuitefound || !session->Transcript_Add(clienthello))
+  for(XDWORD c=0; c<message.GetBody()->Extensions_GetAll()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = message.GetBody()->Extensions_GetAll()->Get(c);
+      if(!extension) return SetError();
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMS)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* algorithms;
+
+          algorithms = (DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS*)extension;
+          for(XDWORD d=0; d<algorithms->List_Get()->GetSize(); d++)
+            {
+              if(!offeredsignatureschemes.Add(algorithms->List_Get()->Get(d))) return SetError();
+            }
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDGROUPS)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS* groups;
+
+          groups = (DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS*)extension;
+          if(groups->List_Get()->IsEmpty()) return SetError();
+
+          for(XDWORD d=0; d<groups->List_Get()->GetSize(); d++)
+            {
+              XWORD group = groups->List_Get()->Get(d);
+
+              if(SupportedGroup_IsOffered(group) || !offeredsupportedgroups.Add(group)) return SetError();
+            }
+
+          supportedgroupsfound = true;
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* keyshare;
+
+          keyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)extension;
+          if(keyshare->List_Get()->IsEmpty()) return SetError();
+
+          for(XDWORD d=0; d<keyshare->List_Get()->GetSize(); d++)
+            {
+              DIOSTREAMTLS_MSG_EXTENSION_KEY* key = keyshare->List_Get()->Get(d);
+
+              if(!key || !SupportedGroup_IsOffered(key->GetKeyType()) ||
+                 KeyShare_IsOffered(key->GetKeyType()) || !offeredkeysharegroups.Add(key->GetKeyType())) return SetError();
+            }
+
+          keysharefound = true;
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_ALPN)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_ALPN* ALPN = (DIOSTREAMTLS_MSG_EXTENSION_ALPN*)extension;
+
+          for(XDWORD d=0; d<ALPN->List_GetNProtocols(); d++)
+            {
+              DIOSTREAMTLS_ALPN_TYPE applicationprotocol;
+
+              if(!ALPN->List_Get(d, applicationprotocol) ||
+                 !offeredapplicationprotocols.Add(applicationprotocol)) return SetError();
+            }
+        }
+    }
+
+  if(!ciphersuitefound || !supportedgroupsfound || !keysharefound ||
+     offeredsignatureschemes.IsEmpty() || !session->Transcript_Add(clienthello) ||
+     !firstclienthello.Add(clienthello))
     {
       return SetError();
     }
@@ -639,6 +920,205 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
     }
 
   state = DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO;
+  currentkeysharegroup = offeredkeysharegroups.Get(0);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryrequest, XBUFFER& clienthello, XBUFFER& records)
+* @brief      Validate a TLS 1.3 HelloRetryRequest and create the second ClientHello
+* @ingroup    DATAIO
+*
+* @param[in]  helloretryrequest : Complete encoded HelloRetryRequest.
+* @param[out] clienthello : Complete encoded second ClientHello.
+* @param[out] records : Clear-text TLS records ready for transport.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSHANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryrequest, XBUFFER& clienthello,
+                                                            XBUFFER& records)
+{
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> hrr;
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO> clienthellomessage;
+  DIOSTREAMTLS_MSG_HANDSHAKE                                       messagehash;
+  XBUFFER                                                          workbuffer;
+  XBUFFER                                                          firsthash;
+  XBUFFER                                                          messagehashbuffer;
+  XBUFFER                                                          keysharepublic;
+  XBUFFER                                                          cookiedata;
+  XWORD                                                             selectedgroup = currentkeysharegroup;
+  bool                                                              versionvalid = false;
+  bool                                                              keysharerequested = false;
+  bool                                                              cookiepresent = false;
+
+  if(!isini || !session || helloretryrequestprocessed ||
+     (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO) ||
+     firstclienthello.IsEmpty() || (&clienthello == &records))
+    {
+      return SetError();
+    }
+
+  clienthello.Delete();
+  records.Delete();
+  workbuffer.Add(helloretryrequest);
+
+  if(!hrr.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
+     (hrr.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO) ||
+     !hrr.GetBody()->IsHelloRetryRequest() ||
+     (hrr.GetBody()->GetLegacyVersion() != DIOSTREAMTLS_MSG_VERSION_TLS_1_2) ||
+     (hrr.GetBody()->GetSessionIDLength() != legacysessionid.GetSize()) ||
+     (hrr.GetBody()->GetSessionIDLength() &&
+      memcmp(hrr.GetBody()->GetSessionID(), legacysessionid.Get(), legacysessionid.GetSize())) ||
+     (hrr.GetBody()->GetCompressionMethod() != DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL) ||
+     !CipherSuite_IsOffered(hrr.GetBody()->GetCipherSuite()))
+    {
+      return SetError();
+    }
+
+  for(XDWORD c=0; c<hrr.GetBody()->Extensions_GetAll()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = hrr.GetBody()->Extensions_GetAll()->Get(c);
+      if(!extension) return SetError();
+
+      switch(extension->GetType())
+        {
+          case DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDVERSIONS : { DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER* supportedversions;
+
+                                                                    supportedversions = (DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER*)extension;
+                                                                    versionvalid = (supportedversions->GetVersion() == DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
+                                                                  }
+                                                                  break;
+
+          case DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE          : { DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST* keyshare;
+
+                                                                    keyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST*)extension;
+                                                                    selectedgroup = keyshare->GetSelectedGroup();
+
+                                                                    if(!SupportedGroup_IsOffered(selectedgroup) || KeyShare_IsOffered(selectedgroup))
+                                                                      {
+                                                                        return SetError();
+                                                                      }
+
+                                                                    keysharerequested = true;
+                                                                  }
+                                                                  break;
+
+          case DIOSTREAMTLS_MSG_EXTENSION_TYPE_COOKIE            : { DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* cookie;
+                                                                    XWORD                            cookielength;
+
+                                                                    cookie = (DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*)extension;
+                                                                    if(!cookie->GetData() || (cookie->GetData()->GetSize() < 3)) return SetError();
+
+                                                                    cookielength = (XWORD)(((XWORD)cookie->GetData()->GetByte(0) << 8) |
+                                                                                            cookie->GetData()->GetByte(1));
+
+                                                                    if(!cookielength ||
+                                                                       (cookielength != (cookie->GetData()->GetSize() - sizeof(XWORD))) ||
+                                                                       !cookiedata.Add((*cookie->GetData())))
+                                                                      {
+                                                                        return SetError();
+                                                                      }
+
+                                                                    cookiepresent = true;
+                                                                  }
+                                                                  break;
+
+                                                        default : return SetError();
+        }
+    }
+
+  if(!versionvalid || (!keysharerequested && !cookiepresent) ||
+     !session->CipherSuite_Select(hrr.GetBody()->GetCipherSuite()) ||
+     !session->TranscriptHash(firsthash))
+    {
+      return SetError();
+    }
+
+  workbuffer.Delete();
+  workbuffer.Add(firstclienthello);
+
+  if(!clienthellomessage.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
+     (clienthellomessage.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO))
+    {
+      return SetError();
+    }
+
+  if(keysharerequested)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_KEY key;
+      bool                           keysharefound = false;
+
+      session->KeyExchange_Delete();
+      if(!session->KeyExchange_Generate(selectedgroup, keysharepublic)) return SetError();
+
+      key.SetKeyType(selectedgroup);
+      if(!key.GetKeyData()->Add(keysharepublic)) return SetError();
+
+      for(XDWORD c=0; c<clienthellomessage.GetBody()->Extensions_GetAll()->GetSize(); c++)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION* extension = clienthellomessage.GetBody()->Extensions_GetAll()->Get(c);
+
+          if(extension && (extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE))
+            {
+              DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* keyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)extension;
+
+              if(!keyshare->List_DeleteAll() || !keyshare->List_Add(&key)) return SetError();
+
+              keysharefound = true;
+              break;
+            }
+        }
+
+      if(!keysharefound) return SetError();
+    }
+
+  if(cookiepresent)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* cookie = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+
+      if(!cookie) return SetError();
+
+      cookie->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_COOKIE);
+
+      if(!cookie->GetData()->Add(cookiedata) || !clienthellomessage.GetBody()->Extensions_Add(cookie))
+        {
+          GEN_DELETE cookie;
+          return SetError();
+        }
+    }
+
+  messagehash.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH);
+
+  if(!messagehash.GetBody()->Add(firsthash) ||
+     !messagehash.SetToBuffer(messagehashbuffer, false) ||
+     !clienthellomessage.SetToBuffer(clienthello, false) ||
+     !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, clienthello, records))
+    {
+      clienthello.Delete();
+      records.Delete();
+      return SetError();
+    }
+
+  session->GetTranscript()->Delete();
+
+  if(!session->Transcript_Add(messagehashbuffer) ||
+     !session->Transcript_Add(helloretryrequest) ||
+     !session->Transcript_Add(clienthello))
+    {
+      clienthello.Delete();
+      records.Delete();
+      return SetError();
+    }
+
+  offeredkeysharegroups.DeleteAll();
+  if(!offeredkeysharegroups.Add(selectedgroup)) return SetError();
+
+  currentkeysharegroup       = selectedgroup;
+  helloretryrequestprocessed = true;
 
   return true;
 }
@@ -647,7 +1127,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
-* @brief      Calculate the X25519 shared secret from ServerHello and activate handshake keys
+* @brief      Calculate the negotiated shared secret from ServerHello and activate handshake keys
 * @ingroup    DATAIO
 *
 * @param[in]  serverhello : Complete encoded ServerHello.
@@ -658,19 +1138,11 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
 bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> message;
-  CIPHERECDSAX25519*                                                keyexchange;
   XBUFFER                                                          workbuffer;
   XBUFFER                                                          sharedsecret;
-  XBYTE*                                                           peerpublickey = NULL;
+  XBUFFER*                                                         peerpublickey = NULL;
 
   if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO))
-    {
-      return SetError();
-    }
-
-  keyexchange = session->GetKeyExchange();
-  if(!keyexchange || !keyexchange->GetKey(CIPHERECDSAX25519_TYPEKEY_PRIVATE) ||
-     !keyexchange->GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC))
     {
       return SetError();
     }
@@ -700,16 +1172,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
           keyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_SERVER*)extension;
           key      = keyshare->GetKey();
 
-          if(key && (key->GetKeyType() == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-             (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY))
+          if(key && (key->GetKeyType() == currentkeysharegroup))
             {
-              peerpublickey = key->GetKeyData()->Get();
+              peerpublickey = key->GetKeyData();
             }
         }
     }
 
-  if(!peerpublickey || !keyexchange->CreateSharedKey(peerpublickey) ||
-     !sharedsecret.Add(keyexchange->GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED), CIPHERECDSAX25519_MAXKEY))
+  if(!peerpublickey || !session->KeyExchange_SharedSecret(currentkeysharegroup, (*peerpublickey), sharedsecret))
     {
       return SetError();
     }
@@ -731,7 +1201,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
 * @ingroup    DATAIO
 *
 * @param[in]  serverhello : Complete encoded ServerHello.
-* @param[in]  sharedsecret : Explicit X25519 shared secret used by a deterministic test vector.
+* @param[in]  sharedsecret : Explicit negotiated shared secret used by a deterministic test vector.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -758,7 +1228,6 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUF
      (message.GetBody()->GetSessionIDLength() != legacysessionid.GetSize()) ||
      (message.GetBody()->GetSessionIDLength() &&
       memcmp(message.GetBody()->GetSessionID(), legacysessionid.Get(), legacysessionid.GetSize())) ||
-     (message.GetBody()->GetCipherSuite() != session->GetKeySchedule()->GetCipherSuite()) ||
      (message.GetBody()->GetCompressionMethod() != DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL))
     {
       return SetError();
@@ -784,9 +1253,11 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUF
                                                                     keyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_SERVER*)extension;
                                                                     key      = keyshare->GetKey();
 
-                                                                    if(key &&
-                                                                       (key->GetKeyType() == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-                                                                       (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY))
+                                                                    if(key && (key->GetKeyType() == currentkeysharegroup) &&
+                                                                       (((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+                                                                         (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY)) ||
+                                                                        ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
+                                                                         (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE))))
                                                                       {
                                                                         keysharevalid = true;
                                                                       }
@@ -797,7 +1268,12 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUF
         }
     }
 
-  if(!versionvalid || !keysharevalid || !session->Transcript_Add(serverhello) ||
+  if(!versionvalid || !keysharevalid ||
+     (helloretryrequestprocessed &&
+      (message.GetBody()->GetCipherSuite() != session->GetKeySchedule()->GetCipherSuite())) ||
+     !CipherSuite_IsOffered(message.GetBody()->GetCipherSuite()) ||
+     !session->CipherSuite_Select(message.GetBody()->GetCipherSuite()) ||
+     !session->Transcript_Add(serverhello) ||
      !session->HandshakeKeys_Activate(sharedsecret))
     {
       return SetError();
@@ -1046,11 +1522,32 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message)
   workbuffer.Add(message);
 
   if(!encryptedextensions.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
-     (encryptedextensions.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_ENCRYPTED_EXTENSIONS) ||
-     !session->Transcript_Add(message))
+     (encryptedextensions.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_ENCRYPTED_EXTENSIONS))
     {
       return SetError();
     }
+
+  applicationprotocolnegotiated = false;
+  applicationprotocol           = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+
+  for(XDWORD c=0; c<encryptedextensions.GetBody()->Extensions_GetAll()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = encryptedextensions.GetBody()->Extensions_GetAll()->Get(c);
+      if(!extension) return SetError();
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_ALPN)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_ALPN* ALPN = (DIOSTREAMTLS_MSG_EXTENSION_ALPN*)extension;
+
+          if(offeredapplicationprotocols.IsEmpty() || (ALPN->List_GetNProtocols() != 1) ||
+             !ALPN->List_Get(0, applicationprotocol) ||
+             !ApplicationProtocol_IsOffered(applicationprotocol)) return SetError();
+
+          applicationprotocolnegotiated = true;
+        }
+    }
+
+  if(!session->Transcript_Add(message)) return SetError();
 
   state = DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_CERTIFICATE;
 
@@ -1229,7 +1726,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
 
   if(!certificateverify.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
      (certificateverify.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_VERIFY) ||
-     (certificateverify.GetBody()->GetAlgorithm() != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256))
+     !SignatureScheme_IsOffered(certificateverify.GetBody()->GetAlgorithm()))
     {
       SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
       return SetError();
@@ -1243,7 +1740,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
 
       CIPHERCERTIFICATEX509* leaf = certificatevalidator.GetLeafCertificate();
       if(!authenticationconfigured || !leaf || !leaf->GetPublicCipherKey() ||
-         (leaf->GetPublicCipherKey()->GetType() != CIPHERKEYTYPE_RSA_PUBLIC) ||
+         !DIOSTREAMTLSSIGNATURE::IsSupported(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey()) ||
          !session->TranscriptHash(transcripthash))
         {
           SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
@@ -1266,12 +1763,8 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
           return SetError();
         }
 
-      CIPHERRSA RSA;
-      HASHSHA2  hash(HASHSHA2TYPE_256);
-
-      if(!RSA.SetKey(leaf->GetPublicCipherKey(), true) ||
-         !RSA.Verify(signedcontent, *certificateverify.GetBody()->GetSignature(), &hash,
-                     CIPHERRSAPKCS1VERSIONV21, HASHSHA2_256_DIGEST_SIZE))
+      if(!DIOSTREAMTLSSIGNATURE::Verify(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey(),
+                                        signedcontent, *certificateverify.GetBody()->GetSignature()))
         {
           SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
           return SetError();
@@ -1409,6 +1902,121 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SetAuthenticationError(DIOSTREAMTLSHANDSHAKECL
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::CipherSuite_IsOffered(XWORD ciphersuite)
+* @brief      Check whether a cipher suite was present in the registered ClientHello
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  ciphersuite : Cipher suite value.
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSHANDSHAKECLIENT::CipherSuite_IsOffered(XWORD ciphersuite)
+{
+  for(XDWORD c=0; c<offeredciphersuites.GetSize(); c++)
+    {
+      if(offeredciphersuites.Get(c) == ciphersuite) return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::SupportedGroup_IsOffered(XWORD supportedgroup)
+* @brief      Check whether a group was present in the registered supported_groups extension
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  supportedgroup : Supported group value.
+*
+* @return     bool : true if the group was offered; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSHANDSHAKECLIENT::SupportedGroup_IsOffered(XWORD supportedgroup)
+{
+  for(XDWORD c=0; c<offeredsupportedgroups.GetSize(); c++)
+    {
+      if(offeredsupportedgroups.Get(c) == supportedgroup) return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::KeyShare_IsOffered(XWORD supportedgroup)
+* @brief      Check whether a group was present in the registered key_share extension
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  supportedgroup : Supported group value.
+*
+* @return     bool : true if the key share was offered; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSHANDSHAKECLIENT::KeyShare_IsOffered(XWORD supportedgroup)
+{
+  for(XDWORD c=0; c<offeredkeysharegroups.GetSize(); c++)
+    {
+      if(offeredkeysharegroups.Get(c) == supportedgroup) return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signaturescheme)
+* @brief      Check whether a signature scheme was present in the registered ClientHello
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  signaturescheme : Signature scheme value.
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSHANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signaturescheme)
+{
+  for(XDWORD c=0; c<offeredsignatureschemes.GetSize(); c++)
+    {
+      if(offeredsignatureschemes.Get(c) == signaturescheme) return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
+* @brief      Check whether an ALPN protocol was present in the registered ClientHello
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  applicationprotocol : Application protocol value.
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSHANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
+{
+  for(XDWORD c=0; c<offeredapplicationprotocols.GetSize(); c++)
+    {
+      if(offeredapplicationprotocols.Get(c) == applicationprotocol) return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void DIOSTREAMTLSHANDSHAKECLIENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
@@ -1427,6 +2035,10 @@ void DIOSTREAMTLSHANDSHAKECLIENT::Clean()
   authenticationerror        = DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
   certificatevalidationerror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
   hasvalidationdatetime      = false;
+  applicationprotocolnegotiated = false;
+  applicationprotocol           = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+  currentkeysharegroup          = 0;
+  helloretryrequestprocessed    = false;
   servercertificate          = NULL;
   servercertificateverify    = NULL;
 }

@@ -119,7 +119,8 @@ class DIOSTREAMTLS : public T
                                               session.End();
 
                                               if(!session.Ini(config->GetCipherSuite(), DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
-                                                 !handshakeclient.Ini(&session, config->IsAllowUnauthenticatedServer()))
+                                                 !handshakeclient.Ini(&session, config->IsAllowUnauthenticatedServer()) ||
+                                                 !handshakeclient.Capabilities_Set(config))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
                                                   return false;
@@ -235,6 +236,29 @@ class DIOSTREAMTLS : public T
                                               if(this->xtimernotactivity) this->xtimernotactivity->Reset();
 
                                               return size;
+                                            }
+
+
+    bool                                    KeyUpdate                               (bool requestpeer = false)
+                                            {
+                                              XBUFFER records;
+
+                                              if(isclosing || isclosed ||
+                                                 (T::GetStatus() != DIOSTREAMSTATUS_CONNECTED) ||
+                                                 !handshakeclient.IsHandshakeCompleted() ||
+                                                 !session.KeyUpdate_Create(requestpeer, records))
+                                                {
+                                                  return false;
+                                                }
+
+                                              if(!Transport_Write(records))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  Close_OnError();
+                                                  return false;
+                                                }
+
+                                              return true;
                                             }
 
 
@@ -471,6 +495,27 @@ class DIOSTREAMTLS : public T
                                                   if(result == DIOSTREAMTLSSESSION_RESULT_INCOMPLETE) continue;
                                                   if(result == DIOSTREAMTLSSESSION_RESULT_ERROR)      return false;
 
+                                                  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> serverhellomessage;
+                                                  XBUFFER                                                          workbuffer;
+
+                                                  workbuffer.Add(serverhello);
+                                                  if(!serverhellomessage.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty()) return false;
+
+                                                  if(serverhellomessage.GetBody()->IsHelloRetryRequest())
+                                                    {
+                                                      XBUFFER secondclienthello;
+                                                      XBUFFER retryrecords;
+
+                                                      if(!session.GetHandshakeInput()->IsEmpty() ||
+                                                         !handshakeclient.HelloRetryRequest_Process(serverhello, secondclienthello, retryrecords) ||
+                                                         !Transport_Write(retryrecords))
+                                                        {
+                                                          return false;
+                                                        }
+
+                                                      continue;
+                                                    }
+
                                                   if(!handshakeclient.ServerHello_Process(serverhello)) return false;
                                                   if(!session.GetHandshakeInput()->IsEmpty())            return false;
 
@@ -500,6 +545,16 @@ class DIOSTREAMTLS : public T
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_RECORD;
                                                   Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+                                                  T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
+                                                  return false;
+                                                }
+
+                                              XBUFFER posthandshakeoutput;
+
+                                              if(!session.PostHandshakeOutput_Extract(posthandshakeoutput) ||
+                                                 (!posthandshakeoutput.IsEmpty() && !Transport_Write(posthandshakeoutput)))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
                                                   T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
                                                   return false;
                                                 }
@@ -650,4 +705,3 @@ class DIOSTREAMTLS : public T
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-

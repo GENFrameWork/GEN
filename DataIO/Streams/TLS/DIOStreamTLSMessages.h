@@ -47,6 +47,7 @@
 #define DIOSTREAMTLS_MSG_SESSIONID_SIZE                                       32
 #define DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE                                 4
 #define DIOSTREAMTLS_MSG_MAXLENGTH24                                          0x00FFFFFF
+#define DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE                                     (4*1024*1024)
 
 #define DIOSTREAMTLS_MSG_CIPHER_DES_CBC3_SHA                                  0x000A    // SSLv3   
 #define DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_CBC_SHA                      0x002F    // SSLv3   
@@ -191,6 +192,7 @@ enum DIOSTREAMTLS_ALERT_DESCRIPTION
 
 enum DIOSTREAMTLS_ALPN_TYPE
 {
+  DIOSTREAMTLS_ALPN_TYPE_UNKNOWN        = -1 ,
   DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1       ,
   DIOSTREAMTLS_ALPN_TYPE_HTTP_2         ,
   DIOSTREAMTLS_ALPN_TYPE_HTTP_3         
@@ -619,5 +621,3 @@ class DIOSTREAMTLS_MSG_FRAGMENT : public DIOSTREAMTLS_MSG_INTERFACE
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-

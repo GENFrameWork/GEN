@@ -37,6 +37,7 @@
 #include "CipherCertificateX509Validator.h"
 
 #include "CipherKeyPublicRSA.h"
+#include "CipherKeyECDSA.h"
 
 
 
@@ -381,6 +382,9 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSignatureAlgorithmSupported(CIPHERCERTIFI
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION : return true;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256         : return true;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS               : return (certificate->GetRSASSAPSSHashType() !=
+                                                                                  CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN);
                                                                     default : break;
     }
 
@@ -420,6 +424,15 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSamePublicKey(CIPHERKEY* key1, CIPHERKEY*
                                                 !exponent1.CompareSignedValues(exponent2));
                                       }
                                  break;
+
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC : { CIPHERKEYECDSA* keyECDSA1 = (CIPHERKEYECDSA*)key1;
+                                                    CIPHERKEYECDSA* keyECDSA2 = (CIPHERKEYECDSA*)key2;
+
+                                                    if(!keyECDSA1->Get() || !keyECDSA2->Get()) return false;
+
+                                                    return keyECDSA1->Get()->Compare((*keyECDSA2->Get()));
+                                                  }
+                                             break;
 
                                default : break;
     }

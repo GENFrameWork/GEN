@@ -60,6 +60,26 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XWORD                   GetCipherSuite                    ();
     void                    SetCipherSuite                    (XWORD ciphersuite);
 
+    XVECTOR<XWORD>*         GetCipherSuites                   ();
+    bool                    CipherSuite_Add                   (XWORD ciphersuite);
+    bool                    CipherSuites_Delete               ();
+
+    XVECTOR<XWORD>*         GetSupportedGroups                ();
+    bool                    SupportedGroup_Add                (XWORD supportedgroup);
+    bool                    SupportedGroups_Delete            ();
+
+    XVECTOR<XWORD>*         GetSignatureSchemes               ();
+    bool                    SignatureScheme_Add               (XWORD signaturescheme);
+    bool                    SignatureSchemes_Delete           ();
+
+    XVECTOR<XWORD>*         GetCertificateSignatureSchemes    ();
+    bool                    CertificateSignatureScheme_Add    (XWORD signaturescheme);
+    bool                    CertificateSignatureSchemes_Delete ();
+
+    XVECTOR<DIOSTREAMTLS_ALPN_TYPE>* GetApplicationProtocols  ();
+    bool                    ApplicationProtocol_Add           (DIOSTREAMTLS_ALPN_TYPE applicationprotocol);
+    bool                    ApplicationProtocols_Delete       ();
+
     XSTRING*                GetServerName                     ();
 
     XVECTOR<XBUFFER*>*      GetTrustedRoots                   ();
@@ -86,7 +106,11 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
 
     void                    Clean                             ();
 
-    XWORD                   ciphersuite;
+    XVECTOR<XWORD>          ciphersuites;
+    XVECTOR<XWORD>          supportedgroups;
+    XVECTOR<XWORD>          signatureschemes;
+    XVECTOR<XWORD>          certificatesignatureschemes;
+    XVECTOR<DIOSTREAMTLS_ALPN_TYPE> applicationprotocols;
     XSTRING                 servername;
     XVECTOR<XBUFFER*>       trustedroots;
     XVECTOR<XBUFFER*>       localcertificatechain;
@@ -98,5 +122,3 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-

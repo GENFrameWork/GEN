@@ -43,7 +43,9 @@
 #include "XTrace.h"
 
 #include "CipherKeyPublicRSA.h"
+#include "CipherKeyECDSA.h"
 #include "CipherRSA.h"
+#include "CipherECDSA.h"
 #include "HashSHA2.h"
 
 
@@ -240,11 +242,17 @@ static bool CIPHERCERTIFICATEX509_DER_OIDToString(CIPHERCERTIFICATEX509_DERITEM&
 }
 
 
-static bool CIPHERCERTIFICATEX509_DER_Algorithm(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& OID)
+static bool CIPHERCERTIFICATEX509_DER_Algorithm(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& OID,
+                                                CIPHERCERTIFICATEX509_DERITEM* algorithmparameters = NULL)
 {
   CIPHERCERTIFICATEX509_DERREADER reader(item.data, item.size);
   CIPHERCERTIFICATEX509_DERITEM   OIDitem;
   CIPHERCERTIFICATEX509_DERITEM   parameters;
+
+  if(algorithmparameters)
+    {
+      memset(algorithmparameters, 0, sizeof(CIPHERCERTIFICATEX509_DERITEM));
+    }
 
   if((item.tag != 0x30) || !reader.Read(OIDitem) || !CIPHERCERTIFICATEX509_DER_OIDToString(OIDitem, OID))
     {
@@ -253,13 +261,158 @@ static bool CIPHERCERTIFICATEX509_DER_Algorithm(CIPHERCERTIFICATEX509_DERITEM& i
 
   if(!reader.IsEnd())
     {
-      if(!reader.Read(parameters) || !reader.IsEnd() || (parameters.tag != 0x05) || parameters.size)
+      if(!reader.Read(parameters) || !reader.IsEnd())
         {
           return false;
+        }
+
+      if(algorithmparameters)
+        {
+          (*algorithmparameters) = parameters;
+        }
+       else
+        {
+          if((parameters.tag != 0x05) || parameters.size) return false;
         }
     }
 
   return true;
+}
+
+
+static bool CIPHERCERTIFICATEX509_DER_PositiveInteger(CIPHERCERTIFICATEX509_DERITEM& item, XDWORD& value)
+{
+  XDWORD index = 0;
+
+  value = 0;
+
+  if((item.tag != 0x02) || !item.size || (item.data[0] & 0x80)) return false;
+
+  if((item.size > 1) && !item.data[0])
+    {
+      if(!(item.data[1] & 0x80)) return false;
+      index = 1;
+    }
+
+  if((item.size - index) > sizeof(XDWORD)) return false;
+
+  while(index < item.size)
+    {
+      value = (value << 8) | item.data[index++];
+    }
+
+  return true;
+}
+
+
+static bool CIPHERCERTIFICATEX509_DER_RSASSAPSSHash(CIPHERCERTIFICATEX509_DERITEM& item,
+                                                     CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE& hashtype)
+{
+  XSTRING OID;
+
+  hashtype = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN;
+
+  if(!CIPHERCERTIFICATEX509_DER_Algorithm(item, OID)) return false;
+
+  if(!OID.Compare(__L("2.16.840.1.101.3.4.2.1"), false))
+    {
+      hashtype = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256;
+      return true;
+    }
+
+  if(!OID.Compare(__L("2.16.840.1.101.3.4.2.2"), false))
+    {
+      hashtype = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384;
+      return true;
+    }
+
+  if(!OID.Compare(__L("2.16.840.1.101.3.4.2.3"), false))
+    {
+      hashtype = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512;
+      return true;
+    }
+
+  return false;
+}
+
+
+static bool CIPHERCERTIFICATEX509_DER_RSASSAPSSParameters(CIPHERCERTIFICATEX509_DERITEM& parameters,
+                                                           CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE& hashtype,
+                                                           XDWORD& saltsize)
+{
+  CIPHERCERTIFICATEX509_DERREADER reader(parameters.data, parameters.size);
+  CIPHERCERTIFICATEX509_DERITEM   item;
+  CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE MGFhashtype;
+  bool                            hashpresent    = false;
+  bool                            MGFpresent     = false;
+  bool                            saltpresent    = false;
+  bool                            trailerpresent = false;
+  XBYTE                           lasttag        = 0;
+
+  hashtype    = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN;
+  MGFhashtype = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN;
+  saltsize    = 0;
+
+  if(parameters.tag != 0x30) return false;
+
+  while(!reader.IsEnd())
+    {
+      CIPHERCERTIFICATEX509_DERREADER explicitreader(NULL, 0);
+      CIPHERCERTIFICATEX509_DERITEM   value;
+
+      if(!reader.Read(item)) return false;
+      if((item.tag < 0xA0) || (item.tag > 0xA3) || (item.tag <= lasttag)) return false;
+
+      lasttag = item.tag;
+
+      explicitreader = CIPHERCERTIFICATEX509_DERREADER(item.data, item.size);
+      if(!explicitreader.Read(value) || !explicitreader.IsEnd()) return false;
+
+      switch(item.tag)
+        {
+          case 0xA0 : if(hashpresent || !CIPHERCERTIFICATEX509_DER_RSASSAPSSHash(value, hashtype)) return false;
+                      hashpresent = true;
+                      break;
+
+          case 0xA1 : { CIPHERCERTIFICATEX509_DERITEM MGFparameters;
+                        XSTRING                        MGFOID;
+
+                        if(MGFpresent || !CIPHERCERTIFICATEX509_DER_Algorithm(value, MGFOID, &MGFparameters) ||
+                           MGFOID.Compare(__L("1.2.840.113549.1.1.8"), false) ||
+                           !CIPHERCERTIFICATEX509_DER_RSASSAPSSHash(MGFparameters, MGFhashtype)) return false;
+
+                        MGFpresent = true;
+                      }
+                      break;
+
+          case 0xA2 : if(saltpresent || !CIPHERCERTIFICATEX509_DER_PositiveInteger(value, saltsize)) return false;
+                      saltpresent = true;
+                      break;
+
+          case 0xA3 : { XDWORD trailerfield;
+
+                        if(trailerpresent || !CIPHERCERTIFICATEX509_DER_PositiveInteger(value, trailerfield) ||
+                           (trailerfield != 1)) return false;
+
+                        trailerpresent = true;
+                      }
+                      break;
+
+              default : return false;
+        }
+    }
+
+  if(!hashpresent || !MGFpresent || !saltpresent || (hashtype != MGFhashtype)) return false;
+
+  switch(hashtype)
+    {
+      case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256 : return (saltsize == HASHSHA2_256_DIGEST_SIZE);
+      case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384 : return (saltsize == HASHSHA2_384_DIGEST_SIZE);
+      case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512 : return (saltsize == HASHSHA2_512_DIGEST_SIZE);
+                                                      default : break;
+    }
+
+  return false;
 }
 
 
@@ -1175,6 +1328,36 @@ XSTRING* CIPHERCERTIFICATEX509::GetAlgorithmTypeStr()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE CIPHERCERTIFICATEX509::GetRSASSAPSSHashType()
+* @brief      Get the validated RSA-PSS hash algorithm
+* @ingroup    CIPHER
+*
+* @return     CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE CIPHERCERTIFICATEX509::GetRSASSAPSSHashType()
+{
+  return RSASSAPSShashtype;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD CIPHERCERTIFICATEX509::GetRSASSAPSSSaltSize()
+* @brief      Get the validated RSA-PSS salt size
+* @ingroup    CIPHER
+*
+* @return     XDWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD CIPHERCERTIFICATEX509::GetRSASSAPSSSaltSize()
+{
+  return RSASSAPSSsaltsize;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetIssuerID()
 * @brief      get issuer Id
@@ -1518,6 +1701,7 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
   CIPHERCERTIFICATEX509_DERITEM   certificatesequence;
   CIPHERCERTIFICATEX509_DERITEM   TBS;
   CIPHERCERTIFICATEX509_DERITEM   outeralgorithm;
+  CIPHERCERTIFICATEX509_DERITEM   outeralgorithmparameters;
   CIPHERCERTIFICATEX509_DERITEM   signatureitem;
   XSTRING                          outeralgorithmOID;
   XSTRING                          inneralgorithmOID;
@@ -1533,7 +1717,7 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
 
   if(!sequence.Read(TBS) || (TBS.tag != 0x30) ||
      !sequence.Read(outeralgorithm) || !sequence.Read(signatureitem) || !sequence.IsEnd() ||
-     !CIPHERCERTIFICATEX509_DER_Algorithm(outeralgorithm, outeralgorithmOID) ||
+     !CIPHERCERTIFICATEX509_DER_Algorithm(outeralgorithm, outeralgorithmOID, &outeralgorithmparameters) ||
      (signatureitem.tag != 0x03) || (signatureitem.size < 2) || signatureitem.data[0])
     {
       return false;
@@ -1542,6 +1726,38 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
   if(!SetAlgorithmType(outeralgorithmOID.Get()))
     {
       return false;
+    }
+
+  if(algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS)
+    {
+      if(!CIPHERCERTIFICATEX509_DER_RSASSAPSSParameters(outeralgorithmparameters,
+                                                        RSASSAPSShashtype, RSASSAPSSsaltsize)) return false;
+
+      switch(RSASSAPSShashtype)
+        {
+          case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256 : algorithmtypestr = __L("RSA-PSS signature using SHA-256");
+                                                                  break;
+
+          case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384 : algorithmtypestr = __L("RSA-PSS signature using SHA-384");
+                                                                  break;
+
+          case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512 : algorithmtypestr = __L("RSA-PSS signature using SHA-512");
+                                                                  break;
+
+                                                          default : return false;
+        }
+    }
+   else if((algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1)   ||
+           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256) ||
+           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384) ||
+           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512))
+    {
+      if(outeralgorithmparameters.tag) return false;
+    }
+   else
+    {
+      if(outeralgorithmparameters.tag &&
+         ((outeralgorithmparameters.tag != 0x05) || outeralgorithmparameters.size)) return false;
     }
 
   CIPHERCERTIFICATEX509_DERREADER tbsreader(TBS.data, TBS.size);
@@ -1588,8 +1804,12 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
       return false;
     }
 
-  if(!tbsreader.Read(item) || !CIPHERCERTIFICATEX509_DER_Algorithm(item, inneralgorithmOID) ||
-     inneralgorithmOID.Compare(outeralgorithmOID))
+  CIPHERCERTIFICATEX509_DERITEM inneralgorithmparameters;
+
+  if(!tbsreader.Read(item) || !CIPHERCERTIFICATEX509_DER_Algorithm(item, inneralgorithmOID, &inneralgorithmparameters) ||
+     inneralgorithmOID.Compare(outeralgorithmOID) ||
+     (item.encodedsize != outeralgorithm.encodedsize) ||
+     memcmp(item.encoded, outeralgorithm.encoded, item.encodedsize))
     {
       return false;
     }
@@ -1632,60 +1852,99 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
 
   CIPHERCERTIFICATEX509_DERREADER publickeyinforeader(item.data, item.size);
   CIPHERCERTIFICATEX509_DERITEM   publickeyalgorithm;
+  CIPHERCERTIFICATEX509_DERITEM   publickeyalgorithmparameters;
   CIPHERCERTIFICATEX509_DERITEM   publickeybits;
   XSTRING                          publickeyalgorithmOID;
 
   if(!publickeyinforeader.Read(publickeyalgorithm) || !publickeyinforeader.Read(publickeybits) ||
      !publickeyinforeader.IsEnd() ||
-     !CIPHERCERTIFICATEX509_DER_Algorithm(publickeyalgorithm, publickeyalgorithmOID) ||
-     publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.1")) ||
+     !CIPHERCERTIFICATEX509_DER_Algorithm(publickeyalgorithm, publickeyalgorithmOID,
+                                          &publickeyalgorithmparameters) ||
      (publickeybits.tag != 0x03) || (publickeybits.size < 2) || publickeybits.data[0])
     {
       return false;
     }
 
-  CIPHERCERTIFICATEX509_DERREADER publickeyreader(&publickeybits.data[1], publickeybits.size - 1);
-  CIPHERCERTIFICATEX509_DERITEM   publickeysequence;
-
-  if(!publickeyreader.Read(publickeysequence) || !publickeyreader.IsEnd() || (publickeysequence.tag != 0x30))
+  if(!publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.1"), false))
     {
-      return false;
+      CIPHERCERTIFICATEX509_DERREADER publickeyreader(&publickeybits.data[1], publickeybits.size - 1);
+      CIPHERCERTIFICATEX509_DERITEM   publickeysequence;
+
+      if((publickeyalgorithmparameters.tag &&
+          ((publickeyalgorithmparameters.tag != 0x05) || publickeyalgorithmparameters.size)) ||
+         !publickeyreader.Read(publickeysequence) || !publickeyreader.IsEnd() || (publickeysequence.tag != 0x30))
+        {
+          return false;
+        }
+
+      CIPHERCERTIFICATEX509_DERREADER RSAreader(publickeysequence.data, publickeysequence.size);
+      CIPHERCERTIFICATEX509_DERITEM   modulusitem;
+      CIPHERCERTIFICATEX509_DERITEM   exponentitem;
+
+      if(!RSAreader.Read(modulusitem) || !RSAreader.Read(exponentitem) || !RSAreader.IsEnd() ||
+         (modulusitem.tag != 0x02) || !modulusitem.size || (modulusitem.data[0] & 0x80) ||
+         ((modulusitem.size > 1) && !modulusitem.data[0] && !(modulusitem.data[1] & 0x80)) ||
+         (exponentitem.tag != 0x02) || !exponentitem.size || (exponentitem.data[0] & 0x80) ||
+         ((exponentitem.size > 1) && !exponentitem.data[0] && !(exponentitem.data[1] & 0x80)))
+        {
+          return false;
+        }
+
+      XBUFFER modulusbuffer;
+      XBUFFER exponentbuffer;
+      XMPINTEGER modulus;
+      XMPINTEGER exponent;
+
+      if(!modulusbuffer.Add((XBYTE*)modulusitem.data, modulusitem.size) ||
+         !exponentbuffer.Add((XBYTE*)exponentitem.data, exponentitem.size) ||
+         !modulus.SetFromXBuffer(modulusbuffer) || !exponent.SetFromXBuffer(exponentbuffer))
+        {
+          return false;
+        }
+
+      CIPHERKEYPUBLICRSA* RSApublickey = GEN_NEW CIPHERKEYPUBLICRSA();
+      if(!RSApublickey)
+        {
+          return false;
+        }
+
+      if(!RSApublickey->Set(modulus, exponent) || !RSApublickey->Check() || !SetPublicCipherKey(RSApublickey))
+        {
+          GEN_DELETE RSApublickey;
+          return false;
+        }
     }
-
-  CIPHERCERTIFICATEX509_DERREADER RSAreader(publickeysequence.data, publickeysequence.size);
-  CIPHERCERTIFICATEX509_DERITEM   modulusitem;
-  CIPHERCERTIFICATEX509_DERITEM   exponentitem;
-
-  if(!RSAreader.Read(modulusitem) || !RSAreader.Read(exponentitem) || !RSAreader.IsEnd() ||
-     (modulusitem.tag != 0x02) || !modulusitem.size || (modulusitem.data[0] & 0x80) ||
-     ((modulusitem.size > 1) && !modulusitem.data[0] && !(modulusitem.data[1] & 0x80)) ||
-     (exponentitem.tag != 0x02) || !exponentitem.size || (exponentitem.data[0] & 0x80) ||
-     ((exponentitem.size > 1) && !exponentitem.data[0] && !(exponentitem.data[1] & 0x80)))
+   else if(!publickeyalgorithmOID.Compare(__L("1.2.840.10045.2.1"), false))
     {
-      return false;
+      XSTRING publickeycurveOID;
+
+      if((publickeyalgorithmparameters.tag != 0x06) ||
+         !CIPHERCERTIFICATEX509_DER_OIDToString(publickeyalgorithmparameters, publickeycurveOID) ||
+         publickeycurveOID.Compare(__L("1.2.840.10045.3.1.7"), false) ||
+         (publickeybits.size != (CIPHERECDSA_P256_PUBLICKEY_SIZE + 1)) ||
+         (publickeybits.data[1] != 0x04))
+        {
+          return false;
+        }
+
+      CIPHERKEYECDSA* ECDSApublickey = GEN_NEW CIPHERKEYECDSA();
+      if(!ECDSApublickey)
+        {
+          return false;
+        }
+
+      ECDSApublickey->SetType(CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC);
+
+      CIPHERECDSA ECDSA;
+      if(!ECDSApublickey->Set((XBYTE*)&publickeybits.data[1], CIPHERECDSA_P256_PUBLICKEY_SIZE) ||
+         !ECDSA.SetKey(ECDSApublickey, true) || !SetPublicCipherKey(ECDSApublickey))
+        {
+          GEN_DELETE ECDSApublickey;
+          return false;
+        }
     }
-
-  XBUFFER modulusbuffer;
-  XBUFFER exponentbuffer;
-  XMPINTEGER modulus;
-  XMPINTEGER exponent;
-
-  if(!modulusbuffer.Add((XBYTE*)modulusitem.data, modulusitem.size) ||
-     !exponentbuffer.Add((XBYTE*)exponentitem.data, exponentitem.size) ||
-     !modulus.SetFromXBuffer(modulusbuffer) || !exponent.SetFromXBuffer(exponentbuffer))
+   else
     {
-      return false;
-    }
-
-  CIPHERKEYPUBLICRSA* RSApublickey = GEN_NEW CIPHERKEYPUBLICRSA();
-  if(!RSApublickey)
-    {
-      return false;
-    }
-
-  if(!RSApublickey->Set(modulus, exponent) || !RSApublickey->Check() || !SetPublicCipherKey(RSApublickey))
-    {
-      GEN_DELETE RSApublickey;
       return false;
     }
 
@@ -2266,7 +2525,7 @@ bool CIPHERCERTIFICATEX509::IsServerNameValid(XCHAR* servername)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
-* @brief      Verify the X.509 signature with the issuer RSA public key
+* @brief      Verify the X.509 signature with the issuer public key
 * @ingroup    CIPHER
 *
 * @param[in]  issuerpublickey : Issuer public key.
@@ -2276,33 +2535,65 @@ bool CIPHERCERTIFICATEX509::IsServerNameValid(XCHAR* servername)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
 {
-  if(!issuerpublickey || (issuerpublickey->GetType() != CIPHERKEYTYPE_RSA_PUBLIC) ||
-     tbsdata.IsEmpty() || signature.IsEmpty())
+  if(!issuerpublickey || tbsdata.IsEmpty() || signature.IsEmpty())
     {
       return false;
     }
 
-  CIPHERRSA RSA;
-  if(!RSA.SetKey(issuerpublickey, true))
+  if(issuerpublickey->GetType() == CIPHERKEYTYPE_RSA_PUBLIC)
     {
-      return false;
+      CIPHERRSA RSA;
+      if(!RSA.SetKey(issuerpublickey, true)) return false;
+
+      switch(algorithmtype)
+        {
+          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_256);
+                                                                                return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
+                                                                              }
+
+          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_384);
+                                                                                return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
+                                                                              }
+
+          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_512);
+                                                                                return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
+                                                                              }
+
+          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS               : switch(RSASSAPSShashtype)
+                                                                              {
+                                                                                case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256 : { HASHSHA2 hash(HASHSHA2TYPE_256);
+                                                                                                                                          return RSA.Verify(tbsdata, signature, &hash,
+                                                                                                                                                            CIPHERRSAPKCS1VERSIONV21,
+                                                                                                                                                            RSASSAPSSsaltsize);
+                                                                                                                                        }
+
+                                                                                case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384 : { HASHSHA2 hash(HASHSHA2TYPE_384);
+                                                                                                                                          return RSA.Verify(tbsdata, signature, &hash,
+                                                                                                                                                            CIPHERRSAPKCS1VERSIONV21,
+                                                                                                                                                            RSASSAPSSsaltsize);
+                                                                                                                                        }
+
+                                                                                case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512 : { HASHSHA2 hash(HASHSHA2TYPE_512);
+                                                                                                                                          return RSA.Verify(tbsdata, signature, &hash,
+                                                                                                                                                            CIPHERRSAPKCS1VERSIONV21,
+                                                                                                                                                            RSASSAPSSsaltsize);
+                                                                                                                                        }
+
+                                                                                                                                default : break;
+                                                                              }
+                                                                              break;
+
+                                                                        default : break;
+        }
     }
 
-  switch(algorithmtype)
+  if((issuerpublickey->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) &&
+     (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256))
     {
-      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_256);
-                                                                            return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
-                                                                          }
+      CIPHERECDSA ECDSA;
+      HASHSHA2    hash(HASHSHA2TYPE_256);
 
-      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_384);
-                                                                            return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
-                                                                          }
-
-      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_512);
-                                                                            return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
-                                                                          }
-
-                                                                    default : break;
+      return ECDSA.SetKey(issuerpublickey, true) && ECDSA.Verify(tbsdata, signature, &hash);
     }
 
   return false;
@@ -2511,6 +2802,8 @@ void CIPHERCERTIFICATEX509::Clean()
   version                         = 0;
   algorithmtype                   = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN;
   algorithmtypestr.Empty();
+  RSASSAPSShashtype               = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN;
+  RSASSAPSSsaltsize               = 0;
 
   publiccipherkeyusaged           = false;
   publiccipherkeybasicconstraints = false;

@@ -291,7 +291,8 @@ XBUFFER* DIOSTREAMTLS_MSG_HANDSHAKE::GetBody()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
-  if(body.GetSize() > DIOSTREAMTLS_MSG_MAXLENGTH24)
+  if((body.GetSize() > DIOSTREAMTLS_MSG_MAXLENGTH24) ||
+     (body.GetSize() > (DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE - DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE)))
     {
       return false;
     }
@@ -382,6 +383,11 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE::Message_Extract(XBUFFER& input, XBUFFER& messag
 
   XDWORD length      = ((XDWORD)data[1] << 16) | ((XDWORD)data[2] << 8) | (XDWORD)data[3];
   XDWORD messagelength = DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE + length;
+
+  if(messagelength > DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE)
+    {
+      return false;
+    }
 
   if(input.GetSize() < messagelength)
     {

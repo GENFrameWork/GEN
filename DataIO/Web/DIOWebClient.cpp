@@ -1598,6 +1598,8 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       if(!tlsconfig) return false;
       tlsconfig->GetServerName()->Set(server.Get());
+      tlsconfig->ApplicationProtocols_Delete();
+      if(!tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1)) return false;
     }
 
   #endif
