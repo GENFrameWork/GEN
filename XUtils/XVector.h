@@ -436,7 +436,7 @@ class XVECTOR
 
     bool                            ResizeAdd                             ()
                                     {
-                                      // althougb if nelement gets bigger than narray we have a serious problem
+
                                       if((nelements >= narray) || (!narray))
                                         {
                                           XDWORD newsize  = nelements + addinlimit;                                       
@@ -456,7 +456,7 @@ class XVECTOR
                                           narray = newsize;
                                           array  = newarray;
 
-                                          // --------------------------------------------------
+
 
                                           if((newsize * sizeof (T)) == 400)
                                             {                                                                                                             
@@ -464,7 +464,7 @@ class XVECTOR
                                               a++;                                                      
                                             }
 
-                                          // --------------------------------------------------
+
                                         }
 
                                       return true;
@@ -489,14 +489,14 @@ class XVECTOR
 
     bool                            ResizeRemove                          (XDWORD index)
                                     {
-                                      // takes the index of the element to remove and copies over the memory to avoid allocations/deallocations
+
                                       if(index <= (nelements-1))
                                         {
                                           array[index].~T();
 
                                           if(index != (nelements-1))
                                             {
-                                              // if we just take elements we are accessing one more memory location
+
                                               XDWORD movedelta = (nelements-1) - index;
                                               memmove(&array[index], &array[index+1], movedelta*sizeof(T));
                                             }

@@ -66,16 +66,16 @@ class HASHSHA1 : public HASH
 
     void              Clean                     (); 
 
-     XDWORD           H[5];                     // Message digest buffers
+     XDWORD           H[5];
 
-     XDWORD           lengthlow;                // Message length in bits
-     XDWORD           lengthhigh;               // Message length in bits
+     XDWORD           lengthlow;
+     XDWORD           lengthhigh;
 
-     XBYTE            msgblock[64];             // 512-bit message blocks
-     int              msgblockindex;            // Index into message block array
+     XBYTE            msgblock[64];
+     int              msgblockindex;
 
-     bool             computed;                 // Is the digest computed?
-     bool             corrupted;                // Is the message digest corrupe
+     bool             computed;
+     bool             corrupted;
 };
 
 

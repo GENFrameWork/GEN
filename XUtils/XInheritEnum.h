@@ -73,9 +73,9 @@ class XINHERITENUM
                         }
   private:
 
-  // Note - the value is declared as a union mainly for as a debugging aid. If 
-  // the union is undesired and you have other methods of debugging, change it
-  // to either of EnumT and do a cast for the constructor that accepts BaseEnumT.
+
+
+
 
      union
      { 

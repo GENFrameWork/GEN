@@ -64,10 +64,10 @@ class UI_ANIMATIONS
   
   private:
                                     UI_ANIMATIONS          ();   
-                                    UI_ANIMATIONS          (UI_ANIMATIONS const&);        // Don't implement
+                                    UI_ANIMATIONS          (UI_ANIMATIONS const&);
     virtual                        ~UI_ANIMATIONS          ();
 
-    void                            operator =             (UI_ANIMATIONS const&);        // Don't implement
+    void                            operator =             (UI_ANIMATIONS const&);
 
     void                            Clean                  ();
 

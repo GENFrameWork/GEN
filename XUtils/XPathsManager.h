@@ -110,9 +110,9 @@ class XPATHSMANAGER
     
   private:
                                       XPATHSMANAGER                 ();
-                                      XPATHSMANAGER                 (XPATHSMANAGER const&);       // Don't implement
+                                      XPATHSMANAGER                 (XPATHSMANAGER const&);
     virtual                          ~XPATHSMANAGER                 ();
-    void                              operator =                    (XPATHSMANAGER const&);       // Don't implement
+    void                              operator =                    (XPATHSMANAGER const&);
 
     void                              Clean                         ();
 

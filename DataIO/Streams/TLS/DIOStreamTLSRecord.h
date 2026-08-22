@@ -91,7 +91,7 @@ class DIOSTREAMTLSRECORD
 
     void                                    Clean                                             ();
 
-    DIOSTREAMTLSKEYSCHEDULE*                keyschedule;                                      // Not owned by this class
+    DIOSTREAMTLSKEYSCHEDULE*                keyschedule;
 
     CIPHERAESGCM*                           cipher[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     CIPHERKEYSYMMETRICAL*                   key[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];

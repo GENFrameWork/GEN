@@ -77,7 +77,7 @@ class XFILECSV : public XFILETXT
                                   XFILECSV                (XFILE* file);
     virtual                      ~XFILECSV                ();
 
-  //virtual bool                  Open                    (XPATH& xpath, bool readonly = true, bool haveheader = false);
+
     virtual bool                  Open                    (XPATH& xpath, bool readonly = true);
     virtual bool                  Close                   (void);
 

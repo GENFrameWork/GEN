@@ -67,8 +67,8 @@ class GRPSTATISTICSCHART
 
     void                            ComputeNiceMax                        (double rawmax, double& nicemax, int& ndivisions);
 
-    GRPSTATISTICSCHARTDATA          data;                                 // chart data model
-    GRPSTATISTICSCHARTCONFIG        config;                               // chart visual config
+    GRPSTATISTICSCHARTDATA          data;
+    GRPSTATISTICSCHARTCONFIG        config;
 };
 
 

@@ -61,25 +61,25 @@ class UI_CSSPARSER
                                     UI_CSSPARSER                ();
     virtual                        ~UI_CSSPARSER                ();
 
-    // Loads a .css file from disk and parses it into `out`. Existing rules in `out` are kept; the file's rules
-    // are appended, so several sheets can be merged into one target if ever needed. Returns false only if the
-    // file cannot be opened; partial parse errors are recovered from and do not fail the whole load.
+
+
+
     bool                            ParseFile                   (XPATH& pathfile, UI_STYLESHEET& out);
 
-    // Parses an in-memory CSS text buffer into `out`. Same append + recover semantics as ParseFile().
+
     bool                            ParseText                   (XSTRING& text, UI_STYLESHEET& out);
 
 
   private:
 
-    // --- Low-level tokenizer helpers over the text buffer being parsed --------------------------------------------
-    void                            SkipWhitespaceAndComments   (XSTRING& text, int& pos);
-    bool                            ReadSelectorList            (XSTRING& text, int& pos, UI_CSSRULE* rule);   // stops before '{'
-    bool                            ReadDeclarationBlock        (XSTRING& text, int& pos, UI_CSSRULE* rule);   // consumes the '{...}'
-    void                            SkipToNextRule              (XSTRING& text, int& pos);                     // error recovery: advance past next '}'
 
-    // Parse one compound selector token (from `start` up to `end`, both inclusive on start / exclusive on end)
-    // into a fresh UI_CSSSELECTOR. Returns NULL on empty/invalid token.
+    void                            SkipWhitespaceAndComments   (XSTRING& text, int& pos);
+    bool                            ReadSelectorList            (XSTRING& text, int& pos, UI_CSSRULE* rule);
+    bool                            ReadDeclarationBlock        (XSTRING& text, int& pos, UI_CSSRULE* rule);
+    void                            SkipToNextRule              (XSTRING& text, int& pos);
+
+
+
     UI_CSSSELECTOR*                 ParseCompoundSelector       (XSTRING& text, int start, int end);
 
     void                            Clean                       ();

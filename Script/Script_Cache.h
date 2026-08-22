@@ -69,9 +69,9 @@ class SCRIPT_CACHE
 
   private:
                                       SCRIPT_CACHE                ();
-                                      SCRIPT_CACHE                (SCRIPT_CACHE const&);       // Don't implement
+                                      SCRIPT_CACHE                (SCRIPT_CACHE const&);
     virtual                          ~SCRIPT_CACHE                ();
-    void                              operator =                  (SCRIPT_CACHE const&);       // Don't implement
+    void                              operator =                  (SCRIPT_CACHE const&);
 
     void                              Clean                       ();
 

@@ -90,10 +90,10 @@ class DIOSSHREVERSE
 
   private:
                                   DIOSSHREVERSE         ();
-                                  DIOSSHREVERSE         (DIOSSHREVERSE const&);     // Don't implement
+                                  DIOSSHREVERSE         (DIOSSHREVERSE const&);
     virtual                      ~DIOSSHREVERSE         ();
                                   
-    void                          operator =            (DIOSSHREVERSE const&);     // Don't implement
+    void                          operator =            (DIOSSHREVERSE const&);
 
     void                          Clean                 ();
     

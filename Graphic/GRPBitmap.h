@@ -281,13 +281,13 @@ class GRPBITMAPPIXELFORMATBUFFER : public GRPBITMAP
                                                             float cosine  = (float)cos(radians);
                                                             float sine    = (float)sin(radians);
 
-                                                            //float oneminuscosine  = (float)cos(oneminusradians);
+
                                                             float oneminussine    = (float)sin(oneminusradians);
 
                                                             int w = (int)(height*fabs(oneminussine) + width*fabs(cosine));
                                                             int h = (int)(height*fabs(cosine) + width*fabs(oneminussine));
 
-                                                            //int bytesppixel = 4;
+
 
                                                             GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>* bitmap = GEN_NEW GRPBITMAPPIXELFORMATBUFFER<PIXELFORMATBUFFER, COLORTYPE>(w, h, mode);
                                                             if(!bitmap) return false;

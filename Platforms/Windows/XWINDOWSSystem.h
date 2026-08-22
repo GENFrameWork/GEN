@@ -87,10 +87,10 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																									PPERF_OBJECT_TYPE perfobj = NULL;
 																									T									value		= { 0 };
 
-																									// Get the first object type.
+
 																									perfobj = FirstObject(*perfdata);
 
-																									// Look for the given object index
+
 
 																									for(DWORD i=0; i<(*perfdata)->NumObjectTypes; i++ )
 																										{
@@ -115,10 +115,10 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																									PPERF_OBJECT_TYPE perfobj		= NULL;
 																									T									value			= { 0 };
 
-																									// Get the first object type.
+
 																									perfobj = FirstObject(*perfdata);
 
-																									// Look for the given object index
+
 
 																									for(DWORD i=0; i<(*perfdata)->NumObjectTypes; i++ )
 																										{
@@ -185,11 +185,11 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 
 		void																				QueryPerformanceData															(PERF_DATA_BLOCK** perfdata, DWORD objectindex, DWORD counterindex)
 																								{
-																									//
-																									// Since i want to use the same allocated area for each query,
-																									// i declare CBUFFER as static.
-																									// The allocated is changed only when RegQueryValueEx return ERROR_MORE_DATA
-																									//
+
+
+
+
+
 																									static CBUFFER		buffer(XWINDOWSSYSTEM_TOTALBYTES);
 																									DWORD							buffersize = buffer.GetSize();
 																									LONG							result;
@@ -204,7 +204,7 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																																																					, buffer
 																																																					, &buffersize )) == ERROR_MORE_DATA )
 																										{
-																											// Get a buffer that is big enough.
+
 
 																											buffersize += XWINDOWSSYSTEM_BYTEINCREMENT;
 																											buffer.Realloc(buffersize);
@@ -220,7 +220,7 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																									PPERF_INSTANCE_DEFINITION		perfinst			= NULL;
 																									PPERF_COUNTER_BLOCK					counterblock	= NULL;
 
-																									// Get the first counter.
+
 
 																									perfcntr = FirstCounter( perfobj );
 
@@ -228,7 +228,7 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																										{
 																											if (perfcntr->CounterNameTitleIndex == counterindex)  break;
 
-																											// Get the next counter.
+
 																											perfcntr = NextCounter( perfcntr );
 																										}
 
@@ -240,9 +240,9 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																										{
 																											perfinst = FirstInstance( perfobj );
 		
-																											// Look for instance instancename
-																											//_bstr_t bstrInstance;
-																											//_bstr_t bstrInputInstance = instancename;
+
+
+
 
 																											XSTRING instancenamestr;
 																											XSTRING instancenamestr2;
@@ -259,7 +259,7 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																															break;
 																														}
 				
-																													// Get the next instance.
+
 
 																													perfinst = NextInstance( perfinst );
 																												}
@@ -287,7 +287,7 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																									PPERF_INSTANCE_DEFINITION		perfinst							= NULL;
 																									PPERF_COUNTER_BLOCK					counterblock					= NULL;
 
-																									// Get the first counter.
+
 
 																									perfcntr = FirstCounter(perfobj);
 
@@ -305,7 +305,7 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																													if(procIDperfcntr) break;
 																												}
 
-																											// Get the next counter.
+
 
 																											perfcntr = NextCounter( perfcntr );
 																										}
@@ -333,7 +333,7 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 																																}
 																														}
 				
-																													// Get the next instance.
+
 
 																													perfinst = NextInstance( perfinst );
 																												}
@@ -351,7 +351,7 @@ class XWINDOWSSYSTEM_PERFCOUNTERS
 
 
 	
-		// Functions used to navigate through the performance data.      
+
 	 
 		PPERF_OBJECT_TYPE														FirstObject																				(PPERF_DATA_BLOCK perfdata)						{	return( (PPERF_OBJECT_TYPE)((PBYTE)perfdata + perfdata->HeaderLength));												}
 		PPERF_OBJECT_TYPE														NextObject																				(PPERF_OBJECT_TYPE perfobj)						{	return( (PPERF_OBJECT_TYPE)((PBYTE)perfobj + perfobj->TotalByteLength));											}

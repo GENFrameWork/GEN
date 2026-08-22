@@ -96,7 +96,7 @@ class CIPHERECDSA : public CIPHER
     XMPINTEGER                      publickeyY;
     bool                            havepublickey;
 
-    // Per-curve sizing, set by Parameters_Set() from the CIPHERTYPE (P-256/P-384/P-521) given to the constructor.
+
     XDWORD                          coordinatesize;
     XDWORD                          publickeysize;
     XDWORD                          curvebits;

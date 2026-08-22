@@ -210,10 +210,10 @@ class DIOALERTS
 
   private:
                                                     DIOALERTS                   (); 
-                                                    DIOALERTS                   (DIOALERTS const&);       // Don't implement
+                                                    DIOALERTS                   (DIOALERTS const&);
     virtual                                        ~DIOALERTS                   ();
 
-    void                                            operator =                  (DIOALERTS const&);       // Don't implement
+    void                                            operator =                  (DIOALERTS const&);
 
     bool                                            Sender_SMTPSend             (DIOALERT* alert); 
     bool                                            Sender_SMSSend              (DIOALERT* alert);

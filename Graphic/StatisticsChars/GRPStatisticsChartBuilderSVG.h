@@ -68,7 +68,7 @@ class GRPSTATISTICSCHARTBUILDERSVG : public GRPSTATISTICSCHARTBUILDER
     XCHAR*                          AnchorToString                        (GRPSTATISTICSCHARTTEXTANCHOR anchor);
     void                            EscapeXML                             (XCHAR* text, XSTRING& out);
 
-    XSTRING                         content;                              // accumulated SVG XML
+    XSTRING                         content;
 };
 
 

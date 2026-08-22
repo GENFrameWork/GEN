@@ -53,17 +53,17 @@ class GRPLINUXBLITGLESX11 : public GRPBLITGLES
 
     bool                                   GetNativeWindowSize                (int& width, int& height);
 
-    // X11: no bitmap rescaling. The canvas is presented at its native pixel size (1 texel = 1
-    // pixel), growing/shrinking independently on each axis with the window instead of being
-    // stretched/letterboxed to fill it. It is anchored to the window's TOP-LEFT corner (not
-    // centered): growing the window reveals more background at the bottom/right, and shrinking it
-    // crops the canvas' bottom/right edges first, regardless of which edge/corner was dragged. The
-    // native window's growth cap at the viewport's max size is handled in GRPLINUXSCREENX11 (a
-    // WM_NORMAL_HINTS/PMaxSize hint for native-chromes windows via ApplyWMNormalHints(), plus a
-    // reactive WM-independent snap-back in Update()/Resize() -- not all X11 window managers honour
-    // PMaxSize for interactive drag, so this method must NOT assume the surface it is handed is
-    // already capped); this method is what makes the content itself hide, rather than shrink,
-    // below the viewport's min size.
+
+
+
+
+
+
+
+
+
+
+
     void                                   ComputePresentationScale          (GLsizei surfacewidth, GLsizei surfaceheight, float& scalex, float& scaley, float& translatex, float& translatey, bool& visible);
 };
 

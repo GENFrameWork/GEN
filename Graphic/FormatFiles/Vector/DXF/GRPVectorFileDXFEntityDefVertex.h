@@ -72,10 +72,10 @@ class GRPVECTORFILEDXFENTITYDEFVERTEX
 
     void                                Clean                                 ();
 
-    GRPVECTORFILEDXFENTITYDEFPOINT      point;                                // The point;    
-    double                              iniwidth;                             // Start width.
-    double                              endwidth;                             // End width.
-    double                              bulge;                                // Bulge.
+    GRPVECTORFILEDXFENTITYDEFPOINT      point;
+    double                              iniwidth;
+    double                              endwidth;
+    double                              bulge;
 };
 
 

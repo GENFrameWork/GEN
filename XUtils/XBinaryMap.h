@@ -120,7 +120,7 @@ class XBINARYMAP
                                                   XLIST<XPAIR<K, E> > lst;
                                                   container.GetMultiple(XPAIR<K, E>(key, E()), lst);
 
-                                                  // now transform lst to the list
+
                                                   typename XLIST<XPAIR<K, E> >::XITERATOR it;
                                                   for(it = lst.Begin(); it != lst.End(); it++)
                                                     {

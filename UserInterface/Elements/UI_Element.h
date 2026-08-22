@@ -142,34 +142,34 @@ class UI_ELEMENT : public XSUBJECT
 
 		XSTRING*															GetTypeString								();
 
-		// --- CSS class attribute (space-separated list, HTML/CSS semantics) ------------------------------------------
-		// Retro-compatible: layouts that never set a "class" attribute keep an empty list and are matched only by
-		// type / id selectors. Populated by the XML loader from the "class" attribute; consumed by UI_STYLESHEET to
-		// resolve .class selectors during layout construction.
-		XSTRING*															GetClassNamesRaw						();										// raw attribute string ("chip primary big")
-		XVECTOR<XSTRING*>*										GetClassNames								();										// split view, one entry per class
-		void																	SetClassNames								(XCHAR* rawlist);							// resets the split view from rawlist
-		void																	SetClassNames								(XSTRING& rawlist);
-		bool																	HasClass										(XCHAR* classname);						// case-insensitive membership test
 
-		// --- Pseudo-class state re-resolution (owned by UI_ELEMENT) --------------------------------------------------
-		// Populates `out` with the pseudo-class names implied by the element's current live state (ispreselect,
-		// isselected, isactive). Strings are heap-allocated with GEN_NEW; the caller must delete them. Adding new
-		// mappings here (e.g. :hover) is the extension point when motion tracking gets wired to the CSS layer.
+
+
+
+		XSTRING*															GetClassNamesRaw						();
+		XVECTOR<XSTRING*>*										GetClassNames								();
+		void																	SetClassNames								(XCHAR* rawlist);
+		void																	SetClassNames								(XSTRING& rawlist);
+		bool																	HasClass										(XCHAR* classname);
+
+
+
+
+
 		void																	GetActivePseudos						(XVECTOR<XSTRING*>& out);
 
-		// Captures the current color / bckgrdcolor / roundrect as the visual baseline for later state flips.
-		// UI_MANAGER calls it once at end-of-load, right after XML + stateless CSS have been applied.
+
+
 		void																	SnapshotStyleVisual					();
 
-		// Re-resolves the active stylesheet with the element's current pseudo-class set, then re-applies the
-		// three baseline visual keys (color, bckgrdcolor, roundrect) on top of the snapshot. Called by the state
-		// setters when their value changes; a no-op if no stylesheet is active or no snapshot exists.
+
+
+
 		void																	ReapplyStyleVisual					();
 
-		// One-time flag that marks this element as reachable by at least one pseudo-carrying rule in the current
-		// stylesheet. UI_MANAGER sets it at load time via HasPseudoRulesFor(); if false, the state setters skip
-		// the snapshot restore + re-resolve pair entirely (zero cost on elements the sheet never restyles).
+
+
+
 		bool																	GetStyleHasStateRules				();
 		void																	SetStyleHasStateRules				(bool has);
 
@@ -185,12 +185,12 @@ class UI_ELEMENT : public XSUBJECT
 		UI_COLOR*															GetColor										();
 		UI_COLOR*															GetBackgroundColor					();
 
-		// --- Authored-vs-default flags for the two base colours (step 6) ------------------------------------------
-		// Track whether "color" and "bckgrdcolor" were actually authored (via XML attribute or CSS declaration),
-		// as opposed to left at UI_COLOR's zero-initialised default. Consumers use these to implement the
-		// CSS-natural semantics: Draw_Form prefers background_color when set (falls back to color for retro-compat
-		// with pre-step-6 layouts), and CSS "color: inherit" walks up the parent chain looking for the first
-		// ancestor with color_set == true.
+
+
+
+
+
+
 		bool																	IsColorSet									();
 		void																	SetColorSet									(bool value);
 
@@ -226,55 +226,55 @@ class UI_ELEMENT : public XSUBJECT
 		double																GetMargin                   (UI_ELEMENT_TYPE_ALIGN position);
 		void																	SetMargin                   (UI_ELEMENT_TYPE_ALIGN position, double value);
 
-		// --- CSS box-model additions (step 4) --------------------------------------------------------------------------
-		// Padding: inner inset applied by CalculePosition when placing this element's children. Indexed by the same
-		// UI_ELEMENT_TYPE_ALIGN enum values used by margin (LEFT / RIGHT / UP / DOWN). Default 0 on every side, so
-		// layouts that never set it retain their historical geometry.
+
+
+
+
 		double																GetPadding                  (UI_ELEMENT_TYPE_ALIGN position);
 		void																	SetPadding                  (UI_ELEMENT_TYPE_ALIGN position, double value);
 
-		// Border width in pixels for the element's stroke. -1 = "unset, use the skin's historical default" (which
-		// today is 1.0 for containers such as UI_ELEMENT_FORM); 0 = draw no border at all; any positive value = draw
-		// with that thickness. Value 0 is honoured explicitly so authors can suppress the default 1-px card outline
-		// from CSS with "border-width: 0;".
+
+
+
+
 		double																GetBorderWidth              ();
 		void																	SetBorderWidth              (double borderwidth);
 
-		// Border color (base-level equivalent of the existing per-type "linecolor"). When unset, containers fall
-		// back to their historical linecolor member so pre-step-5 layouts render unchanged. Query IsBorderColorSet()
-		// before consuming, to distinguish an authored value (including a transparent one) from the default state.
+
+
+
 		UI_COLOR*															GetBorderColor              ();
 		bool																	IsBorderColorSet            ();
 		void																	SetBorderColorFromString    (XCHAR* string);
 		void																	SetBorderColorFromString    (XSTRING& string);
 
-		// Per-corner border radius (CSS convention: TL, TR, BR, BL). A corner with radius < 0 falls back to the
-		// element's uniform roundrect; if roundrect is also 0, the corner is drawn square. Consumers should read
-		// through GetEffectiveBorderRadius() so the fallback chain is applied consistently.
+
+
+
 		double																GetBorderRadius             (UI_ELEMENT_BORDER_CORNER corner);
 		void																	SetBorderRadius             (UI_ELEMENT_BORDER_CORNER corner, double value);
 		double																GetEffectiveBorderRadius    (UI_ELEMENT_BORDER_CORNER corner);
 		bool																	HasAnyPerCornerRadius       ();
 
-		// --- Box-shadow (steps 7-10) -----------------------------------------------------------------------------------
-		// CSS-like drop shadow drawn behind the element (before its own content) at (offset_x, offset_y), tinted
-		// with shadow_color. When blur > 0, the skin rasterises the silhouette into an off-screen RGBA buffer and
-		// runs AGG's own agg::stack_blur_rgba32 (agg_blur.h) on it before compositing; blur == 0 (or a non-32-bit
-		// canvas, or a failed off-screen allocation) falls back to the hard-edged silhouette. These properties
-		// live on the base UI_ELEMENT precisely so any widget type can use them, but as of step 10 only three
-		// Draw_X functions in UI_SkinCanvas.cpp actually paint the shadow layer: Draw_Form (its own inline copy,
-		// anchored on UI_ELEMENT_FORM::GetVisibleRect()), Draw_Image (via the generic, type-agnostic
-		// UI_SkinCanvas_DrawElementBoxShadow helper, anchored on the base GetBoundaryLine()), and Draw_ProgressBar
-		// (its own inline copy, read from the PROGRESSBAR element but anchored/radius-matched on the actual visible
-		// track sub-element, element->GetProgressRect() -- deliberately not the generic helper, since that rect and
-		// its roundcap-aware radius are not what UI_SkinCanvas_DrawElementBoxShadow assumes). Draw_Animation gets it
-		// transitively (it delegates its own drawing to a child Draw_Image call). Every other Draw_X still silently
-		// ignores a box-shadow set on it -- setting box_shadow_set on those types stores the value (CSS parsing is
-		// unaffected) but nothing renders yet. See UI_SkinCanvas_DrawElementBoxShadow's own comment for why wiring
-		// in more types is a per-type job, not a blind loop over every Draw_X.
-		// The skin expands the element's rebuild-area to include the shadow footprint (see PreDrawFunction),
-		// so save/restore cycles at repaint time do not leave ghost pixels outside the element rect -- this part
-		// already works for every element type regardless of whether its Draw_X paints the shadow yet.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		bool																	IsBoxShadowSet              ();
 		void																	SetBoxShadowSet             (bool value);
 		double																GetShadowOffsetX            ();
@@ -329,8 +329,8 @@ class UI_ELEMENT : public XSUBJECT
 		XSTRING																name;
 		UI_ELEMENT_TYPE												type;
 		XSTRING																type_string;
-		XSTRING																class_names_raw;											// full "class" attribute as authored
-		XVECTOR<XSTRING*>											class_names;													// owned split view (one XSTRING* per class)
+		XSTRING																class_names_raw;
+		XVECTOR<XSTRING*>											class_names;
 		UI_ELEMENT_CHROMEROLE									chromerole;
 		
 		UI_ELEMENT*														father;	
@@ -338,15 +338,15 @@ class UI_ELEMENT : public XSUBJECT
 		
 		UI_COLOR															color;
 		UI_COLOR															backgroundcolor;
-		bool																	color_set;                                 // step 6: true iff "color" was authored
-		bool																	background_color_set;                      // step 6: true iff "bckgrdcolor" was authored
+		bool																	color_set;
+		bool																	background_color_set;
 
-		// Step 7: box-shadow. box_shadow_set flags whether the shadow layer must be drawn at all; when false
-		// the other fields are irrelevant and the skin skips the extra draw call and the rebuild-area expansion.
+
+
 		bool																	box_shadow_set;
 		double																shadow_offset_x;
 		double																shadow_offset_y;
-		double																shadow_blur;                               // parsed and stored; rendered via agg::stack_blur_rgba32 when > 0 (see Draw_Form)
+		double																shadow_blur;
 		UI_COLOR															shadow_color;
 
 		double																x_position;
@@ -362,12 +362,12 @@ class UI_ELEMENT : public XSUBJECT
 		UI_BOUNDARYLINE												boundaryline;
 
 		double																margin[UI_ELEMENT_MARGIN_MAX];
-		double																padding[UI_ELEMENT_MARGIN_MAX];                // step 4: CSS padding (LEFT/RIGHT/UP/DOWN)
-		double																border_width;                                  // step 4: -1 = unset, 0 = no stroke, >0 = px
+		double																padding[UI_ELEMENT_MARGIN_MAX];
+		double																border_width;
 
-		UI_COLOR															border_color;                                  // step 5: authored border colour (see border_color_set)
-		bool																	border_color_set;                              // step 5: true iff border_color was authored
-		double																border_radius[UI_ELEMENT_BORDER_CORNER_MAX];   // step 5: per-corner radius; -1 = fallback to roundrect
+		UI_COLOR															border_color;
+		bool																	border_color_set;
+		double																border_radius[UI_ELEMENT_BORDER_CORNER_MAX];
 
 		bool																	isactive;
 		bool																	ispreselect;		
@@ -391,9 +391,9 @@ class UI_ELEMENT : public XSUBJECT
 		
 		XVECTOR<UI_ELEMENT*>									compose_elements;
 
-		// --- Baseline visual snapshot for pseudo-class state re-resolution -------------------------------------------
-		// Captured once at end-of-load via SnapshotStyleVisual(); restored by ReapplyStyleVisual() before
-		// layering state-active CSS rules on top. Only used when style_has_state_rules is true.
+
+
+
 		UI_COLOR															snapshot_color;
 		UI_COLOR															snapshot_backgroundcolor;
 		XDWORD																snapshot_roundrect;

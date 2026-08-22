@@ -72,29 +72,29 @@ class CIPHERRSA_CONTEXT
 
     void                            Clean                             ();
                                     
-    size_t                          len;                              // size(N) in chars
+    size_t                          len;
 
-    XMPINTEGER                      N;                                // public modulus
-    XMPINTEGER                      E;                                // public exponent
+    XMPINTEGER                      N;
+    XMPINTEGER                      E;
 
-    XMPINTEGER                      D;                                // private exponent
-    XMPINTEGER                      P;                                // 1st prime factor
-    XMPINTEGER                      Q;                                // 2nd prime factor
-    XMPINTEGER                      DP;                               // D % (P - 1)
-    XMPINTEGER                      DQ;                               // D % (Q - 1)
-    XMPINTEGER                      QP;                               // 1 / (Q % P)
+    XMPINTEGER                      D;
+    XMPINTEGER                      P;
+    XMPINTEGER                      Q;
+    XMPINTEGER                      DP;
+    XMPINTEGER                      DQ;
+    XMPINTEGER                      QP;
 
-    XMPINTEGER                      RN;                               // cached R^2 mod N
-    XMPINTEGER                      RP;                               // cached R^2 mod P
-    XMPINTEGER                      RQ;                               // cached R^2 mod Q
+    XMPINTEGER                      RN;
+    XMPINTEGER                      RP;
+    XMPINTEGER                      RQ;
 
     #if !defined(CIPHERRSA_RSANOCRT)
-    XMPINTEGER                      Vi;                               // cached blinding value
-    XMPINTEGER                      Vf;                               // cached un-blinding value
+    XMPINTEGER                      Vi;
+    XMPINTEGER                      Vf;
     #endif
 
-    int                             padding;                          // RSA_PKCS_V15 for 1.5 padding and RSA_PKCS_v21 for OAEP/PSS
-    int                             hashID;                           // Hash identifier of md_type_t as specified in the md.h header file for the EME-OAEP and EMSA-PSS encoding
+    int                             padding;
+    int                             hashID;
 };
 
 

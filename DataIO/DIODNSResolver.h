@@ -115,10 +115,10 @@ class DIODNSRESOLVER
 
   private:
                                             DIODNSRESOLVER                  ();
-                                            DIODNSRESOLVER                  (DIODNSRESOLVER const&);        // Don't implement
+                                            DIODNSRESOLVER                  (DIODNSRESOLVER const&);
     virtual                                ~DIODNSRESOLVER                  ();
 
-    void                                    operator =                      (DIODNSRESOLVER const&);        // Don't implement
+    void                                    operator =                      (DIODNSRESOLVER const&);
 
     void                                    Clean                           ();
 

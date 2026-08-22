@@ -83,11 +83,11 @@ class CIPHERECDSAX25519
     static void             fexpand                   (XQWORDSIG* output, const XBYTE* input);
     static void             fcontract                 (XBYTE *output, XQWORDSIG* input);
 
-    static void             fmonty                    (XQWORDSIG* x2, XQWORDSIG* z2,          // output 2Q 
-                                                       XQWORDSIG* x3, XQWORDSIG* z3,          // output Q + Q' 
-                                                       XQWORDSIG* x, XQWORDSIG* z,            // input Q 
-                                                       XQWORDSIG* xprime, XQWORDSIG* zprime,  // input Q' 
-                                                       const XQWORDSIG* qmqp                  // input Q - Q'
+    static void             fmonty                    (XQWORDSIG* x2, XQWORDSIG* z2,
+                                                       XQWORDSIG* x3, XQWORDSIG* z3,
+                                                       XQWORDSIG* x, XQWORDSIG* z,
+                                                       XQWORDSIG* xprime, XQWORDSIG* zprime,
+                                                       const XQWORDSIG* qmqp
                                                       ); 
 
     static void             swap_conditional          (XQWORDSIG a[19], XQWORDSIG b[19], XQWORDSIG iswap);

@@ -79,17 +79,17 @@ class GRPVECTORFILEDXFENTITYOBJELLIPSE : public GRPVECTORFILEDXFENTITYOBJ
    
     void                                Clean                                   ();   
           
-    GRPVECTORFILEDXFENTITYDEFPOINT      center;                                 // Center point.   
-    GRPVECTORFILEDXFENTITYDEFPOINT      majoraxis;                              // Major Axis point.
+    GRPVECTORFILEDXFENTITYDEFPOINT      center;
+    GRPVECTORFILEDXFENTITYDEFPOINT      majoraxis;
    
-    double                              iniparameter;                           // Start parameter (this value is 0.0 for a full ellipse)
-    double                              endparameter;                           // End   parameter (this value is 2pi for a full ellipse)
+    double                              iniparameter;
+    double                              endparameter;
          
-    double                              radius;                                 // Radius.
+    double                              radius;
 
-    double                              thickness;                              // Thickness (default=0.0).             
+    double                              thickness;
 
-    GRPVECTORFILEDXFENTITYDEFPOINT      dirextrusion;                           // Extrusion direction.
+    GRPVECTORFILEDXFENTITYDEFPOINT      dirextrusion;
 };
 
 

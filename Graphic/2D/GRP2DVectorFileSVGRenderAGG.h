@@ -83,8 +83,8 @@ class GRP2DVECTORFILESVGRENDERAGG
 
     void                            Clean                      ();
 
-    GRPVECTORFILESVG*               contextsvg;                                  // current SVG being rendered (to resolve <use> references)
-    int                             usedepth;                                    // recursion guard for <use>
+    GRPVECTORFILESVG*               contextsvg;
+    int                             usedepth;
 };
 
 

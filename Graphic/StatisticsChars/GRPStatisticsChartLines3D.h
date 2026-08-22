@@ -55,7 +55,7 @@ class GRPSTATISTICSCHARTLINES3D : public GRPSTATISTICSCHART
     void                            DrawRibbonCap                         (GRPSTATISTICSCHARTBUILDER& builder, double px, double py, double zfront, double zback, double thick, GRPSTATISTICSCHARTCOLOR& color);
     GRPSTATISTICSCHARTCOLOR          MakeShade                            (GRPSTATISTICSCHARTCOLOR& color, double factor);
 
-    double                          depthratio;                           // total depth as a ratio of the smaller plot dimension (default 0.15)
+    double                          depthratio;
 };
 
 

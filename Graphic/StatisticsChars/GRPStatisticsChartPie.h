@@ -56,7 +56,7 @@ class GRPSTATISTICSCHARTPIE : public GRPSTATISTICSCHART
 
     void                            DrawSector                            (GRPSTATISTICSCHARTBUILDER& builder, double cx, double cy, double router, double rinner, double startdeg, double enddeg, GRPSTATISTICSCHARTSTYLE& style);
 
-    double                          innerradiusratio;                     // 0 = full pie, (0..1) = donut hole radius as a ratio of the outer radius
+    double                          innerradiusratio;
 };
 
 

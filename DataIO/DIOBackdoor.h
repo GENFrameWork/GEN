@@ -270,14 +270,14 @@ class DIOBACKDOOR
                                     Clean();
                                   }
 
-                                  DIOBACKDOOR           (DIOBACKDOOR const&);     // Don't implement
+                                  DIOBACKDOOR           (DIOBACKDOOR const&);
 
     virtual                      ~DIOBACKDOOR           ()
                                   {
                                     Clean();
                                   }
 
-    void                          operator =            (DIOBACKDOOR const&);     // Don't implement
+    void                          operator =            (DIOBACKDOOR const&);
 
     void                          Clean                 ()
                                   {

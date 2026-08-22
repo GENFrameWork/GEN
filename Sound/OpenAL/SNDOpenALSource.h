@@ -74,7 +74,7 @@ class SNDOPENALSOURCE
     void                        ResetPlay                           ();
 
 
-    // In revision
+
 
     void                        SetSecondsOffset                    (float seconds);
     void                        SetSamplesOffset                    (int samples);

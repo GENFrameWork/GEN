@@ -49,7 +49,7 @@ class GRPVECTORFILESVGCSSSTYLESHEET
                                     GRPVECTORFILESVGCSSSTYLESHEET     ();
     virtual                        ~GRPVECTORFILESVGCSSSTYLESHEET     ();
 
-    bool                            ParseDocument                     (XFILEXMLELEMENT* root);          // scans the whole document for <style> elements
+    bool                            ParseDocument                     (XFILEXMLELEMENT* root);
 
     XSTRING*                        Get                                (XCHAR* classname);
     XSTRING*                        Get                                (XSTRING& classname);
@@ -58,12 +58,12 @@ class GRPVECTORFILESVGCSSSTYLESHEET
 
     bool                            Add                                (XCHAR* classname, XCHAR* declarations);
 
-    bool                            CollectStyleElements               (XFILEXMLELEMENT* element);       // recursive
-    bool                            ParseStyleSheetText                (XSTRING& text);                  // ".fil0{fill:white} .fil1{fill:black;fill-rule:nonzero} * {fill:#RRGGBB}"
+    bool                            CollectStyleElements               (XFILEXMLELEMENT* element);
+    bool                            ParseStyleSheetText                (XSTRING& text);
 
     void                            Clean                              ();
 
-    XMAP<XSTRING*, XSTRING*>        classes;                                                              // classname -> "prop:value;prop:value" (same syntax as the style="" attribute)
+    XMAP<XSTRING*, XSTRING*>        classes;
 };
 
 

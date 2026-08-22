@@ -76,16 +76,16 @@ class GRPVECTORFILEDXFENTITYOBJARC : public GRPVECTORFILEDXFENTITYOBJ
    
     void                                  Clean                             ();   
           
-    GRPVECTORFILEDXFENTITYDEFPOINT        center;                           // Center point.     
+    GRPVECTORFILEDXFENTITYDEFPOINT        center;
 
-    double                                iniangle;                         // Start angle.
-    double                                endangle;                         // End   angle.
+    double                                iniangle;
+    double                                endangle;
 
-    double                                radius;                           // Radius.
+    double                                radius;
 
-    double                                thickness;                        // Thickness (default=0.0).          
+    double                                thickness;
 
-    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;                     // Extrusion direction.
+    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;
 };
 
 

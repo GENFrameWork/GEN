@@ -57,14 +57,14 @@ class GRPVECTORFILESVGSTYLE
 
     void                            InheritFrom                (GRPVECTORFILESVGSTYLE& parent);
 
-    bool                            HasFill                    ();                                           // there is a fill (not 'none')
+    bool                            HasFill                    ();
     bool                            IsFillSpecified            ();
     GRP2DCOLOR_RGBA8&               GetFillColor               ();
 
-    bool                            IsFillPaintServer          ();                                           // fill is a url(#id) reference (gradient...)
+    bool                            IsFillPaintServer          ();
     XSTRING*                        GetFillPaintID             ();
 
-    bool                            HasStroke                  ();                                           // there is a stroke (not 'none')
+    bool                            HasStroke                  ();
     bool                            IsStrokeSpecified          ();
     GRP2DCOLOR_RGBA8&               GetStrokeColor             ();
 

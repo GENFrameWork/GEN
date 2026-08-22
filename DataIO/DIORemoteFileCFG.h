@@ -190,7 +190,7 @@ class DIOREMOTEFILECFG : public XFILECFG
                                               return false;
                                             }
   
-                                          // Copy existing values
+
 
                                           for(XDWORD c=1; c<GetValues()->GetSize()+1; c++)
                                             {  

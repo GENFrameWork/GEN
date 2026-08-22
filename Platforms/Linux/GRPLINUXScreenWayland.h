@@ -129,14 +129,14 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
 
     bool                                  HasFocus                          ();
 
-    // Pumps the wl_display connection (flush outgoing requests, non-blocking read of any new
-    // incoming events, dispatch everything already queued). Wayland has no per-window/per-mask
-    // selective dequeue like XCheckWindowEvent, so unlike X11 there is a single dispatch point
-    // for the WHOLE connection, shared by this screen and by INPLINUXDEVICEKEYBOARDWAYLAND /
-    // INPLINUXDEVICEMOUSEWAYLAND. Calling it more than once per frame is harmless (a call with
-    // nothing new pending is a cheap no-op) -- Update() calls it, and so does the Update() of
-    // both input devices, exactly mirroring how all three X11 counterparts independently call
-    // XCheckWindowEvent()/XQueryPointer() every frame without coordinating with each other.
+
+
+
+
+
+
+
+
     bool                                  DispatchEvents                    ();
 
     struct wl_display*                    GetWLDisplay                      ();
@@ -149,19 +149,19 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
     XDWORD                                GetLastPointerSerial              ();
     XDWORD                                GetLastKeyboardSerial             ();
 
-    // Consumed once per frame by INPLINUXDEVICEMOUSEWAYLAND::Update() / INPLINUXDEVICEKEYBOARDWAYLAND::Update()
-    // -- see the GRPLINUXSCREENWAYLAND_EVENTQUEUE_SIZE comment above for why events are queued
-    // here instead of each device listening directly.
+
+
+
     bool                                   PopButtonEvent                    (XDWORD& code, bool& pressed);
     bool                                   PopKeyEvent                       (XDWORD& keysym, bool& pressed);
     bool                                   GetPointerPosition                (int& x, int& y);
     int                                    GetAndResetScrollDelta            ();
 
-    // LIVE compositor-driven window size (windowwidth/windowheight below), as opposed to
-    // GetWidth()/GetHeight() (inherited from GRPPROPERTIES), which after this port represents ONLY
-    // the canvas' fixed design size -- see the windowwidth/windowheight member comment for the full
-    // rationale. Needed by GRPLINUXBLITGLESWAYLAND (a different class) to size the wl_egl_window /
-    // report the EGL native surface size.
+
+
+
+
+
     int                                    GetWindowWidth                    ();
     int                                    GetWindowHeight                   ();
 
@@ -183,57 +183,57 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
     struct xdg_toplevel*                  xdgtoplevel;
 
     #ifdef LINUX_WAYLAND_XDGDECORATION_ACTIVE
-    // Bound from the registry (interface "zxdg_decoration_manager_v1") like compositor/shm/
-    // xdgwmbase/seat above -- persists for the lifetime of the connection, NULL if the compositor
-    // never advertises it (an optional extension, see GEN_Main_WaylandProtocols.cmake and
-    // Create_Surface() for the "no native chromes on this compositor" fallback that results).
+
+
+
+
     struct zxdg_decoration_manager_v1*    decorationmanager;
 
-    // Per-toplevel, unlike decorationmanager: created fresh in Create_Surface() (needs an
-    // xdg_toplevel to attach to) and destroyed in Delete() alongside it, not in the destructor.
+
+
     struct zxdg_toplevel_decoration_v1*   toplleveldecoration;
     #endif
 
     struct wl_pointer*                    pointer;
     struct wl_keyboard*                   keyboard;
 
-    // xkbcommon keymap/state, built from the wl_keyboard::keymap event (a shared-memory fd
-    // holding the keymap the compositor wants this client to use). Xlib needs nothing like this:
-    // its keysym tables are compiled in. Owned here (not by INPLINUXDEVICEKEYBOARDWAYLAND) for
-    // the same one-listener-per-proxy reason everything else pointer/keyboard-related lives here.
+
+
+
+
     struct xkb_context*                   xkbcontext;
     struct xkb_keymap*                    xkbkeymap;
     struct xkb_state*                     xkbstate;
 
-    // Serial of the last enter/button/key event received on this seat -- required by several
-    // Wayland requests that have no X11 equivalent (e.g. wl_pointer_set_cursor(), which unlike
-    // XCreatePixmapCursor()/XDefineCursor() needs the serial of the enter event it responds to).
+
+
+
     XDWORD                                lastpointerserial;
     XDWORD                                lastkeyboardserial;
 
-    bool                                  configured;             // true after the first xdg_surface::configure + ack
-    bool                                  haskeyboardfocus;       // pushed by wl_keyboard::enter/leave (no XGetInputFocus equivalent)
-    bool                                  haspointerfocus;        // pushed by wl_pointer::enter/leave
+    bool                                  configured;
+    bool                                  haskeyboardfocus;
+    bool                                  haspointerfocus;
 
-    // LIVE compositor-driven window size, deliberately kept SEPARATE from the inherited
-    // GRPPROPERTIES::width/height (GetWidth()/GetHeight()/SetSize()), which represent ONLY the
-    // canvas' fixed design resolution (e.g. 1024x768), set once by the app and never touched again
-    // by window-resize code -- the same invariant GRPLINUXSCREENX11 already preserves (by never
-    // calling SetSize() from Resize()) and GRPWINDOWSSCREEN relies on. Prior to this port,
-    // Resize()/XDGToplevel_Configure() called SetSize() directly, conflating the two and breaking
-    // that invariant on Wayland only; SetSize() must never be called again from window-resize code
-    // on this class, only from the app's own canvas-size setup. Updated by Resize() (locally
-    // requested size) and XDGToplevel_Configure() (compositor-confirmed size), both clamped to the
-    // GRPVIEWPORT_ID_MAIN viewport's max via ClampToViewportMax(). Read by
-    // GRPLINUXBLITGLESWAYLAND::GetNativeWindow()/GetNativeWindowSize() (via GetWindowWidth()/
-    // GetWindowHeight() below) to size the wl_egl_window / report the EGL native surface size, and
-    // by this class's own Update() raster path as the "live size" to crop against.
+
+
+
+
+
+
+
+
+
+
+
+
+
     int                                   windowwidth;
     int                                   windowheight;
 
-    int                                   pointerx;               // last known surface-local position, pushed by wl_pointer::motion
+    int                                   pointerx;
     int                                   pointery;
-    int                                   scrolldelta;            // accumulated wl_pointer::axis (vertical) since the last GetAndResetScrollDelta()
+    int                                   scrolldelta;
 
     GRPLINUXSCREENWAYLAND_BUTTONEVENT     buttonqueue[GRPLINUXSCREENWAYLAND_EVENTQUEUE_SIZE];
     XDWORD                                buttonqueuehead;
@@ -245,12 +245,12 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
 
     bool                                  isdesktop;
 
-    // Bound from wl_registry::global (interface "wl_output"), one entry per connected monitor,
-    // in announcement order. There is no Xrandr-style synchronous "give me all outputs and their
-    // geometry" call -- GetDesktopScreenSelected() indexes into this the same way
-    // GRPLINUXSCREENX11::Create_Window() indexes into GetDesktopManager()->GetDesktopMonitors()->
-    // GetMonitorsRects(), just populated by push events instead of an XRRGetScreenResources()
-    // call. See GRPLINUXDesktopManager.cpp for the equivalent geometry/mode enumeration.
+
+
+
+
+
+
     XVECTOR<struct wl_output*>            outputs;
 
     #ifdef GRP_OPENGL_ACTIVE
@@ -264,45 +264,45 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
     bool                                  ConnectDisplay                    ();
     bool                                  BindGlobals                       ();
 
-    // Shared resolution logic for the GRPVIEWPORT_ID_MAIN viewport's max size, used by both
-    // ClampToViewportMax() and ApplyMaxSizeHint() below: an EXPLICIT GRPVIEWPORT::SetMaxSize() on
-    // an axis wins; otherwise that axis falls back to the viewport's own declared size
-    // (GetWidth()/GetHeight()), same fallback GRPLINUXSCREENX11::ApplyWMNormalHints() and
-    // GRPWINDOWSSCREEN::ApplyResizeLimits() use. maxw/maxh are left untouched (caller's
-    // responsibility to treat <=0 as "no cap on that axis") if no viewport is configured yet.
+
+
+
+
+
+
     void                                  ResolveViewportMax                (float& maxw, float& maxh);
 
-    // In/out clamp of a requested (w,h) pair down to the GRPVIEWPORT_ID_MAIN viewport's resolved
-    // max, per axis independently (see ResolveViewportMax() above) -- the Wayland analogue of
-    // GRPWINDOWSSCREEN::ApplyResizeLimits() clamping ptMaxTrackSize, applied here in-process since
-    // xdg-shell gives clients no equivalent OS-level drag-limit hook for THIS (see
-    // ApplyMaxSizeHint() below for the proactive xdg_toplevel_set_max_size() request that covers
-    // that side). Leaves w/h untouched on an axis with no resolved max, or if no viewport is
-    // configured yet.
+
+
+
+
+
+
+
     void                                  ClampToViewportMax                (int& w, int& h);
 
-    // Proactive Wayland analogue of GRPLINUXSCREENX11::ApplyWMNormalHints()/
-    // GRPWINDOWSSCREEN::ApplyResizeLimits(): resolves the GRPVIEWPORT_ID_MAIN viewport's max size
-    // (see ResolveViewportMax() above) and, if xdgtoplevel already exists, calls the standard
-    // xdg_toplevel_set_max_size() request so the compositor's own interactive resize grab AND its
-    // own maximize logic both respect it -- unlike X11's XSetWMNormalHints (a property the WM reads
-    // whenever it needs to), this is a real protocol request that must be reissued, so it is called
-    // both once from Create_Surface() and again on every XDGToplevel_Configure() (idempotent/cheap
-    // either way). Deliberately does NOT call xdg_toplevel_set_min_size() (no OS-enforced minimum,
-    // same policy as X11/Windows) -- see the Update() raster-path guard and
-    // GRPLINUXBLITGLESWAYLAND::ComputePresentationScale (GL path) for how content below the
-    // viewport's min is hidden instead.
+
+
+
+
+
+
+
+
+
+
+
     void                                  ApplyMaxSizeHint                  ();
 
   public:
 
-    // wl_*_listener callbacks below are public, not private: each one is read via address-of
-    // from the file-scope "static const struct wl_..._listener" aggregate tables in the .cpp
-    // (grplinuxscreenwayland_registry_listener and friends), which sit OUTSIDE this class --
-    // the same way a C API callback trampoline needs external visibility. A private static
-    // method's address cannot be taken from outside the class, even in a same-translation-unit
-    // file-scope initializer, so these must live here instead of alongside the rest of the
-    // implementation-only helpers below. Nothing outside this file calls them directly.
+
+
+
+
+
+
+
 
     static void                           Registry_Global                   (void* data, struct wl_registry* registry, XDWORD name, const char* interface, XDWORD version);
     static void                           Registry_GlobalRemove              (void* data, struct wl_registry* registry, XDWORD name);
@@ -317,7 +317,7 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
     static void                           Seat_Capabilities                 (void* data, struct wl_seat* seat, XDWORD capabilities);
     static void                           Seat_Name                        (void* data, struct wl_seat* seat, const char* name);
 
-    // wl_pointer_listener callbacks (installed once, on bind, in Seat_Capabilities()).
+
     static void                           Pointer_Enter                     (void* data, struct wl_pointer* pointer, XDWORD serial, struct wl_surface* surface, wl_fixed_t sx, wl_fixed_t sy);
     static void                           Pointer_Leave                     (void* data, struct wl_pointer* pointer, XDWORD serial, struct wl_surface* surface);
     static void                           Pointer_Motion                    (void* data, struct wl_pointer* pointer, XDWORD time, wl_fixed_t sx, wl_fixed_t sy);
@@ -328,7 +328,7 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
     static void                           Pointer_AxisStop                  (void* data, struct wl_pointer* pointer, XDWORD time, XDWORD axis);
     static void                           Pointer_AxisDiscrete               (void* data, struct wl_pointer* pointer, XDWORD axis, int discrete);
 
-    // wl_keyboard_listener callbacks (installed once, on bind, in Seat_Capabilities()).
+
     static void                           Keyboard_Keymap                   (void* data, struct wl_keyboard* keyboard, XDWORD format, int fd, XDWORD size);
     static void                           Keyboard_Enter                    (void* data, struct wl_keyboard* keyboard, XDWORD serial, struct wl_surface* surface, struct wl_array* keys);
     static void                           Keyboard_Leave                    (void* data, struct wl_keyboard* keyboard, XDWORD serial, struct wl_surface* surface);
@@ -336,19 +336,19 @@ class GRPLINUXSCREENWAYLAND : public GRPSCREEN
     static void                           Keyboard_Modifiers                (void* data, struct wl_keyboard* keyboard, XDWORD serial, XDWORD modsdepressed, XDWORD modslatched, XDWORD modslocked, XDWORD group);
     static void                           Keyboard_RepeatInfo                (void* data, struct wl_keyboard* keyboard, int rate, int delay);
 
-    // wl_buffer_listener callback for the one-shot SHM buffers CreateSHMBuffer() creates (used
-    // only by the software fallback path in Update(), when GRP_OPENGL_ACTIVE's blitgles path is
-    // unavailable). Destroys the wl_buffer proxy once the compositor confirms it is done reading
-    // from it -- see Buffer_Release() in the .cpp for why this cannot simply be destroyed
-    // synchronously right after wl_surface_commit().
+
+
+
+
+
     static void                           Buffer_Release                     (void* data, struct wl_buffer* buffer);
 
     #ifdef LINUX_WAYLAND_XDGDECORATION_ACTIVE
-    // zxdg_toplevel_decoration_v1_listener callback -- the compositor's answer to the mode
-    // Create_Surface() requested via zxdg_toplevel_decoration_v1_set_mode(). Purely informational
-    // (GEN has nothing finer-grained to react with -- unlike X11's per-button MWM hints, this
-    // protocol is a single client-side/server-side switch, no per-decoration-piece control): logs
-    // the outcome so a mismatch between requested and granted mode is visible, not silently eaten.
+
+
+
+
+
     static void                           Decoration_Configure               (void* data, struct zxdg_toplevel_decoration_v1* decoration, XDWORD mode);
     #endif
 

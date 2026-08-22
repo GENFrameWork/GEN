@@ -130,10 +130,10 @@ class APPFLOWUPDATE : public XOBSERVER, public XSUBJECT
 
   private:
                                         APPFLOWUPDATE                   ();
-                                        APPFLOWUPDATE                   (APPFLOWUPDATE const&);        // Don't implement
+                                        APPFLOWUPDATE                   (APPFLOWUPDATE const&);
     virtual                            ~APPFLOWUPDATE                   ();
 
-    void                                operator =                      (APPFLOWUPDATE const&);        // Don't implement
+    void                                operator =                      (APPFLOWUPDATE const&);
 
     bool                                CreateTaskUpdate                (bool doajust = true);
 

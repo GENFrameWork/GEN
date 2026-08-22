@@ -155,7 +155,8 @@ bool DIOSTREAMTLSKEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROL
 
   isini             = true;
 
-  // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Key Schedule] Ini: cipher suite %04X, %s, hash %d, key %d, iv %d"), ciphersuite, (role == DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT)?__L("client"):__L("server"), hashsize, keysize, IVsize);
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Key Schedule] Ini: cipher suite %04X, %s, hash %d, key %d, iv %d"), ciphersuite,
+                                       (role == DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT)?__L("client"):__L("server"), hashsize, keysize, IVsize);
 
   return true;
 }
@@ -395,7 +396,6 @@ bool DIOSTREAMTLSKEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
 
   bool status = HKDF->Extract(salt, PSK?(*PSK):zeroPSK, earlysecret);
 
-  /*
   XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Early Secret: %s"), status?__L("Ok"):__L("Error!"));
 
   #ifdef DIOSTREAMTLSKEYSCHEDULE_TRACE_SECRETS
@@ -404,7 +404,6 @@ bool DIOSTREAMTLSKEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
       XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, earlysecret);
     }
   #endif
-  */
 
   return status;
 }
@@ -447,7 +446,6 @@ bool DIOSTREAMTLSKEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
 
   bool status = HKDF->Extract(derivedsecret, sharedsecret, handshakesecret);
 
-  /*
   XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Handshake Secret: %s"), status?__L("Ok"):__L("Error!"));
 
   #ifdef DIOSTREAMTLSKEYSCHEDULE_TRACE_SECRETS
@@ -456,8 +454,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
       XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, handshakesecret);
     }
   #endif
-  */
-  
+
   return status;
 }
 
@@ -500,7 +497,6 @@ bool DIOSTREAMTLSKEYSCHEDULE::MasterSecret_Calculate()
 
   bool status = HKDF->Extract(derivedsecret, zerokeymaterial, mastersecret);
 
-  /*
   XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Master Secret: %s"), status?__L("Ok"):__L("Error!"));
 
   #ifdef DIOSTREAMTLSKEYSCHEDULE_TRACE_SECRETS
@@ -509,7 +505,6 @@ bool DIOSTREAMTLSKEYSCHEDULE::MasterSecret_Calculate()
       XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, mastersecret);
     }
   #endif
-  */
 
   return status;
 }
@@ -545,7 +540,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcr
 
   bool status = HKDF->ExpandLabel(handshakesecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_SERVERHANDSHAKE, transcripthash, hashsize, serverhandshaketrafficsecret);
 
-  // XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Handshake traffic secrets: %s"), status?__L("Ok"):__L("Error!"));
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Handshake traffic secrets: %s"), status?__L("Ok"):__L("Error!"));
 
   return status;
 }
@@ -581,7 +576,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::ApplicationTrafficSecrets_Calculate(XBUFFER& trans
 
   bool status = HKDF->ExpandLabel(mastersecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_SERVERAPPLICATION, transcripthash, hashsize, serverapplicationtrafficsecret);
 
- // XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Application traffic secrets: %s"), status?__L("Ok"):__L("Error!"));
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Application traffic secrets: %s"), status?__L("Ok"):__L("Error!"));
 
   return status;
 }
@@ -867,7 +862,9 @@ bool DIOSTREAMTLSKEYSCHEDULE::VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION d
 
   bool status = CIPHER::CompareConstantTime(calculatedverifydata, verifydata);
 
-  // XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Finished of the %s end: %s"), (direction == DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)?__L("local"):__L("remote"), status?__L("verified"):__L("NOT VALID!"));
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Finished of the %s end: %s"),
+                                       (direction == DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)?__L("local"):__L("remote"),
+                                       status?__L("verified"):__L("NOT VALID!"));
 
   return status;
 }

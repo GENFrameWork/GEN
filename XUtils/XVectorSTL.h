@@ -137,16 +137,16 @@ class XVECTORSTL : public std::vector<T>
 
     virtual bool                    Delete                                (T element)
                                     { 
-                                      /*
-                                      for(vector::iterator it=begin(); it !=end(); it++)
-                                      {
-                                        if((*it) == element)
-                                        {
-                                          erase(it);   
-                                          return true;
-                                        }
-                                      }
-                                      */
+
+
+
+
+
+
+
+
+
+
                                       return false;
                                     }
 

@@ -75,7 +75,7 @@ class XORDEREDLIST : public XLIST<T>
 
                               switch(result)
                                 {
-                                  case  0: return false; //the item already exists
+                                  case  0: return false;
                                   case  1: return this->Insert(current,element);
                                 }
 

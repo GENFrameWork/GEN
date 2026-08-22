@@ -62,10 +62,10 @@ class DIOPUBLICINTERNETIP
 
   private:
                                     DIOPUBLICINTERNETIP               ();
-                                    DIOPUBLICINTERNETIP               (DIOPUBLICINTERNETIP const&);        // Don't implement
+                                    DIOPUBLICINTERNETIP               (DIOPUBLICINTERNETIP const&);
     virtual                        ~DIOPUBLICINTERNETIP               ();
 
-    void                            operator =                        (DIOPUBLICINTERNETIP const&);        // Don't implement    
+    void                            operator =                        (DIOPUBLICINTERNETIP const&);
 
     void                            Clean                             ();
 

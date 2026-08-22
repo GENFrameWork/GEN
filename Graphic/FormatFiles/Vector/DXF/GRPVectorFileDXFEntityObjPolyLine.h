@@ -63,9 +63,9 @@ class GRPVECTORFILEDXFENTITYOBJPOLYLINE : public GRPVECTORFILEDXFENTITYOBJ
    
     void                                  Clean                                 (); 
       
-    double                                thickness;                            // Thickness (default=0.0).
+    double                                thickness;
 
-    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;                         // Extrusion direction.
+    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;
 };
 
 

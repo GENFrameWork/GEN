@@ -114,10 +114,10 @@ class XWINDOWSWINGET
            
   private:                                             
                                                 XWINDOWSWINGET                ();
-                                                XWINDOWSWINGET                (XWINDOWSWINGET const&);        // Don't implement
+                                                XWINDOWSWINGET                (XWINDOWSWINGET const&);
     virtual                                    ~XWINDOWSWINGET                ();
 
-    void                                        operator =                    (XWINDOWSWINGET const&);        // Don't implement    
+    void                                        operator =                    (XWINDOWSWINGET const&);
     
     bool                                        Exec                          (XCHAR* params, XBUFFER& output);
 

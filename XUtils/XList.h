@@ -185,7 +185,7 @@ class XLIST
 
                                       if(newsize >= nelements)
                                         {
-                                          // should insert new elements at the tail
+
                                           XDWORD toinsert = newsize - nelements;
 
                                           XLISTDATA<T>* data = lastelement;
@@ -238,12 +238,12 @@ class XLIST
                                             }
                                         }
 
-                                      // new element to add
+
                                       XLISTDATA<T>* data = GEN_NEW XLISTDATA<T>();
                                       data->active = true;
                                       data->data = element;
 
-                                      // special case if the list is empty
+
                                       if(nelements == 0)
                                         {
                                           firstelement = data;
@@ -252,7 +252,7 @@ class XLIST
                                           return true;
                                         }
 
-                                      // fix pointers
+
                                       lastelement->next = data;
                                       data->prev = lastelement;
                                       nelements++;
@@ -280,7 +280,7 @@ class XLIST
                                       return NOTFOUND;
                                     }
 
-    // overload not by return, need to select a name
+
     XLISTDATA<T>*                   FindData                                  (T element)
                                     {
                                       XDWORD index = 0;
@@ -370,7 +370,7 @@ class XLIST
                                             }
                                         }
 
-                                      // special cases for first and last elements
+
                                       if(index == 0)
                                         {
                                           Insert(firstelement, element);
@@ -383,7 +383,7 @@ class XLIST
                                           return true;
                                         }
 
-                                      // general middle case
+
                                       XLISTDATA<T>* data = firstelement;
 
                                       for(XDWORD i = 0; i < nelements; i++)
@@ -413,13 +413,13 @@ class XLIST
                                           return true;
                                         }
 
-                                      // special case, we take for granted it's one past the last
+
                                       if(position == NULL)
                                         {
                                           Add(element);
                                         }
 
-                                      // last element is a general case
+
                                       if(position == firstelement)
                                         {
                                           XLISTDATA<T>* newdata = GEN_NEW XLISTDATA<T>();
@@ -474,7 +474,7 @@ class XLIST
                                             {
                                               data->Delete();
 
-                                              // check if data is first or last element
+
                                               if(data == firstelement)
                                                 {
                                                   firstelement = firstelement->next;
@@ -505,14 +505,14 @@ class XLIST
 
         bool                        Delete                                    (XLISTDATA<T>* element)
                                     {
-                                      if(nelements == 0) return false; // something went wrong
+                                      if(nelements == 0) return false;
 
                                       if(nelements == 1)
                                         {
                                           return DeleteAll();
                                         }
 
-                                      // general case
+
                                       if(element == firstelement)
                                         {
                                           firstelement = firstelement->next;
@@ -606,7 +606,7 @@ class XLIST
                                           data = data->next;
                                         }
 
-                                      // delete the element here
+
                                       XLISTDATA<T>* prev = data->prev;
                                       XLISTDATA<T>* next = data->next;
 
@@ -760,9 +760,9 @@ class XLIST
                                       return it;
                                     }
 
-/*----------------------------------------------------------------------------------------------------------------------*/
-/* START XLIST ITERATOR                                                                                                 */
-/*----------------------------------------------------------------------------------------------------------------------*/
+
+
+
 
 class XITERATOR
 {
@@ -797,7 +797,7 @@ class XITERATOR
                                       return *this;
                                     }
 
-    typename XLIST::XITERATOR       operator++                                (int) // postfix
+    typename XLIST::XITERATOR       operator++                                (int)
                                     {
                                       typename XLIST::XITERATOR it = *this;
 
@@ -817,9 +817,9 @@ T                                   operator*                                 ()
 };
 
 
-/*----------------------------------------------------------------------------------------------------------------------*/
-/* END XLIST ITERATOR                                                                                                 */
-/*----------------------------------------------------------------------------------------------------------------------*/
+
+
+
 
   protected:
 

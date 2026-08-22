@@ -57,7 +57,7 @@ class UI_ELEMENT_TEXTBOX : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
     XDWORD                            GetLineSpacing              ();
     void                              SetLineSpacing              (XDWORD linespacing = UI_ELEMENT_TEXTBOX_DEFAULTLINESPACING);
 
-    XDWORD                            GetImageSeparation          ();                                                                      // gap (px) kept between an inline ![IMAGE] and the surrounding text, on every edge
+    XDWORD                            GetImageSeparation          ();
     void                              SetImageSeparation          (XDWORD imageseparation = UI_ELEMENT_TEXTBOX_DEFAULTIMAGESEPARATION);
 
     UI_ELEMENT_TYPE_ALIGN             GetTextAlignment            ();     
@@ -69,7 +69,7 @@ class UI_ELEMENT_TEXTBOX : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
     XSTRING*                          GetText                     (); 
     XSTRING*                          GetMaskText                 (); 
 
-    double                            GetContentHeight            ();                          // total laid-out text height (set by the skin at draw)
+    double                            GetContentHeight            ();
     void                              SetContentHeight            (double contentheight);
 	  
   private:

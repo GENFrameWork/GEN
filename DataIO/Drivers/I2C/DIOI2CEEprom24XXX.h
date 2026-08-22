@@ -89,7 +89,7 @@ class DIOI2CEEPROM24XXX : public DIODEVICEI2C
 
     DIOI2CEEPROM24XXXTYPE     type;
 
-    XDWORD                    maxsize;                        // All descriptors in Bytes.
+    XDWORD                    maxsize;
     XWORD                     npages;
     XWORD                     maxsizepage;
     XWORD                     maxsizechunk;

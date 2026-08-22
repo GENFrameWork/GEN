@@ -54,7 +54,7 @@ class GRPSTATISTICSCHARTCOLUMNS3D : public GRPSTATISTICSCHART
     void                            DrawPrism                             (GRPSTATISTICSCHARTBUILDER& builder, double colx, double topy, double colw, double basey, double depthx, double depthy, GRPSTATISTICSCHARTCOLOR& color);
     GRPSTATISTICSCHARTCOLOR          MakeShade                            (GRPSTATISTICSCHARTCOLOR& color, double factor);
 
-    double                          depthratio;                           // depth as a ratio of the smaller plot dimension (default 0.15)
+    double                          depthratio;
 };
 
 

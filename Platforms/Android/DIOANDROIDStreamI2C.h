@@ -158,7 +158,7 @@ class DIOANDROIDSTREAMI2C : public DIOSTREAMI2C
     virtual                      ~DIOANDROIDSTREAMI2C                     ();
 
     bool                          Open                                    ();
-  //XDWORD                        Read                                    (XBYTE* buffer,XDWORD size);
+
     bool                          WaitToFilledReadingBuffer               (int filledto = DIOSTREAM_SOMETHINGTOREAD, int timeout = XTIMER_INFINITE);
     bool                          Close                                   ();
 

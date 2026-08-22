@@ -157,18 +157,18 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            CreaterVirtualKeyboard                    (UI_LAYOUT* layout, GRPSCREEN* screen);
     bool                            DeleteVirtualKeyboard                     ();
 
-    // --- CSS stylesheet attached to the currently loaded layout bundle. -------------------------------------------
-    // Loaded from an optional <stylesheet>file.css</stylesheet> node under the XML root at CreateLayouts() time;
-    // owned by the manager (deleted when a new layout is loaded, or in the destructor). NULL means "no stylesheet
-    // active" - layouts then behave exactly as before this feature was introduced.
+
+
+
+
     UI_STYLESHEET*                  GetStyleSheet                             ();
 
   private:                                 
                                     UI_MANAGER                                ();
-                                    UI_MANAGER                                (UI_MANAGER const&);        // Don't implement
+                                    UI_MANAGER                                (UI_MANAGER const&);
     virtual                        ~UI_MANAGER                                ();
 
-    void                            operator =                                (UI_MANAGER const&);        // Don't implement
+    void                            operator =                                (UI_MANAGER const&);
 
     UI_SKIN*                        Skin_Create                               (XSTRING& skintypename, UI_SKIN_DRAWMODE drawmode, GRPSCREEN* screen, int viewportindex = 0);
 
@@ -254,7 +254,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
 
     UI_VIRTUALKEYBOARD*             virtualkeyboard;
 
-    UI_STYLESHEET*                  stylesheet;                                // owned; NULL when no .css is active
+    UI_STYLESHEET*                  stylesheet;
 };
 
 

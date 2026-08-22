@@ -69,19 +69,19 @@ class GRP2DPATHSEGMENT
 
     GRP2DPATHSEGMENTTYPE         type;
 
-    double                       x;                                           // End point x.
-    double                       y;                                           // End point y.
+    double                       x;
+    double                       y;
 
-    double                       c1x;                                         // Control point 1 x (curve / quad).
-    double                       c1y;                                         // Control point 1 y (curve / quad).
-    double                       c2x;                                         // Control point 2 x (curve).
-    double                       c2y;                                         // Control point 2 y (curve).
+    double                       c1x;
+    double                       c1y;
+    double                       c2x;
+    double                       c2y;
 
-    double                       rx;                                          // Arc radius x.
-    double                       ry;                                          // Arc radius y.
-    double                       xrot;                                        // Arc x axis rotation (degrees).
-    bool                         largearc;                                    // Arc large flag.
-    bool                         sweep;                                       // Arc sweep flag.
+    double                       rx;
+    double                       ry;
+    double                       xrot;
+    bool                         largearc;
+    bool                         sweep;
 
   private:
 

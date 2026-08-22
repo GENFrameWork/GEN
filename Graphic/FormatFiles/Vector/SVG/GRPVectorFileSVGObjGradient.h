@@ -82,7 +82,7 @@ class GRPVECTORFILESVGOBJGRADIENT : public GRPVECTORFILESVGOBJ
     GRP2DGRADIENTSTOP*              GetStops                   ();
     int                             GetNStops                  ();
 
-    XSTRING*                        GetHRef                    ();                          // referenced gradient id for stop inheritance (without '#')
+    XSTRING*                        GetHRef                    ();
 
   private:
 

@@ -81,7 +81,7 @@ class CIPHERHKDF : public CIPHER
 
     void                            Clean                                 ();
 
-    HASH*                           hash;                                 // Not owned by this class
+    HASH*                           hash;
     HASHHMAC*                       hashhmac;
     XSTRING                         labelprefix;
 };

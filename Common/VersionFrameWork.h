@@ -75,10 +75,10 @@ class VERSIONFRAMEWORK
     
   private:  
                               VERSIONFRAMEWORK              ();
-                              VERSIONFRAMEWORK              (VERSIONFRAMEWORK const&);         // Don't implement
+                              VERSIONFRAMEWORK              (VERSIONFRAMEWORK const&);
     virtual                  ~VERSIONFRAMEWORK              ();
   
-    void                      operator =                    (VERSIONFRAMEWORK const&);         // Don't implement    
+    void                      operator =                    (VERSIONFRAMEWORK const&);
   
     void                      Clean                         ();
   

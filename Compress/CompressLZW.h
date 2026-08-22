@@ -100,7 +100,7 @@ class COMPRESS_LZW : public COMPRESSBASE
     XBYTE                  bymincode;
     XBYTE                  bycurrbits;
     XWORD                  currtableindex;
- // XBYTE                  padding[2];
+
 
     XDWORD                 m_dibheight;
     XDWORD                 m_dibwidth;

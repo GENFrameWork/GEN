@@ -90,8 +90,8 @@ class UI_SKIN_TEXTBOX_PART
 
 		XSTRING*													GetText															  ();
 
-    GRPBITMAP*                        GetImage														  ();                      // non-NULL => this part is an inline image (text empty)
-    void                              SetImage														  (GRPBITMAP* image);      // bitmap is owned by the manager's animation cache (not freed here)
+    GRPBITMAP*                        GetImage														  ();
+    void                              SetImage														  (GRPBITMAP* image);
 
 	private:
 
@@ -104,7 +104,7 @@ class UI_SKIN_TEXTBOX_PART
     XDWORD                            width;
     XDWORD                            height;    
 		XSTRING														text;
-    GRPBITMAP*                        image;       // inline image (cache-owned, may be NULL)
+    GRPBITMAP*                        image;
 };	
 
 

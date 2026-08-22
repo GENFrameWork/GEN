@@ -148,10 +148,10 @@ class XTRANSLATION_GEN
 
   private:
                                           XTRANSLATION_GEN                    ();
-                                          XTRANSLATION_GEN                    (XTRANSLATION_GEN const&);        // Don't implement
+                                          XTRANSLATION_GEN                    (XTRANSLATION_GEN const&);
     virtual                              ~XTRANSLATION_GEN                    ();
 
-    void                                  operator =                          (XTRANSLATION_GEN const&);        // Don't implement
+    void                                  operator =                          (XTRANSLATION_GEN const&);
 
     void                                  Clean                               ();
 

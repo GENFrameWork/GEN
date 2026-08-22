@@ -77,10 +77,10 @@ class APPFLOWEXTENDED
          
   private:
                                         APPFLOWEXTENDED                 ();
-                                        APPFLOWEXTENDED                 (APPFLOWEXTENDED const&);        // Don't implement
+                                        APPFLOWEXTENDED                 (APPFLOWEXTENDED const&);
     virtual                            ~APPFLOWEXTENDED                 ();
 
-    void                                operator =                      (APPFLOWEXTENDED const&);        // Don't implement
+    void                                operator =                      (APPFLOWEXTENDED const&);
 
     static void                         ThreadFunction_Update           (void* param);
 

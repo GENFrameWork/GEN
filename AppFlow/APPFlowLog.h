@@ -63,10 +63,10 @@ class APPFLOWLOG
 
   private:
                                         APPFLOWLOG                      ();
-                                        APPFLOWLOG                      (APPFLOWLOG const&);        // Don't implement
+                                        APPFLOWLOG                      (APPFLOWLOG const&);
     virtual                            ~APPFLOWLOG                      ();
 
-    void                                operator =                      (APPFLOWLOG const&);        // Don't implement
+    void                                operator =                      (APPFLOWLOG const&);
 
     void                                Clean                           ();
 

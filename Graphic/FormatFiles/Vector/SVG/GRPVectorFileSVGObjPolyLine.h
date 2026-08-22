@@ -51,13 +51,13 @@ class GRPVECTORFILESVGOBJPOLYLINE : public GRPVECTORFILESVGOBJ
     bool                            ApplyData                  (XFILEXMLELEMENT* element);
     bool                            BuildPath                  (GRP2DPATH& path);
 
-    XVECTOR<double>*                GetPoints                  ();                          // interleaved x0,y0,x1,y1,...
-    XDWORD                          GetNPoints                 ();                          // number of (x,y) points
+    XVECTOR<double>*                GetPoints                  ();
+    XDWORD                          GetNPoints                 ();
 
   protected:
 
     bool                            ParsePoints                (XFILEXMLELEMENT* element);
-    virtual bool                    IsClosed                   ();                          // polygon overrides to true
+    virtual bool                    IsClosed                   ();
 
     void                            Clean                      ();
 

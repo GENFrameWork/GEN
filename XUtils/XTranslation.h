@@ -85,10 +85,10 @@ class XTRANSLATION
 
   private:
                                       XTRANSLATION                        ();
-                                      XTRANSLATION                        (XTRANSLATION const&);        // Don't implement
+                                      XTRANSLATION                        (XTRANSLATION const&);
     virtual                          ~XTRANSLATION                        ();
 
-    void                              operator =                          (XTRANSLATION const&);        // Don't implement
+    void                              operator =                          (XTRANSLATION const&);
 
     bool                              LoadLanguageAvailable               ();
     bool                              IsLanguageAvailable                 (XDWORD code);

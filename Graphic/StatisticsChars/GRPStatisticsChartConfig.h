@@ -116,43 +116,43 @@ class GRPSTATISTICSCHARTCONFIG
                                         gridcolor.Set      (220, 220, 220);
                                         textcolor.Set      ( 40,  40,  40);
 
-                                        palette[0].Set( 79, 129, 189);      // blue
-                                        palette[1].Set(192,  80,  77);      // red
-                                        palette[2].Set(155, 187,  89);      // green
-                                        palette[3].Set(128, 100, 162);      // purple
-                                        palette[4].Set( 75, 172, 198);      // cyan
-                                        palette[5].Set(247, 150,  70);      // orange
-                                        palette[6].Set(119, 119, 119);      // gray
-                                        palette[7].Set(193, 165,  90);      // gold
+                                        palette[0].Set( 79, 129, 189);
+                                        palette[1].Set(192,  80,  77);
+                                        palette[2].Set(155, 187,  89);
+                                        palette[3].Set(128, 100, 162);
+                                        palette[4].Set( 75, 172, 198);
+                                        palette[5].Set(247, 150,  70);
+                                        palette[6].Set(119, 119, 119);
+                                        palette[7].Set(193, 165,  90);
                                       }
 
-    XSTRING                         title;                                // chart title (empty = no title)
+    XSTRING                         title;
 
-    bool                            hasbackground;                        // true if the chart paints a background
-    GRPSTATISTICSCHARTCOLOR         backgroundcolor;                      // background color
+    bool                            hasbackground;
+    GRPSTATISTICSCHARTCOLOR         backgroundcolor;
 
-    GRPSTATISTICSCHARTCOLOR         axiscolor;                            // axis lines color
-    GRPSTATISTICSCHARTCOLOR         gridcolor;                            // grid lines color
-    GRPSTATISTICSCHARTCOLOR         textcolor;                            // labels color
+    GRPSTATISTICSCHARTCOLOR         axiscolor;
+    GRPSTATISTICSCHARTCOLOR         gridcolor;
+    GRPSTATISTICSCHARTCOLOR         textcolor;
 
-    double                          fontsize;                             // base font size for labels
-    double                          titlefontsize;                        // font size for the title
+    double                          fontsize;
+    double                          titlefontsize;
 
-    bool                            showgrid;                             // draw the value grid
-    bool                            showvalues;                           // draw the value of each data point
+    bool                            showgrid;
+    bool                            showvalues;
 
-    bool                            showaxislabels;                       // draw the X/Y scale (tick) labels
-    double                          axisfontsize;                         // font size for the X/Y scale labels
+    bool                            showaxislabels;
+    double                          axisfontsize;
 
-    bool                            showlegend;                           // draw the series legend
-    GRPSTATISTICSCHARTLEGENDPOSITION legendposition;                      // legend placement (top/bottom/left/right)
-    double                          legendfontsize;                       // font size for the legend entries
+    bool                            showlegend;
+    GRPSTATISTICSCHARTLEGENDPOSITION legendposition;
+    double                          legendfontsize;
 
-    XSTRING                         fontfilename;                         // optional vector-font file the app should load
+    XSTRING                         fontfilename;
 
-    double                          margin;                               // outer margin around the plot
+    double                          margin;
 
-    GRPSTATISTICSCHARTCOLOR         palette[GRPSTATISTICSCHARTCONFIG_PALETTESIZE]; // default series colors
+    GRPSTATISTICSCHARTCOLOR         palette[GRPSTATISTICSCHARTCONFIG_PALETTESIZE];
 };
 
 

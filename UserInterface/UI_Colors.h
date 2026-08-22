@@ -63,10 +63,10 @@ class UI_COLORS
 
   private:
                                     UI_COLORS              ();   
-                                    UI_COLORS              (UI_COLORS const&);        // Don't implement
+                                    UI_COLORS              (UI_COLORS const&);
     virtual                        ~UI_COLORS              ();
 
-    void                            operator =             (UI_COLORS const&);        // Don't implement
+    void                            operator =             (UI_COLORS const&);
 
     void                            Clean                  ();
 

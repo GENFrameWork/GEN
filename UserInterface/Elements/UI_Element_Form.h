@@ -52,8 +52,8 @@ class UI_ELEMENT_FORM : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
 	  UI_COLOR*													GetLineColor								();
     UI_BOUNDARYLINE*                  GetVisibleRect              ();
 
-    // Step 6: single-shot latch that lets Draw_Form emit a "migrate color to bckgrdcolor" XTRACE warning
-    // exactly once per instance, rather than every frame. Cleared by Clean() on construction.
+
+
     bool                              GetLegacyFillWarningEmitted ();
     void                              SetLegacyFillWarningEmitted (bool value);
 
@@ -64,7 +64,7 @@ class UI_ELEMENT_FORM : public UI_ELEMENT, public UI_PROPERTY_SCROLLEABLE
     UI_COLOR                          linecolor;
     UI_BOUNDARYLINE                   visiblerect;
     XDWORD                            roundvisiblerect;
-    bool                              legacy_fill_warning_emitted;      // step 6: latched by Draw_Form
+    bool                              legacy_fill_warning_emitted;
 };
 
 

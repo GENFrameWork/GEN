@@ -161,8 +161,8 @@ class XSERIALIZABLE
                                            {
                                              element->SetSerializationMethod(serializationmethod);
 
-                                             // FIX: position the extraction context on the c-th element of the array,
-                                             // otherwise every element reads the data of the first entry of the JSON.
+
+
                                              if(serializationmethod->ExtractArrayElement(c, name, true))
                                                {
                                                  element->Deserialize();
@@ -214,8 +214,8 @@ class XSERIALIZABLE
                                            {
                                              element->SetSerializationMethod(serializationmethod);
 
-                                             // FIX: position the extraction context on the c-th element of the array,
-                                             // otherwise every element reads the data of the first entry of the JSON.
+
+
                                              if(serializationmethod->ExtractArrayElement(c, name, true))
                                                {
                                                  Class_Extract<T>(element, nameclass);

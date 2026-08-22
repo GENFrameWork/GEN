@@ -66,7 +66,7 @@ class ANDROIDNATIVEINPUT_HANDLER
     virtual bool                     OnTouchEvent                             (AInputEvent* event)  = 0;
     virtual bool                     OnKeyboardEvent                          (AInputEvent* event)  = 0;
     virtual bool                     OnTrackballEvent                         (AInputEvent* event)  = 0;
-  //virtual bool                     OnAccelerometerEvent                     (ASensorEvent* event) = 0;
+
 };
 
 
@@ -121,12 +121,12 @@ class ANDROIDNATIVEACTIVITY_EVENTLOOP
     static void                       CallbackEvent                           (android_app* app, int32_t command);
 
 
-    bool                              enabled;                                // Saves application state when application is active/paused.
-    bool                              quit;                                   // Indicates if the event handler wants to exit.
+    bool                              enabled;
+    bool                              quit;
 
-    android_app*                      application;                            // Application details provided by Android.
-    ANDROIDNATIVEACTIVITY_HANDLER*    activityhandler;                        // Activity event observer.
-    ANDROIDNATIVEINPUT_HANDLER*       inputhandler;                           // Input event observer.
+    android_app*                      application;
+    ANDROIDNATIVEACTIVITY_HANDLER*    activityhandler;
+    ANDROIDNATIVEINPUT_HANDLER*       inputhandler;
 };
 
 

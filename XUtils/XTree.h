@@ -219,9 +219,9 @@ class XTREE_NODE_ITERATOR
 
     XTREE_NODE_ITERATOR<T>&           operator ++             ()
                                       {
-                                        // put the current' nodes children on the stack, and
-                                        // then move onto the next one by popping it
-                                        // off the stack and making it the current one
+
+
+
                                         if(current)
                                           {
                                             for( int i = current->GetNChildren()-1; i>=0 ; i--)
@@ -256,7 +256,7 @@ class XTREE_NODE_ITERATOR
                                             stack.Pop();
                                           }
 
-                                        XTREE_NODE_ITERATOR<T>&   it        = const_cast <XTREE_NODE_ITERATOR<T>&>(iterator);   // remove const-ness
+                                        XTREE_NODE_ITERATOR<T>&   it        = const_cast <XTREE_NODE_ITERATOR<T>&>(iterator);
                                         int                       stacksize = it.GetStack()->GetSize();
                                         XVECTOR<XTREE_NODE<T>*>   vtree(stacksize);
 
@@ -266,7 +266,7 @@ class XTREE_NODE_ITERATOR
                                             it.stack.Pop();
                                           }
 
-                                        // now fill both stacks from the vector (traverse from back)
+
                                         for(int i=vtree.GetSize()-1; i>=0; i--)
                                           {
                                             it.stack.Push(vtree.Get(i));
@@ -278,10 +278,10 @@ class XTREE_NODE_ITERATOR
 
     bool                              operator ==             (const XTREE_NODE_ITERATOR<T>& iterator) const
                                       {
-                                        // i am not going to do stack check because checking the stack is costly
-                                        // so just check if tree, and current and stack sizes are the same
 
-                                        if ((current == iterator.current) && (tree == iterator.tree)  ) // && (stack.GetSize() == iterator.stack.GetSize()))
+
+
+                                        if ((current == iterator.current) && (tree == iterator.tree)  )
                                                 return true;
                                           else return false;
                                       }

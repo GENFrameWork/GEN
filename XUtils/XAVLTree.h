@@ -102,7 +102,7 @@ class XAVLNODE
 
 
     K                                     key;
-    int                                   height; // not to be recursive
+    int                                   height;
     int                                   balance;
 
     XAVLNODE*                             left;
@@ -150,10 +150,10 @@ class XAVLTREE
 
     virtual                              ~XAVLTREE                                      ()
                                           {
-                                            //GEN_DELETE root;
+
                                             DeleteNodes(root);
 
-                                            // need to make function to recursively GEN_DELETE the tree
+
 
                                             Clean();
                                           }
@@ -163,8 +163,8 @@ class XAVLTREE
 
     bool                                  Add                                           (const K& key)
                                           {
-                                            //root = Insert(root, key, element);
-                                            //FixHeight(root);
+
+
                                             Insert(root, key);
                                             return true;
                                           }
@@ -174,7 +174,7 @@ class XAVLTREE
                                             XAVLNODE<K>* node = i;
                                             XAVLNODE<K>* parent = NULL;
                                             XAVLNODE<K>* q = NULL;
-                                            // find place to insert
+
                                             bool issmaller = false;
                                             while(node)
                                               {
@@ -187,7 +187,7 @@ class XAVLTREE
                                                   {
                                                     if(!ismulti)
                                                       {
-                                                        // if this is the case, it's the same node, and we are not multi
+
                                                         if(!islessimp(node->key, key))
                                                           {
                                                             return NULL;
@@ -269,8 +269,8 @@ class XAVLTREE
                                               {
                                                 if((!islessimp(root->key, key)) && (!islessimp(key, root->key)))
                                                   {
-                                                    //return E();
-                                                    //return root->elements.GetFirst();
+
+
                                                     return root->key;
                                                   }
 
@@ -278,11 +278,11 @@ class XAVLTREE
 
                                                 while(n != NULL)
                                                   {
-                                                    // need to check this, avoid as many comparisons as possible
+
                                                     if((!islessimp(n->key, key)) && (!islessimp(key, n->key)))
                                                       {
-                                                        //return E();
-                                                        //return n->elements.GetFirst();
+
+
                                                         return n->key;
                                                       }
 
@@ -290,7 +290,7 @@ class XAVLTREE
                                                   }
                                               }
 
-                                            return K(); // WILL have to check this
+                                            return K();
                                           }
 
     XLIST<K>                              GetMultiple                                   (const K& key)
@@ -322,7 +322,7 @@ class XAVLTREE
 
                                                 while(n != NULL)
                                                   {
-                                                    // need to check this, avoid as many comparisons as possible
+
                                                     if((!islessimp(n->key, key)) && (!islessimp(key, n->key)))
                                                       {
                                                         return index;
@@ -333,7 +333,7 @@ class XAVLTREE
                                                   }
                                               }
 
-                                            return NOTFOUND; // WILL have to check this
+                                            return NOTFOUND;
                                           }
 
 
@@ -388,7 +388,7 @@ class XAVLTREE
                                             return nelements;
                                           }
 
-/*--- XAVLTREE ITERATOR ---------------------------------------------------------------------------------------------------------*/
+
 
 
 class XITERATOR
@@ -427,7 +427,7 @@ class XITERATOR
                                               {
                                                 XAVLNODE<K>* y = current->parent;
 
-                                                // special root case
+
                                                 if(y == NULL)
                                                   {
                                                     current = NULL;
@@ -457,7 +457,7 @@ class XITERATOR
                                             return *this;
                                           }
 
-    typename XAVLTREE::XITERATOR          operator++                                    (int) // postfix
+    typename XAVLTREE::XITERATOR          operator++                                    (int)
                                           {
                                             typename XAVLTREE::XITERATOR it = *this;
                                             ++(*this);
@@ -479,7 +479,7 @@ class XITERATOR
                                           {
                                             if(!current) return K();
                                             return current->key;
-                                            //return current->elements.GetFirst();
+
                                           }
 
     K                                     GetKey()
@@ -495,35 +495,35 @@ class XITERATOR
 };
 
 
-/*--- XAVLTREE ITERATOR ---------------------------------------------------------------------------------------------------------*/
+
 
   protected:
 
     void                                  FillList                                      (XAVLNODE<K>* n, const K& key, XLIST<K>* list)
                                           {
-                                            // finds all ocurrences of nodes in the tree taking advantage of rotations being invariant
+
                                             if(n == NULL)
                                               {
                                                 return;
                                               }
 
-                                            // in order visit
-                                            // visit left
+
+
                                             FillList(n->left, key, list);
 
-                                            // visit me
-                                            //if I'm bigger return and don't continue
+
+
                                             if(islessimp(key, n->key))
                                               {
                                                 return;
                                               }
                                             else if(!islessimp(n->key, key))
                                               {
-                                                // neither bigger or smaller, must be equal
+
                                                 list->Add(n->key);
                                               }
 
-                                            // visit right
+
                                             FillList(n->right, key, list);
                                           }
 
@@ -655,7 +655,7 @@ class XITERATOR
                                             if(n == NULL)
                                               {
                                                 return -1;
-                                                //return 0;
+
                                               }
 
                                             return n->height;
@@ -666,7 +666,7 @@ class XITERATOR
                                             int hl = Height(n->left);
                                             int hr = Height(n->right);
 
-                                            //n->height = ((hl < hr) ? hr : hl) + 1;
+
                                             n->height = __MAX(hl, hr) + 1;
                                           }
 
@@ -677,7 +677,7 @@ class XITERATOR
                                                 return;
                                               }
 
-                                            // InOrder traversal
+
                                             this->Copy(node->left);
                                             this->Add(node->element);
                                             this->Copy(node->right);

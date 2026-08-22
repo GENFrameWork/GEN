@@ -65,7 +65,7 @@ class CIPHERAES : public CIPHER
     bool                  Cipher                  (XBYTE* input,  XDWORD size);
     bool                  Uncipher                (XBYTE* input,  XDWORD size);
 
-  protected:                                                                    // Reused by CIPHERAESGCM
+  protected:
 
     void                  AESGenTables            (void);
 

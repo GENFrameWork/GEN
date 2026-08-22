@@ -69,12 +69,12 @@ class GRPVECTORFILEDXFENTITYOBJPOINT : public GRPVECTORFILEDXFENTITYOBJ
    
     void                                  Clean                               ();
 
-    GRPVECTORFILEDXFENTITYDEFPOINT        point;                              // Point.   
-    double                                xaxisangle;                         // X Axis Angle;
+    GRPVECTORFILEDXFENTITYDEFPOINT        point;
+    double                                xaxisangle;
       
-    double                                thickness;                          // Thickness (default=0.0).
+    double                                thickness;
 
-    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;                       // Extrusion direction.     
+    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;
 };
 
 

@@ -75,13 +75,13 @@ class DIONTPBASICINFO
 
     XBYTE                         livnmode;
     XBYTE                         stratum;
-    /*
-    char                          poll;
-    char                          precision;
-    long                          rootdelay;
-    long                          rootdispersion;
-    char                          referenceID[4];
-    */
+
+
+
+
+
+
+
     XBYTE                         poll;
     XBYTE                         precision;
     XDWORD                        rootdelay;
@@ -122,14 +122,14 @@ class DIONTPRESPONSE
 {
   public:
 
-    int                           leapindicator;        // (0: no warning, 1: last minute in day has 61 seconds, 2: last minute has 59 seconds, 3: clock not synchronized)
-    int                           stratum;              // (0: unspecified or unavailable, 1: primary reference (e.g., radio clock),  2- 15: secondary reference (via NTP or SNTP), 16-255: reserved)
-    XQWORD                        originatetime;        // Time when the request was sent from the client to the SNTP server
-    XQWORD                        receivetime;          // Time when the request was received by the server
-    XQWORD                        transmittime;         // Time when the server sent the request back to the client
-    XQWORD                        destinationtime;      // Time when the reply was received by the client
-    double                        roundtripdelay;       // Round trip time in seconds
-    double                        localclockoffset;     // Local clock offset relative to the server
+    int                           leapindicator;
+    int                           stratum;
+    XQWORD                        originatetime;
+    XQWORD                        receivetime;
+    XQWORD                        transmittime;
+    XQWORD                        destinationtime;
+    double                        roundtripdelay;
+    double                        localclockoffset;
 };
 #pragma pack(pop, r5)
 

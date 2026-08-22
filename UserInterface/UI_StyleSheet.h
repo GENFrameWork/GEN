@@ -96,35 +96,35 @@ class UI_CSSSELECTOR
     void                            AddClass                    (XCHAR* classname);
     void                            AddPseudo                   (XCHAR* pseudoname);
 
-    // Precomputed CSS-style specificity: id * 100 + (class + pseudo) * 10 + type * 1. Universal selector = 0.
+
     int                             GetSpecificity              () const { return specificity; }
     void                            RecomputeSpecificity        ();
 
-    // True iff this selector is exactly ":root" (no type, no id, no classes, single pseudo "root"). Used by
-    // the parser to intercept ":root { ... }" blocks and move their declarations to the stylesheet's
-    // variable table instead of treating them as a normal rule.
+
+
+
     bool                            IsRootOnly                  ();
 
-    // True iff this selector carries at least one pseudo-class (other than ":root", which is intercepted at
-    // parse time and never reaches selectors). Used by the loader as a cheap "does this rule depend on state?"
-    // discriminator to decide whether an element must subscribe to state re-resolution.
+
+
+
     bool                            HasPseudos                  ()    { return pseudos.GetSize() > 0; }
 
-    // Matches (element_type, element_id, element_classlist, active-pseudos) against this selector. Comparisons
-    // are case-insensitive to keep parity with the XML attribute lookup semantics used elsewhere in the UI
-    // module. Every pseudo required by the selector must be present in `activepseudos`. Passing an empty
-    // `activepseudos` therefore behaves as "no state active" (load-time resolution), and selectors carrying
-    // pseudos will not match -- reproducing step 2's behaviour without a code path change.
+
+
+
+
+
     bool                            Match                       (XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos);
 
   private:
 
     void                            Clean                       ();
 
-    XSTRING                         type;                 // empty = no type restriction
-    XSTRING                         id;                   // empty = no id restriction
-    XVECTOR<XSTRING*>               classes;              // empty = no class restriction; owned strings
-    XVECTOR<XSTRING*>               pseudos;              // empty = no pseudo restriction; owned strings
+    XSTRING                         type;
+    XSTRING                         id;
+    XVECTOR<XSTRING*>               classes;
+    XVECTOR<XSTRING*>               pseudos;
     int                             specificity;
 };
 
@@ -143,7 +143,7 @@ class UI_CSSRULE
     XVECTOR<UI_CSSSELECTOR*>&       GetSelectors                ()    { return selectors;    }
     UI_STYLE&                       GetDeclarations             ()    { return declarations; }
 
-    // Source order index (assigned by the parser). Used to break specificity ties in the cascade: later wins.
+
     int                             GetSourceIndex              () const { return sourceindex; }
     void                            SetSourceIndex              (int idx)                     { sourceindex = idx; }
 
@@ -151,7 +151,7 @@ class UI_CSSRULE
 
     void                            Clean                       ();
 
-    XVECTOR<UI_CSSSELECTOR*>        selectors;            // owned
+    XVECTOR<UI_CSSSELECTOR*>        selectors;
     UI_STYLE                        declarations;
     int                             sourceindex;
 };
@@ -172,44 +172,44 @@ class UI_STYLESHEET
     int                             Rules_Count                 ()       { return (int)rules.GetSize(); }
     void                            Rules_DeleteAll             ();
 
-    // --- Theme variables (CSS custom properties: "--name" keyed) ----------------------------------------------
-    // The parser routes every ":root { --name: value; }" declaration into this bag (later assignments overwrite
-    // earlier ones, matching CSS cascade semantics). Consumers should not write here directly; ExpandVariables()
-    // is what folds these values into rule declarations. Exposed public so the parser can populate it.
+
+
+
+
     UI_STYLE&                       Variables                   ()    { return variables; }
     int                             Variables_Count             ()       { return variables.GetProperties() ? (int)variables.GetProperties()->GetSize() : 0; }
     bool                            Variables_Get               (XCHAR* name, XSTRING& out);
 
-    // One-shot substitution of every "var(--name[, fallback])" token embedded in a rule's declaration value.
-    // Called once by the parser at end-of-parse; safe to call again if variables were amended by hand.
-    // Also self-expands variable-to-variable references (up to a small fixed number of iterations, so a
-    // circular reference stabilizes at the last resolved form rather than looping forever).
+
+
+
+
     void                            ExpandVariables             ();
 
-    // Cascade resolver: writes into `out` every declaration whose rule matches (elementtype, elementid,
-    // elementclasses, active-pseudos). Rules are applied in ascending specificity, ties by source order, so on
-    // return `out` holds the effective per-property value for this element. Existing keys in `out` are
-    // overwritten by any matching rule (CSS-wins-over-XML semantics, when the caller has pre-filled `out`
-    // from the XML front-end). Pass an empty `activepseudos` for load-time / stateless resolution.
+
+
+
+
+
     bool                            Resolve                     (XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos, UI_STYLE& out);
 
-    // Cheap "does any rule in this sheet require pseudo-classes to match a given element?" query. Used by the
-    // loader to decide whether an element must snapshot its baseline visual state and subscribe to state
-    // re-resolution, or can skip that overhead entirely.
+
+
+
     bool                            HasPseudoRulesFor           (XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses);
 
   private:
 
     void                            Clean                       ();
 
-    // Substitute every var(--name[, fallback]) occurrence in `in` and place the result in `out`. Returns true
-    // if at least one substitution ran; false if `in` contained no var() references at all. Missing variables
-    // without fallback expand to empty string (matches CSS behaviour of "invalid at computed-value time" for
-    // our simple string-typed values).
+
+
+
+
     bool                            SubstituteVars              (XSTRING& in, XSTRING& out);
 
-    XVECTOR<UI_CSSRULE*>            rules;                // owned, in source order
-    UI_STYLE                        variables;            // ":root" declarations, keyed by "--name"
+    XVECTOR<UI_CSSRULE*>            rules;
+    UI_STYLE                        variables;
 };
 
 

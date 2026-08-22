@@ -104,7 +104,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 																		  UI_SKINCANVAS														(GRPSCREEN* screen, int viewportindex = 0);
     virtual													 ~UI_SKINCANVAS														();
 
-		static void												GetScrollViewportSize										(UI_ELEMENT* element, double& width, double& height);   // Form -> visiblerect window; else boundaryline
+		static void												GetScrollViewportSize										(UI_ELEMENT* element, double& width, double& height);
 
 		GRPSCREEN*                        GetScreen																(); 
 		GRP2DCANVAS*                      GetCanvas																(); 

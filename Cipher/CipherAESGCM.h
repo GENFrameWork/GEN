@@ -85,14 +85,14 @@ class CIPHERAESGCM : public CIPHERAES
 
     void                  Clean                   ();
 
-    CIPHERAES_CONTEXT     ctx;                                                  // AES key schedule, cipher direction
+    CIPHERAES_CONTEXT     ctx;
     bool                  keyisready;
     XDWORD                tagsize;
 
-    XQWORD                HL[CIPHERAESGCM_TABLESIZE];                           // Precalculated multiples of H, low  part
-    XQWORD                HH[CIPHERAESGCM_TABLESIZE];                           // Precalculated multiples of H, high part
+    XQWORD                HL[CIPHERAESGCM_TABLESIZE];
+    XQWORD                HH[CIPHERAESGCM_TABLESIZE];
 
-    XBYTE                 basectr[CIPHERAESGCM_BLOCKSIZE];                      // E(K, J0)
+    XBYTE                 basectr[CIPHERAESGCM_BLOCKSIZE];
     XBYTE                 counter[CIPHERAESGCM_BLOCKSIZE];
     XBYTE                 ghash[CIPHERAESGCM_BLOCKSIZE];
 

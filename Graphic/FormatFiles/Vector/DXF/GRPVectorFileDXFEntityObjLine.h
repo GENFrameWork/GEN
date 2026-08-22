@@ -70,12 +70,12 @@ class GRPVECTORFILEDXFENTITYOBJLINE : public GRPVECTORFILEDXFENTITYOBJ
    
     void                                  Clean                               ();   
       
-    GRPVECTORFILEDXFENTITYDEFPOINT        ini;                                // Initial point.
-    GRPVECTORFILEDXFENTITYDEFPOINT        end;                                // end point.
+    GRPVECTORFILEDXFENTITYDEFPOINT        ini;
+    GRPVECTORFILEDXFENTITYDEFPOINT        end;
 
-    double                                thickness;                          // Thickness (default=0.0).
+    double                                thickness;
 
-    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion ;                      // Extrusion direction.
+    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion ;
 };
 
 

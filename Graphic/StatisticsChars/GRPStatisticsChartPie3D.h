@@ -60,8 +60,8 @@ class GRPSTATISTICSCHARTPIE3D : public GRPSTATISTICSCHART
     void                            DrawSectorWall                        (GRPSTATISTICSCHARTBUILDER& builder, double cx, double cy, double rx, double ry, double thick, double startdeg, double enddeg, GRPSTATISTICSCHARTCOLOR& color);
     GRPSTATISTICSCHARTCOLOR         MakeShade                             (GRPSTATISTICSCHARTCOLOR& color, double factor);
 
-    double                          tiltratio;                            // vertical squash of the ellipse (default 0.55)
-    double                          thicknessratio;                       // pie thickness as a ratio of the radius (default 0.16)
+    double                          tiltratio;
+    double                          thicknessratio;
 };
 
 

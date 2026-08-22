@@ -75,18 +75,18 @@ class GRPSCREENCFGCHROMES
 
     #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
 
-    // NOTE: only meaningful when GetUseNativeChromes() is false. namelayoutfile is the .xml layout file (resolved
-    // the same way any other UI layout is); namelayout is the specific <layout name="..."> to use from that file,
-    // since a single .xml can define more than one layout.
+
+
+
     XSTRING*                              GetCustomLayoutFile           ();
     void                                  SetCustomLayoutFile           (XCHAR* namelayoutfile);
 
     XSTRING*                              GetCustomLayoutName           ();
     void                                  SetCustomLayoutName           (XCHAR* namelayout);
 
-    // Custom chromes only. 0 (the default) disables auto-hide entirely -- the caption stays always visible,
-    // as before. A value > 0 is the delay, in milliseconds, the cursor must stay steadily outside (to hide) or
-    // inside (to show) the caption's own area before it actually happens; see GRPSCREEN::UpdateCFGChromesAutoHide().
+
+
+
     XDWORD                                GetCustomAutoHide             ();
     void                                  SetCustomAutoHide             (XDWORD timehidden);
 

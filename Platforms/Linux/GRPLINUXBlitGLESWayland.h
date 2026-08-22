@@ -54,26 +54,26 @@ class GRPLINUXBLITGLESWAYLAND : public GRPBLITGLES
 
     bool                                   GetNativeWindowSize                (int& width, int& height);
 
-    // Wayland: no bitmap rescaling. The canvas is presented at its native pixel size (1 texel = 1
-    // pixel), growing/shrinking independently on each axis with the window instead of being
-    // stretched/letterboxed to fill it. It is anchored to the window's TOP-LEFT corner (not
-    // centered): growing the window reveals more background at the bottom/right, and shrinking it
-    // crops the canvas' bottom/right edges first, regardless of which edge/corner was dragged. See
-    // GRPLINUXSCREENWAYLAND::ApplyMaxSizeHint (xdg_toplevel_set_max_size) for the native-window-side
-    // growth cap at the viewport's max size; this method is what makes the content itself hide,
-    // rather than shrink, below the viewport's min size.
+
+
+
+
+
+
+
+
     void                                   ComputePresentationScale          (GLsizei surfacewidth, GLsizei surfaceheight, float& scalex, float& scaley, float& translatex, float& translatey, bool& visible);
 
   private:
 
-    // Wayland has no equivalent of X11's raw XID-as-EGLNativeWindowType: EGL needs a
-    // struct wl_egl_window*, a small libwayland-egl wrapper around the wl_surface that also
-    // tracks the buffer size (there is no "resize an X11 Window" step -- XResizeWindow already
-    // IS the window; on Wayland, wl_egl_window_resize() must be called explicitly whenever the
-    // compositor-driven size changes, see GetNativeWindow() below). Created lazily on first use
-    // and owned/destroyed by this class, one per screen -- same lifetime GRPLINUXBLITGLESX11 gives
-    // the raw Window handle it borrows from GRPLINUXSCREENX11 (it never destroys it, because it
-    // never owned it; here we DO own the wl_egl_window and must destroy it ourselves).
+
+
+
+
+
+
+
+
     struct wl_egl_window*                 eglwindow;
 };
 

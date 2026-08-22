@@ -78,22 +78,22 @@ class UI_ELEMENT_PROGRESS_RADIAL : public UI_ELEMENT_OPTION
     virtual                ~UI_ELEMENT_PROGRESS_RADIAL  ();
 
     float                   GetLevel                    ();
-    void                    SetLevel                    (float level);              // clamped to [0 .. 100]
+    void                    SetLevel                    (float level);
 
     double                  GetStartAngle               ();
-    void                    SetStartAngle               (double startangle);        // degrees, -90 = top
+    void                    SetStartAngle               (double startangle);
 
     double                  GetSweepAngle               ();
-    void                    SetSweepAngle               (double sweepangle);        // degrees, 360 = full ring
+    void                    SetSweepAngle               (double sweepangle);
 
     double                  GetThickness                ();
-    void                    SetThickness                (double thickness);         // ring width in px (0 = auto)
+    void                    SetThickness                (double thickness);
 
     bool                    GetRoundCap                 ();
     void                    SetRoundCap                 (bool roundcap);
 
-    UI_COLOR*               GetLineColor                ();                         // value arc gradient END color
-    UI_COLOR*               GetGradientColor            ();                         // value arc gradient END color (no gradient when its alpha == 0)
+    UI_COLOR*               GetLineColor                ();
+    UI_COLOR*               GetGradientColor            ();
     int                     GetGradientMode             ();
     void                    SetGradientMode             (int gradientmode);
 

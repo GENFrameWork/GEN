@@ -70,10 +70,10 @@ class GRPVECTORFILEDXFENTITYOBJCIRCLE : public GRPVECTORFILEDXFENTITYOBJ
    
     void                                  Clean                               ();   
           
-    GRPVECTORFILEDXFENTITYDEFPOINT        center;                             // Center point.           
-    double                                radius;                             // Radius.
-    double                                thickness;                          // Thickness (default=0.0).          
-    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;                       // Extrusion direction.
+    GRPVECTORFILEDXFENTITYDEFPOINT        center;
+    double                                radius;
+    double                                thickness;
+    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;
 };
 
 

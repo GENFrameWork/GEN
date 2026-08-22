@@ -53,7 +53,7 @@ class GRPVECTORFILESVGOBJUSE : public GRPVECTORFILESVGOBJ
 
     bool                            ApplyData                  (XFILEXMLELEMENT* element);
 
-    XSTRING*                        GetHRef                    ();                          // referenced id (without the leading '#')
+    XSTRING*                        GetHRef                    ();
 
     double                          GetX                       ();
     double                          GetY                       ();

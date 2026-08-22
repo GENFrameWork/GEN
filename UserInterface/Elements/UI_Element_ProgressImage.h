@@ -65,22 +65,22 @@ class UI_ELEMENT_PROGRESS_IMAGE : public UI_ELEMENT_OPTION
     virtual                ~UI_ELEMENT_PROGRESS_IMAGE   ();
 
     GRPBITMAP*              GetImageEmpty               ();
-    void                    SetImageEmpty               (GRPBITMAP* image);         // 0% graphic (cache-owned)
+    void                    SetImageEmpty               (GRPBITMAP* image);
 
     GRPBITMAP*              GetImageFull                ();
-    void                    SetImageFull                (GRPBITMAP* image);         // 100% graphic (cache-owned)
+    void                    SetImageFull                (GRPBITMAP* image);
 
     double                  GetOffsetStart              ();
-    void                    SetOffsetStart              (double offsetstart);       // px from the start edge (width/height)
+    void                    SetOffsetStart              (double offsetstart);
 
     double                  GetOffsetEnd                ();
-    void                    SetOffsetEnd                (double offsetend);         // px from the end edge (width/height)
+    void                    SetOffsetEnd                (double offsetend);
 
     float                   GetLevel                    ();
-    void                    SetLevel                    (float level);              // clamped to [0 .. 100]
+    void                    SetLevel                    (float level);
 
     XBYTE                   GetAlpha                    ();
-    void                    SetAlpha                    (XBYTE alpha);              // 0 .. 100
+    void                    SetAlpha                    (XBYTE alpha);
 
   private:
 

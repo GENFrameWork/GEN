@@ -73,23 +73,23 @@ class GRP2DVECTORFILEDXFRENDERAGG
     bool                            Render                     (GRPVECTORFILEDXF* dxf, GRP2DCANVAS* canvas, double targetx, double targety, double targetwidth, double targetheight);
 
     bool                            GetBackgroundIsDark        ();
-    void                            SetBackgroundIsDark        (bool isdark);                                          // controls how ACI 7 (black/white) is mapped
+    void                            SetBackgroundIsDark        (bool isdark);
 
     bool                            GetForceColorActive        ();
-    void                            SetForceColor              (bool active, GRP2DCOLOR_RGBA8 color);                  // ignore ACI and paint everything with one color
+    void                            SetForceColor              (bool active, GRP2DCOLOR_RGBA8 color);
 
     double                          GetLineWidth               ();
-    void                            SetLineWidth               (double linewidth);                                    // device stroke width (pixels)
+    void                            SetLineWidth               (double linewidth);
 
     bool                            GetDrawText                ();
-    void                            SetDrawText                (bool drawtext);                                        // TEXT / MTEXT need a vector font loaded on the canvas
+    void                            SetDrawText                (bool drawtext);
 
   private:
 
     bool                            ComputeExtents             (GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, GRPVECTORFILEDXF* dxf, double& minx, double& miny, double& maxx, double& maxy, int depth);
     bool                            CalculateFitTransform      (GRPVECTORFILEDXF* dxf, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, double targetx, double targety, double targetwidth, double targetheight);
 
-    void                            MapPoint                   (double ux, double uy, double& dx, double& dy);        // block local -> world -> device (Y down)
+    void                            MapPoint                   (double ux, double uy, double& dx, double& dy);
 
     bool                            RenderEntityList           (GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities);
     bool                            RenderEntity               (GRPVECTORFILEDXFENTITY* entity, GRPVECTORFILEDXFTEXTSECTIONENTITIES* entities, XDWORD& index);
@@ -126,37 +126,37 @@ class GRP2DVECTORFILEDXFRENDERAGG
 
     GRP2DCOLOR_RGBA8                ResolveColor               (GRPVECTORFILEDXFENTITY* entity);
 
-    void                            BuildLayerTable            (GRPVECTORFILEDXF* dxf);                       // parse the LAYER table (name code 2, color code 62) from the file
-    int                             LayerColorACI              (XCHAR* layername);                            // ACI color for a layer name (256 = not found / ByLayer)
-    XCHAR*                          GetLayerName               (GRPVECTORFILEDXFENTITY* entity);              // entity layer name (code 8 / G_LAYER_NAME)
-    void                            CleanLayerTable            ();                                            // free the layer table
+    void                            BuildLayerTable            (GRPVECTORFILEDXF* dxf);
+    int                             LayerColorACI              (XCHAR* layername);
+    XCHAR*                          GetLayerName               (GRPVECTORFILEDXFENTITY* entity);
+    void                            CleanLayerTable            ();
     GRP2DCOLOR_RGBA8                ColorFromACI               (int aci);
 
     void                            Clean                      ();
 
-    GRP2DCANVAS*                    contextcanvas;                               // canvas being rendered (handlers paint on it)
-    GRPVECTORFILEDXF*               contextdxf;                                  // file being rendered (to reach the BLOCKS section for INSERT)
-    int                             insertdepth;                                 // nested INSERT recursion guard
+    GRP2DCANVAS*                    contextcanvas;
+    GRPVECTORFILEDXF*               contextdxf;
+    int                             insertdepth;
 
-    double                          scale;                                       // world -> device uniform scale
-    double                          offsetx;                                     // world -> device x offset (device space)
-    double                          offsety;                                     // world -> device y offset (device space)
+    double                          scale;
+    double                          offsetx;
+    double                          offsety;
 
-    double                          blocka;                                      // block local -> world affine : [a c e ; b d f]
+    double                          blocka;
     double                          blockb;
     double                          blockc;
     double                          blockd;
     double                          blocke;
     double                          blockf;
 
-    double                          linewidth;                                   // device stroke width
-    bool                            backgroundisdark;                            // ACI 7 mapping
-    bool                            drawtext;                                    // render TEXT / MTEXT entities
+    double                          linewidth;
+    bool                            backgroundisdark;
+    bool                            drawtext;
 
-    bool                            forcecoloractive;                            // ignore ACI, use forcecolor
-    GRP2DCOLOR_RGBA8                forcecolor;                                  // single override color
+    bool                            forcecoloractive;
+    GRP2DCOLOR_RGBA8                forcecolor;
 
-    GRPVECTORFILEDXF*               layertabledxf;                               // file the LAYER table was built for (rebuild only when the file changes)
-    XVECTOR<XSTRING*>               layernames;                                  // LAYER table : layer names (parallel to layeracis)
-    XVECTOR<int>                    layeracis;                                   // LAYER table : ACI color per layer (parallel to layernames)
+    GRPVECTORFILEDXF*               layertabledxf;
+    XVECTOR<XSTRING*>               layernames;
+    XVECTOR<int>                    layeracis;
 };

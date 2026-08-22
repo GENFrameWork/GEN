@@ -63,10 +63,10 @@ class UI_TEXTS
 
   private:
                                     UI_TEXTS                ();   
-                                    UI_TEXTS                (UI_TEXTS const&);        // Don't implement
+                                    UI_TEXTS                (UI_TEXTS const&);
     virtual                        ~UI_TEXTS                ();
 
-    void                            operator =              (UI_TEXTS const&);        // Don't implement
+    void                            operator =              (UI_TEXTS const&);
 
     void                            Clean                   ();
 

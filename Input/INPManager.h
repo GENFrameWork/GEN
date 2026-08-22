@@ -68,10 +68,10 @@ class INPMANAGER
 
   private:
                                         INPMANAGER                ();
-                                        INPMANAGER                (INPMANAGER const&);        // Don't implement
+                                        INPMANAGER                (INPMANAGER const&);
     virtual                            ~INPMANAGER                ();
 
-    void                                operator =                (INPMANAGER const&);        // Don't implement    
+    void                                operator =                (INPMANAGER const&);
     
     void                                Clean                     ();
     

@@ -79,7 +79,7 @@ class HASHHMAC : public HASH
 
     void                            Clean                                 ();
 
-    HASH*                           hash;                                 // Not owned by this class
+    HASH*                           hash;
     XDWORD                          blocksize;
     XBUFFER                         key;
 };

@@ -58,9 +58,9 @@ class UI_ANIMATION
 
     bool                       LoadFromFile         (XSTRING& resourcename, GRPPROPERTYMODE mode);
 
-    // NOTE: vector resources (SVG, DXF...) have no intrinsic pixel size of their own; unlike a bitmap file, the
-    // caller must always supply the target width/height to rasterize at (see GRP2DVECTORFILERENDERAGG). The
-    // referencecanvas provides the pixel format and the loaded vector font to rasterize with.
+
+
+
     bool                       LoadFromFileVector   (XSTRING& resourcename, GRP2DCANVAS* referencecanvas, double width, double height);
 
     XSTRING*                   GetName              ();

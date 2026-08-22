@@ -263,7 +263,7 @@ class GRP2DCANVASAGG_DASHED_LINE
 
     void                                                                        Draw                          (double x1, double y1, double x2, double y2, double line_width, double dash_length)
                                                                                 {
-                                                                                  //m_src.init(x1 + 0.5, y1 + 0.5, x2 + 0.5, y2 + 0.5);
+
                                                                                   m_src.init(x1, y1, x2, y2);
                                                                                   m_ras.reset();
 
@@ -346,10 +346,10 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                       return false;
                                                                                     }
 
-                                                                                  // See GRP2DCANVAS::Buffer_Create(): a canvas must start from a known, fully transparent surface. Only the
-                                                                                  // regions a layout actually covers are ever painted, so leaving the allocation uninitialized shows raw heap
-                                                                                  // memory as garbage -- most visibly under the semi-transparent caption of a custom window chrome, and it is
-                                                                                  // then captured as the saved background of that element's rebuild area and restored on every repaint.
+
+
+
+
                                                                                   memset(buffer, 0, buffersize);
 
                                                                                   rbuffer.attach(buffer, width , height, (IsBufferInverse()?1:-1)*((int)width * GetBytesperPixel()));
@@ -540,7 +540,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                  
                                                                                   if(linewidth <= 1.0)
                                                                                     {
-                                                                                      //renderer_primitives->rectangle((int)x1, (int)y1, (int)x2, (int)y2);
+
 
                                                                                       AGG_SOLIDFILL_INI
                                                                                       
@@ -555,12 +555,12 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                     {
                                                                                       AGG_OUTLINE_INI
 
-                                                                                      ren.color(renderer_primitives->line_color());          //mandatory!
+                                                                                      ren.color(renderer_primitives->line_color());
 
-                                                                                      //ras.round_cap(true);                   //optional
-                                                                                      //ras.accurate_join(true);             //optional
 
-                                                                                      //-- move_to/line_to interface
+
+
+
                                                                                       ras.move_to_d(x1, y1);
                                                                                       ras.line_to_d(x1, y2);
                                                                                       ras.line_to_d(x2, y2);
@@ -597,8 +597,8 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
 
                                                                                       ren.color(renderer_primitives->line_color());
 
-                                                                                      //ras.round_cap(true);                 //optional
-                                                                                      //ras.accurate_join(true);             //optional
+
+
 
                                                                                       agg::ellipse ell(x, y, rx, ry, 100);
                                                                                       ras.add_path(ell);
@@ -637,10 +637,10 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
 
                                                                                    AGG_OUTLINE_INI
 
-                                                                                   ren.color(renderer_primitives->line_color());          //mandatory!
+                                                                                   ren.color(renderer_primitives->line_color());
 
-                                                                                   //ras.round_cap(true);                  //optional
-                                                                                   //ras.accurate_join(true);              //optional
+
+
 
                                                                                    GRP2DVERTEX* vertex = vertexs.Get(0);
                                                                                    if(!vertex) return;
@@ -1031,14 +1031,14 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
 
                                                                                       ren.color(renderer_primitives->line_color());
 
-                                                                                      //ras.round_cap(true);                 //optional
-                                                                                      //ras.accurate_join(true);             //optional
+
+
 
                                                                                       agg::rounded_rect roundrect (x1, y1, x2, y2, radius);
-                                                                                      //agg::rounded_rect roundrect2(x1 + 1, y1 - 1, x2, y2 + 1, radius);
+
 
                                                                                       ras.add_path(roundrect);
-                                                                                      //ras.add_path(roundrect2);
+
 
                                                                                       AGG_OUTLINE_END
                                                                                     }
@@ -1048,7 +1048,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
     GRPBITMAP*                                                                  GetBitmap                         (double x, double y, double width, double height)
                                                                                 {
 
-                                                                                  //Rectangle(x, y, x+width, y+height, false);
+
 
                                                                                   int clipwidth    = (renderer_base->xmax() - renderer_base->xmin());
                                                                                   int clipheight   = (renderer_base->ymax() - renderer_base->ymin());
@@ -1123,7 +1123,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                    else
                                                                                     {
                                                                                       int xslide       = 0;
-                                                                                      //int yslide       = 0;
+
                                                                                       int clipwidth    = (renderer_base->xmax() - renderer_base->xmin());
                                                                                       int clipheight   = (renderer_base->ymax() - renderer_base->ymin());
                                                                                       int bitmapwidth  = bitmap->GetWidth();
@@ -1171,7 +1171,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                     }
 
                                                                                   #ifdef DEBUG_ACTIVE 
-                                                                                  //Debug_Draw(x, y, bitmap->GetWidth(), bitmap->GetHeight());
+
                                                                                   #endif  
                                                                                 }
 
@@ -1192,7 +1192,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                     }
 
                                                                                   #ifdef DEBUG_ACTIVE 
-                                                                                  //Debug_Draw(x, y, bitmap->GetWidth(), bitmap->GetHeight());
+
                                                                                   #endif  
                                                                                 }
 
@@ -1213,7 +1213,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                     }
 
                                                                                   #ifdef DEBUG_ACTIVE 
-                                                                                  //Debug_Draw(x, y, bitmap->GetWidth(), bitmap->GetHeight());
+
                                                                                   #endif  
                                                                                 }
 
@@ -1382,7 +1382,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                   const  char* p = charstr.GetPtrChar();
 
                                                                                   for(XDWORD c=0; c<_string.GetSize(); c++)
-                                                                                  //while(*p)
+
                                                                                     {
                                                                                       const agg::glyph_cache* glyph = vectorfont_manager->glyph(*p);
 
@@ -1429,7 +1429,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                   const char* p = charstr.GetPtrChar();
 
                                                                                   for(XDWORD c=0; c<_string.GetSize(); c++)
-                                                                                  //while(*p)
+
                                                                                     {
                                                                                       const agg::glyph_cache* glyph = vectorfont_manager->glyph(*p);
 
@@ -1513,26 +1513,26 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                               case agg::glyph_data_outline    : ras.reset();
 
                                                                                                                                 
-                                                                                                                                /* 
-                                                                                                                                if(fabs(m_weight.value()) <= 0.01)
-                                                                                                                                  {
-                                                                                                                                    // For the sake of efficiency skip the
-                                                                                                                                    // contour converter if the weight is about zero.
-                                                                                                                                    //-----------------------
 
-                                                                                                                                    ras.add_path(m_curves);
-                                                                                                                                  }
-                                                                                                                                  else
-                                                                                                                                  {
-                                                                                                                                    ras.add_path(m_contour);
-                                                                                                                                  }
-                                                                                                                                */
+
+
+
+
+
+
+
+
+
+
+
+
+
                                                                                                                                 renderer_scanline->color((*vectorfont_config.GetColor()));
                                                                                                                                 agg::render_scanlines(ras, sl, ren);                                                                                  
                                                                                                                                 break;
                                                                                               }
 
-                                                                                            // increment pen position
+
                                                                                             x += glyph->advance_x;
                                                                                             y += glyph->advance_y;  
 
@@ -1547,10 +1547,10 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
 
     bool                                                                        VectorFont_PrintAngle             (double _x, double _y, double _angle, XCHAR* _outstring)
                                                                                 {
-                                                                                  if(_angle == 0.0)                       return VectorFont_Print(_x, _y, _outstring);   // fast path : identical to the non-rotated method
-                                                                                  if(vectorfont_namefile.GetSize() == 0)  return VectorFont_Print(_x, _y, _outstring);   // no stored path : safe upright fallback
+                                                                                  if(_angle == 0.0)                       return VectorFont_Print(_x, _y, _outstring);
+                                                                                  if(vectorfont_namefile.GetSize() == 0)  return VectorFont_Print(_x, _y, _outstring);
 
-                                                                                  vectorfont_engine.load_font(vectorfont_namefile.GetPtrChar(), 0, agg::glyph_ren_agg_gray8);   // AGG ignores transform() in native modes; agg_gray8 honours it (reuses cached face, no TTF reload)
+                                                                                  vectorfont_engine.load_font(vectorfont_namefile.GetPtrChar(), 0, agg::glyph_ren_agg_gray8);
 
                                                                                   XSTRING outstring;
 
@@ -1564,7 +1564,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                   vectorfont_engine.height(vectorfont_config.GetHeight());
                                                                                   vectorfont_engine.width(vectorfont_config.GetWidth());
                                                                                   vectorfont_engine.flip_y(true);
-                                                                                  vectorfont_engine.transform(agg::trans_affine_rotation(_angle));   // rotate glyph outlines + advances
+                                                                                  vectorfont_engine.transform(agg::trans_affine_rotation(_angle));
 
                                                                                   double x      = _x;
                                                                                   double y      = _y+1;
@@ -1609,11 +1609,11 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                           }
                                                                                     }
 
-                                                                                  vectorfont_engine.transform(agg::trans_affine());   // reset the transform
+                                                                                  vectorfont_engine.transform(agg::trans_affine());
 
                                                                                   AGG_SOLIDFILL_END
 
-                                                                                  vectorfont_engine.load_font(vectorfont_namefile.GetPtrChar(), 0, agg::glyph_ren_native_gray8);   // restore the original native mode (UI text unchanged)
+                                                                                  vectorfont_engine.load_font(vectorfont_namefile.GetPtrChar(), 0, agg::glyph_ren_native_gray8);
 
                                                                                   return true;
                                                                                 }
@@ -1738,7 +1738,7 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
                                                                                         }
                                                                                     }
                                                                                            
-                                                                                  //Debug_Draw(framerate_x - 4 , framerate_y - height - 4, (width + 8), (height + 8));                                                                                                                                                                                                         
+
                                                                                   
                                                                                   framerate_bitmap = GetBitmap(framerate_x - 4 , framerate_y - height - 4, (width + 8), (height + 8));
                                                                                                                                                                        

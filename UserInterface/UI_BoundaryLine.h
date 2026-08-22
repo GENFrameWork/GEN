@@ -79,7 +79,7 @@ class UI_BOUNDARYLINE
 
     bool             IsEmpty            ();
 
-    // --- Resolved screen edges (route everything through the single conversion point) ---------------------------
+
     double           GetLeft            ()    { return UI_BOUNDARYLINE_EdgeLeft  (x, width);  }
     double           GetRight           ()    { return UI_BOUNDARYLINE_EdgeRight (x, width);  }
     double           GetTop             ()    { return UI_BOUNDARYLINE_EdgeTop   (y, height); }

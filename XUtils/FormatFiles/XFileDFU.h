@@ -54,10 +54,10 @@ class XFILEDFU_PREFIX
                                     XFILEDFU_PREFIX         ();
     virtual                        ~XFILEDFU_PREFIX         ();
 
-    XBYTE                           signature[XFILEDFU_PREFIX_SIGNATUREPREXIF_MAX];     // DfuSe
-    XBYTE                           version;                                            // version 
-    XDWORD                          imagesize;                                          // image size;          
-    XBYTE                           ntargets;                                           // number images; 
+    XBYTE                           signature[XFILEDFU_PREFIX_SIGNATUREPREXIF_MAX];
+    XBYTE                           version;
+    XDWORD                          imagesize;
+    XBYTE                           ntargets;
 
   private:
 

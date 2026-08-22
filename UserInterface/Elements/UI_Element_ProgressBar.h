@@ -62,7 +62,7 @@ class UI_ELEMENT_PROGRESSBAR : public UI_ELEMENT_OPTION
 
     UI_COLOR*						    GetLineColor								      ();
 
-    UI_COLOR*               GetGradientColor                  ();                         // value-fill gradient END color (no gradient when its alpha == 0)
+    UI_COLOR*               GetGradientColor                  ();
     int                     GetGradientMode                   ();
     void                    SetGradientMode                   (int gradientmode);
 

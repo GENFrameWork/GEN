@@ -86,10 +86,10 @@ class APPFLOWALERTS
 
   private:
                                         APPFLOWALERTS                   ();
-                                        APPFLOWALERTS                   (APPFLOWALERTS const&);        // Don't implement
+                                        APPFLOWALERTS                   (APPFLOWALERTS const&);
     virtual                            ~APPFLOWALERTS                   ();
 
-    void                                operator =                      (APPFLOWALERTS const&);        // Don't implement
+    void                                operator =                      (APPFLOWALERTS const&);
 
     void                                Clean                           ();
 

@@ -75,15 +75,15 @@ class GRPVECTORFILEDXFENTITYOBJLWPOLYLINE : public GRPVECTORFILEDXFENTITYOBJ
    
     void                                  Clean                                     ();   
       
-    int                                   nvertex;                                  // Number of vertices.
+    int                                   nvertex;
     
-    int                                   polylineflag;                             // Polyline flag (bit-coded); default is 0: 1 = closed 128 = plinegen
-    double                                constantwidth;                            // Constant width (optional; default = 0) Not used if variable width (codes 40 and/or 41) is set.
-    double                                elevation;                                // Elevation (optional; default = 0)               
+    int                                   polylineflag;
+    double                                constantwidth;
+    double                                elevation;
       
-    double                                thickness;                                // Thickness (default=0.0).
+    double                                thickness;
 
-    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;                             // Extrusion direction.
+    GRPVECTORFILEDXFENTITYDEFPOINT        dirextrusion;
 };
 
 

@@ -108,8 +108,8 @@ class XSERIALIZATIONMETHODJSON : public XSERIALIZATIONMETHOD
     XVECTOR<XFILEJSONOBJECT*>   fathers;
     XFILEJSONOBJECT*            actualobject;
 
-    // Extraction context: independent from actualobject (which is set by CreateInstance for the Add path and
-    // becomes dangling when the JSON tree is rebuilt by ReadAndDecodeAllLines/DecodeAllLines).
+
+
     XVECTOR<XFILEJSONOBJECT*>   extractfathers;
     XFILEJSONOBJECT*            extractobject;
 };

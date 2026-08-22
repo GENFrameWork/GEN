@@ -61,14 +61,14 @@ class GRPBLITGLES
 
     virtual bool                          GetNativeWindowSize               (int& width, int& height);
 
-    // Computes how the canvas texture maps onto the drawable surface (the fullscreen quad's NDC
-    // scale AND position) and whether it should be drawn at all. Default (shared) policy:
-    // letterbox/pillarbox, i.e. keep the canvas aspect ratio inside the surface, scaling the quad
-    // down on one axis, CENTERED (translatex/translatey = 0), with black bars filling the rest --
-    // this rescales the presented bitmap as the surface is resized. Platform specialisations can
-    // override this to implement a different presentation policy (see GRPWINDOWSBLITGLES, which
-    // presents the canvas at its native pixel size with no rescaling, anchored to the top-left
-    // corner instead of centered).
+
+
+
+
+
+
+
+
     virtual void                          ComputePresentationScale          (GLsizei surfacewidth, GLsizei surfaceheight, float& scalex, float& scaley, float& translatex, float& translatey, bool& visible);
 
     virtual bool                          PreCreateHook                     ();
@@ -88,7 +88,7 @@ class GRPBLITGLES
     void                                  SetUseVSync                       (bool active);
     bool                                  GetUseVSync                       ();
 
-    void                                  SetUsePBO                         (bool active);  // requires ES 3.0
+    void                                  SetUsePBO                         (bool active);
     bool                                  GetUsePBO                         ();
 
     void                                  SetFlipY                          (bool active);
@@ -114,7 +114,7 @@ class GRPBLITGLES
 
     GLuint                                texid;
     GLuint                                vbo;
-    GLuint                                vao;        // ES 3.0 only
+    GLuint                                vao;
     GLuint                                program;
     GLint                                 u_modelview;
     GLint                                 u_tex;
@@ -139,10 +139,10 @@ class GRPBLITGLES
     float                                 lboxsx;
     float                                 lboxsy;
 
-    // Screen-space translation applied AFTER the lboxsx/lboxsy scale (see BuildModelMatrix). 0,0
-    // (the default) keeps the presented quad centered, exactly like before. Platform
-    // specialisations that anchor the content to a fixed corner instead of centering it (see
-    // GRPWINDOWSBLITGLES::ComputePresentationScale) set these to something else.
+
+
+
+
     float                                 lboxtx;
     float                                 lboxty;
 

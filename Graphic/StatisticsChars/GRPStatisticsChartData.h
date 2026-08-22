@@ -59,10 +59,10 @@ class GRPSTATISTICSCHARTSERIE
 
   private:
 
-    XSTRING                             name;                             // serie name (used in legends)
-    bool                                hascolor;                         // true if the serie has an explicit color
-    GRPSTATISTICSCHARTCOLOR             color;                            // explicit serie color (else taken from the palette)
-    XVECTOR<double>                     values;                           // one value per category
+    XSTRING                             name;
+    bool                                hascolor;
+    GRPSTATISTICSCHARTCOLOR             color;
+    XVECTOR<double>                     values;
 };
 
 
@@ -156,8 +156,8 @@ class GRPSTATISTICSCHARTDATA
 
   private:
 
-    XVECTOR<XSTRING*>                   categories;                       // category (X axis) labels
-    XVECTOR<GRPSTATISTICSCHARTSERIE*>   series;                           // value series (one or more)
+    XVECTOR<XSTRING*>                   categories;
+    XVECTOR<GRPSTATISTICSCHARTSERIE*>   series;
 };
 
 

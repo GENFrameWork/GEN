@@ -87,10 +87,10 @@ class XPUBLISHER
 
   private:
                                         XPUBLISHER                  ();
-                                        XPUBLISHER                  (XPUBLISHER const&);        // Don't implement
+                                        XPUBLISHER                  (XPUBLISHER const&);
     virtual                            ~XPUBLISHER                  ();
 
-    void                                operator =                  (XPUBLISHER const&);        // Don't implement
+    void                                operator =                  (XPUBLISHER const&);
 
     void                                Clean                       ();
 

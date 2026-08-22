@@ -82,7 +82,7 @@ class GRPVECTORFILESVGOBJ
 
     virtual bool                    ApplyData                  (XFILEXMLELEMENT* element);
 
-    virtual bool                    BuildPath                  (GRP2DPATH& path);           // emit geometry into a path (overriden by shapes)
+    virtual bool                    BuildPath                  (GRP2DPATH& path);
 
     GRPVECTORFILESVGOBJTYPE         GetObjType                 ();
     void                            SetObjType                 (GRPVECTORFILESVGOBJTYPE type);
@@ -94,7 +94,7 @@ class GRPVECTORFILESVGOBJ
     GRPVECTORFILESVGSTYLE*          GetStyle                   ();
     GRPVECTORFILESVGTRANSFORM*      GetTransform               ();
 
-    XSTRING*                        GetClipPathID              ();              // referenced clipPath id (without '#'), empty if none
+    XSTRING*                        GetClipPathID              ();
 
     XFILEXMLELEMENT*                GetXMLElement              ();
     void                            SetXMLElement              (XFILEXMLELEMENT* element);
@@ -106,7 +106,7 @@ class GRPVECTORFILESVGOBJ
     XDWORD                          GetNChilds                 ();
     GRPVECTORFILESVGOBJ*            GetChild                   (int index);
 
-    GRPVECTORFILESVGOBJ*            FindByID                   (XCHAR* id);                 // recursive search by id (this + descendants)
+    GRPVECTORFILESVGOBJ*            FindByID                   (XCHAR* id);
 
     #ifdef XTRACE_ACTIVE
     void                            Trace                      (int level = 0);
@@ -118,13 +118,13 @@ class GRPVECTORFILESVGOBJ
 
     GRPVECTORFILESVGOBJTYPE         type;
     XSTRING                         id;
-    XSTRING                         clippathid;                                  // referenced clipPath id (without '#'), empty if none
+    XSTRING                         clippathid;
     GRPVECTORFILESVGSTYLE           style;
     GRPVECTORFILESVGTRANSFORM       transform;
 
-    XFILEXMLELEMENT*                xmlelement;                                  // weak reference (owned by the XFILEXML tree)
+    XFILEXMLELEMENT*                xmlelement;
 
-    GRPVECTORFILESVGCSSSTYLESHEET*  cssstylesheet;                               // weak reference (owned by the loader, only valid during CreateInstance)
+    GRPVECTORFILESVGCSSSTYLESHEET*  cssstylesheet;
 
     XVECTOR<GRPVECTORFILESVGOBJ*>   childs;
 

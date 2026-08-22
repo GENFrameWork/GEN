@@ -94,10 +94,10 @@ class XWINDOWSVIRTUALDESKTOPMANAGER
 
   private:
                                               XWINDOWSVIRTUALDESKTOPMANAGER     ();
-                                              XWINDOWSVIRTUALDESKTOPMANAGER     (XWINDOWSVIRTUALDESKTOPMANAGER const&);        // Don't implement
+                                              XWINDOWSVIRTUALDESKTOPMANAGER     (XWINDOWSVIRTUALDESKTOPMANAGER const&);
     virtual                                  ~XWINDOWSVIRTUALDESKTOPMANAGER     ();
 
-    void                                      operator =                        (XWINDOWSVIRTUALDESKTOPMANAGER const&);        // Don't implement
+    void                                      operator =                        (XWINDOWSVIRTUALDESKTOPMANAGER const&);
 
     bool                                      LaunchApplication                 (XCHAR* applicationfilepath, XCHAR* desktopname);
     static BOOL __stdcall                     EnumDesktopProc                   (LPTSTR desktop, LPARAM param);

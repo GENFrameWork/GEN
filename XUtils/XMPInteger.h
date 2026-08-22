@@ -181,9 +181,9 @@ class XMPINTEGER
     bool                        GetDigit                      (XDWORD* data, int radix, XCHAR character);
     bool                        SetToStringHelper             (int radix, XSTRING& string);
 
-    int                         sign;           // Integer sign
-    XDWORD                      nlimbs;         // Number of limbs;
-    XLIMB*                      limbs;          // Pointer to limbs
+    int                         sign;
+    XDWORD                      nlimbs;
+    XLIMB*                      limbs;
 };
 
 
