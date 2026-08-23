@@ -210,7 +210,8 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
 bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
 {
   if((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1)) return false;
+     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
+     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) return false;
 
   for(XDWORD c=0; c<supportedgroups.GetSize(); c++)
     {
@@ -742,6 +743,72 @@ void DIOSTREAMTLSCONFIG::SetAllowUnauthenticatedServer(bool allowunauthenticated
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLSCONFIG::IsActiveAIAFetch()
+* @brief      Check whether a missing-intermediate chain may be completed via AuthorityInfoAccess fetching
+* @ingroup    DATAIO
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::IsActiveAIAFetch()
+{
+  return aiafetchactive;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLSCONFIG::AIAFetch_Activate(bool activate)
+* @brief      Activate or deactivate AuthorityInfoAccess fetching
+* @ingroup    DATAIO
+*
+* @param[in]  activate : true to activate; false to deactivate.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLSCONFIG::AIAFetch_Activate(bool activate)
+{
+  aiafetchactive = activate;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DIOSTREAMTLSCONFIG::GetAIAFetchTimeout()
+* @brief      Get the AuthorityInfoAccess fetch timeout, in seconds
+* @ingroup    DATAIO
+*
+* @return     int : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DIOSTREAMTLSCONFIG::GetAIAFetchTimeout()
+{
+  return aiafetchtimeout;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::SetAIAFetchTimeout(int timeout)
+* @brief      Set the AuthorityInfoAccess fetch timeout, in seconds
+* @ingroup    DATAIO
+*
+* @param[in]  timeout : Timeout value, in seconds. Must be greater than zero.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::SetAIAFetchTimeout(int timeout)
+{
+  if(timeout <= 0) return false;
+
+  aiafetchtimeout = timeout;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         XWORD DIOSTREAMTLSCONFIG::GetMinVersion()
 * @brief      Get the minimum TLS version this client will negotiate
 * @ingroup    DATAIO
@@ -841,6 +908,7 @@ void DIOSTREAMTLSCONFIG::Clean()
   SupportedGroups_Delete();
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
 
   // Handshake-signing schemes offered in signature_algorithms. RSA-PSS only BY DEFAULT: this is the set that
   // has been in production use, and it is deliberately not widened without evidence, because every entry added
@@ -878,4 +946,7 @@ void DIOSTREAMTLSCONFIG::Clean()
   TrustedRoots_Delete();
   LocalCredentials_Delete();
   allowunauthenticatedserver  = false;
+
+  aiafetchactive  = true;
+  aiafetchtimeout = 5;
 }

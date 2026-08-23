@@ -100,6 +100,20 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     bool                    IsAllowUnauthenticatedServer      ();
     void                    SetAllowUnauthenticatedServer     (bool allowunauthenticatedserver);
 
+    // Best-effort completion of a certificate chain the server sent incomplete: when the chain received in the
+    // handshake cannot be linked to a trusted root because an intermediate is missing, and the offending
+    // certificate carries an AuthorityInfoAccess id-ad-caIssuers URL, the client fetches that URL over plain HTTP
+    // and retries validation with the fetched certificate appended. Active by default -- it never weakens
+    // validation (a fetched certificate still has to chain correctly and land on a trusted root), it only
+    // recovers from a server-side omission a well-configured server would not have made. See
+    // DIOSTREAMTLSAIAFETCHER for the fetch itself and its documented limits (plain HTTP only, no redirects,
+    // bounded response size).
+    bool                    IsActiveAIAFetch                  ();
+    void                    AIAFetch_Activate                 (bool activate);
+
+    int                     GetAIAFetchTimeout                ();
+    bool                    SetAIAFetchTimeout                (int timeout);
+
     
     
     
@@ -132,6 +146,9 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XVECTOR<XBUFFER*>       localcertificatechain;
     CIPHERKEY*              localprivatekey;
     bool                    allowunauthenticatedserver;
+
+    bool                    aiafetchactive;
+    int                     aiafetchtimeout;
 };
 
 

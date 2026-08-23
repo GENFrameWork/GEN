@@ -105,6 +105,7 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     bool                                    IsServerAuthenticated                            ();
 
     bool                                    Authentication_Set                               (XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
+    void                                    AIAFetch_Set                                      (bool active, int timeout);
     DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR GetAuthenticationError                 ();
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    GetCertificateValidationError                    ();
 
@@ -145,6 +146,8 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     bool                                    ServerHelloDone_Process                          (XBUFFER& message);
     bool                                    Finished_Process                                 (XBUFFER& message);
 
+    bool                                    CertificateChain_CompleteViaAIA                   (XVECTOR<XBUFFER*>& certificatechain);
+
     bool                                    SetError                                         ();
     bool                                    SetAuthenticationError                           (DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR error);
     bool                                    CipherSuite_IsOffered                            (XWORD ciphersuite);
@@ -168,6 +171,9 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     XVECTOR<XBUFFER*>                       trustedroots;
     XDATETIME                                validationdatetime;
     bool                                    hasvalidationdatetime;
+
+    bool                                    aiafetchactive;
+    int                                     aiafetchtimeout;
 
     CIPHERCERTIFICATEX509VALIDATOR          certificatevalidator;
 

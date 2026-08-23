@@ -1696,6 +1696,8 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
   static const XBYTE OIDextendedkeyusage[] = { 0x55, 0x1D, 0x25 };
   static const XBYTE OIDsubjectaltname[]   = { 0x55, 0x1D, 0x11 };
   static const XBYTE OIDserverauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x01 };
+  static const XBYTE OIDauthorityinfoaccess[] = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x01, 0x01 };  // id-pe-authorityInfoAccess
+  static const XBYTE OIDcaissuers[]           = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x02 };  // id-ad-caIssuers
 
   CIPHERCERTIFICATEX509_DERREADER certificatereader(certificate.Get(), certificate.GetSize());
   CIPHERCERTIFICATEX509_DERITEM   certificatesequence;
@@ -2238,6 +2240,62 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
                     }
                 }
             }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDauthorityinfoaccess, sizeof(OIDauthorityinfoaccess)))
+            {
+              CIPHERCERTIFICATEX509_DERREADER accessouter(extensionvalue.data, extensionvalue.size);
+              CIPHERCERTIFICATEX509_DERITEM   accesssequence;
+
+              if(hasauthorityinfoaccess || !accessouter.Read(accesssequence) || !accessouter.IsEnd() ||
+                 (accesssequence.tag != 0x30))
+                {
+                  return false;
+                }
+
+              hasauthorityinfoaccess = true;
+              CIPHERCERTIFICATEX509_DERREADER accessreader(accesssequence.data, accesssequence.size);
+
+              while(!accessreader.IsEnd())
+                {
+                  CIPHERCERTIFICATEX509_DERITEM accessdescription;
+                  if(!accessreader.Read(accessdescription) || (accessdescription.tag != 0x30))
+                    {
+                      return false;
+                    }
+
+                  CIPHERCERTIFICATEX509_DERREADER descriptionreader(accessdescription.data, accessdescription.size);
+                  CIPHERCERTIFICATEX509_DERITEM   accessmethod;
+                  CIPHERCERTIFICATEX509_DERITEM   accesslocation;
+
+                  if(!descriptionreader.Read(accessmethod) || (accessmethod.tag != 0x06) ||
+                     !descriptionreader.Read(accesslocation) || !descriptionreader.IsEnd())
+                    {
+                      return false;
+                    }
+
+                  // accessLocation is a GeneralName: only uniformResourceIdentifier [6] (IA5String, tag 0x86) is
+                  // used here -- the only form the id-ad-caIssuers access method needs for an HTTP(S) fetch. Any
+                  // other access method, or any other GeneralName form, is simply skipped (not an error): AIA can
+                  // legally carry entries this class has no use for (e.g. id-ad-ocsp).
+                  if(!hascaissuersurl && (accesslocation.tag == 0x86) &&
+                     CIPHERCERTIFICATEX509_DER_OIDCompare(accessmethod, OIDcaissuers, sizeof(OIDcaissuers)))
+                    {
+                      for(XDWORD n=0; n<accesslocation.size; n++)
+                        {
+                          if(accesslocation.data[n] & 0x80)
+                            {
+                              return false;
+                            }
+
+                          if(!caissuersurl.Add((XCHAR)accesslocation.data[n]))
+                            {
+                              return false;
+                            }
+                        }
+
+                      hascaissuersurl = !caissuersurl.IsEmpty();
+                    }
+                }
+            }
           else if(critical)
             {
               hasunknowncriticalextension = true;
@@ -2493,6 +2551,36 @@ XVECTOR<XSTRING*>* CIPHERCERTIFICATEX509::GetSubjectAlternativeNamesDNS()
 XVECTOR<XBUFFER*>* CIPHERCERTIFICATEX509::GetSubjectAlternativeNamesIP()
 {
   return &subjectalternativenamesIP;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::HasCAIssuersURL()
+* @brief      Check whether an AuthorityInfoAccess id-ad-caIssuers URL is present
+* @ingroup    CIPHER
+*
+* @return     bool : true if the extension is present; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::HasCAIssuersURL()
+{
+  return hascaissuersurl;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* CIPHERCERTIFICATEX509::GetCAIssuersURL()
+* @brief      Get the AuthorityInfoAccess id-ad-caIssuers URL used to fetch the certificate's issuer
+* @ingroup    CIPHER
+*
+* @return     XSTRING* : CA Issuers URL; empty when HasCAIssuersURL() is false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* CIPHERCERTIFICATEX509::GetCAIssuersURL()
+{
+  return &caissuersurl;
 }
 
 
@@ -2873,4 +2961,8 @@ void CIPHERCERTIFICATEX509::Clean()
   extendedkeyusageserverauthentication  = false;
   hasunknowncriticalextension           = false;
   hassubjectalternativename              = false;
+
+  hasauthorityinfoaccess                = false;
+  hascaissuersurl                       = false;
+  caissuersurl.Empty();
 }

@@ -48,6 +48,7 @@
 #include "XTrace.h"
 
 #include "CipherCertificateX509.h"
+#include "DIOStreamTLSAIAFetcher.h"
 
 
 
@@ -123,6 +124,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Ini(DIOSTREAMTLS13SESSION* session, bool all
   ciphersuites.Add(session->GetKeySchedule()->GetCipherSuite());
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
   signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
@@ -189,6 +191,8 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::End()
   applicationprotocol           = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
   currentkeysharegroup          = 0;
   helloretryrequestprocessed    = false;
+  aiafetchactive                = true;
+  aiafetchtimeout                = DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }
 
 
@@ -340,7 +344,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
       XWORD supportedgroup = config->GetSupportedGroups()->Get(c);
 
       if(((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1)) || !supportedgroups.Add(supportedgroup)) return false;
+          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
+          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) || !supportedgroups.Add(supportedgroup)) return false;
     }
 
   // A signature scheme this build cannot actually verify is SKIPPED, not treated as a fatal configuration error.
@@ -535,6 +540,24 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTO
   certificatevalidationerror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS13HANDSHAKECLIENT::AIAFetch_Set(bool active, int timeout)
+* @brief      Configure best-effort AuthorityInfoAccess fetching for an incomplete certificate chain
+* @ingroup    DATAIO
+*
+* @param[in]  active : true to fetch a missing intermediate via id-ad-caIssuers when the chain the server sent
+*             does not reach a trusted root by itself; false to keep the previous strict behaviour.
+* @param[in]  timeout : Fetch connect / idle timeout, in seconds.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS13HANDSHAKECLIENT::AIAFetch_Set(bool active, int timeout)
+{
+  aiafetchactive  = active;
+  aiafetchtimeout = (timeout > 0)?timeout:DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }
 
 
@@ -1310,7 +1333,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XB
                                                                        (((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
                                                                          (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY)) ||
                                                                         ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
-                                                                         (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE))))
+                                                                         (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE)) ||
+                                                                        ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) &&
+                                                                         (key->GetKeyData()->GetSize() == CIPHERECDSA_P384_PUBLICKEY_SIZE))))
                                                                       {
                                                                         keysharevalid = true;
                                                                       }
@@ -1483,13 +1508,10 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Process()
                                                                   // "Handshake_Client() returned false" and every cause looks identical.
                                                                   // description 40 = handshake_failure (no acceptable parameters offered),
                                                                   // 47 = illegal_parameter, 42/48 = certificate/CA problems, 70 = version.
-                                                                  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": ALERT from the server: level %d, description %d [%s] (state %d)"),
-                                                                                    expectedservername.Get(), (int)alert.GetLevel(), (int)alert.GetDescription(),
-                                                                                    DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription()), (int)state); */
                                                                   return SetError();
                                                                 }
 
-                                                       default : /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": unexpected content type %d (state %d)"), expectedservername.Get(), (int)contenttype, (int)state); */
+                                                       default :
                                                                  return SetError();
         }
 
@@ -1669,6 +1691,67 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUFFER*>& certificatechain)
+* @brief      Retry validation after completing a chain the server sent incomplete, via AuthorityInfoAccess
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in,out] certificatechain : Chain last passed to certificatevalidator.Validate(), extended in place with
+*                each fetched intermediate. Only called right after that call left certificatevalidator holding an
+*                UNTRUSTEDROOT error, so GetCertificateChain() below reflects the chain as received from the server.
+*
+* @return     bool : true if the chain now validates after the fetch(es); otherwise false, and certificatevalidator
+*             is left holding whichever error the last attempt produced (its original UNTRUSTEDROOT error when no
+*             fetch was even possible).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUFFER*>& certificatechain)
+{
+  if(!aiafetchactive || (certificatevalidator.GetError() != CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT))
+    {
+      return false;
+    }
+
+  XVECTOR<XBUFFER*> fetchedcerts;
+  bool              validated = false;
+
+  for(int attempt=0; attempt<DIOSTREAMTLSAIAFETCHER_MAXCHAINFETCHES; attempt++)
+    {
+      XVECTOR<CIPHERCERTIFICATEX509*>* decodedchain = certificatevalidator.GetCertificateChain();
+      CIPHERCERTIFICATEX509*           chainend     = decodedchain?decodedchain->GetLast():NULL;
+
+      if(!chainend || !chainend->HasCAIssuersURL()) break;
+
+      XBUFFER* fetched = GEN_NEW XBUFFER();
+      if(!fetched) break;
+
+      DIOSTREAMTLSAIAFETCHER fetcher;
+      if(!fetcher.Fetch((*chainend->GetCAIssuersURL()), (*fetched), aiafetchtimeout) ||
+         !fetchedcerts.Add(fetched) || !certificatechain.Add(fetched))
+        {
+          GEN_DELETE fetched;
+          break;
+        }
+
+      if(certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
+                                       hasvalidationdatetime?&validationdatetime:NULL))
+        {
+          validated = true;
+          break;
+        }
+
+      if(certificatevalidator.GetError() != CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT) break;
+    }
+
+  fetchedcerts.DeleteContents();
+  fetchedcerts.DeleteAll();
+
+  return validated;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
 * @brief      Decode and retain the server Certificate message
 * @note       INTERNAL
@@ -1721,15 +1804,13 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
         }
 
       if(!certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
-                                        hasvalidationdatetime?&validationdatetime:NULL))
+                                        hasvalidationdatetime?&validationdatetime:NULL) &&
+         !CertificateChain_CompleteViaAIA(certificatechain))
         {
           certificatevalidationerror = certificatevalidator.GetError();
 
           // 2=invalid certificate, 3=unsupported algorithm, 4=dates, 5=name, 6=key usage, 7=invalid CA,
           // 8=invalid signature, 9=untrusted root, 10=unknown critical extension, 11=path length.
-          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": certificate chain REJECTED: validator error %d, %d certificates, %d trusted roots"),
-                            expectedservername.Get(), (int)certificatevalidationerror, (int)certificatechain.GetSize(),
-                            (int)trustedroots.GetSize()); */
 
           SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
           return SetError();
@@ -1834,9 +1915,6 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
       if(!DIOSTREAMTLSSIGNATURE::Verify(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey(),
                                         signedcontent, *certificateverify.GetBody()->GetSignature()))
         {
-          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": CertificateVerify NOT VALID: scheme %04X, leaf key type %d, signature %d bytes"),
-                            expectedservername.Get(), (int)certificateverify.GetBody()->GetAlgorithm(), (int)leaf->GetPublicCipherKey()->GetType(),
-                            (int)certificateverify.GetBody()->GetSignature()->GetSize()); */
 
           SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
           return SetError();
@@ -2113,4 +2191,6 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::Clean()
   helloretryrequestprocessed    = false;
   servercertificate          = NULL;
   servercertificateverify    = NULL;
+  aiafetchactive              = true;
+  aiafetchtimeout             = DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }

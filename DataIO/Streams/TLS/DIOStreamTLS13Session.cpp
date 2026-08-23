@@ -59,7 +59,7 @@
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS13SESSION::DIOSTREAMTLS13SESSION() : keyexchangep256(CIPHERTYPE_ECDSA_SECP256R1)
+DIOSTREAMTLS13SESSION::DIOSTREAMTLS13SESSION() : keyexchangep256(CIPHERTYPE_ECDSA_SECP256R1), keyexchangep384(CIPHERTYPE_ECDSA_SECP384R1)
 {
   Clean();
 }
@@ -300,6 +300,21 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
                                                   }
                                                 break;
 
+      case DIOSTREAMTLS_MSG_CURVEID_SECP384R1 : keyexchangep384private.FillBuffer(0);
+                                                keyexchangep384private.Delete();
+                                                keyexchangep384public.Delete();
+
+                                                if(!keyexchangep384.KeyPair_Create(keyexchangep384private,
+                                                                                  keyexchangep384public) ||
+                                                   !publickey.Add(keyexchangep384public))
+                                                  {
+                                                    keyexchangep384private.FillBuffer(0);
+                                                    keyexchangep384private.Delete();
+                                                    keyexchangep384public.Delete();
+                                                    return false;
+                                                  }
+                                                break;
+
                                       default : return false;
     }
 
@@ -346,6 +361,14 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
                                                   }
                                                 break;
 
+      case DIOSTREAMTLS_MSG_CURVEID_SECP384R1 : if(keyexchangep384private.IsEmpty() ||
+                                                   !keyexchangep384.SharedSecret_Create(keyexchangep384private,
+                                                                                       publickey, sharedsecret))
+                                                  {
+                                                    return false;
+                                                  }
+                                                break;
+
                                       default : return false;
     }
 
@@ -367,6 +390,10 @@ void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
   keyexchangep256private.FillBuffer(0);
   keyexchangep256private.Delete();
   keyexchangep256public.Delete();
+
+  keyexchangep384private.FillBuffer(0);
+  keyexchangep384private.Delete();
+  keyexchangep384public.Delete();
 }
 
 
@@ -709,7 +736,13 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret)
 {
   XBUFFER transcripthash;
 
-  if(!isini || (sharedsecret.GetSize() != CIPHERECDSAX25519_MAXKEY))
+  // Shared-secret size is group-dependent: X25519 and secp256r1 both happen to produce 32 bytes, secp384r1
+  // produces 48 (its coordinate size) -- so this must enumerate every group KeyExchange_SharedSecret() can
+  // hand back here, not assume the X25519 constant fits them all.
+  if(!isini ||
+     ((sharedsecret.GetSize() != CIPHERECDSAX25519_MAXKEY) &&
+      (sharedsecret.GetSize() != CIPHERECDSA_P256_COORDINATE_SIZE) &&
+      (sharedsecret.GetSize() != CIPHERECDSA_P384_COORDINATE_SIZE)))
     {
       return false;
     }

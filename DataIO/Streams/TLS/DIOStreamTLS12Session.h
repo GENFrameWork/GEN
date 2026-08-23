@@ -135,6 +135,9 @@ class DIOSTREAMTLS12SESSION
     CIPHERECDSA                             keyexchangep256;
     XBUFFER                                 keyexchangep256private;
     XBUFFER                                 keyexchangep256public;
+    CIPHERECDSA                             keyexchangep384;
+    XBUFFER                                 keyexchangep384private;
+    XBUFFER                                 keyexchangep384public;
 
     XBUFFER                                 recordinput;
     XBUFFER                                 handshakeinput;

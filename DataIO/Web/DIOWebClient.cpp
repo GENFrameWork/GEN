@@ -1883,6 +1883,8 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     {
       diostream->Close();
       if(connectionfailed) *connectionfailed = true;
+
+
       return false;
     }
 
@@ -1890,6 +1892,8 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     {
       diostream->Close();
       if(connectionfailed) *connectionfailed = true;
+
+
       return false;
     }
 
@@ -1934,6 +1938,11 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   sendheader += __L("\r\n");
 
   if(addhead) sendheader += addhead;
+
+  // Some servers/CDNs/WAFs treat a request with no User-Agent at all as non-browser/bot traffic and respond
+  // differently (a canonical-redirect loop has been observed against at least one real site) -- send the
+  // default identification unless the caller already supplied their own via addhead.
+  if(sendheader.Find(__L("User-Agent:"), true) == XSTRING_NOTFOUND) sendheader += DIOWEBCLIENT_DEFAULTUSERAGENT;
 
   #ifdef COMPRESS_ACTIVE
 
@@ -2043,15 +2052,22 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
       return false;
     }
 
+
   //--- Read Content ---------------------------
 
-  if(header.GetResultServer() == 301)
+  { int resultserver = header.GetResultServer();
+
+  if((resultserver == 301) || (resultserver == 302) || (resultserver == 303) ||
+     (resultserver == 307) || (resultserver == 308))
     {
-      // Only GET/HEAD are auto-followed: a 301 must preserve the method per RFC 7231, and blindly
+      // Only GET/HEAD are auto-followed: a redirect must preserve the method per RFC 7231, and blindly
       // replaying a POST/PUT body against a redirected URL risks an unintended duplicate side effect.
-      // The redirect chain is bounded, and a missing/empty Location simply falls through unchanged
-      // to the existing behaviour below (the 301 response is then read/returned as-is).
+      // 307/308 require the method AND body to stay identical on redirect, which is automatically true
+      // here since only bodyless GET/HEAD are ever auto-followed in the first place. The redirect chain
+      // is bounded, and a missing/empty Location simply falls through unchanged to the existing
+      // behaviour below (the redirect response is then read/returned as-is).
       XSTRING location;
+
 
       if(((method == DIOWEBHEADER_METHOD_GET) || (method == DIOWEBHEADER_METHOD_HEAD)) &&
          (redirectcount < DIOWEBCLIENT_MAXREDIRECTS) && header.GetLocation(location))
@@ -2086,11 +2102,21 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
               redirecturl += location;
             }
 
+          // Force a full teardown-and-recreate of the transport for the retry, instead of leaving
+          // Stream_Create() to reuse this same diostream instance (which it does whenever the redirect
+          // target keeps the same scheme, i.e. isTLS unchanged). A platform stream implementation is not
+          // guaranteed to support being Open()'d again on the very same object instance after a prior
+          // Close() -- reconnecting via a brand-new instance sidesteps any such reuse bug entirely, at
+          // the cost of one extra allocation per redirect hop (redirect chains are already bounded by
+          // DIOWEBCLIENT_MAXREDIRECTS).
           diostream->Close();
+          GEN_DIOFACTORY.DeleteStreamIO(diostream);
+          diostream = NULL;
 
           return MakeOperation(method, redirecturl, postdata, addhead, timeout, localIP, istobuffer, to, redirectcount+1);
         }
     }
+  }
 
   if((header.GetResultServer() == 401) && (authenticationmethod == DIOWEBCLIENT_AUTHENTICATION_METHOD_DIGEST))
     {

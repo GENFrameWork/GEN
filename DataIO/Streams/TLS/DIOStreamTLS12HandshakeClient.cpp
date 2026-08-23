@@ -40,6 +40,7 @@
 #include "DIOStreamTLSMessagesHandShakeServerHello.h"
 #include "DIOStreamTLSMessagesHandShakeServerFlight.h"
 #include "DIOStreamTLSSignature.h"
+#include "DIOStreamTLSAIAFetcher.h"
 
 #include "XRand.h"
 
@@ -122,6 +123,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool allowunauthenticatedserver, bool ch
 
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
 
   signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
@@ -391,6 +393,24 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTO
   certificatevalidationerror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLS12HANDSHAKECLIENT::AIAFetch_Set(bool active, int timeout)
+* @brief      Configure best-effort AuthorityInfoAccess fetching for an incomplete certificate chain
+* @ingroup    DATAIO
+*
+* @param[in]  active : true to fetch a missing intermediate via id-ad-caIssuers when the chain the server sent
+*             does not reach a trusted root by itself; false to keep the previous strict behaviour.
+* @param[in]  timeout : Fetch connect / idle timeout, in seconds.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS12HANDSHAKECLIENT::AIAFetch_Set(bool active, int timeout)
+{
+  aiafetchactive  = active;
+  aiafetchtimeout = (timeout > 0)?timeout:DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }
 
 
@@ -708,11 +728,17 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
           while(true)
             {
               if(recordinput->GetSize() < DIOSTREAMTLS_MSG_RECORDHEADER_SIZE) return true;
-              if(!header.Peek(*recordinput)) return SetError();
+              if(!header.Peek(*recordinput))
+                {
+                  return SetError();
+                }
               if((XDWORD)recordinput->GetSize() < ((XDWORD)DIOSTREAMTLS_MSG_RECORDHEADER_SIZE + header.GetLength())) return true;
 
               XBUFFER onerecord;
-              if(!DIOSTREAMTLS12RECORD::Record_Extract(*recordinput, onerecord)) return SetError();
+              if(!DIOSTREAMTLS12RECORD::Record_Extract(*recordinput, onerecord))
+                {
+                  return SetError();
+                }
 
               if(header.GetContenType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE)
                 {
@@ -725,10 +751,10 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
 
                       if(alert.GetFromBuffer(alertbody, false))
                         {
-                          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ALERT before ServerHello: level %d, description %d [%s]"),
-                                            expectedservername.Get(), (int)alert.GetLevel(), (int)alert.GetDescription(),
-                                            DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription())); */
                         }
+                    }
+                   else
+                    {
                     }
 
                   return SetError();
@@ -796,9 +822,6 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
 
                                                                   if(!alert.GetFromBuffer(plain, false) || !plain.IsEmpty()) return SetError();
 
-                                                                  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ALERT from the server: level %d, description %d [%s] (state %d)"),
-                                                                                    expectedservername.Get(), (int)alert.GetLevel(), (int)alert.GetDescription(),
-                                                                                    DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription()), (int)state); */
 
                                                                   // The two descriptions a real TLS 1.2 server sends when nothing in the ClientHello
                                                                   // (cipher suite or signature_algorithms) is usable -- most commonly an ECDSA-only
@@ -813,7 +836,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
                                                                   return SetError();
                                                                 }
 
-                                                       default : /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": unexpected content type %d (state %d)"), expectedservername.Get(), (int)contenttype, (int)state); */
+                                                       default :
                                                                  return SetError();
         }
 
@@ -870,8 +893,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Handshake_Process(XBUFFER& message)
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_KEY_EXCHANGE  : return ServerKeyExchange_Process(message);
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO_DONE    : return ServerHelloDone_Process(message);
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED             : return Finished_Process(message);
-                                                            default   : /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": unexpected handshake type %d (state %d)"),
-                                                                                          expectedservername.Get(), (int)genericmessage.GetMsgType(), (int)state); */
+                                                            default   :
                                                                        return SetError();
     }
 }
@@ -956,6 +978,67 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ServerHello_Process(XBUFFER& message)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUFFER*>& certificatechain)
+* @brief      Retry validation after completing a chain the server sent incomplete, via AuthorityInfoAccess
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in,out] certificatechain : Chain last passed to certificatevalidator.Validate(), extended in place with
+*                each fetched intermediate. Only called right after that call left certificatevalidator holding an
+*                UNTRUSTEDROOT error, so GetCertificateChain() below reflects the chain as received from the server.
+*
+* @return     bool : true if the chain now validates after the fetch(es); otherwise false, and certificatevalidator
+*             is left holding whichever error the last attempt produced (its original UNTRUSTEDROOT error when no
+*             fetch was even possible).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS12HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUFFER*>& certificatechain)
+{
+  if(!aiafetchactive || (certificatevalidator.GetError() != CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT))
+    {
+      return false;
+    }
+
+  XVECTOR<XBUFFER*> fetchedcerts;
+  bool              validated = false;
+
+  for(int attempt=0; attempt<DIOSTREAMTLSAIAFETCHER_MAXCHAINFETCHES; attempt++)
+    {
+      XVECTOR<CIPHERCERTIFICATEX509*>* decodedchain = certificatevalidator.GetCertificateChain();
+      CIPHERCERTIFICATEX509*           chainend     = decodedchain?decodedchain->GetLast():NULL;
+
+      if(!chainend || !chainend->HasCAIssuersURL()) break;
+
+      XBUFFER* fetched = GEN_NEW XBUFFER();
+      if(!fetched) break;
+
+      DIOSTREAMTLSAIAFETCHER fetcher;
+      if(!fetcher.Fetch((*chainend->GetCAIssuersURL()), (*fetched), aiafetchtimeout) ||
+         !fetchedcerts.Add(fetched) || !certificatechain.Add(fetched))
+        {
+          GEN_DELETE fetched;
+          break;
+        }
+
+      if(certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
+                                       hasvalidationdatetime?&validationdatetime:NULL))
+        {
+          validated = true;
+          break;
+        }
+
+      if(certificatevalidator.GetError() != CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT) break;
+    }
+
+  fetchedcerts.DeleteContents();
+  fetchedcerts.DeleteAll();
+
+  return validated;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
 * @brief      Decode the server Certificate and validate the chain
 * @note       INTERNAL
@@ -1005,13 +1088,11 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
         }
 
       if(!certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
-                                        hasvalidationdatetime?&validationdatetime:NULL))
+                                        hasvalidationdatetime?&validationdatetime:NULL) &&
+         !CertificateChain_CompleteViaAIA(certificatechain))
         {
           certificatevalidationerror = certificatevalidator.GetError();
 
-          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": certificate chain REJECTED: validator error %d, %d certificates, %d trusted roots"),
-                            expectedservername.Get(), (int)certificatevalidationerror, (int)certificatechain.GetSize(),
-                            (int)trustedroots.GetSize()); */
 
           SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
           return SetError();
@@ -1106,9 +1187,6 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ServerKeyExchange_Process(XBUFFER& message)
       if(!DIOSTREAMTLSSIGNATURE::Verify(ske.GetBody()->GetSignatureAlgorithm(), leaf->GetPublicCipherKey(),
                                         signedcontent, *ske.GetBody()->GetSignature()))
         {
-          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ServerKeyExchange signature NOT VALID: scheme %04X, leaf key type %d, signature %d bytes"),
-                            expectedservername.Get(), (int)ske.GetBody()->GetSignatureAlgorithm(), (int)leaf->GetPublicCipherKey()->GetType(),
-                            (int)ske.GetBody()->GetSignature()->GetSize()); */
 
           SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
           return SetError();
@@ -1461,4 +1539,6 @@ void DIOSTREAMTLS12HANDSHAKECLIENT::Clean()
   certificatevalidationerror  = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
   hasvalidationdatetime       = false;
   servergroup                 = 0;
+  aiafetchactive               = true;
+  aiafetchtimeout              = DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }

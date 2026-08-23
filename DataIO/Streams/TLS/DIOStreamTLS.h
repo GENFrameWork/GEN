@@ -239,6 +239,8 @@ class DIOSTREAMTLS : public T
                                                       tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
                                                       return false;
                                                     }
+
+                                                  handshakeclient12.AIAFetch_Set(config->IsActiveAIAFetch(), config->GetAIAFetchTimeout());
                                                 }
                                                else
                                                 {
@@ -252,6 +254,8 @@ class DIOSTREAMTLS : public T
                                                       tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
                                                       return false;
                                                     }
+
+                                                  handshakeclient.AIAFetch_Set(config->IsActiveAIAFetch(), config->GetAIAFetchTimeout());
                                                 }
 
                                               
@@ -669,12 +673,6 @@ class DIOSTREAMTLS : public T
 
                                               if(!status)
                                                 {
-                                                  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": FAILED (usingtls12: %s, serverhello processed: %s, server finished verified: %s, transport: %s)"),
-                                                                    servername?servername:__L("?"),
-                                                                    usingtls12?__L("yes"):__L("no"),
-                                                                    serverhelloprocessed?__L("yes"):__L("NO"),
-                                                                    (!usingtls12 && handshakeclient.IsServerFinishedVerified())?__L("yes"):__L("NO"),
-                                                                    (T::GetStatus() == DIOSTREAMSTATUS_DISCONNECTED)?__L("DISCONNECTED"):__L("connected")); */
                                                 }
 
                                               return status;
@@ -710,14 +708,7 @@ class DIOSTREAMTLS : public T
 
                                                       if(alert.GetFromBuffer(plain, false))
                                                         {
-                                                          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": ALERT before ServerHello: level %d, description %d [%s]"),
-                                                                            servername?servername:__L("?"), (int)alert.GetLevel(), (int)alert.GetDescription(),
-                                                                            DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription())); */
 
-                                                          
-                                                          
-                                                          
-                                                          
                                                           if((alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL) &&
                                                              ((alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION) ||
                                                               (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE)))
@@ -728,8 +719,6 @@ class DIOSTREAMTLS : public T
                                                         }
                                                        else
                                                         {
-                                                          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": malformed ALERT before ServerHello (%d bytes)"),
-                                                                            servername?servername:__L("?"), (int)plain.GetSize()); */
                                                         }
 
                                                       return false;
@@ -738,8 +727,6 @@ class DIOSTREAMTLS : public T
                                                   if(contenttype != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE ||
                                                      !session.HandshakeInput_Add(plain))
                                                     {
-                                                      /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": unexpected content type %d before ServerHello"),
-                                                                        servername?servername:__L("?"), (int)contenttype); */
                                                       return false;
                                                     }
 
