@@ -114,8 +114,9 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool allowunauthenticatedserver, bool ch
   state                            = DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE;
   isini                            = true;
 
-  // Only the suites and schemes actually exercised so far: ECDHE-RSA AEAD-GCM, signed with RSA-PSS (the only
-  // schemes DIOSTREAMTLSSIGNATURE currently verifies). ECDHE-ECDSA suites can be added once that class does.
+  // ECDHE-RSA AEAD-GCM, signed with RSA-PSS: the same known-good default that has been in production use.
+  // Deliberately not widened with the ECDHE-ECDSA suites here -- see CipherSuitesAndSchemes_WidenECDSA() and
+  // DIOSTREAMTLS<T>::Open() for why that only ever happens on a last-resort retry, never in the default offer.
   ciphersuites.Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
   ciphersuites.Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384);
 
@@ -127,6 +128,71 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool allowunauthenticatedserver, bool ch
   signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::CipherSuitesAndSchemes_WidenECDSA()
+* @brief      Last-resort fallback: add the ECDHE-ECDSA cipher suites and ECDSA schemes for one retry attempt
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS12HANDSHAKECLIENT::CipherSuitesAndSchemes_WidenECDSA()
+{
+  if(!isini || (state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE) || ciphersuites.IsEmpty() || signatureschemes.IsEmpty())
+    {
+      return false;
+    }
+
+  static const XWORD ecdsaciphersuites[2] = { DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                                               DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 };
+  static const XWORD ecdsaschemes[3]      = { DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
+                                               DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384,
+                                               DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 };
+
+  for(XDWORD e=0; e<2; e++)
+    {
+      bool alreadypresent = false;
+
+      for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
+        {
+          if(ciphersuites.Get(c) == ecdsaciphersuites[e]) { alreadypresent = true; break; }
+        }
+
+      if(!alreadypresent && !ciphersuites.Add(ecdsaciphersuites[e])) return false;
+    }
+
+  for(XDWORD e=0; e<3; e++)
+    {
+      bool alreadypresent = false;
+
+      for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
+        {
+          if(signatureschemes.Get(c) == ecdsaschemes[e]) { alreadypresent = true; break; }
+        }
+
+      if(!alreadypresent && !signatureschemes.Add(ecdsaschemes[e])) return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::IsAlgorithmRejected()
+* @brief      Whether the peer answered with a FATAL handshake_failure/insufficient_security alert
+* @ingroup    DATAIO
+*
+* @return     bool : true if the peer explicitly rejected the offer; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS12HANDSHAKECLIENT::IsAlgorithmRejected()
+{
+  return algorithmrejected;
 }
 
 
@@ -659,9 +725,9 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
 
                       if(alert.GetFromBuffer(alertbody, false))
                         {
-                          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ALERT before ServerHello: level %d, description %d [%s]"),
+                          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ALERT before ServerHello: level %d, description %d [%s]"),
                                             expectedservername.Get(), (int)alert.GetLevel(), (int)alert.GetDescription(),
-                                            DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription()));
+                                            DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription())); */
                         }
                     }
 
@@ -730,13 +796,24 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
 
                                                                   if(!alert.GetFromBuffer(plain, false) || !plain.IsEmpty()) return SetError();
 
-                                                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ALERT from the server: level %d, description %d [%s] (state %d)"),
+                                                                  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ALERT from the server: level %d, description %d [%s] (state %d)"),
                                                                                     expectedservername.Get(), (int)alert.GetLevel(), (int)alert.GetDescription(),
-                                                                                    DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription()), (int)state);
+                                                                                    DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription()), (int)state); */
+
+                                                                  // The two descriptions a real TLS 1.2 server sends when nothing in the ClientHello
+                                                                  // (cipher suite or signature_algorithms) is usable -- most commonly an ECDSA-only
+                                                                  // certificate against an ECDHE-RSA-only offer. See IsAlgorithmRejected()'s declaration.
+                                                                  if((alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL) &&
+                                                                     ((alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE) ||
+                                                                      (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY)))
+                                                                    {
+                                                                      algorithmrejected = true;
+                                                                    }
+
                                                                   return SetError();
                                                                 }
 
-                                                       default : XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": unexpected content type %d (state %d)"), expectedservername.Get(), (int)contenttype, (int)state);
+                                                       default : /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": unexpected content type %d (state %d)"), expectedservername.Get(), (int)contenttype, (int)state); */
                                                                  return SetError();
         }
 
@@ -793,8 +870,8 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Handshake_Process(XBUFFER& message)
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_KEY_EXCHANGE  : return ServerKeyExchange_Process(message);
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO_DONE    : return ServerHelloDone_Process(message);
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED             : return Finished_Process(message);
-                                                            default   : XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": unexpected handshake type %d (state %d)"),
-                                                                                          expectedservername.Get(), (int)genericmessage.GetMsgType(), (int)state);
+                                                            default   : /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": unexpected handshake type %d (state %d)"),
+                                                                                          expectedservername.Get(), (int)genericmessage.GetMsgType(), (int)state); */
                                                                        return SetError();
     }
 }
@@ -932,9 +1009,9 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
         {
           certificatevalidationerror = certificatevalidator.GetError();
 
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": certificate chain REJECTED: validator error %d, %d certificates, %d trusted roots"),
+          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": certificate chain REJECTED: validator error %d, %d certificates, %d trusted roots"),
                             expectedservername.Get(), (int)certificatevalidationerror, (int)certificatechain.GetSize(),
-                            (int)trustedroots.GetSize());
+                            (int)trustedroots.GetSize()); */
 
           SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
           return SetError();
@@ -1029,9 +1106,9 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ServerKeyExchange_Process(XBUFFER& message)
       if(!DIOSTREAMTLSSIGNATURE::Verify(ske.GetBody()->GetSignatureAlgorithm(), leaf->GetPublicCipherKey(),
                                         signedcontent, *ske.GetBody()->GetSignature()))
         {
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ServerKeyExchange signature NOT VALID: scheme %04X, leaf key type %d, signature %d bytes"),
+          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS 1.2 Handshake] \"%s\": ServerKeyExchange signature NOT VALID: scheme %04X, leaf key type %d, signature %d bytes"),
                             expectedservername.Get(), (int)ske.GetBody()->GetSignatureAlgorithm(), (int)leaf->GetPublicCipherKey()->GetType(),
-                            (int)ske.GetBody()->GetSignature()->GetSize());
+                            (int)ske.GetBody()->GetSignature()->GetSize()); */
 
           SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
           return SetError();
@@ -1377,6 +1454,7 @@ void DIOSTREAMTLS12HANDSHAKECLIENT::Clean()
   isini                       = false;
   allowunauthenticatedserver  = false;
   checkdowngradesentinel      = false;
+  algorithmrejected           = false;
   authenticationconfigured    = false;
   serverauthenticated         = false;
   authenticationerror         = DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;

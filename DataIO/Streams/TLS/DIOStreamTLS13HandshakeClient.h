@@ -89,6 +89,16 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     bool                                    IsServerAuthenticated                            ();
 
     bool                                    Capabilities_Set                                 (DIOSTREAMTLSCONFIG* config);
+
+    
+    
+    
+    
+    
+    
+    
+    
+    bool                                    SignatureSchemes_WidenECDSA                      ();
     bool                                    IsApplicationProtocolNegotiated                  ();
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
 

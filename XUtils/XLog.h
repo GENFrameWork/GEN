@@ -196,10 +196,10 @@ class GEN_API_LIB_EXP XLOG : public XLOGBASE
   
   private:
                             XLOG                              ();
-                            XLOG                              (XLOG const&);        // Don't implement
+                            XLOG                              (XLOG const&);        
     virtual                ~XLOG                              ();
 
-    void                    operator =                        (XLOG const&);        // Don't implement    
+    void                    operator =                        (XLOG const&);        
 
     static XLOG*            instance;
 };

@@ -85,9 +85,9 @@ class DIOSTREAMTLS12SESSION
     bool                                    KeyExchange_SharedSecret                          (XWORD group, XBUFFER& publickey, XBUFFER& sharedsecret);
     void                                    KeyExchange_Delete                                ();
 
-    // Derives master_secret from the ECDHE shared secret, then key_block from master_secret, and loads both
-    // record directions in one step (RFC 5246: one key_block covers client_write and server_write together;
-    // ChangeCipherSpec only switches which direction the record layer is currently USING, not when it is derived).
+    
+    
+    
     bool                                    Keys_Activate                                     (XBUFFER& premastersecret, XBUFFER& clientrandom, XBUFFER& serverrandom);
 
     XBUFFER*                                GetRecordInput                                    ();
@@ -104,8 +104,8 @@ class DIOSTREAMTLS12SESSION
     bool                                    Transcript_Add                                   (XBUFFER& message);
     bool                                    TranscriptHash                                   (XBUFFER& transcripthash);
 
-    // Post-handshake application-data plane. PARALLEL to the equivalent DIOSTREAMTLS13SESSION (TLS 1.3) methods,
-    // trimmed to what RFC 5246 actually has: no KeyUpdate, no NewSessionTicket, no post-handshake output queue.
+    
+    
     XBUFFER*                                GetApplicationInput                              ();
     bool                                    ApplicationData_Protect                          (XBYTE* data, XDWORD size, XBUFFER& records);
     bool                                    ApplicationData_Protect                          (XBUFFER& data, XBUFFER& records);

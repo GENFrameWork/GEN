@@ -136,16 +136,16 @@ class DIOSTREAMTLS : public T
                                                   return false;
                                                 }
 
-                                              // dualversionmode == both versions allowed: TLS 1.3 is attempted first (Handshake_Attempt() below,
-                                              // completely unchanged from every earlier phase), and Open() closes the transport and retries the
-                                              // WHOLE connection from scratch, this time offering TLS 1.2 only via the parallel objects, ONLY
-                                              // when that first attempt was explicitly turned away by a fatal protocol_version/handshake_failure
-                                              // alert (versionrejected -- see its declaration and ServerHello_Process()). A bare timeout, a reset
-                                              // connection, or anything else that isn't a real "I don't speak TLS 1.3" answer from the peer never
-                                              // triggers the retry, so an on-path attacker cannot force the weaker path just by breaking the 1.3
-                                              // attempt in some generic way. This costs an extra round trip on a real downgrade, but it means the
-                                              // TLS 1.3 path (handshakeclient/session, Capabilities_Set() included) never has to tolerate anything
-                                              // beyond the two suites it already validates, so it needed no changes at all.
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
                                               dualversionmode = (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
                                               starttls12       = (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
 
@@ -154,6 +154,13 @@ class DIOSTREAMTLS : public T
                                                   T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
                                                   return true;
                                                 }
+
+                                              
+                                              
+                                              
+                                              
+                                              bool tls13rejected = !starttls12 && (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
+                                              bool tls12rejected = starttls12 && (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
 
                                               if(dualversionmode && !starttls12 && (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && versionrejected)
                                                 {
@@ -164,30 +171,68 @@ class DIOSTREAMTLS : public T
                                                       T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
                                                       return true;
                                                     }
+
+                                                  tls12rejected = (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
+                                                }
+
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              if(tls13rejected && (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_3))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_NONE;
+
+                                                  if(Handshake_Attempt(config, servername, false, true))
+                                                    {
+                                                      T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
+                                                      return true;
+                                                    }
+
+                                                  if((tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && versionrejected && (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2))
+                                                    {
+                                                      tls12rejected = true;
+                                                    }
+                                                }
+
+                                              if(tls12rejected && (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_NONE;
+
+                                                  if(Handshake_Attempt(config, servername, true, true))
+                                                    {
+                                                      T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
+                                                      return true;
+                                                    }
                                                 }
 
                                               return false;
                                             }
 
 
-    // One full connect-and-handshake attempt, either version. Open() calls this once, and a second time (over
-    // a fresh transport) only for a dual-version TLS 1.3-to-1.2 fallback (see Open() above).
-    bool                                    Handshake_Attempt                       (DIOSTREAMTLSCONFIG* config, XCHAR* servername, bool astls12)
+    
+    
+    bool                                    Handshake_Attempt                       (DIOSTREAMTLSCONFIG* config, XCHAR* servername, bool astls12, bool widenschemes = false)
                                             {
                                               handshakeclient.End();
                                               session.End();
                                               handshakeclient12.End();
 
-                                              usingtls12      = astls12;
-                                              versionrejected = false;
+                                              usingtls12       = astls12;
+                                              versionrejected  = false;
+                                              algorithmrejected = false;
 
                                               if(usingtls12)
                                                 {
-                                                  // dualversionmode can only be true here on the fallback (second) attempt -- see Open(): it is
-                                                  // mutually exclusive with starttls12, and only the fallback path ever calls Handshake_Attempt()
-                                                  // with astls12==true while dualversionmode==true. That is exactly when the RFC 8446 downgrade
-                                                  // sentinel must be checked (see DIOSTREAMTLS12HANDSHAKECLIENT::Ini()).
+                                                  
+                                                  
+                                                  
+                                                  
                                                   if(!handshakeclient12.Ini(config->IsAllowUnauthenticatedServer(), dualversionmode) ||
+                                                     (widenschemes && !handshakeclient12.CipherSuitesAndSchemes_WidenECDSA()) ||
                                                      (!config->IsAllowUnauthenticatedServer() &&
                                                       !handshakeclient12.Authentication_Set(servername, config->GetTrustedRoots())))
                                                     {
@@ -200,6 +245,7 @@ class DIOSTREAMTLS : public T
                                                   if(!session.Ini(config->GetCipherSuite(), DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
                                                      !handshakeclient.Ini(&session, config->IsAllowUnauthenticatedServer()) ||
                                                      !handshakeclient.Capabilities_Set(config) ||
+                                                     (widenschemes && !handshakeclient.SignatureSchemes_WidenECDSA()) ||
                                                      (!config->IsAllowUnauthenticatedServer() &&
                                                       !handshakeclient.Authentication_Set(servername, config->GetTrustedRoots())))
                                                     {
@@ -208,11 +254,11 @@ class DIOSTREAMTLS : public T
                                                     }
                                                 }
 
-                                              // A dual-version retry reuses the same underlying T after Close_OnError() from the first (failed)
-                                              // attempt: that only closes the socket, it does not clear whatever was left queued in T's own
-                                              // in/out buffers (a transport class like SYNCSTREAM that bypasses the base Open()'s bookkeeping
-                                              // never gets a chance to). Any leftover bytes from the aborted attempt would otherwise get sent
-                                              // to (or misread from) the freshly reconnected socket, corrupting this second attempt.
+                                              
+                                              
+                                              
+                                              
+                                              
                                               T::ResetOutXBuffer();
                                               T::ResetInXBuffer();
 
@@ -236,6 +282,8 @@ class DIOSTREAMTLS : public T
                                               if(!Handshake_Client(servername))
                                                 {
                                                   if(tlserror == DIOSTREAMTLS_ERROR_NONE) tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+
+                                                  if(usingtls12) algorithmrejected = handshakeclient12.IsAlgorithmRejected();
 
                                                   if((!usingtls12 && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) != DIOSTREAMTLS13SESSION_EPOCH_CLEAR)) ||
                                                      (usingtls12 && handshakeclient12.GetSession()->IsIni()))
@@ -329,7 +377,7 @@ class DIOSTREAMTLS : public T
                                             {
                                               XBUFFER records;
 
-                                              // RFC 5246 has no KeyUpdate message: unsupported once negotiated TLS 1.2.
+                                              
                                               if(usingtls12) return false;
 
                                               if(isclosing || isclosed ||
@@ -495,9 +543,9 @@ class DIOSTREAMTLS : public T
                                             }
 
 
-    // Phase 5: introspection of the parallel TLS 1.2 objects and of which version actually got negotiated.
-    // GetTLSSession()/GetTLSHandshakeClient() above keep returning the TLS 1.3 objects unconditionally, exactly
-    // as before, for source compatibility; check IsUsingTLS12() first if the negotiated version matters.
+    
+    
+    
     bool                                    IsUsingTLS12                            ()
                                             {
                                               return usingtls12;
@@ -506,9 +554,9 @@ class DIOSTREAMTLS : public T
 
     DIOSTREAMTLS12SESSION*                  GetTLSSession12                         ()
                                             {
-                                              // Unlike DIOSTREAMTLS13SESSION (TLS 1.3, injected as a pointer into its handshake client),
-                                              // DIOSTREAMTLS12SESSION is owned directly BY handshakeclient12 (see DIOStreamTLS12HandshakeClient.h)
-                                              // — there is no separate session12 member here to return a pointer to.
+                                              
+                                              
+                                              
                                               return handshakeclient12.GetSession();
                                             }
 
@@ -536,7 +584,7 @@ class DIOSTREAMTLS : public T
 
                                               if(usingtls12)
                                                 {
-                                                  // Pure TLS 1.2 mode, decided in Open(): native ClientHello, nothing borrowed from the 1.3 path.
+                                                  
                                                   if(!handshakeclient12.ClientHello_Create(servername, clienthello, records) ||
                                                      !Transport_Write(records))
                                                     {
@@ -621,12 +669,12 @@ class DIOSTREAMTLS : public T
 
                                               if(!status)
                                                 {
-                                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": FAILED (usingtls12: %s, serverhello processed: %s, server finished verified: %s, transport: %s)"),
+                                                  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": FAILED (usingtls12: %s, serverhello processed: %s, server finished verified: %s, transport: %s)"),
                                                                     servername?servername:__L("?"),
                                                                     usingtls12?__L("yes"):__L("no"),
                                                                     serverhelloprocessed?__L("yes"):__L("NO"),
                                                                     (!usingtls12 && handshakeclient.IsServerFinishedVerified())?__L("yes"):__L("NO"),
-                                                                    (T::GetStatus() == DIOSTREAMSTATUS_DISCONNECTED)?__L("DISCONNECTED"):__L("connected"));
+                                                                    (T::GetStatus() == DIOSTREAMSTATUS_DISCONNECTED)?__L("DISCONNECTED"):__L("connected")); */
                                                 }
 
                                               return status;
@@ -652,35 +700,36 @@ class DIOSTREAMTLS : public T
                                                       continue;
                                                     }
 
-                                                  // A server that refuses the ClientHello answers with an ALERT record BEFORE any ServerHello.
-                                                  // That arrives here, not in DIOSTREAMTLS13HANDSHAKECLIENT::Process(), so without this the most
-                                                  // common rejection of all (description 40, handshake_failure: nothing we offered is usable,
-                                                  // typically an ECDSA-only certificate against an RSA-only signature_algorithms) is silent.
+                                                  
+                                                  
+                                                  
+                                                  
                                                   if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT)
                                                     {
                                                       DIOSTREAMTLS_MSG_ALERT alert;
 
                                                       if(alert.GetFromBuffer(plain, false))
                                                         {
-                                                          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": ALERT before ServerHello: level %d, description %d [%s]"),
+                                                          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": ALERT before ServerHello: level %d, description %d [%s]"),
                                                                             servername?servername:__L("?"), (int)alert.GetLevel(), (int)alert.GetDescription(),
-                                                                            DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription()));
+                                                                            DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription())); */
 
-                                                          // Phase 6 hardening: only a well-formed FATAL alert, and only these two descriptions --
-                                                          // the ones a real TLS-1.2-only server actually sends when it cannot make sense of a
-                                                          // TLS-1.3-shaped ClientHello -- is treated as an explicit "this server does not speak
-                                                          // TLS 1.3" signal. This is the ONLY place versionrejected is set; see its declaration.
+                                                          
+                                                          
+                                                          
+                                                          
                                                           if((alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL) &&
                                                              ((alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION) ||
                                                               (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE)))
                                                             {
-                                                              versionrejected = true;
+                                                              versionrejected   = true;
+                                                              algorithmrejected = true;
                                                             }
                                                         }
                                                        else
                                                         {
-                                                          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": malformed ALERT before ServerHello (%d bytes)"),
-                                                                            servername?servername:__L("?"), (int)plain.GetSize());
+                                                          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": malformed ALERT before ServerHello (%d bytes)"),
+                                                                            servername?servername:__L("?"), (int)plain.GetSize()); */
                                                         }
 
                                                       return false;
@@ -689,8 +738,8 @@ class DIOSTREAMTLS : public T
                                                   if(contenttype != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE ||
                                                      !session.HandshakeInput_Add(plain))
                                                     {
-                                                      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": unexpected content type %d before ServerHello"),
-                                                                        servername?servername:__L("?"), (int)contenttype);
+                                                      /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": unexpected content type %d before ServerHello"),
+                                                                        servername?servername:__L("?"), (int)contenttype); */
                                                       return false;
                                                     }
 
@@ -756,7 +805,7 @@ class DIOSTREAMTLS : public T
                                                       return false;
                                                     }
 
-                                                  // RFC 5246 has no post-handshake output queue (no KeyUpdate, no NewSessionTicket).
+                                                  
 
                                                   if(handshakeclient12.GetSession()->IsCloseNotifyReceived())
                                                     {
@@ -947,6 +996,7 @@ class DIOSTREAMTLS : public T
                                               usingtls12      = false;
                                               dualversionmode = false;
                                               versionrejected = false;
+                                              algorithmrejected = false;
                                             }
 
 
@@ -955,25 +1005,35 @@ class DIOSTREAMTLS : public T
     bool                                    isclosed;
     bool                                    isclosing;
 
-    // Phase 6 hardening: the dual-version fallback (Open(), below) must only fire when the TLS 1.3 attempt was
-    // actually, explicitly turned away by the peer -- a fatal protocol_version or handshake_failure alert
-    // received before ServerHello, the two descriptions a real TLS-1.2-only server sends (see ServerHello_Process()).
-    // Any OTHER handshake-stage failure (a dead/blackholed connection, a timeout, injected garbage that isn't a
-    // well-formed alert at all) must NOT authorize retrying over pure TLS 1.2: an active on-path attacker who
-    // simply breaks the 1.3 attempt, without ever answering as a legitimate 1.2 server, must not be able to
-    // force this client onto the weaker path. Reset once per Handshake_Attempt(), set only in that one place.
+    
+    
+    
+    
+    
+    
+    
     bool                                    versionrejected;
+
+    
+    
+    
+    
+    
+    
+    
+    
+    bool                                    algorithmrejected;
 
     DIOSTREAMTLS13SESSION                     session;
     DIOSTREAMTLS13HANDSHAKECLIENT             handshakeclient;
 
-    // Phase 5: parallel TLS 1.2 objects. Unlike DIOSTREAMTLS13SESSION (TLS 1.3), which is owned here and injected
-    // into handshakeclient as a pointer, DIOSTREAMTLS12SESSION is owned directly BY handshakeclient12 (see
-    // DIOStreamTLS12HandshakeClient.h) — reached via handshakeclient12.GetSession(), never a separate member.
-    // usingtls12/dualversionmode are decided once per Handshake_Attempt() call from Open() (see there): pure
-    // TLS 1.2 config starts with usingtls12 true; dual-version mode tries TLS 1.3 first and retries as pure TLS
-    // 1.2 (a second, independent Handshake_Attempt over a fresh transport) only if that first attempt fails at
-    // the handshake stage.
+    
+    
+    
+    
+    
+    
+    
     DIOSTREAMTLS12HANDSHAKECLIENT            handshakeclient12;
     bool                                    usingtls12;
     bool                                    dualversionmode;

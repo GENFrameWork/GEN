@@ -65,8 +65,8 @@ class DIOSTREAMTLS12RECORD
     void                                    End                                               ();
     bool                                    IsIni                                             ();
 
-    // The key and the AEAD salt come from DIOSTREAMTLS12KEYSCHEDULE, but this class does not depend on it:
-    // it only needs the material, which is also what makes it directly testable against captured traffic.
+    
+    
     bool                                    SetKeys                                           (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& key, XBUFFER& fixedIV);
 
     bool                                    IsProtected                                       (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
@@ -85,12 +85,12 @@ class DIOSTREAMTLS12RECORD
 
     void                                    Clean                                             ();
 
-    // nonce = salt(4) + nonce_explicit(8). Unlike TLS 1.3, the explicit half travels in the clear at the front
-    // of the fragment, so the peer does not need to track our sequence number to rebuild it.
+    
+    
     bool                                    Nonce_Build                                       (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBYTE* explicitnonce, XBUFFER& nonce);
 
-    // additional_data = seq_num(8) + type(1) + version(2) + length(2), where length is the PLAIN text length,
-    // not the length written in the record header. RFC 5246 section 6.2.3.3.
+    
+    
     bool                                    AAD_Build                                         (XQWORD sequence, DIOSTREAMTLS_CONTENTTYPE contenttype, XWORD version, XWORD plainlength, XBUFFER& additionaldata);
 
     bool                                    Protect_OneRecord                                 (DIOSTREAMTLS_CONTENTTYPE contenttype, XBYTE* plain, XWORD size, XBUFFER& records);

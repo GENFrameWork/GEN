@@ -411,6 +411,39 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::SignatureSchemes_WidenECDSA()
+* @brief      Last-resort fallback: add the three ECDSA schemes to signature_algorithms for one retry attempt
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKECLIENT::SignatureSchemes_WidenECDSA()
+{
+  if(!isini || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE) || signatureschemes.IsEmpty()) return false;
+
+  static const XWORD ecdsaschemes[3] = { DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
+                                          DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384,
+                                          DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 };
+
+  for(XDWORD e=0; e<3; e++)
+    {
+      bool alreadypresent = false;
+
+      for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
+        {
+          if(signatureschemes.Get(c) == ecdsaschemes[e]) { alreadypresent = true; break; }
+        }
+
+      if(!alreadypresent && !signatureschemes.Add(ecdsaschemes[e])) return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsApplicationProtocolNegotiated()
 * @brief      Check whether the server selected an ALPN application protocol
 * @ingroup    DATAIO
@@ -1450,13 +1483,13 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Process()
                                                                   // "Handshake_Client() returned false" and every cause looks identical.
                                                                   // description 40 = handshake_failure (no acceptable parameters offered),
                                                                   // 47 = illegal_parameter, 42/48 = certificate/CA problems, 70 = version.
-                                                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": ALERT from the server: level %d, description %d [%s] (state %d)"),
+                                                                  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": ALERT from the server: level %d, description %d [%s] (state %d)"),
                                                                                     expectedservername.Get(), (int)alert.GetLevel(), (int)alert.GetDescription(),
-                                                                                    DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription()), (int)state);
+                                                                                    DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(alert.GetDescription()), (int)state); */
                                                                   return SetError();
                                                                 }
 
-                                                       default : XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": unexpected content type %d (state %d)"), expectedservername.Get(), (int)contenttype, (int)state);
+                                                       default : /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": unexpected content type %d (state %d)"), expectedservername.Get(), (int)contenttype, (int)state); */
                                                                  return SetError();
         }
 
@@ -1694,9 +1727,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
 
           // 2=invalid certificate, 3=unsupported algorithm, 4=dates, 5=name, 6=key usage, 7=invalid CA,
           // 8=invalid signature, 9=untrusted root, 10=unknown critical extension, 11=path length.
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": certificate chain REJECTED: validator error %d, %d certificates, %d trusted roots"),
+          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": certificate chain REJECTED: validator error %d, %d certificates, %d trusted roots"),
                             expectedservername.Get(), (int)certificatevalidationerror, (int)certificatechain.GetSize(),
-                            (int)trustedroots.GetSize());
+                            (int)trustedroots.GetSize()); */
 
           SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
           return SetError();
@@ -1801,9 +1834,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
       if(!DIOSTREAMTLSSIGNATURE::Verify(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey(),
                                         signedcontent, *certificateverify.GetBody()->GetSignature()))
         {
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": CertificateVerify NOT VALID: scheme %04X, leaf key type %d, signature %d bytes"),
+          /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Handshake] \"%s\": CertificateVerify NOT VALID: scheme %04X, leaf key type %d, signature %d bytes"),
                             expectedservername.Get(), (int)certificateverify.GetBody()->GetAlgorithm(), (int)leaf->GetPublicCipherKey()->GetType(),
-                            (int)certificateverify.GetBody()->GetSignature()->GetSize());
+                            (int)certificateverify.GetBody()->GetSignature()->GetSize()); */
 
           SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
           return SetError();

@@ -1784,11 +1784,34 @@ bool DIOWEBCLIENT::Body_Decompress(bool istobuffer, void* to)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount)
+bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount, bool* connectionfailed)
 {
   if(!diostreamcfg)     return false;
   if(!timerout)         return false;
   if(!to)               return false;
+
+  // No scheme in the URL at all: behave like curl's implicit default -- try HTTPS first, and only fall
+  // back to plain HTTP if TLS itself could not be established (see the "connectionfailed" points below).
+  // This can only trigger here, on the original call from Get()/Put()/Post(): every recursive call this
+  // function makes (redirects, and the two dispatch calls right here) always passes a URL that already
+  // has an explicit scheme, so this branch cannot re-enter itself or interfere with redirect handling.
+  if(!url.HaveHTTPID())
+    {
+      DIOURL urlhttps;
+      DIOURL urlhttp;
+      bool   tlsunavailable = false;
+
+      urlhttps  = DIOURL_WEBURLID_SECURE;
+      urlhttps += url.Get();
+
+      if(MakeOperation(method, urlhttps, postdata, addhead, timeout, localIP, istobuffer, to, 0, &tlsunavailable)) return true;
+      if(!tlsunavailable) return false;                // failed for a real reason after connecting -- never silently downgrade
+
+      urlhttp  = DIOURL_WEBURLID;
+      urlhttp += url.Get();
+
+      return MakeOperation(method, urlhttp, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
+    }
 
   if(istobuffer) ((XBUFFER*)to)->Delete();
 
@@ -1797,9 +1820,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   int   defaultport     = isTLS?DIOWEBCLIENT_DEFAULTSECUREPORT:DIOWEBCLIENT_DEFAULTPORT;
   int   operationport;
 
-  if(!url.HaveHTTPID()) url.AddHTTPID();
-
-  XSTRING               server; 
+  XSTRING               server;
   DIOURL                resource;
   XSTRING               methodstring;
   DIOWEBCLIENT_XEVENT   xevent(this, XEVENT_TYPE_NONE);
@@ -1834,7 +1855,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     }
    else
     {
-      if(isTLS) return false;
+      if(isTLS) { if(connectionfailed) *connectionfailed = true; return false; }
 
       diostreamcfg->GetRemoteURL()->Set(proxyurl.Get());
       diostreamcfg->SetRemotePort(proxyport);
@@ -1846,27 +1867,29 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     {
       DIOSTREAMTLSCONFIG* tlsconfig = GetStreamTLSCFG();
 
-      if(!tlsconfig) return false;
+      if(!tlsconfig) { if(connectionfailed) *connectionfailed = true; return false; }
       tlsconfig->GetServerName()->Set(server.Get());
       tlsconfig->ApplicationProtocols_Delete();
-      if(!tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1)) return false;
+      if(!tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1)) { if(connectionfailed) *connectionfailed = true; return false; }
     }
 
   #endif
 
-  if(!Stream_Create(isTLS)) return false;
+  if(!Stream_Create(isTLS)) { if(connectionfailed) *connectionfailed = true; return false; }
 
   //--- Connection WEB server -------------------
 
   if(!diostream->Open())
     {
       diostream->Close();
+      if(connectionfailed) *connectionfailed = true;
       return false;
     }
 
   if(!diostream->WaitToConnected(timeout))
     {
       diostream->Close();
+      if(connectionfailed) *connectionfailed = true;
       return false;
     }
 

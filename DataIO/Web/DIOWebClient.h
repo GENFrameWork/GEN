@@ -158,15 +158,15 @@ class DIOWEBCLIENT : public XSUBJECT
     bool                                      IsActiveDoStopHTTPError           ();
     void                                      DoStopHTTPError                   (bool activate);
 
-    // Content-Encoding support (RFC 7231 §3.1.2.2): when active (the default), requests advertise
-    // "Accept-Encoding: gzip, deflate" and a gzip/deflate response body is transparently decompressed before
-    // it reaches the caller (XBUFFER or XPATH destination alike). Requires the COMPRESS_GZ/COMPRESS_DEFLATE
-    // GEN modules to be compiled in; otherwise the response is returned exactly as before (still encoded).
+
+
+
+
     bool                                      IsActiveContentEncoding           ();
     void                                      ContentEncoding_Activate          (bool activate);
 
-    // Opt-in: gzip-compresses an outgoing Put()/Post() body and sends it with "Content-Encoding: gzip". Off by
-    // default, since not every server accepts a compressed request body.
+
+
     bool                                      IsActiveCompressRequestBody       ();
     void                                      CompressRequestBody_Activate      (bool activate);
 
@@ -187,7 +187,12 @@ class DIOWEBCLIENT : public XSUBJECT
    
   private:
 
-    bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0);
+    // connectionfailed (out, optional): when non-NULL, set to true if this call returned false because the
+    // connection itself could not be established (TLS unavailable/misconfigured, TCP connect failure, TLS
+    // handshake failure) -- as opposed to failing after a request was actually sent over a working connection.
+    // Used only by the internal scheme-less-URL dispatch below; left NULL (and therefore untouched) by every
+    // ordinary caller.
+    bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0, bool* connectionfailed = NULL);
     bool                                      Header_Read                       (int timeout);
     bool                                      Body_Read                         (DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD contentlength, int timeout, bool istobuffer, void* to, DIOWEBCLIENT_XEVENT& xevent);
     bool                                      Body_Decompress                   (bool istobuffer, void* to);
@@ -225,10 +230,10 @@ class DIOWEBCLIENT : public XSUBJECT
     bool                                      contentencodingactive;
     bool                                      compressrequestbody;
 
-    // Owned instance (mirrors DIOCOREPROTOCOL's pattern): created in the constructor, destroyed in the
-    // destructor. Deliberately NOT COMPRESSMANAGER::GetInstance() -- that process-wide singleton is never
-    // released by anything in GEN, so routing through it here would leak one COMPRESSMANAGER for the life
-    // of the process every time a DIOWEBCLIENT is used.
+
+
+
+
     COMPRESSMANAGER*                          compressmanager;
 };
 

@@ -77,22 +77,22 @@ class DIOSTREAMTLS12KEYSCHEDULE
     XDWORD                                  GetFixedIVSize                                    ();
     HASH*                                   GetHash                                           ();
 
-    // PRF(secret, label, seed) = P_hash(secret, label + seed), RFC 5246 section 5. The hash is the one bound to
-    // the negotiated cipher suite, NOT always SHA-256.
+    
+    
     bool                                    PRF                                               (XBUFFER& secret, const char* label, XBUFFER& seed, XDWORD outputsize, XBUFFER& output);
 
     bool                                    MasterSecret_Create                               (XBUFFER& premastersecret, XBUFFER& clientrandom, XBUFFER& serverrandom);
     XBUFFER*                                GetMasterSecret                                   ();
 
-    // key_block = PRF(master_secret, "key expansion", server_random + client_random). Note the order of the
-    // randoms is the REVERSE of the one used for the master secret; getting it backwards still produces keys,
-    // just not the same ones the peer derived.
+    
+    
+    
     bool                                    KeyBlock_Create                                   (XBUFFER& clientrandom, XBUFFER& serverrandom);
 
     XBUFFER*                                GetKey                                            (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
     XBUFFER*                                GetFixedIV                                        (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
 
-    // verify_data = PRF(master_secret, "client finished" | "server finished", Hash(handshake_messages), 12)
+    
     bool                                    VerifyData_Create                                 (bool isclient, XBUFFER& handshakehash, XBUFFER& verifydata);
 
   private:

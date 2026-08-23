@@ -262,10 +262,10 @@ bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREA
   sequence[direction]    = 0;
   isprotected[direction] = true;
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] Keys of the %s direction installed: %s level, key %d, iv %d"),
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] Keys of the %s direction installed: %s level, key %d, iv %d"),
                                        (direction == DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)?__L("local"):__L("remote"),
                                        (level == DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE)?__L("handshake"):__L("application"),
-                                       trafficzkey.GetSize(), IV[direction].GetSize());
+                                       trafficzkey.GetSize(), IV[direction].GetSize()); */
 
   return true;
 }
@@ -562,8 +562,8 @@ bool DIOSTREAMTLSRECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& co
 
   if(!cipher[direction]->UncipherAEAD(ciphertext, nonce, additionaldata, tag))
     {
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Record] Record %llu of the remote end DID NOT AUTHENTICATE, %d bytes discarded"),
-                                          sequence[direction], length);
+      /* XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Record] Record %llu of the remote end DID NOT AUTHENTICATE, %d bytes discarded"),
+                                          sequence[direction], length); */
       return false;
     }
 
@@ -592,7 +592,7 @@ bool DIOSTREAMTLSRECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& co
       plain.Add(inner->Get(), size - 1);
     }
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] In  %llu: type %02X, %d bytes"), sequence[direction], (XBYTE)contenttype, plain.GetSize());
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] In  %llu: type %02X, %d bytes"), sequence[direction], (XBYTE)contenttype, plain.GetSize()); */
 
   sequence[direction]++;
 
@@ -779,7 +779,7 @@ bool DIOSTREAMTLSRECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttype,
       return false;
     }
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] Out %llu: type %02X, %d bytes"), sequence[direction], (XBYTE)contenttype, size);
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] Out %llu: type %02X, %d bytes"), sequence[direction], (XBYTE)contenttype, size); */
 
   sequence[direction]++;
 

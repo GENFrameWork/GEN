@@ -88,9 +88,9 @@ class DIOSTREAMTLS12_MSG_SERVERKEYEXCHANGE_ECDHE : public DIOSTREAMTLS_MSG_INTER
 
     XBUFFER*                                GetSignature                                      ();
 
-    // ServerECDHParams as sent on the wire (curve_type + named_curve + public key), the exact bytes that are
-    // digitally-signed together with client_random and server_random (RFC 5246 section 7.4.3). Needed by the
-    // caller to rebuild the signed content for DIOSTREAMTLSSIGNATURE::Verify().
+    
+    
+    
     bool                                    GetSignedParams                                   (XBUFFER& params);
 
     bool                                    SetToBuffer                                       (XBUFFER& buffer, bool showdebug);

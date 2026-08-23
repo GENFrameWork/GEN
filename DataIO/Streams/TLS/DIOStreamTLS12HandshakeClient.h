@@ -86,13 +86,13 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
                                             DIOSTREAMTLS12HANDSHAKECLIENT                    ();
     virtual                                ~DIOSTREAMTLS12HANDSHAKECLIENT                    ();
 
-    // checkdowngradesentinel: only pass true when this connection is a dual-version TLS 1.3-to-1.2 FALLBACK (a
-    // second, independent attempt after a real TLS 1.3 attempt was explicitly turned away -- see DIOSTREAMTLS<T>).
-    // Leave it false (the default) for a deliberately configured TLS-1.2-only connection: the RFC 8446 4.1.3
-    // sentinel exists to protect a client that tried or would have tried TLS 1.3 from being silently downgraded,
-    // and a great many real TLS-1.3-capable servers set it for ANY TLS 1.2 negotiation regardless of why the
-    // client only offered 1.2 -- rejecting it unconditionally would make pure TLS-1.2 configuration unusable
-    // against ordinary modern servers, not just against an actual attacker.
+    
+    
+    
+    
+    
+    
+    
     bool                                    Ini                                              (bool allowunauthenticatedserver, bool checkdowngradesentinel = false);
     void                                    End                                              ();
     bool                                    IsIni                                            ();
@@ -111,14 +111,28 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     DIOSTREAMTLS12_MSG_CERTIFICATE*         GetServerCertificate                            ();
     DIOSTREAMTLS12_MSG_SERVERKEYEXCHANGE_ECDHE* GetServerKeyExchange                        ();
 
+    
+    
+    
+    
+    
+    bool                                    CipherSuitesAndSchemes_WidenECDSA                ();
+
+    
+    
+    
+    
+    
+    bool                                    IsAlgorithmRejected                              ();
+
     bool                                    ClientHello_Create                               (XCHAR* servername, XBUFFER& clienthello, XBUFFER& records);
 
     bool                                    RecordInput_Add                                  (XBYTE* data, XDWORD size);
     bool                                    RecordInput_Add                                  (XBUFFER& data);
     bool                                    Process                                          ();
 
-    // Only valid once GetState() == DIOSTREAMTLS12HANDSHAKECLIENT_STATE_READY_CLIENTFLIGHT: builds
-    // ClientKeyExchange (clear), ChangeCipherSpec (clear) and Finished (encrypted, first LOCAL record).
+    
+    
     bool                                    ClientFlight_Create                              (XBUFFER& records);
 
   private:
@@ -145,6 +159,7 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     bool                                    authenticationconfigured;
     bool                                    serverauthenticated;
     bool                                    checkdowngradesentinel;
+    bool                                    algorithmrejected;
 
     DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR authenticationerror;
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    certificatevalidationerror;
