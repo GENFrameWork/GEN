@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       DIOStreamTLSHandshakeClient.h
+* @file       DIOStreamTLS13HandshakeClient.h
 *
-* @class      DIOSTREAMTLSHANDSHAKECLIENT
+* @class      DIOSTREAMTLS13HANDSHAKECLIENT
 * @brief      Data Input/Output Stream TLS 1.3 Client Handshake class
 * @ingroup    DATAIO
 *
@@ -30,7 +30,7 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "DIOStreamTLSSession.h"
+#include "DIOStreamTLS13Session.h"
 #include "DIOStreamTLSMessagesHandShakeServerFlight.h"
 
 #include "CipherCertificateX509Validator.h"
@@ -40,26 +40,26 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
-enum DIOSTREAMTLSHANDSHAKECLIENT_STATE
+enum DIOSTREAMTLS13HANDSHAKECLIENT_STATE
 {
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE                       = 0 ,
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO               ,
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS       ,
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_CERTIFICATE               ,
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_CERTIFICATEVERIFY         ,
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_FINISHED                  ,
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED        ,
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED            ,
-  DIOSTREAMTLSHANDSHAKECLIENT_STATE_ERROR                          ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE                       = 0 ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_SERVERHELLO               ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS       ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATE               ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATEVERIFY         ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_FINISHED                  ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED        ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED            ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_STATE_ERROR                          ,
 };
 
 
-enum DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR
+enum DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR
 {
-  DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_NONE             = 0 ,
-  DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION        ,
-  DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE          ,
-  DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY    ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE             = 0 ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION        ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE          ,
+  DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY    ,
 };
 
 
@@ -71,17 +71,17 @@ enum DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR
 class DIOSTREAMTLSCONFIG;
 
 
-class DIOSTREAMTLSHANDSHAKECLIENT
+class DIOSTREAMTLS13HANDSHAKECLIENT
 {
   public:
-                                            DIOSTREAMTLSHANDSHAKECLIENT                      ();
-    virtual                                ~DIOSTREAMTLSHANDSHAKECLIENT                      ();
+                                            DIOSTREAMTLS13HANDSHAKECLIENT                      ();
+    virtual                                ~DIOSTREAMTLS13HANDSHAKECLIENT                      ();
 
-    bool                                    Ini                                              (DIOSTREAMTLSSESSION* session, bool allowunauthenticatedserver);
+    bool                                    Ini                                              (DIOSTREAMTLS13SESSION* session, bool allowunauthenticatedserver);
     void                                    End                                              ();
     bool                                    IsIni                                            ();
 
-    DIOSTREAMTLSHANDSHAKECLIENT_STATE       GetState                                         ();
+    DIOSTREAMTLS13HANDSHAKECLIENT_STATE       GetState                                         ();
     bool                                    IsServerFinishedVerified                         ();
     bool                                    IsHandshakeCompleted                             ();
     bool                                    IsCertificateRequested                           ();
@@ -93,7 +93,7 @@ class DIOSTREAMTLSHANDSHAKECLIENT
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
 
     bool                                    Authentication_Set                               (XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
-    DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR GetAuthenticationError                   ();
+    DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR GetAuthenticationError                   ();
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    GetCertificateValidationError                    ();
 
     DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE* GetServerCertificate                            ();
@@ -120,7 +120,7 @@ class DIOSTREAMTLSHANDSHAKECLIENT
     bool                                    Finished_Process                                 (XBUFFER& message);
 
     bool                                    SetError                                         ();
-    bool                                    SetAuthenticationError                           (DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR error);
+    bool                                    SetAuthenticationError                           (DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR error);
     bool                                    CipherSuite_IsOffered                            (XWORD ciphersuite);
     bool                                    SupportedGroup_IsOffered                         (XWORD supportedgroup);
     bool                                    KeyShare_IsOffered                               (XWORD supportedgroup);
@@ -128,15 +128,15 @@ class DIOSTREAMTLSHANDSHAKECLIENT
     bool                                    ApplicationProtocol_IsOffered                    (DIOSTREAMTLS_ALPN_TYPE applicationprotocol);
     void                                    Clean                                            ();
 
-    DIOSTREAMTLSSESSION*                    session;
-    DIOSTREAMTLSHANDSHAKECLIENT_STATE       state;
+    DIOSTREAMTLS13SESSION*                    session;
+    DIOSTREAMTLS13HANDSHAKECLIENT_STATE       state;
     bool                                    isini;
     bool                                    allowunauthenticatedserver;
     bool                                    certificaterequested;
     bool                                    authenticationconfigured;
     bool                                    serverauthenticated;
 
-    DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR authenticationerror;
+    DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR authenticationerror;
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    certificatevalidationerror;
 
     XSTRING                                 expectedservername;

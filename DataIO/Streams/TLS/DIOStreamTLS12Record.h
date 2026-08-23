@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       DIOStreamTLSRecord.h
+* @file       DIOStreamTLS12Record.h
 *
-* @class      DIOSTREAMTLSRECORD
-* @brief      Data Input/Output Stream TLS Record Layer (TLS 1.3, RFC 8446 section 5) class
+* @class      DIOSTREAMTLS12RECORD
+* @brief      Data Input/Output Stream TLS 1.2 record protection class (RFC 5246 + RFC 5288)
 * @ingroup    DATAIO
 *
 * @copyright  EndoraSoft. All rights reserved.
@@ -32,21 +32,18 @@
 
 #include "XBuffer.h"
 
-#include "CipherAESGCM.h"
-#include "CipherKeySymmetrical.h"
-
 #include "DIOStreamTLSMessages.h"
-#include "DIOStreamTLS13KeySchedule.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
-#define DIOSTREAMTLSRECORD_MAXPLAINSIZE                       16384             // 2^14, the limit set by RFC 8446 section 5.1
-#define DIOSTREAMTLSRECORD_MAXCIPHERSIZE                      (16384 + 256)     // The limit for a protected record, section 5.2
-
-#define DIOSTREAMTLSRECORD_LEGACYVERSION                      DIOSTREAMTLS_MSG_VERSION_TLS_1_2
+#define DIOSTREAMTLS12RECORD_MAXPLAINSIZE                     16384             // 2^14, RFC 5246 section 6.2.1
+#define DIOSTREAMTLS12RECORD_MAXCIPHERSIZE                    (16384 + 2048)    // Plain text plus the AEAD expansion
+#define DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE                8                 // GenericAEADCipher.nonce_explicit, RFC 5288
+#define DIOSTREAMTLS12RECORD_TAGSIZE                          16
+#define DIOSTREAMTLS12RECORD_AADSIZE                          13                // seq(8) + type(1) + version(2) + length(2)
 
 
 
@@ -54,28 +51,28 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class DIOSTREAMTLSRECORD
+class CIPHERAESGCM;
+class CIPHERKEYSYMMETRICAL;
+
+
+class DIOSTREAMTLS12RECORD
 {
   public:
-                                            DIOSTREAMTLSRECORD                                ();
-    virtual                                ~DIOSTREAMTLSRECORD                                ();
+                                            DIOSTREAMTLS12RECORD                              ();
+    virtual                                ~DIOSTREAMTLS12RECORD                              ();
 
-    bool                                    Ini                                               (DIOSTREAMTLS13KEYSCHEDULE* keyschedule);
+    bool                                    Ini                                               ();
     void                                    End                                               ();
-
     bool                                    IsIni                                             ();
 
-    bool                                    SetKeys                                           (DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    // The key and the AEAD salt come from DIOSTREAMTLS12KEYSCHEDULE, but this class does not depend on it:
+    // it only needs the material, which is also what makes it directly testable against captured traffic.
+    bool                                    SetKeys                                           (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& key, XBUFFER& fixedIV);
+
     bool                                    IsProtected                                       (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
 
     XQWORD                                  GetSequence                                       (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
     bool                                    ResetSequence                                     (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
-
-    XWORD                                   GetMaxPlainSize                                   ();
-    bool                                    SetMaxPlainSize                                   (XWORD maxplainsize);
-
-    XBYTE                                   GetPaddingSize                                    ();
-    void                                    SetPaddingSize                                    (XBYTE paddingsize);
 
     bool                                    Protect                                           (DIOSTREAMTLS_CONTENTTYPE contenttype, XBYTE* plain, XDWORD size, XBUFFER& records);
     bool                                    Protect                                           (DIOSTREAMTLS_CONTENTTYPE contenttype, XBUFFER& plain, XBUFFER& records);
@@ -86,28 +83,29 @@ class DIOSTREAMTLSRECORD
 
   private:
 
-    bool                                    CalculateNonce                                    (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& nonce);
-    bool                                    Protect_OneRecord                                 (DIOSTREAMTLS_CONTENTTYPE contenttype, XBYTE* plain, XWORD size, XBUFFER& records);
-
     void                                    Clean                                             ();
 
-    DIOSTREAMTLS13KEYSCHEDULE*                keyschedule;
+    // nonce = salt(4) + nonce_explicit(8). Unlike TLS 1.3, the explicit half travels in the clear at the front
+    // of the fragment, so the peer does not need to track our sequence number to rebuild it.
+    bool                                    Nonce_Build                                       (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBYTE* explicitnonce, XBUFFER& nonce);
+
+    // additional_data = seq_num(8) + type(1) + version(2) + length(2), where length is the PLAIN text length,
+    // not the length written in the record header. RFC 5246 section 6.2.3.3.
+    bool                                    AAD_Build                                         (XQWORD sequence, DIOSTREAMTLS_CONTENTTYPE contenttype, XWORD version, XWORD plainlength, XBUFFER& additionaldata);
+
+    bool                                    Protect_OneRecord                                 (DIOSTREAMTLS_CONTENTTYPE contenttype, XBYTE* plain, XWORD size, XBUFFER& records);
+
+    bool                                    isini;
 
     CIPHERAESGCM*                           cipher[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     CIPHERKEYSYMMETRICAL*                   key[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
-    XBUFFER                                 IV[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
+    XBUFFER                                 fixedIV[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
+
     XQWORD                                  sequence[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     bool                                    isprotected[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
-
-    XWORD                                   maxplainsize;
-    XBYTE                                   paddingsize;
-    bool                                    isini;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-

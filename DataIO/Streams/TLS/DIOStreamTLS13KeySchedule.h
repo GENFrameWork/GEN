@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       DIOStreamTLSKeySchedule.h
+* @file       DIOStreamTLS13KeySchedule.h
 *
-* @class      DIOSTREAMTLSKEYSCHEDULE
+* @class      DIOSTREAMTLS13KEYSCHEDULE
 * @brief      Data Input/Output Stream TLS Key Schedule (TLS 1.3, RFC 8446 section 7.1) class
 * @ingroup    DATAIO
 *
@@ -42,48 +42,34 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
-#define DIOSTREAMTLSKEYSCHEDULE_IVSIZE                        12                // Fixed by RFC 8446, section 5.3, for every cipher suite
+#define DIOSTREAMTLS13KEYSCHEDULE_IVSIZE                        12                // Fixed by RFC 8446, section 5.3, for every cipher suite
 
 // Dumping key material to the trace is only ever a debugging aid, for example to follow the trace of the RFC 8448.
 // It must never be left active in a delivered build: it writes the secrets of the connection in the clear.
-//#define DIOSTREAMTLSKEYSCHEDULE_TRACE_SECRETS
+//#define DIOSTREAMTLS13KEYSCHEDULE_TRACE_SECRETS
 
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_DERIVED                 __L("derived")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_CLIENTHANDSHAKE         __L("c hs traffic")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_SERVERHANDSHAKE         __L("s hs traffic")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_CLIENTAPPLICATION       __L("c ap traffic")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_SERVERAPPLICATION       __L("s ap traffic")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_RESUMPTION              __L("res master")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_KEY                     __L("key")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_IV                      __L("iv")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_FINISHED                __L("finished")
-#define DIOSTREAMTLSKEYSCHEDULE_LABEL_TRAFFICUPDATE           __L("traffic upd")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_DERIVED                 __L("derived")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTHANDSHAKE         __L("c hs traffic")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_SERVERHANDSHAKE         __L("s hs traffic")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTAPPLICATION       __L("c ap traffic")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_SERVERAPPLICATION       __L("s ap traffic")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_RESUMPTION              __L("res master")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_KEY                     __L("key")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_IV                      __L("iv")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_FINISHED                __L("finished")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_TRAFFICUPDATE           __L("traffic upd")
 
 
-enum DIOSTREAMTLSKEYSCHEDULE_ROLE
+// DIOSTREAMTLSKEYSCHEDULE_ROLE and _DIRECTION/_MAXDIRECTIONS moved to DIOStreamTLSMessages.h: they are shared
+// vocabulary with the TLS 1.2 key schedule (DIOSTREAMTLS12KEYSCHEDULE), not exclusive to this TLS 1.3 one. Every
+// secret here is still asked for by direction, never by role -- that's what lets the server-role build of this
+// class reuse it untouched, only the role given to Ini() changes.
+
+enum DIOSTREAMTLS13KEYSCHEDULE_LEVEL
 {
-  DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT               = 0 ,
-  DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER                   ,
-};
-
-
-// Every secret is asked for by direction, never by role. This is what lets the server of the second phase reuse
-// this class untouched: only the role given to Ini() changes.
-
-enum DIOSTREAMTLSKEYSCHEDULE_DIRECTION
-{
-  DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL           = 0 ,                       // What this end writes
-  DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE              ,                       // What the other end writes
-
-  DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS
-};
-
-
-enum DIOSTREAMTLSKEYSCHEDULE_LEVEL
-{
-  DIOSTREAMTLSKEYSCHEDULE_LEVEL_NONE                = 0 ,
-  DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE               ,
-  DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION             ,
+  DIOSTREAMTLS13KEYSCHEDULE_LEVEL_NONE                = 0 ,
+  DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE               ,
+  DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION             ,
 };
 
 
@@ -92,11 +78,11 @@ enum DIOSTREAMTLSKEYSCHEDULE_LEVEL
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class DIOSTREAMTLSKEYSCHEDULE
+class DIOSTREAMTLS13KEYSCHEDULE
 {
   public:
-                                            DIOSTREAMTLSKEYSCHEDULE                           ();
-    virtual                                ~DIOSTREAMTLSKEYSCHEDULE                           ();
+                                            DIOSTREAMTLS13KEYSCHEDULE                           ();
+    virtual                                ~DIOSTREAMTLS13KEYSCHEDULE                           ();
 
     bool                                    Ini                                               (XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
     void                                    End                                               ();
@@ -128,10 +114,10 @@ class DIOSTREAMTLSKEYSCHEDULE
     XBUFFER*                                GetMasterSecret                                   ();
     XBUFFER*                                GetResumptionSecret                               ();
 
-    XBUFFER*                                GetTrafficSecret                                  (DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    XBUFFER*                                GetTrafficSecret                                  (DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
 
-    bool                                    GetTrafficKeys                                    (DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& key, XBUFFER& IV);
-    bool                                    GetFinishedKey                                    (DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& finishedkey);
+    bool                                    GetTrafficKeys                                    (DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& key, XBUFFER& IV);
+    bool                                    GetFinishedKey                                    (DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& finishedkey);
 
     bool                                    CalculateFinished                                 (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata);
     bool                                    VerifyFinished                                    (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata);

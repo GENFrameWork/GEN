@@ -99,12 +99,28 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
 
     bool                    IsAllowUnauthenticatedServer      ();
     void                    SetAllowUnauthenticatedServer     (bool allowunauthenticatedserver);
-    
+
+    // Version negotiation window (Phase 5). Both default to TLS 1.3, i.e. the exact behavior of every previous
+    // phase: nothing changes unless the caller explicitly widens the window. Lowering minversion to
+    // DIOSTREAMTLS_MSG_VERSION_TLS_1_2 enables a TLS 1.2 fallback (via the parallel DIOSTREAMTLS12SESSION /
+    // DIOSTREAMTLS12HANDSHAKECLIENT classes) for servers that do not speak TLS 1.3, and automatically enables the
+    // two ECDHE-RSA-GCM suites those classes offer (DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_*_GCM_SHA*) so the
+    // hybrid ClientHello has something a TLS 1.2-only server can select. Only DIOSTREAMTLS_MSG_VERSION_TLS_1_2 and
+    // DIOSTREAMTLS_MSG_VERSION_TLS_1_3 are valid values, and minversion must never be set above maxversion.
+    XWORD                   GetMinVersion                     ();
+    bool                    SetMinVersion                     (XWORD version);
+
+    XWORD                   GetMaxVersion                     ();
+    bool                    SetMaxVersion                     (XWORD version);
+
   protected:
-    
+
   private:
 
     void                    Clean                             ();
+
+    XWORD                   minversion;
+    XWORD                   maxversion;
 
     XVECTOR<XWORD>          ciphersuites;
     XVECTOR<XWORD>          supportedgroups;

@@ -554,6 +554,14 @@ DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
 
   diostreamcfg = GEN_NEW DIOSTREAMTLSCONFIG();
 
+  // Automatic version negotiation, by default, for every HTTPS request made through DIOWEBCLIENT: a caller never
+  // has to know or decide whether the target speaks TLS 1.3 or only TLS 1.2. GetOpen() tries TLS 1.3 first and,
+  // only if that specific server rejects it at the handshake stage, retries the same request once as pure TLS
+  // 1.2 (see DIOSTREAMTLS<T>::Open() / Handshake_Attempt()). A caller that wants strict TLS 1.3-only behavior
+  // can still narrow the window back with GetStreamTLSCFG()->SetMaxVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3) /
+  // SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3) after construction.
+  if(diostreamcfg) ((DIOSTREAMTLSCONFIG*)diostreamcfg)->SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+
   #else
 
   diostreamcfg = GEN_NEW DIOSTREAMTCPIPCONFIG();

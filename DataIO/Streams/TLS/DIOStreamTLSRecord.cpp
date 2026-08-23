@@ -97,7 +97,7 @@ DIOSTREAMTLSRECORD::~DIOSTREAMTLSRECORD()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSRECORD::Ini(DIOSTREAMTLSKEYSCHEDULE* keyschedule)
+* @fn         bool DIOSTREAMTLSRECORD::Ini(DIOSTREAMTLS13KEYSCHEDULE* keyschedule)
 * @brief      Prepare the record layer over a key schedule
 * @note       Until SetKeys() is called for a direction, the records of that direction travel in the clear, which is
 *             what the first flight of the handshake needs.
@@ -108,7 +108,7 @@ DIOSTREAMTLSRECORD::~DIOSTREAMTLSRECORD()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSRECORD::Ini(DIOSTREAMTLSKEYSCHEDULE* keyschedule)
+bool DIOSTREAMTLSRECORD::Ini(DIOSTREAMTLS13KEYSCHEDULE* keyschedule)
 {
   End();
 
@@ -182,7 +182,7 @@ bool DIOSTREAMTLSRECORD::IsIni()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+* @fn         bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Install the traffic keys of a level in one direction, and restart its sequence number
 * @note       RFC 8446 section 5.3: every time the keys change, the sequence number goes back to zero.
 * @ingroup    DATAIO
@@ -193,7 +193,7 @@ bool DIOSTREAMTLSRECORD::IsIni()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 {
   if(!isini || !keyschedule)
     {
@@ -262,7 +262,10 @@ bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMT
   sequence[direction]    = 0;
   isprotected[direction] = true;
 
-  // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] Keys of the %s direction installed: %s level, key %d, iv %d"), (direction == DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)?__L("local"):__L("remote"), (level == DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE)?__L("handshake"):__L("application"), trafficzkey.GetSize(), IV[direction].GetSize());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] Keys of the %s direction installed: %s level, key %d, iv %d"),
+                                       (direction == DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)?__L("local"):__L("remote"),
+                                       (level == DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE)?__L("handshake"):__L("application"),
+                                       trafficzkey.GetSize(), IV[direction].GetSize());
 
   return true;
 }
@@ -559,7 +562,8 @@ bool DIOSTREAMTLSRECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& co
 
   if(!cipher[direction]->UncipherAEAD(ciphertext, nonce, additionaldata, tag))
     {
-      // XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Record] Record %llu of the remote end DID NOT AUTHENTICATE, %d bytes discarded"), sequence[direction], length);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[TLS Record] Record %llu of the remote end DID NOT AUTHENTICATE, %d bytes discarded"),
+                                          sequence[direction], length);
       return false;
     }
 
@@ -588,7 +592,7 @@ bool DIOSTREAMTLSRECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& co
       plain.Add(inner->Get(), size - 1);
     }
 
-  // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] In  %llu: type %02X, %d bytes"), sequence[direction], (XBYTE)contenttype, plain.GetSize());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] In  %llu: type %02X, %d bytes"), sequence[direction], (XBYTE)contenttype, plain.GetSize());
 
   sequence[direction]++;
 
@@ -775,7 +779,7 @@ bool DIOSTREAMTLSRECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttype,
       return false;
     }
 
-  // XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] Out %llu: type %02X, %d bytes"), sequence[direction], (XBYTE)contenttype, size);
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Record] Out %llu: type %02X, %d bytes"), sequence[direction], (XBYTE)contenttype, size);
 
   sequence[direction]++;
 
