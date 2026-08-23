@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       DIOStreamTLSKeySchedule.cpp
+* @file       DIOStreamTLS13KeySchedule.cpp
 *
-* @class      DIOSTREAMTLSKEYSCHEDULE
+* @class      DIOSTREAMTLS13KEYSCHEDULE
 * @brief      Data Input/Output Stream TLS Key Schedule (TLS 1.3, RFC 8446 section 7.1) class
 * @ingroup    DATAIO
 *
@@ -34,7 +34,7 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "DIOStreamTLSKeySchedule.h"
+#include "DIOStreamTLS13KeySchedule.h"
 
 #include "XFactory.h"
 #include "XTrace.h"
@@ -71,12 +71,12 @@ static void DIOStreamTLS_BufferErase(XBUFFER& buffer)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLSKEYSCHEDULE::DIOSTREAMTLSKEYSCHEDULE()
+* @fn         DIOSTREAMTLS13KEYSCHEDULE::DIOSTREAMTLS13KEYSCHEDULE()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLSKEYSCHEDULE::DIOSTREAMTLSKEYSCHEDULE()
+DIOSTREAMTLS13KEYSCHEDULE::DIOSTREAMTLS13KEYSCHEDULE()
 {
   Clean();
 }
@@ -84,13 +84,13 @@ DIOSTREAMTLSKEYSCHEDULE::DIOSTREAMTLSKEYSCHEDULE()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLSKEYSCHEDULE::~DIOSTREAMTLSKEYSCHEDULE()
+* @fn         DIOSTREAMTLS13KEYSCHEDULE::~DIOSTREAMTLS13KEYSCHEDULE()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLSKEYSCHEDULE::~DIOSTREAMTLSKEYSCHEDULE()
+DIOSTREAMTLS13KEYSCHEDULE::~DIOSTREAMTLS13KEYSCHEDULE()
 {
   End();
 
@@ -100,7 +100,7 @@ DIOSTREAMTLSKEYSCHEDULE::~DIOSTREAMTLSKEYSCHEDULE()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
 * @brief      Prepare the key schedule for a cipher suite and a role
 * @note       The role only decides which of the two traffic secrets is the local one. Everything else is symmetrical,
 *             which is what makes this class usable by a server without any change.
@@ -112,7 +112,7 @@ DIOSTREAMTLSKEYSCHEDULE::~DIOSTREAMTLSKEYSCHEDULE()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
+bool DIOSTREAMTLS13KEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
 {
   End();
 
@@ -135,7 +135,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROL
     }
 
   hashsize = (XDWORD)hash->GetDefaultSize();
-  IVsize   = DIOSTREAMTLSKEYSCHEDULE_IVSIZE;
+  IVsize   = DIOSTREAMTLS13KEYSCHEDULE_IVSIZE;
 
   if(!hashsize)
     {
@@ -155,8 +155,8 @@ bool DIOSTREAMTLSKEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROL
 
   isini             = true;
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Key Schedule] Ini: cipher suite %04X, %s, hash %d, key %d, iv %d"), ciphersuite,
-                                       (role == DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT)?__L("client"):__L("server"), hashsize, keysize, IVsize);
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[TLS Key Schedule] Ini: cipher suite %04X, %s, hash %d, key %d, iv %d"), ciphersuite,
+                                       (role == DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT)?__L("client"):__L("server"), hashsize, keysize, IVsize); */
 
   return true;
 }
@@ -164,12 +164,12 @@ bool DIOSTREAMTLSKEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROL
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void DIOSTREAMTLSKEYSCHEDULE::End()
+* @fn         void DIOSTREAMTLS13KEYSCHEDULE::End()
 * @brief      Release everything and wipe every secret
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLSKEYSCHEDULE::End()
+void DIOSTREAMTLS13KEYSCHEDULE::End()
 {
   if(HKDF)
     {
@@ -207,14 +207,14 @@ void DIOSTREAMTLSKEYSCHEDULE::End()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::IsIni()
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::IsIni()
 * @brief      Is the key schedule ready to be used
 * @ingroup    DATAIO
 *
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::IsIni()
+bool DIOSTREAMTLS13KEYSCHEDULE::IsIni()
 {
   return isini;
 }
@@ -222,14 +222,14 @@ bool DIOSTREAMTLSKEYSCHEDULE::IsIni()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XWORD DIOSTREAMTLSKEYSCHEDULE::GetCipherSuite()
+* @fn         XWORD DIOSTREAMTLS13KEYSCHEDULE::GetCipherSuite()
 * @brief      Get cipher suite
 * @ingroup    DATAIO
 *
 * @return     XWORD : Requested value.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XWORD DIOSTREAMTLSKEYSCHEDULE::GetCipherSuite()
+XWORD DIOSTREAMTLS13KEYSCHEDULE::GetCipherSuite()
 {
   return ciphersuite;
 }
@@ -237,14 +237,14 @@ XWORD DIOSTREAMTLSKEYSCHEDULE::GetCipherSuite()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLSKEYSCHEDULE_ROLE DIOSTREAMTLSKEYSCHEDULE::GetRole()
+* @fn         DIOSTREAMTLSKEYSCHEDULE_ROLE DIOSTREAMTLS13KEYSCHEDULE::GetRole()
 * @brief      Get role
 * @ingroup    DATAIO
 *
 * @return     DIOSTREAMTLSKEYSCHEDULE_ROLE : Requested value.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLSKEYSCHEDULE_ROLE DIOSTREAMTLSKEYSCHEDULE::GetRole()
+DIOSTREAMTLSKEYSCHEDULE_ROLE DIOSTREAMTLS13KEYSCHEDULE::GetRole()
 {
   return role;
 }
@@ -252,14 +252,14 @@ DIOSTREAMTLSKEYSCHEDULE_ROLE DIOSTREAMTLSKEYSCHEDULE::GetRole()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XDWORD DIOSTREAMTLSKEYSCHEDULE::GetHashSize()
+* @fn         XDWORD DIOSTREAMTLS13KEYSCHEDULE::GetHashSize()
 * @brief      Get the size, in bytes, of the digest of the negotiated hash
 * @ingroup    DATAIO
 *
 * @return     XDWORD : Requested value.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XDWORD DIOSTREAMTLSKEYSCHEDULE::GetHashSize()
+XDWORD DIOSTREAMTLS13KEYSCHEDULE::GetHashSize()
 {
   return hashsize;
 }
@@ -267,14 +267,14 @@ XDWORD DIOSTREAMTLSKEYSCHEDULE::GetHashSize()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XDWORD DIOSTREAMTLSKEYSCHEDULE::GetKeySize()
+* @fn         XDWORD DIOSTREAMTLS13KEYSCHEDULE::GetKeySize()
 * @brief      Get the size, in bytes, of the traffic keys
 * @ingroup    DATAIO
 *
 * @return     XDWORD : Requested value.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XDWORD DIOSTREAMTLSKEYSCHEDULE::GetKeySize()
+XDWORD DIOSTREAMTLS13KEYSCHEDULE::GetKeySize()
 {
   return keysize;
 }
@@ -282,14 +282,14 @@ XDWORD DIOSTREAMTLSKEYSCHEDULE::GetKeySize()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XDWORD DIOSTREAMTLSKEYSCHEDULE::GetIVSize()
+* @fn         XDWORD DIOSTREAMTLS13KEYSCHEDULE::GetIVSize()
 * @brief      Get the size, in bytes, of the traffic initialization vectors
 * @ingroup    DATAIO
 *
 * @return     XDWORD : Requested value.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XDWORD DIOSTREAMTLSKEYSCHEDULE::GetIVSize()
+XDWORD DIOSTREAMTLS13KEYSCHEDULE::GetIVSize()
 {
   return IVsize;
 }
@@ -297,14 +297,14 @@ XDWORD DIOSTREAMTLSKEYSCHEDULE::GetIVSize()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         HASH* DIOSTREAMTLSKEYSCHEDULE::GetHash()
+* @fn         HASH* DIOSTREAMTLS13KEYSCHEDULE::GetHash()
 * @brief      Get the hash of the negotiated cipher suite
 * @ingroup    DATAIO
 *
 * @return     HASH* : Pointer to the requested object; NULL if it is not available.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-HASH* DIOSTREAMTLSKEYSCHEDULE::GetHash()
+HASH* DIOSTREAMTLS13KEYSCHEDULE::GetHash()
 {
   return hash;
 }
@@ -312,14 +312,14 @@ HASH* DIOSTREAMTLSKEYSCHEDULE::GetHash()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         CIPHERHKDF* DIOSTREAMTLSKEYSCHEDULE::GetHKDF()
+* @fn         CIPHERHKDF* DIOSTREAMTLS13KEYSCHEDULE::GetHKDF()
 * @brief      Get the key derivation function
 * @ingroup    DATAIO
 *
 * @return     CIPHERHKDF* : Pointer to the requested object; NULL if it is not available.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-CIPHERHKDF* DIOSTREAMTLSKEYSCHEDULE::GetHKDF()
+CIPHERHKDF* DIOSTREAMTLS13KEYSCHEDULE::GetHKDF()
 {
   return HKDF;
 }
@@ -327,7 +327,7 @@ CIPHERHKDF* DIOSTREAMTLSKEYSCHEDULE::GetHKDF()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::TranscriptHash(XBUFFER& messages, XBUFFER& transcripthash)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::TranscriptHash(XBUFFER& messages, XBUFFER& transcripthash)
 * @brief      Calculate the transcript hash of the concatenated handshake messages
 * @ingroup    DATAIO
 *
@@ -337,7 +337,7 @@ CIPHERHKDF* DIOSTREAMTLSKEYSCHEDULE::GetHKDF()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::TranscriptHash(XBUFFER& messages, XBUFFER& transcripthash)
+bool DIOSTREAMTLS13KEYSCHEDULE::TranscriptHash(XBUFFER& messages, XBUFFER& transcripthash)
 {
   if(!isini || !hash)
     {
@@ -365,7 +365,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::TranscriptHash(XBUFFER& messages, XBUFFER& transcr
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
 * @brief      Early Secret = HKDF-Extract(0, PSK). Without a PSK the input keying material is HashLen zero bytes
 * @ingroup    DATAIO
 *
@@ -374,7 +374,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::TranscriptHash(XBUFFER& messages, XBUFFER& transcr
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
+bool DIOSTREAMTLS13KEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
 {
   if(!isini || !HKDF)
     {
@@ -396,9 +396,9 @@ bool DIOSTREAMTLSKEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
 
   bool status = HKDF->Extract(salt, PSK?(*PSK):zeroPSK, earlysecret);
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Early Secret: %s"), status?__L("Ok"):__L("Error!"));
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Early Secret: %s"), status?__L("Ok"):__L("Error!")); */
 
-  #ifdef DIOSTREAMTLSKEYSCHEDULE_TRACE_SECRETS
+  #ifdef DIOSTREAMTLS13KEYSCHEDULE_TRACE_SECRETS
   if(status)
     {
       XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, earlysecret);
@@ -411,7 +411,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
 * @brief      Handshake Secret = HKDF-Extract(Derive-Secret(Early Secret, "derived", ""), (EC)DHE)
 * @ingroup    DATAIO
 *
@@ -420,7 +420,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::EarlySecret_Calculate(XBUFFER* PSK)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
+bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
 {
   if(!isini || !HKDF)
     {
@@ -439,16 +439,16 @@ bool DIOSTREAMTLSKEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
 
   XBUFFER derivedsecret;
 
-  if(!DeriveEmptySecret(earlysecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_DERIVED, derivedsecret))
+  if(!DeriveEmptySecret(earlysecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_DERIVED, derivedsecret))
     {
       return false;
     }
 
   bool status = HKDF->Extract(derivedsecret, sharedsecret, handshakesecret);
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Handshake Secret: %s"), status?__L("Ok"):__L("Error!"));
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Handshake Secret: %s"), status?__L("Ok"):__L("Error!")); */
 
-  #ifdef DIOSTREAMTLSKEYSCHEDULE_TRACE_SECRETS
+  #ifdef DIOSTREAMTLS13KEYSCHEDULE_TRACE_SECRETS
   if(status)
     {
       XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, handshakesecret);
@@ -461,14 +461,14 @@ bool DIOSTREAMTLSKEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::MasterSecret_Calculate()
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::MasterSecret_Calculate()
 * @brief      Master Secret = HKDF-Extract(Derive-Secret(Handshake Secret, "derived", ""), 0)
 * @ingroup    DATAIO
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::MasterSecret_Calculate()
+bool DIOSTREAMTLS13KEYSCHEDULE::MasterSecret_Calculate()
 {
   if(!isini || !HKDF)
     {
@@ -483,7 +483,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::MasterSecret_Calculate()
   XBUFFER derivedsecret;
   XBUFFER zerokeymaterial;
 
-  if(!DeriveEmptySecret(handshakesecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_DERIVED, derivedsecret))
+  if(!DeriveEmptySecret(handshakesecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_DERIVED, derivedsecret))
     {
       return false;
     }
@@ -497,9 +497,9 @@ bool DIOSTREAMTLSKEYSCHEDULE::MasterSecret_Calculate()
 
   bool status = HKDF->Extract(derivedsecret, zerokeymaterial, mastersecret);
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Master Secret: %s"), status?__L("Ok"):__L("Error!"));
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Master Secret: %s"), status?__L("Ok"):__L("Error!")); */
 
-  #ifdef DIOSTREAMTLSKEYSCHEDULE_TRACE_SECRETS
+  #ifdef DIOSTREAMTLS13KEYSCHEDULE_TRACE_SECRETS
   if(status)
     {
       XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, mastersecret);
@@ -512,7 +512,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::MasterSecret_Calculate()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcripthash)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcripthash)
 * @brief      Derive both handshake traffic secrets from the transcript up to the ServerHello
 * @ingroup    DATAIO
 *
@@ -521,7 +521,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::MasterSecret_Calculate()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcripthash)
+bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcripthash)
 {
   if(!isini || !HKDF)
     {
@@ -533,14 +533,14 @@ bool DIOSTREAMTLSKEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcr
       return false;
     }
 
-  if(!HKDF->ExpandLabel(handshakesecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_CLIENTHANDSHAKE, transcripthash, hashsize, clienthandshaketrafficsecret))
+  if(!HKDF->ExpandLabel(handshakesecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTHANDSHAKE, transcripthash, hashsize, clienthandshaketrafficsecret))
     {
       return false;
     }
 
-  bool status = HKDF->ExpandLabel(handshakesecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_SERVERHANDSHAKE, transcripthash, hashsize, serverhandshaketrafficsecret);
+  bool status = HKDF->ExpandLabel(handshakesecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_SERVERHANDSHAKE, transcripthash, hashsize, serverhandshaketrafficsecret);
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Handshake traffic secrets: %s"), status?__L("Ok"):__L("Error!"));
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Handshake traffic secrets: %s"), status?__L("Ok"):__L("Error!")); */
 
   return status;
 }
@@ -548,7 +548,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcr
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::ApplicationTrafficSecrets_Calculate(XBUFFER& transcripthash)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::ApplicationTrafficSecrets_Calculate(XBUFFER& transcripthash)
 * @brief      Derive both application traffic secrets from the transcript up to the server Finished
 * @ingroup    DATAIO
 *
@@ -557,7 +557,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcr
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::ApplicationTrafficSecrets_Calculate(XBUFFER& transcripthash)
+bool DIOSTREAMTLS13KEYSCHEDULE::ApplicationTrafficSecrets_Calculate(XBUFFER& transcripthash)
 {
   if(!isini || !HKDF)
     {
@@ -569,14 +569,14 @@ bool DIOSTREAMTLSKEYSCHEDULE::ApplicationTrafficSecrets_Calculate(XBUFFER& trans
       return false;
     }
 
-  if(!HKDF->ExpandLabel(mastersecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_CLIENTAPPLICATION, transcripthash, hashsize, clientapplicationtrafficsecret))
+  if(!HKDF->ExpandLabel(mastersecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTAPPLICATION, transcripthash, hashsize, clientapplicationtrafficsecret))
     {
       return false;
     }
 
-  bool status = HKDF->ExpandLabel(mastersecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_SERVERAPPLICATION, transcripthash, hashsize, serverapplicationtrafficsecret);
+  bool status = HKDF->ExpandLabel(mastersecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_SERVERAPPLICATION, transcripthash, hashsize, serverapplicationtrafficsecret);
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Application traffic secrets: %s"), status?__L("Ok"):__L("Error!"));
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Application traffic secrets: %s"), status?__L("Ok"):__L("Error!")); */
 
   return status;
 }
@@ -584,7 +584,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::ApplicationTrafficSecrets_Calculate(XBUFFER& trans
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::ResumptionSecret_Calculate(XBUFFER& transcripthash)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::ResumptionSecret_Calculate(XBUFFER& transcripthash)
 * @brief      Derive the resumption master secret from the transcript up to the client Finished
 * @ingroup    DATAIO
 *
@@ -593,7 +593,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::ApplicationTrafficSecrets_Calculate(XBUFFER& trans
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::ResumptionSecret_Calculate(XBUFFER& transcripthash)
+bool DIOSTREAMTLS13KEYSCHEDULE::ResumptionSecret_Calculate(XBUFFER& transcripthash)
 {
   if(!isini || !HKDF)
     {
@@ -605,20 +605,20 @@ bool DIOSTREAMTLSKEYSCHEDULE::ResumptionSecret_Calculate(XBUFFER& transcripthash
       return false;
     }
 
-  return HKDF->ExpandLabel(mastersecret, DIOSTREAMTLSKEYSCHEDULE_LABEL_RESUMPTION, transcripthash, hashsize, resumptionsecret);
+  return HKDF->ExpandLabel(mastersecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_RESUMPTION, transcripthash, hashsize, resumptionsecret);
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetEarlySecret()
+* @fn         XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetEarlySecret()
 * @brief      Get early secret
 * @ingroup    DATAIO
 *
 * @return     XBUFFER* : Pointer to the requested buffer.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetEarlySecret()
+XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetEarlySecret()
 {
   return &earlysecret;
 }
@@ -626,14 +626,14 @@ XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetEarlySecret()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetHandshakeSecret()
+* @fn         XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetHandshakeSecret()
 * @brief      Get handshake secret
 * @ingroup    DATAIO
 *
 * @return     XBUFFER* : Pointer to the requested buffer.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetHandshakeSecret()
+XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetHandshakeSecret()
 {
   return &handshakesecret;
 }
@@ -641,14 +641,14 @@ XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetHandshakeSecret()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetMasterSecret()
+* @fn         XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetMasterSecret()
 * @brief      Get master secret
 * @ingroup    DATAIO
 *
 * @return     XBUFFER* : Pointer to the requested buffer.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetMasterSecret()
+XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetMasterSecret()
 {
   return &mastersecret;
 }
@@ -656,14 +656,14 @@ XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetMasterSecret()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetResumptionSecret()
+* @fn         XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetResumptionSecret()
 * @brief      Get resumption master secret
 * @ingroup    DATAIO
 *
 * @return     XBUFFER* : Pointer to the requested buffer.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetResumptionSecret()
+XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetResumptionSecret()
 {
   return &resumptionsecret;
 }
@@ -671,7 +671,7 @@ XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetResumptionSecret()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+* @fn         XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Get a traffic secret by level and direction, never by role
 * @ingroup    DATAIO
 *
@@ -681,17 +681,17 @@ XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetResumptionSecret()
 * @return     XBUFFER* : Pointer to the requested buffer; NULL if it is not available.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 {
   bool isclient = IsDirectionOfTheClient(direction);
 
   switch(level)
     {
-      case DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE    : return isclient?&clienthandshaketrafficsecret:&serverhandshaketrafficsecret;
+      case DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE    : return isclient?&clienthandshaketrafficsecret:&serverhandshaketrafficsecret;
 
-      case DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION  : return isclient?&clientapplicationtrafficsecret:&serverapplicationtrafficsecret;
+      case DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION  : return isclient?&clientapplicationtrafficsecret:&serverapplicationtrafficsecret;
 
-      case DIOSTREAMTLSKEYSCHEDULE_LEVEL_NONE         :
+      case DIOSTREAMTLS13KEYSCHEDULE_LEVEL_NONE         :
                                           default     : break;
     }
 
@@ -701,7 +701,7 @@ XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::GetTrafficKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& key, XBUFFER& IV)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::GetTrafficKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& key, XBUFFER& IV)
 * @brief      Derive the write key and the write initialization vector of a traffic secret
 * @ingroup    DATAIO
 *
@@ -713,7 +713,7 @@ XBUFFER* DIOSTREAMTLSKEYSCHEDULE::GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::GetTrafficKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& key, XBUFFER& IV)
+bool DIOSTREAMTLS13KEYSCHEDULE::GetTrafficKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& key, XBUFFER& IV)
 {
   if(!isini || !HKDF)
     {
@@ -733,18 +733,18 @@ bool DIOSTREAMTLSKEYSCHEDULE::GetTrafficKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL level
       return false;
     }
 
-  if(!HKDF->ExpandLabel((*trafficsecret), DIOSTREAMTLSKEYSCHEDULE_LABEL_KEY, context, keysize, key))
+  if(!HKDF->ExpandLabel((*trafficsecret), DIOSTREAMTLS13KEYSCHEDULE_LABEL_KEY, context, keysize, key))
     {
       return false;
     }
 
-  return HKDF->ExpandLabel((*trafficsecret), DIOSTREAMTLSKEYSCHEDULE_LABEL_IV, context, IVsize, IV);
+  return HKDF->ExpandLabel((*trafficsecret), DIOSTREAMTLS13KEYSCHEDULE_LABEL_IV, context, IVsize, IV);
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::GetFinishedKey(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& finishedkey)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::GetFinishedKey(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& finishedkey)
 * @brief      Derive the key that computes the verify data of a Finished message
 * @ingroup    DATAIO
 *
@@ -755,7 +755,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::GetTrafficKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL level
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::GetFinishedKey(DIOSTREAMTLSKEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& finishedkey)
+bool DIOSTREAMTLS13KEYSCHEDULE::GetFinishedKey(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& finishedkey)
 {
   if(!isini || !HKDF)
     {
@@ -775,13 +775,13 @@ bool DIOSTREAMTLSKEYSCHEDULE::GetFinishedKey(DIOSTREAMTLSKEYSCHEDULE_LEVEL level
       return false;
     }
 
-  return HKDF->ExpandLabel((*trafficsecret), DIOSTREAMTLSKEYSCHEDULE_LABEL_FINISHED, context, hashsize, finishedkey);
+  return HKDF->ExpandLabel((*trafficsecret), DIOSTREAMTLS13KEYSCHEDULE_LABEL_FINISHED, context, hashsize, finishedkey);
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata)
 * @brief      verify_data = HMAC(finished_key, Transcript-Hash(Handshake Context, Certificate*, CertificateVerify*))
 * @ingroup    DATAIO
 *
@@ -792,7 +792,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::GetFinishedKey(DIOSTREAMTLSKEYSCHEDULE_LEVEL level
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata)
+bool DIOSTREAMTLS13KEYSCHEDULE::CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata)
 {
   if(!isini || !hash)
     {
@@ -807,7 +807,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTIO
   XBUFFER   finishedkey;
   HASHHMAC  hashHMAC(hash);
 
-  if(!GetFinishedKey(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, direction, finishedkey))
+  if(!GetFinishedKey(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, direction, finishedkey))
     {
       return false;
     }
@@ -833,7 +833,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTIO
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata)
 * @brief      Verify the verify data of a received Finished message
 * @note       The comparison is made in constant time, so that its duration does not tell an attacker how much of a
 *             forged value was right.
@@ -846,7 +846,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTIO
 * @return     bool : true if the verify data is valid; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata)
+bool DIOSTREAMTLS13KEYSCHEDULE::VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBUFFER& transcripthash, XBUFFER& verifydata)
 {
   XBUFFER calculatedverifydata;
 
@@ -862,9 +862,9 @@ bool DIOSTREAMTLSKEYSCHEDULE::VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION d
 
   bool status = CIPHER::CompareConstantTime(calculatedverifydata, verifydata);
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Finished of the %s end: %s"),
+  /* XTRACE_PRINTCOLOR(XTRACE_COLOR_CHECKERROR(status), __L("[TLS Key Schedule] Finished of the %s end: %s"),
                                        (direction == DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)?__L("local"):__L("remote"),
-                                       status?__L("verified"):__L("NOT VALID!"));
+                                       status?__L("verified"):__L("NOT VALID!")); */
 
   return status;
 }
@@ -872,7 +872,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION d
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Advance an application traffic secret one generation, as the KeyUpdate message requires
 * @ingroup    DATAIO
 *
@@ -881,14 +881,14 @@ bool DIOSTREAMTLSKEYSCHEDULE::VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION d
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+bool DIOSTREAMTLS13KEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 {
   if(!isini || !HKDF)
     {
       return false;
     }
 
-  XBUFFER* trafficsecret = GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, direction);
+  XBUFFER* trafficsecret = GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, direction);
   XBUFFER  context;
   XBUFFER  newtrafficsecret;
 
@@ -902,7 +902,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECT
       return false;
     }
 
-  if(!HKDF->ExpandLabel((*trafficsecret), DIOSTREAMTLSKEYSCHEDULE_LABEL_TRAFFICUPDATE, context, hashsize, newtrafficsecret))
+  if(!HKDF->ExpandLabel((*trafficsecret), DIOSTREAMTLS13KEYSCHEDULE_LABEL_TRAFFICUPDATE, context, hashsize, newtrafficsecret))
     {
       return false;
     }
@@ -915,7 +915,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECT
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::IsDirectionOfTheClient(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::IsDirectionOfTheClient(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Resolve a direction into one of the two roles, using the role of this end
 * @note       INTERNAL. This single method is the whole of the client and server asymmetry of the key schedule.
 * @ingroup    DATAIO
@@ -925,7 +925,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECT
 * @return     bool : true if that direction belongs to the client; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::IsDirectionOfTheClient(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+bool DIOSTREAMTLS13KEYSCHEDULE::IsDirectionOfTheClient(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 {
   if(direction == DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)
     {
@@ -938,7 +938,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::IsDirectionOfTheClient(DIOSTREAMTLSKEYSCHEDULE_DIR
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSKEYSCHEDULE::DeriveEmptySecret(XBUFFER& secret, XCHAR* label, XBUFFER& derivedsecret)
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::DeriveEmptySecret(XBUFFER& secret, XCHAR* label, XBUFFER& derivedsecret)
 * @brief      Derive-Secret(secret, label, "") : the transitions between the three stages of the schedule
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -950,7 +950,7 @@ bool DIOSTREAMTLSKEYSCHEDULE::IsDirectionOfTheClient(DIOSTREAMTLSKEYSCHEDULE_DIR
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSKEYSCHEDULE::DeriveEmptySecret(XBUFFER& secret, XCHAR* label, XBUFFER& derivedsecret)
+bool DIOSTREAMTLS13KEYSCHEDULE::DeriveEmptySecret(XBUFFER& secret, XCHAR* label, XBUFFER& derivedsecret)
 {
   XBUFFER nomessages;
   XBUFFER transcripthash;
@@ -966,13 +966,13 @@ bool DIOSTREAMTLSKEYSCHEDULE::DeriveEmptySecret(XBUFFER& secret, XCHAR* label, X
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void DIOSTREAMTLSKEYSCHEDULE::Clean()
+* @fn         void DIOSTREAMTLS13KEYSCHEDULE::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLSKEYSCHEDULE::Clean()
+void DIOSTREAMTLS13KEYSCHEDULE::Clean()
 {
   ciphersuite = 0;
   role        = DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT;

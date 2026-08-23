@@ -498,6 +498,53 @@ DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS_MSG_ALERT::GetDescription()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         XCHAR* DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(DIOSTREAMTLS_ALERT_DESCRIPTION description)
+* @brief      Get the RFC 8446 name of an alert description, for traces and logs
+* @note       STATIC
+* @ingroup    DATAIO
+*
+* @param[in]  description : Alert description value.
+*
+* @return     XCHAR* : Name of the alert; "unknown" when it is not a description defined by RFC 8446.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XCHAR* DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(DIOSTREAMTLS_ALERT_DESCRIPTION description)
+{
+  switch(description)
+    {
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_CLOSE_NOTIFY                    : return __L("close_notify");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE              : return __L("unexpected_message");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_RECORD_MAC                  : return __L("bad_record_mac");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_RECORD_OVERFLOW                 : return __L("record_overflow");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE               : return __L("handshake_failure (nothing offered is acceptable)");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE                 : return __L("bad_certificate");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_UNSUPPORTED_CERTIFICATE         : return __L("unsupported_certificate");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_REVOKED             : return __L("certificate_revoked");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_EXPIRED             : return __L("certificate_expired");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_UNKNOWN             : return __L("certificate_unknown");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER               : return __L("illegal_parameter");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_UNKNOWN_CA                      : return __L("unknown_ca");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_ACCESS_DENIED                   : return __L("access_denied");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR                    : return __L("decode_error");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_DECRYPT_ERROR                   : return __L("decrypt_error");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION                : return __L("protocol_version (the server does NOT support TLS 1.3)");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY           : return __L("insufficient_security");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR                  : return __L("internal_error");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_MISSING_EXTENSION               : return __L("missing_extension");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_UNSUPPORTED_EXTENSION           : return __L("unsupported_extension");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_UNRECOGNIZED_NAME               : return __L("unrecognized_name (SNI not served here)");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE : return __L("bad_certificate_status_response");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_UNKNOWN_PSK_IDENTITY            : return __L("unknown_psk_identity");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_REQUIRED            : return __L("certificate_required");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_NO_APPLICATION_PROTOCOL         : return __L("no_application_protocol (ALPN not accepted)");
+    }
+
+  return __L("unknown");
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void DIOSTREAMTLS_MSG_ALERT::SetDescription(DIOSTREAMTLS_ALERT_DESCRIPTION description)
 * @brief      Set the alert description
 * @ingroup    DATAIO

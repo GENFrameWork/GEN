@@ -183,6 +183,9 @@ class CIPHERCERTIFICATEX509
     XVECTOR<XSTRING*>*                      GetSubjectAlternativeNamesDNS           ();
     XVECTOR<XBUFFER*>*                      GetSubjectAlternativeNamesIP            ();
 
+    bool                                    HasCAIssuersURL                         ();
+    XSTRING*                                GetCAIssuersURL                         ();
+
     bool                                    IsServerNameValid                       (XCHAR* servername);
     bool                                    VerifySignature                         (CIPHERKEY* issuerpublickey);
 
@@ -239,6 +242,10 @@ class CIPHERCERTIFICATEX509
 
     XVECTOR<XSTRING*>                       subjectalternativenamesDNS;
     XVECTOR<XBUFFER*>                       subjectalternativenamesIP;
+
+    bool                                    hasauthorityinfoaccess;
+    bool                                    hascaissuersurl;
+    XSTRING                                 caissuersurl;
 };
 
 

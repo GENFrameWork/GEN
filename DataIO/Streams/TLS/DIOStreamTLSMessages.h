@@ -77,11 +77,19 @@
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_AES256_SHA384                  0xC028    // TLSv1.2 
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256           0xC02B    // TLSv1.2 
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384           0xC02C    // TLSv1.2 
-#define DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256             0xC02F    // TLSv1.2 
+#define DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256             0xC02F    // TLSv1.2
+
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384             0xC030    // TLSv1.2 
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256       0xCCA8    // TLSv1.2
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256     0xCCA9    // TLSv1.2
 #define DIOSTREAMTLS_MSG_CIPHER_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256         0xCCAA    // TLSv1.2 
+
+// TLS 1.2 (RFC 5246 + RFC 5289) suites supported by DIOSTREAMTLS12: ECDHE key exchange with AEAD GCM only.
+// The CBC ones are deliberately left out; they need MAC-then-encrypt, and no modern server requires them.
+#define DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256             0xC02B
+#define DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384             0xC02C
+#define DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256               0xC02F
+#define DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384               0xC030
                                         
 #define DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL                                 0x00
 
@@ -195,7 +203,28 @@ enum DIOSTREAMTLS_ALPN_TYPE
   DIOSTREAMTLS_ALPN_TYPE_UNKNOWN        = -1 ,
   DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1       ,
   DIOSTREAMTLS_ALPN_TYPE_HTTP_2         ,
-  DIOSTREAMTLS_ALPN_TYPE_HTTP_3         
+  DIOSTREAMTLS_ALPN_TYPE_HTTP_3
+};
+
+
+// Shared between the TLS 1.3 key schedule (DIOSTREAMTLS13KEYSCHEDULE) and the TLS 1.2 one (DIOSTREAMTLS12KEYSCHEDULE
+// / DIOSTREAMTLS12RECORD / DIOSTREAMTLS12SESSION): every secret or key is asked for by role/direction, never by a
+// version-specific type, which is what lets both parallel implementations share this one vocabulary. Kept here
+// (not in either version-numbered KeySchedule header) precisely because it is common ground, not exclusive to one.
+
+enum DIOSTREAMTLSKEYSCHEDULE_ROLE
+{
+  DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT               = 0 ,
+  DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER                   ,
+};
+
+
+enum DIOSTREAMTLSKEYSCHEDULE_DIRECTION
+{
+  DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL           = 0 ,                       // What this end writes
+  DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE              ,                       // What the other end writes
+
+  DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS
 };
 
 
@@ -296,6 +325,8 @@ class DIOSTREAMTLS_MSG_ALERT : public DIOSTREAMTLS_MSG_INTERFACE
 
     DIOSTREAMTLS_ALERT_DESCRIPTION          GetDescription                                  ();
     void                                    SetDescription                                  (DIOSTREAMTLS_ALERT_DESCRIPTION description);
+
+    static XCHAR*                           GetDescriptionString                            (DIOSTREAMTLS_ALERT_DESCRIPTION description);
 
     bool                                    SetToBuffer                                     (XBUFFER& buffer, bool showdebug);
     bool                                    GetFromBuffer                                   (XBUFFER& buffer, bool showdebug);

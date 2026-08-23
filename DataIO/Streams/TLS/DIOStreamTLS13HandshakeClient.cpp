@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       DIOStreamTLSHandshakeClient.cpp
+* @file       DIOStreamTLS13HandshakeClient.cpp
 *
-* @class      DIOSTREAMTLSHANDSHAKECLIENT
+* @class      DIOSTREAMTLS13HANDSHAKECLIENT
 * @brief      Data Input/Output Stream TLS 1.3 Client Handshake class
 * @ingroup    DATAIO
 *
@@ -34,7 +34,7 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "DIOStreamTLSHandshakeClient.h"
+#include "DIOStreamTLS13HandshakeClient.h"
 #include "DIOStreamTLSConfig.h"
 #include "DIOStreamTLSSignature.h"
 #include "DIOStreamTLSMessagesHandShakeClientHello.h"
@@ -45,8 +45,10 @@
 #include "XFactory.h"
 #include "XRand.h"
 #include "XString.h"
+#include "XTrace.h"
 
 #include "CipherCertificateX509.h"
+#include "DIOStreamTLSAIAFetcher.h"
 
 
 
@@ -66,12 +68,12 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLSHANDSHAKECLIENT::DIOSTREAMTLSHANDSHAKECLIENT()
+* @fn         DIOSTREAMTLS13HANDSHAKECLIENT::DIOSTREAMTLS13HANDSHAKECLIENT()
 * @brief      Constructor of class
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLSHANDSHAKECLIENT::DIOSTREAMTLSHANDSHAKECLIENT()
+DIOSTREAMTLS13HANDSHAKECLIENT::DIOSTREAMTLS13HANDSHAKECLIENT()
 {
   Clean();
 }
@@ -79,13 +81,13 @@ DIOSTREAMTLSHANDSHAKECLIENT::DIOSTREAMTLSHANDSHAKECLIENT()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLSHANDSHAKECLIENT::~DIOSTREAMTLSHANDSHAKECLIENT()
+* @fn         DIOSTREAMTLS13HANDSHAKECLIENT::~DIOSTREAMTLS13HANDSHAKECLIENT()
 * @brief      Destructor of class
 * @note       VIRTUAL
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLSHANDSHAKECLIENT::~DIOSTREAMTLSHANDSHAKECLIENT()
+DIOSTREAMTLS13HANDSHAKECLIENT::~DIOSTREAMTLS13HANDSHAKECLIENT()
 {
   End();
   Clean();
@@ -94,7 +96,7 @@ DIOSTREAMTLSHANDSHAKECLIENT::~DIOSTREAMTLSHANDSHAKECLIENT()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Ini(DIOSTREAMTLSSESSION* session, bool allowunauthenticatedserver)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Ini(DIOSTREAMTLS13SESSION* session, bool allowunauthenticatedserver)
 * @brief      Initialize the client handshake over a role-neutral session
 * @ingroup    DATAIO
 *
@@ -104,7 +106,7 @@ DIOSTREAMTLSHANDSHAKECLIENT::~DIOSTREAMTLSHANDSHAKECLIENT()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::Ini(DIOSTREAMTLSSESSION* session, bool allowunauthenticatedserver)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::Ini(DIOSTREAMTLS13SESSION* session, bool allowunauthenticatedserver)
 {
   End();
 
@@ -116,12 +118,13 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Ini(DIOSTREAMTLSSESSION* session, bool allowun
 
   this->session                    = session;
   this->allowunauthenticatedserver = allowunauthenticatedserver;
-  state                            = DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE;
+  state                            = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE;
   isini                            = true;
 
   ciphersuites.Add(session->GetKeySchedule()->GetCipherSuite());
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
   signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
@@ -134,12 +137,12 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Ini(DIOSTREAMTLSSESSION* session, bool allowun
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void DIOSTREAMTLSHANDSHAKECLIENT::End()
+* @fn         void DIOSTREAMTLS13HANDSHAKECLIENT::End()
 * @brief      End the client handshake and release decoded peer messages
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLSHANDSHAKECLIENT::End()
+void DIOSTREAMTLS13HANDSHAKECLIENT::End()
 {
   if(servercertificate)
     {
@@ -175,32 +178,34 @@ void DIOSTREAMTLSHANDSHAKECLIENT::End()
   expectedservername.Empty();
 
   session                      = NULL;
-  state                        = DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE;
+  state                        = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE;
   isini                        = false;
   allowunauthenticatedserver   = false;
   certificaterequested         = false;
   authenticationconfigured    = false;
   serverauthenticated          = false;
-  authenticationerror         = DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
+  authenticationerror         = DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
   certificatevalidationerror  = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
   hasvalidationdatetime       = false;
   applicationprotocolnegotiated = false;
   applicationprotocol           = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
   currentkeysharegroup          = 0;
   helloretryrequestprocessed    = false;
+  aiafetchactive                = true;
+  aiafetchtimeout                = DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::IsIni()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsIni()
 * @brief      Check whether the client handshake is initialized
 * @ingroup    DATAIO
 *
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::IsIni()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsIni()
 {
   return isini;
 }
@@ -208,14 +213,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::IsIni()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLSHANDSHAKECLIENT_STATE DIOSTREAMTLSHANDSHAKECLIENT::GetState()
+* @fn         DIOSTREAMTLS13HANDSHAKECLIENT_STATE DIOSTREAMTLS13HANDSHAKECLIENT::GetState()
 * @brief      Get the current client handshake state
 * @ingroup    DATAIO
 *
-* @return     DIOSTREAMTLSHANDSHAKECLIENT_STATE : Requested value.
+* @return     DIOSTREAMTLS13HANDSHAKECLIENT_STATE : Requested value.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLSHANDSHAKECLIENT_STATE DIOSTREAMTLSHANDSHAKECLIENT::GetState()
+DIOSTREAMTLS13HANDSHAKECLIENT_STATE DIOSTREAMTLS13HANDSHAKECLIENT::GetState()
 {
   return state;
 }
@@ -223,45 +228,45 @@ DIOSTREAMTLSHANDSHAKECLIENT_STATE DIOSTREAMTLSHANDSHAKECLIENT::GetState()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::IsServerFinishedVerified()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsServerFinishedVerified()
 * @brief      Check whether the server Finished has been verified
 * @ingroup    DATAIO
 *
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::IsServerFinishedVerified()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsServerFinishedVerified()
 {
-  return ((state == DIOSTREAMTLSHANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED) ||
-          (state == DIOSTREAMTLSHANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED));
+  return ((state == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED) ||
+          (state == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED));
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::IsHandshakeCompleted()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsHandshakeCompleted()
 * @brief      Check whether both application traffic directions are active
 * @ingroup    DATAIO
 *
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::IsHandshakeCompleted()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsHandshakeCompleted()
 {
-  return (state == DIOSTREAMTLSHANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED);
+  return (state == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED);
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::IsCertificateRequested()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsCertificateRequested()
 * @brief      Check whether the server requested a client certificate
 * @ingroup    DATAIO
 *
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::IsCertificateRequested()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsCertificateRequested()
 {
   return certificaterequested;
 }
@@ -269,14 +274,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::IsCertificateRequested()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::IsUnauthenticatedServerAllowed()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsUnauthenticatedServerAllowed()
 * @brief      Check whether the explicit Hito 2A unauthenticated mode is enabled
 * @ingroup    DATAIO
 *
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::IsUnauthenticatedServerAllowed()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsUnauthenticatedServerAllowed()
 {
   return allowunauthenticatedserver;
 }
@@ -284,14 +289,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::IsUnauthenticatedServerAllowed()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::IsServerAuthenticated()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsServerAuthenticated()
 * @brief      Check whether X.509 and CertificateVerify authenticated the server
 * @ingroup    DATAIO
 *
 * @return     bool : true if the server identity is authenticated; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::IsServerAuthenticated()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsServerAuthenticated()
 {
   return serverauthenticated;
 }
@@ -299,7 +304,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::IsServerAuthenticated()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
 * @brief      Copy the ordered TLS client capabilities from a stream configuration
 * @ingroup    DATAIO
 *
@@ -308,9 +313,9 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::IsServerAuthenticated()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
 {
-  if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE) || !config ||
+  if(!isini || !session || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE) || !config ||
      !config->GetCipherSuites() || config->GetCipherSuites()->IsEmpty() ||
      !config->GetSupportedGroups() || config->GetSupportedGroups()->IsEmpty() ||
      !config->GetSignatureSchemes() || config->GetSignatureSchemes()->IsEmpty() ||
@@ -339,19 +344,35 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
       XWORD supportedgroup = config->GetSupportedGroups()->Get(c);
 
       if(((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1)) || !supportedgroups.Add(supportedgroup)) return false;
+          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
+          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) || !supportedgroups.Add(supportedgroup)) return false;
     }
 
+  // A signature scheme this build cannot actually verify is SKIPPED, not treated as a fatal configuration error.
+  // Advertising only what can be verified is the correct behaviour anyway, and it keeps a configuration that
+  // names a newer scheme (for example a DIOSTREAMTLSCONFIG updated ahead of this file) from disabling the whole
+  // TLS client: previously a single unrecognised entry made Capabilities_Set() fail, which aborts DIOSTREAMTLS
+  // ::Open() before the handshake and so breaks EVERY TLS connection, including plain RSA servers. An empty
+  // resulting list is still an error, since a ClientHello without signature algorithms is not usable.
   for(XDWORD c=0; c<config->GetSignatureSchemes()->GetSize(); c++)
     {
       XWORD signaturescheme = config->GetSignatureSchemes()->Get(c);
 
-      if((signaturescheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256) &&
-         (signaturescheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) &&
-         (signaturescheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384) &&
-         (signaturescheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512)) return false;
+      switch(signaturescheme)
+        {
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256    :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384    :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512    : break;
+                                                             default   : continue;
+        }
+
       if(!signatureschemes.Add(signaturescheme)) return false;
     }
+
+  if(signatureschemes.IsEmpty()) return false;
 
   for(XDWORD c=0; c<config->GetCertificateSignatureSchemes()->GetSize(); c++)
     {
@@ -368,11 +389,13 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256     :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384     :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512     : break;
-                                                            default : return false;
+                                                            default : continue;
         }
 
       if(!certificatesignatureschemes.Add(signaturescheme)) return false;
     }
+
+  if(certificatesignatureschemes.IsEmpty()) return false;
 
   if(config->GetApplicationProtocols())
     {
@@ -393,14 +416,47 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::IsApplicationProtocolNegotiated()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::SignatureSchemes_WidenECDSA()
+* @brief      Last-resort fallback: add the three ECDSA schemes to signature_algorithms for one retry attempt
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKECLIENT::SignatureSchemes_WidenECDSA()
+{
+  if(!isini || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE) || signatureschemes.IsEmpty()) return false;
+
+  static const XWORD ecdsaschemes[3] = { DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
+                                          DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384,
+                                          DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 };
+
+  for(XDWORD e=0; e<3; e++)
+    {
+      bool alreadypresent = false;
+
+      for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
+        {
+          if(signatureschemes.Get(c) == ecdsaschemes[e]) { alreadypresent = true; break; }
+        }
+
+      if(!alreadypresent && !signatureschemes.Add(ecdsaschemes[e])) return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsApplicationProtocolNegotiated()
 * @brief      Check whether the server selected an ALPN application protocol
 * @ingroup    DATAIO
 *
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::IsApplicationProtocolNegotiated()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsApplicationProtocolNegotiated()
 {
   return applicationprotocolnegotiated;
 }
@@ -408,14 +464,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::IsApplicationProtocolNegotiated()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLSHANDSHAKECLIENT::GetApplicationProtocol()
+* @fn         DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13HANDSHAKECLIENT::GetApplicationProtocol()
 * @brief      Get the ALPN application protocol selected by the server
 * @ingroup    DATAIO
 *
 * @return     DIOSTREAMTLS_ALPN_TYPE : Requested value.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLSHANDSHAKECLIENT::GetApplicationProtocol()
+DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13HANDSHAKECLIENT::GetApplicationProtocol()
 {
   return applicationprotocol;
 }
@@ -423,7 +479,7 @@ DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLSHANDSHAKECLIENT::GetApplicationProtocol()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
 * @brief      Configure the expected server identity and explicit X.509 trust anchors
 * @ingroup    DATAIO
 *
@@ -434,13 +490,13 @@ DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLSHANDSHAKECLIENT::GetApplicationProtocol()
 * @return     bool : true if the authentication policy was copied; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
 {
-  if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE) ||
+  if(!isini || !session || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE) ||
      allowunauthenticatedserver || !servername || !servername[0] ||
      !trustedroots || trustedroots->IsEmpty())
     {
-      return SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
+      return SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
     }
 
   this->trustedroots.DeleteContents();
@@ -455,14 +511,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTOR<
 
       if(!root || root->IsEmpty())
         {
-          return SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
+          return SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
         }
 
       copy = GEN_NEW XBUFFER();
       if(!copy || !copy->Add((*root)) || !this->trustedroots.Add(copy))
         {
           if(copy) GEN_DELETE copy;
-          return SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
+          return SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
         }
     }
 
@@ -473,14 +529,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTOR<
     {
       if(!datetime->IsValidDate() || !validationdatetime.CopyFrom(datetime))
         {
-          return SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
+          return SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
         }
 
       hasvalidationdatetime = true;
     }
 
   authenticationconfigured   = true;
-  authenticationerror        = DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
+  authenticationerror        = DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
   certificatevalidationerror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
 
   return true;
@@ -489,14 +545,32 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTOR<
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR DIOSTREAMTLSHANDSHAKECLIENT::GetAuthenticationError()
+* @fn         void DIOSTREAMTLS13HANDSHAKECLIENT::AIAFetch_Set(bool active, int timeout)
+* @brief      Configure best-effort AuthorityInfoAccess fetching for an incomplete certificate chain
+* @ingroup    DATAIO
+*
+* @param[in]  active : true to fetch a missing intermediate via id-ad-caIssuers when the chain the server sent
+*             does not reach a trusted root by itself; false to keep the previous strict behaviour.
+* @param[in]  timeout : Fetch connect / idle timeout, in seconds.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLS13HANDSHAKECLIENT::AIAFetch_Set(bool active, int timeout)
+{
+  aiafetchactive  = active;
+  aiafetchtimeout = (timeout > 0)?timeout:DIOSTREAMTLSAIAFETCHER_TIMEOUT;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR DIOSTREAMTLS13HANDSHAKECLIENT::GetAuthenticationError()
 * @brief      Get the last server authentication error
 * @ingroup    DATAIO
 *
-* @return     DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR : Authentication result.
+* @return     DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR : Authentication result.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR DIOSTREAMTLSHANDSHAKECLIENT::GetAuthenticationError()
+DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR DIOSTREAMTLS13HANDSHAKECLIENT::GetAuthenticationError()
 {
   return authenticationerror;
 }
@@ -504,14 +578,14 @@ DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR DIOSTREAMTLSHANDSHAKECLIENT::Get
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         CIPHERCERTIFICATEX509VALIDATOR_ERROR DIOSTREAMTLSHANDSHAKECLIENT::GetCertificateValidationError()
+* @fn         CIPHERCERTIFICATEX509VALIDATOR_ERROR DIOSTREAMTLS13HANDSHAKECLIENT::GetCertificateValidationError()
 * @brief      Get the detailed X.509 validation result
 * @ingroup    DATAIO
 *
 * @return     CIPHERCERTIFICATEX509VALIDATOR_ERROR : X.509 validation result.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-CIPHERCERTIFICATEX509VALIDATOR_ERROR DIOSTREAMTLSHANDSHAKECLIENT::GetCertificateValidationError()
+CIPHERCERTIFICATEX509VALIDATOR_ERROR DIOSTREAMTLS13HANDSHAKECLIENT::GetCertificateValidationError()
 {
   return certificatevalidationerror;
 }
@@ -519,14 +593,14 @@ CIPHERCERTIFICATEX509VALIDATOR_ERROR DIOSTREAMTLSHANDSHAKECLIENT::GetCertificate
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE* DIOSTREAMTLSHANDSHAKECLIENT::GetServerCertificate()
+* @fn         DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE* DIOSTREAMTLS13HANDSHAKECLIENT::GetServerCertificate()
 * @brief      Get the retained server certificate message
 * @ingroup    DATAIO
 *
 * @return     DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE* : Pointer to the requested object; NULL if it is not available.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE* DIOSTREAMTLSHANDSHAKECLIENT::GetServerCertificate()
+DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE* DIOSTREAMTLS13HANDSHAKECLIENT::GetServerCertificate()
 {
   return servercertificate;
 }
@@ -534,14 +608,14 @@ DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE* DIOSTREAMTLSHANDSHAKECLIENT::GetServerCe
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* DIOSTREAMTLSHANDSHAKECLIENT::GetServerCertificateVerify()
+* @fn         DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* DIOSTREAMTLS13HANDSHAKECLIENT::GetServerCertificateVerify()
 * @brief      Get the retained server CertificateVerify message
 * @ingroup    DATAIO
 *
 * @return     DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* : Pointer to the requested object; NULL if it is not available.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* DIOSTREAMTLSHANDSHAKECLIENT::GetServerCertificateVerify()
+DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* DIOSTREAMTLS13HANDSHAKECLIENT::GetServerCertificateVerify()
 {
   return servercertificateverify;
 }
@@ -549,7 +623,7 @@ DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* DIOSTREAMTLSHANDSHAKECLIENT::GetSe
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER& clienthello, XBUFFER& records)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER& clienthello, XBUFFER& records)
 * @brief      Create and register a TLS 1.3 ClientHello with a fresh key share
 * @ingroup    DATAIO
 *
@@ -560,7 +634,7 @@ DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY* DIOSTREAMTLSHANDSHAKECLIENT::GetSe
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER& clienthello, XBUFFER& records)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER& clienthello, XBUFFER& records)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO> message;
   DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO*                           body;
@@ -571,7 +645,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
   XBUFFER                                                           keysharepublic;
   bool                                                              status;
 
-  if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE) ||
+  if(!isini || !session || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE) ||
      !session->GetTranscript()->IsEmpty() || (&clienthello == &records))
     {
       return SetError();
@@ -580,7 +654,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
   if(!allowunauthenticatedserver &&
      (!authenticationconfigured || !servername || !servername[0] || expectedservername.Compare(servername, true)))
     {
-      SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
+      SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
       return SetError();
     }
 
@@ -798,7 +872,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Start(XBUFFER& clienthello)
 * @brief      Register the exact ClientHello sent by this end and start the transcript
 * @ingroup    DATAIO
 *
@@ -807,7 +881,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFER&
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::Start(XBUFFER& clienthello)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO> message;
   XBUFFER                                                          workbuffer;
@@ -815,7 +889,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
   bool                                                             supportedgroupsfound = false;
   bool                                                             keysharefound = false;
 
-  if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE) ||
+  if(!isini || !session || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE) ||
      !session->GetTranscript()->IsEmpty())
     {
       return SetError();
@@ -921,7 +995,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
       return SetError();
     }
 
-  state = DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO;
+  state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_SERVERHELLO;
   currentkeysharegroup = offeredkeysharegroups.Get(0);
 
   return true;
@@ -930,7 +1004,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryrequest, XBUFFER& clienthello, XBUFFER& records)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryrequest, XBUFFER& clienthello, XBUFFER& records)
 * @brief      Validate a TLS 1.3 HelloRetryRequest and create the second ClientHello
 * @ingroup    DATAIO
 *
@@ -941,7 +1015,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Start(XBUFFER& clienthello)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryrequest, XBUFFER& clienthello,
+bool DIOSTREAMTLS13HANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryrequest, XBUFFER& clienthello,
                                                             XBUFFER& records)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> hrr;
@@ -958,7 +1032,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryr
   bool                                                              cookiepresent = false;
 
   if(!isini || !session || helloretryrequestprocessed ||
-     (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO) ||
+     (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_SERVERHELLO) ||
      firstclienthello.IsEmpty() || (&clienthello == &records))
     {
       return SetError();
@@ -1128,7 +1202,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryr
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
 * @brief      Calculate the negotiated shared secret from ServerHello and activate handshake keys
 * @ingroup    DATAIO
 *
@@ -1137,14 +1211,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretryr
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> message;
   XBUFFER                                                          workbuffer;
   XBUFFER                                                          sharedsecret;
   XBUFFER*                                                         peerpublickey = NULL;
 
-  if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO))
+  if(!isini || !session || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_SERVERHELLO))
     {
       return SetError();
     }
@@ -1197,7 +1271,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUFFER& sharedsecret)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUFFER& sharedsecret)
 * @brief      Validate ServerHello and activate the handshake traffic keys
 * @note       This overload keeps deterministic protocol vectors independent of random private keys.
 * @ingroup    DATAIO
@@ -1208,7 +1282,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUFFER& sharedsecret)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUFFER& sharedsecret)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> message;
   XBUFFER                                                          workbuffer;
@@ -1216,7 +1290,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUF
   bool                                                             keysharevalid = false;
 
   if(!isini || !session ||
-     (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO))
+     (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_SERVERHELLO))
     {
       return SetError();
     }
@@ -1259,7 +1333,9 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUF
                                                                        (((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
                                                                          (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY)) ||
                                                                         ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
-                                                                         (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE))))
+                                                                         (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE)) ||
+                                                                        ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) &&
+                                                                         (key->GetKeyData()->GetSize() == CIPHERECDSA_P384_PUBLICKEY_SIZE))))
                                                                       {
                                                                         keysharevalid = true;
                                                                       }
@@ -1281,7 +1357,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUF
       return SetError();
     }
 
-  state = DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS;
+  state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS;
 
   return true;
 }
@@ -1289,7 +1365,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUF
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinished, XBUFFER& records)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinished, XBUFFER& records)
 * @brief      Create the client Finished and activate local application traffic keys
 * @note       Client authentication is not implemented; a preceding CertificateRequest is refused here.
 * @ingroup    DATAIO
@@ -1300,13 +1376,13 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XBUF
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinished, XBUFFER& records)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinished, XBUFFER& records)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_FINISHED> finished;
   XBUFFER                                                       transcripthash;
   XBUFFER                                                       verifydata;
 
-  if(!isini || !session || (state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED) ||
+  if(!isini || !session || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED) ||
      certificaterequested || (&clientfinished == &records))
     {
       return SetError();
@@ -1335,7 +1411,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinished,
       return SetError();
     }
 
-  state = DIOSTREAMTLSHANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED;
+  state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED;
 
   return true;
 }
@@ -1343,7 +1419,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinished,
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::RecordInput_Add(XBYTE* data, XDWORD size)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::RecordInput_Add(XBYTE* data, XDWORD size)
 * @brief      Add received transport bytes to the TLS session
 * @ingroup    DATAIO
 *
@@ -1353,7 +1429,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinished,
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::RecordInput_Add(XBYTE* data, XDWORD size)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::RecordInput_Add(XBYTE* data, XDWORD size)
 {
   if(!isini || !session)
     {
@@ -1366,7 +1442,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::RecordInput_Add(XBYTE* data, XDWORD size)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::RecordInput_Add(XBUFFER& data)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::RecordInput_Add(XBUFFER& data)
 * @brief      Add a received transport buffer to the TLS session
 * @ingroup    DATAIO
 *
@@ -1375,7 +1451,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::RecordInput_Add(XBYTE* data, XDWORD size)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::RecordInput_Add(XBUFFER& data)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::RecordInput_Add(XBUFFER& data)
 {
   return RecordInput_Add(data.Get(), data.GetSize());
 }
@@ -1383,7 +1459,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::RecordInput_Add(XBUFFER& data)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Process()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Process()
 * @brief      Process every complete record and handshake message currently accumulated
 * @note       An incomplete record or message is retained and is not an error.
 * @ingroup    DATAIO
@@ -1391,9 +1467,9 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::RecordInput_Add(XBUFFER& data)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::Process()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::Process()
 {
-  if(!isini || !session || (state == DIOSTREAMTLSHANDSHAKECLIENT_STATE_ERROR))
+  if(!isini || !session || (state == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_ERROR))
     {
       return false;
     }
@@ -1401,17 +1477,17 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Process()
   while(true)
     {
       DIOSTREAMTLS_CONTENTTYPE    contenttype = (DIOSTREAMTLS_CONTENTTYPE)0;
-      DIOSTREAMTLSSESSION_RESULT  result;
+      DIOSTREAMTLS13SESSION_RESULT  result;
       XBUFFER                     plain;
 
       result = session->Record_Extract(contenttype, plain);
 
-      if(result == DIOSTREAMTLSSESSION_RESULT_INCOMPLETE)
+      if(result == DIOSTREAMTLS13SESSION_RESULT_INCOMPLETE)
         {
           return true;
         }
 
-      if(result == DIOSTREAMTLSSESSION_RESULT_ERROR)
+      if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)
         {
           return SetError();
         }
@@ -1428,10 +1504,15 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Process()
 
                                                                   if(!alert.GetFromBuffer(plain, false) || !plain.IsEmpty()) return SetError();
 
+                                                                  // The peer said WHY it is refusing. Without this the caller only sees
+                                                                  // "Handshake_Client() returned false" and every cause looks identical.
+                                                                  // description 40 = handshake_failure (no acceptable parameters offered),
+                                                                  // 47 = illegal_parameter, 42/48 = certificate/CA problems, 70 = version.
                                                                   return SetError();
                                                                 }
 
-                                                       default : return SetError();
+                                                       default :
+                                                                 return SetError();
         }
 
       while(true)
@@ -1440,12 +1521,12 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Process()
 
           result = session->Handshake_Extract(handshake);
 
-          if(result == DIOSTREAMTLSSESSION_RESULT_INCOMPLETE)
+          if(result == DIOSTREAMTLS13SESSION_RESULT_INCOMPLETE)
             {
               break;
             }
 
-          if(result == DIOSTREAMTLSSESSION_RESULT_ERROR)
+          if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)
             {
               return SetError();
             }
@@ -1461,7 +1542,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Process()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Handshake_Process(XBUFFER& message)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Handshake_Process(XBUFFER& message)
 * @brief      Process one exact server handshake message according to the current state
 * @ingroup    DATAIO
 *
@@ -1470,12 +1551,12 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Process()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::Handshake_Process(XBUFFER& message)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::Handshake_Process(XBUFFER& message)
 {
   DIOSTREAMTLS_MSG_HANDSHAKE genericmessage;
   XBUFFER                    workbuffer;
 
-  if(!isini || !session || (state == DIOSTREAMTLSHANDSHAKECLIENT_STATE_ERROR))
+  if(!isini || !session || (state == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_ERROR))
     {
       return false;
     }
@@ -1501,7 +1582,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Handshake_Process(XBUFFER& message)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message)
 * @brief      Decode EncryptedExtensions and advance the transcript
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1511,12 +1592,12 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Handshake_Process(XBUFFER& message)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_ENCRYPTEDEXTENSIONS> encryptedextensions;
   XBUFFER                                                                   workbuffer;
 
-  if(state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS)
+  if(state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS)
     {
       return SetError();
     }
@@ -1551,7 +1632,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message)
 
   if(!session->Transcript_Add(message)) return SetError();
 
-  state = DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_CERTIFICATE;
+  state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATE;
 
   return true;
 }
@@ -1559,7 +1640,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
 * @brief      Decode an optional CertificateRequest and advance the transcript
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1569,13 +1650,13 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEREQUEST> certificaterequest;
   XBUFFER                                                                 workbuffer;
   bool                                                                    signaturealgorithms = false;
 
-  if((state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_CERTIFICATE) || certificaterequested)
+  if((state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATE) || certificaterequested)
     {
       return SetError();
     }
@@ -1610,7 +1691,68 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUFFER*>& certificatechain)
+* @brief      Retry validation after completing a chain the server sent incomplete, via AuthorityInfoAccess
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in,out] certificatechain : Chain last passed to certificatevalidator.Validate(), extended in place with
+*                each fetched intermediate. Only called right after that call left certificatevalidator holding an
+*                UNTRUSTEDROOT error, so GetCertificateChain() below reflects the chain as received from the server.
+*
+* @return     bool : true if the chain now validates after the fetch(es); otherwise false, and certificatevalidator
+*             is left holding whichever error the last attempt produced (its original UNTRUSTEDROOT error when no
+*             fetch was even possible).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUFFER*>& certificatechain)
+{
+  if(!aiafetchactive || (certificatevalidator.GetError() != CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT))
+    {
+      return false;
+    }
+
+  XVECTOR<XBUFFER*> fetchedcerts;
+  bool              validated = false;
+
+  for(int attempt=0; attempt<DIOSTREAMTLSAIAFETCHER_MAXCHAINFETCHES; attempt++)
+    {
+      XVECTOR<CIPHERCERTIFICATEX509*>* decodedchain = certificatevalidator.GetCertificateChain();
+      CIPHERCERTIFICATEX509*           chainend     = decodedchain?decodedchain->GetLast():NULL;
+
+      if(!chainend || !chainend->HasCAIssuersURL()) break;
+
+      XBUFFER* fetched = GEN_NEW XBUFFER();
+      if(!fetched) break;
+
+      DIOSTREAMTLSAIAFETCHER fetcher;
+      if(!fetcher.Fetch((*chainend->GetCAIssuersURL()), (*fetched), aiafetchtimeout) ||
+         !fetchedcerts.Add(fetched) || !certificatechain.Add(fetched))
+        {
+          GEN_DELETE fetched;
+          break;
+        }
+
+      if(certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
+                                       hasvalidationdatetime?&validationdatetime:NULL))
+        {
+          validated = true;
+          break;
+        }
+
+      if(certificatevalidator.GetError() != CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT) break;
+    }
+
+  fetchedcerts.DeleteContents();
+  fetchedcerts.DeleteAll();
+
+  return validated;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
 * @brief      Decode and retain the server Certificate message
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1620,13 +1762,13 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE> certificate;
   XBUFFER                                                          workbuffer;
   XVECTOR<XBUFFER*>                                                certificatechain;
 
-  if(state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_CERTIFICATE)
+  if(state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATE)
     {
       return SetError();
     }
@@ -1645,7 +1787,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
     {
       if(!authenticationconfigured)
         {
-          SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
+          SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
           return SetError();
         }
 
@@ -1656,16 +1798,21 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
           entry = certificate.GetBody()->CertificateList_GetAll()->Get(c);
           if(!entry || !entry->GetCertificateData() || !certificatechain.Add(entry->GetCertificateData()))
             {
-              SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
+              SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
               return SetError();
             }
         }
 
       if(!certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
-                                        hasvalidationdatetime?&validationdatetime:NULL))
+                                        hasvalidationdatetime?&validationdatetime:NULL) &&
+         !CertificateChain_CompleteViaAIA(certificatechain))
         {
           certificatevalidationerror = certificatevalidator.GetError();
-          SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
+
+          // 2=invalid certificate, 3=unsupported algorithm, 4=dates, 5=name, 6=key usage, 7=invalid CA,
+          // 8=invalid signature, 9=untrusted root, 10=unknown critical extension, 11=path length.
+
+          SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
           return SetError();
         }
 
@@ -1694,7 +1841,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
 
   if(servercertificate) GEN_DELETE servercertificate;
   servercertificate = decodedcertificate;
-  state             = DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_CERTIFICATEVERIFY;
+  state             = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATEVERIFY;
 
   return true;
 }
@@ -1702,7 +1849,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
 * @brief      Decode, cryptographically verify and retain the server CertificateVerify message
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1712,14 +1859,14 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY> certificateverify;
   XBUFFER                                                              workbuffer;
   XBUFFER                                                              transcripthash;
   XBUFFER                                                              signedcontent;
 
-  if(state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_CERTIFICATEVERIFY)
+  if(state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATEVERIFY)
     {
       return SetError();
     }
@@ -1730,7 +1877,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
      (certificateverify.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_VERIFY) ||
      !SignatureScheme_IsOffered(certificateverify.GetBody()->GetAlgorithm()))
     {
-      SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
+      SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
       return SetError();
     }
 
@@ -1745,7 +1892,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
          !DIOSTREAMTLSSIGNATURE::IsSupported(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey()) ||
          !session->TranscriptHash(transcripthash))
         {
-          SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
+          SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
           return SetError();
         }
 
@@ -1753,7 +1900,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
         {
           if(!signedcontent.Add((XBYTE)0x20))
             {
-              SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
+              SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
               return SetError();
             }
         }
@@ -1761,14 +1908,15 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
       if(!signedcontent.Add(context, sizeof(context)) || !signedcontent.Add((XBYTE)0x00) ||
          !signedcontent.Add(transcripthash))
         {
-          SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
+          SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
           return SetError();
         }
 
       if(!DIOSTREAMTLSSIGNATURE::Verify(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey(),
                                         signedcontent, *certificateverify.GetBody()->GetSignature()))
         {
-          SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
+
+          SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
           return SetError();
         }
 
@@ -1801,10 +1949,10 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
   if(!allowunauthenticatedserver)
     {
       serverauthenticated = true;
-      authenticationerror = DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
+      authenticationerror = DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
     }
 
-  state                   = DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_FINISHED;
+  state                   = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_FINISHED;
 
   return true;
 }
@@ -1812,7 +1960,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::Finished_Process(XBUFFER& message)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::Finished_Process(XBUFFER& message)
 * @brief      Verify the server Finished and activate remote application keys
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1822,13 +1970,13 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::Finished_Process(XBUFFER& message)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::Finished_Process(XBUFFER& message)
 {
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_FINISHED> finished;
   XBUFFER                                                       workbuffer;
   XBUFFER                                                       transcripthash;
 
-  if((state != DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_FINISHED) ||
+  if((state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_FINISHED) ||
      (!allowunauthenticatedserver && !serverauthenticated))
     {
       return SetError();
@@ -1852,7 +2000,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Finished_Process(XBUFFER& message)
       return SetError();
     }
 
-  state = DIOSTREAMTLSHANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED;
+  state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED;
 
   return true;
 }
@@ -1860,7 +2008,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Finished_Process(XBUFFER& message)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::SetError()
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::SetError()
 * @brief      Move the handshake to its terminal error state
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1868,9 +2016,9 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::Finished_Process(XBUFFER& message)
 * @return     bool : Always false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::SetError()
+bool DIOSTREAMTLS13HANDSHAKECLIENT::SetError()
 {
-  state = DIOSTREAMTLSHANDSHAKECLIENT_STATE_ERROR;
+  state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_ERROR;
 
   return false;
 }
@@ -1878,7 +2026,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SetError()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR error)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR error)
 * @brief      Set a server authentication error
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1888,12 +2036,12 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SetError()
 * @return     bool : Always false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::SetAuthenticationError(DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR error)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR error)
 {
   authenticationerror = error;
   serverauthenticated = false;
 
-  if(error == DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION)
+  if(error == DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION)
     {
       authenticationconfigured = false;
     }
@@ -1904,7 +2052,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SetAuthenticationError(DIOSTREAMTLSHANDSHAKECL
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::CipherSuite_IsOffered(XWORD ciphersuite)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::CipherSuite_IsOffered(XWORD ciphersuite)
 * @brief      Check whether a cipher suite was present in the registered ClientHello
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1914,7 +2062,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SetAuthenticationError(DIOSTREAMTLSHANDSHAKECL
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::CipherSuite_IsOffered(XWORD ciphersuite)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::CipherSuite_IsOffered(XWORD ciphersuite)
 {
   for(XDWORD c=0; c<offeredciphersuites.GetSize(); c++)
     {
@@ -1927,7 +2075,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CipherSuite_IsOffered(XWORD ciphersuite)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::SupportedGroup_IsOffered(XWORD supportedgroup)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::SupportedGroup_IsOffered(XWORD supportedgroup)
 * @brief      Check whether a group was present in the registered supported_groups extension
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1937,7 +2085,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::CipherSuite_IsOffered(XWORD ciphersuite)
 * @return     bool : true if the group was offered; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::SupportedGroup_IsOffered(XWORD supportedgroup)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::SupportedGroup_IsOffered(XWORD supportedgroup)
 {
   for(XDWORD c=0; c<offeredsupportedgroups.GetSize(); c++)
     {
@@ -1950,7 +2098,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SupportedGroup_IsOffered(XWORD supportedgroup)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::KeyShare_IsOffered(XWORD supportedgroup)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::KeyShare_IsOffered(XWORD supportedgroup)
 * @brief      Check whether a group was present in the registered key_share extension
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1960,7 +2108,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SupportedGroup_IsOffered(XWORD supportedgroup)
 * @return     bool : true if the key share was offered; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::KeyShare_IsOffered(XWORD supportedgroup)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::KeyShare_IsOffered(XWORD supportedgroup)
 {
   for(XDWORD c=0; c<offeredkeysharegroups.GetSize(); c++)
     {
@@ -1973,7 +2121,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::KeyShare_IsOffered(XWORD supportedgroup)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signaturescheme)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signaturescheme)
 * @brief      Check whether a signature scheme was present in the registered ClientHello
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -1983,7 +2131,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::KeyShare_IsOffered(XWORD supportedgroup)
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signaturescheme)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signaturescheme)
 {
   for(XDWORD c=0; c<offeredsignatureschemes.GetSize(); c++)
     {
@@ -1996,7 +2144,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signatureschem
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLSHANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
 * @brief      Check whether an ALPN protocol was present in the registered ClientHello
 * @note       INTERNAL
 * @ingroup    DATAIO
@@ -2006,7 +2154,7 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signatureschem
 * @return     bool : true if the condition is met; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSHANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
+bool DIOSTREAMTLS13HANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
 {
   for(XDWORD c=0; c<offeredapplicationprotocols.GetSize(); c++)
     {
@@ -2019,22 +2167,22 @@ bool DIOSTREAMTLSHANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_ALP
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void DIOSTREAMTLSHANDSHAKECLIENT::Clean()
+* @fn         void DIOSTREAMTLS13HANDSHAKECLIENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLSHANDSHAKECLIENT::Clean()
+void DIOSTREAMTLS13HANDSHAKECLIENT::Clean()
 {
   session                    = NULL;
-  state                      = DIOSTREAMTLSHANDSHAKECLIENT_STATE_NONE;
+  state                      = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE;
   isini                      = false;
   allowunauthenticatedserver = false;
   certificaterequested       = false;
   authenticationconfigured  = false;
   serverauthenticated        = false;
-  authenticationerror        = DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
+  authenticationerror        = DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
   certificatevalidationerror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
   hasvalidationdatetime      = false;
   applicationprotocolnegotiated = false;
@@ -2043,4 +2191,6 @@ void DIOSTREAMTLSHANDSHAKECLIENT::Clean()
   helloretryrequestprocessed    = false;
   servercertificate          = NULL;
   servercertificateverify    = NULL;
+  aiafetchactive              = true;
+  aiafetchtimeout             = DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }

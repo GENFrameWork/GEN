@@ -210,7 +210,8 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
 bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
 {
   if((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1)) return false;
+     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
+     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) return false;
 
   for(XDWORD c=0; c<supportedgroups.GetSize(); c++)
     {
@@ -269,6 +270,8 @@ bool DIOSTREAMTLSCONFIG::SignatureScheme_Add(XWORD signaturescheme)
   switch(signaturescheme)
     {
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 : break;
@@ -739,6 +742,151 @@ void DIOSTREAMTLSCONFIG::SetAllowUnauthenticatedServer(bool allowunauthenticated
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::IsActiveAIAFetch()
+* @brief      Check whether a missing-intermediate chain may be completed via AuthorityInfoAccess fetching
+* @ingroup    DATAIO
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::IsActiveAIAFetch()
+{
+  return aiafetchactive;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLSCONFIG::AIAFetch_Activate(bool activate)
+* @brief      Activate or deactivate AuthorityInfoAccess fetching
+* @ingroup    DATAIO
+*
+* @param[in]  activate : true to activate; false to deactivate.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLSCONFIG::AIAFetch_Activate(bool activate)
+{
+  aiafetchactive = activate;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DIOSTREAMTLSCONFIG::GetAIAFetchTimeout()
+* @brief      Get the AuthorityInfoAccess fetch timeout, in seconds
+* @ingroup    DATAIO
+*
+* @return     int : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DIOSTREAMTLSCONFIG::GetAIAFetchTimeout()
+{
+  return aiafetchtimeout;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::SetAIAFetchTimeout(int timeout)
+* @brief      Set the AuthorityInfoAccess fetch timeout, in seconds
+* @ingroup    DATAIO
+*
+* @param[in]  timeout : Timeout value, in seconds. Must be greater than zero.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::SetAIAFetchTimeout(int timeout)
+{
+  if(timeout <= 0) return false;
+
+  aiafetchtimeout = timeout;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XWORD DIOSTREAMTLSCONFIG::GetMinVersion()
+* @brief      Get the minimum TLS version this client will negotiate
+* @ingroup    DATAIO
+*
+* @return     XWORD : DIOSTREAMTLS_MSG_VERSION_TLS_1_2 or DIOSTREAMTLS_MSG_VERSION_TLS_1_3.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLSCONFIG::GetMinVersion()
+{
+  return minversion;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::SetMinVersion(XWORD version)
+* @brief      Set the minimum TLS version this client will negotiate
+* @note       A TLS 1.2 fallback (minversion == TLS_1_2, maxversion == TLS_1_3) does not add anything to
+*             GetCipherSuites(): DIOSTREAMTLS<T> tries TLS 1.3 first with that list completely unchanged, and
+*             only on a handshake-stage failure retries the whole connection using the parallel
+*             DIOSTREAMTLS12HANDSHAKECLIENT, whose own two ECDHE-RSA-GCM suites are hardcoded and unrelated to
+*             this list.
+* @ingroup    DATAIO
+*
+* @param[in]  version : DIOSTREAMTLS_MSG_VERSION_TLS_1_2 or DIOSTREAMTLS_MSG_VERSION_TLS_1_3.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::SetMinVersion(XWORD version)
+{
+  if((version != DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (version != DIOSTREAMTLS_MSG_VERSION_TLS_1_3)) return false;
+  if(version > maxversion) return false;
+
+  minversion = version;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XWORD DIOSTREAMTLSCONFIG::GetMaxVersion()
+* @brief      Get the maximum TLS version this client will negotiate
+* @ingroup    DATAIO
+*
+* @return     XWORD : DIOSTREAMTLS_MSG_VERSION_TLS_1_2 or DIOSTREAMTLS_MSG_VERSION_TLS_1_3.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XWORD DIOSTREAMTLSCONFIG::GetMaxVersion()
+{
+  return maxversion;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::SetMaxVersion(XWORD version)
+* @brief      Set the maximum TLS version this client will negotiate
+* @ingroup    DATAIO
+*
+* @param[in]  version : DIOSTREAMTLS_MSG_VERSION_TLS_1_2 or DIOSTREAMTLS_MSG_VERSION_TLS_1_3.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::SetMaxVersion(XWORD version)
+{
+  if((version != DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (version != DIOSTREAMTLS_MSG_VERSION_TLS_1_3)) return false;
+  if(version < minversion) return false;
+
+  maxversion = version;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOSTREAMTLSCONFIG::Clean()
 * @brief      Clean the attributes of the class: Default initialize
@@ -748,6 +896,11 @@ void DIOSTREAMTLSCONFIG::SetAllowUnauthenticatedServer(bool allowunauthenticated
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::Clean()
 {
+  // Default negotiation window is TLS 1.3 only, matching every previous phase exactly: nothing changes for an
+  // existing caller unless it explicitly calls SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2).
+  minversion = DIOSTREAMTLS_MSG_VERSION_TLS_1_3;
+  maxversion = DIOSTREAMTLS_MSG_VERSION_TLS_1_3;
+
   CipherSuites_Delete();
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
@@ -755,7 +908,22 @@ void DIOSTREAMTLSCONFIG::Clean()
   SupportedGroups_Delete();
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
 
+  // Handshake-signing schemes offered in signature_algorithms. RSA-PSS only BY DEFAULT: this is the set that
+  // has been in production use, and it is deliberately not widened without evidence, because every entry added
+  // here changes which certificate a dual-certificate server decides to send -- confirmed for real against
+  // example.com, whose CDN switched to an ECDSA certificate chain the moment ECDSA was offered here, and that
+  // specific chain did not validate against the embedded trusted-root bundle (untrusted root), even though the
+  // bundle already carries 40+ common ECDSA roots. Root-caused but not yet reproduced with the real chain, so
+  // this stays RSA-PSS-only until it is.
+  //
+  // ECDSA (P-256/P-384/P-521) is verified correctly by DIOSTREAMTLSSIGNATURE and can be enabled per connection:
+  //
+  //     GetStreamTLSCFG()->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
+  //
+  // A server holding ONLY an ECDSA certificate aborts the handshake with handshake_failure unless that is done,
+  // since it cannot sign CertificateVerify with anything offered here.
   SignatureSchemes_Delete();
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
@@ -778,4 +946,7 @@ void DIOSTREAMTLSCONFIG::Clean()
   TrustedRoots_Delete();
   LocalCredentials_Delete();
   allowunauthenticatedserver  = false;
+
+  aiafetchactive  = true;
+  aiafetchtimeout = 5;
 }

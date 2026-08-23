@@ -554,6 +554,14 @@ DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
 
   diostreamcfg = GEN_NEW DIOSTREAMTLSCONFIG();
 
+  // Automatic version negotiation, by default, for every HTTPS request made through DIOWEBCLIENT: a caller never
+  // has to know or decide whether the target speaks TLS 1.3 or only TLS 1.2. GetOpen() tries TLS 1.3 first and,
+  // only if that specific server rejects it at the handshake stage, retries the same request once as pure TLS
+  // 1.2 (see DIOSTREAMTLS<T>::Open() / Handshake_Attempt()). A caller that wants strict TLS 1.3-only behavior
+  // can still narrow the window back with GetStreamTLSCFG()->SetMaxVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3) /
+  // SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3) after construction.
+  if(diostreamcfg) ((DIOSTREAMTLSCONFIG*)diostreamcfg)->SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+
   #else
 
   diostreamcfg = GEN_NEW DIOSTREAMTCPIPCONFIG();
@@ -1776,11 +1784,34 @@ bool DIOWEBCLIENT::Body_Decompress(bool istobuffer, void* to)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount)
+bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount, bool* connectionfailed)
 {
   if(!diostreamcfg)     return false;
   if(!timerout)         return false;
   if(!to)               return false;
+
+  // No scheme in the URL at all: behave like curl's implicit default -- try HTTPS first, and only fall
+  // back to plain HTTP if TLS itself could not be established (see the "connectionfailed" points below).
+  // This can only trigger here, on the original call from Get()/Put()/Post(): every recursive call this
+  // function makes (redirects, and the two dispatch calls right here) always passes a URL that already
+  // has an explicit scheme, so this branch cannot re-enter itself or interfere with redirect handling.
+  if(!url.HaveHTTPID())
+    {
+      DIOURL urlhttps;
+      DIOURL urlhttp;
+      bool   tlsunavailable = false;
+
+      urlhttps  = DIOURL_WEBURLID_SECURE;
+      urlhttps += url.Get();
+
+      if(MakeOperation(method, urlhttps, postdata, addhead, timeout, localIP, istobuffer, to, 0, &tlsunavailable)) return true;
+      if(!tlsunavailable) return false;                // failed for a real reason after connecting -- never silently downgrade
+
+      urlhttp  = DIOURL_WEBURLID;
+      urlhttp += url.Get();
+
+      return MakeOperation(method, urlhttp, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
+    }
 
   if(istobuffer) ((XBUFFER*)to)->Delete();
 
@@ -1789,9 +1820,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   int   defaultport     = isTLS?DIOWEBCLIENT_DEFAULTSECUREPORT:DIOWEBCLIENT_DEFAULTPORT;
   int   operationport;
 
-  if(!url.HaveHTTPID()) url.AddHTTPID();
-
-  XSTRING               server; 
+  XSTRING               server;
   DIOURL                resource;
   XSTRING               methodstring;
   DIOWEBCLIENT_XEVENT   xevent(this, XEVENT_TYPE_NONE);
@@ -1826,7 +1855,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     }
    else
     {
-      if(isTLS) return false;
+      if(isTLS) { if(connectionfailed) *connectionfailed = true; return false; }
 
       diostreamcfg->GetRemoteURL()->Set(proxyurl.Get());
       diostreamcfg->SetRemotePort(proxyport);
@@ -1838,27 +1867,33 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     {
       DIOSTREAMTLSCONFIG* tlsconfig = GetStreamTLSCFG();
 
-      if(!tlsconfig) return false;
+      if(!tlsconfig) { if(connectionfailed) *connectionfailed = true; return false; }
       tlsconfig->GetServerName()->Set(server.Get());
       tlsconfig->ApplicationProtocols_Delete();
-      if(!tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1)) return false;
+      if(!tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1)) { if(connectionfailed) *connectionfailed = true; return false; }
     }
 
   #endif
 
-  if(!Stream_Create(isTLS)) return false;
+  if(!Stream_Create(isTLS)) { if(connectionfailed) *connectionfailed = true; return false; }
 
   //--- Connection WEB server -------------------
 
   if(!diostream->Open())
     {
       diostream->Close();
+      if(connectionfailed) *connectionfailed = true;
+
+
       return false;
     }
 
   if(!diostream->WaitToConnected(timeout))
     {
       diostream->Close();
+      if(connectionfailed) *connectionfailed = true;
+
+
       return false;
     }
 
@@ -1903,6 +1938,11 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   sendheader += __L("\r\n");
 
   if(addhead) sendheader += addhead;
+
+  // Some servers/CDNs/WAFs treat a request with no User-Agent at all as non-browser/bot traffic and respond
+  // differently (a canonical-redirect loop has been observed against at least one real site) -- send the
+  // default identification unless the caller already supplied their own via addhead.
+  if(sendheader.Find(__L("User-Agent:"), true) == XSTRING_NOTFOUND) sendheader += DIOWEBCLIENT_DEFAULTUSERAGENT;
 
   #ifdef COMPRESS_ACTIVE
 
@@ -2012,15 +2052,22 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
       return false;
     }
 
+
   //--- Read Content ---------------------------
 
-  if(header.GetResultServer() == 301)
+  { int resultserver = header.GetResultServer();
+
+  if((resultserver == 301) || (resultserver == 302) || (resultserver == 303) ||
+     (resultserver == 307) || (resultserver == 308))
     {
-      // Only GET/HEAD are auto-followed: a 301 must preserve the method per RFC 7231, and blindly
+      // Only GET/HEAD are auto-followed: a redirect must preserve the method per RFC 7231, and blindly
       // replaying a POST/PUT body against a redirected URL risks an unintended duplicate side effect.
-      // The redirect chain is bounded, and a missing/empty Location simply falls through unchanged
-      // to the existing behaviour below (the 301 response is then read/returned as-is).
+      // 307/308 require the method AND body to stay identical on redirect, which is automatically true
+      // here since only bodyless GET/HEAD are ever auto-followed in the first place. The redirect chain
+      // is bounded, and a missing/empty Location simply falls through unchanged to the existing
+      // behaviour below (the redirect response is then read/returned as-is).
       XSTRING location;
+
 
       if(((method == DIOWEBHEADER_METHOD_GET) || (method == DIOWEBHEADER_METHOD_HEAD)) &&
          (redirectcount < DIOWEBCLIENT_MAXREDIRECTS) && header.GetLocation(location))
@@ -2055,11 +2102,21 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
               redirecturl += location;
             }
 
+          // Force a full teardown-and-recreate of the transport for the retry, instead of leaving
+          // Stream_Create() to reuse this same diostream instance (which it does whenever the redirect
+          // target keeps the same scheme, i.e. isTLS unchanged). A platform stream implementation is not
+          // guaranteed to support being Open()'d again on the very same object instance after a prior
+          // Close() -- reconnecting via a brand-new instance sidesteps any such reuse bug entirely, at
+          // the cost of one extra allocation per redirect hop (redirect chains are already bounded by
+          // DIOWEBCLIENT_MAXREDIRECTS).
           diostream->Close();
+          GEN_DIOFACTORY.DeleteStreamIO(diostream);
+          diostream = NULL;
 
           return MakeOperation(method, redirecturl, postdata, addhead, timeout, localIP, istobuffer, to, redirectcount+1);
         }
     }
+  }
 
   if((header.GetResultServer() == 401) && (authenticationmethod == DIOWEBCLIENT_AUTHENTICATION_METHOD_DIGEST))
     {

@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       DIOStreamTLSSession.h
+* @file       DIOStreamTLS12Session.h
 *
-* @class      DIOSTREAMTLSSESSION
-* @brief      Data Input/Output Stream TLS 1.3 role-neutral Session class
+* @class      DIOSTREAMTLS12SESSION
+* @brief      Data Input/Output Stream TLS 1.2 (RFC 5246) role-neutral Session class
 * @ingroup    DATAIO
 *
 * @copyright  EndoraSoft. All rights reserved.
@@ -26,6 +26,12 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 
+// PARALLEL to DIOStreamTLS13Session.h (TLS 1.3): same responsibilities (ephemeral ECDHE key exchange, record
+// input/handshake input accumulation, transcript, record protection), but built on DIOSTREAMTLS12KEYSCHEDULE
+// and DIOSTREAMTLS12RECORD instead. Nothing here is shared state with the TLS 1.3 session; the two can run
+// side by side. The ECDHE cipher primitives (CIPHERECDSAX25519 / CIPHERECDSA) are generic, version-agnostic
+// crypto and are reused directly, exactly like the TLS 1.3 session already does.
+
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -35,32 +41,23 @@
 #include "CipherECDSA.h"
 #include "CipherECDSAX25519.h"
 
-#include "DIOStreamTLSKeySchedule.h"
-#include "DIOStreamTLSRecord.h"
+#include "DIOStreamTLS12KeySchedule.h"
+#include "DIOStreamTLS12Record.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
-#define DIOSTREAMTLSSESSION_MAXHANDSHAKESIZE                    DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE
-#define DIOSTREAMTLSSESSION_MAXRECORDINPUTSIZE                  (4*1024*1024)
-#define DIOSTREAMTLSSESSION_MAXKEYUPDATES                       1024
+#define DIOSTREAMTLS12SESSION_MAXHANDSHAKESIZE                  DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE
+#define DIOSTREAMTLS12SESSION_MAXRECORDINPUTSIZE                (4*1024*1024)
 
 
-enum DIOSTREAMTLSSESSION_RESULT
+enum DIOSTREAMTLS12SESSION_RESULT
 {
-  DIOSTREAMTLSSESSION_RESULT_ERROR       = -1 ,
-  DIOSTREAMTLSSESSION_RESULT_INCOMPLETE  =  0 ,
-  DIOSTREAMTLSSESSION_RESULT_COMPLETE         ,
-};
-
-
-enum DIOSTREAMTLSSESSION_EPOCH
-{
-  DIOSTREAMTLSSESSION_EPOCH_CLEAR        = 0 ,
-  DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE        ,
-  DIOSTREAMTLSSESSION_EPOCH_APPLICATION      ,
+  DIOSTREAMTLS12SESSION_RESULT_ERROR       = -1 ,
+  DIOSTREAMTLS12SESSION_RESULT_INCOMPLETE  =  0 ,
+  DIOSTREAMTLS12SESSION_RESULT_COMPLETE         ,
 };
 
 
@@ -69,52 +66,51 @@ enum DIOSTREAMTLSSESSION_EPOCH
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class DIOSTREAMTLSSESSION
+class DIOSTREAMTLS12SESSION
 {
   public:
-                                            DIOSTREAMTLSSESSION                              ();
-    virtual                                ~DIOSTREAMTLSSESSION                              ();
+                                            DIOSTREAMTLS12SESSION                             ();
+    virtual                                ~DIOSTREAMTLS12SESSION                             ();
 
-    bool                                    Ini                                              (XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
-    void                                    End                                              ();
-    bool                                    IsIni                                            ();
+    bool                                    Ini                                               (XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
+    void                                    End                                               ();
+    bool                                    IsIni                                             ();
 
-    DIOSTREAMTLSKEYSCHEDULE_ROLE            GetRole                                          ();
-    DIOSTREAMTLSSESSION_EPOCH               GetEpoch                                         (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    DIOSTREAMTLSKEYSCHEDULE_ROLE            GetRole                                           ();
 
-    DIOSTREAMTLSKEYSCHEDULE*                GetKeySchedule                                   ();
-    DIOSTREAMTLSRECORD*                     GetRecord                                         ();
-    CIPHERECDSAX25519*                      GetKeyExchange                                    ();
+    DIOSTREAMTLS12KEYSCHEDULE*              GetKeySchedule                                    ();
+    DIOSTREAMTLS12RECORD*                   GetRecord                                         ();
+
     bool                                    KeyExchange_Generate                              (XWORD group, XBUFFER& publickey);
     bool                                    KeyExchange_SharedSecret                          (XWORD group, XBUFFER& publickey, XBUFFER& sharedsecret);
     void                                    KeyExchange_Delete                                ();
-    bool                                    CipherSuite_Select                                (XWORD ciphersuite);
+
+    
+    
+    
+    bool                                    Keys_Activate                                     (XBUFFER& premastersecret, XBUFFER& clientrandom, XBUFFER& serverrandom);
 
     XBUFFER*                                GetRecordInput                                    ();
     bool                                    RecordInput_Add                                  (XBYTE* data, XDWORD size);
     bool                                    RecordInput_Add                                  (XBUFFER& data);
-    DIOSTREAMTLSSESSION_RESULT              Record_Extract                                   (DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain);
+    DIOSTREAMTLS12SESSION_RESULT            Record_Extract                                    (DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain);
 
     XBUFFER*                                GetHandshakeInput                                 ();
     bool                                    HandshakeInput_Add                               (XBYTE* data, XDWORD size);
     bool                                    HandshakeInput_Add                               (XBUFFER& data);
-    DIOSTREAMTLSSESSION_RESULT              Handshake_Extract                                (XBUFFER& message);
+    DIOSTREAMTLS12SESSION_RESULT            Handshake_Extract                                (XBUFFER& message);
 
     XBUFFER*                                GetTranscript                                    ();
     bool                                    Transcript_Add                                   (XBUFFER& message);
     bool                                    TranscriptHash                                   (XBUFFER& transcripthash);
 
-    bool                                    HandshakeKeys_Activate                           (XBUFFER& sharedsecret);
-    bool                                    ApplicationTrafficSecrets_Calculate              ();
-    bool                                    ApplicationKeys_Activate                         (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
-
+    
+    
     XBUFFER*                                GetApplicationInput                              ();
     bool                                    ApplicationData_Protect                          (XBYTE* data, XDWORD size, XBUFFER& records);
     bool                                    ApplicationData_Protect                          (XBUFFER& data, XBUFFER& records);
     XDWORD                                  ApplicationData_Read                             (XBYTE* data, XDWORD size);
-    DIOSTREAMTLSSESSION_RESULT              ApplicationData_Process                          ();
-    bool                                    KeyUpdate_Create                                 (bool requestpeer, XBUFFER& records);
-    bool                                    PostHandshakeOutput_Extract                       (XBUFFER& records);
+    DIOSTREAMTLS12SESSION_RESULT            ApplicationData_Process                          ();
 
     bool                                    Alert_Create                                     (DIOSTREAMTLS_ALERT_LEVEL level, DIOSTREAMTLS_ALERT_DESCRIPTION description, XBUFFER& records);
     bool                                    CloseNotify_Create                               (XBUFFER& records);
@@ -123,47 +119,38 @@ class DIOSTREAMTLSSESSION
     bool                                    IsCloseNotifyReceived                            ();
     bool                                    IsError                                          ();
     bool                                    IsTransportClosedWithoutNotify                   ();
-    DIOSTREAMTLS_ALERT_LEVEL                GetReceivedAlertLevel                            ();
-    DIOSTREAMTLS_ALERT_DESCRIPTION          GetReceivedAlertDescription                      ();
-
     bool                                    TransportClosed                                  ();
 
   private:
 
-    bool                                    KeyUpdate_Process                                (DIOSTREAMTLS_MSG_HANDSHAKE& handshake);
-    void                                    Clean                                            ();
+    void                                    Clean                                             ();
 
     DIOSTREAMTLSKEYSCHEDULE_ROLE            role;
     bool                                    isini;
-    bool                                    applicationsecretscalculated;
+    bool                                    keysactivated;
 
-    DIOSTREAMTLSSESSION_EPOCH               epoch[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
-
-    DIOSTREAMTLSKEYSCHEDULE                 keyschedule;
-    DIOSTREAMTLSRECORD                      record;
+    DIOSTREAMTLS12KEYSCHEDULE               keyschedule;
+    DIOSTREAMTLS12RECORD                    record;
     CIPHERECDSAX25519                       keyexchange;
     CIPHERECDSA                             keyexchangep256;
     XBUFFER                                 keyexchangep256private;
     XBUFFER                                 keyexchangep256public;
+    CIPHERECDSA                             keyexchangep384;
+    XBUFFER                                 keyexchangep384private;
+    XBUFFER                                 keyexchangep384public;
 
     XBUFFER                                 recordinput;
     XBUFFER                                 handshakeinput;
     XBUFFER                                 transcript;
     XBUFFER                                 applicationinput;
-    XBUFFER                                 posthandshakeoutput;
 
-    XDWORD                                  keyupdates[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
-
+    bool                                    iserror;
     bool                                    closenotifysent;
     bool                                    closenotifyreceived;
-    bool                                    iserror;
     bool                                    transportclosedwithoutnotify;
-    DIOSTREAMTLS_ALERT_LEVEL                receivedalertlevel;
-    DIOSTREAMTLS_ALERT_DESCRIPTION          receivedalertdescription;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-

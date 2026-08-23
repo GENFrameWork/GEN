@@ -107,35 +107,17 @@ class DIOLINUXGPIORPI : public DIOLINUXGPIO
       
     bool                                Ini                         ();
     
-    /*
-    bool                                SetMode                     (DIOGPIO_ENTRY* entry, XWORD mode);  
-
-    bool                                GetValue                    (DIOGPIO_ENTRY* entry);
-    bool                                SetValue                    (DIOGPIO_ENTRY* entry, bool value);
-
-    bool                                End                         ();
-    */     
+         
 
   private:
 
-    /*
-    bool                                RPI_Ini                     ();
-    bool                                RPI_End                     ();
-    bool                                RPI_IsGPIOValid             (XQWORD GPIO);
-    bool                                RPI_GPIOMode                (XQWORD GPIO, bool isinput);
-    bool                                RPI_GPIORead                (XQWORD GPIO);
-    bool                                RPI_GPIOWrite               (XQWORD GPIO, bool isactive);    
-    */
+    
 
     void                                Clean                       ();
     
     RPI_MODEL                           model;
 
-    /*
-    XDWORD                              RPI_map_base;
-    XQWORD                              RPI_map_base64;
-    bool                                initialization;
-    */
+    
 };
 
 
