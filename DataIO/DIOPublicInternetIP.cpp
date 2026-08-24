@@ -161,7 +161,7 @@ bool DIOPUBLICINTERNETIP::Get(XSTRING& publicIP)
     }
   
   url = DIOPUBLICINTERNETIP_URL
-  webclient.Set_Port(80);
+  //webclient.Set_Port(80);
 
   buffer.Resize(64);
 

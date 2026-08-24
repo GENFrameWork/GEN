@@ -1862,23 +1862,6 @@ XDWORD XTRACE::GetTraceFromXBuffer(XBUFFER& xbufferpacket, XDWORD& publicIP, XDW
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         ifdef DIO_ACTIVE XDWORD XTRACE::GetTraceFromDIOStream(DIOSTREAM* DIOstream, XDWORD& publicIP, XDWORD& localIP, XBYTE& level, XDWORD& sequence, XDATETIME* xtime, XBUFFER& data)
-* @brief      Get trace from DIO stream
-* @ingroup    XUTILS
-* 
-* @param[in]  DIOstream : DI Ostream pointer to use.
-* @param[in]  publicIP : Public IP value.
-* @param[in]  localIP : Local IP value.
-* @param[in]  level : Level value.
-* @param[in]  sequence : Sequence value.
-* @param[in]  xtime : Xtime pointer to use.
-* @param[in]  data : Data buffer to use.
-* 
-* @return     \#ifdef DIO_ACTIVE XDWORD : Requested value.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 #ifdef DIO_ACTIVE
 /**-------------------------------------------------------------------------------------------------------------------
 * 
